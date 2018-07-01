@@ -5,14 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
@@ -22,20 +19,35 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
  * against all indexed content objects in the storage layer.
  *
  * Normalization and querying capabilities might depend on the system
- * configuration or the used search engine and might differ. The following
- * basic query semantics are supported:
+ * configuration or the used search engine and might differ. To find about
+ * supported querying capabilities you can use
+ * {@link \eZ\Publish\API\Repository\SearchService::supports()} method.
  *
- * - If multiple words are specified an AND query is performed. OR queries are
- *   not yet supported.
+ * If supported, advanced full text query has the following semantics:
  *
+ * - If multiple words are specified an OR query is performed.
+ * - Boolean operators are supported: AND (&&), OR (||), NOT (!).
+ * - Required/prohibit operators are supported: +, -.
+ * - Grouping is supported through parentheses.
+ * - Phrases are supported using double quotes.
  * - Simple wild cards are supported. If an asterisk (*) is used at the end or
  *   beginning of a word this is translated into a wild card query. Thus "fo*"
  *   would match "foo" and "foobar", for example.
+ * - Advanced language analysis (like stemming, synonym expansion and stop word
+ *   removal) might be applied to the words provided in the query.
  *
+ * If advanced full text query is not supported, basic query format will be
+ * available:
+ *
+ *  - If multiple words are specified an AND query is performed. OR queries are
+ *   not supported.
+ * - Simple wild cards are supported. If an asterisk (*) is used at the end or
+ *   beginning of a word this is translated into a wild card query. Thus "fo*"
+ *   would match "foo" and "foobar", for example.
  * - Simple stop word removal might be applied to the words provided in the
  *   query.
  */
-class FullText extends Criterion implements CriterionInterface, CustomFieldInterface
+class FullText extends Criterion implements CustomFieldInterface
 {
     /**
      * Fuzziness of the fulltext search.
@@ -110,8 +122,13 @@ class FullText extends Criterion implements CriterionInterface, CustomFieldInter
         );
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new self($value);
     }
 

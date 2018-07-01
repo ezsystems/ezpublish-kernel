@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
@@ -126,9 +124,9 @@ abstract class FileSystemTwigIntegrationTestCase extends Twig_Test_IntegrationTe
 
                 foreach (array_keys($templates) as $name) {
                     echo "Template: $name\n";
-                    $source = $loader->getSource($name);
+                    $source = $loader->getSourceContext($name);
                     echo $twig->compile(
-                        $twig->parse($twig->tokenize($source, $name))
+                        $twig->parse($twig->tokenize($source))
                     );
                 }
             }

@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 class LimitationTest extends BaseTest
 {
@@ -57,10 +56,7 @@ class LimitationTest extends BaseTest
      */
     public function testResultIsLimitation($result)
     {
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\Limitation',
-            $result
-        );
+        $this->assertInstanceOf(Limitation::class, $result);
     }
 
     /**

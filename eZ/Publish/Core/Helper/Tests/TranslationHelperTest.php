@@ -5,32 +5,34 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Helper\Tests;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use Psr\Log\LoggerInterface;
 
-class TranslationHelperTest extends PHPUnit_Framework_TestCase
+class TranslationHelperTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     private $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\ContentService
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\ContentService
      */
     private $contentService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -54,9 +56,9 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
-        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->contentService = $this->createMock(ContentService::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->siteAccessByLanguages = array(
             'fre-FR' => array('fre'),
             'eng-GB' => array('my_siteaccess', 'eng'),
@@ -90,14 +92,22 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
     {
         return new Content(
             array(
-                'versionInfo' => new VersionInfo(
-                    array(
-                        'names' => $this->translatedNames,
-                        'initialLanguageCode' => 'fre-FR',
-                    )
-                ),
+                'versionInfo' => $this->generateVersionInfo(),
                 'internalFields' => $this->translatedFields,
             )
+        );
+    }
+
+    /**
+     * @return APIVersionInfo
+     */
+    private function generateVersionInfo()
+    {
+        return new VersionInfo(
+            [
+                'names' => $this->translatedNames,
+                'initialLanguageCode' => 'fre-FR',
+            ]
         );
     }
 
@@ -127,7 +137,7 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
      */
     public function testGetTranslatedNameByContentInfo(array $prioritizedLanguages, $expectedLocale)
     {
-        $content = $this->generateContent();
+        $versionInfo = $this->generateVersionInfo();
         $contentInfo = new ContentInfo(array('id' => 123));
         $this->configResolver
             ->expects($this->once())
@@ -137,9 +147,9 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
 
         $this->contentService
             ->expects($this->once())
-            ->method('loadContentByContentInfo')
+            ->method('loadVersionInfo')
             ->with($contentInfo)
-            ->will($this->returnValue($content));
+            ->will($this->returnValue($versionInfo));
 
         $this->assertSame($this->translatedNames[$expectedLocale], $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo));
     }
@@ -157,7 +167,7 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
 
     public function testGetTranslatedNameByContentInfoForcedLanguage()
     {
-        $content = $this->generateContent();
+        $versionInfo = $this->generateVersionInfo();
         $contentInfo = new ContentInfo(array('id' => 123));
         $this->configResolver
             ->expects($this->never())
@@ -165,9 +175,9 @@ class TranslationHelperTest extends PHPUnit_Framework_TestCase
 
         $this->contentService
             ->expects($this->exactly(2))
-            ->method('loadContentByContentInfo')
+            ->method('loadVersionInfo')
             ->with($contentInfo)
-            ->will($this->returnValue($content));
+            ->will($this->returnValue($versionInfo));
 
         $this->assertSame('My name in english', $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo, 'eng-GB'));
         $this->assertSame('Mon nom en français', $this->translationHelper->getTranslatedContentNameByContentInfo($contentInfo, 'eng-US'));

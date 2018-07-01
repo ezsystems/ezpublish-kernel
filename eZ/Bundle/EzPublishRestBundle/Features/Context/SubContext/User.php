@@ -6,7 +6,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 /**
  * @method \eZ\Publish\API\Repository\Repository getRepository()

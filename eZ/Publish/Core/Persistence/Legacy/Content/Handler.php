@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
@@ -323,10 +321,53 @@ class Handler implements BaseContentHandler
             $this->contentGateway->loadVersionedNameData(array(array('id' => $id, 'version' => $version)))
         );
         $content = $contentObjects[0];
+        unset($rows, $contentObjects);
 
         $this->fieldHandler->loadExternalFieldData($content);
 
         return $content;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $contentLoadStructs): array
+    {
+        $idVersionTranslationPairs = [];
+        foreach ($contentLoadStructs as $struct) {
+            $idVersionTranslationPairs[] = [
+                'id' => $struct->id,
+                'version' => $struct->versionNo,
+                'languages' => $struct->languages,
+            ];
+        }
+
+        $rawList = $this->contentGateway->loadContentList($idVersionTranslationPairs);
+        if (empty($rawList)) {
+            return [];
+        }
+
+        $idVersionPairs = [];
+        foreach ($rawList as $row) {
+            $idVersionPairs[] = [
+                'id' => $row['ezcontentobject_id'],
+                'version' => $row['ezcontentobject_version_version'],
+            ];
+        }
+
+        $contentObjects = $this->mapper->extractContentFromRows(
+            $rawList,
+            $this->contentGateway->loadVersionedNameData($idVersionPairs)
+        );
+        unset($rawList, $idVersionPairs, $idVersionTranslationPairs);
+
+        $result = [];
+        foreach ($contentObjects as $content) {
+            $this->fieldHandler->loadExternalFieldData($content);
+            $result[$content->versionInfo->contentInfo->id] = $content;
+        }
+
+        return $result;
     }
 
     /**
@@ -339,6 +380,20 @@ class Handler implements BaseContentHandler
     public function loadContentInfo($contentId)
     {
         return $this->treeHandler->loadContentInfo($contentId);
+    }
+
+    public function loadContentInfoList(array $contentIds)
+    {
+        $list = $this->mapper->extractContentInfoFromRows(
+            $this->contentGateway->loadContentInfoList($contentIds)
+        );
+
+        $listByContentId = [];
+        foreach ($list as $item) {
+            $listByContentId[$item->id] = $item;
+        }
+
+        return $listByContentId;
     }
 
     /**
@@ -562,13 +617,17 @@ class Handler implements BaseContentHandler
     /**
      * Returns the versions for $contentId.
      *
+     * Result is returned with oldest version first (sorted by created, alternatively version id if auto increment).
+     *
      * @param int $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function listVersions($contentId)
+    public function listVersions($contentId, $status = null, $limit = -1)
     {
-        return $this->treeHandler->listVersions($contentId);
+        return $this->treeHandler->listVersions($contentId, $status, $limit);
     }
 
     /**
@@ -709,5 +768,69 @@ class Handler implements BaseContentHandler
         return $this->mapper->extractRelationsFromRows(
             $this->contentGateway->loadReverseRelations($destinationContentId, $type)
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeTranslationFromContent($contentId, $languageCode)
+    {
+        @trigger_error(
+            __METHOD__ . ' is deprecated, use deleteTranslationFromContent instead',
+            E_USER_DEPRECATED
+        );
+        $this->deleteTranslationFromContent($contentId, $languageCode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteTranslationFromContent($contentId, $languageCode)
+    {
+        $this->fieldHandler->deleteTranslationFromContentFields(
+            $contentId,
+            $this->listVersions($contentId),
+            $languageCode
+        );
+        $this->contentGateway->deleteTranslationFromContent($contentId, $languageCode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteTranslationFromDraft($contentId, $versionNo, $languageCode)
+    {
+        $versionInfo = $this->loadVersionInfo($contentId, $versionNo);
+
+        $this->fieldHandler->deleteTranslationFromVersionFields(
+            $versionInfo,
+            $languageCode
+        );
+        $this->contentGateway->deleteTranslationFromVersion(
+            $contentId,
+            $versionNo,
+            $languageCode
+        );
+
+        // get all [languageCode => name] entries except the removed Translation
+        $names = array_filter(
+            $versionInfo->names,
+            function ($lang) use ($languageCode) {
+                return $lang !== $languageCode;
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+        // set new Content name
+        foreach ($names as $language => $name) {
+            $this->contentGateway->setName(
+                $contentId,
+                $versionNo,
+                $name,
+                $language
+            );
+        }
+
+        // reload entire Version w/o removed Translation
+        return $this->load($contentId, $versionNo);
     }
 }

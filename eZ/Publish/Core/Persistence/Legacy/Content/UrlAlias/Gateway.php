@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
@@ -15,6 +13,20 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
  */
 abstract class Gateway
 {
+    /**
+     * Default database table.
+     */
+    const TABLE = 'ezurlalias_ml';
+
+    /**
+     * Changes the gateway database table.
+     *
+     * @internal
+     *
+     * @param string $name
+     */
+    abstract public function setTable($name);
+
     /**
      * Loads list of aliases by given $locationId.
      *
@@ -95,11 +107,23 @@ abstract class Gateway
     abstract public function cleanupAfterPublish($action, $languageId, $newId, $parentId, $textMD5);
 
     /**
+     * Historizes entry with $action by $languageMask.
+     *
+     * Used when swapping Location aliases, this ensures that given $languageMask matches a
+     * single entry (database row).
+     *
+     * @param string $action
+     * @param int $languageMask
+     *
+     * @return mixed
+     */
+    abstract public function historizeBeforeSwap($action, $languageMask);
+
+    /**
      * Marks all entries with given $id as history entries.
      *
-     * This method is used by Handler::locationMoved(). For this reason rows are not updated with next id value as
-     * all entries with given id are being marked as history and there is no need for id separation.
-     * Thus only "link" and "is_original" columns are updated.
+     * This method is used by Handler::locationMoved(). Each row is separately historized
+     * because future publishing needs to be able to take over history entries safely.
      *
      * @param mixed $id
      * @param mixed $link
@@ -194,4 +218,30 @@ abstract class Gateway
      * @return mixed
      */
     abstract public function getNextId();
+
+    /**
+     * Returns main language ID of the Content on the Location with given $locationId.
+     *
+     * @param int $locationId
+     *
+     * @return int
+     */
+    abstract public function getLocationContentMainLanguageId($locationId);
+
+    /**
+     * Removes languageId of removed translation from lang_mask and deletes single language rows for multiple Locations.
+     *
+     * @param int $languageId Language Id to be removed
+     * @param string[] $actions actions for which to perform the update
+     */
+    abstract public function bulkRemoveTranslation($languageId, $actions);
+
+    /**
+     * Archive (remove or historize) URL aliases for removed Translations.
+     *
+     * @param int $locationId
+     * @param int $parentId Parent alias used for linking historized entries
+     * @param int[] $languageIds Language IDs of removed Translations
+     */
+    abstract public function archiveUrlAliasesForDeletedTranslations($locationId, $parentId, array $languageIds);
 }

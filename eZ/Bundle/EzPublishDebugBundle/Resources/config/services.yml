@@ -1,11 +1,11 @@
 parameters:
     ezpublish.debug.data_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\EzPublishCoreCollector
     ezpublish_debug.persistence_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\PersistenceCacheCollector
-    ezpublish_debug.templates_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\TemplatesDataCollector
+    ezpublish_debug.siteaccess_collector.class: eZ\Bundle\EzPublishDebugBundle\Collector\SiteAccessCollector
 
 services:
     ezpublish_debug.data_collector:
-        class: %ezpublish.debug.data_collector.class%
+        class: "%ezpublish.debug.data_collector.class%"
         tags:
             -
                 name: data_collector
@@ -13,11 +13,20 @@ services:
                 id: "ezpublish.debug.toolbar"
 
     ezpublish_debug.persistence_collector:
-        class: %ezpublish_debug.persistence_collector.class%
-        arguments: [@ezpublish.spi.persistence.cache.persistenceLogger]
+        class: "%ezpublish_debug.persistence_collector.class%"
+        arguments: ["@ezpublish.spi.persistence.cache.persistenceLogger"]
         tags:
             -
                 name: ezpublish_data_collector
                 id: "ezpublish.debug.persistence"
                 panelTemplate: "EzPublishDebugBundle:Profiler/persistence:panel.html.twig"
                 toolbarTemplate: "EzPublishDebugBundle:Profiler/persistence:toolbar.html.twig"
+
+    ezpublish_debug.siteaccess_collector:
+        class: "%ezpublish_debug.siteaccess_collector.class%"
+        tags:
+            -
+                name: ezpublish_data_collector
+                id: "ezpublish.debug.siteaccess"
+                panelTemplate: "EzPublishDebugBundle:Profiler/siteaccess:panel.html.twig"
+                toolbarTemplate: "EzPublishDebugBundle:Profiler/siteaccess:toolbar.html.twig"

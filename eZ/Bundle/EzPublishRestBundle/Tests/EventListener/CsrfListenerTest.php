@@ -5,20 +5,20 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\EventListener;
 
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface;
 use eZ\Bundle\EzPublishRestBundle\EventListener\CsrfListener;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Csrf\CsrfToken;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class CsrfListenerTest extends EventListenerTest
 {
@@ -119,14 +119,23 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * Tests that session creation request is properly accepted.
+     * @dataProvider provideSessionRoutes
      */
-    public function testCreateSessionRequest()
+    public function testSessionRequests($route)
     {
-        $this->route = 'ezpublish_rest_createSession';
+        $this->route = $route;
         $this->csrfTokenHeaderValue = null;
 
         $this->getEventListener()->onKernelRequest($this->getEventMock());
+    }
+
+    public static function provideSessionRoutes()
+    {
+        return [
+            ['ezpublish_rest_createSession'],
+            ['ezpublish_rest_refreshSession'],
+            ['ezpublish_rest_deleteSession'],
+        ];
     }
 
     /**
@@ -159,11 +168,11 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return CsrfProviderInterface|PHPUnit_Framework_MockObject_MockObject
+     * @return CsrfProviderInterface|MockObject
      */
     protected function getCsrfProviderMock()
     {
-        $provider = $this->getMock('\Symfony\Component\Security\Csrf\CsrfTokenManagerInterface');
+        $provider = $this->createMock(CsrfTokenManagerInterface::class);
         $provider->expects($this->any())
             ->method('isTokenValid')
             ->will(
@@ -182,12 +191,12 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|GetResponseEvent
+     * @return MockObject|GetResponseEvent
      */
     protected function getEventMock($class = null)
     {
         if (!isset($this->eventMock)) {
-            parent::getEventMock('Symfony\Component\HttpKernel\Event\GetResponseEvent');
+            parent::getEventMock(GetResponseEvent::class);
 
             $this->eventMock
                 ->expects($this->any())
@@ -199,12 +208,12 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\Session\SessionInterface|PHPUnit_Framework_MockObject_MockObject
+     * @return \Symfony\Component\HttpFoundation\Session\SessionInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSessionMock()
     {
         if (!isset($this->sessionMock)) {
-            $this->sessionMock = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+            $this->sessionMock = $this->createMock(SessionInterface::class);
             $this->sessionMock
                 ->expects($this->atLeastOnce())
                 ->method('isStarted')
@@ -215,7 +224,7 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return ParameterBag|PHPUnit_Framework_MockObject_MockObject
+     * @return ParameterBag|MockObject
      */
     protected function getRequestHeadersMock()
     {
@@ -249,7 +258,7 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|Request
+     * @return MockObject|Request
      */
     protected function getRequestMock()
     {
@@ -284,14 +293,12 @@ class CsrfListenerTest extends EventListenerTest
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     * @return MockObject|EventDispatcherInterface
      */
     protected function getEventDispatcherMock()
     {
         if (!isset($this->eventDispatcherMock)) {
-            $this->eventDispatcherMock = $this->getMock(
-                'Symfony\Component\EventDispatcher\EventDispatcherInterface'
-            );
+            $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
         }
 
         return $this->eventDispatcherMock;

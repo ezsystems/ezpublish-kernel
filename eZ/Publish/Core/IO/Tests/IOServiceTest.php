@@ -10,38 +10,40 @@ namespace eZ\Publish\Core\IO\Tests;
 
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\IOService;
+use eZ\Publish\Core\IO\IOBinarydataHandler;
+use eZ\Publish\Core\IO\IOMetadataHandler;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\MimeTypeDetector;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for IO Service.
  */
-class IOServiceTest extends PHPUnit_Framework_TestCase
+class IOServiceTest extends TestCase
 {
     const PREFIX = 'test-prefix';
 
     /** @var IOService */
     protected $IOService;
 
-    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit\Framework\MockObject\MockObject */
     protected $metadataHandlerMock;
 
-    /** @var \eZ\Publish\Core\IO\IOBinarydataHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOBinarydataHandler|\PHPUnit\Framework\MockObject\MockObject */
     protected $binarydataHandlerMock;
 
-    /** @var MimeTypeDetector|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MimeTypeDetector|\PHPUnit\Framework\MockObject\MockObject */
     protected $mimeTypeDetectorMock;
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->binarydataHandlerMock = $this->getMock('eZ\Publish\Core\IO\IOBinarydataHandler');
-        $this->metadataHandlerMock = $this->getMock('eZ\Publish\Core\IO\IOMetadataHandler');
-        $this->mimeTypeDetectorMock = $this->getMock('eZ\\Publish\\SPI\\IO\\MimeTypeDetector');
+        $this->binarydataHandlerMock = $this->createMock(IOBinarydataHandler::class);
+        $this->metadataHandlerMock = $this->createMock(IOMetadataHandler::class);
+        $this->mimeTypeDetectorMock = $this->createMock(MimeTypeDetector::class);
 
         $this->IOService = new IOService(
             $this->metadataHandlerMock,
@@ -50,6 +52,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
             array('prefix' => self::PREFIX)
         );
     }
+
     /**
      * Test creating new BinaryCreateStruct from uploaded file.
      *
@@ -59,7 +62,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
     {
         self::markTestSkipped('Test skipped as it seems to depend on php-cgi');
         $uploadTest = $this->getFileUploadTest();
-        $result = $uploadTest->run();// Fails because of unset cgi param and missing php-cgi exe
+        $result = $uploadTest->run(); // Fails because of unset cgi param and missing php-cgi exe
         // Params bellow makes the code execute but fails:
         //->run( null, array( 'cgi' => 'php' ) );
 
@@ -102,7 +105,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
             $file
         );
 
-        self::assertInstanceOf('eZ\\Publish\\Core\\IO\\Values\\BinaryFileCreateStruct', $binaryCreateStruct);
+        self::assertInstanceOf(BinaryFileCreateStruct::class, $binaryCreateStruct);
         self::assertNull($binaryCreateStruct->id);
         self::assertTrue(is_resource($binaryCreateStruct->inputStream));
         self::assertEquals(filesize(__FILE__), $binaryCreateStruct->size);
@@ -150,7 +153,7 @@ class IOServiceTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($spiBinaryFile));
 
         $binaryFile = $this->IOService->createBinaryFile($createStruct);
-        self::assertInstanceOf('eZ\Publish\Core\IO\Values\BinaryFile', $binaryFile);
+        self::assertInstanceOf(BinaryFile::class, $binaryFile);
         self::assertEquals($createStruct->id, $binaryFile->id);
         self::assertEquals($createStruct->size, $binaryFile->size);
 

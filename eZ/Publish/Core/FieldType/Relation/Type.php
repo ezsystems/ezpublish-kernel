@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Relation;
 
@@ -25,22 +23,28 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  *
  * hash format ({@see fromhash()}, {@see toHash()}):
  * array( 'destinationContentId' => (int)$destinationContentId );
+ *
+ * @deprecated Since 7.0 and will be removed in 8.0. Use `RelationList\Type` instead.
  */
 class Type extends FieldType
 {
-    const SELECTION_BROWSE = 0,
-          SELECTION_DROPDOWN = 1;
+    const SELECTION_BROWSE = 0;
+    const SELECTION_DROPDOWN = 1;
 
-    protected $settingsSchema = array(
-        'selectionMethod' => array(
+    protected $settingsSchema = [
+        'selectionMethod' => [
             'type' => 'int',
             'default' => self::SELECTION_BROWSE,
-        ),
-        'selectionRoot' => array(
+        ],
+        'selectionRoot' => [
             'type' => 'string',
             'default' => null,
-        ),
-    );
+        ],
+        'selectionContentTypes' => [
+            'type' => 'array',
+            'default' => [],
+        ],
+    ];
 
     /**
      * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
@@ -59,7 +63,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );
@@ -73,9 +77,9 @@ class Type extends FieldType
                             "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
                             null,
                             array(
-                                'setting' => $name,
-                                'selection_browse' => self::SELECTION_BROWSE,
-                                'selection_dropdown' => self::SELECTION_DROPDOWN,
+                                '%setting%' => $name,
+                                '%selection_browse%' => self::SELECTION_BROWSE,
+                                '%selection_dropdown%' => self::SELECTION_DROPDOWN,
                             ),
                             "[$name]"
                         );
@@ -87,8 +91,20 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of either null, string or integer",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
                             ),
+                            "[$name]"
+                        );
+                    }
+                    break;
+                case 'selectionContentTypes':
+                    if (!is_array($value)) {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of array type",
+                            null,
+                            [
+                                '%setting%' => $name,
+                            ],
                             "[$name]"
                         );
                     }
@@ -121,7 +137,7 @@ class Type extends FieldType
      */
     public function getName(SPIValue $value)
     {
-        throw new \RuntimeException('@todo Implement this method');
+        throw new \RuntimeException('Name generation provided via NameableField set via "ezpublish.fieldType.nameable" service tag');
     }
 
     /**
@@ -159,7 +175,7 @@ class Type extends FieldType
         // ContentInfo
         if ($inputValue instanceof ContentInfo) {
             $inputValue = new Value($inputValue->id);
-        } elseif (is_integer($inputValue) || is_string($inputValue)) { // content id
+        } elseif (is_int($inputValue) || is_string($inputValue)) { // content id
             $inputValue = new Value($inputValue);
         }
 
@@ -175,7 +191,7 @@ class Type extends FieldType
      */
     protected function checkValueStructure(BaseValue $value)
     {
-        if (!is_integer($value->destinationContentId) && !is_string($value->destinationContentId)) {
+        if (!is_int($value->destinationContentId) && !is_string($value->destinationContentId)) {
             throw new InvalidArgumentType(
                 '$value->destinationContentId',
                 'string|int',
@@ -252,7 +268,7 @@ class Type extends FieldType
      *          "contentIds" => array( 12 ),
      *          "locationIds" => array( 24, 45 )
      *      ),
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD => array( 12 )
      *  )
      * </code>
      */

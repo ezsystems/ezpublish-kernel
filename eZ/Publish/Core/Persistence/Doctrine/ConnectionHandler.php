@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Doctrine;
 
@@ -16,6 +14,12 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\DBALException;
 
+/**
+ * Class ConnectionHandler.
+ *
+ * @deprecated Since 6.13, please use Doctrine DBAL instead (@ezpublish.persistence.connection)
+ *             it provides richer and more powerful DB abstraction which is also easier to use.
+ */
 class ConnectionHandler implements DatabaseHandler
 {
     /**
@@ -36,6 +40,9 @@ class ConnectionHandler implements DatabaseHandler
             $parsed = $dsn;
         }
 
+        /**
+         * @todo retry connection here.
+         */
         return DriverManager::getConnection($parsed);
     }
 
@@ -155,7 +162,7 @@ class ConnectionHandler implements DatabaseHandler
             $parsed['driver'] = $str;
         }
 
-        if (!count($dsn)) {
+        if (empty($dsn)) {
             return $parsed;
         }
 
@@ -177,7 +184,7 @@ class ConnectionHandler implements DatabaseHandler
         if (preg_match('|^([^(]+)\((.*?)\)/?(.*?)$|', $dsn, $match)) {
             // $dsn => proto(proto_opts)/database
             $proto = $match[1];
-            $proto_opts = $match[2] ? $match[2] : false;
+            $proto_opts = $match[2] ?: false;
             $dsn = $match[3];
         } else {
             // $dsn => protocol+host/database (old format)

@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
@@ -47,13 +46,14 @@ interface UserService
      * Loads a user group for the given id.
      *
      * @param mixed $id
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function loadUserGroup($id);
+    public function loadUserGroup($id, array $prioritizedLanguages = []);
 
     /**
      * Loads the sub groups of a user group.
@@ -61,12 +61,13 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25);
+    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = []);
 
     /**
      * Removes a user group.
@@ -76,6 +77,8 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
+     *
+     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
     public function deleteUserGroup(UserGroup $userGroup);
 
@@ -127,19 +130,20 @@ interface UserService
      * Loads a user.
      *
      * @param mixed $userId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      */
-    public function loadUser($userId);
+    public function loadUser($userId, array $prioritizedLanguages = []);
 
     /**
      * Loads anonymous user.
      *
      * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
      *
-     * @uses loadUser()
+     * @uses ::loadUser()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -148,45 +152,59 @@ interface UserService
     /**
      * Loads a user for the given login and password.
      *
-     * This method is case sensitive in regards to $login and $password as a comparison of password hash is done
-     * which contains both parameters.
+     * Since 6.1 login is case-insensitive across all storage engines and database backends, however if login
+     * is part of the password hash this method will essentially be case sensitive.
      *
      * @param string $login
      * @param string $password the plain password
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if credentials are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByCredentials($login, $password);
+    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = []);
 
     /**
      * Loads a user for the given login.
      *
-     * Note: This method loads user by $login where $login might be case in-sensitive on certain storage engines!
+     * Since 6.1 login is case-insensitive across all storage engines and database backends, like was the case
+     * with mysql before in eZ Publish 3.x/4.x/5.x.
      *
      * @param string $login
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login);
+    public function loadUserByLogin($login, array $prioritizedLanguages = []);
 
     /**
      * Loads a user for the given email.
      *
-     * Note: This method loads user by $email where $email might be case in-sensitive on certain storage engines!
+     * Note: This method loads user by $email where $email might be case-insensitive on certain storage engines!
      *
      * Returns an array of Users since eZ Publish has under certain circumstances allowed
      * several users having same email in the past (by means of a configuration option).
      *
      * @param string $email
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersByEmail($email);
+    public function loadUsersByEmail($email, array $prioritizedLanguages = []);
+
+    /**
+     * Loads a user with user hash key.
+     *
+     * @param string $hash
+     * @param array $prioritizedLanguages
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadUserByToken($hash, array $prioritizedLanguages = []);
 
     /**
      * This method deletes a user.
@@ -194,6 +212,8 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete the user
+     *
+     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
     public function deleteUser(User $user);
 
@@ -214,6 +234,23 @@ interface UserService
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function updateUser(User $user, UserUpdateStruct $userUpdateStruct);
+
+    /**
+     * Update the user token information specified by the user token struct.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct);
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash);
 
     /**
      * Assigns a new user group to the user.
@@ -247,10 +284,11 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25);
+    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25, array $prioritizedLanguages = []);
 
     /**
      * Loads the users of a user group.
@@ -260,10 +298,11 @@ interface UserService
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of users returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25);
+    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = []);
 
     /**
      * Instantiate a user create class.

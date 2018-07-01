@@ -67,19 +67,51 @@ return array(
             'text' => 'tri',
             'text_md5' => 'd2cfe69af2d64330670e08efb2c86df7',
         ),
+        6 => array(
+            'action' => 'eznode:317',
+            'action_type' => 'eznode',
+            'alias_redirects' => '0',
+            'id' => '5',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '15',
+            'link' => '4',
+            'parent' => '3',
+            'text' => 'multi-composite-always-available',
+            'text_md5' => '33e6762b930e3a428a9f0e94907a8eaa',
+        ),
+        7 => array(
+            'action' => 'eznode:318',
+            'action_type' => 'eznode',
+            'alias_redirects' => '0',
+            'id' => '6',
+            'is_alias' => '0',
+            'is_original' => '1',
+            'lang_mask' => '14',
+            'link' => '4',
+            'parent' => '3',
+            'text' => 'multi-composite',
+            'text_md5' => 'bc3644bfb4f44ebbd4dd2de0de2ce6c2',
+        ),
     ),
     'ezcontent_language' => array(
         0 => array(
             'disabled' => 0,
             'id' => 2,
             'locale' => 'cro-HR',
-            'name' => 'Croatian (Hrvatski)'
+            'name' => 'Croatian (Hrvatski)',
         ),
         1 => array(
             'disabled' => 0,
             'id' => 4,
             'locale' => 'eng-GB',
-            'name' => 'English (United Kingdom)'
+            'name' => 'English (United Kingdom)',
+        ),
+        2 => array(
+            'disabled' => 0,
+            'id' => 8,
+            'locale' => 'pol-PL',
+            'name' => 'Polish (polski)',
         ),
     ),
     'ezurlalias_ml_incr' => array(
@@ -94,6 +126,12 @@ return array(
         ),
         3 => array(
             'id' => '4',
+        ),
+        4 => array(
+            'id' => '5',
+        ),
+        5 => array(
+            'id' => '6',
         ),
     ),
 );

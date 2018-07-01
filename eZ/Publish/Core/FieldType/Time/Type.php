@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Time;
 
@@ -154,6 +152,23 @@ class Type extends FieldType
     }
 
     /**
+     * Returns if the given $value is considered empty by the field type.
+     *
+     *
+     * @param \eZ\Publish\Core\FieldType\Value $value
+     *
+     * @return bool
+     */
+    public function isEmptyValue(SPIValue $value)
+    {
+        if ($value->time === null) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Converts a $Value to a hash.
      *
      * @param \eZ\Publish\Core\FieldType\Time\Value $value
@@ -196,7 +211,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );
@@ -210,7 +225,7 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of boolean type",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
                             ),
                             "[$name]"
                         );
@@ -226,7 +241,7 @@ class Type extends FieldType
                             "Setting '%setting%' is of unknown type",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
                             ),
                             "[$name]"
                         );

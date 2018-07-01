@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Image\IO;
 
@@ -14,6 +12,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 
 /**
  * Legacy Image IOService.
@@ -142,7 +141,22 @@ class Legacy implements IOServiceInterface
             $binaryFileId = $this->publishedIOService->getExternalPath($binaryFileId);
         }
 
-        return $this->publishedIOService->loadBinaryFile($binaryFileId);
+        try {
+            $image = $this->publishedIOService->loadBinaryFile($binaryFileId);
+
+            if ($image instanceof MissingBinaryFile) {
+                throw new InvalidArgumentException('binaryFileId', sprintf("Can't find file with id %s", $binaryFileId));
+            }
+
+            return $image;
+        } catch (InvalidArgumentException $prefixException) {
+            // InvalidArgumentException means that the prefix didn't match, NotFound can pass through
+            try {
+                return $this->draftIOService->loadBinaryFile($binaryFileId);
+            } catch (InvalidArgumentException $e) {
+                throw $prefixException;
+            }
+        }
     }
 
     /**
@@ -151,7 +165,13 @@ class Legacy implements IOServiceInterface
     public function loadBinaryFileByUri($binaryFileUri)
     {
         try {
-            return $this->publishedIOService->loadBinaryFileByUri($binaryFileUri);
+            $image = $this->publishedIOService->loadBinaryFileByUri($binaryFileUri);
+
+            if ($image instanceof MissingBinaryFile) {
+                throw new InvalidArgumentException('binaryFileUri', sprintf("Can't find file with url %s", $binaryFileUri));
+            }
+
+            return $image;
         } catch (InvalidArgumentException $prefixException) {
             // InvalidArgumentException means that the prefix didn't match, NotFound can pass through
             try {
@@ -164,6 +184,10 @@ class Legacy implements IOServiceInterface
 
     public function getFileContents(BinaryFile $binaryFile)
     {
+        if ($this->draftIOService->exists($binaryFile->id)) {
+            return $this->draftIOService->getFileContents($binaryFile);
+        }
+
         return $this->publishedIOService->getFileContents($binaryFile);
     }
 
@@ -187,6 +211,10 @@ class Legacy implements IOServiceInterface
         // If the id is an internal path (absolute) to a published image, replace with the internal path
         if ($this->isPublishedImagePath($binaryFileId)) {
             $binaryFileId = $this->publishedIOService->getExternalPath($binaryFileId);
+        }
+
+        if ($this->draftIOService->exists($binaryFileId)) {
+            return $this->draftIOService->getMimeType($binaryFileId);
         }
 
         return $this->publishedIOService->getMimeType($binaryFileId);

@@ -5,14 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
+abstract class BinaryInputProcessorTest extends TestCase
 {
     private $tempDir;
 
@@ -82,7 +80,7 @@ abstract class BinaryInputProcessorTest extends PHPUnit_Framework_TestCase
         $this->assertFalse(isset($outputHash['data']), 'Data found in input hash');
         $this->assertTrue(isset($outputHash['inputUri']), 'No path found in output hash');
 
-        $this->assertTrue(file_exists($outputHash['inputUri']), "The output path {$outputHash['inputUri']} does not exist");
+        $this->assertFileExists($outputHash['inputUri'], "The output path {$outputHash['inputUri']} does not exist");
 
         $this->assertEquals($fileContent, file_get_contents($outputHash['inputUri']));
     }

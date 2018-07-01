@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -23,12 +22,12 @@ use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupC
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct as SPIUserTokenUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\SPI\Persistence\User as SPIUser;
 use eZ\Publish\Core\FieldType\User\Value as UserValue;
-use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LocationId as CriterionLocationId;
@@ -39,8 +38,8 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use ezcMailTools;
 use Exception;
+use Psr\Log\LoggerInterface;
 
 /**
  * This service provides methods for managing users and user groups.
@@ -64,6 +63,17 @@ class UserService implements UserServiceInterface
      */
     protected $settings;
 
+    /** @var \Psr\Log\LoggerInterface|null */
+    protected $logger;
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
+
+    public function setLogger(LoggerInterface $logger = null)
+    {
+        $this->logger = $logger;
+    }
+
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
@@ -74,13 +84,14 @@ class UserService implements UserServiceInterface
     public function __construct(RepositoryInterface $repository, Handler $userHandler, array $settings = array())
     {
         $this->repository = $repository;
+        $this->permissionResolver = $repository->getPermissionResolver();
         $this->userHandler = $userHandler;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'defaultUserPlacement' => 12,
-            'userClassID' => 4,// @todo Rename this settings to swap out "Class" for "Type"
+            'userClassID' => 4, // @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
-            'hashType' => User::PASSWORD_HASH_MD5_USER,
+            'hashType' => APIUser::DEFAULT_PASSWORD_HASH,
             'siteName' => 'ez.no',
         );
     }
@@ -140,15 +151,16 @@ class UserService implements UserServiceInterface
      * Loads a user group for the given id.
      *
      * @param mixed $id
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function loadUserGroup($id)
+    public function loadUserGroup($id, array $prioritizedLanguages = [])
     {
-        $content = $this->repository->getContentService()->loadContent($id);
+        $content = $this->repository->getContentService()->loadContent($id, $prioritizedLanguages);
 
         return $this->buildDomainUserGroupObject($content);
     }
@@ -159,12 +171,13 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(APIUserGroup $userGroup, $offset = 0, $limit = 25)
+    public function loadSubUserGroups(APIUserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
         $locationService = $this->repository->getLocationService();
 
@@ -181,13 +194,7 @@ class UserService implements UserServiceInterface
             $loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId
         );
 
-        $searchResult = $this->searchSubGroups(
-            $mainGroupLocation->id,
-            $mainGroupLocation->sortField,
-            $mainGroupLocation->sortOrder,
-            $offset,
-            $limit
-        );
+        $searchResult = $this->searchSubGroups($mainGroupLocation, $offset, $limit);
         if ($searchResult->totalCount == 0) {
             return array();
         }
@@ -196,7 +203,8 @@ class UserService implements UserServiceInterface
         foreach ($searchResult->searchHits as $searchHit) {
             $subUserGroups[] = $this->buildDomainUserGroupObject(
                 $this->repository->getContentService()->internalLoadContent(
-                    $searchHit->valueObject->contentInfo->id
+                    $searchHit->valueObject->contentInfo->id,
+                    $prioritizedLanguages
                 )
             );
         }
@@ -207,32 +215,25 @@ class UserService implements UserServiceInterface
     /**
      * Returns (searches) subgroups of a user group described by its main location.
      *
-     * @param mixed $locationId
-     * @param int|null $sortField
-     * @param int $sortOrder
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset
      * @param int $limit
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    protected function searchSubGroups($locationId, $sortField = null, $sortOrder = Location::SORT_ORDER_ASC, $offset = 0, $limit = 25)
+    protected function searchSubGroups(Location $location, $offset = 0, $limit = 25)
     {
         $searchQuery = new LocationQuery();
 
         $searchQuery->offset = $offset;
         $searchQuery->limit = $limit;
 
-        $searchQuery->filter = new CriterionLogicalAnd(
-            array(
-                new CriterionContentTypeId($this->settings['userGroupClassID']),
-                new CriterionParentLocationId($locationId),
-            )
-        );
+        $searchQuery->filter = new CriterionLogicalAnd([
+            new CriterionContentTypeId($this->settings['userGroupClassID']),
+            new CriterionParentLocationId($location->id),
+        ]);
 
-        $searchQuery->sortClauses = array();
-        if ($sortField !== null) {
-            $searchQuery->sortClauses[] = $this->getSortClauseBySortField($sortField, $sortOrder);
-        }
+        $searchQuery->sortClauses = $location->getSortClauses();
 
         return $this->repository->getSearchService()->findLocations($searchQuery, array(), false);
     }
@@ -253,12 +254,14 @@ class UserService implements UserServiceInterface
         $this->repository->beginTransaction();
         try {
             //@todo: what happens to sub user groups and users below sub user groups
-            $this->repository->getContentService()->deleteContent($loadedUserGroup->getVersionInfo()->getContentInfo());
+            $affectedLocationIds = $this->repository->getContentService()->deleteContent($loadedUserGroup->getVersionInfo()->getContentInfo());
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
+
+        return $affectedLocationIds;
     }
 
     /**
@@ -385,7 +388,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue('email', $userCreateStruct->email, 'UserCreateStruct');
         }
 
-        if (!ezcMailTools::validateEmailAddress($userCreateStruct->email)) {
+        if (!preg_match('/^.+@.+\..+$/', $userCreateStruct->email)) {
             throw new InvalidArgumentValue('email', $userCreateStruct->email, 'UserCreateStruct');
         }
 
@@ -501,15 +504,16 @@ class UserService implements UserServiceInterface
      * Loads a user.
      *
      * @param mixed $userId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      */
-    public function loadUser($userId)
+    public function loadUser($userId, array $prioritizedLanguages = [])
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $content */
-        $content = $this->repository->getContentService()->internalLoadContent($userId);
+        $content = $this->repository->getContentService()->internalLoadContent($userId, $prioritizedLanguages);
         // Get spiUser value from Field Value
         foreach ($content->getFields() as $field) {
             if (!$field->value instanceof UserValue) {
@@ -542,7 +546,7 @@ class UserService implements UserServiceInterface
      *
      * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
      *
-     * @uses loadUser()
+     * @uses ::loadUser()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -554,15 +558,20 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user for the given login and password.
      *
+     * If the password hash type differs from that configured for the service, it will be updated to the configured one.
+     *
+     * {@inheritdoc}
+     *
      * @param string $login
      * @param string $password the plain password
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if credentials are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByCredentials($login, $password)
+    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = [])
     {
         if (!is_string($login) || empty($login)) {
             throw new InvalidArgumentValue('login', $login);
@@ -572,34 +581,68 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue('password', $password);
         }
 
-        // Randomize login time to protect against timing attacks
-        usleep(mt_rand(0, 30000));
-
         $spiUser = $this->userHandler->loadByLogin($login);
-        $passwordHash = $this->createPasswordHash(
-            $login,
-            $password,
-            $this->settings['siteName'],
-            $spiUser->hashAlgorithm
-        );
-
-        if ($spiUser->passwordHash !== $passwordHash) {
+        if (!$this->verifyPassword($login, $password, $spiUser)) {
             throw new NotFoundException('user', $login);
         }
 
-        return $this->buildDomainUserObject($spiUser);
+        // Don't catch BadStateException, on purpose, to avoid broken hashes.
+        $this->updatePasswordHash($login, $password, $spiUser);
+
+        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
+    }
+
+    /**
+     * Update password hash to the type configured for the service, if they differ.
+     *
+     * @param string $login User login
+     * @param string $password User password
+     * @param \eZ\Publish\SPI\Persistence\User $spiUser
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException if the password is not correctly saved, in which case the update is reverted
+     */
+    private function updatePasswordHash($login, $password, SPIUser $spiUser)
+    {
+        if ($spiUser->hashAlgorithm === $this->settings['hashType']) {
+            return;
+        }
+
+        $spiUser->passwordHash = $this->createPasswordHash($login, $password, null, $this->settings['hashType']);
+        $spiUser->hashAlgorithm = $this->settings['hashType'];
+
+        $this->repository->beginTransaction();
+        $this->userHandler->update($spiUser);
+        $reloadedSpiUser = $this->userHandler->load($spiUser->id);
+
+        if ($reloadedSpiUser->passwordHash === $spiUser->passwordHash) {
+            $this->repository->commit();
+        } else {
+            // Password hash was not correctly saved, possible cause: EZP-28692
+            $this->repository->rollback();
+            if (isset($this->logger)) {
+                $this->logger->critical('Password hash could not be updated. Please verify that your database schema is up to date.');
+            }
+
+            throw new BadStateException(
+                'user',
+                'Could not save updated password hash, reverting to previous hash. Please verify that your database schema is up to date.'
+            );
+        }
     }
 
     /**
      * Loads a user for the given login.
      *
+     * {@inheritdoc}
+     *
      * @param string $login
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login)
+    public function loadUserByLogin($login, array $prioritizedLanguages = [])
     {
         if (!is_string($login) || empty($login)) {
             throw new InvalidArgumentValue('login', $login);
@@ -607,20 +650,20 @@ class UserService implements UserServiceInterface
 
         $spiUser = $this->userHandler->loadByLogin($login);
 
-        return $this->buildDomainUserObject($spiUser);
+        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
     }
 
     /**
      * Loads a user for the given email.
      *
-     * Returns an array of Users since eZ Publish has under certain circumstances allowed
-     * several users having same email in the past (by means of a configuration option).
+     * {@inheritdoc}
      *
      * @param string $email
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersByEmail($email)
+    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
     {
         if (!is_string($email) || empty($email)) {
             throw new InvalidArgumentValue('email', $email);
@@ -628,10 +671,34 @@ class UserService implements UserServiceInterface
 
         $users = array();
         foreach ($this->userHandler->loadByEmail($email) as $spiUser) {
-            $users[] = $this->buildDomainUserObject($spiUser);
+            $users[] = $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
         }
 
         return $users;
+    }
+
+    /**
+     * Loads a user for the given token.
+     *
+     * {@inheritdoc}
+     *
+     * @param string $hash
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     */
+    public function loadUserByToken($hash, array $prioritizedLanguages = [])
+    {
+        if (!is_string($hash) || empty($hash)) {
+            throw new InvalidArgumentValue('hash', $hash);
+        }
+
+        $spiUser = $this->userHandler->loadUserByToken($hash);
+
+        return $this->buildDomainUserObject($spiUser, null, $prioritizedLanguages);
     }
 
     /**
@@ -647,13 +714,15 @@ class UserService implements UserServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->repository->getContentService()->deleteContent($loadedUser->getVersionInfo()->getContentInfo());
+            $affectedLocationIds = $this->repository->getContentService()->deleteContent($loadedUser->getVersionInfo()->getContentInfo());
             $this->userHandler->delete($loadedUser->id);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
+
+        return $affectedLocationIds;
     }
 
     /**
@@ -697,7 +766,7 @@ class UserService implements UserServiceInterface
                 throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
             }
 
-            if (!ezcMailTools::validateEmailAddress($userUpdateStruct->email)) {
+            if (!preg_match('/^.+@.+\..+$/', $userUpdateStruct->email)) {
                 throw new InvalidArgumentValue('email', $userUpdateStruct->email, 'UserUpdateStruct');
             }
         }
@@ -716,8 +785,17 @@ class UserService implements UserServiceInterface
 
         $contentService = $this->repository->getContentService();
 
-        if (!$this->repository->canUser('content', 'edit', $loadedUser)) {
+        $canEditContent = $this->permissionResolver->canUser('content', 'edit', $loadedUser);
+
+        if (!$canEditContent && $this->isUserProfileUpdateRequested($userUpdateStruct)) {
             throw new UnauthorizedException('content', 'edit');
+        }
+
+        if (!empty($userUpdateStruct->password) &&
+            !$canEditContent &&
+            !$this->permissionResolver->canUser('user', 'password', $loadedUser)
+        ) {
+            throw new UnauthorizedException('user', 'password');
         }
 
         $this->repository->beginTransaction();
@@ -753,7 +831,9 @@ class UserService implements UserServiceInterface
                                 $this->settings['hashType']
                             ) :
                             $loadedUser->passwordHash,
-                        'hashAlgorithm' => $this->settings['hashType'],
+                        'hashAlgorithm' => $userUpdateStruct->password ?
+                            $this->settings['hashType'] :
+                            $loadedUser->hashAlgorithm,
                         'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
                         'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int)$userUpdateStruct->maxLogin : $loadedUser->maxLogin,
                     )
@@ -767,6 +847,68 @@ class UserService implements UserServiceInterface
         }
 
         return $this->loadUser($loadedUser->id);
+    }
+
+    /**
+     * Update the user token information specified by the user token struct.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \RuntimeException
+     * @throws \Exception
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function updateUserToken(APIUser $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        $loadedUser = $this->loadUser($user->id);
+
+        if ($userTokenUpdateStruct->hashKey !== null && (!is_string($userTokenUpdateStruct->hashKey) || empty($userTokenUpdateStruct->hashKey))) {
+            throw new InvalidArgumentValue('hashKey', $userTokenUpdateStruct->hashKey, 'UserTokenUpdateStruct');
+        }
+
+        if ($userTokenUpdateStruct->time === null) {
+            throw new InvalidArgumentValue('time', $userTokenUpdateStruct->time, 'UserTokenUpdateStruct');
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $this->userHandler->updateUserToken(
+                new SPIUserTokenUpdateStruct(
+                    array(
+                        'userId' => $loadedUser->id,
+                        'hashKey' => $userTokenUpdateStruct->hashKey,
+                        'time' => $userTokenUpdateStruct->time->getTimestamp(),
+                    )
+                )
+            );
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->loadUser($loadedUser->id);
+    }
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash)
+    {
+        $this->repository->beginTransaction();
+        try {
+            $this->userHandler->expireUserToken($hash);
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
     }
 
     /**
@@ -872,14 +1014,15 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 25)
+    public function loadUserGroupsOfUser(APIUser $user, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
         $locationService = $this->repository->getLocationService();
 
-        if (!$this->repository->canUser('content', 'read', $user)) {
+        if (!$this->repository->getPermissionResolver()->canUser('content', 'read', $user)) {
             throw new UnauthorizedException('content', 'read');
         }
 
@@ -901,19 +1044,20 @@ class UserService implements UserServiceInterface
         $searchQuery->performCount = false;
 
         $searchQuery->filter = new CriterionLogicalAnd(
-            array(
+            [
                 new CriterionContentTypeId($this->settings['userGroupClassID']),
                 new CriterionLocationId($parentLocationIds),
-            )
+            ]
         );
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
-        $userGroups = array();
+        $userGroups = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $userGroups[] = $this->buildDomainUserGroupObject(
                 $this->repository->getContentService()->internalLoadContent(
-                    $resultItem->valueObject->contentInfo->id
+                    $resultItem->valueObject->contentInfo->id,
+                    $prioritizedLanguages
                 )
             );
         }
@@ -929,15 +1073,20 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of users returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(APIUserGroup $userGroup, $offset = 0, $limit = 25)
-    {
+    public function loadUsersOfUserGroup(
+        APIUserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
 
         if ($loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            return array();
+            return [];
         }
 
         $mainGroupLocation = $this->repository->getLocationService()->loadLocation(
@@ -947,28 +1096,26 @@ class UserService implements UserServiceInterface
         $searchQuery = new LocationQuery();
 
         $searchQuery->filter = new CriterionLogicalAnd(
-            array(
+            [
                 new CriterionContentTypeId($this->settings['userClassID']),
                 new CriterionParentLocationId($mainGroupLocation->id),
-            )
+            ]
         );
 
         $searchQuery->offset = $offset;
         $searchQuery->limit = $limit;
         $searchQuery->performCount = false;
-
-        $searchQuery->sortClauses = array(
-            $this->getSortClauseBySortField($mainGroupLocation->sortField, $mainGroupLocation->sortOrder),
-        );
+        $searchQuery->sortClauses = $mainGroupLocation->getSortClauses();
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
-        $users = array();
+        $users = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $users[] = $this->buildDomainUserObject(
                 $this->userHandler->load($resultItem->valueObject->contentInfo->id),
                 $this->repository->getContentService()->internalLoadContent(
-                    $resultItem->valueObject->contentInfo->id
+                    $resultItem->valueObject->contentInfo->id,
+                    $prioritizedLanguages
                 )
             );
         }
@@ -1064,21 +1211,17 @@ class UserService implements UserServiceInterface
     {
         $locationService = $this->repository->getLocationService();
 
-        $subGroupCount = 0;
         if ($content->getVersionInfo()->getContentInfo()->mainLocationId !== null) {
             $mainLocation = $locationService->loadLocation(
                 $content->getVersionInfo()->getContentInfo()->mainLocationId
             );
             $parentLocation = $locationService->loadLocation($mainLocation->parentLocationId);
-            $subGroups = $this->searchSubGroups($mainLocation->id, null, Location::SORT_ORDER_ASC, 0, 0);
-            $subGroupCount = $subGroups->totalCount;
         }
 
         return new UserGroup(
             array(
                 'content' => $content,
                 'parentId' => isset($parentLocation) ? $parentLocation->contentId : null,
-                'subGroupCount' => $subGroupCount,
             )
         );
     }
@@ -1088,13 +1231,20 @@ class UserService implements UserServiceInterface
      *
      * @param \eZ\Publish\SPI\Persistence\User $spiUser
      * @param \eZ\Publish\API\Repository\Values\Content\Content|null $content
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function buildDomainUserObject(SPIUser $spiUser, APIContent $content = null)
-    {
+    protected function buildDomainUserObject(
+        SPIUser $spiUser,
+        APIContent $content = null,
+        array $prioritizedLanguages = []
+    ) {
         if ($content === null) {
-            $content = $this->repository->getContentService()->internalLoadContent($spiUser->id);
+            $content = $this->repository->getContentService()->internalLoadContent(
+                $spiUser->id,
+                $prioritizedLanguages
+            );
         }
 
         return new User(
@@ -1111,6 +1261,37 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Verifies if the provided login and password are valid.
+     *
+     * @param string $login User login
+     * @param string $password User password
+     * @param \eZ\Publish\SPI\Persistence\User $spiUser Loaded user handler
+     *
+     * @return bool return true if the login and password are sucessfully
+     * validate and false, if not.
+     */
+    protected function verifyPassword($login, $password, $spiUser)
+    {
+        // In case of bcrypt let php's password functionality do it's magic
+        if ($spiUser->hashAlgorithm === APIUser::PASSWORD_HASH_BCRYPT ||
+            $spiUser->hashAlgorithm === APIUser::PASSWORD_HASH_PHP_DEFAULT) {
+            return password_verify($password, $spiUser->passwordHash);
+        }
+
+        // Randomize login time to protect against timing attacks
+        usleep(random_int(0, 30000));
+
+        $passwordHash = $this->createPasswordHash(
+            $login,
+            $password,
+            $this->settings['siteName'],
+            $spiUser->hashAlgorithm
+        );
+
+        return $passwordHash === $spiUser->passwordHash;
+    }
+
+    /**
      * Returns password hash based on user data and site settings.
      *
      * @param string $login User login
@@ -1119,77 +1300,59 @@ class UserService implements UserServiceInterface
      * @param int $type Type of password to generate
      *
      * @return string Generated password hash
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the type is not recognized
      */
     protected function createPasswordHash($login, $password, $site, $type)
     {
+        $deprecationWarningFormat = 'Password hash type %s is deprecated since 6.13.';
+
         switch ($type) {
-            case User::PASSWORD_HASH_MD5_PASSWORD:
+            case APIUser::PASSWORD_HASH_MD5_PASSWORD:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_PASSWORD'), E_USER_DEPRECATED);
+
                 return md5($password);
 
-            case User::PASSWORD_HASH_MD5_USER:
+            case APIUser::PASSWORD_HASH_MD5_USER:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_USER'), E_USER_DEPRECATED);
+
                 return md5("$login\n$password");
 
-            case User::PASSWORD_HASH_MD5_SITE:
+            case APIUser::PASSWORD_HASH_MD5_SITE:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_MD5_SITE'), E_USER_DEPRECATED);
+
                 return md5("$login\n$password\n$site");
 
-            case User::PASSWORD_HASH_PLAINTEXT:
+            case APIUser::PASSWORD_HASH_PLAINTEXT:
+                @trigger_error(sprintf($deprecationWarningFormat, 'PASSWORD_HASH_PLAINTEXT'), E_USER_DEPRECATED);
+
                 return $password;
 
+            case APIUser::PASSWORD_HASH_BCRYPT:
+                return password_hash($password, PASSWORD_BCRYPT);
+
+            case APIUser::PASSWORD_HASH_PHP_DEFAULT:
+                return password_hash($password, PASSWORD_DEFAULT);
+
             default:
-                return md5($password);
+                throw new InvalidArgumentException('type', "Password hash type '$type' is not recognized");
         }
     }
 
     /**
-     * Instantiates a correct sort clause object based on provided location sort field and sort order.
+     * Return true if any of the UserUpdateStruct properties refers to User Profile (Content) update.
      *
-     * @param int $sortField
-     * @param int $sortOrder
+     * @param UserUpdateStruct $userUpdateStruct
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\SortClause
+     * @return bool
      */
-    protected function getSortClauseBySortField($sortField, $sortOrder = Location::SORT_ORDER_ASC)
+    private function isUserProfileUpdateRequested(UserUpdateStruct $userUpdateStruct)
     {
-        $sortOrder = $sortOrder == Location::SORT_ORDER_DESC ? LocationQuery::SORT_DESC : LocationQuery::SORT_ASC;
-        switch ($sortField) {
-            case Location::SORT_FIELD_PATH:
-                return new SortClause\Location\Path($sortOrder);
-
-            case Location::SORT_FIELD_PUBLISHED:
-                return new SortClause\DatePublished($sortOrder);
-
-            case Location::SORT_FIELD_MODIFIED:
-                return new SortClause\DateModified($sortOrder);
-
-            case Location::SORT_FIELD_SECTION:
-                return new SortClause\SectionIdentifier($sortOrder);
-
-            case Location::SORT_FIELD_DEPTH:
-                return new SortClause\Location\Depth($sortOrder);
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_CLASS_IDENTIFIER:
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_CLASS_NAME:
-
-            case Location::SORT_FIELD_PRIORITY:
-                return new SortClause\Location\Priority($sortOrder);
-
-            case Location::SORT_FIELD_NAME:
-                return new SortClause\ContentName($sortOrder);
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_MODIFIED_SUBNODE:
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_NODE_ID:
-
-            //@todo: enable
-            // case APILocation::SORT_FIELD_CONTENTOBJECT_ID:
-
-            default:
-                return new SortClause\Location\Path($sortOrder);
-        }
+        return
+            !empty($userUpdateStruct->contentUpdateStruct) ||
+            !empty($userUpdateStruct->contentMetadataUpdateStruct) ||
+            !empty($userUpdateStruct->email) ||
+            !empty($userUpdateStruct->enabled) ||
+            !empty($userUpdateStruct->maxLogin);
     }
 }

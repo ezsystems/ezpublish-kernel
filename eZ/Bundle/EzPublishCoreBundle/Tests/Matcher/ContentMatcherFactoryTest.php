@@ -5,12 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
 use eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ViewMatcherInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,7 +21,7 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
     {
         $matcherServiceIdentifier = 'my.matcher.service';
         $resolverMock = $this->getResolverMock($matcherServiceIdentifier);
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $container = $this->createMock(ContainerInterface::class);
         $container
             ->expects($this->atLeastOnce())
             ->method('has')
@@ -40,13 +41,13 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
                         array(
                             $matcherServiceIdentifier,
                             ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE,
-                            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ViewMatcherInterface'),
+                            $this->createMock(ViewMatcherInterface::class),
                         ),
                     )
                 )
             );
 
-        $matcherFactory = new ContentMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory = new ContentMatcherFactory($resolverMock, $this->createMock(Repository::class));
         $matcherFactory->setContainer($container);
         $matcherFactory->match($this->getContentInfoMock(), 'full');
     }
@@ -54,8 +55,8 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
     public function testSetSiteAccessNull()
     {
         $matcherServiceIdentifier = 'my.matcher.service';
-        $resolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $resolverMock = $this->createMock(ConfigResolverInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
 
         $resolverMock
             ->expects($this->once())
@@ -75,7 +76,7 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
                     )
                 )
             );
-        $matcherFactory = new ContentMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory = new ContentMatcherFactory($resolverMock, $this->createMock(Repository::class));
         $matcherFactory->setContainer($container);
         $matcherFactory->setSiteAccess();
     }
@@ -83,8 +84,8 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
     public function testSetSiteAccess()
     {
         $matcherServiceIdentifier = 'my.matcher.service';
-        $resolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $container = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $resolverMock = $this->createMock(ConfigResolverInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
 
         $siteAccessName = 'siteaccess_name';
         $updatedMatchConfig = array(
@@ -120,7 +121,7 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
                     )
                 )
             );
-        $matcherFactory = new ContentMatcherFactory($resolverMock, $this->getMock('eZ\\Publish\\API\\Repository\\Repository'));
+        $matcherFactory = new ContentMatcherFactory($resolverMock, $this->createMock(Repository::class));
         $matcherFactory->setContainer($container);
         $matcherFactory->setSiteAccess(new SiteAccess($siteAccessName));
 

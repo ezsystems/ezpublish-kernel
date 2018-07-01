@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
@@ -58,14 +56,26 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                     ->scalarNode('dsn')->info('Full database DSN. Will replace settings above.')->example('mysql://root:root@localhost:3306/ezdemo')->end()
                 ->end()
             ->end()
-            ->scalarNode('cache_pool_name')
-                ->example('ez_site_x')
-                ->info('The cache pool name to use for a siteaccess / siteaccess-group, *must* be present under stash.caches: yml config. Default value is "default". NB! Setting is Deprecated, will be made redundant in future version.')
+            ->scalarNode('cache_service_name')
+                ->example('cache.app')
+                ->defaultValue('cache.app')
+                ->info('The cache pool service name to use for a siteaccess / siteaccess-group, *must* be present.')
             ->end()
             ->scalarNode('var_dir')
                 ->cannotBeEmpty()
                 ->example('var/ezdemo_site')
                 ->info('The directory relative to web/ where files are stored. Default value is "var"')
+            ->end()
+            ->arrayNode('api_keys')
+                ->info('Collection of API keys')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->scalarNode('google_maps')
+                        ->setDeprecated('The child node "%node%" at path "%path%" is no longer used and deprecated.')
+                        ->info('Google Maps API Key, required as of Google Maps v3 to make sure maps show up correctly.')
+                        ->defaultNull()
+                    ->end()
+                ->end()
             ->end()
             ->scalarNode('storage_dir')
                 ->cannotBeEmpty()
@@ -93,6 +103,10 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                     ->booleanNode('cookie_httponly')->end()
                 ->end()
             ->end()
+            ->scalarNode('pagelayout')
+                ->info('The default layout to use')
+                ->example('AppBundle::pagelayout.html.twig')
+            ->end()
             ->scalarNode('index_page')
                 ->info('The page that the index page will show. Default value is null.')
                 ->example('/Getting-Started')
@@ -103,7 +117,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             ->end()
             ->arrayNode('http_cache')
                 ->info('Settings related to Http cache')
-                ->cannotBeEmpty()
                 ->children()
                     ->arrayNode('purge_servers')
                         ->info('Servers to use for Http PURGE (will NOT be used if ezpublish.http_cache.purge_type is "local").')
@@ -145,8 +158,8 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
         if (isset($scopeSettings['repository'])) {
             $contextualizer->setContextualParameter('repository', $currentScope, $scopeSettings['repository']);
         }
-        if (isset($scopeSettings['cache_pool_name'])) {
-            $contextualizer->setContextualParameter('cache_pool_name', $currentScope, $scopeSettings['cache_pool_name']);
+        if (isset($scopeSettings['cache_service_name'])) {
+            $contextualizer->setContextualParameter('cache_service_name', $currentScope, $scopeSettings['cache_service_name']);
         }
         if (isset($scopeSettings['var_dir'])) {
             $contextualizer->setContextualParameter('var_dir', $currentScope, $scopeSettings['var_dir']);
@@ -156,6 +169,11 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
         }
         if (isset($scopeSettings['binary_dir'])) {
             $contextualizer->setContextualParameter('binary_dir', $currentScope, $scopeSettings['binary_dir']);
+        }
+
+        $contextualizer->setContextualParameter('api_keys', $currentScope, $scopeSettings['api_keys']);
+        foreach ($scopeSettings['api_keys'] as $key => $value) {
+            $contextualizer->setContextualParameter('api_keys.' . $key, $currentScope, $value);
         }
 
         // session_name setting is deprecated in favor of session.name
@@ -188,6 +206,9 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
         }
         if (isset($scopeSettings['default_page'])) {
             $contextualizer->setContextualParameter('default_page', $currentScope, '/' . ltrim($scopeSettings['default_page'], '/'));
+        }
+        if (isset($scopeSettings['pagelayout'])) {
+            $contextualizer->setContextualParameter('pagelayout', $currentScope, $scopeSettings['pagelayout']);
         }
     }
 

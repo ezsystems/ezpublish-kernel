@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
@@ -17,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ObjectStateId;
 /**
  * Test case for ObjectState issues in EZP-20018.
  *
- * @issue EZP-20018
+ * Issue EZP-20018
  */
 class EZP20018ObjectStateTest extends BaseTest
 {

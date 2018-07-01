@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
@@ -15,20 +13,20 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class UrlAliasTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers nothing. Creates a folder for other tests.
+     * Covers nothing. Creates a folder for other tests.
      *
      * @return string The folder's main location href
      */
     public function testCreateFolder()
     {
-        $folderArray = $this->createFolder(__METHOD__, '/api/ezp/v2/content/locations/1/2');
+        $folderArray = $this->createFolder('UrlAliasTest_testCreateFolder', '/api/ezp/v2/content/locations/1/2');
         $folderLocations = $this->getContentLocations($folderArray['_href']);
 
         return $folderLocations['LocationList']['Location'][0]['_href'];
     }
 
     /**
-     * @covers GET /content/urlaliases
+     * Covers GET /content/urlaliases.
      */
     public function testListGlobalURLAliases()
     {
@@ -41,7 +39,7 @@ class UrlAliasTest extends RESTFunctionalTestCase
 
     /**
      * @depends testCreateFolder
-     * @covers POST /content/urlaliases
+     * Covers POST /content/urlaliases
      * @returns string The created url alias href
      */
     public function testCreateUrlAlias($locationHref)
@@ -62,23 +60,23 @@ XML;
             'POST',
             '/api/ezp/v2/content/urlaliases',
             'UrlAliasCreate+xml',
-            'UrlAlias+json'
+            'UrlAlias+json',
+            $xml
         );
-        $request->setContent($xml);
 
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
     }
 
     /**
-     * @covers POST /content/urlaliases
+     * Covers POST /content/urlaliases.
      * @returns string The created url alias href
      */
     public function testCreateGlobalUrlAlias()
@@ -99,16 +97,16 @@ XML;
             'POST',
             '/api/ezp/v2/content/urlaliases',
             'UrlAliasCreate+xml',
-            'UrlAlias+json'
+            'UrlAlias+json',
+            $xml
         );
-        $request->setContent($xml);
 
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -116,7 +114,7 @@ XML;
 
     /**
      * @depends testCreateUrlAlias
-     * @covers GET /content/urlaliases/{urlAliasId}
+     * Covers GET /content/urlaliases/{urlAliasId}
      */
     public function testLoadURLAlias($urlAliasHref)
     {
@@ -134,7 +132,7 @@ XML;
 
     /**
      * @depends testCreateUrlAlias
-     * @covers DELETE /content/urlaliases/{urlAliasId}
+     * Covers DELETE /content/urlaliases/{urlAliasId}
      */
     public function testDeleteURLAlias($urlAliasHref)
     {
@@ -153,7 +151,7 @@ XML;
 
     /**
      * @depends testCreateFolder
-     * @covers GET /content/locations/{locationPath}/urlaliases
+     * Covers GET /content/locations/{locationPath}/urlaliases
      */
     public function testListLocationURLAliases($contentLocationHref)
     {

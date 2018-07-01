@@ -5,19 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\OriginalRequestListener;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class OriginalRequestListenerTest extends PHPUnit_Framework_TestCase
+class OriginalRequestListenerTest extends TestCase
 {
     public function testGetSubscribedEvents()
     {
@@ -33,7 +31,7 @@ class OriginalRequestListenerTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request();
         $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::SUB_REQUEST
         );
@@ -47,7 +45,7 @@ class OriginalRequestListenerTest extends PHPUnit_Framework_TestCase
     {
         $request = new Request();
         $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -73,7 +71,7 @@ class OriginalRequestListenerTest extends PHPUnit_Framework_TestCase
         $request->headers->set('x-fos-original-url', $originalUri);
         $request->headers->set('x-fos-original-accept', $originalAccept);
         $event = new GetResponseEvent(
-            $this->getMock('\Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );

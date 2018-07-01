@@ -5,29 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Values\ContentType;
 
 use eZ\Publish\Core\REST\Client\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Client\Values\ContentType\FieldDefinition;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\REST\Client\Values\FieldDefinitionList;
+use eZ\Publish\Core\REST\Client\ContentTypeService;
+use PHPUnit\Framework\TestCase;
 
-class ContentTypeTest extends PHPUnit_Framework_TestCase
+class ContentTypeTest extends TestCase
 {
     protected $contentTypeServiceMock;
 
     public function setUp()
     {
-        $this->contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->contentTypeServiceMock = $this->createMock(ContentTypeService::class);
     }
 
     public function testGetName()
@@ -138,13 +132,7 @@ class ContentTypeTest extends PHPUnit_Framework_TestCase
 
     protected function getFieldDefinitionListMock()
     {
-        $mock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Client\\Values\\FieldDefinitionList',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $mock = $this->createMock(FieldDefinitionList::class);
         $mock->expects($this->any())
             ->method('getFieldDefinitions')
             ->will($this->returnValue($this->getFieldDefinitions()));

@@ -5,14 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use Behat\Gherkin\Node\TableNode;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 trait ContentTypeGroup
 {

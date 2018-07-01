@@ -5,6 +5,7 @@
 {% if embedParams.link is defined  %}
     {% set params = params|merge( { "linkParameters": embedParams.link } ) %}
 {% endif %}
+{{ fos_httpcache_tag('relation-location-' ~ embedParams.id) }}
 {{
     render(
         controller(
@@ -12,7 +13,8 @@
             {
                 "locationId": embedParams.id,
                 "viewType": embedParams.viewType,
-                "params": params
+                "params": params,
+                "layout": false
             }
         )
     )

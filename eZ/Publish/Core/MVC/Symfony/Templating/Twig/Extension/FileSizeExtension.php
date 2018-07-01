@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
@@ -94,12 +92,12 @@ class FileSizeExtension extends Twig_Extension
     {
         $mod = 1000;
         $index = count($this->suffixes);
-        if ($number < pow($mod, $index)) {
+        if ($number < ($mod ** $index)) {
             for ($i = 0; $number >= $mod; ++$i) {
                 $number /= $mod;
             }
         } else {
-            $number /= pow($mod, ($index - 1));
+            $number /= $mod ** ($index - 1);
             $i = ($index - 1);
         }
         $formatter = new NumberFormatter($this->getLocale(), NumberFormatter::PATTERN_DECIMAL);

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 
@@ -28,7 +26,7 @@ class PostgresConnectionHandler extends ConnectionHandler
      */
     public function getAutoIncrementValue($table, $column)
     {
-        return "nextval('"  . $this->getSequenceName($table, $column) . "')";
+        return "nextval('" . $this->getSequenceName($table, $column) . "')";
     }
 
     /**
@@ -41,7 +39,7 @@ class PostgresConnectionHandler extends ConnectionHandler
      */
     public function getSequenceName($table, $column)
     {
-        return $table . '_s';
+        return sprintf('%s_%s_seq', $table, $column);
     }
 
     /**

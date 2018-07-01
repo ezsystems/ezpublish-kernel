@@ -1,13 +1,11 @@
 <?php
 
 /**
- * File containing the Persistence Handler interface.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\SPI\Persistence;
 
 /**
@@ -64,6 +62,21 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
      */
     public function urlWildcardHandler();
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\Legacy\URL\Handler
+     */
+    public function urlHandler();
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Bookmark\Handler
+     */
+    public function bookmarkHandler();
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Notification\Handler
+     */
+    public function notificationHandler();
 
     /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler

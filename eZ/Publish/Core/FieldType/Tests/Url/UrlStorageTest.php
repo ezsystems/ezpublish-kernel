@@ -5,19 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\Url;
 
+use eZ\Publish\Core\FieldType\Url\UrlStorage;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-/**
- */
-class UrlStorageTest extends PHPUnit_Framework_TestCase
+class UrlStorageTest extends TestCase
 {
     public function testStoreFieldDataWithExistingUrl()
     {
@@ -37,13 +36,7 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
             ->method('linkUrl')
             ->with(12, 42, 24);
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
         $this->assertTrue($result);
@@ -74,13 +67,7 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
             ->method('linkUrl')
             ->with(12, 42, 24);
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
         $this->assertTrue($result);
@@ -106,13 +93,7 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('linkUrl');
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
         $this->assertFalse($result);
@@ -132,13 +113,7 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
             ->with(array(12))
             ->will($this->returnValue(array(12 => 'http://ez.no')));
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $storage->getFieldData($versionInfo, $field, $this->getContext());
 
         $this->assertEquals('http://ez.no', $field->value->externalData);
@@ -157,13 +132,7 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
             ->with(array(12))
             ->will($this->returnValue(array()));
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $logger = $this->getLoggerMock();
         $logger
             ->expects($this->once())
@@ -191,13 +160,7 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
             ->expects($this->never())
             ->method('error');
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->any())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $storage->getFieldData($versionInfo, $field, $this->getContext());
 
         $this->assertEquals(null, $field->value->externalData);
@@ -216,38 +179,32 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
                 ->with($id, 24);
         }
 
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
-        $storage
-            ->expects($this->once())
-            ->method('getGateway')
-            ->with($this->getContext())
-            ->will($this->returnValue($gateway));
-
+        $storage = $this->getPartlyMockedStorage($gateway);
         $storage->deleteFieldData($versionInfo, $fieldIds, $this->getContext());
     }
 
     public function testHasFieldData()
     {
-        $storage = $this->getPartlyMockedStorage(array('getGateway'));
+        $storage = $this->getPartlyMockedStorage($this->getGatewayMock());
 
         $this->assertTrue($storage->hasFieldData());
     }
 
     /**
-     * @param array $methods
-     *
-     * @return \eZ\Publish\Core\FieldType\Url\UrlStorage|\PHPUnit_Framework_MockObject_MockObject
+     * @param \eZ\Publish\SPI\FieldType\StorageGateway $gateway
+     * @return \eZ\Publish\Core\FieldType\Url\UrlStorage|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getPartlyMockedStorage(array $methods = array())
+    protected function getPartlyMockedStorage(StorageGateway $gateway)
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\FieldType\\Url\\UrlStorage',
-            $methods,
-            array(
-                array(),
-                $this->getLoggerMock(),
+        return $this->getMockBuilder(UrlStorage::class)
+            ->setMethods(null)
+            ->setConstructorArgs(
+                array(
+                    $gateway,
+                    $this->getLoggerMock(),
+                )
             )
-        );
+            ->getMock();
     }
 
     /**
@@ -259,18 +216,18 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @return \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLoggerMock()
     {
         if (!isset($this->loggerMock)) {
             $this->loggerMock = $this->getMockForAbstractClass(
-                'Psr\\Log\\LoggerInterface'
+                LoggerInterface::class
             );
         }
 
@@ -278,19 +235,17 @@ class UrlStorageTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $gatewayMock;
 
     /**
-     * @return \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\FieldType\\Url\\UrlStorage\\Gateway'
-            );
+            $this->gatewayMock = $this->createMock(UrlStorage\Gateway::class);
         }
 
         return $this->gatewayMock;

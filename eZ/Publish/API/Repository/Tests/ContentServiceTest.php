@@ -5,12 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -20,6 +21,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use DOMDocument;
 use Exception;
 
 /**
@@ -124,14 +126,22 @@ class ContentServiceTest extends BaseContentServiceTest
 
         // Give Anonymous user role additional rights
         $role = $roleService->loadRoleByIdentifier('Anonymous');
+        $roleDraft = $roleService->createRoleDraft($role);
         $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreateStruct->addLimitation(new SectionLimitation(array('limitationValues' => array(1))));
         $policyCreateStruct->addLimitation(new LocationLimitation(array('limitationValues' => array(2))));
         $policyCreateStruct->addLimitation(new ContentTypeLimitation(array('limitationValues' => array(1))));
-        $roleService->addPolicy($role, $policyCreateStruct);
+        $roleDraft = $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+
+        $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'publish');
+        $policyCreateStruct->addLimitation(new SectionLimitation(array('limitationValues' => array(1))));
+        $policyCreateStruct->addLimitation(new LocationLimitation(array('limitationValues' => array(2))));
+        $policyCreateStruct->addLimitation(new ContentTypeLimitation(array('limitationValues' => array(1))));
+        $roleDraft = $roleService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+        $roleService->publishRoleDraft($roleDraft);
 
         // Set Anonymous user as current
-        $repository->setCurrentUser($repository->getUserService()->loadUser($anonymousUserId));
+        $repository->getPermissionResolver()->setCurrentUserReference($repository->getUserService()->loadUser($anonymousUserId));
 
         // Create a new content object:
         $contentCreate = $contentService->newContentCreateStruct(
@@ -248,6 +258,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'initialLanguageCode' => $content->getVersionInfo()->initialLanguageCode,
             )
         );
+        $this->assertTrue($content->getVersionInfo()->isDraft());
+        $this->assertFalse($content->getVersionInfo()->isPublished());
+        $this->assertFalse($content->getVersionInfo()->isArchived());
     }
 
     /**
@@ -341,7 +354,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Violates string length constraint
         $contentCreate1->setField('short_name', str_repeat('a', 200));
 
-        // Throws ContentValidationException, since short_name does not pass
+        // Throws ContentFieldValidationException, since short_name does not pass
         // validation of the string length validator
         $draft = $contentService->createContent($contentCreate1);
         /* END: Use Case */
@@ -351,10 +364,10 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the createContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
-    public function testCreateContentThrowsContentValidationException()
+    public function testCreateContentRequiredFieldMissing()
     {
         $repository = $this->getRepository();
 
@@ -367,7 +380,7 @@ class ContentServiceTest extends BaseContentServiceTest
         $contentCreate1 = $contentService->newContentCreateStruct($contentType, 'eng-US');
         // Required field "name" is not set
 
-        // Throws a ContentValidationException, since a required field is
+        // Throws a ContentFieldValidationException, since a required field is
         // missing
         $draft = $contentService->createContent($contentCreate1);
         /* END: Use Case */
@@ -488,6 +501,24 @@ class ContentServiceTest extends BaseContentServiceTest
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo',
             $contentInfo
         );
+
+        return $contentInfo;
+    }
+
+    /**
+     * Test for the returned value of the loadContentInfo() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfo
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoSetsExpectedContentInfo(ContentInfo $contentInfo)
+    {
+        $this->assertPropertiesCorrectUnsorted(
+            $this->getExpectedMediaContentInfoProperties(),
+            $contentInfo
+        );
     }
 
     /**
@@ -527,6 +558,38 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo', $contentInfo);
+
+        return $contentInfo;
+    }
+
+    /**
+     * Test for the returned value of the loadContentInfoByRemoteId() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function testLoadContentInfoByRemoteIdSetsExpectedContentInfo(ContentInfo $contentInfo)
+    {
+        $this->assertPropertiesCorrectUnsorted(
+            [
+                'id' => 10,
+                'contentTypeId' => 4,
+                'name' => 'Anonymous User',
+                'sectionId' => 2,
+                'currentVersionNo' => 2,
+                'published' => true,
+                'ownerId' => 14,
+                'modificationDate' => $this->createDateTime(1072180405),
+                'publishedDate' => $this->createDateTime(1033920665),
+                'alwaysAvailable' => 1,
+                'remoteId' => 'faaeb9be3bd98ed09f606fc16d144eca',
+                'mainLanguageCode' => 'eng-US',
+                'mainLocationId' => 45,
+            ],
+            $contentInfo
+        );
     }
 
     /**
@@ -601,6 +664,42 @@ class ContentServiceTest extends BaseContentServiceTest
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
             $versionInfo
         );
+
+        return $versionInfo;
+    }
+
+    /**
+     * Test for the returned value of the loadVersionInfoById() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     */
+    public function testLoadVersionInfoByIdSetsExpectedVersionInfo(VersionInfo $versionInfo)
+    {
+        $this->assertPropertiesCorrect(
+            [
+                'names' => [
+                    'eng-US' => 'Media',
+                ],
+                'contentInfo' => new ContentInfo($this->getExpectedMediaContentInfoProperties()),
+                'id' => 472,
+                'versionNo' => 1,
+                'modificationDate' => $this->createDateTime(1060695457),
+                'creatorId' => 14,
+                'creationDate' => $this->createDateTime(1060695450),
+                'status' => VersionInfo::STATUS_PUBLISHED,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => [
+                    'eng-US',
+                ],
+            ],
+            $versionInfo
+        );
+        $this->assertTrue($versionInfo->isPublished());
+        $this->assertFalse($versionInfo->isDraft());
+        $this->assertFalse($versionInfo->isArchived());
     }
 
     /**
@@ -732,28 +831,52 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Data provider for testLoadContentByRemoteId().
+     *
+     * @return array
+     */
+    public function contentRemoteIdVersionLanguageProvider()
+    {
+        return [
+            ['f5c88a2209584891056f987fd965b0ba', null, null],
+            ['f5c88a2209584891056f987fd965b0ba', ['eng-US'], null],
+            ['f5c88a2209584891056f987fd965b0ba', null, 1],
+            ['f5c88a2209584891056f987fd965b0ba', ['eng-US'], 1],
+            ['a6e35cbcb7cd6ae4b691f3eee30cd262', null, null],
+            ['a6e35cbcb7cd6ae4b691f3eee30cd262', ['eng-US'], null],
+            ['a6e35cbcb7cd6ae4b691f3eee30cd262', null, 1],
+            ['a6e35cbcb7cd6ae4b691f3eee30cd262', ['eng-US'], 1],
+        ];
+    }
+
+    /**
      * Test for the loadContentByRemoteId() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
+     * @covers \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId
+     * @dataProvider contentRemoteIdVersionLanguageProvider
+     *
+     * @param string $remoteId
+     * @param array|null $languages
+     * @param int $versionNo
      */
-    public function testLoadContentByRemoteId()
+    public function testLoadContentByRemoteId($remoteId, $languages, $versionNo)
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
-        // Remote id of the "Media" folder
-        $mediaRemoteId = 'a6e35cbcb7cd6ae4b691f3eee30cd262';
-
         $contentService = $repository->getContentService();
 
-        // Load the Content for "Media" folder
-        $content = $contentService->loadContentByRemoteId($mediaRemoteId);
-        /* END: Use Case */
+        $content = $contentService->loadContentByRemoteId($remoteId, $languages, $versionNo);
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
+            Content::class,
             $content
         );
+
+        $this->assertEquals($remoteId, $content->contentInfo->remoteId);
+        if ($languages !== null) {
+            $this->assertEquals($languages, $content->getVersionInfo()->languageCodes);
+        }
+        $this->assertEquals($versionNo ?: 1, $content->getVersionInfo()->versionNo);
     }
 
     /**
@@ -791,14 +914,19 @@ class ContentServiceTest extends BaseContentServiceTest
      */
     public function testPublishVersion()
     {
+        $time = time();
         /* BEGIN: Use Case */
         $content = $this->createContentVersion1();
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            $content
-        );
+        $this->assertInstanceOf(Content::class, $content);
+        $this->assertTrue($content->contentInfo->published);
+        $this->assertEquals(VersionInfo::STATUS_PUBLISHED, $content->versionInfo->status);
+        $this->assertGreaterThanOrEqual($time, $content->contentInfo->publishedDate->getTimestamp());
+        $this->assertGreaterThanOrEqual($time, $content->contentInfo->modificationDate->getTimestamp());
+        $this->assertTrue($content->versionInfo->isPublished());
+        $this->assertFalse($content->versionInfo->isDraft());
+        $this->assertFalse($content->versionInfo->isArchived());
 
         return $content;
     }
@@ -874,6 +1002,9 @@ class ContentServiceTest extends BaseContentServiceTest
         );
 
         $this->assertNotNull($content->getVersionInfo()->modificationDate);
+        $this->assertTrue($content->getVersionInfo()->isPublished());
+        $this->assertFalse($content->getVersionInfo()->isDraft());
+        $this->assertFalse($content->getVersionInfo()->isArchived());
     }
 
     /**
@@ -962,6 +1093,38 @@ class ContentServiceTest extends BaseContentServiceTest
         // is already published.
         $contentService->publishVersion($draft->getVersionInfo());
         /* END: Use Case */
+    }
+
+    /**
+     * Test that publishVersion() does not affect publishedDate (assuming previous version exists).
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::publishVersion
+     */
+    public function testPublishVersionDoesNotChangePublishedDate()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $publishedContent = $this->createContentVersion1();
+
+        // force timestamps to differ
+        sleep(1);
+
+        $contentDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('name', 'New name');
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+        $republishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $this->assertEquals(
+            $publishedContent->contentInfo->publishedDate->getTimestamp(),
+            $republishedContent->contentInfo->publishedDate->getTimestamp()
+        );
+        $this->assertGreaterThan(
+            $publishedContent->contentInfo->modificationDate->getTimestamp(),
+            $republishedContent->contentInfo->modificationDate->getTimestamp()
+        );
     }
 
     /**
@@ -1110,6 +1273,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'versionNo' => $versionInfo->versionNo,
             )
         );
+        $this->assertTrue($versionInfo->isDraft());
+        $this->assertFalse($versionInfo->isPublished());
+        $this->assertFalse($versionInfo->isArchived());
     }
 
     /**
@@ -1221,7 +1387,7 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the newContentUpdateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct()
+     * @covers \eZ\Publish\API\Repository\ContentService::newContentUpdateStruct
      * @group user
      */
     public function testNewContentUpdateStruct()
@@ -1235,7 +1401,15 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentUpdateStruct',
+            ContentUpdateStruct::class,
+            $updateStruct
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'initialLanguageCode' => null,
+                'fields' => [],
+            ],
             $updateStruct
         );
     }
@@ -1321,6 +1495,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description',
+                    'fieldTypeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -1329,6 +1504,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description',
+                    'fieldTypeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -1337,6 +1513,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
             new Field(
@@ -1345,6 +1522,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -1418,10 +1596,10 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the updateContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
-    public function testUpdateContentThrowsContentValidationExceptionWhenMandatoryFieldIsEmpty()
+    public function testUpdateContentWhenMandatoryFieldIsEmpty()
     {
         $repository = $this->getRepository();
 
@@ -1437,7 +1615,7 @@ class ContentServiceTest extends BaseContentServiceTest
         // Don't set this, then the above call without languageCode will fail
         $contentUpdateStruct->initialLanguageCode = 'eng-US';
 
-        // This call will fail with a "ContentValidationException", because the
+        // This call will fail with a "ContentFieldValidationException", because the
         // mandatory "name" field is empty.
         $contentService->updateContent(
             $draft->getVersionInfo(),
@@ -1475,6 +1653,60 @@ class ContentServiceTest extends BaseContentServiceTest
         // Throws ContentFieldValidationException because the string length
         // validation of the field "short_name" fails
         $contentService->updateContent($draft->getVersionInfo(), $contentUpdate);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContent() method.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
+     */
+    public function testUpdateContentValidatorIgnoresRequiredFieldsOfNotUpdatedLanguages()
+    {
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        // Create multilangual content
+        $contentService = $repository->getContentService();
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'An awesome Sidelfingen folder', 'eng-US');
+        $contentCreate->setField('name', 'An awesome Sidelfingen folder', 'eng-GB');
+
+        $contentDraft = $contentService->createContent($contentCreate);
+
+        // 2. Update content type definition
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+
+        $fieldDefinition = $contentType->getFieldDefinition('description');
+        $fieldDefinitionUpdate = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $fieldDefinitionUpdate->identifier = 'description';
+        $fieldDefinitionUpdate->isRequired = true;
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition,
+            $fieldDefinitionUpdate
+        );
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        // 3. Update only eng-US translation
+        $description = new DOMDocument();
+        $description->loadXML(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>Lorem ipsum dolor</para>
+</section>
+XML
+        );
+
+        $contentUpdate = $contentService->newContentUpdateStruct();
+        $contentUpdate->setField('name', 'An awesome Sidelfingen folder (updated)', 'eng-US');
+        $contentUpdate->setField('description', $description);
+
+        $contentService->updateContent($contentDraft->getVersionInfo(), $contentUpdate);
         /* END: Use Case */
     }
 
@@ -1549,6 +1781,32 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the createContentDraft() method with third parameter.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::createContentDraft
+     */
+    public function testCreateContentDraftWithThirdParameter()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $content = $contentService->loadContent(4);
+        $user = $this->createUserVersion1();
+
+        $draftContent = $contentService->createContentDraft(
+            $content->contentInfo,
+            $content->getVersionInfo(),
+            $user
+        );
+
+        $this->assertInstanceOf(
+            Content::class,
+            $draftContent
+        );
+    }
+
+    /**
      * Test for the publishVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
@@ -1577,6 +1835,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'versionNo' => $versionInfo->versionNo,
             )
         );
+        $this->assertTrue($versionInfo->isPublished());
+        $this->assertFalse($versionInfo->isDraft());
+        $this->assertFalse($versionInfo->isArchived());
     }
 
     /**
@@ -1607,6 +1868,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 'versionNo' => $versionInfo->versionNo,
             )
         );
+        $this->assertTrue($versionInfo->isArchived());
+        $this->assertFalse($versionInfo->isDraft());
+        $this->assertFalse($versionInfo->isPublished());
     }
 
     /**
@@ -1657,9 +1921,79 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the publishVersion() method, and that it creates limited archives.
+     *
+     * @todo Adapt this when per content type archive limited is added on repository Content Type model.
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     */
+    public function testPublishVersionNotCreatingUnlimitedArchives()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion1();
+
+        // load first to make sure list gets updated also (cache)
+        $versionInfoList = $contentService->loadVersions($content->contentInfo);
+        $this->assertEquals(1, count($versionInfoList));
+        $this->assertEquals(1, $versionInfoList[0]->versionNo);
+
+        // Create a new draft with versionNo = 2
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 3
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 4
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 5
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 6
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        // Create a new draft with versionNo = 7
+        $draftedContentVersion = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draftedContentVersion->getVersionInfo());
+
+        $versionInfoList = $contentService->loadVersions($content->contentInfo);
+
+        $this->assertEquals(6, count($versionInfoList));
+        $this->assertEquals(2, $versionInfoList[0]->versionNo);
+        $this->assertEquals(7, $versionInfoList[5]->versionNo);
+
+        $this->assertEquals(
+            [
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_ARCHIVED,
+                VersionInfo::STATUS_PUBLISHED,
+            ],
+            [
+                $versionInfoList[0]->status,
+                $versionInfoList[1]->status,
+                $versionInfoList[2]->status,
+                $versionInfoList[3]->status,
+                $versionInfoList[4]->status,
+                $versionInfoList[5]->status,
+            ]
+        );
+    }
+
+    /**
      * Test for the newContentMetadataUpdateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct()
+     * @covers \eZ\Publish\API\Repository\ContentService::newContentMetadataUpdateStruct
      * @group user
      */
     public function testNewContentMetadataUpdateStruct()
@@ -1672,13 +2006,17 @@ class ContentServiceTest extends BaseContentServiceTest
         // Creates a new metadata update struct
         $metadataUpdate = $contentService->newContentMetadataUpdateStruct();
 
+        foreach ($metadataUpdate as $propertyName => $propertyValue) {
+            $this->assertNull($propertyValue, "Property '{$propertyName}' initial value should be null'");
+        }
+
         $metadataUpdate->remoteId = 'aaaabbbbccccddddeeeeffff11112222';
         $metadataUpdate->mainLanguageCode = 'eng-GB';
         $metadataUpdate->alwaysAvailable = false;
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\ContentMetadataUpdateStruct',
+            ContentMetadataUpdateStruct::class,
             $metadataUpdate
         );
     }
@@ -1780,11 +2118,11 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the updateContentMetadata() method.
      *
-     * @see \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
+     * @covers \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
-    public function testUpdateContentMetadataThrowsInvalidArgumentException()
+    public function testUpdateContentMetadataThrowsInvalidArgumentExceptionOnDuplicateRemoteId()
     {
         $repository = $this->getRepository();
 
@@ -1807,6 +2145,25 @@ class ContentServiceTest extends BaseContentServiceTest
             $metadataUpdate
         );
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateContentMetadata() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUpdateContentMetadataThrowsInvalidArgumentExceptionOnNoMetadataPropertiesSet()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $contentInfo = $contentService->loadContentInfo(4);
+        $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+
+        // Throws an exception because no properties are set in $contentMetadataUpdateStruct
+        $contentService->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
     }
 
     /**
@@ -1988,6 +2345,9 @@ class ContentServiceTest extends BaseContentServiceTest
                 $newCurrentUserDrafts[0]->getContentInfo()->remoteId,
             )
         );
+        $this->assertTrue($newCurrentUserDrafts[0]->isDraft());
+        $this->assertFalse($newCurrentUserDrafts[0]->isArchived());
+        $this->assertFalse($newCurrentUserDrafts[0]->isPublished());
     }
 
     /**
@@ -2069,6 +2429,61 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(
             $publishedContent->getVersionInfo()->getContentInfo()->mainLocationId,
             $versionInfo->getContentInfo()->mainLocationId
+        );
+
+        return [
+            'versionInfo' => $versionInfo,
+            'draftContent' => $draftContent,
+        ];
+    }
+
+    /**
+     * Test for the returned value of the loadVersionInfoById() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoByIdWithSecondParameter
+     * @covers \eZ\Publish\API\Repository\ContentService::loadVersionInfoById
+     *
+     * @param array $data
+     */
+    public function testLoadVersionInfoByIdWithSecondParameterSetsExpectedVersionInfo(array $data)
+    {
+        /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo */
+        $versionInfo = $data['versionInfo'];
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $draftContent */
+        $draftContent = $data['draftContent'];
+
+        $this->assertPropertiesCorrect(
+            [
+                'names' => [
+                    'eng-US' => 'An awesome forum',
+                ],
+                'contentInfo' => new ContentInfo([
+                    'id' => $draftContent->contentInfo->id,
+                    'contentTypeId' => 28,
+                    'name' => 'An awesome forum',
+                    'sectionId' => 1,
+                    'currentVersionNo' => 1,
+                    'published' => true,
+                    'ownerId' => 14,
+                    // this Content Object is created at the test runtime
+                    'modificationDate' => $versionInfo->contentInfo->modificationDate,
+                    'publishedDate' => $versionInfo->contentInfo->publishedDate,
+                    'alwaysAvailable' => 1,
+                    'remoteId' => 'abcdef0123456789abcdef0123456789',
+                    'mainLanguageCode' => 'eng-US',
+                    'mainLocationId' => $draftContent->contentInfo->mainLocationId,
+                    'status' => ContentInfo::STATUS_PUBLISHED,
+                ]),
+                'id' => $draftContent->versionInfo->id,
+                'versionNo' => 2,
+                'creatorId' => 14,
+                'status' => 0,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => [
+                    'eng-US',
+                ],
+            ],
+            $versionInfo
         );
     }
 
@@ -2238,6 +2653,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description',
+                    'fieldTypeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -2246,6 +2662,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -2271,6 +2688,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description',
+                    'fieldTypeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -2279,6 +2697,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -2304,6 +2723,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description',
+                    'fieldTypeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -2312,6 +2732,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => true,
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
         );
@@ -2361,7 +2782,7 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithThirdParameter
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithVersionNumberParameter
      */
     public function testLoadContentByContentInfoThrowsNotFoundExceptionWithVersionNumberParameter()
     {
@@ -2398,6 +2819,25 @@ class ContentServiceTest extends BaseContentServiceTest
         /* END: Use Case */
 
         $this->assertLocaleFieldsEquals($draftLocalized->getFields(), 'eng-GB');
+
+        return $draft;
+    }
+
+    /**
+     * Test for the loadContent() method using undefined translation.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithSecondParameter
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $contentDraft
+     */
+    public function testLoadContentWithSecondParameterThrowsNotFoundException(Content $contentDraft)
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $contentService->loadContent($contentDraft->id, array('ger-DE'), null, false);
     }
 
     /**
@@ -2542,6 +2982,46 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test that retrieval of translated name field respects prioritized language list.
+     *
+     * @dataProvider getPrioritizedLanguageList
+     * @param string[]|null $languageCodes
+     */
+    public function testLoadContentWithPrioritizedLanguagesList($languageCodes)
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion2();
+
+        $content = $contentService->loadContent($content->id, $languageCodes);
+
+        $expectedName = $content->getVersionInfo()->getName(
+            isset($languageCodes[0]) ? $languageCodes[0] : null
+        );
+        $nameValue = $content->getFieldValue('name');
+        /** @var \eZ\Publish\Core\FieldType\TextLine\Value $nameValue */
+        self::assertEquals($expectedName, $nameValue->text);
+        self::assertEquals($expectedName, $content->getVersionInfo()->getName());
+        // Also check value on shortcut method on content
+        self::assertEquals($expectedName, $content->getName());
+    }
+
+    /**
+     * @return array
+     */
+    public function getPrioritizedLanguageList()
+    {
+        return [
+            [['eng-US']],
+            [['eng-GB']],
+            [['eng-GB', 'eng-US']],
+            [['eng-US', 'eng-GB']],
+        ];
+    }
+
+    /**
      * Test for the deleteVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
@@ -2630,6 +3110,8 @@ class ContentServiceTest extends BaseContentServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadVersions()
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[]
      */
     public function testLoadVersions()
     {
@@ -2644,26 +3126,66 @@ class ContentServiceTest extends BaseContentServiceTest
         $versions = $contentService->loadVersions($contentVersion2->contentInfo);
         /* END: Use Case */
 
-        $expectedVersionIds = array(
-            $contentService->loadVersionInfo($contentVersion2->contentInfo, 1)->id => true,
-            $contentService->loadVersionInfo($contentVersion2->contentInfo, 2)->id => true,
+        $expectedVersionsOrder = [
+            $contentService->loadVersionInfo($contentVersion2->contentInfo, 1),
+            $contentService->loadVersionInfo($contentVersion2->contentInfo, 2),
+        ];
+
+        $this->assertEquals($expectedVersionsOrder, $versions);
+
+        return $versions;
+    }
+
+    /**
+     * Test for the loadVersions() method.
+     *
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersions
+     * @covers \eZ\Publish\Core\Repository\ContentService::loadVersions
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo[] $versions
+     */
+    public function testLoadVersionsSetsExpectedVersionInfo(array $versions)
+    {
+        $this->assertCount(2, $versions);
+
+        $expectedVersions = [
+            [
+                'versionNo' => 1,
+                'creatorId' => 14,
+                'status' => VersionInfo::STATUS_ARCHIVED,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => ['eng-US'],
+            ],
+            [
+                'versionNo' => 2,
+                'creatorId' => 10,
+                'status' => VersionInfo::STATUS_PUBLISHED,
+                'initialLanguageCode' => 'eng-US',
+                'languageCodes' => ['eng-US', 'eng-GB'],
+            ],
+        ];
+
+        $this->assertPropertiesCorrect($expectedVersions[0], $versions[0]);
+        $this->assertPropertiesCorrect($expectedVersions[1], $versions[1]);
+        $this->assertEquals(
+            $versions[0]->creationDate->getTimestamp(),
+            $versions[1]->creationDate->getTimestamp(),
+            'Creation time did not match within delta of 2 seconds',
+            2
         );
+        $this->assertEquals(
+            $versions[0]->modificationDate->getTimestamp(),
+            $versions[1]->modificationDate->getTimestamp(),
+            'Creation time did not match within delta of 2 seconds',
+            2
+        );
+        $this->assertTrue($versions[0]->isArchived());
+        $this->assertFalse($versions[0]->isDraft());
+        $this->assertFalse($versions[0]->isPublished());
 
-        foreach ($versions as $actualVersion) {
-            if (!isset($expectedVersionIds[$actualVersion->id])) {
-                $this->fail("Unexpected version with ID '{$actualVersion->id}' loaded.");
-            }
-            unset($expectedVersionIds[$actualVersion->id]);
-        }
-
-        if (!empty($expectedVersionIds)) {
-            $this->fail(
-                sprintf(
-                    "Expected versions not loaded: '%s'",
-                    implode("', '", $expectedVersionIds)
-                )
-            );
-        }
+        $this->assertTrue($versions[1]->isPublished());
+        $this->assertFalse($versions[1]->isDraft());
+        $this->assertFalse($versions[1]->isArchived());
     }
 
     /**
@@ -4371,6 +4893,8 @@ class ContentServiceTest extends BaseContentServiceTest
         // Rollback all changes
         $repository->rollback();
 
+        $this->refreshSearch($repository);
+
         // This array will only contain a single admin user object
         $locations = $locationService->loadLocationChildren(
             $locationService->loadLocation($locationId)
@@ -4440,8 +4964,6 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertEquals(2, count($locations));
     }
 
-    /**
-     */
     public function testURLAliasesCreatedForNewContent()
     {
         $repository = $this->getRepository();
@@ -4479,8 +5001,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
-    /**
-     */
     public function testURLAliasesCreatedForUpdatedContent()
     {
         $repository = $this->getRepository();
@@ -4491,6 +5011,30 @@ class ContentServiceTest extends BaseContentServiceTest
 
         /* BEGIN: Use Case */
         $draft = $this->createUpdatedDraftVersion2();
+
+        $location = $locationService->loadLocation(
+            $draft->getVersionInfo()->getContentInfo()->mainLocationId
+        );
+
+        // Load and assert URL aliases before publishing updated Content, so that
+        // SPI cache is warmed up and cache invalidation is also tested.
+        $aliases = $urlAliasService->listLocationAliases($location, false);
+
+        $this->assertAliasesCorrect(
+            array(
+                '/Design/Plain-site/An-awesome-forum' => array(
+                    'type' => URLAlias::LOCATION,
+                    'destination' => $location->id,
+                    'path' => '/Design/Plain-site/An-awesome-forum',
+                    'languageCodes' => array('eng-US'),
+                    'alwaysAvailable' => true,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                ),
+            ),
+            $aliases
+        );
 
         // Automatically marks old aliases for the content as history
         // and creates new aliases, based on the changes
@@ -4510,6 +5054,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum2',
                     'languageCodes' => array('eng-US'),
+                    'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
@@ -4519,6 +5064,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'destination' => $location->id,
                     'path' => '/Design/Plain-site/An-awesome-forum23',
                     'languageCodes' => array('eng-GB'),
+                    'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
@@ -4528,8 +5074,6 @@ class ContentServiceTest extends BaseContentServiceTest
         );
     }
 
-    /**
-     */
     public function testCustomURLAliasesNotHistorizedOnUpdatedContent()
     {
         $repository = $this->getRepository();
@@ -4600,8 +5144,6 @@ class ContentServiceTest extends BaseContentServiceTest
 
         $contentService = $repository->getContentService();
 
-        $contentService = $repository->getContentService();
-
         $contentVersion2 = $this->createContentVersion2();
 
         $loadedContent1 = $contentService->loadContent($contentVersion2->id, null, 1);
@@ -4611,6 +5153,588 @@ class ContentServiceTest extends BaseContentServiceTest
             $loadedContent1->getFieldValue('name', 'eng-US'),
             $loadedContent2->getFieldValue('name', 'eng-US')
         );
+    }
+
+    /**
+     * Test scenario with writer and publisher users.
+     * Writer can only create content. Publisher can publish this content.
+     */
+    public function testPublishWorkflow()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $this->createRoleWithPolicies('Publisher', [
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'publish'],
+        ]);
+
+        $this->createRoleWithPolicies('Writer', [
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'create'],
+        ]);
+
+        $writerUser = $this->createCustomUserWithLogin(
+            'writer',
+            'writer@example.com',
+            'Writers',
+            'Writer'
+        );
+
+        $publisherUser = $this->createCustomUserWithLogin(
+            'publisher',
+            'publisher@example.com',
+            'Publishers',
+            'Publisher'
+        );
+
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+        $draft = $this->createContentDraftVersion1();
+
+        $repository->getPermissionResolver()->setCurrentUserReference($publisherUser);
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        $contentService->loadContent($content->id);
+    }
+
+    /**
+     * Test publish / content policy is required to be able to publish content.
+     *
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @expectedExceptionMessageRegExp /User does not have access to 'publish' 'content'/
+     */
+    public function testPublishContentWithoutPublishPolicyThrowsException()
+    {
+        $repository = $this->getRepository();
+
+        $this->createRoleWithPolicies('Writer', [
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'edit'],
+        ]);
+        $writerUser = $this->createCustomUserWithLogin(
+            'writer',
+            'writer@example.com',
+            'Writers',
+            'Writer'
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+
+        $this->createContentVersion1();
+    }
+
+    /**
+     * Test removal of the specific translation from all the Versions of a Content Object.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
+     */
+    public function testDeleteTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $content = $this->createContentVersion2();
+
+        // create multiple versions to exceed archive limit
+        for ($i = 0; $i < 5; ++$i) {
+            $contentDraft = $contentService->createContentDraft($content->contentInfo);
+            $contentUpdateStruct = $contentService->newContentUpdateStruct();
+            $contentDraft = $contentService->updateContent(
+                $contentDraft->versionInfo,
+                $contentUpdateStruct
+            );
+            $contentService->publishVersion($contentDraft->versionInfo);
+        }
+
+        $contentService->deleteTranslation($content->contentInfo, 'eng-GB');
+
+        $this->assertTranslationDoesNotExist('eng-GB', $content->id);
+    }
+
+    /**
+     * Test deleting a Translation which is initial for some Version, updates initialLanguageCode
+     * with mainLanguageCode (assuming they are different).
+     */
+    public function testDeleteTranslationUpdatesInitialLanguageCodeVersion()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion2();
+        // create another, copied, version
+        $contentDraft = $contentService->updateContent(
+            $contentService->createContentDraft($content->contentInfo)->versionInfo,
+            $contentService->newContentUpdateStruct()
+        );
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        // remove first version with only one translation as it is not the subject of this test
+        $contentService->deleteVersion(
+            $contentService->loadVersionInfo($publishedContent->contentInfo, 1)
+        );
+
+        // sanity check
+        self::assertEquals('eng-US', $content->contentInfo->mainLanguageCode);
+        self::assertEquals('eng-US', $content->versionInfo->initialLanguageCode);
+
+        // update mainLanguageCode so it is different than initialLanguageCode for Version
+        $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $content = $contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
+
+        $contentService->deleteTranslation($content->contentInfo, 'eng-US');
+
+        $this->assertTranslationDoesNotExist('eng-US', $content->id);
+    }
+
+    /**
+     * Test removal of the specific translation properly updates languages of the URL alias.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
+     */
+    public function testDeleteTranslationUpdatesUrlAlias()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $content = $this->createContentVersion2();
+        $mainLocation = $locationService->loadLocation($content->contentInfo->mainLocationId);
+
+        // create custom URL alias for Content main Location
+        $urlAliasService->createUrlAlias($mainLocation, '/my-custom-url', 'eng-GB');
+
+        // create secondary Location for Content
+        $secondaryLocation = $locationService->createLocation(
+            $content->contentInfo,
+            $locationService->newLocationCreateStruct(2)
+        );
+
+        // create custom URL alias for Content secondary Location
+        $urlAliasService->createUrlAlias($secondaryLocation, '/my-secondary-url', 'eng-GB');
+
+        // delete Translation
+        $contentService->deleteTranslation($content->contentInfo, 'eng-GB');
+
+        foreach ([$mainLocation, $secondaryLocation] as $location) {
+            // check auto-generated URL aliases
+            foreach ($urlAliasService->listLocationAliases($location, false) as $alias) {
+                self::assertNotContains('eng-GB', $alias->languageCodes);
+            }
+
+            // check custom URL aliases
+            foreach ($urlAliasService->listLocationAliases($location) as $alias) {
+                self::assertNotContains('eng-GB', $alias->languageCodes);
+            }
+        }
+    }
+
+    /**
+     * Test removal of a main translation throws BadStateException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Specified translation is the main translation of the Content Object
+     */
+    public function testDeleteTranslationMainLanguageThrowsBadStateException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $content = $this->createContentVersion2();
+
+        // delete first version which has only one translation
+        $contentService->deleteVersion($contentService->loadVersionInfo($content->contentInfo, 1));
+
+        // try to delete main translation
+        $contentService->deleteTranslation($content->contentInfo, $content->contentInfo->mainLanguageCode);
+    }
+
+    /**
+     * Test removal of a Translation is possible when some archived Versions have only this Translation.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
+     */
+    public function testDeleteTranslationDeletesSingleTranslationVersions()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        // content created by the createContentVersion1 method has eng-US translation only.
+        $content = $this->createContentVersion1();
+
+        // create new version and add eng-GB translation
+        $contentDraft = $contentService->createContentDraft($content->contentInfo);
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('name', 'Awesome Board', 'eng-GB');
+        $contentDraft = $contentService->updateContent($contentDraft->versionInfo, $contentUpdateStruct);
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        // update mainLanguageCode to avoid exception related to that
+        $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+
+        $content = $contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
+
+        $contentService->deleteTranslation($content->contentInfo, 'eng-US');
+
+        $this->assertTranslationDoesNotExist('eng-US', $content->id);
+    }
+
+    /**
+     * Test removal of the translation by the user who is not allowed to delete a content
+     * throws UnauthorizedException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @expectedExceptionMessage User does not have access to 'remove' 'content'
+     */
+    public function testDeleteTranslationThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion2();
+
+        // create user that can read/create/edit but cannot delete content
+        $this->createRoleWithPolicies('Writer', [
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'versionread'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'edit'],
+        ]);
+        $writerUser = $this->createCustomUserWithLogin(
+            'writer',
+            'writer@example.com',
+            'Writers',
+            'Writer'
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+        $contentService->deleteTranslation($content->contentInfo, 'eng-GB');
+    }
+
+    /**
+     * Test removal of a non-existent translation throws InvalidArgumentException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessage Argument '$languageCode' is invalid: ger-DE does not exist in the Content item
+     */
+    public function testDeleteTranslationThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        // content created by the createContentVersion1 method has eng-US translation only.
+        $content = $this->createContentVersion1();
+        $contentService->deleteTranslation($content->contentInfo, 'ger-DE');
+    }
+
+    /**
+     * Test deleting a Translation from Draft.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     */
+    public function testDeleteTranslationFromDraft()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCode = 'eng-GB';
+        $content = $this->createMultipleLanguageContentVersion2();
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $draft = $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        $loadedContent = $contentService->loadContent($content->id);
+        self::assertNotContains($languageCode, $loadedContent->versionInfo->languageCodes);
+        self::assertEmpty($loadedContent->getFieldsByLanguage($languageCode));
+    }
+
+    /**
+     * Get values for multilingual field.
+     *
+     * @return array
+     */
+    public function providerForDeleteTranslationFromDraftRemovesUrlAliasOnPublishing()
+    {
+        return [
+            [
+                ['eng-US' => 'US Name', 'eng-GB' => 'GB Name'],
+            ],
+            [
+                ['eng-US' => 'Same Name', 'eng-GB' => 'Same Name'],
+            ],
+        ];
+    }
+
+    /**
+     * Test deleting a Translation from Draft removes previously stored URL aliases for published Content.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     *
+     * @dataProvider providerForDeleteTranslationFromDraftRemovesUrlAliasOnPublishing
+     *
+     * @param string[] $fieldValues translated field values
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testDeleteTranslationFromDraftRemovesUrlAliasOnPublishing(array $fieldValues)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        // set language code to be removed
+        $languageCode = 'eng-GB';
+        $draft = $this->createMultilingualContentDraft(
+            'folder',
+            2,
+            'eng-US',
+            [
+                'name' => [
+                    'eng-GB' => $fieldValues['eng-GB'],
+                    'eng-US' => $fieldValues['eng-US'],
+                ],
+            ]
+        );
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        // create secondary location
+        $locationService->createLocation(
+            $content->contentInfo,
+            $locationService->newLocationCreateStruct(5)
+        );
+
+        // sanity check
+        $locations = $locationService->loadLocations($content->contentInfo);
+        self::assertCount(2, $locations, 'Sanity check: Expected to find 2 Locations');
+        foreach ($locations as $location) {
+            $urlAliasService->createUrlAlias($location, '/us-custom_' . $location->id, 'eng-US');
+            $urlAliasService->createUrlAlias($location, '/gb-custom_' . $location->id, 'eng-GB');
+
+            // check default URL aliases
+            $aliases = $urlAliasService->listLocationAliases($location, false, $languageCode);
+            self::assertNotEmpty($aliases, 'Sanity check: URL alias for the translation does not exist');
+
+            // check custom URL aliases
+            $aliases = $urlAliasService->listLocationAliases($location, true, $languageCode);
+            self::assertNotEmpty($aliases, 'Sanity check: Custom URL alias for the translation does not exist');
+        }
+
+        // delete translation and publish new version
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $draft = $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
+        $contentService->publishVersion($draft->versionInfo);
+
+        // check that aliases does not exist
+        foreach ($locations as $location) {
+            // check default URL aliases
+            $aliases = $urlAliasService->listLocationAliases($location, false, $languageCode);
+            self::assertEmpty($aliases, 'URL alias for the deleted translation still exists');
+
+            // check custom URL aliases
+            $aliases = $urlAliasService->listLocationAliases($location, true, $languageCode);
+            self::assertEmpty($aliases, 'Custom URL alias for the deleted translation still exists');
+        }
+    }
+
+    /**
+     * Test that URL aliases for deleted Translations are properly archived.
+     */
+    public function testDeleteTranslationFromDraftArchivesUrlAliasOnPublishing()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $urlAliasService = $repository->getURLAliasService();
+
+        $content = $contentService->publishVersion(
+            $this->createMultilingualContentDraft(
+                'folder',
+                2,
+                'eng-US',
+                [
+                    'name' => [
+                        'eng-GB' => 'BritishEnglishContent',
+                        'eng-US' => 'AmericanEnglishContent',
+                    ],
+                ]
+            )->versionInfo
+        );
+
+        $unrelatedContent = $contentService->publishVersion(
+            $this->createMultilingualContentDraft(
+                'folder',
+                2,
+                'eng-US',
+                [
+                    'name' => [
+                        'eng-GB' => 'AnotherBritishContent',
+                        'eng-US' => 'AnotherAmericanContent',
+                    ],
+                ]
+            )->versionInfo
+        );
+
+        $urlAlias = $urlAliasService->lookup('/BritishEnglishContent');
+        self::assertFalse($urlAlias->isHistory);
+        self::assertEquals($urlAlias->path, '/BritishEnglishContent');
+        self::assertEquals($urlAlias->destination, $content->contentInfo->mainLocationId);
+
+        $draft = $contentService->deleteTranslationFromDraft(
+            $contentService->createContentDraft($content->contentInfo)->versionInfo,
+            'eng-GB'
+        );
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        $urlAlias = $urlAliasService->lookup('/BritishEnglishContent');
+        self::assertTrue($urlAlias->isHistory);
+        self::assertEquals($urlAlias->path, '/BritishEnglishContent');
+        self::assertEquals($urlAlias->destination, $content->contentInfo->mainLocationId);
+
+        $unrelatedUrlAlias = $urlAliasService->lookup('/AnotherBritishContent');
+        self::assertFalse($unrelatedUrlAlias->isHistory);
+        self::assertEquals($unrelatedUrlAlias->path, '/AnotherBritishContent');
+        self::assertEquals($unrelatedUrlAlias->destination, $unrelatedContent->contentInfo->mainLocationId);
+    }
+
+    /**
+     * Test deleting a Translation from Draft which has single Translation throws BadStateException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Specified Translation is the only one Content Object Version has
+     */
+    public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnSingleTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        // create Content with single Translation
+        $publishedContent = $contentService->publishVersion(
+            $this->createContentDraft(
+                'forum',
+                2,
+                ['name' => 'Eng-US Version name']
+            )->versionInfo
+        );
+
+        // update mainLanguageCode to avoid exception related to trying to delete main Translation
+        $contentMetadataUpdateStruct = $contentService->newContentMetadataUpdateStruct();
+        $contentMetadataUpdateStruct->mainLanguageCode = 'eng-GB';
+        $publishedContent = $contentService->updateContentMetadata(
+            $publishedContent->contentInfo,
+            $contentMetadataUpdateStruct
+        );
+
+        // create single Translation Version from the first one
+        $draft = $contentService->createContentDraft(
+            $publishedContent->contentInfo,
+            $publishedContent->versionInfo
+        );
+
+        // attempt to delete Translation
+        $contentService->deleteTranslationFromDraft($draft->versionInfo, 'eng-US');
+    }
+
+    /**
+     * Test deleting the Main Translation from Draft throws BadStateException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Specified Translation is the main Translation of the Content Object
+     */
+    public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnMainTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $mainLanguageCode = 'eng-US';
+        $draft = $this->createMultilingualContentDraft(
+            'forum',
+            2,
+            $mainLanguageCode,
+            [
+                'name' => [
+                    'eng-US' => 'An awesome eng-US forum',
+                    'eng-GB' => 'An awesome eng-GB forum',
+                ],
+            ]
+        );
+        $contentService->deleteTranslationFromDraft($draft->versionInfo, $mainLanguageCode);
+    }
+
+    /**
+     * Test deleting the Translation from Published Version throws BadStateException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedExceptionMessage Version is not a draft
+     */
+    public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnPublishedVersion()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCode = 'eng-US';
+        $content = $this->createMultipleLanguageContentVersion2();
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $publishedContent = $contentService->publishVersion($draft->versionInfo);
+        $contentService->deleteTranslationFromDraft($publishedContent->versionInfo, $languageCode);
+    }
+
+    /**
+     * Test deleting a Translation from Draft throws UnauthorizedException if user cannot edit Content.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @expectedExceptionMessage User does not have access to 'edit' 'content'
+     */
+    public function testDeleteTranslationFromDraftThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCode = 'eng-GB';
+        $content = $this->createMultipleLanguageContentVersion2();
+        $draft = $contentService->createContentDraft($content->contentInfo);
+
+        // create user that can read/create/delete but cannot edit or content
+        $this->createRoleWithPolicies('Writer', [
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'versionread'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'delete'],
+        ]);
+        $writerUser = $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            'Writers',
+            'Writer'
+        );
+        $repository->getPermissionResolver()->setCurrentUserReference($writerUser);
+
+        $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
+    }
+
+    /**
+     * Test deleting a non-existent Translation from Draft throws InvalidArgumentException.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @expectedExceptionMessageRegExp /The Version \(ContentId=\d+, VersionNo=\d+\) is not translated into ger-DE/
+     */
+    public function testDeleteTranslationFromDraftThrowsInvalidArgumentException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $languageCode = 'ger-DE';
+        $content = $this->createMultipleLanguageContentVersion2();
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
     }
 
     /**
@@ -4716,6 +5840,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => ($field->value !== null ? true : null),
                     'languageCode' => $field->languageCode,
                     'fieldDefIdentifier' => $field->fieldDefIdentifier,
+                    'fieldTypeIdentifier' => $field->fieldTypeIdentifier,
                 )
             );
         }
@@ -4778,6 +5903,35 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Assert that given Content has no references to a translation specified by the $languageCode.
+     *
+     * @param string $languageCode
+     * @param int $contentId
+     */
+    private function assertTranslationDoesNotExist($languageCode, $contentId)
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $contentService->loadContent($contentId);
+
+        foreach ($content->fields as $fieldIdentifier => $field) {
+            /** @var array $field */
+            self::assertArrayNotHasKey($languageCode, $field);
+            self::assertNotEquals($languageCode, $content->contentInfo->mainLanguageCode);
+            self::assertArrayNotHasKey($languageCode, $content->versionInfo->getNames());
+            self::assertNotEquals($languageCode, $content->versionInfo->initialLanguageCode);
+            self::assertNotContains($languageCode, $content->versionInfo->languageCodes);
+        }
+        foreach ($contentService->loadVersions($content->contentInfo) as $versionInfo) {
+            self::assertArrayNotHasKey($languageCode, $versionInfo->getNames());
+            self::assertNotEquals($languageCode, $versionInfo->contentInfo->mainLanguageCode);
+            self::assertNotEquals($languageCode, $versionInfo->initialLanguageCode);
+            self::assertNotContains($languageCode, $versionInfo->languageCodes);
+        }
+    }
+
+    /**
      * Returns the default fixture of fields used in most tests.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Field[]
@@ -4791,6 +5945,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => 'Foo',
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'description',
+                    'fieldTypeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -4799,6 +5954,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => 'Bar',
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'description',
+                    'fieldTypeIdentifier' => 'ezrichtext',
                 )
             ),
             new Field(
@@ -4807,6 +5963,7 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => 'An awesome multi-lang forum²',
                     'languageCode' => 'eng-US',
                     'fieldDefIdentifier' => 'name',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
             new Field(
@@ -4815,8 +5972,34 @@ class ContentServiceTest extends BaseContentServiceTest
                     'value' => 'An awesome multi-lang forum²³',
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'name',
+                    'fieldTypeIdentifier' => 'ezstring',
                 )
             ),
         );
+    }
+
+    /**
+     * Gets expected property values for the "Media" ContentInfo ValueObject.
+     *
+     * @return array
+     */
+    private function getExpectedMediaContentInfoProperties()
+    {
+        return [
+            'id' => 41,
+            'contentTypeId' => 1,
+            'name' => 'Media',
+            'sectionId' => 3,
+            'currentVersionNo' => 1,
+            'published' => true,
+            'ownerId' => 14,
+            'modificationDate' => $this->createDateTime(1060695457),
+            'publishedDate' => $this->createDateTime(1060695457),
+            'alwaysAvailable' => 1,
+            'remoteId' => 'a6e35cbcb7cd6ae4b691f3eee30cd262',
+            'mainLanguageCode' => 'eng-US',
+            'mainLocationId' => 43,
+            'status' => ContentInfo::STATUS_PUBLISHED,
+        ];
     }
 }

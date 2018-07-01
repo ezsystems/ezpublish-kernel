@@ -1,6 +1,8 @@
-==========================
-eZ Publish REST API V2 RFC
-==========================
+﻿﻿=======================
+eZ Platform REST API V2
+=======================
+
+*This document was previously called "eZ Publish REST API V2" given this version of the REST API first was introduced with eZ Publish Platform 5.0.*
 
 .. contents:: Table of Contents
 
@@ -208,6 +210,242 @@ SSL Client Authentication
 
 The REST API provides authenticating a user by a subject in a client certificate delivered by the web server configured as SSL endpoint.
 
+Bookmark
+========
+
+Overview
+--------
+
+====================== ================ ================ =============================== ================ ================
+Resource                     POST             GET              HEAD                      PATCH/PUT        DELETE
+---------------------- ---------------- ---------------- ------------------------------- ---------------- ----------------
+/bookmark              .                List bookmarks   .                               .                .
+/bookmark/<locationId> Create bookmark  .                Check if location is bookmarked .                Delete bookmark
+====================== ================ ================ =============================== ================ ================
+
+Specification
+-------------
+
+List bookmarks
+~~~~~~~~~~~~~~
+
+:Resource: /bookmark
+:Method: GET
+:Description: List bookmarked locations for the current user
+:Parameters:
+    :offset: the offset of the result set. Default value is 0
+    :limit: the number of bookmarks returned. Default value is 25
+:Headers:
+    :Accept:
+        :application/vnd.ez.api.BookmarkList+xml:  if set the list is returned in XML format
+        :application/vnd.ez.api.BookmarkList+json: if set the list is returned in JSON format
+:Response:
+
+.. code:: http
+
+    HTTP/1.1 200 OK
+    Location: /bookmark
+    Accept-Patch:  application/vnd.ez.api.BookmarkList+(json|xml)
+    ETag: "<newEtag>"
+    Content-Type: <depending on accept header>
+    Content-Length: <length>
+
+:Error Codes:
+        :401: If the user is not authorized to list bookmarks
+
+XML Example
+```````````
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <BookmarkList media-type="application/vnd.ez.api.BookmarkList+xml">
+        <count>1</count>
+        <Bookmark media-type="application/vnd.ez.api.Bookmark+xml" _href="/api/ezp/v2/bookmark/2">
+            <Location media-type="application/vnd.ez.api.Location+xml" href="/api/ezp/v2/content/locations/1/2">
+                <id>2</id>
+                <priority>0</priority>
+                <hidden>false</hidden>
+                <invisible>false</invisible>
+                <ParentLocation media-type="application/vnd.ez.api.Location+xml" href="/api/ezp/v2/content/locations/1"/>
+                <pathString>/1/2/</pathString>
+                <depth>1</depth>
+                <childCount>4</childCount>
+                <remoteId>f3e90596361e31d496d4026eb624c983</remoteId>
+                <Children media-type="application/vnd.ez.api.LocationList+xml" href="/api/ezp/v2/content/locations/1/2/children"/>
+                <Content media-type="application/vnd.ez.api.Content+xml" href="/api/ezp/v2/content/objects/1"/>
+                <sortField>PRIORITY</sortField>
+                <sortOrder>ASC</sortOrder>
+                <UrlAliases media-type="application/vnd.ez.api.UrlAliasRefList+xml" href="/api/ezp/v2/content/locations/1/2/urlaliases"/>
+                <ContentInfo media-type="application/vnd.ez.api.ContentInfo+xml" href="/api/ezp/v2/content/objects/1">
+                    <Content media-type="application/vnd.ez.api.ContentInfo+xml" href="/api/ezp/v2/content/objects/1" remoteId="9459d3c29e15006e45197295722c7ade" id="1">
+                        <ContentType media-type="application/vnd.ez.api.ContentType+xml" href="/api/ezp/v2/content/types/1"/>
+                        <Name>eZ Platform</Name>
+                        <Versions media-type="application/vnd.ez.api.VersionList+xml" href="/api/ezp/v2/content/objects/1/versions"/>
+                        <CurrentVersion media-type="application/vnd.ez.api.Version+xml" href="/api/ezp/v2/content/objects/1/currentversion"/>
+                        <Section media-type="application/vnd.ez.api.Section+xml" href="/api/ezp/v2/content/sections/1"/>
+                        <Locations media-type="application/vnd.ez.api.LocationList+xml" href="/api/ezp/v2/content/objects/1/locations"/>
+                        <Owner media-type="application/vnd.ez.api.User+xml" href="/api/ezp/v2/user/users/14"/>
+                        <lastModificationDate>2015-11-30T13:10:46+00:00</lastModificationDate>
+                        <publishedDate>2015-11-30T13:10:46+00:00</publishedDate>
+                        <mainLanguageCode>eng-GB</mainLanguageCode>
+                        <currentVersionNo>9</currentVersionNo>
+                        <alwaysAvailable>true</alwaysAvailable>
+                        <ObjectStates media-type="application/vnd.ez.api.ContentObjectStates+xml" href="/api/ezp/v2/content/objects/1/objectstates"/>
+                    </Content>
+                </ContentInfo>
+            </Location>
+        </Bookmark>
+    </BookmarkList>
+
+
+JSON Example
+````````````
+
+.. code:: json
+
+    {
+        "BookmarkList": {
+            "_media-type": "application/vnd.ez.api.BookmarkList+json",
+            "count": 1,
+            "items": [
+                {
+                    "_media-type": "application/vnd.ez.api.Bookmark+json",
+                    "__href": "/api/ezp/v2/bookmark/2",
+                    "Location": {
+                        "_media-type": "application/vnd.ez.api.Location+json",
+                        "_href": "/api/ezp/v2/content/locations/1/2",
+                        "id": 2,
+                        "priority": 0,
+                        "hidden": false,
+                        "invisible": false,
+                        "ParentLocation": {
+                            "_media-type": "application/vnd.ez.api.Location+json",
+                            "_href": "/api/ezp/v2/content/locations/1"
+                        },
+                        "pathString": "/1/2/",
+                        "depth": 1,
+                        "childCount": 4,
+                        "remoteId": "f3e90596361e31d496d4026eb624c983",
+                        "Children": {
+                            "_media-type": "application/vnd.ez.api.LocationList+json",
+                            "_href": "/api/ezp/v2/content/locations/1/2/children"
+                        },
+                        "Content": {
+                            "_media-type": "application/vnd.ez.api.Content+json",
+                            "_href": "/api/ezp/v2/content/objects/1"
+                        },
+                        "sortField": "PRIORITY",
+                        "sortOrder": "ASC",
+                        "UrlAliases": {
+                            "_media-type": "application/vnd.ez.api.UrlAliasRefList+json",
+                            "_href": "/api/ezp/v2/content/locations/1/2/urlaliases"
+                        },
+                        "ContentInfo": {
+                            "_media-type": "application/vnd.ez.api.ContentInfo+json",
+                            "_href": "/api/ezp/v2/content/objects/1",
+                            "Content": {
+                                "_media-type": "application/vnd.ez.api.ContentInfo+json",
+                                "_href": "/api/ezp/v2/content/objects/1",
+                                "_remoteId": "9459d3c29e15006e45197295722c7ade",
+                                "_id": 1,
+                                "ContentType": {
+                                    "_media-type": "application/vnd.ez.api.ContentType+json",
+                                    "_href": "/api/ezp/v2/content/types/1"
+                                },
+                                "Name": "eZ Platform",
+                                "Versions": {
+                                    "_media-type": "application/vnd.ez.api.VersionList+json",
+                                    "_href": "/api/ezp/v2/content/objects/1/versions"
+                                },
+                                "CurrentVersion": {
+                                    "_media-type": "application/vnd.ez.api.Version+json",
+                                    "_href": "/api/ezp/v2/content/objects/1/currentversion"
+                                },
+                                "Section": {
+                                    "_media-type": "application/vnd.ez.api.Section+json",
+                                    "_href": "/api/ezp/v2/content/sections/1"
+                                },
+                                "Locations": {
+                                    "_media-type": "application/vnd.ez.api.LocationList+json",
+                                    "_href": "/api/ezp/v2/content/objects/1/locations"
+                                },
+                                "Owner": {
+                                    "_media-type": "application/vnd.ez.api.User+json",
+                                    "_href": "/api/ezp/v2/user/users/14"
+                                },
+                                "lastModificationDate": "2015-11-30T13:10:46+00:00",
+                                "publishedDate": "2015-11-30T13:10:46+00:00",
+                                "mainLanguageCode": "eng-GB",
+                                "currentVersionNo": 9,
+                                "alwaysAvailable": true,
+                                "ObjectStates": {
+                                    "_media-type": "application/vnd.ez.api.ContentObjectStates+json",
+                                    "_href": "/api/ezp/v2/content/objects/1/objectstates"
+                                }
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+
+Create bookmark
+~~~~~~~~~~~~~~~
+
+:Resource: /bookmark/<locationId>
+:Method: POST
+:Description: Add given location to bookmarks of current user
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 201 Created
+          Location: /bookmark/<locationId>
+          ETag: <etag>
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+
+:Error Codes:
+        :401: If the user is not authorized to given location
+        :404: If a given location not exists
+        :409: If location is already bookmarked
+
+Check if location is bookmarked
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+:Resource: /bookmark/<locationId>
+:Method: HEAD
+:Description: Check if given location is bookmarked by current user
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 200 OK
+          Location: /bookmark/<locationId>
+
+:Error Codes:
+    :401: If the user is not authorized to given location
+    :404: If a given location not exists / is not bookmarked
+
+
+Delete bookmark
+~~~~~~~~~~~~~~~
+
+:Resource: /bookmark/<locationId>
+:Method: DELETE
+:Description: Delete given location from bookmarks of current user
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 204 No Content
+
+:Error Codes:
+    :401: If the user is not authorized to given location
+    :404: If a given location not exists / is not bookmarked
+
 
 Content
 =======
@@ -224,7 +462,8 @@ Resource                                                          POST          
 /                                                                 .                   list root resources     .                            .
 /content/objects                                                  create new content  .                       .                            .
 /content/objects/<ID>                                             .                   load content            update content meta data     delete content   copy content
-/content/objects/<ID>/<lang_code>                                 .                   .                       .                            delete language
+/content/objects/<ID>/translations/<languageCode>                 .                   .                       .                            delete
+                                                                                                                                           translation
                                                                                                                                            from content
 /content/objects/<ID>/versions                                    .                   load all versions       .                            .
                                                                                       (version infos)
@@ -233,6 +472,9 @@ Resource                                                          POST          
                                                                                                                                                              version
 /content/objects/<ID>/versions/<no>                               .                   get a specific version  update a version/draft       delete version    create draft
                                                                                                                                                              from version
+/content/objects/<ID>/versions/<no>/translations/<languageCode>   .                   .                       .                            delete
+                                                                                                                                           translation
+                                                                                                                                           from version
 /content/objects/<ID>/versions/<no>/relations                     create new relation load relations of vers. .                            .
 /content/objects/<ID>/versions/<no>/relations/<ID>                .                   load relation details   .                            delete relation
 /content/objects/<ID>/locations                                   create location     load locations of cont- .                            .
@@ -615,6 +857,7 @@ XML Example
       <Owner href="/user/users/14" media-type="application/vnd.ez.api.User+xml" />
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>true</alwaysAvailable>
     </Content>
 
@@ -781,6 +1024,7 @@ JSON Example
         },
         "lastModificationDate": "2012-02-12T12:30:00",
         "mainLanguageCode": "eng-US",
+        "currentVersionNo": "1",
         "alwaysAvailable": true
       }
     }
@@ -874,6 +1118,7 @@ XML Example
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>eng-US</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>true</alwaysAvailable>
     </Content>
 
@@ -969,6 +1214,7 @@ In this example
       <lastModificationDate>2012-02-12T12:30:00</lastModificationDate>
       <publishedDate>2012-02-12T15:30:00</publishedDate>
       <mainLanguageCode>ger-DE</mainLanguageCode>
+      <currentVersionNo>1</currentVersionNo>
       <alwaysAvailable>false</alwaysAvailable>
     </Content>
 
@@ -1013,6 +1259,23 @@ Example
 
     HTTP/1.1 201 Created
     Location: /content/objects/74
+
+Delete (permanently) Translation from all Versions of a Content
+```````````````````````````````````````````````````````````````
+:Resource: /content/objects/<ID>/translations/<languageCode>
+:Method: DELETE
+:Description: Permanently delete a Translation from all Versions of a Content
+:Response:
+
+.. code:: http
+
+    HTTP/1.1 204 No Content
+
+:Error Codes:
+                :404: if the Content item was not found
+                :401: If the user is not authorized to delete Content (content/remove policy)
+                :406: if the given Translation does not exist for the Content
+                :409: if the specified Translation is the only one any Version has or is the Main Translation
 
 
 Managing Versions
@@ -1448,6 +1711,33 @@ Delete Content Version
     :401: If the user is not authorized to delete this version
     :403: If the version is in state published
 
+Delete Content Version Draft Translation
+````````````````````````````````````````
+:Resource: /content/objects/<ID>/versions/<versionNo>/translations/<languageCode>
+:Method: DELETE
+:Description: Removes a translation from a version draft
+:Response:
+
+.. code:: http
+
+    HTTP/1.1 204 No Content
+
+:Error Codes:
+        :404: if the content item or version number were not found
+        :401: If the user is not authorized to delete this translation
+        :403: If the version is in not draft state
+        :406: if the given translation does not exist for the version
+        :409: if the specified translation is the only one the Version has or is the main translation
+
+Example (workflow) of deleting translation from a published Content
+'''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+.. code:: http
+
+    COPY /content/objects/123/versions/2
+    DELETE /content/objects/123/versions/3/translations/fre-FR
+    PUBLISH /content/objects/123/versions/3
+
 Publish a content version
 `````````````````````````
 :Resource: /content/objects/<ID>/versions/<versionNo>
@@ -1820,13 +2110,14 @@ XML Example
       <Location href="/content/locations/1/4/73/133" media-type="application/vnd.ez.api.Location+xml"/>
     </LocationList>
 
-Load locations by id
+Load locations by id/remoteId/urlAlias
 ````````````````````
 :Resource: /content/locations
 :Method: GET
-:Description: loads the location for a given id (x)or remote id
+:Description: loads the location for a given id (x), remote id or url alias.
 :Parameters: :id: the id of the location. If present the location is with the given id is returned.
              :remoteId: the remoteId of the location. If present the location with the given remoteId is returned
+             :urlAlias: one of the url Aliases of the location. If present the location with given url Alias is returned
 :Response:
 
 .. code:: http
@@ -1835,7 +2126,7 @@ Load locations by id
           Location: /content/locations/<path>
 
 :Error Codes:
-    :404: If the  location with the given id (remoteId) does not exist
+    :404: If the  location with the given id (remoteId or urlAlias) does not exist
 
 Load location
 `````````````
@@ -2040,6 +2331,8 @@ Move Subtree
 :Resource: /content/locations/<path>
 :Method: MOVE or POST with header X-HTTP-Method-Override: MOVE
 :Description: moves the location to another parent. The destination can also be /content/trash where the location is put into the trash.
+    *(NOTE: Be aware that the user might not have access to the item any longer after it has been moved,
+    for example when read access is limited by subtree)*
 :Headers:
     :Destination: A parent location resource to which the location is moved
 :Response:
@@ -2049,12 +2342,20 @@ Move Subtree
         HTTP/1.1 201 Created
         Location: /content/locations/<newPath>
 
-or if destination is /content/trash
+or if destination is /content/trash and content only has one location *(NOTE: Like on normal subtree
+moves, be aware that the user might not have access to the item any longer after it has been moved
+to trash)*
 
 .. code:: http
 
         HTTP/1.1 201 Created
         Location: /content/trash/<ID>
+
+or if destination is /content/trash and content still has other locations (no trash item is created)
+
+.. code:: http
+
+        HTTP/1.1 204 No Content
 
 :Error Codes:
     :404: If the  location with the given id does not exist
@@ -2149,7 +2450,7 @@ Create View
 XML Example
 '''''''''''
 
-Perform a query on images withing the media section, sorted by name, limiting results to 10.
+Perform a query on images within the media section, sorted by name, limiting results to 10.
 
 .. code:: http
 
@@ -2164,16 +2465,14 @@ Perform a query on images withing the media section, sorted by name, limiting re
     <ViewInput>
       <identifier>TitleView</identifier>
       <ContentQuery>
-        <Criteria>
+        <Filter>
           <ContentTypeIdentifierCriterion>image</ContentTypeIdentifierCriterion>
           <SectionIdentifierCriterion>media</SectionIdentifierCriterion>
-        </Criteria>
+        </Filter>
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
-          <SortClause>
-            <SortField>NAME</SortField>
-          </SortClause>
+          <ContentName>ascending</ContentName>
         </SortClauses>
         <FacetBuilders>
           <contentTypeFacetBuilder/>
@@ -2196,15 +2495,13 @@ Perform a query on images withing the media section, sorted by name, limiting re
       <User href="/user/users/14" media-type="vnd.ez.api.User+xml"/>
       <public>false</public>
       <LocationQuery>
-        <Criteria>
+        <Filter>
           <ParentLocationIdCriterion>2</ParentLocationIdCriterion>
-        </Criteria>
+        </Filter>
         <limit>10</limit>
         <offset>0</offset>
         <SortClauses>
-          <SortClause>
-            <SortField>NAME</SortField>
-          </SortClause>
+          <ContentName>ascending</ContentName>
         </SortClauses>
         <FacetBuilders>
           <contentTypeFacetBuilder/>
@@ -3776,7 +4073,7 @@ Copy Content Type
 :Resource: /content/types/<ID>
 :Method:      COPY or POST with header: X-HTTP-Method-Override COPY
 :Description: copies a content type. A new remoteId is generated, and the identifier of the copy is set to
-              copy_of_<identifier>_<remoteId> (or another random string).
+              copy_of_<originalBaseIdentifier>_<newTypeId> (or another random string).
 :Response:
 
 .. code:: http
@@ -4261,7 +4558,7 @@ Overview
 --------
 
 ============================================= ===================== ======================= ===================== ============================= ============= =====================
-Resource                                      POST                  GET                     PUT                   DELETE                        HEAD          PUBLISH
+Resource                                      POST                  GET                     PATCH/PUT             DELETE                        HEAD          PUBLISH
 --------------------------------------------- --------------------- ----------------------- --------------------- ----------------------------- ------------- ---------------------
 /user/groups                                  .                     load all topl. groups   .                     .                             .             .
 /user/groups/root                             .                     redirect to root        .                     .                             .             .
@@ -4277,9 +4574,9 @@ Resource                                      POST                  GET         
                                                                     by the user
 /user/users/<ID>/roles                        assign role to user   load roles of group     .                     .                             .             .
 /user/users/<ID>/roles/<ID>                   .                     load roleassignment     .                     unassign role from user       .             .
-/user/roles                                   create new role       load all roles          .                     .                             .             .
-/user/roles/<ID>                              .                     load role               update role           delete role                   .             .
-/user/roles/<ID>/draft                        .                     load draft for role     update role draft     .                             .             publish a role draft
+/user/roles                                   create role/draft     load all roles          .                     .                             .             .
+/user/roles/<ID>                              create role draft     load role               update role           delete role                   .             .
+/user/roles/<ID>/draft                        .                     load draft for role     update role draft     delete role draft             .             publish a role draft
 /user/roles/<ID>/policies                     create policy         load policies           .                     delete all policies from role .             .
 /user/roles/<ID>/policies/<ID>                .                     load policy             update policy         delete policy                 .             .
 /user/sessions                                create session        .                       .                     .                             .             .
@@ -5252,11 +5549,12 @@ XML Example
 Managing Roles and Policies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Create Role
-```````````
+Create Role / Role Draft
+````````````````````````
 :Resource: /user/roles
 :Method: POST
-:Description: Creates a new role
+:Description: Creates a new role or role draft
+:Parameters: :publish: (default true) If true the role is published after creation
 :Headers:
     :Accept:
          :application/vnd.ez.api.Role+xml:  if set the new user is returned in xml format (see Role_)
@@ -5274,15 +5572,28 @@ Create Role
           ETag: "<newEtag>"
           Content-Type: <depending on accept header>
           Content-Length: <length>
+
+          or:
+
+          HTTP/1.1 201 Created
+          Location: /user/roles/<ID>/draft
+          Accept-Patch:  application/vnd.ez.api.RoleUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
 .. parsed-literal::
           Role_
 
+          or:
+
+          RoleDraft_
+
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
-    :401: If the user is not authorized to create this role
+    :401: If the user is not authorized to create this role / role draft
 
-XML Example
-'''''''''''
+XML Example for returning a role
+''''''''''''''''''''''''''''''''
 
 .. code:: http
 
@@ -5312,6 +5623,105 @@ XML Example
     <?xml version="1.0" encoding="UTF-8"?>
     <Role href="/user/roles/11" media-type="application/vnd.ez.api.Role+xml">
       <identifier>NewRole</identifier>
+      <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
+    </Role>
+
+XML Example for returning a role draft
+''''''''''''''''''''''''''''''''''''''
+
+.. code:: http
+
+    POST /user/roles?publish=false HTTP/1.1
+    Accept: application/vnd.ez.api.RoleDraft+xml
+    Content-Type: application/vnd.ez.api.RoleInput+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleInput>
+      <identifier>NewRole</identifier>
+    </RoleInput>
+
+.. code:: http
+
+    HTTP/1.1 201 Created
+    Location: /user/roles/11
+    Accept-Patch: application/vnd.ez.api.RoleUpdate+xml
+    ETag: "465897639450694836"
+    Content-Type: application/vnd.ez.api.RoleDraft+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Role href="/user/roles/11" media-type="application/vnd.ez.api.RoleDraft+xml">
+      <identifier>NewRole</identifier>
+      <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
+    </Role>
+
+
+
+Create Role Draft
+`````````````````
+:Resource: /user/roles/<ID>
+:Method: POST
+:Description: Creates a new role draft from an existing role.
+:Headers:
+    :Accept:
+         :application/vnd.ez.api.Role+xml:  if set the new user is returned in xml format (see Role_)
+         :application/vnd.ez.api.Role+json:  if set the new user is returned in json format (see Role_)
+    :Content-Type:
+         :application/vnd.ez.api.RoleInput+json: the RoleInput_  schema encoded in json
+         :application/vnd.ez.api.RoleInput+xml: the RoleInput_  schema encoded in xml
+:Response:
+
+.. code:: http
+
+          HTTP/1.1 201 Created
+          Location: /user/roles/<ID>/draft
+          Accept-Patch:  application/vnd.ez.api.RoleUpdate+(json|xml)
+          ETag: "<newEtag>"
+          Content-Type: <depending on accept header>
+          Content-Length: <length>
+.. parsed-literal::
+
+          RoleDraft_
+
+:Error Codes:
+    :401: If the user is not authorized to create this role / role draft
+
+XML Example
+'''''''''''
+
+.. code:: http
+
+    POST /user/roles/5 HTTP/1.1
+    Accept: application/vnd.ez.api.RoleDraft+xml
+    Content-Type: application/vnd.ez.api.RoleInput+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <RoleInput>
+      <identifier>MyRole</identifier>
+    </RoleInput>
+
+.. code:: http
+
+    HTTP/1.1 201 Created
+    Location: /user/roles/11
+    Accept-Patch: application/vnd.ez.api.RoleUpdate+xml
+    ETag: "465897639450694836"
+    Content-Type: application/vnd.ez.api.RoleDraft+xml
+    Content-Length: xxx
+
+.. code:: xml
+
+    <?xml version="1.0" encoding="UTF-8"?>
+    <Role href="/user/roles/11" media-type="application/vnd.ez.api.RoleDraft+xml">
+      <identifier>MyRole</identifier>
       <Policies href="/user/roles/11/policies" media-type="application/vnd.ez.api.PolicyList+xml"/>
     </Role>
 
@@ -5461,18 +5871,17 @@ Update Role draft
 
 Publish Role draft
 ``````````````````
-:Resource: /user/roles/<ID/draft
+:Resource: /user/roles/<ID>/draft
 :Method: PUBLISH or POST with header X-HTTP-Method-Override: PUBLISH
 :Description: Publishes a role draft
 :Response:
 
 .. code:: http
 
-          HTTP/1.1 200 OK
+          HTTP/1.1 204 No Content
+          Location: /api/ezp/v2/user/roles/<ID>
           Content-Type: <depending on accept header>
-          Content-Length: <length>
-.. parsed-literal::
-          Role_
+          Content-Length: 0
 
 :Error Codes:
     :401: If the user is not authorized to publish this content type draft
@@ -5492,6 +5901,20 @@ Delete Role
 
 :Error Codes:
     :401: If the user is not authorized to delete this role
+
+Delete Role Draft
+`````````````````
+:Resource: /user/roles/<ID>/draft
+:Method: DELETE
+:Description: The given role draft is deleted.
+:Response:
+
+.. code:: http
+
+        HTTP/1.1 204 No Content
+
+:Error Codes:
+        :401: If the user is not authorized to delete this role
 
 Load Roles for User or User Group
 `````````````````````````````````
@@ -6620,6 +7043,7 @@ Content XML Schema
                 minOccurs="0" />
               <xsd:element name="lastModificationDate" type="xsd:dateTime" />
               <xsd:element name="mainLanguageCode" type="xsd:string" />
+              <xsd:element name="currentVersionNo" type="xsd:int" />
               <xsd:element name="alwaysAvailable" type="xsd:boolean" />
             </xsd:all>
             <xsd:attribute name="id" type="xsd:int" />
@@ -6808,7 +7232,8 @@ Version
           <xsd:element name="id" type="xsd:integer" />
           <xsd:element name="fieldDefinitionIdentifier" type="xsd:string" />
           <xsd:element name="languageCode" type="xsd:string" />
-          <xsd:element name="value" type="fieldValueType" />
+          <xsd:element name="fieldTypeIdentifier" type="xsd:string" />
+          <xsd:element name="fieldValue" type="fieldValueType" />
         </xsd:all>
       </xsd:complexType>
       <xsd:complexType name="vnd.ez.api.Version">
@@ -7046,6 +7471,13 @@ View XML Schema
         </xsd:restriction>
       </xsd:simpleType>
 
+      <xsd:simpleType name="sortClauseDirectionEnumType">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="ascending" />
+          <xsd:enumeration value="descending" />
+        </xsd:restriction>
+      </xsd:simpleType>
+
       <xsd:complexType name="fieldCriterionType">
         <xsd:all>
           <xsd:element name="target" type="xsd:string">
@@ -7116,17 +7548,17 @@ View XML Schema
       </xsd:complexType>
 
       <xsd:complexType name="sortClauseType">
-        <xsd:sequence>
-          <xsd:element name="SortClause">
-            <xsd:complexType>
-              <xsd:all>
-                <xsd:element name="SortField" type="sortClauseEnumType" />
-                <xsd:element name="TargetData" type="xsd:anyType"
-                  minOccurs="0" />
-              </xsd:all>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:sequence>
+        <xsd:choice minOccurs="1" maxOccurs="unbounded">
+          <xsd:element name="ContentId" type="sortClauseDirectionEnumType" />
+          <xsd:element name="ContentName" type="sortClauseDirectionEnumType" />
+          <xsd:element name="DateModified" type="sortClauseDirectionEnumType" />
+          <xsd:element name="DatePublished" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationDepth" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationPath" type="sortClauseDirectionEnumType" />
+          <xsd:element name="LocationPriority" type="sortClauseDirectionEnumType" />
+          <xsd:element name="SectionIdentifier" type="sortClauseDirectionEnumType" />
+          <xsd:element name="SectionName" type="sortClauseDirectionEnumType" />
+        </xsd:choice>
       </xsd:complexType>
 
       <xsd:complexType name="facetBuilderType">
@@ -7248,7 +7680,7 @@ View XML Schema
           <xsd:choice>
             <xsd:element name="contentTypeFacetBuilder" type="facetBuilderType" />
             <xsd:element name="criterionFacetBuilder" type="facetBuilderType" />
-            <xsd:element name="dateRangeFacetBulder" type="dateRangeFacetBuilderType" />
+            <xsd:element name="dateRangeFacetBuilder" type="dateRangeFacetBuilderType" />
             <xsd:element name="fieldFacetBuilder" type="fieldFacetBuilderType"></xsd:element>
             <xsd:element name="fieldRangeFacetBuilder" type="fieldRangeFacetBuilderType"></xsd:element>
             <xsd:element name="locationFacetBuilder" type="locationFacetBuilderType" />
@@ -7261,7 +7693,10 @@ View XML Schema
 
       <xsd:complexType name="queryType">
         <xsd:all>
-          <xsd:element name="Criterion" type="criterionType" />
+          <!-- Criteria is deprecated since 6.6.0. Use 'Filter' instead, or 'Query' for criteria that should affect scoring. -->
+          <xsd:element name="Criteria" type="criterionType" />
+          <xsd:element name="Filter" type="criterionType" />
+          <xsd:element name="Query" type="criterionType" />
           <xsd:element name="limit" type="xsd:int" />
           <xsd:element name="offset" type="xsd:int" />
           <xsd:element name="FacetBuilders" type="facetBuilderListType" />
@@ -9627,6 +10062,39 @@ ErrorMessage XML Schema
           <xsd:element name="errorCode" type="xsd:string"></xsd:element>
           <xsd:element name="errorMessage" type="xsd:string"></xsd:element>
           <xsd:element name="errorDescription" type="xsd:string"></xsd:element>
+          <xsd:element name="errorDetails" minOccurs="0">
+            <xsd:complexType>
+              <xsd:all>
+                <xsd:element name="fields" minOccurs="1">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="field" minOccurs="1" maxOccurs="unbounded">
+                        <xsd:attribute name="fieldTypeId" type="xsd:integer"/>
+                        <xsd:complexType>
+                          <xsd:all>
+                            <xsd:element name="errors" minOccurs="1">
+                              <xsd:complexType>
+                                <xsd:sequence>
+                                  <xsd:element name="error" minOccurs="1" maxOccurs="unbounded">
+                                    <xsd:complexType>
+                                      <xsd:all>
+                                        <xsd:element name="type" type="xsd:string"/>
+                                        <xsd:element name="message" type="xsd:string"/>
+                                      </xsd:all>
+                                    </xsd:complexType>
+                                  </xsd:element>
+                                </xsd:sequence>
+                              </xsd:complexType>
+                            </xsd:element>
+                          </xsd:all>
+                        </xsd:complexType>
+                      </xsd:element>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:all>
+            </xsd:complexType>
+          </xsd:element>
         </xsd:all>
       </xsd:complexType>
       <xsd:element name="ErrorMessage" type="vnd.ez.api.ErrorMessage"></xsd:element>

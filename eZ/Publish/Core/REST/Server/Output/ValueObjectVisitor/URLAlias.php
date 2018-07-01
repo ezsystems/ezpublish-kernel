@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
@@ -14,6 +12,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\Values;
+use eZ\Publish\API\Repository\Values\Content\URLAlias as URLAliasValue;
 
 /**
  * URLAlias value object visitor.
@@ -31,7 +30,35 @@ class URLAlias extends ValueObjectVisitor
     {
         $generator->startObjectElement('UrlAlias');
         $visitor->setHeader('Content-Type', $generator->getMediaType('UrlAlias'));
+        $this->visitURLAliasAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('UrlAlias');
+    }
 
+    /**
+     * Serializes the given $urlAliasType to a string representation.
+     *
+     * @param int $urlAliasType
+     *
+     * @return string
+     */
+    protected function serializeType($urlAliasType)
+    {
+        switch ($urlAliasType) {
+            case Values\Content\URLAlias::LOCATION:
+                return 'LOCATION';
+
+            case Values\Content\URLAlias::RESOURCE:
+                return 'RESOURCE';
+
+            case Values\Content\URLAlias::VIRTUAL:
+                return 'VIRTUAL';
+        }
+
+        throw new \RuntimeException("Unknown URL alias type: '{$urlAliasType}'.");
+    }
+
+    protected function visitURLAliasAttributes(Visitor $visitor, Generator $generator, URLAliasValue $data)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadURLAlias', array('urlAliasId' => $data->id))
@@ -86,30 +113,5 @@ class URLAlias extends ValueObjectVisitor
             $this->serializeBool($generator, $data->isCustom)
         );
         $generator->endValueElement('custom');
-
-        $generator->endObjectElement('UrlAlias');
-    }
-
-    /**
-     * Serializes the given $urlAliasType to a string representation.
-     *
-     * @param int $urlAliasType
-     *
-     * @return string
-     */
-    protected function serializeType($urlAliasType)
-    {
-        switch ($urlAliasType) {
-            case Values\Content\URLAlias::LOCATION:
-                return 'LOCATION';
-
-            case Values\Content\URLAlias::RESOURCE:
-                return 'RESOURCE';
-
-            case Values\Content\URLAlias::VIRTUAL:
-                return 'VIRTUAL';
-        }
-
-        throw new \RuntimeException("Unknown URL alias type: '{$urlAliasType}'.");
     }
 }

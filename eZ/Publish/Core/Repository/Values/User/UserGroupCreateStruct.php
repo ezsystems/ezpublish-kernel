@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\User;
 
@@ -15,6 +13,8 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
  * This class is used to create a new user group in the repository.
+ *
+ * @internal Meant for internal use by Repository, type hint against API instead.
  */
 class UserGroupCreateStruct extends APIUserGroupCreateStruct
 {

@@ -5,15 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\AliasCleaner;
-use PHPUnit_Framework_TestCase;
+use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
+use PHPUnit\Framework\TestCase;
 
-class AliasCleanerTest extends PHPUnit_Framework_TestCase
+class AliasCleanerTest extends TestCase
 {
     /**
      * @var AliasCleaner
@@ -21,14 +20,14 @@ class AliasCleanerTest extends PHPUnit_Framework_TestCase
     private $aliasCleaner;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $resolver;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->resolver = $this->getMock('\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface');
+        $this->resolver = $this->createMock(ResolverInterface::class);
         $this->aliasCleaner = new AliasCleaner($this->resolver);
     }
 

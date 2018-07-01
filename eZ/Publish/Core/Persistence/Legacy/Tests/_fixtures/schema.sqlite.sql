@@ -1,3 +1,6 @@
+-- Enable support for foreign keys. See: https://sqlite.org/foreignkeys.html#fk_enable
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE ezbinaryfile (
   contentobject_attribute_id integer NOT NULL DEFAULT 0,
   download_count integer NOT NULL DEFAULT 0,
@@ -189,6 +192,7 @@ CREATE INDEX ezcontentobject_lmask ON ezcontentobject (language_mask);
 CREATE INDEX ezcontentobject_owner ON ezcontentobject (owner_id);
 CREATE INDEX ezcontentobject_pub ON ezcontentobject (published);
 CREATE INDEX ezcontentobject_status ON ezcontentobject (status);
+CREATE INDEX ezcontentobject_section ON ezcontentobject (section_id);
 
 CREATE TABLE ezcontentobject_attribute (
   attribute_original_id integer DEFAULT 0,
@@ -286,6 +290,7 @@ CREATE INDEX ezcontentobject_tree_p_node_id ON ezcontentobject_tree (parent_node
 CREATE INDEX ezcontentobject_tree_path ON ezcontentobject_tree (path_string);
 CREATE INDEX ezcontentobject_tree_path_ident ON ezcontentobject_tree (path_identification_string);
 CREATE INDEX modified_subnode ON ezcontentobject_tree (modified_subnode);
+CREATE INDEX ezcontentobject_tree_contentobject_id_path_string ON ezcontentobject_tree (path_string, contentobject_id);
 
 CREATE TABLE ezcontentobject_version (
   contentobject_id integer,
@@ -432,10 +437,11 @@ CREATE TABLE ezuser (
   contentobject_id integer NOT NULL DEFAULT 0,
   email text(150) NOT NULL,
   login text(150) NOT NULL,
-  password_hash text(50),
+  password_hash text(255),
   password_hash_type integer NOT NULL DEFAULT 1,
   PRIMARY KEY (contentobject_id)
 );
+CREATE UNIQUE INDEX ezuser_login ON ezuser (login COLLATE NOCASE);
 
 CREATE TABLE ezuser_role (
   contentobject_id integer,
@@ -532,3 +538,28 @@ CREATE TABLE ezgmaplocation (
   PRIMARY KEY (contentobject_attribute_id,contentobject_version)
 );
 CREATE INDEX ezgmaplocation_latlon ON ezgmaplocation (latitude,longitude);
+
+CREATE TABLE ezcontentbrowsebookmark (
+  id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name text(255) NOT NULL DEFAULT '',
+  node_id integer NOT NULL DEFAULT 0,
+  user_id integer NOT NULL DEFAULT 0,
+  CONSTRAINT ezcontentbrowsebookmark_location_fk FOREIGN KEY (node_id) REFERENCES ezcontentobject_tree(node_id) ON DELETE CASCADE,
+  CONSTRAINT ezcontentbrowsebookmark_user_fk FOREIGN KEY (user_id) REFERENCES ezuser(contentobject_id) ON DELETE CASCADE
+);
+
+CREATE INDEX ezcontentbrowsebookmark_user ON ezcontentbrowsebookmark(user_id);
+CREATE INDEX ezcontentbrowsebookmark_location ON ezcontentbrowsebookmark(node_id);
+CREATE INDEX ezcontentbrowsebookmark_user_location ON ezcontentbrowsebookmark(user_id, node_id);
+
+CREATE TABLE eznotification (
+  id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  owner_id integer NOT NULL DEFAULT 0,
+  is_pending integer NOT NULL DEFAULT 1,
+  type text(255) NOT NULL DEFAULT '',
+  created integer NOT NULL DEFAULT 0,
+  data blob
+);
+
+CREATE INDEX eznotification_owner ON eznotification(owner_id);
+CREATE INDEX eznotification_owner_is_pending ON eznotification(owner_id, is_pending);

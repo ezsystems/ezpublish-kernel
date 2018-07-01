@@ -5,11 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\PDOException;
 use eZ\Publish\Core\Base\ServiceContainer;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
@@ -19,6 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler as Cachin
 use Exception;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Filesystem\Filesystem;
+use eZ\Publish\Core\Base\Container\Compiler;
 
 /**
  * A Test Factory is used to setup the infrastructure for a tests, based on a
@@ -80,6 +81,10 @@ class Legacy extends SetupFactory
             self::$dsn = 'sqlite://:memory:';
         }
 
+        if ($repositoryReference = getenv('REPOSITORY_SERVICE_ID')) {
+            $this->repositoryReference = $repositoryReference;
+        }
+
         self::$db = preg_replace('(^([a-z]+).*)', '\\1', self::$dsn);
 
         if (!isset(self::$ioRootDir)) {
@@ -112,6 +117,7 @@ class Legacy extends SetupFactory
 
         return $tmpFile;
     }
+
     /**
      * Returns a configured repository for testing.
      *
@@ -167,6 +173,8 @@ class Legacy extends SetupFactory
     {
         $data = $this->getInitialData();
         $handler = $this->getDatabaseHandler();
+        $connection = $handler->getConnection();
+        $dbPlatform = $connection->getDatabasePlatform();
         $this->cleanupVarDir($this->getInitialVarDir());
 
         // @todo FIXME: Needs to be in fixture
@@ -175,13 +183,17 @@ class Legacy extends SetupFactory
         $data['ezmedia'] = array();
         $data['ezkeyword'] = array();
 
-        foreach ($data as $table => $rows) {
-            // Cleanup before inserting
-            $deleteQuery = $handler->createDeleteQuery();
-            $deleteQuery->deleteFrom($handler->quoteIdentifier($table));
-            $stmt = $deleteQuery->prepare();
-            $stmt->execute();
+        foreach (array_reverse(array_keys($data)) as $table) {
+            try {
+                // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
+                $connection->executeUpdate($dbPlatform->getTruncateTableSql($handler->quoteIdentifier($table)));
+            } catch (DBALException | PDOException $e) {
+                // Fallback to DELETE if TRUNCATE failed (because of FKs for instance)
+                $connection->createQueryBuilder()->delete($table)->execute();
+            }
+        }
 
+        foreach ($data as $table => $rows) {
             // Check that at least one row exists
             if (!isset($rows[0])) {
                 continue;
@@ -231,9 +243,6 @@ class Legacy extends SetupFactory
 
     protected function cleanupVarDir($sourceDir)
     {
-        if ($this->getServiceContainer()->getInnerContainer()->has('ezpublish.core.io.flysystem.default_filesystem')) {
-            $this->getServiceContainer()->getInnerContainer()->get('ezpublish.core.io.flysystem.default_filesystem')->flushCache();
-        }
         $fs = new Filesystem();
         $varDir = self::$ioRootDir . '/var';
         if ($fs->exists($varDir)) {
@@ -262,10 +271,10 @@ class Legacy extends SetupFactory
             $contentTypeHandler->clearCache();
         }
 
-        /** @var $decorator \eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator */
-        $decorator = $this->getServiceContainer()->get('ezpublish.cache_pool.spi.cache.decorator');
+        /** @var $cachePool \Psr\Cache\CacheItemPoolInterface */
+        $cachePool = $this->getServiceContainer()->get('ezpublish.cache_pool');
 
-        $decorator->clearAllTestData();
+        $cachePool->clear();
     }
 
     /**
@@ -354,7 +363,7 @@ class Legacy extends SetupFactory
      *
      * @return \eZ\Publish\Core\Base\ServiceContainer
      */
-    protected function getServiceContainer()
+    public function getServiceContainer()
     {
         if (!isset(self::$serviceContainer)) {
             $config = include __DIR__ . '/../../../../../../config.php';
@@ -364,6 +373,7 @@ class Legacy extends SetupFactory
             $containerBuilder = include $config['container_builder_path'];
 
             /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load('search_engines/legacy.yml');
             $loader->load('tests/integration_legacy.yml');
 
             $this->externalBuildContainer($containerBuilder);
@@ -377,6 +387,9 @@ class Legacy extends SetupFactory
                 'io_root_dir',
                 self::$ioRootDir . '/' . $containerBuilder->getParameter('storage_dir')
             );
+
+            $containerBuilder->addCompilerPass(new Compiler\Search\SearchEngineSignalSlotPass('legacy'));
+            $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
 
             self::$serviceContainer = new ServiceContainer(
                 $containerBuilder,

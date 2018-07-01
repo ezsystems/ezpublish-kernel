@@ -5,18 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\REST\Common\Input\Parser;
+use PHPUnit\Framework\TestCase;
 
 /**
  * ParsingDispatcher test class.
  */
-class ParsingDispatcherTest extends PHPUnit_Framework_TestCase
+class ParsingDispatcherTest extends TestCase
 {
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
@@ -100,10 +99,10 @@ class ParsingDispatcherTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Common\Input\Parser|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\REST\Common\Input\Parser|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createParserMock()
     {
-        return $this->getMock('eZ\Publish\Core\REST\Common\Input\Parser');
+        return $this->createMock(Parser::class);
     }
 }

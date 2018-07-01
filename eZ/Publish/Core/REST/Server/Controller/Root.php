@@ -5,14 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\Core\REST\Common\Exceptions\NotFoundException;
-use eZ\Publish\Core\REST\Common\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
+use eZ\Publish\Core\REST\Server\Service\RootResourceBuilderInterface;
 
 /**
  * Root controller.
@@ -20,13 +18,23 @@ use eZ\Publish\Core\REST\Server\Controller as RestController;
 class Root extends RestController
 {
     /**
+     * @var RootResourceBuilderInterface
+     */
+    private $rootResourceBuilder;
+
+    public function __construct($rootResourceBuilder)
+    {
+        $this->rootResourceBuilder = $rootResourceBuilder;
+    }
+
+    /**
      * List the root resources of the eZ Publish installation.
      *
      * @return \eZ\Publish\Core\REST\Common\Values\Root
      */
     public function loadRootResource()
     {
-        return new Values\Root();
+        return $this->rootResourceBuilder->buildRootResource();
     }
 
     /**

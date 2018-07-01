@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
@@ -21,6 +19,11 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
+use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as ContentTypeUpdateHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
 
 /**
  * Content Search test case for ContentSearchHandler.
@@ -98,10 +101,18 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                 ),
                 $this->getLanguageHandler()
             ),
-            $this->getMock('eZ\\Publish\\Core\\Search\\Legacy\\Content\\Location\\Gateway'),
+            $this->createMock(LocationGateway::class),
+            new Content\WordIndexer\Gateway\DoctrineDatabase(
+                $this->getDatabaseHandler(),
+                $this->getContentTypeHandler(),
+                $this->getDefinitionBasedTransformationProcessor(),
+                new Content\WordIndexer\Repository\SearchIndex($this->getDatabaseHandler()),
+                $this->getFullTextSearchConfiguration()
+            ),
             $this->getContentMapperMock(),
-            $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper'),
-            $this->getLanguageHandler()
+            $this->createMock(LocationMapper::class),
+            $this->getLanguageHandler(),
+            $this->getFullTextMapper($this->getContentTypeHandler())
         );
     }
 
@@ -113,6 +124,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
             $this->contentTypeHandler = new ContentTypeHandler(
                 new ContentTypeGateway(
                     $this->getDatabaseHandler(),
+                    $this->getDatabaseConnection(),
                     $this->getLanguageMaskGenerator()
                 ),
                 new ContentTypeMapper(
@@ -133,7 +145,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                         )
                     )
                 ),
-                $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler')
+                $this->createMock(ContentTypeUpdateHandler::class)
             );
         }
 
@@ -147,14 +159,15 @@ class HandlerContentSortTest extends LanguageAwareTestCase
      */
     protected function getContentMapperMock()
     {
-        $mapperMock = $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-            array('extractContentInfoFromRows'),
-            array(
-                $this->getFieldRegistry(),
-                $this->getLanguageHandler(),
+        $mapperMock = $this->getMockBuilder(ContentMapper::class)
+            ->setConstructorArgs(
+                array(
+                    $this->getFieldRegistry(),
+                    $this->getLanguageHandler(),
+                )
             )
-        );
+            ->setMethods(array('extractContentInfoFromRows'))
+            ->getMock();
         $mapperMock->expects($this->any())
             ->method('extractContentInfoFromRows')
             ->with($this->isType('array'))
@@ -186,11 +199,10 @@ class HandlerContentSortTest extends LanguageAwareTestCase
     protected function getFieldRegistry()
     {
         if (!isset($this->fieldRegistry)) {
-            $this->fieldRegistry = $this->getMock(
-                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
-                array(),
-                array(array())
-            );
+            $this->fieldRegistry = $this->getMockBuilder(ConverterRegistry::class)
+                ->setConstructorArgs(array())
+                ->setMethods(array())
+                ->getMock();
         }
 
         return $this->fieldRegistry;
@@ -203,13 +215,10 @@ class HandlerContentSortTest extends LanguageAwareTestCase
      */
     protected function getContentFieldHandlerMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
-            array('loadExternalFieldData'),
-            array(),
-            '',
-            false
-        );
+        return $this->getMockBuilder(FieldHandler::class)
+            ->disableOriginalConstructor()
+            ->setMethods(array('loadExternalFieldData'))
+            ->getMock();
     }
 
     public function testNoSorting()

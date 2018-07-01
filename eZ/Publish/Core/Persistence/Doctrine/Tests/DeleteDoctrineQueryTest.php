@@ -2,6 +2,8 @@
 
 namespace eZ\Publish\Core\Persistence\Doctrine\Tests;
 
+use eZ\Publish\Core\Persistence\Database\QueryException;
+
 class DeleteDoctrineQueryTest extends TestCase
 {
     public function testGenerateDeleteQuery()
@@ -17,7 +19,7 @@ class DeleteDoctrineQueryTest extends TestCase
     {
         $deleteQuery = $this->handler->createDeleteQuery();
 
-        $this->setExpectedException('eZ\Publish\Core\Persistence\Database\QueryException');
+        $this->expectException(QueryException::class);
 
         $deleteQuery->getQuery();
     }

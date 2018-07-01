@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser\FieldType;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser\AbstractParserTestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\FieldType\RichText as RichTextConfigParser;
 use Symfony\Component\Yaml\Yaml;
@@ -33,7 +32,7 @@ class RichTextTest extends AbstractParserTestCase
 
     protected function getMinimalConfiguration()
     {
-        return Yaml::parse(file_get_contents(__DIR__ . '/../../../Fixtures/ezpublish_minimal.yml'));
+        return Yaml::parse(file_get_contents(__DIR__ . '/../../../Fixtures/FieldType/RichText/ezrichtext.yml'));
     }
 
     public function testDefaultContentSettings()
@@ -55,6 +54,34 @@ class RichTextTest extends AbstractParserTestCase
                     'priority' => 0,
                 ),
             ),
+            'ezdemo_site'
+        );
+    }
+
+    /**
+     * Test Rich Text Custom Tags invalid settings, like enabling undefined Custom Tag.
+     */
+    public function testRichTextCustomTagsInvalidSettings()
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Unknown RichText Custom Tag \'foo\'');
+
+        $this->load(
+            [
+                'system' => [
+                    'ezdemo_site' => [
+                        'fieldtypes' => [
+                            'ezrichtext' => [
+                                'custom_tags' => ['foo'],
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
+        $this->assertConfigResolverParameterValue(
+            'fieldtypes.ezrichtext.custom_tags',
+            ['foo'],
             'ezdemo_site'
         );
     }
@@ -205,6 +232,18 @@ class RichTextTest extends AbstractParserTestCase
                             ),
                         ),
                     ),
+                ),
+            ),
+            array(
+                array(
+                    'fieldtypes' => array(
+                        'ezrichtext' => array(
+                            'custom_tags' => array('video', 'equation'),
+                        ),
+                    ),
+                ),
+                array(
+                    'fieldtypes.ezrichtext.custom_tags' => array('video', 'equation'),
                 ),
             ),
             array(

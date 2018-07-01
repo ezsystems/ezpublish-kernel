@@ -5,20 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Routing;
 
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader;
-use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
  * @covers \eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader
  */
-class OptionsLoaderTest extends PHPUnit_Framework_TestCase
+class OptionsLoaderTest extends TestCase
 {
     /**
      * @param string $type
@@ -59,11 +57,11 @@ class OptionsLoaderTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a partially mocked OptionsLoader, with the import method mocked.
      *
-     * @return OptionsLoader|PHPUnit_Framework_MockObject_MockObject
+     * @return OptionsLoader|MockObject
      */
     protected function getOptionsLoader()
     {
-        $mock = $this->getMockBuilder('eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader')
+        $mock = $this->getMockBuilder(OptionsLoader::class)
             ->setConstructorArgs(array($this->getRouteCollectionMapperMock()))
             ->setMethods(array('import'))
             ->getMock();
@@ -77,14 +75,12 @@ class OptionsLoaderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getRouteCollectionMapperMock()
     {
         if (!isset($this->routeCollectionMapperMock)) {
-            $this->routeCollectionMapperMock = $this->getMockBuilder('eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->routeCollectionMapperMock = $this->createMock(OptionsLoader\RouteCollectionMapper::class);
         }
 
         return $this->routeCollectionMapperMock;

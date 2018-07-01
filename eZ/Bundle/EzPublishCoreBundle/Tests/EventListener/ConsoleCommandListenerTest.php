@@ -5,15 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ConsoleCommandListener;
 use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\TestOutput;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Event\ConsoleCommandEvent;
@@ -23,7 +22,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class ConsoleCommandListenerTest extends PHPUnit_Framework_TestCase
+class ConsoleCommandListenerTest extends TestCase
 {
     /**
      * @var array
@@ -36,7 +35,7 @@ class ConsoleCommandListenerTest extends PHPUnit_Framework_TestCase
     private $siteAccess;
 
     /**
-     * @var EventDispatcherInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var EventDispatcherInterface|MockObject
      */
     private $dispatcher;
 
@@ -64,7 +63,7 @@ class ConsoleCommandListenerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->siteAccess = new SiteAccess();
-        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->listener = new ConsoleCommandListener('default', $this->siteAccessList, $this->dispatcher);
         $this->listener->setSiteAccess($this->siteAccess);
         $this->dispatcher->addSubscriber($this->listener);

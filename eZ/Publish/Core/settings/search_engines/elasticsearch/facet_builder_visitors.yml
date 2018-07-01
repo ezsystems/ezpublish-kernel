@@ -8,19 +8,19 @@ services:
     # Note: services tagged with 'ezpublish.search.elasticsearch.content.facet_builder_visitor'
     # are registered to this one using compilation pass
     ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate:
-        class: %ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate.class%
+        class: "%ezpublish.search.elasticsearch.content.facet_builder_visitor.aggregate.class%"
 
     ezpublish.search.elasticsearch.content.facet_builder_visitor.content_type:
-        class: %ezpublish.search.elasticsearch.content.facet_builder_visitor.content_type.class%
+        class: "%ezpublish.search.elasticsearch.content.facet_builder_visitor.content_type.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.content.facet_builder_visitor}
 
     ezpublish.search.elasticsearch.content.facet_builder_visitor.section:
-        class: %ezpublish.search.elasticsearch.content.facet_builder_visitor.section.class%
+        class: "%ezpublish.search.elasticsearch.content.facet_builder_visitor.section.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.content.facet_builder_visitor}
 
     ezpublish.search.elasticsearch.content.facet_builder_visitor.user:
-        class: %ezpublish.search.elasticsearch.content.facet_builder_visitor.user.class%
+        class: "%ezpublish.search.elasticsearch.content.facet_builder_visitor.user.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.content.facet_builder_visitor}

@@ -248,4 +248,9 @@
       <s:assert test="not(.//db:ezlink)">ezlink must not occur in the descendants of link</s:assert>
     </s:rule>
   </s:pattern>
+  <s:pattern name="Element contents validation">
+    <s:rule context="db:link">
+      <s:assert test="not(contains(@*[name()='xlink:href'], 'javascript:') or contains(@*[name()='xlink:href'], 'vbscript:'))" mode="schematron-get-full-path-2">using scripts in links is not allowed</s:assert>
+    </s:rule>
+  </s:pattern>
 </s:schema>

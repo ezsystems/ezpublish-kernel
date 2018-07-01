@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
@@ -64,6 +62,7 @@ abstract class BaseContentServiceTest extends BaseTest
 
         return $content;
     }
+
     /**
      * Creates a fresh clean content draft.
      *
@@ -325,5 +324,103 @@ abstract class BaseContentServiceTest extends BaseTest
         /* END: Inline */
 
         return $contentVersion2;
+    }
+
+    /**
+     * Create Content Draft with custom field values in multiple languages and generated remoteId.
+     *
+     * @param string $contentTypeIdentifier
+     * @param int $parentLocationId
+     * @param string $mainLanguageCode
+     * @param array $multilingualFieldValues map of <code>['fieldIdentifier' => ['languageCode' => 'field value']]</code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft
+     */
+    protected function createMultilingualContentDraft(
+        $contentTypeIdentifier,
+        $parentLocationId,
+        $mainLanguageCode,
+        array $multilingualFieldValues
+    ) {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // Load content type
+        $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+
+        // Prepare new Content Object
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentType,
+            $mainLanguageCode
+        );
+
+        foreach ($multilingualFieldValues as $fieldIdentifier => $multilingualFieldValue) {
+            foreach ($multilingualFieldValue as $languageCode => $fieldValue) {
+                $contentCreateStruct->setField($fieldIdentifier, $fieldValue, $languageCode);
+            }
+        }
+
+        $contentCreateStruct->sectionId = $this->generateId('section', 1);
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Prepare Location
+        $locationCreateStruct = $locationService->newLocationCreateStruct(
+            $this->generateId('location', $parentLocationId)
+        );
+
+        // Create a draft
+        $contentDraft = $contentService->createContent(
+            $contentCreateStruct,
+            [$locationCreateStruct]
+        );
+
+        return $contentDraft;
+    }
+
+    /**
+     * Create Content Draft with custom field values and generated remoteId.
+     *
+     * @param string $contentTypeIdentifier
+     * @param int $parentLocationId
+     * @param array $fieldValues map of <code>['fieldIdentifier' => 'field value']</code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft
+     */
+    protected function createContentDraft(
+        $contentTypeIdentifier,
+        $parentLocationId,
+        array $fieldValues
+    ) {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        // Load content type
+        $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+
+        // Prepare new Content Object
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-US');
+
+        foreach ($fieldValues as $fieldIdentifier => $fieldValue) {
+            $contentCreateStruct->setField($fieldIdentifier, $fieldValue);
+        }
+
+        $contentCreateStruct->sectionId = $this->generateId('section', 1);
+        $contentCreateStruct->alwaysAvailable = true;
+
+        // Prepare Location
+        $locationCreateStruct = $locationService->newLocationCreateStruct(
+            $this->generateId('location', $parentLocationId)
+        );
+        // Create a draft
+        $contentDraft = $contentService->createContent(
+            $contentCreateStruct,
+            [$locationCreateStruct]
+        );
+
+        return $contentDraft;
     }
 }

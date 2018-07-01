@@ -5,16 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Normalizer;
 
 use eZ\Publish\Core\FieldType\RichText\Normalizer\DocumentTypeDefinition;
 use DOMDocument;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DocumentTypeDefinitionTest extends PHPUnit_Framework_TestCase
+class DocumentTypeDefinitionTest extends TestCase
 {
     public function providerForTestNormalize()
     {

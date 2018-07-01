@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
@@ -14,7 +12,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\CachedValue;
-use PHPUnit_Framework_MockObject_MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
 use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -160,13 +158,13 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return ConfigResolverInterface|PHPUnit_Framework_MockObject_MockObject
+     * @return ConfigResolverInterface|MockObject
      */
     protected function getConfigProviderMock()
     {
         $options = $this->options ?: $this->defaultOptions;
 
-        $mock = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $mock = $this->createMock(ConfigResolverInterface::class);
         $mock
             ->expects($this->any())
             ->method('hasParameter')

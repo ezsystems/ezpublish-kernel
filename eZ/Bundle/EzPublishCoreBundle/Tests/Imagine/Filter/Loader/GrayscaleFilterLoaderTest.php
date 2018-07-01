@@ -5,20 +5,20 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\GrayscaleFilterLoader;
-use PHPUnit_Framework_TestCase;
+use Imagine\Effects\EffectsInterface;
+use Imagine\Image\ImageInterface;
+use PHPUnit\Framework\TestCase;
 
-class GrayscaleFilterLoaderTest extends PHPUnit_Framework_TestCase
+class GrayscaleFilterLoaderTest extends TestCase
 {
     public function testLoad()
     {
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
-        $effects = $this->getMock('\Imagine\Effects\EffectsInterface');
+        $image = $this->createMock(ImageInterface::class);
+        $effects = $this->createMock(EffectsInterface::class);
         $image
             ->expects($this->once())
             ->method('effects')

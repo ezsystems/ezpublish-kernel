@@ -5,15 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
 use Twig_Extension;
 use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
+use Twig_Extension_GlobalsInterface;
 
-class CoreExtension extends Twig_Extension
+class CoreExtension extends Twig_Extension implements Twig_Extension_GlobalsInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper

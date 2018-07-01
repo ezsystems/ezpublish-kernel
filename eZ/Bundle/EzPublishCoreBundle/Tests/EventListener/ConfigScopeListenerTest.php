@@ -5,42 +5,43 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ConfigScopeListener;
+use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager;
+use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider;
+use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ConfigScopeListenerTest extends PHPUnit_Framework_TestCase
+class ConfigScopeListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $viewManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $viewProviders;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface');
-        $this->viewManager = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager');
+        $this->configResolver = $this->createMock(VersatileScopeInterface::class);
+        $this->viewManager = $this->createMock(ViewManager::class);
         $this->viewProviders = array(
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
-            $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
+            $this->createMock(ViewProvider::class),
+            $this->createMock(ViewProvider::class),
         );
     }
 

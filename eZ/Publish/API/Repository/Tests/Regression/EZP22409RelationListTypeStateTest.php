@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
@@ -17,7 +15,7 @@ use DateTime;
 /**
  * Test case for RelationList using alterate ContentType states issue in EZP-22409.
  *
- * @issue EZP-22409
+ * Issue EZP-22409
  */
 class EZP22409RelationListTypeStateTest extends BaseTest
 {

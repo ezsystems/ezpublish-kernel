@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository;
 
@@ -14,6 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 /**
  * Location service, used for complex subtree operations.
@@ -45,10 +44,11 @@ interface LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param mixed $locationId
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocation($locationId);
+    public function loadLocation($locationId, array $prioritizedLanguages = null);
 
     /**
      * Loads a location object from its $remoteId.
@@ -57,10 +57,11 @@ interface LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param string $remoteId
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocationByRemoteId($remoteId);
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null);
 
     /**
      * Loads the locations for the given content object.
@@ -72,10 +73,11 @@ interface LocationService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
      */
-    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null);
+    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null, array $prioritizedLanguages = null);
 
     /**
      * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder.
@@ -83,10 +85,21 @@ interface LocationService
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25);
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null);
+
+    /**
+     * Load parent Locations for Content Draft.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] List of parent Locations
+     */
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null);
 
     /**
      * Returns the number of children which are readable by the current user of a location object.

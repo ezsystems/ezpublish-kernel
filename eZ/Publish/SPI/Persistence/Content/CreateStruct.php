@@ -5,15 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Persistence\Content;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
-/**
- */
 class CreateStruct extends ValueObject
 {
     /**
@@ -72,6 +68,15 @@ class CreateStruct extends ValueObject
      * @var mixed
      */
     public $initialLanguageId;
+
+    /**
+     * Optional, main language of the content, if not set $initialLanguageId will be used instead.
+     *
+     * Typical use is copy operations where content main language and version initial language might differ.
+     *
+     * @var mixed|null
+     */
+    public $mainLanguageId;
 
     /**
      * Modification date.

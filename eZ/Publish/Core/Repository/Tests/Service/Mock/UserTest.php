@@ -5,12 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\API\Repository\ContentService as APIContentService;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
+use eZ\Publish\Core\Repository\UserService;
 
 /**
  * Mock test case for User Service.
@@ -26,13 +29,13 @@ class UserTest extends BaseServiceMockTest
     {
         $repository = $this->getRepositoryMock();
         $userService = $this->getPartlyMockedUserService(array('loadUser'));
-        $contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $contentService = $this->createMock(APIContentService::class);
         $userHandler = $this->getPersistenceMock()->userHandler();
 
-        $user = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $loadedUser = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $versionInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
-        $contentInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $user = $this->createMock(APIUser::class);
+        $loadedUser = $this->createMock(APIUser::class);
+        $versionInfo = $this->createMock(APIVersionInfo::class);
+        $contentInfo = $this->createMock(APIContentInfo::class);
 
         $user->expects($this->once())
             ->method('__get')
@@ -67,7 +70,7 @@ class UserTest extends BaseServiceMockTest
             ->method('getContentService')
             ->will($this->returnValue($contentService));
 
-        /* @var \PHPUnit_Framework_MockObject_MockObject $userHandler */
+        /* @var \PHPUnit\Framework\MockObject\MockObject $userHandler */
         $userHandler->expects($this->once())
             ->method('delete')
             ->with(42);
@@ -88,12 +91,12 @@ class UserTest extends BaseServiceMockTest
     {
         $repository = $this->getRepositoryMock();
         $userService = $this->getPartlyMockedUserService(array('loadUser'));
-        $contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $contentService = $this->createMock(APIContentService::class);
 
-        $user = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $loadedUser = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $versionInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo');
-        $contentInfo = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
+        $user = $this->createMock(APIUser::class);
+        $loadedUser = $this->createMock(APIUser::class);
+        $versionInfo = $this->createMock(APIVersionInfo::class);
+        $contentInfo = $this->createMock(APIContentInfo::class);
 
         $user->expects($this->once())
             ->method('__get')
@@ -137,17 +140,18 @@ class UserTest extends BaseServiceMockTest
      *
      * @param string[] $methods
      *
-     * @return \eZ\Publish\Core\Repository\UserService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Repository\UserService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedUserService(array $methods = null)
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\UserService',
-            $methods,
-            array(
-                $this->getRepositoryMock(),
-                $this->getPersistenceMock()->userHandler(),
+        return $this->getMockBuilder(UserService::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->getRepositoryMock(),
+                    $this->getPersistenceMock()->userHandler(),
+                )
             )
-        );
+            ->getMock();
     }
 }

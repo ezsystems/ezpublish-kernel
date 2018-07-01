@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller;
 
@@ -108,7 +106,7 @@ class PageController extends Controller
      *
      * This method can be used with ESI rendering strategy.
      *
-     * @uses self::viewBlock()
+     * @uses \self::viewBlock()
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If block could not be found.
      *

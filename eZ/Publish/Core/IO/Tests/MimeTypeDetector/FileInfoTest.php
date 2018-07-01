@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\IO\Tests\MimeTypeDetector;
 
 use eZ\Publish\Core\IO\MimeTypeDetector\FileInfo as MimeTypeDetector;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class FileInfoTest extends PHPUnit_Framework_TestCase
+class FileInfoTest extends TestCase
 {
     /** @var MimeTypeDetector */
     protected $mimeTypeDetector;

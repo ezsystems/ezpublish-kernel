@@ -16,16 +16,13 @@ class CleanInstaller extends DbBasedInstaller implements Installer
 
     public function importSchema()
     {
-        $this->runQueriesFromFile(
-            'vendor/ezsystems/ezpublish-kernel/data/mysql/schema.sql'
-        );
+        $this->runQueriesFromFile($this->getKernelSQLFileForDBMS('schema.sql'));
+        $this->runQueriesFromFile($this->getKernelSQLFileForDBMS('dfs_schema.sql'));
     }
 
     public function importData()
     {
-        $this->runQueriesFromFile(
-            'vendor/ezsystems/ezpublish-kernel/data/cleandata.sql'
-        );
+        $this->runQueriesFromFile($this->getKernelSQLFileForDBMS('cleandata.sql'));
     }
 
     public function importBinaries()

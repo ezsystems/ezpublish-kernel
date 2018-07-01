@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
@@ -14,11 +12,12 @@ use eZ\Bundle\EzPublishCoreBundle\EventListener\SessionInitByPostListener;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
+class SessionInitByPostListenerTest extends TestCase
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\EventListener\SessionInitByPostListener
@@ -26,14 +25,14 @@ class SessionInitByPostListenerTest extends PHPUnit_Framework_TestCase
     private $listener;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $session;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->session = $this->createMock(SessionInterface::class);
         $this->listener = new SessionInitByPostListener($this->session);
     }
 

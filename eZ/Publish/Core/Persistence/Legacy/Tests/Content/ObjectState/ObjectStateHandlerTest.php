@@ -5,13 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
@@ -92,7 +92,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $result = $handler->loadGroup(2);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group',
+            Group::class,
             $result
         );
     }
@@ -136,7 +136,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $result = $handler->loadGroupByIdentifier('ez_lock');
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group',
+            Group::class,
             $result
         );
     }
@@ -181,7 +181,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         foreach ($result as $resultItem) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group',
+                Group::class,
                 $resultItem
             );
         }
@@ -210,7 +210,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         foreach ($result as $resultItem) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
+                ObjectState::class,
                 $resultItem
             );
         }
@@ -247,7 +247,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $result = $handler->updateGroup(2, $this->getInputStructFixture());
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Group',
+            Group::class,
             $result
         );
     }
@@ -329,7 +329,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $result = $handler->create(2, $this->getInputStructFixture());
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
+            ObjectState::class,
             $result
         );
     }
@@ -356,7 +356,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $result = $handler->load(1);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
+            ObjectState::class,
             $result
         );
     }
@@ -400,7 +400,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $result = $handler->loadByIdentifier('not_locked', 2);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
+            ObjectState::class,
             $result
         );
     }
@@ -453,7 +453,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $result = $handler->update(1, $this->getInputStructFixture());
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
+            ObjectState::class,
             $result
         );
     }
@@ -588,7 +588,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         $result = $handler->setContentState(42, 2, 2);
 
-        $this->assertEquals(true, $result);
+        $this->assertTrue($result);
     }
 
     /**
@@ -613,7 +613,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $result = $handler->getContentState(42, 2);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState',
+            ObjectState::class,
             $result
         );
     }
@@ -691,11 +691,10 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     protected function getMapperMock()
     {
         if (!isset($this->mapperMock)) {
-            $this->mapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Mapper',
-                array(),
-                array($this->getLanguageHandler())
-            );
+            $this->mapperMock = $this->getMockBuilder(Mapper::class)
+                ->setConstructorArgs(array($this->getLanguageHandler()))
+                ->setMethods(array())
+                ->getMock();
         }
 
         return $this->mapperMock;
@@ -709,9 +708,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Gateway'
-            );
+            $this->gatewayMock = $this->getMockForAbstractClass(Gateway::class);
         }
 
         return $this->gatewayMock;

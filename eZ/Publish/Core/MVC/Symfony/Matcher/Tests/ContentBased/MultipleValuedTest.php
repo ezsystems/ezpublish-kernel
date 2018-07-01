@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher;
 
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
+use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued;
 
 class MultipleValuedTest extends BaseTest
 {
@@ -62,6 +61,6 @@ class MultipleValuedTest extends BaseTest
 
     private function getMultipleValuedMatcherMock()
     {
-        return $this->getMockForAbstractClass('eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\MultipleValued');
+        return $this->getMockForAbstractClass(MultipleValued::class);
     }
 }

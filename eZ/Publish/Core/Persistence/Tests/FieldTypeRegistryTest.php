@@ -5,13 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Tests;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
+use eZ\Publish\SPI\Persistence\FieldType as SPIPersistenceFieldType;
 
 /**
  * Test case for FieldTypeRegistry.
@@ -45,7 +45,7 @@ class FieldTypeRegistryTest extends TestCase
 
         $result = $registry->getFieldType('some-type');
 
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\FieldType', $result);
+        $this->assertInstanceOf(SPIPersistenceFieldType::class, $result);
         $this->assertAttributeSame(
             $instance,
             'internalFieldType',
@@ -66,7 +66,7 @@ class FieldTypeRegistryTest extends TestCase
 
         $result = $registry->getFieldType('some-type');
 
-        $this->assertInstanceOf('eZ\\Publish\\SPI\\Persistence\\FieldType', $result);
+        $this->assertInstanceOf(SPIPersistenceFieldType::class, $result);
         $this->assertAttributeSame(
             $instance,
             'internalFieldType',
@@ -134,8 +134,6 @@ class FieldTypeRegistryTest extends TestCase
      */
     protected function getFieldTypeMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\SPI\\FieldType\\FieldType'
-        );
+        return $this->createMock(SPIFieldType::class);
     }
 }

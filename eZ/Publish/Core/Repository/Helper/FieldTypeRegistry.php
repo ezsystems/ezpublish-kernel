@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
@@ -16,6 +14,8 @@ use RuntimeException;
 
 /**
  * Registry for SPI FieldTypes.
+ *
+ * @internal Meant for internal use by Repository.
  */
 class FieldTypeRegistry
 {
@@ -42,7 +42,7 @@ class FieldTypeRegistry
         // First make sure all items are correct type (call closures)
         foreach ($this->fieldTypes as $identifier => $value) {
             if (!$value instanceof SPIFieldType) {
-                return $this->getFieldType($identifier);
+                $this->getFieldType($identifier);
             }
         }
 
@@ -66,14 +66,17 @@ class FieldTypeRegistry
 
         if ($this->fieldTypes[$identifier] instanceof SPIFieldType) {
             return $this->fieldTypes[$identifier];
-        } elseif (!is_callable($this->fieldTypes[$identifier])) {
+        } elseif (is_callable($this->fieldTypes[$identifier])) {
+            /** @var $closure \Closure */
+            $closure = $this->fieldTypes[$identifier];
+            $this->fieldTypes[$identifier] = $closure();
+        }
+
+        if (!$this->fieldTypes[$identifier] instanceof SPIFieldType) {
             throw new RuntimeException("\$fieldTypes[$identifier] must be instance of SPI\\FieldType\\FieldType or callable");
         }
 
-        /** @var $closure \Closure */
-        $closure = $this->fieldTypes[$identifier];
-
-        return $this->fieldTypes[$identifier] = $closure();
+        return $this->fieldTypes[$identifier];
     }
 
     /**

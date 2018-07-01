@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Base\Exceptions;
 
@@ -37,18 +35,17 @@ class UnauthorizedException extends APIUnauthorizedException implements Httpable
      */
     public function __construct($module, $function, array $properties = null, Exception $previous = null)
     {
-        $messageTemplate = "User does not have access to '%function%' '%module%'";
+        $this->setMessageTemplate("User does not have access to '%function%' '%module%'");
         $this->setParameters(['%module%' => $module, '%function%' => $function]);
 
         if ($properties) {
-            $messageTemplate .= ' with: %with%';
+            $this->setMessageTemplate("User does not have access to '%function%' '%module%' with: %with%'");
             $with = [];
             foreach ($properties as $name => $value) {
                 $with[] = "{$name} '{$value}'";
             }
             $this->addParameter('%with%', implode(', ', $with));
         }
-        $this->setMessageTemplate($messageTemplate);
 
         parent::__construct($this->getBaseTranslation(), self::UNAUTHORIZED, $previous);
     }

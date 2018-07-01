@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\TransformationProcessor;
 
@@ -221,12 +219,12 @@ class PcreCompiler
     protected function compileTargetCharacter($char)
     {
         switch (true) {
-            case ($char === 'remove'):
+            case $char === 'remove':
                 return function ($matches) {
                     return '';
                 };
 
-            case ($char === 'keep'):
+            case $char === 'keep':
                 return function ($matches) {
                     return $matches[0];
                 };

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
@@ -43,4 +41,13 @@ abstract class SetupFactory
      * @return mixed
      */
     abstract public function getConfigValue($configKey);
+
+    /**
+     * Returns the service container used for initialization of the repository.
+     *
+     * Most tests should not use this at all!!
+     *
+     * @return \eZ\Publish\Core\Base\ServiceContainer
+     */
+    abstract public function getServiceContainer();
 }

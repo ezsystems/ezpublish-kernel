@@ -13,6 +13,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException;
 use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryPrefixException;
 use eZ\Publish\Core\IO\Exception\IOException;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
@@ -156,7 +157,7 @@ class IOService implements IOServiceInterface
         $this->checkBinaryFileId($binaryFileId);
 
         // @todo An absolute path can in no case be loaded, but throwing an exception is too much (why ?)
-        if ($binaryFileId[0] === '/') {
+        if ($this->isAbsolutePath($binaryFileId)) {
             return false;
         }
 
@@ -235,7 +236,7 @@ class IOService implements IOServiceInterface
         $spiBinaryCreateStruct->size = $binaryFileCreateStruct->size;
         $spiBinaryCreateStruct->setInputStream($binaryFileCreateStruct->inputStream);
         $spiBinaryCreateStruct->mimeType = $binaryFileCreateStruct->mimeType;
-        $spiBinaryCreateStruct->mtime = time();
+        $spiBinaryCreateStruct->mtime = new \DateTime();
 
         return $spiBinaryCreateStruct;
     }
@@ -282,7 +283,7 @@ class IOService implements IOServiceInterface
      *
      * @return string
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\IO\Exception\InvalidBinaryPrefixException
      */
     protected function removeUriPrefix($spiBinaryFileId)
     {
@@ -291,7 +292,7 @@ class IOService implements IOServiceInterface
         }
 
         if (strpos($spiBinaryFileId, $this->settings['prefix'] . '/') !== 0) {
-            throw new InvalidArgumentException('$id', "Prefix {$this->settings['prefix']} not found in {$spiBinaryFileId}");
+            throw new InvalidBinaryPrefixException($spiBinaryFileId, $this->settings['prefix'] . '/');
         }
 
         return substr($spiBinaryFileId, strlen($this->settings['prefix']) + 1);
@@ -319,5 +320,16 @@ class IOService implements IOServiceInterface
         $prefixedUri = $this->getPrefixedUri($path);
         $this->metadataHandler->deleteDirectory($prefixedUri);
         $this->binarydataHandler->deleteDirectory($prefixedUri);
+    }
+
+    /**
+     * Check if path is absolute, in terms of http or disk (incl if it contains driver letter on Win).
+     *
+     * @param string $path
+     * @return bool
+     */
+    protected function isAbsolutePath($path)
+    {
+        return $path[0] === '/' || (PHP_OS === 'WINNT' && $path[1] === ':');
     }
 }

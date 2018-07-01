@@ -28,6 +28,7 @@ class EzPublishIOBundle extends Bundle
                 $extension->getBinarydataHandlerFactories()
             )
         );
+        $container->addCompilerPass(new Compiler\MigrationFileListerPass());
         parent::build($container);
     }
 

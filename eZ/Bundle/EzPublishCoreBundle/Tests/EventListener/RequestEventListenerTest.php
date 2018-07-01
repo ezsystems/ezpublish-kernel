@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\RequestEventListener;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,21 +18,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Routing\RouterInterface;
+use PHPUnit\Framework\TestCase;
 
-class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
+class RequestEventListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
      */
     private $logger;
 
@@ -53,7 +54,7 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
     private $event;
 
     /**
-     * @var HttpKernelInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpKernel;
 
@@ -61,18 +62,18 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->router = $this->getMock('Symfony\Component\Routing\RouterInterface');
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->router = $this->createMock(RouterInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
 
         $this->requestEventListener = new RequestEventListener($this->configResolver, $this->router, 'foobar', $this->logger);
 
         $this->request = $this
-            ->getMockBuilder('Symfony\\Component\\HttpFoundation\\Request')
+            ->getMockBuilder(Request::class)
             ->setMethods(array('getSession', 'hasSession'))
             ->getMock();
 
-        $this->httpKernel = $this->getMock('Symfony\\Component\\HttpKernel\\HttpKernelInterface');
+        $this->httpKernel = $this->createMock(HttpKernelInterface::class);
         $this->event = new GetResponseEvent(
             $this->httpKernel,
             $this->request,
@@ -152,9 +153,32 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($event->hasResponse());
         /** @var RedirectResponse $response */
         $response = $event->getResponse();
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame("$semanticPathinfo?some=thing", $response->getTargetUrl());
         $this->assertSame(301, $response->getStatusCode());
+        $this->assertTrue($event->isPropagationStopped());
+    }
+
+    public function testOnKernelRequestRedirectWithLocationId()
+    {
+        $queryParameters = array('some' => 'thing');
+        $cookieParameters = array('cookie' => 'value');
+        $request = Request::create('/test_sa/foo/bar', 'GET', $queryParameters, $cookieParameters);
+        $semanticPathinfo = '/foo/something';
+        $request->attributes->set('semanticPathinfo', $semanticPathinfo);
+        $request->attributes->set('needsRedirect', true);
+        $request->attributes->set('locationId', 123);
+        $request->attributes->set('siteaccess', new SiteAccess());
+
+        $event = new GetResponseEvent($this->httpKernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $this->requestEventListener->onKernelRequestRedirect($event);
+        $this->assertTrue($event->hasResponse());
+        /** @var RedirectResponse $response */
+        $response = $event->getResponse();
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame("$semanticPathinfo?some=thing", $response->getTargetUrl());
+        $this->assertSame(301, $response->getStatusCode());
+        $this->assertEquals(123, $response->headers->get('X-Location-Id'));
         $this->assertTrue($event->isPropagationStopped());
     }
 
@@ -162,7 +186,7 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
     {
         $queryParameters = array('some' => 'thing');
         $cookieParameters = array('cookie' => 'value');
-        $siteaccessMatcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+        $siteaccessMatcher = $this->createMock(SiteAccess\URILexer::class);
         $siteaccess = new SiteAccess('test', 'foo', $siteaccessMatcher);
         $semanticPathinfo = '/foo/something';
 
@@ -184,7 +208,7 @@ class RequestEventListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($event->hasResponse());
         /** @var RedirectResponse $response */
         $response = $event->getResponse();
-        $this->assertInstanceOf('Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame("$expectedURI?some=thing", $response->getTargetUrl());
         $this->assertSame(301, $response->getStatusCode());
         $this->assertTrue($event->isPropagationStopped());

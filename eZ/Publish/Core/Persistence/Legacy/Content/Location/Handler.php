@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
 
@@ -225,8 +223,8 @@ class Handler implements BaseLocationHandler
         $locationMap = array(
             $children[0]['parent_node_id'] => array(
                 'id' => $destinationParentId,
-                'hidden' => (boolean)$destinationParentData['is_hidden'],
-                'invisible' => (boolean)$destinationParentData['is_invisible'],
+                'hidden' => (bool)$destinationParentData['is_hidden'],
+                'invisible' => (bool)$destinationParentData['is_invisible'],
                 'path_identification_string' => $destinationParentData['path_identification_string'],
             ),
         );
@@ -312,17 +310,52 @@ class Handler implements BaseLocationHandler
             );
         }
 
-        // If subtree root is main location for its content, update subtree section to the one of the
-        // parent location content
-        $subtreeRootContentInfo = $this->contentHandler->loadContentInfo($copiedSubtreeRootLocation->contentId);
-        if ($subtreeRootContentInfo->mainLocationId === $copiedSubtreeRootLocation->id) {
-            $this->setSectionForSubtree(
-                $copiedSubtreeRootLocation->id,
-                $this->contentHandler->loadContentInfo($this->load($destinationParentId)->contentId)->sectionId
-            );
-        }
+        $destinationParentSectionId = $this->getSectionId($destinationParentId);
+        $this->updateSubtreeSectionIfNecessary($copiedSubtreeRootLocation, $destinationParentSectionId);
 
         return $copiedSubtreeRootLocation;
+    }
+
+    /**
+     * Retrieves section ID of the location's content.
+     *
+     * @param int $locationId
+     *
+     * @return int
+     */
+    private function getSectionId($locationId)
+    {
+        $location = $this->load($locationId);
+        $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
+
+        return $locationContentInfo->sectionId;
+    }
+
+    /**
+     * If the location is the main location for its content, updates subtree section.
+     *
+     * @param Location $location
+     * @param int $sectionId
+     */
+    private function updateSubtreeSectionIfNecessary(Location $location, $sectionId)
+    {
+        if ($this->isMainLocation($location)) {
+            $this->setSectionForSubtree($location->id, $sectionId);
+        }
+    }
+
+    /**
+     * Checks if the location is the main location for its content.
+     *
+     * @param Location $location
+     *
+     * @return bool
+     */
+    private function isMainLocation(Location $location)
+    {
+        $locationContentInfo = $this->contentHandler->loadContentInfo($location->contentId);
+
+        return $locationContentInfo->mainLocationId === $location->id;
     }
 
     /**
@@ -353,6 +386,10 @@ class Handler implements BaseLocationHandler
             $destinationParentId,
             Gateway::NODE_ASSIGNMENT_OP_CODE_MOVE
         );
+
+        $sourceLocation = $this->load($sourceId);
+        $destinationParentSectionId = $this->getSectionId($destinationParentId);
+        $this->updateSubtreeSectionIfNecessary($sourceLocation, $destinationParentSectionId);
     }
 
     /**

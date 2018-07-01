@@ -5,20 +5,21 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Integer\Value as IntegerValue;
 use eZ\Publish\Core\FieldType\Validator\IntegerValueValidator;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\Translation\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group fieldType
  * @group validator
  */
-class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
+class IntegerValueValidatorTest extends TestCase
 {
     /**
      * @return int
@@ -42,7 +43,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new IntegerValueValidator()
         );
     }
@@ -81,7 +82,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
             ),
             'maxIntegerValue' => array(
                 'type' => 'int',
-                'default' => false,
+                'default' => null,
             ),
         );
         $validator = new IntegerValueValidator();
@@ -192,11 +193,11 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
         $messages = $validator->getMessage();
         $this->assertCount(1, $messages);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+            ValidationError::class,
             $messages[0]
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+            Message::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(
@@ -212,10 +213,10 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
     public function providerForValidateKO()
     {
         return array(
-            array(-12, 'The value can not be lower than %size%.', array('size' => $this->getMinIntegerValue())),
-            array(0, 'The value can not be lower than %size%.', array('size' => $this->getMinIntegerValue())),
-            array(9, 'The value can not be lower than %size%.', array('size' => $this->getMinIntegerValue())),
-            array(16, 'The value can not be higher than %size%.', array('size' => $this->getMaxIntegerValue())),
+            array(-12, 'The value can not be lower than %size%.', array('%size%' => $this->getMinIntegerValue())),
+            array(0, 'The value can not be lower than %size%.', array('%size%' => $this->getMinIntegerValue())),
+            array(9, 'The value can not be lower than %size%.', array('%size%' => $this->getMinIntegerValue())),
+            array(16, 'The value can not be higher than %size%.', array('%size%' => $this->getMaxIntegerValue())),
         );
     }
 
@@ -246,15 +247,15 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                     'maxIntegerValue' => 2,
                 ),
                 array(
-                    'minIntegerValue' => false,
-                    'maxIntegerValue' => false,
+                    'minIntegerValue' => null,
+                    'maxIntegerValue' => null,
                 ),
                 array(
                     'minIntegerValue' => -5,
-                    'maxIntegerValue' => false,
+                    'maxIntegerValue' => null,
                 ),
                 array(
-                    'minIntegerValue' => false,
+                    'minIntegerValue' => null,
                     'maxIntegerValue' => 12,
                 ),
                 array(
@@ -278,7 +279,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
 
         foreach ($expectedMessages as $index => $expectedMessage) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+                Message::class,
                 $messages[0]->getTranslatableMessage()
             );
             $this->assertEquals(
@@ -301,7 +302,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'minIntegerValue'),
+                    array('%parameter%' => 'minIntegerValue'),
                 ),
             ),
             array(
@@ -310,7 +311,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'minIntegerValue'),
+                    array('%parameter%' => 'minIntegerValue'),
                 ),
             ),
             array(
@@ -320,7 +321,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'minIntegerValue'),
+                    array('%parameter%' => 'minIntegerValue'),
                 ),
             ),
             array(
@@ -330,7 +331,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'maxIntegerValue'),
+                    array('%parameter%' => 'maxIntegerValue'),
                 ),
             ),
             array(
@@ -340,7 +341,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'minIntegerValue'),
+                    array('%parameter%' => 'minIntegerValue'),
                 ),
             ),
             array(
@@ -353,8 +354,8 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                     "Validator parameter '%parameter%' value must be of integer type",
                 ),
                 array(
-                    array('parameter' => 'minIntegerValue'),
-                    array('parameter' => 'maxIntegerValue'),
+                    array('%parameter%' => 'minIntegerValue'),
+                    array('%parameter%' => 'maxIntegerValue'),
                 ),
             ),
             array(
@@ -363,7 +364,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('parameter' => 'brljix'),
+                    array('%parameter%' => 'brljix'),
                 ),
             ),
             array(
@@ -373,7 +374,7 @@ class IntegerValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('parameter' => 'brljix'),
+                    array('%parameter%' => 'brljix'),
                 ),
             ),
         );

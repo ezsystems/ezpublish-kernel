@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\BinaryFile\Type as BinaryFileType;
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 
 /**
  * @group fieldType
@@ -49,7 +48,7 @@ class BinaryFileTest extends BinaryBaseTest
         $binaryFileInput = array(
             array(
                 new BinaryFileValue(array('id' => '/foo/bar')),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
+                InvalidArgumentValue::class,
             ),
         );
 

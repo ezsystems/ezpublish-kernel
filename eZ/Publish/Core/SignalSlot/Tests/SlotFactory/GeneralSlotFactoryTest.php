@@ -5,20 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Tests\SignalDispatcher;
 
 use eZ\Publish\Core\SignalSlot;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group signalSlot
  * @covers \eZ\Publish\Core\SignalSlot\SlotFactory\GeneralSlotFactory
  */
-class GeneralSlotFactoryTest extends PHPUnit_Framework_TestCase
+class GeneralSlotFactoryTest extends TestCase
 {
     public function providerForFactoryTests()
     {
@@ -26,8 +24,8 @@ class GeneralSlotFactoryTest extends PHPUnit_Framework_TestCase
             array(array('slot1' => true, 'slot2' => true)),
             array(
                 array(
-                    'slot1' => $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot'),
-                    'slot2' => $this->getMock('\\eZ\\Publish\\Core\\SignalSlot\\Slot'),
+                    'slot1' => $this->createMock(SignalSlot\Slot::class),
+                    'slot2' => $this->createMock(SignalSlot\Slot::class),
                 ),
             ),
         );

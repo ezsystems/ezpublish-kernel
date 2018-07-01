@@ -5,21 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * The Field Criterion class.
  *
  * Provides content filtering based on Fields contents & values.
  */
-class CustomField extends Criterion implements CriterionInterface
+class CustomField extends Criterion
 {
     public function getSpecifications()
     {

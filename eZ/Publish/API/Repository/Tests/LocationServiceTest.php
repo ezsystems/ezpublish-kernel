@@ -5,17 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
+use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -258,6 +259,49 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the createLocation() method.
      *
+     * @covers \eZ\Publish\API\Repository\LocationService::createLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
+     * @dataProvider dataProviderForOutOfRangeLocationPriority
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateLocationThrowsInvalidArgumentExceptionPriorityIsOutOfRange($priority)
+    {
+        $repository = $this->getRepository();
+
+        $contentId = $this->generateId('object', 41);
+        $parentLocationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $contentId is the ID of an existing content object
+        // $parentLocationId is the ID of an existing location
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // ContentInfo for "How to use eZ Publish"
+        $contentInfo = $contentService->loadContentInfo($contentId);
+
+        $locationCreate = $locationService->newLocationCreateStruct($parentLocationId);
+        $locationCreate->priority = $priority;
+        $locationCreate->hidden = true;
+        $locationCreate->remoteId = 'sindelfingen';
+        $locationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $locationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Throws exception, since priority is out of range
+        $locationService->createLocation(
+            $contentInfo,
+            $locationCreate
+        );
+        /* END: Use Case */
+    }
+
+    public function dataProviderForOutOfRangeLocationPriority()
+    {
+        return [[-2147483649], [2147483648]];
+    }
+
+    /**
+     * Test for the createLocation() method.
+     *
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
@@ -310,7 +354,7 @@ class LocationServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      *
-     * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocation
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testLoadLocation()
@@ -326,9 +370,10 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
+            Location::class,
             $location
         );
+        self::assertEquals(5, $location->id);
 
         return $location;
     }
@@ -419,6 +464,53 @@ class LocationServiceTest extends BaseTest
             $location->contentInfo
         );
         $this->assertEquals($this->generateId('object', 4), $location->contentInfo->id);
+
+        // Check lazy loaded proxy on ->content
+        $this->assertInstanceOf(
+            Content::class,
+            $content = $location->getContent()
+        );
+        $this->assertEquals(4, $content->contentInfo->id);
+    }
+
+    public function testLoadLocationPrioritizedLanguagesFallback()
+    {
+        $repository = $this->getRepository();
+
+        // Add a language
+        $languageService = $repository->getContentLanguageService();
+        $languageStruct = $languageService->newLanguageCreateStruct();
+        $languageStruct->name = 'Norsk';
+        $languageStruct->languageCode = 'nor-NO';
+        $languageService->createLanguage($languageStruct);
+
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $location = $locationService->loadLocation(5);
+
+        // Translate "Users"
+        $draft = $contentService->createContentDraft($location->contentInfo);
+        $struct = $contentService->newContentUpdateStruct();
+        $struct->setField('name', 'Brukere', 'nor-NO');
+        $draft = $contentService->updateContent($draft->getVersionInfo(), $struct);
+        $contentService->publishVersion($draft->getVersionInfo());
+
+        // Load with prioritc language (fallback will be the old one)
+        $location = $locationService->loadLocation(5, ['nor-NO']);
+
+        $this->assertInstanceOf(
+            Location::class,
+            $location
+        );
+        self::assertEquals(5, $location->id);
+        $this->assertInstanceOf(
+            Content::class,
+            $content = $location->getContent()
+        );
+        $this->assertEquals(4, $content->contentInfo->id);
+
+        $this->assertEquals($content->getVersionInfo()->getName(), 'Brukere');
+        $this->assertEquals($content->getVersionInfo()->getName('eng-US'), 'Users');
     }
 
     /**
@@ -509,6 +601,12 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInternalType('array', $locations);
+        self::assertNotEmpty($locations);
+
+        foreach ($locations as $location) {
+            self::assertInstanceOf(Location::class, $location);
+            self::assertEquals($contentInfo->id, $location->getContentInfo()->id);
+        }
 
         return $locations;
     }
@@ -681,7 +779,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the loadLocationChildren() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::loadLocationChildren()
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationChildren
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadLocationChildren()
@@ -698,11 +796,74 @@ class LocationServiceTest extends BaseTest
         $childLocations = $locationService->loadLocationChildren($location);
         /* END: Use Case */
 
-        $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList', $childLocations);
+        $this->assertInstanceOf(LocationList::class, $childLocations);
         $this->assertInternalType('array', $childLocations->locations);
+        $this->assertNotEmpty($childLocations->locations);
         $this->assertInternalType('int', $childLocations->totalCount);
 
+        foreach ($childLocations->locations as $childLocation) {
+            $this->assertInstanceOf(Location::class, $childLocation);
+            $this->assertEquals($location->id, $childLocation->parentLocationId);
+        }
+
         return $childLocations;
+    }
+
+    /**
+     * Test loading parent Locations for draft Content.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadParentLocationsForDraftContent
+     */
+    public function testLoadParentLocationsForDraftContent()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        // prepare locations
+        $locationCreateStructs = [
+            $locationService->newLocationCreateStruct(2),
+            $locationService->newLocationCreateStruct(5),
+        ];
+
+        // Create new content
+        $folderType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $contentCreate = $contentService->newContentCreateStruct($folderType, 'eng-US');
+        $contentCreate->setField('name', 'New Folder');
+        $contentDraft = $contentService->createContent($contentCreate, $locationCreateStructs);
+
+        // Test loading parent Locations
+        $locations = $locationService->loadParentLocationsForDraftContent($contentDraft->versionInfo);
+
+        self::assertCount(2, $locations);
+        foreach ($locations as $location) {
+            // test it is one of the given parent locations
+            self::assertTrue($location->id === 2 || $location->id === 5);
+        }
+
+        return $contentDraft;
+    }
+
+    /**
+     * Test that trying to load parent Locations throws Exception if Content is not a draft.
+     *
+     * @depends testLoadParentLocationsForDraftContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $contentDraft
+     */
+    public function testLoadParentLocationsForDraftContentThrowsBadStateException(Content $contentDraft)
+    {
+        $this->expectException(BadStateException::class);
+        $this->expectExceptionMessageRegExp('/has been already published/');
+
+        $repository = $this->getRepository(false);
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        $content = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $locationService->loadParentLocationsForDraftContent($content->versionInfo);
     }
 
     /**
@@ -889,7 +1050,7 @@ class LocationServiceTest extends BaseTest
     /**
      * Test for the newLocationUpdateStruct() method.
      *
-     * @see \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct()
+     * @covers \eZ\Publish\API\Repository\LocationService::newLocationUpdateStruct
      */
     public function testNewLocationUpdateStruct()
     {
@@ -902,7 +1063,17 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct',
+            LocationUpdateStruct::class,
+            $updateStruct
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'priority' => null,
+                'remoteId' => null,
+                'sortField' => null,
+                'sortOrder' => null,
+            ],
             $updateStruct
         );
     }
@@ -980,6 +1151,41 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testUpdateLocationWithSameRemoteId()
+    {
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $locationId and remote ID is the IDs of the same, existing location
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation($locationId);
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+
+        // Remote ID of an existing location with the same locationId
+        $updateStruct->remoteId = $originalLocation->remoteId;
+
+        // Sets one of the properties to be able to confirm location gets updated, here: priority
+        $updateStruct->priority = 2;
+
+        $location = $locationService->updateLocation($originalLocation, $updateStruct);
+
+        // Checks that the location was updated
+        $this->assertEquals(2, $location->priority);
+
+        // Checks that remoteId remains the same
+        $this->assertEquals($originalLocation->remoteId, $location->remoteId);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateLocationThrowsInvalidArgumentException()
@@ -988,14 +1194,44 @@ class LocationServiceTest extends BaseTest
 
         $locationId = $this->generateId('location', 5);
         /* BEGIN: Use Case */
-        // $locationId is the ID of an existing location
+        // $locationId and remoteId is the IDs of an existing, but not the same, location
         $locationService = $repository->getLocationService();
 
         $originalLocation = $locationService->loadLocation($locationId);
 
         $updateStruct = $locationService->newLocationUpdateStruct();
-        // Remote ID of an existing location
+
+        // Remote ID of an existing location with a different locationId
         $updateStruct->remoteId = 'f3e90596361e31d496d4026eb624c983';
+
+        // Throws exception, since remote ID is already taken
+        $locationService->updateLocation($originalLocation, $updateStruct);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the updateLocation() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::updateLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     * @dataProvider dataProviderForOutOfRangeLocationPriority
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testUpdateLocationThrowsInvalidArgumentExceptionPriorityIsOutOfRange($priority)
+    {
+        $repository = $this->getRepository();
+
+        $locationId = $this->generateId('location', 5);
+        /* BEGIN: Use Case */
+        // $locationId and remoteId is the IDs of an existing, but not the same, location
+        $locationService = $repository->getLocationService();
+
+        $originalLocation = $locationService->loadLocation($locationId);
+
+        $updateStruct = $locationService->newLocationUpdateStruct();
+
+        // Priority value is out of range
+        $updateStruct->priority = $priority;
 
         // Throws exception, since remote ID is already taken
         $locationService->updateLocation($originalLocation, $updateStruct);
@@ -1067,14 +1303,101 @@ class LocationServiceTest extends BaseTest
         $locationService->swapLocation($mediaLocation, $demoDesignLocation);
         /* END: Use Case */
 
+        // Reload Locations, IDs swapped
+        $demoDesignLocation = $locationService->loadLocation($mediaLocationId);
+        $mediaLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        // Assert Location's Content is updated
         $this->assertEquals(
             $mediaContentInfo->id,
-            $locationService->loadLocation($demoDesignLocationId)->getContentInfo()->id
+            $mediaLocation->getContentInfo()->id
         );
         $this->assertEquals(
             $demoDesignContentInfo->id,
-            $locationService->loadLocation($mediaLocationId)->getContentInfo()->id
+            $demoDesignLocation->getContentInfo()->id
         );
+
+        // Assert URL aliases are updated
+        $this->assertEquals(
+            $mediaLocation->id,
+            $repository->getURLAliasService()->lookup('/Design/Media')->destination
+        );
+        $this->assertEquals(
+            $demoDesignLocation->id,
+            $repository->getURLAliasService()->lookup('/eZ-Publish-Demo-Design-without-demo-content')->destination
+        );
+    }
+
+    /**
+     * Test swapping Main Location of a Content with another one updates Content item Main Location.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::swapLocation
+     */
+    public function testSwapLocationUpdatesMainLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        $mainLocationParentId = 60;
+        $secondaryLocationId = 43;
+
+        $publishedContent = $this->publishContentWithParentLocation(
+            'Content for Swap Location Test', $mainLocationParentId
+        );
+
+        // sanity check
+        $mainLocation = $locationService->loadLocation($publishedContent->contentInfo->mainLocationId);
+        self::assertEquals($mainLocationParentId, $mainLocation->parentLocationId);
+
+        // load another pre-existing location
+        $secondaryLocation = $locationService->loadLocation($secondaryLocationId);
+
+        // swap the Main Location with a secondary one
+        $locationService->swapLocation($mainLocation, $secondaryLocation);
+
+        // check if Main Location has been updated
+        $mainLocation = $locationService->loadLocation($secondaryLocation->id);
+        self::assertEquals($publishedContent->contentInfo->id, $mainLocation->contentInfo->id);
+        self::assertEquals($mainLocation->id, $mainLocation->contentInfo->mainLocationId);
+
+        $reloadedContent = $contentService->loadContentByContentInfo($publishedContent->contentInfo);
+        self::assertEquals($mainLocation->id, $reloadedContent->contentInfo->mainLocationId);
+    }
+
+    /**
+     * Test if location swap affects related bookmarks.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::swapLocation
+     */
+    public function testBookmarksAreSwappedAfterSwapLocation()
+    {
+        $repository = $this->getRepository();
+
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+        $bookmarkService = $repository->getBookmarkService();
+
+        $mediaLocation = $locationService->loadLocation($mediaLocationId);
+        $demoDesignLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        // Bookmark locations
+        $bookmarkService->createBookmark($mediaLocation);
+        $bookmarkService->createBookmark($demoDesignLocation);
+
+        $beforeSwap = $bookmarkService->loadBookmarks();
+
+        // Swaps the content referred to by the locations
+        $locationService->swapLocation($mediaLocation, $demoDesignLocation);
+
+        $afterSwap = $bookmarkService->loadBookmarks();
+        /* END: Use Case */
+
+        $this->assertEquals($beforeSwap->items[0]->id, $afterSwap->items[1]->id);
+        $this->assertEquals($beforeSwap->items[1]->id, $afterSwap->items[0]->id);
     }
 
     /**
@@ -1356,7 +1679,7 @@ class LocationServiceTest extends BaseTest
      * Related issue: EZP-21904
      *
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
-     * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContentObjectLastLocation()
     {
@@ -1393,6 +1716,39 @@ class LocationServiceTest extends BaseTest
         // this should throw a not found exception
         $contentService->loadContent($content->versionInfo->contentInfo->id);
         /* END: Use case*/
+    }
+
+    /**
+     * Test for the deleteLocation() method.
+     *
+     * @covers  \eZ\Publish\API\Repository\LocationService::deleteLocation()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
+     */
+    public function testDeleteLocationDeletesRelatedBookmarks()
+    {
+        $repository = $this->getRepository();
+
+        $parentLocationId = $this->generateId('location', 43);
+        $childLocationId = $this->generateId('location', 53);
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+        $bookmarkService = $repository->getBookmarkService();
+
+        // Load location
+        $childLocation = $locationService->loadLocation($childLocationId);
+        // Add location to bookmarks
+        $bookmarkService->createBookmark($childLocation);
+        // Load parent location
+        $parentLocation = $locationService->loadLocation($parentLocationId);
+        // Delete parent location
+        $locationService->deleteLocation($parentLocation);
+        /* END: Use Case */
+
+        // Location isn't bookmarked anymore
+        foreach ($bookmarkService->loadBookmarks(0, 9999) as $bookmarkedLocation) {
+            $this->assertNotEquals($childLocation->id, $bookmarkedLocation->id);
+        }
     }
 
     /**
@@ -1445,6 +1801,46 @@ class LocationServiceTest extends BaseTest
         );
 
         $this->assertDefaultContentStates($copiedLocation->contentInfo);
+    }
+
+    /**
+     * Test for the copySubtree() method.
+     *
+     * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
+     * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
+     */
+    public function testCopySubtreeWithAliases()
+    {
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+
+        // $mediaLocationId is the ID of the "Media" page location in
+        // an eZ Publish demo installation
+
+        // $demoDesignLocationId is the ID of the "Demo Design" page location in an eZ
+        // Publish demo installation
+        $mediaLocationId = $this->generateId('location', 43);
+        $demoDesignLocationId = $this->generateId('location', 56);
+
+        $locationService = $repository->getLocationService();
+        $locationToCopy = $locationService->loadLocation($mediaLocationId);
+        $newParentLocation = $locationService->loadLocation($demoDesignLocationId);
+
+        $expectedSubItemAliases = [
+            '/Design/Plain-site/Media/Multimedia',
+            '/Design/Plain-site/Media/Images',
+            '/Design/Plain-site/Media/Files',
+        ];
+
+        $this->assertAliasesBeforeCopy($urlAliasService, $expectedSubItemAliases);
+
+        // Copy location "Media" to "Design"
+        $locationService->copySubtree(
+            $locationToCopy,
+            $newParentLocation
+        );
+
+        $this->assertGeneratedAliases($urlAliasService, $expectedSubItemAliases);
     }
 
     /**
@@ -2045,5 +2441,66 @@ class LocationServiceTest extends BaseTest
             ),
             $overwrite
         );
+    }
+
+    /**
+     * Assert generated aliases to expected alias return.
+     *
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param array $expectedAliases
+     */
+    protected function assertGeneratedAliases($urlAliasService, array $expectedAliases)
+    {
+        foreach ($expectedAliases as $expectedAlias) {
+            $urlAlias = $urlAliasService->lookup($expectedAlias);
+            $this->assertPropertiesCorrect(['type' => 0], $urlAlias);
+        }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     * @param array $expectedSubItemAliases
+     */
+    private function assertAliasesBeforeCopy($urlAliasService, array $expectedSubItemAliases)
+    {
+        foreach ($expectedSubItemAliases as $aliasUrl) {
+            try {
+                $urlAliasService->lookup($aliasUrl);
+                $this->fail('We didn\'t expect to find alias, but it was found');
+            } catch (\Exception $e) {
+                $this->assertTrue(true); // OK - alias was not found
+            }
+        }
+    }
+
+    /**
+     * Create and publish Content with the given parent Location.
+     *
+     * @param string $contentName
+     * @param int $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content published Content
+     */
+    private function publishContentWithParentLocation($contentName, $parentLocationId)
+    {
+        $repository = $this->getRepository(false);
+        $locationService = $repository->getLocationService();
+
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
+            'eng-US'
+        );
+        $contentCreateStruct->setField('name', $contentName);
+        $contentDraft = $contentService->createContent(
+            $contentCreateStruct,
+            [
+                $locationService->newLocationCreateStruct($parentLocationId),
+            ]
+        );
+
+        return $contentService->publishVersion($contentDraft->versionInfo);
     }
 }

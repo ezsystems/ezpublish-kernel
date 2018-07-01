@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler;
 
@@ -37,7 +35,7 @@ class ObjectStateHandler extends LimitationHandler
                 $map = $this->getGroupMap($policy->limitations[Limitation::STATE]);
             }
             $policy->limitations += $map;
-            unset($policy->limitations[ Limitation::STATE ]);
+            unset($policy->limitations[Limitation::STATE]);
         }
     }
 

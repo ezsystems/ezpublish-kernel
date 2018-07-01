@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
@@ -14,6 +12,7 @@ use eZ\Publish\Core\FieldType\Selection\Type as Selection;
 use eZ\Publish\Core\FieldType\Selection\Value as SelectionValue;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -107,11 +106,11 @@ class SelectionTest extends FieldTypeTest
         return array(
             array(
                 23,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 'sindelfingen',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }
@@ -545,7 +544,7 @@ class SelectionTest extends FieldTypeTest
                         'Option with index %index% does not exist in the field definition.',
                         null,
                         array(
-                            'index' => 3,
+                            '%index%' => 3,
                         ),
                         'selection'
                     ),

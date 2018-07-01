@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
@@ -39,7 +37,7 @@ class StorageEngineFactory
     /**
      * Registers $persistenceHandler as a valid storage engine, with identifier $storageEngineIdentifier.
      *
-     * @note It is strongly recommenced to register a lazy persistent handler.
+     * Note: It is strongly recommenced to register a lazy persistent handler.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param string $storageEngineIdentifier

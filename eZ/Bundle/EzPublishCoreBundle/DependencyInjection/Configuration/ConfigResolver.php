@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration;
 
@@ -14,7 +12,8 @@ use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 /**
  * This class will help you get settings for a specific scope.
@@ -33,13 +32,15 @@ use Symfony\Component\DependencyInjection\ContainerAware;
  * 2. SiteAccess name
  * 3. "default"
  */
-class ConfigResolver extends ContainerAware implements VersatileScopeInterface, SiteAccessAware
+class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, ContainerAwareInterface
 {
-    const SCOPE_GLOBAL = 'global',
-          SCOPE_DEFAULT = 'default';
+    use ContainerAwareTrait;
 
-    const UNDEFINED_STRATEGY_EXCEPTION = 1,
-          UNDEFINED_STRATEGY_NULL = 2;
+    const SCOPE_GLOBAL = 'global';
+    const SCOPE_DEFAULT = 'default';
+
+    const UNDEFINED_STRATEGY_EXCEPTION = 1;
+    const UNDEFINED_STRATEGY_NULL = 2;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
@@ -87,7 +88,6 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface, 
     public function setSiteAccess(SiteAccess $siteAccess = null)
     {
         $this->siteAccess = $siteAccess;
-        $this->defaultScope = $siteAccess->name;
     }
 
     /**
@@ -126,7 +126,7 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface, 
     public function hasParameter($paramName, $namespace = null, $scope = null)
     {
         $namespace = $namespace ?: $this->defaultNamespace;
-        $scope = $scope ?: $this->defaultScope;
+        $scope = $scope ?: $this->getDefaultScope();
 
         $defaultScopeParamName = "$namespace." . self::SCOPE_DEFAULT . ".$paramName";
         $globalScopeParamName = "$namespace." . self::SCOPE_GLOBAL . ".$paramName";
@@ -166,7 +166,7 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface, 
     public function getParameter($paramName, $namespace = null, $scope = null)
     {
         $namespace = $namespace ?: $this->defaultNamespace;
-        $scope = $scope ?: $this->defaultScope;
+        $scope = $scope ?: $this->getDefaultScope();
         $triedScopes = array();
 
         // Global scope
@@ -182,7 +182,7 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface, 
         if ($this->container->hasParameter($relativeScopeParamName)) {
             return $this->container->getParameter($relativeScopeParamName);
         }
-        $triedScopes[] = $this->defaultScope;
+        $triedScopes[] = $scope;
         unset($relativeScopeParamName);
 
         // Relative scope, siteaccess group wise
@@ -234,7 +234,7 @@ class ConfigResolver extends ContainerAware implements VersatileScopeInterface, 
 
     public function getDefaultScope()
     {
-        return $this->defaultScope;
+        return $this->defaultScope ?: $this->siteAccess->name;
     }
 
     public function setDefaultScope($scope)

@@ -5,31 +5,29 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\EventListener;
 
-use PHPUnit_Framework_MockObject_MockObject;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use eZ\Bundle\EzPublishRestBundle\EventListener\CsrfListener;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-abstract class EventListenerTest extends PHPUnit_Framework_TestCase
+abstract class EventListenerTest extends TestCase
 {
     /** @var EventDispatcherInterface */
     protected $eventMock;
 
-    /** @var Request|PHPUnit_Framework_MockObject_MockObject */
+    /** @var Request|MockObject */
     protected $requestMock;
 
-    /** @var ParameterBag|PHPUnit_Framework_MockObject_MockObject */
+    /** @var ParameterBag|MockObject */
     protected $requestAttributesMock;
 
-    /** @var ParameterBag|PHPUnit_Framework_MockObject_MockObject */
+    /** @var ParameterBag|MockObject */
     protected $requestHeadersMock;
 
     protected $isRestRequest = true;
@@ -61,7 +59,7 @@ abstract class EventListenerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|$class
+     * @return MockObject|$class
      */
     protected function getEventMock($class)
     {
@@ -80,12 +78,12 @@ abstract class EventListenerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ParameterBag|PHPUnit_Framework_MockObject_MockObject
+     * @return ParameterBag|MockObject
      */
     protected function getRequestAttributesMock()
     {
         if (!isset($this->requestAttributesMock)) {
-            $this->requestAttributesMock = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
+            $this->requestAttributesMock = $this->createMock(ParameterBag::class);
             $this->requestAttributesMock
                 ->expects($this->once())
                 ->method('get')
@@ -97,12 +95,12 @@ abstract class EventListenerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|Request
+     * @return MockObject|Request
      */
     protected function getRequestMock()
     {
         if (!isset($this->requestMock)) {
-            $this->requestMock = $this->getMock('Symfony\Component\HttpFoundation\Request');
+            $this->requestMock = $this->createMock(Request::class);
             $this->requestMock->attributes = $this->getRequestAttributesMock();
             $this->requestMock->headers = $this->getRequestHeadersMock();
 
@@ -122,12 +120,12 @@ abstract class EventListenerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ParameterBag|PHPUnit_Framework_MockObject_MockObject
+     * @return ParameterBag|MockObject
      */
     protected function getRequestHeadersMock()
     {
         if (!isset($this->requestHeadersMock)) {
-            $this->requestHeadersMock = $this->getMock('Symfony\Component\HttpFoundation\ParameterBag');
+            $this->requestHeadersMock = $this->createMock(ParameterBag::class);
         }
 
         return $this->requestHeadersMock;

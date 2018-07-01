@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location;
@@ -19,8 +18,12 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState;
+use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler as ObjectStateHandler;
 use eZ\Publish\SPI\Persistence\Content\ObjectState\Group as ObjectStateGroup;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
 
 /**
  * Test case for LocationHandlerTest.
@@ -51,14 +54,14 @@ class LocationHandlerTest extends TestCase
     /**
      * Mocked object state handler instance.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $objectStateHandler;
 
     /**
      * Mocked Tree handler instance.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $treeHandler;
 
@@ -66,9 +69,10 @@ class LocationHandlerTest extends TestCase
     {
         parent::setUp();
 
-        $this->locationGateway = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway');
-        $this->locationMapper = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper');
-        $this->treeHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\TreeHandler', array(), array(), '', false);
+        $this->locationGateway = $this->createMock(Gateway::class);
+        $this->locationMapper = $this->createMock(Mapper::class);
+        $this->treeHandler = $this->createMock(TreeHandler::class);
+        $this->contentHandler = $this->createMock(ContentHandler::class);
     }
 
     protected function getLocationHandler()
@@ -78,8 +82,8 @@ class LocationHandlerTest extends TestCase
         return new Handler(
             $this->locationGateway,
             $this->locationMapper,
-            $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false),
-            $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler', array(), array(), '', false),
+            $this->contentHandler,
+            $this->createMock(ObjectStateHandler::class),
             $this->treeHandler
         );
     }
@@ -213,6 +217,7 @@ class LocationHandlerTest extends TestCase
         $destinationData = array(
             'node_id' => 77,
             'path_string' => '/1/2/77/',
+            'contentobject_id' => 68,
         );
         $this->locationGateway
             ->expects($this->at(1))
@@ -229,6 +234,42 @@ class LocationHandlerTest extends TestCase
             ->expects($this->once())
             ->method('updateNodeAssignment')
             ->with(67, 2, 77, 5);
+
+        $this->treeHandler
+            ->expects($this->at(0))
+            ->method('loadLocation')
+            ->with($sourceData['node_id'])
+            ->will($this->returnValue(
+                new Location(
+                    array(
+                        'id' => $sourceData['node_id'],
+                        'contentId' => $sourceData['contentobject_id'],
+                    )
+                )
+            ));
+
+        $this->treeHandler
+            ->expects($this->at(1))
+            ->method('loadLocation')
+            ->with($destinationData['node_id'])
+            ->will($this->returnValue(new Location(array('contentId' => $destinationData['contentobject_id']))));
+
+        $this->contentHandler
+            ->expects($this->at(0))
+            ->method('loadContentInfo')
+            ->with($destinationData['contentobject_id'])
+            ->will($this->returnValue(new ContentInfo(array('sectionId' => 12345))));
+
+        $this->contentHandler
+            ->expects($this->at(1))
+            ->method('loadContentInfo')
+            ->with($sourceData['contentobject_id'])
+            ->will($this->returnValue(new ContentInfo(array('mainLocationId' => 69))));
+
+        $this->treeHandler
+            ->expects($this->once())
+            ->method('setSectionForSubtree')
+            ->with(69, 12345);
 
         $handler->move(69, 77);
     }
@@ -388,7 +429,7 @@ class LocationHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::changeMainLocation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::changeMainLocation
      */
     public function testChangeMainLocation()
     {
@@ -405,7 +446,7 @@ class LocationHandlerTest extends TestCase
     /**
      * Test for the removeSubtree() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::removeSubtree
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::removeSubtree
      */
     public function testRemoveSubtree()
     {
@@ -422,7 +463,7 @@ class LocationHandlerTest extends TestCase
     /**
      * Test for the copySubtree() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::copySubtree
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler::copySubtree
      */
     public function testCopySubtree()
     {
@@ -547,7 +588,7 @@ class LocationHandlerTest extends TestCase
                 ->with(
                     $contentId + $offset,
                     1,
-                    $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct')
+                    $this->isInstanceOf(Content\MetadataUpdateStruct::class)
                 )
                 ->will(
                     $this->returnValue(
@@ -612,12 +653,6 @@ class LocationHandlerTest extends TestCase
                 ->with($contentId, $locationId);
         }
 
-        $this->contentHandler
-            ->expects($this->at($lastContentHandlerIndex + 1))
-            ->method('loadContentInfo')
-            ->with(21)
-            ->will($this->returnValue(new ContentInfo(array('mainLocationId' => 1010))));
-
         $handler
             ->expects($this->once())
             ->method('load')
@@ -625,10 +660,16 @@ class LocationHandlerTest extends TestCase
             ->will($this->returnValue(new Location(array('contentId' => $destinationData['contentobject_id']))));
 
         $this->contentHandler
-            ->expects($this->at($lastContentHandlerIndex + 2))
+            ->expects($this->at($lastContentHandlerIndex + 1))
             ->method('loadContentInfo')
             ->with($destinationData['contentobject_id'])
             ->will($this->returnValue(new ContentInfo(array('sectionId' => 12345))));
+
+        $this->contentHandler
+            ->expects($this->at($lastContentHandlerIndex + 2))
+            ->method('loadContentInfo')
+            ->with(21)
+            ->will($this->returnValue(new ContentInfo(array('mainLocationId' => 1010))));
 
         $handler
             ->expects($this->once())
@@ -650,16 +691,17 @@ class LocationHandlerTest extends TestCase
      */
     protected function getPartlyMockedHandler(array $methods)
     {
-        return $this->getMock(
-            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler',
-            $methods,
-            array(
-                $this->locationGateway = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway', array(), array(), '', false),
-                $this->locationMapper = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper', array(), array(), '', false),
-                $this->contentHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false),
-                $this->objectStateHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Handler', array(), array(), '', false),
-                $this->treeHandler = $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\TreeHandler', array(), array(), '', false),
+        return $this->getMockBuilder(LocationHandler::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->locationGateway = $this->createMock(Gateway::class),
+                    $this->locationMapper = $this->createMock(Mapper::class),
+                    $this->contentHandler = $this->createMock(ContentHandler::class),
+                    $this->objectStateHandler = $this->createMock(ObjectStateHandler::class),
+                    $this->treeHandler = $this->createMock(TreeHandler::class),
+                )
             )
-        );
+            ->getMock();
     }
 }

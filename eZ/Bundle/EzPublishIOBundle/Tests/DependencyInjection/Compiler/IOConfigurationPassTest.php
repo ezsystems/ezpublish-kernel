@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\Compiler;
 
@@ -16,13 +14,14 @@ use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use PHPUnit\Framework\MockObject\MockObject;
 
 class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 {
-    /** @var ConfigurationFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigurationFactory|MockObject */
     protected $metadataConfigurationFactoryMock;
 
-    /** @var ConfigurationFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ConfigurationFactory|MockObject */
     protected $binarydataConfigurationFactoryMock;
 
     public function setUp()
@@ -37,8 +36,8 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
 
     protected function registerCompilerPass(ContainerBuilder $container)
     {
-        $this->metadataConfigurationFactoryMock = $this->getMock('\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory');
-        $this->binarydataConfigurationFactoryMock = $this->getMock('\eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory');
+        $this->metadataConfigurationFactoryMock = $this->createMock(ConfigurationFactory::class);
+        $this->binarydataConfigurationFactoryMock = $this->createMock(ConfigurationFactory::class);
 
         $container->addCompilerPass(
             new IOConfigurationPass(

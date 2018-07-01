@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
@@ -279,6 +277,18 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $IdVersionTranslationPairs): array
+    {
+        try {
+            return $this->innerGateway->loadContentList($IdVersionTranslationPairs);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Loads data for a content object identified by its remote ID.
      *
      * Returns an array with the relevant data.
@@ -291,6 +301,28 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadContentInfoByRemoteId($remoteId);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (\PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Loads info for a content object identified by its location ID (node ID).
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
+     */
+    public function loadContentInfoByLocationId($locationId)
+    {
+        try {
+            return $this->innerGateway->loadContentInfoByLocationId($locationId);
         } catch (DBALException $e) {
             throw new \RuntimeException('Database error', 0, $e);
         } catch (\PDOException $e) {
@@ -314,6 +346,17 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadContentInfo($contentId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    public function loadContentInfoList(array $contentIds)
+    {
+        try {
+            return $this->innerGateway->loadContentInfoList($contentIds);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -366,14 +409,18 @@ class ExceptionConversion extends Gateway
     /**
      * Returns all version data for the given $contentId.
      *
+     * Result is returned with oldest version first (using version id as it has index and is auto increment).
+     *
      * @param mixed $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return string[][]
      */
-    public function listVersions($contentId)
+    public function listVersions($contentId, $status = null, $limit = -1)
     {
         try {
-            return $this->innerGateway->listVersions($contentId);
+            return $this->innerGateway->listVersions($contentId, $status, $limit);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -438,16 +485,18 @@ class ExceptionConversion extends Gateway
     /**
      * Returns all field IDs of $contentId grouped by their type.
      * If $versionNo is set only field IDs for that version are returned.
+     * If $languageCode is set, only field IDs for that language are returned.
      *
      * @param int $contentId
      * @param int|null $versionNo
+     * @param string|null $languageCode
      *
      * @return int[][]
      */
-    public function getFieldIdsByType($contentId, $versionNo = null)
+    public function getFieldIdsByType($contentId, $versionNo = null, $languageCode = null)
     {
         try {
-            return $this->innerGateway->getFieldIdsByType($contentId, $versionNo);
+            return $this->innerGateway->getFieldIdsByType($contentId, $versionNo, $languageCode);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -722,6 +771,60 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->copyRelations($originalContentId, $copiedContentId, $versionNo);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Remove the specified translation from all the Versions of a Content Object.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     */
+    public function deleteTranslationFromContent($contentId, $languageCode)
+    {
+        try {
+            return $this->innerGateway->deleteTranslationFromContent($contentId, $languageCode);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Delete Content fields (attributes) for the given Translation.
+     * If $versionNo is given, fields for that Version only will be deleted.
+     *
+     * @param string $languageCode
+     * @param int $contentId
+     * @param int $versionNo (optional) filter by versionNo
+     */
+    public function deleteTranslatedFields($languageCode, $contentId, $versionNo = null)
+    {
+        try {
+            return $this->innerGateway->deleteTranslatedFields($languageCode, $contentId, $versionNo);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * Delete the specified Translation from the given Version.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     * @param string $languageCode
+     */
+    public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode)
+    {
+        try {
+            return $this->innerGateway->deleteTranslationFromVersion($contentId, $versionNo, $languageCode);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

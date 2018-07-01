@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
@@ -39,7 +37,8 @@ class LogicalNot extends CriterionParser
         if (count($data['NOT']) > 1) {
             throw new Exceptions\Parser('NOT element can only contain one subitem');
         }
-        list($criterionName, $criterionData) = each($data['NOT']);
+        $criterionName = key($data['NOT']);
+        $criterionData = current($data['NOT']);
         $criteria = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
 
         return new LogicalNotCriterion($criteria);

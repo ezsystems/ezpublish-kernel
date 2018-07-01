@@ -5,15 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\User;
 
 use eZ\Publish\Core\FieldType\FieldType;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\Persistence\Cache\UserHandler;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 /**
  * The User field type.
@@ -22,6 +24,17 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class Type extends FieldType
 {
+    /** @var \eZ\Publish\Core\Persistence\Cache\UserHandler */
+    protected $userHandler;
+
+    /**
+     * @param \eZ\Publish\Core\Persistence\Cache\UserHandler $userHandler
+     */
+    public function __construct(UserHandler $userHandler)
+    {
+        $this->userHandler = $userHandler;
+    }
+
     /**
      * Returns the field type identifier for this field type.
      *
@@ -191,5 +204,45 @@ class Type extends FieldType
     public function fromPersistenceValue(FieldValue $fieldValue)
     {
         return $this->acceptValue($fieldValue->externalData);
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\User\Value $fieldValue The field value for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    {
+        $errors = [];
+
+        if ($this->isEmptyValue($fieldValue)) {
+            return $errors;
+        }
+
+        if (!$fieldValue->hasStoredLogin) {
+            try {
+                $login = $fieldValue->login;
+                $this->userHandler->loadByLogin($login);
+
+                // If you want to change this ValidationError message, please remember to change it also in Repository Forms in lib/Validator/Constraints/FieldValueValidatorMessages class
+                $errors[] = new ValidationError(
+                    "The user login '%login%' is used by another user. You must enter a unique login.",
+                    null,
+                    [
+                        '%login%' => $login,
+                    ],
+                    'username'
+                );
+            } catch (NotFoundException $e) {
+                // Do nothing
+            }
+        }
+
+        return $errors;
     }
 }

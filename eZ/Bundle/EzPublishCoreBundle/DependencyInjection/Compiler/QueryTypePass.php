@@ -23,16 +23,20 @@ class QueryTypePass implements CompilerPassInterface
         }
 
         $queryTypes = [];
+        $queryTypesClasses = [];
 
         // tagged query types
         $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.query_type');
         foreach ($taggedServiceIds as $taggedServiceId => $tags) {
             $queryTypeDefinition = $container->getDefinition($taggedServiceId);
-            $queryTypeClass = $queryTypeDefinition->getClass();
+            $queryTypeClass = $container->getParameterBag()->resolveValue($queryTypeDefinition->getClass());
+
+            $queryTypesClasses[$queryTypeClass] = [];
 
             for ($i = 0, $count = count($tags); $i < $count; ++$i) {
-                // TODO: Check for duplicates
-                $queryTypes[$queryTypeClass::getName()] = new Reference($taggedServiceId);
+                $name = isset($tags[$i]['alias']) ? $tags[$i]['alias'] : $queryTypeClass::getName();
+                $queryTypes[$name] = new Reference($taggedServiceId);
+                $queryTypesClasses[$queryTypeClass][$name] = true;
             }
         }
 
@@ -57,6 +61,13 @@ class QueryTypePass implements CompilerPassInterface
                         throw new Exception("Expected $queryTypeClassName to be defined in $queryTypeFilePath");
                     }
 
+                    $queryTypeName = $queryTypeClassName::getName();
+
+                    // skip if the class was already registered as a tagged service with the same name
+                    if (isset($queryTypesClasses[$queryTypeClassName][$queryTypeName])) {
+                        continue;
+                    }
+
                     $queryTypeReflectionClass = new ReflectionClass($queryTypeClassName);
                     if (!$queryTypeReflectionClass->implementsInterface('eZ\Publish\Core\QueryType\QueryType')) {
                         throw new Exception("$queryTypeClassName needs to implement eZ\\Publish\\Core\\QueryType\\QueryType");
@@ -65,8 +76,9 @@ class QueryTypePass implements CompilerPassInterface
                     $serviceId = 'ezpublish.query_type.convention.' . strtolower($bundleName) . '_' . strtolower($queryTypeFileName);
                     $queryTypeServices[$serviceId] = new Definition($queryTypeClassName);
 
-                    $queryTypes[$queryTypeClassName::getName()] = new Reference($serviceId);
+                    $queryTypes[$queryTypeName] = new Reference($serviceId);
                 }
+
                 $container->addDefinitions($queryTypeServices);
             }
         }

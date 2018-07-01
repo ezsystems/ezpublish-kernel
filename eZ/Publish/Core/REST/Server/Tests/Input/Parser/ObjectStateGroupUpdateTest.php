@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\ObjectStateService;
 use eZ\Publish\Core\REST\Server\Input\Parser\ObjectStateGroupUpdate;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 
@@ -45,7 +44,7 @@ class ObjectStateGroupUpdateTest extends BaseTest
         $result = $objectStateGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupUpdateStruct',
+            ObjectStateGroupUpdateStruct::class,
             $result,
             'ObjectStateGroupUpdateStruct not created correctly.'
         );
@@ -121,13 +120,7 @@ class ObjectStateGroupUpdateTest extends BaseTest
      */
     protected function getObjectStateServiceMock()
     {
-        $objectStateServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ObjectStateService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $objectStateServiceMock = $this->createMock(ObjectStateService::class);
 
         $objectStateServiceMock->expects($this->any())
             ->method('newObjectStateGroupUpdateStruct')

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Common\Slot;
 
@@ -31,5 +29,10 @@ class DeleteContent extends Slot
 
         // Delete Content
         $this->searchHandler->deleteContent($signal->contentId);
+
+        // Delete locations if there is any
+        foreach ($signal->affectedLocationIds as $locationId) {
+            $this->searchHandler->deleteLocation($locationId, $signal->contentId);
+        }
     }
 }

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser;
 
@@ -27,7 +25,7 @@ class Languages extends AbstractParser
     {
         $nodeBuilder
             ->arrayNode('languages')
-                ->cannotBeEmpty()
+                ->requiresAtLeastOneElement()
                 ->info('Available languages, in order of precedence')
                 ->example(array('fre-FR', 'eng-GB'))
                 ->prototype('scalar')->end()

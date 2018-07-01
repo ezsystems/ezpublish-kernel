@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Base\Exceptions;
 
@@ -29,6 +27,7 @@ class ContentValidationException extends APIContentValidationException implement
      */
     public function __construct($messageTemplate, array $parameters = [])
     {
+        /** @Ignore */
         $this->setMessageTemplate($messageTemplate);
         $this->setParameters($parameters);
 

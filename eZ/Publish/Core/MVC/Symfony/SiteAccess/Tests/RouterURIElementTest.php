@@ -5,19 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement as URIElementMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use Psr\Log\LoggerInterface;
 
-class RouterURIElementTest extends PHPUnit_Framework_TestCase
+class RouterURIElementTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder
@@ -34,7 +34,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
     {
         return new Router(
             $this->matcherBuilder,
-            $this->getMock('Psr\\Log\\LoggerInterface'),
+            $this->createMock(LoggerInterface::class),
             'default_sa',
             array(
                 'URIElement' => array(
@@ -60,7 +60,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
     public function testMatch(SimplifiedRequest $request, $siteAccess, Router $router)
     {
         $sa = $router->match($request);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa);
+        $this->assertInstanceOf(SiteAccess::class, $sa);
         $this->assertSame($siteAccess, $sa->name);
         $router->setSiteAccess();
     }
@@ -168,7 +168,7 @@ class RouterURIElementTest extends PHPUnit_Framework_TestCase
         $matcher = new URIElementMatcher(array(1));
         $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => $originalPathinfo)));
         $result = $matcher->reverseMatch($siteAccessName);
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\URIElement', $result);
+        $this->assertInstanceOf(URIElement::class, $result);
         $this->assertSame("/{$siteAccessName}{$originalPathinfo}", $result->getRequest()->pathinfo);
         $this->assertSame("/$siteAccessName/some/linked/uri", $result->analyseLink('/some/linked/uri'));
         $this->assertSame('/foo/bar/baz', $result->analyseURI("/$siteAccessName/foo/bar/baz"));

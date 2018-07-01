@@ -5,14 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Rating\Type as Rating;
 use eZ\Publish\Core\FieldType\Rating\Value;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use ReflectionObject;
 
 /**
@@ -98,15 +97,15 @@ class RatingTest extends FieldTypeTest
         return array(
             array(
                 'sindelfingen',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new Value('sindelfingen'),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

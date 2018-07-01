@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository;
 
@@ -94,34 +92,7 @@ class RoleService implements RoleServiceInterface
         $this->userHandler = $userHandler;
         $this->limitationService = $limitationService;
         $this->roleDomainMapper = $roleDomainMapper;
-        // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
-            'policyMap' => array(
-                'content' => array(
-                    'read' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
-                    'diff' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                    'view_embed' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                    'create' => array('Class' => true, 'Section' => true, 'ParentOwner' => true, 'ParentGroup' => true, 'ParentClass' => true, 'ParentDepth' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'edit' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true),
-                    'manage_locations' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Subtree' => true),
-                    'hide' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'translate' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'remove' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
-                    'versionread' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true),
-                    'versionremove' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true),
-                    'pdf' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                ),
-                'section' => array(
-                    'assign' => array('Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true),
-                ),
-                'state' => array(
-                    'assign' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true),
-                ),
-                'user' => array(
-                    'login' => array('SiteAccess' => true),
-                ),
-            ),
-        );
+        $this->settings = $settings;
     }
 
     /**
@@ -676,34 +647,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Removes a policy from the role.
-     *
-     * @deprecated since 5.3, use {@link removePolicyByRoleDraft()} instead.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if policy does not belong to the given role
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     * @param \eZ\Publish\API\Repository\Values\User\Policy $policy the policy to remove from the role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role the updated role
-     */
-    public function removePolicy(APIRole $role, APIPolicy $policy)
-    {
-        if ($this->repository->hasAccess('role', 'update') !== true) {
-            throw new UnauthorizedException('role', 'update');
-        }
-
-        if ($policy->roleId != $role->id) {
-            throw new InvalidArgumentException('$policy', 'Policy does not belong to the given role');
-        }
-
-        $this->internalDeletePolicy($policy);
-
-        return $this->loadRole($role->id);
-    }
-
-    /**
      * Deletes a policy.
      *
      * @deprecated since 6.0, use {@link removePolicyByRoleDraft()} instead.
@@ -734,7 +677,7 @@ class RoleService implements RoleServiceInterface
     {
         $this->repository->beginTransaction();
         try {
-            $this->userHandler->deletePolicy($policy->id);
+            $this->userHandler->deletePolicy($policy->id, $policy->roleId);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
@@ -1392,7 +1335,7 @@ class RoleService implements RoleServiceInterface
     /**
      * Validates Policies and Limitations in Role create struct.
      *
-     * @uses validatePolicy()
+     * @uses ::validatePolicy()
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStruct
      *

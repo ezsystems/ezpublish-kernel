@@ -8,27 +8,31 @@
  */
 namespace eZ\Publish\Core\IO\Tests\IOMetadataHandler;
 
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\IO\IOMetadataHandler\LegacyDFSCluster;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
-use PHPUnit_Framework_TestCase;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Statement;
+use eZ\Publish\Core\IO\UrlDecorator;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
-class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
+class LegacyDFSClusterTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit\Framework\MockObject\MockObject */
     private $handler;
 
-    /** @var  \Doctrine\DBAL\Connection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Doctrine\DBAL\Connection|\PHPUnit\Framework\MockObject\MockObject */
     private $dbalMock;
 
-    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $urlDecoratorMock;
 
     public function setUp()
     {
-        $this->dbalMock = $this->getMockBuilder('Doctrine\DBAL\Connection')->disableOriginalConstructor()->getMock();
-        $this->urlDecoratorMock = $this->getMock('eZ\Publish\Core\IO\UrlDecorator');
+        $this->dbalMock = $this->createMock(Connection::class);
+        $this->urlDecoratorMock = $this->createMock(UrlDecorator::class);
 
         $this->handler = new LegacyDFSCluster(
             $this->dbalMock,
@@ -37,30 +41,55 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testCreate()
+    public function providerCreate()
     {
-        $statement = $this->createDbalStatementMock();
-        $statement
-            ->expects($this->once())
-            ->method('rowCount')
-            ->will($this->returnValue(1));
+        return [
+            ['prefix/my/file.png', 'image/png', 123, new DateTime('@1307155200'), new DateTime('@1307155200')],
+            ['prefix/my/file.png', 'image/png', 123, new DateTime('@1307155200'), new DateTime('@1307155200')], // Duplicate, should not fail
+            ['prefix/my/file.png', 'image/png', 123, new DateTime('@1307155242'), new DateTime('@1307155242')],
+        ];
+    }
 
+    /**
+     * @dataProvider providerCreate
+     */
+    public function testCreate($id, $mimeType, $size, $mtime, $mtimeExpected)
+    {
         $this->dbalMock
             ->expects($this->once())
             ->method('prepare')
             ->with($this->anything())
-            ->will($this->returnValue($statement));
+            ->will($this->returnValue($this->createDbalStatementMock()));
+
+        $spiCreateStruct = new SPIBinaryFileCreateStruct();
+        $spiCreateStruct->id = $id;
+        $spiCreateStruct->mimeType = $mimeType;
+        $spiCreateStruct->size = $size;
+        $spiCreateStruct->mtime = $mtime;
+
+        $spiBinary = $this->handler->create($spiCreateStruct);
+
+        $this->assertInstanceOf(SPIBinaryFile::class, $spiBinary);
+
+        $this->assertEquals($mtimeExpected, $spiBinary->mtime);
+    }
+
+    /**
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testCreateInvalidArgument()
+    {
+        $this->dbalMock
+            ->expects($this->never())
+            ->method('prepare');
 
         $spiCreateStruct = new SPIBinaryFileCreateStruct();
         $spiCreateStruct->id = 'prefix/my/file.png';
         $spiCreateStruct->mimeType = 'image/png';
         $spiCreateStruct->size = 123;
-        $spiCreateStruct->mtime = 1307155200;
+        $spiCreateStruct->mtime = 1307155242; // Invalid, should be a DateTime
 
-        $this->assertInstanceOf(
-            'eZ\Publish\SPI\IO\BinaryFile',
-            $this->handler->create($spiCreateStruct)
-        );
+        $this->handler->create($spiCreateStruct);
     }
 
     public function testDelete()
@@ -187,26 +216,53 @@ class LegacyDFSClusterTest extends PHPUnit_Framework_TestCase
 
     public function testDeletedirectory()
     {
-        $statement = $this->createDbalStatementMock();
-        $statement
+        $this->urlDecoratorMock
             ->expects($this->once())
-            ->method('bindValue')
-            ->with(1, 'folder/subfolder/%');
+            ->method('decorate')
+            ->will($this->returnValue('prefix/images/_alias/subfolder'));
+
+        $queryBuilderMock = $this
+            ->getMockBuilder(QueryBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $queryBuilderMock->expects($this->at(0))
+            ->method('delete')
+            ->with('ezdfsfile')
+            ->willReturn($queryBuilderMock);
+
+        $queryBuilderMock->expects($this->at(1))
+            ->method('where')
+            ->with('name LIKE :spiPath ESCAPE :esc')
+            ->willReturn($queryBuilderMock);
+
+        $queryBuilderMock->expects($this->at(2))
+            ->method('setParameter')
+            ->with(':esc', '\\')
+            ->willReturn($queryBuilderMock);
+
+        $queryBuilderMock->expects($this->at(3))
+            ->method('setParameter')
+            ->with(':spiPath', 'prefix/images/\_alias/subfolder/%')
+            ->willReturn($queryBuilderMock);
+
+        $queryBuilderMock->expects($this->once())
+            ->method('execute')
+            ->willReturn(1);
 
         $this->dbalMock
             ->expects($this->once())
-            ->method('prepare')
-            ->with($this->anything())
-            ->will($this->returnValue($statement));
+            ->method('createQueryBuilder')
+            ->willReturn($queryBuilderMock);
 
-        $this->handler->deleteDirectory('folder/subfolder/');
+        $this->handler->deleteDirectory('images/_alias/subfolder/');
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function createDbalStatementMock()
     {
-        return $this->getMock('Doctrine\DBAL\Driver\Statement');
+        return $this->createMock(Statement::class);
     }
 }

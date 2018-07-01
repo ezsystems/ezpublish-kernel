@@ -5,18 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use PHPUnit\Framework\TestCase;
 
-class FilterConfigurationTest extends PHPUnit_Framework_TestCase
+class FilterConfigurationTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
@@ -28,7 +27,7 @@ class FilterConfigurationTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
         $this->filterConfiguration = new FilterConfiguration();
         $this->filterConfiguration->setConfigResolver($this->configResolver);
     }

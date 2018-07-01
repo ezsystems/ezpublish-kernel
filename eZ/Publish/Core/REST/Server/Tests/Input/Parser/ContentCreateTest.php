@@ -5,16 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\Core\Repository\ContentService;
+use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate;
+use eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
+use eZ\Publish\Core\REST\Client\FieldTypeService;
 
 class ContentCreateTest extends BaseTest
 {
@@ -521,23 +524,17 @@ class ContentCreateTest extends BaseTest
      */
     private function getFieldTypeParserMock()
     {
-        $fieldTypeParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
-            array(),
-            array(
-                $this->getContentServiceMock(),
-                $this->getContentTypeServiceMock(),
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Client\\FieldTypeService',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-            ),
-            '',
-            false
-        );
+        $fieldTypeParserMock = $this->getMockBuilder(FieldTypeParser::class)
+            ->disableOriginalConstructor()
+            ->setMethods(array())
+            ->setConstructorArgs(
+                array(
+                    $this->getContentServiceMock(),
+                    $this->getContentTypeServiceMock(),
+                    $this->createMock(FieldTypeService::class),
+                )
+            )
+            ->getMock();
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseValue')
@@ -554,13 +551,7 @@ class ContentCreateTest extends BaseTest
      */
     private function getLocationCreateParserMock()
     {
-        $locationCreateParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Server\\Input\\Parser\\LocationCreate',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $locationCreateParserMock = $this->createMock(LocationCreate::class);
 
         $locationCreateParserMock->expects($this->any())
             ->method('parse')
@@ -577,13 +568,7 @@ class ContentCreateTest extends BaseTest
      */
     protected function getContentServiceMock()
     {
-        $contentServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentServiceMock = $this->createMock(ContentService::class);
 
         $contentType = $this->getContentType();
         $contentServiceMock->expects($this->any())
@@ -613,13 +598,7 @@ class ContentCreateTest extends BaseTest
      */
     protected function getContentTypeServiceMock()
     {
-        $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
 
         $contentTypeServiceMock->expects($this->any())
             ->method('loadContentType')

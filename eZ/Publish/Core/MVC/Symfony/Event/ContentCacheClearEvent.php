@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Event;
 
@@ -14,6 +12,12 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use Symfony\Component\EventDispatcher\Event;
 
+/**
+ * Class ContentCacheClearEvent.
+ *
+ * @deprecated Since 6.12, not triggered anymore when using ezplatform-http-cache, as this never worked for for instance
+ * deleted content.
+ */
 class ContentCacheClearEvent extends Event
 {
     /**

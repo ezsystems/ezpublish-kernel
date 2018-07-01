@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content;
 
@@ -14,7 +12,6 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Search\Handler as SearchHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -241,44 +238,13 @@ class Handler implements SearchHandlerInterface
     {
         // 1. Delete the Content
         if ($versionId === null) {
-            $ast = array(
-                'query' => array(
-                    'filtered' => array(
-                        'filter' => array(
-                            'and' => array(
-                                array(
-                                    'ids' => array(
-                                        'type' => $this->contentDocumentTypeIdentifier,
-                                        'values' => array(
-                                            $contentId,
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            );
-
-            $this->gateway->deleteByQuery(json_encode($ast), 'content');
+            $this->gateway->deleteByQuery(json_encode(['query' => ['match' => ['_id' => $contentId]]]), $this->contentDocumentTypeIdentifier);
         } else {
-            $this->gateway->delete($contentId, 'content');
+            $this->gateway->delete($contentId, $this->contentDocumentTypeIdentifier);
         }
 
         // 2. Delete all Content's Locations
-        $ast = array(
-            'query' => array(
-                'filtered' => array(
-                    'filter' => array(
-                        'term' => array(
-                            'content_id' => $contentId,
-                        ),
-                    ),
-                ),
-            ),
-        );
-
-        $this->gateway->deleteByQuery(json_encode($ast), $this->locationDocumentTypeIdentifier);
+        $this->gateway->deleteByQuery(json_encode(['query' => ['match' => ['content_id_id' => $contentId]]]), $this->locationDocumentTypeIdentifier);
     }
 
     /**
@@ -293,22 +259,24 @@ class Handler implements SearchHandlerInterface
      */
     public function deleteLocation($locationId, $contentId)
     {
-        // 1. Delete the Location
-        $this->gateway->delete($locationId, $this->locationDocumentTypeIdentifier);
-
-        // 2. Update (reindex) all Content in the subtree with additional Location(s) outside of it
+        // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
         $ast = array(
             'filter' => array(
-                'nested' => array(
-                    'path' => 'locations_doc',
-                    'filter' => array(
-                        'and' => array(
-                            0 => array(
+                'and' => array(
+                    0 => array(
+                        'nested' => array(
+                            'path' => 'locations_doc',
+                            'filter' => array(
                                 'regexp' => array(
                                     'locations_doc.path_string_id' => ".*/{$locationId}/.*",
                                 ),
                             ),
-                            1 => array(
+                        ),
+                    ),
+                    1 => array(
+                        'nested' => array(
+                            'path' => 'locations_doc',
+                            'filter' => array(
                                 'regexp' => array(
                                     'locations_doc.path_string_id' => array(
                                         // Matches anything (@) and (&) not (~) <expression>
@@ -333,9 +301,9 @@ class Handler implements SearchHandlerInterface
 
         $this->gateway->bulkIndex($documents);
 
-        // 3. Delete all Content in the subtree with no other Location(s) outside of it
-        $ast['filter']['nested']['filter']['and'][1] = array(
-            'not' => $ast['filter']['nested']['filter']['and'][1],
+        // 2. Delete all Content in the subtree with no other Location(s) outside of it
+        $ast['filter']['and'][1] = array(
+            'not' => $ast['filter']['and'][1],
         );
         $ast = array(
             'query' => array(
@@ -343,13 +311,17 @@ class Handler implements SearchHandlerInterface
             ),
         );
 
-        $this->gateway->deleteByQuery(json_encode($ast), $this->contentDocumentTypeIdentifier);
+        $response = $this->gateway->findRaw(json_encode($ast), $this->contentDocumentTypeIdentifier);
+        $documentsToDelete = json_decode($response->body);
+
+        foreach ($documentsToDelete->hits->hits as $documentToDelete) {
+            $this->gateway->deleteByQuery(json_encode(['query' => ['match' => ['_id' => $documentToDelete->_id]]]), $this->contentDocumentTypeIdentifier);
+            $this->gateway->deleteByQuery(json_encode(['query' => ['match' => ['content_id_id' => $documentToDelete->_id]]]), $this->locationDocumentTypeIdentifier);
+        }
     }
 
     /**
      * Purges all contents from the index.
-     *
-     * @todo: Make this public API?
      */
     public function purgeIndex()
     {

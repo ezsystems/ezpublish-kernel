@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
@@ -166,6 +164,12 @@ class RestContent extends ValueObjectVisitor
             $contentInfo->mainLanguageCode
         );
         $generator->endValueElement('mainLanguageCode');
+
+        $generator->startValueElement(
+            'currentVersionNo',
+            $contentInfo->currentVersionNo
+        );
+        $generator->endValueElement('currentVersionNo');
 
         $generator->startValueElement(
             'alwaysAvailable',

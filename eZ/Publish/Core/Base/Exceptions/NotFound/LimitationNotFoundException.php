@@ -30,8 +30,7 @@ class LimitationNotFoundException extends RuntimeException implements Httpable, 
     public function __construct($limitation, Exception $previous = null)
     {
         $this->setMessageTemplate(
-            "Limitation '%limitation%' not found, needs to be implemented or configured to use "
-            . 'Limitation\\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%)'
+            "Limitation '%limitation%' not found, needs to be implemented or configured to use Limitation\\BlockingLimitationType (%ezpublish.api.role.limitation_type.blocking.class%"
         );
         $this->setParameters(['%limitation%' => $limitation]);
 

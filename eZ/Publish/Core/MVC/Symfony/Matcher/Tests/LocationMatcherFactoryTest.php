@@ -5,14 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Matcher\LocationMatcherFactory;
+
 class LocationMatcherFactoryTest extends ContentBasedMatcherFactoryTest
 {
-    protected $matcherFactoryClass = 'eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\LocationMatcherFactory';
+    protected $matcherFactoryClass = LocationMatcherFactory::class;
 
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.

@@ -5,28 +5,27 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
+abstract class BaseMatcherFactoryTest extends TestCase
 {
     /**
      * @param string $matcherServiceIdentifier
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getResolverMock($matcherServiceIdentifier)
     {
-        $resolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $resolverMock = $this->createMock(ConfigResolverInterface::class);
         $resolverMock
         ->expects($this->atLeastOnce())
         ->method('getParameter')
@@ -60,7 +59,7 @@ abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLocationMock(array $properties = array())
     {
@@ -73,7 +72,7 @@ abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     protected function getContentInfoMock(array $properties = array())
     {
@@ -86,7 +85,7 @@ abstract class BaseMatcherFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getBlockMock(array $properties = array())
     {

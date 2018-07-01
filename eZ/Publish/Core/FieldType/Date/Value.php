@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Date;
 
@@ -78,10 +76,7 @@ class Value extends BaseValue
     public static function fromTimestamp($timestamp)
     {
         try {
-            $dateTime = new DateTime();
-            $dateTime->setTimestamp($timestamp);
-
-            return new static($dateTime);
+            return new static(new DateTime("@{$timestamp}"));
         } catch (Exception $e) {
             throw new InvalidArgumentValue('$timestamp', $timestamp, __CLASS__, $e);
         }

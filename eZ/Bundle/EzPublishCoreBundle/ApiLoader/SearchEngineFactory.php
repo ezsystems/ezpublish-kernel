@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
@@ -39,7 +37,7 @@ class SearchEngineFactory
     /**
      * Registers $searchHandler as a valid search engine with identifier $searchEngineIdentifier.
      *
-     * @note It is strongly recommended to register a lazy persistent handler.
+     * Note It is strongly recommended to register a lazy persistent handler.
      *
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
      * @param string $searchEngineIdentifier

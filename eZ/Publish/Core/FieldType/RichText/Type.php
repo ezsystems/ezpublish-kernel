@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\RichText;
 
@@ -28,20 +26,6 @@ use RuntimeException;
 class Type extends FieldType
 {
     /**
-     * List of settings available for this FieldType.
-     *
-     * The key is the setting name, and the value is the default value for this setting
-     *
-     * @var array
-     */
-    protected $settingsSchema = array(
-        'numRows' => array(
-            'type' => 'int',
-            'default' => 10,
-        ),
-    );
-
-    /**
      * @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
      */
     protected $internalFormatValidator;
@@ -62,21 +46,37 @@ class Type extends FieldType
     protected $inputValidatorDispatcher;
 
     /**
+     * @var null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator
+     */
+    protected $internalLinkValidator;
+
+    /**
+     * @var null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator
+     */
+    private $customTagsValidator;
+
+    /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
      * @param null|\eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
      * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
+     * @param null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator $internalLinkValidator
+     * @param null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator $customTagsValidator
      */
     public function __construct(
         Validator $internalFormatValidator,
         ConverterDispatcher $inputConverterDispatcher,
         Normalizer $inputNormalizer = null,
-        ValidatorDispatcher $inputValidatorDispatcher = null
+        ValidatorDispatcher $inputValidatorDispatcher = null,
+        InternalLinkValidator $internalLinkValidator = null,
+        CustomTagsValidator $customTagsValidator = null
     ) {
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
         $this->inputNormalizer = $inputNormalizer;
         $this->inputValidatorDispatcher = $inputValidatorDispatcher;
+        $this->internalLinkValidator = $internalLinkValidator;
+        $this->customTagsValidator = $customTagsValidator;
     }
 
     /**
@@ -116,7 +116,7 @@ class Type extends FieldType
             $result = $value->xml->documentElement->textContent;
         }
 
-        return trim($result);
+        return trim(preg_replace(array('/\n/', '/\s\s+/'), ' ', $result));
     }
 
     /**
@@ -268,6 +268,20 @@ class Type extends FieldType
             );
         }
 
+        if ($this->internalLinkValidator !== null) {
+            $errors = $this->internalLinkValidator->validateDocument($value->xml);
+            foreach ($errors as $error) {
+                $validationErrors[] = new ValidationError($error);
+            }
+        }
+
+        if ($this->customTagsValidator !== null) {
+            $errors = $this->customTagsValidator->validateDocument($value->xml);
+            foreach ($errors as $error) {
+                $validationErrors[] = new ValidationError($error);
+            }
+        }
+
         return $validationErrors;
     }
 
@@ -355,48 +369,6 @@ class Type extends FieldType
     }
 
     /**
-     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
-     *
-     * @param mixed $fieldSettings
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateFieldSettings($fieldSettings)
-    {
-        $validationErrors = array();
-
-        foreach ($fieldSettings as $name => $value) {
-            if (isset($this->settingsSchema[$name])) {
-                switch ($name) {
-                    case 'numRows':
-                        if (!is_integer($value)) {
-                            $validationErrors[] = new ValidationError(
-                                "Setting '%setting%' value must be of integer type",
-                                null,
-                                array(
-                                    'setting' => $name,
-                                ),
-                                "[$name]"
-                            );
-                        }
-                        break;
-                }
-            } else {
-                $validationErrors[] = new ValidationError(
-                    "Setting '%setting%' is unknown",
-                    null,
-                    array(
-                        'setting' => $name,
-                    ),
-                    "[$name]"
-                );
-            }
-        }
-
-        return $validationErrors;
-    }
-
-    /**
      * Returns relation data extracted from value.
      *
      * Not intended for \eZ\Publish\API\Repository\Values\Content\Relation::COMMON type relations,
@@ -417,7 +389,7 @@ class Type extends FieldType
      *          "contentIds" => array( 12 ),
      *          "locationIds" => array( 24, 45 )
      *      ),
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD => array( 12 )
      *  )
      * </code>
      */
@@ -437,35 +409,37 @@ class Type extends FieldType
     }
 
     /**
-     * @todo handle embeds when implemented
+     * {@inheritdoc}
      */
     protected function getRelatedObjectIds(Value $fieldValue, $relationType)
     {
         if ($relationType === Relation::EMBED) {
-            $tagName = 'embed';
+            $tagNames = ['ezembedinline', 'ezembed'];
         } else {
-            $tagName = 'link';
+            $tagNames = ['link', 'ezlink'];
         }
 
         $contentIds = array();
         $locationIds = array();
         $xpath = new \DOMXPath($fieldValue->xml);
         $xpath->registerNamespace('docbook', 'http://docbook.org/ns/docbook');
-        $xpathExpression = "//docbook:{$tagName}[starts-with( @xlink:href, 'ezcontent://' ) or starts-with( @xlink:href, 'ezlocation://' )]";
 
-        /** @var \DOMElement $link */
-        foreach ($xpath->query($xpathExpression) as $link) {
-            preg_match('~^(.+)://([^#]*)?(#.*|\\s*)?$~', $link->getAttribute('xlink:href'), $matches);
-            list(, $scheme, $id) = $matches;
+        foreach ($tagNames as $tagName) {
+            $xpathExpression = "//docbook:{$tagName}[starts-with( @xlink:href, 'ezcontent://' ) or starts-with( @xlink:href, 'ezlocation://' )]";
+            /** @var \DOMElement $element */
+            foreach ($xpath->query($xpathExpression) as $element) {
+                preg_match('~^(.+)://([^#]*)?(#.*|\\s*)?$~', $element->getAttribute('xlink:href'), $matches);
+                list(, $scheme, $id) = $matches;
 
-            if (empty($id)) {
-                continue;
-            }
+                if (empty($id)) {
+                    continue;
+                }
 
-            if ($scheme === 'ezcontent') {
-                $contentIds[] = $id;
-            } elseif ($scheme === 'ezlocation') {
-                $locationIds[] = $id;
+                if ($scheme === 'ezcontent') {
+                    $contentIds[] = $id;
+                } elseif ($scheme === 'ezlocation') {
+                    $locationIds[] = $id;
+                }
             }
         }
 

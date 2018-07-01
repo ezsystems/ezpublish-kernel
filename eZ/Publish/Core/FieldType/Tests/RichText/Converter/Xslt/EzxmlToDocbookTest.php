@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Xslt;
 
@@ -18,6 +16,8 @@ use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
 
 /**
  * Tests conversion from legacy ezxml to docbook format.
+ *
+ * @deprecated since version 7.2, to be removed in 8.0. *
  */
 class EzxmlToDocbookTest extends BaseTest
 {
@@ -25,7 +25,7 @@ class EzxmlToDocbookTest extends BaseTest
     {
         parent::setUp();
 
-        if (!class_exists('eZ\Publish\Core\FieldType\XmlText\Converter\Expanding')) {
+        if (!class_exists(Expanding::class)) {
             $this->markTestSkipped('This tests requires XmlText field type');
         }
     }

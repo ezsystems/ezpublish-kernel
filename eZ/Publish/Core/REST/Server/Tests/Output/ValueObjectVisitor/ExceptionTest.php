@@ -5,25 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common;
 
 class ExceptionTest extends ValueObjectVisitorBaseTest
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     *
-     * @todo: This and its creation could be moved to common base test class
-     *        for input parsers.
-     */
-    protected $visitor;
-
     /**
      * Test the Exception visitor.
      *
@@ -36,7 +25,14 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $exception = $this->getException();
+        $previousException = new \Exception('Sub-test');
+        $exception = new \Exception('Test', 0, $previousException);
+
+        $this
+            ->getVisitorMock()
+            ->expects($this->once())
+            ->method('visitValueObject')
+            ->with($previousException);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -69,8 +65,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
                 ),
             ),
             $result,
-            'Invalid <ErrorMessage> element.',
-            false
+            'Invalid <ErrorMessage> element.'
         );
     }
 
@@ -92,8 +87,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
                 ),
             ),
             $result,
-            'Invalid <ErrorMessage> element.',
-            false
+            'Invalid <ErrorMessage> element.'
         );
     }
 
@@ -114,8 +108,7 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
                 ),
             ),
             $result,
-            'Invalid <ErrorMessage> element.',
-            false
+            'Invalid <ErrorMessage> element.'
         );
     }
 
@@ -136,8 +129,23 @@ class ExceptionTest extends ValueObjectVisitorBaseTest
                 ),
             ),
             $result,
-            'Invalid <ErrorMessage> attributes.',
-            false
+            'Invalid <ErrorMessage> attributes.'
+        );
+    }
+
+    /**
+     * Test if result contains ErrorMessage element.
+     *
+     * @depends testVisit
+     */
+    public function testResultContainsPreviousError($result)
+    {
+        $dom = new \DOMDocument();
+        $dom->loadXml($result);
+
+        $this->assertXPath(
+            $dom,
+            '/ErrorMessage/Previous[@media-type="application/vnd.ez.api.ErrorMessage+xml"]'
         );
     }
 

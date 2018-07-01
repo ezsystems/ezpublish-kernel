@@ -5,11 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Bundle\EzPublishCoreBundle\Converter\LocationParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +17,7 @@ class LocationParamConverterTest extends AbstractParamConverterTest
 {
     const PROPERTY_NAME = 'locationId';
 
-    const LOCATION_CLASS = 'eZ\Publish\API\Repository\Values\Content\Location';
+    const LOCATION_CLASS = Location::class;
 
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\Converter\LocationParamConverter
@@ -28,7 +28,7 @@ class LocationParamConverterTest extends AbstractParamConverterTest
 
     public function setUp()
     {
-        $this->locationServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
+        $this->locationServiceMock = $this->createMock(LocationService::class);
 
         $this->converter = new LocationParamConverter($this->locationServiceMock);
     }
@@ -48,7 +48,7 @@ class LocationParamConverterTest extends AbstractParamConverterTest
     public function testApplyLocation()
     {
         $id = 42;
-        $valueObject = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Location');
+        $valueObject = $this->createMock(Location::class);
 
         $this->locationServiceMock
             ->expects($this->once())

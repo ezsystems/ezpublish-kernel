@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Routing;
 
@@ -163,7 +161,14 @@ abstract class Generator implements SiteAccessAware
         }
 
         if ($simplifiedRequest->port) {
-            $context->setHttpPort($simplifiedRequest->port);
+            switch ($simplifiedRequest->scheme) {
+                case 'https':
+                    $context->setHttpsPort($simplifiedRequest->port);
+                    break;
+                default:
+                    $context->setHttpPort($simplifiedRequest->port);
+                    break;
+            }
         }
 
         if ($simplifiedRequest->host) {

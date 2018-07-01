@@ -5,37 +5,38 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\DynamicSettingsListener;
+use eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ExpressionLanguage;
 
-class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
+class DynamicSettingsListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $container;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $expressionLanguage;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock('\Symfony\Component\DependencyInjection\IntrospectableContainerInterface');
-        $this->expressionLanguage = $this->getMock('\Symfony\Component\DependencyInjection\ExpressionLanguage');
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->expressionLanguage = $this->createMock(ExpressionLanguage::class);
     }
 
     public function testGetSubscribedEvents()
@@ -97,7 +98,7 @@ class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
             ->method('set')
             ->with('bar.baz', null);
 
-        $updateableService1 = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface');
+        $updateableService1 = $this->createMock(FooServiceInterface::class);
         $dynamicSetting1 = 'foo';
         $this->container
             ->expects($this->at(4))
@@ -113,7 +114,7 @@ class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
             ->method('someMethod')
             ->with($dynamicSetting1);
 
-        $updateableService2 = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface');
+        $updateableService2 = $this->createMock(FooServiceInterface::class);
         $dynamicSetting2 = array('foo' => 'bar');
         $this->container
             ->expects($this->at(6))
@@ -171,7 +172,7 @@ class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
             ->method('set')
             ->with('bar.baz', null);
 
-        $updateableService1 = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface');
+        $updateableService1 = $this->createMock(FooServiceInterface::class);
         $dynamicSetting1 = 'foo';
         $this->container
             ->expects($this->at(4))
@@ -187,7 +188,7 @@ class DynamicSettingsListenerTest extends PHPUnit_Framework_TestCase
             ->method('someMethod')
             ->with($dynamicSetting1);
 
-        $updateableService2 = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\FooServiceInterface');
+        $updateableService2 = $this->createMock(FooServiceInterface::class);
         $dynamicSetting2 = array('foo' => 'bar');
         $this->container
             ->expects($this->at(6))

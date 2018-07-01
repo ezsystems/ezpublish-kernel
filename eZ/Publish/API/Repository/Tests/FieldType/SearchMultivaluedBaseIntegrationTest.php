@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
@@ -199,7 +197,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
-                array_push($template, $additionalField[0]);
+                $template[] = $additionalField[0];
                 array_unshift($template, $additionalField[2]);
                 array_unshift($template, $additionalField[1]);
 

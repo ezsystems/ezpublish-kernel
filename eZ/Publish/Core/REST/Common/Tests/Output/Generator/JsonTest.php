@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\GeneratorTest;
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator;
 
 require_once __DIR__ . '/../GeneratorTest.php';
 
@@ -265,13 +264,7 @@ class JsonTest extends GeneratorTest
     {
         if (!isset($this->generator)) {
             $this->generator = new Common\Output\Generator\Json(
-                $this->getMock(
-                    'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Json\\FieldTypeHashGenerator',
-                    array(),
-                    array(),
-                    '',
-                    false
-                )
+                $this->createMock(FieldTypeHashGenerator::class)
             );
         }
 

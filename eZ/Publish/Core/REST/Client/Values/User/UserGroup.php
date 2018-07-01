@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Values\User;
@@ -29,7 +27,7 @@ class UserGroup extends APIUserGroup
     /**
      * Returns the VersionInfo for this version.
      *
-     * @return VersionInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     public function getVersionInfo()
     {

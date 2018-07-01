@@ -5,21 +5,21 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\IndexRequestListener;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use PHPUnit\Framework\TestCase;
 
-class IndexRequestListenerTest extends \PHPUnit_Framework_TestCase
+class IndexRequestListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
@@ -39,7 +39,7 @@ class IndexRequestListenerTest extends \PHPUnit_Framework_TestCase
     private $event;
 
     /**
-     * @var HttpKernelInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $httpKernel;
 
@@ -47,16 +47,16 @@ class IndexRequestListenerTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
 
         $this->indexRequestEventListener = new IndexRequestListener($this->configResolver);
 
         $this->request = $this
-            ->getMockBuilder('Symfony\\Component\\HttpFoundation\\Request')
+            ->getMockBuilder(Request::class)
             ->setMethods(array('getSession', 'hasSession'))
             ->getMock();
 
-        $this->httpKernel = $this->getMock('Symfony\\Component\\HttpKernel\\HttpKernelInterface');
+        $this->httpKernel = $this->createMock(HttpKernelInterface::class);
         $this->event = new GetResponseEvent(
             $this->httpKernel,
             $this->request,

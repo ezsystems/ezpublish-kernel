@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
@@ -65,18 +63,18 @@ abstract class Gateway
     abstract public function deleteGroup($groupId);
 
     /**
-     * Returns an array with data about the Group with $groupId.
+     * Returns an array with data about the Group(s) with $groupIds.
      *
-     * @param int $groupId
+     * @param int[] $groupIds
      *
      * @return array
      */
-    abstract public function loadGroupData($groupId);
+    abstract public function loadGroupData(array $groupIds);
 
     /**
      * Returns an array with data about the Group with $identifier.
      *
-     * @param int $identifier
+     * @param string $identifier
      *
      * @return array
      */

@@ -5,19 +5,21 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View\Builder;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
+use eZ\Publish\Core\Helper\ContentInfoLocationLoader;
+use eZ\Publish\Core\MVC\Exception\HiddenLocationException;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\MVC\Symfony\View\EmbedView;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
@@ -43,16 +45,23 @@ class ContentViewBuilder implements ViewBuilder
      */
     private $defaultTemplates;
 
+    /**
+     * @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader
+     */
+    private $locationLoader;
+
     public function __construct(
         Repository $repository,
         AuthorizationCheckerInterface $authorizationChecker,
         Configurator $viewConfigurator,
-        ParametersInjector $viewParametersInjector
+        ParametersInjector $viewParametersInjector,
+        ContentInfoLocationLoader $locationLoader = null
     ) {
         $this->repository = $repository;
         $this->authorizationChecker = $authorizationChecker;
         $this->viewConfigurator = $viewConfigurator;
         $this->viewParametersInjector = $viewParametersInjector;
+        $this->locationLoader = $locationLoader;
     }
 
     public function matches($argument)
@@ -88,6 +97,9 @@ class ContentViewBuilder implements ViewBuilder
 
         if (isset($parameters['content'])) {
             $content = $parameters['content'];
+        } elseif ($location instanceof Location) {
+            // if we already have location load content true it so we avoid dual loading in case user does that in view
+            $content = $location->getContent();
         } else {
             if (isset($parameters['contentId'])) {
                 $contentId = $parameters['contentId'];
@@ -97,18 +109,35 @@ class ContentViewBuilder implements ViewBuilder
                 throw new InvalidArgumentException('Content', 'No content could be loaded from parameters');
             }
 
-            $content = $view->isEmbed() ? $this->loadContent($contentId) : $this->loadEmbeddedContent($contentId, $location);
+            $content = $view->isEmbed() ? $this->loadEmbeddedContent($contentId, $location) : $this->loadContent($contentId);
         }
 
         $view->setContent($content);
+
         if (isset($location)) {
             if ($location->contentId !== $content->id) {
                 throw new InvalidArgumentException('Location', 'Provided location does not belong to selected content');
             }
 
+            if (isset($parameters['contentId']) && $location->contentId !== $parameters['contentId']) {
+                throw new InvalidArgumentException(
+                    'Location',
+                    'Provided location does not belong to selected content as requested via contentId parameter'
+                );
+            }
+        } elseif (isset($this->locationLoader)) {
+            try {
+                $location = $this->locationLoader->loadLocation($content->contentInfo);
+            } catch (NotFoundException $e) {
+                // nothing else to do
+            }
+        }
+
+        if (isset($location)) {
             $view->setLocation($location);
         }
 
+        $this->viewParametersInjector->injectViewParameters($view, $parameters);
         $this->viewConfigurator->configure($view);
 
         // deprecated controller actions are replaced with their new equivalent, viewAction and embedAction
@@ -119,8 +148,6 @@ class ContentViewBuilder implements ViewBuilder
                 $view->setControllerReference(new ControllerReference('ez_content:embedAction'));
             }
         }
-
-        $this->viewParametersInjector->injectViewParameters($view, $parameters);
 
         return $view;
     }
@@ -194,7 +221,7 @@ class ContentViewBuilder implements ViewBuilder
             }
         );
         if ($location->invisible) {
-            throw new NotFoundHttpException('Location cannot be displayed as it is flagged as invisible.');
+            throw new HiddenLocationException($location, 'Location cannot be displayed as it is flagged as invisible.');
         }
 
         return $location;

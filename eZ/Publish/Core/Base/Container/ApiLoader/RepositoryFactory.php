@@ -5,21 +5,24 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\API\Repository\Repository;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
-class RepositoryFactory extends ContainerAware
+class RepositoryFactory implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var string
      */
@@ -33,16 +36,36 @@ class RepositoryFactory extends ContainerAware
     protected $fieldTypeCollectionFactory;
 
     /**
+     * Collection of fieldTypes, lazy loaded via a closure.
+     *
+     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
+     */
+    protected $fieldTypeNameableCollectionFactory;
+
+    /**
      * Collection of limitation types for the RoleService.
      *
      * @var \eZ\Publish\SPI\Limitation\Type[]
      */
     protected $roleLimitations = array();
 
-    public function __construct($repositoryClass, FieldTypeCollectionFactory $fieldTypeCollectionFactory)
-    {
+    /**
+     * Policies map.
+     *
+     * @var array
+     */
+    protected $policyMap = array();
+
+    public function __construct(
+        $repositoryClass,
+        FieldTypeCollectionFactory $fieldTypeCollectionFactory,
+        FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory,
+        array $policyMap
+    ) {
         $this->repositoryClass = $repositoryClass;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
+        $this->fieldTypeNameableCollectionFactory = $fieldTypeNameableCollectionFactory;
+        $this->policyMap = $policyMap;
     }
 
     /**
@@ -53,18 +76,27 @@ class RepositoryFactory extends ContainerAware
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
+     * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    public function buildRepository(PersistenceHandler $persistenceHandler, SearchHandler $searchHandler)
-    {
+    public function buildRepository(
+        PersistenceHandler $persistenceHandler,
+        SearchHandler $searchHandler,
+        BackgroundIndexer $backgroundIndexer,
+        RelationProcessor $relationProcessor
+    ) {
         $repository = new $this->repositoryClass(
             $persistenceHandler,
             $searchHandler,
+            $backgroundIndexer,
+            $relationProcessor,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
+                'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
                 'role' => array(
                     'limitationTypes' => $this->roleLimitations,
+                    'policyMap' => $this->policyMap,
                 ),
                 'languages' => $this->container->getParameter('languages'),
             ),

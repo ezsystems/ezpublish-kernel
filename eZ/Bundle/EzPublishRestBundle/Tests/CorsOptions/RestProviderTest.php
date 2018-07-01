@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\CorsOptions;
 
@@ -15,11 +13,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
-use PHPUnit_Framework_MockObject_MockObject;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Exception;
 
-class RestProviderTest extends PHPUnit_Framework_TestCase
+class RestProviderTest extends TestCase
 {
     /**
      * Return value expectation for RequestMatcher::matchRequest
@@ -62,7 +60,7 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Exception
+     * @expectedException \Exception
      */
     public function testGetOptionsException()
     {
@@ -113,11 +111,11 @@ class RestProviderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return PHPUnit_Framework_MockObject_MockObject|RequestMatcherInterface
+     * @return MockObject|RequestMatcherInterface
      */
     protected function getRequestMatcherMock()
     {
-        $mock = $this->getMock('Symfony\Component\Routing\Matcher\RequestMatcherInterface');
+        $mock = $this->createMock(RequestMatcherInterface::class);
 
         if ($this->matchRequestResult instanceof Exception) {
             $mock->expects($this->any())

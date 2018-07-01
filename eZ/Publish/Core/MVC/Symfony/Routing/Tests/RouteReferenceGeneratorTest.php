@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
@@ -15,21 +13,22 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class RouteReferenceGeneratorTest extends PHPUnit_Framework_TestCase
+class RouteReferenceGeneratorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $dispatcher;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->dispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
     }
 
     public function testGenerateNullResource()
@@ -52,7 +51,7 @@ class RouteReferenceGeneratorTest extends PHPUnit_Framework_TestCase
         $generator = new RouteReferenceGenerator($this->dispatcher);
         $generator->setRequestStack($requestStack);
         $reference = $generator->generate();
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Routing\RouteReference', $reference);
+        $this->assertInstanceOf(RouteReference::class, $reference);
         $this->assertSame($currentRouteName, $reference->getRoute());
         $this->assertSame($currentRouteParams, $reference->getParams());
     }
@@ -79,7 +78,7 @@ class RouteReferenceGeneratorTest extends PHPUnit_Framework_TestCase
         $generator = new RouteReferenceGenerator($this->dispatcher);
         $generator->setRequestStack($requestStack);
         $reference = $generator->generate(null, $passedParams);
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Routing\RouteReference', $reference);
+        $this->assertInstanceOf(RouteReference::class, $reference);
         $this->assertSame($currentRouteName, $reference->getRoute());
         $this->assertSame($expectedParams, $reference->getParams());
     }
@@ -107,7 +106,7 @@ class RouteReferenceGeneratorTest extends PHPUnit_Framework_TestCase
         $generator = new RouteReferenceGenerator($this->dispatcher);
         $generator->setRequestStack($requestStack);
         $reference = $generator->generate($resource, $params);
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Routing\RouteReference', $reference);
+        $this->assertInstanceOf(RouteReference::class, $reference);
         $this->assertSame($resource, $reference->getRoute());
         $this->assertSame($params, $reference->getParams());
     }
@@ -130,7 +129,7 @@ class RouteReferenceGeneratorTest extends PHPUnit_Framework_TestCase
         $generator = new RouteReferenceGenerator($this->dispatcher);
         $generator->setRequestStack($requestStack);
         $reference = $generator->generate();
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Routing\RouteReference', $reference);
+        $this->assertInstanceOf(RouteReference::class, $reference);
     }
 
     public function generateGenerator()

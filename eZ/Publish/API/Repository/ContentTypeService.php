@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository;
 
@@ -45,10 +43,11 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
      *
      * @param mixed $contentTypeGroupId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroup($contentTypeGroupId);
+    public function loadContentTypeGroup($contentTypeGroupId, array $prioritizedLanguages = []);
 
     /**
      * Get a Content Type Group object by identifier.
@@ -56,17 +55,20 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
      *
      * @param string $contentTypeGroupIdentifier
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier);
+    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, array $prioritizedLanguages = []);
 
     /**
      * Get all Content Type Groups.
      *
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
      */
-    public function loadContentTypeGroups();
+    public function loadContentTypeGroups(array $prioritizedLanguages = []);
 
     /**
      * Update a Content Type Group object.
@@ -118,10 +120,11 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If a content type with the given id and status DEFINED can not be found
      *
      * @param mixed $contentTypeId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentType($contentTypeId);
+    public function loadContentType($contentTypeId, array $prioritizedLanguages = []);
 
     /**
      * Get a Content Type object by identifier.
@@ -129,10 +132,11 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content type with the given identifier and status DEFINED can not be found
      *
      * @param string $identifier
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByIdentifier($identifier);
+    public function loadContentTypeByIdentifier($identifier, array $prioritizedLanguages = []);
 
     /**
      * Get a Content Type object by id.
@@ -140,10 +144,11 @@ interface ContentTypeService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If content type with the given remote id and status DEFINED can not be found
      *
      * @param string $remoteId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByRemoteId($remoteId);
+    public function loadContentTypeByRemoteId($remoteId, array $prioritizedLanguages = []);
 
     /**
      * Get a Content Type object draft by id.
@@ -160,10 +165,11 @@ interface ContentTypeService
      * Get Content Type objects which belong to the given content type group.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[] an array of {@link ContentType} which have status DEFINED
      */
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup);
+    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = []);
 
     /**
      * Creates a draft from an existing content type.
@@ -196,7 +202,9 @@ interface ContentTypeService
     /**
      * Delete a Content Type object.
      *
-     * Deletes a content type if it has no instances
+     * Deletes a content type if it has no instances. If content type in state STATUS_DRAFT is
+     * given, only the draft content type will be deleted. Otherwise, if content type in state
+     * STATUS_DEFINED is given, all content type data will be deleted.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there exist content objects of this type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type

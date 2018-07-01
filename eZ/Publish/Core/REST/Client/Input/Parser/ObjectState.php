@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
@@ -54,7 +52,7 @@ class ObjectState extends BaseParser
                 'id' => $data['_href'],
                 'identifier' => $data['identifier'],
                 'priority' => (int)$data['priority'],
-                'defaultLanguageCode' => $data['defaultLanguageCode'],
+                'mainLanguageCode' => $data['defaultLanguageCode'],
                 'languageCodes' => explode(',', $data['languageCodes']),
                 'names' => $names,
                 'descriptions' => $descriptions,

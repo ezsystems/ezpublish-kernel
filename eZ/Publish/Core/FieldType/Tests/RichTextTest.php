@@ -5,29 +5,30 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use eZ\Publish\Core\FieldType\RichText\Normalizer\Aggregate;
 use eZ\Publish\Core\FieldType\RichText\Type as RichTextType;
 use eZ\Publish\Core\FieldType\RichText\Value;
+use eZ\Publish\Core\FieldType\Value as CoreValue;
 use eZ\Publish\Core\FieldType\RichText\ConverterDispatcher;
 use eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher;
 use eZ\Publish\Core\FieldType\RichText\Validator;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Relation;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\FieldType\ValidationError;
 use Exception;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group fieldType
  * @group ezrichtext
  */
-class RichTextTest extends PHPUnit_Framework_TestCase
+class RichTextTest extends TestCase
 {
     /**
      * @return \eZ\Publish\Core\FieldType\RichText\Type
@@ -51,12 +52,12 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTransformationProcessorMock()
     {
         return $this->getMockForAbstractClass(
-            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
+            TransformationProcessor::class,
             array(),
             '',
             false,
@@ -84,12 +85,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     {
         $fieldType = $this->getFieldType();
         self::assertSame(
-            array(
-                'numRows' => array(
-                    'type' => 'int',
-                    'default' => 10,
-                ),
-            ),
+            [],
             $fieldType->getSettingsSchema(),
             'The settings schema does not match what is expected.'
         );
@@ -101,7 +97,7 @@ class RichTextTest extends PHPUnit_Framework_TestCase
      */
     public function testAcceptValueInvalidType()
     {
-        $this->getFieldType()->acceptValue($this->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Value')->disableOriginalConstructor()->getMock());
+        $this->getFieldType()->acceptValue($this->createMock(CoreValue::class));
     }
 
     public static function providerForTestAcceptValueValidFormat()
@@ -202,6 +198,37 @@ class RichTextTest extends PHPUnit_Framework_TestCase
                     ),
                 ),
             ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+  <para><link xlink:href="javascript:alert(\'XSS\');">link</link></para>
+</section>',
+                array(
+                    new ValidationError(
+                        "Validation of XML content failed:\n" .
+                        '/section/para/link: using scripts in links is not allowed'
+                    ),
+                ),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+  <para><link xlink:href="vbscript:alert(\'XSS\');">link</link></para>
+</section>',
+                array(
+                    new ValidationError(
+                        "Validation of XML content failed:\n" .
+                        '/section/para/link: using scripts in links is not allowed'
+                    ),
+                ),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+  <para><link xlink:href="http://example.org">link</link></para>
+</section>',
+                array(),
+            ),
         );
     }
 
@@ -216,10 +243,8 @@ class RichTextTest extends PHPUnit_Framework_TestCase
         $fieldType = $this->getFieldType();
         $value = new Value($xmlString);
 
-        /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
-        $fieldDefinitionMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition'
-        );
+        /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit\Framework\MockObject\MockObject $fieldDefinitionMock */
+        $fieldDefinitionMock = $this->createMock(APIFieldDefinition::class);
 
         $validationErrors = $fieldType->validate($fieldDefinitionMock, $value);
 
@@ -267,7 +292,6 @@ class RichTextTest extends PHPUnit_Framework_TestCase
     public static function providerForTestGetName()
     {
         return array(
-
             array(
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"

@@ -5,20 +5,22 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\Values\Translation\Message;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\Core\FieldType\Validator\StringLengthValidator;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\API\Repository\Values\Translation\Plural;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group fieldType
  * @group validator
  */
-class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
+class StringLengthValidatorTest extends TestCase
 {
     /**
      * @return int
@@ -42,7 +44,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new StringLengthValidator()
         );
     }
@@ -170,6 +172,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
             array('hello'),
             array('hello!'),
             array('0123456789'),
+            array('♔♕♖♗♘♙♚♛♜♝'),
         );
     }
 
@@ -188,11 +191,11 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
         $messages = $validator->getMessage();
         $this->assertCount(1, $messages);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+            ValidationError::class,
             $messages[0]
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Plural',
+            Plural::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(
@@ -216,19 +219,25 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 '',
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
-                array('size' => $this->getMinStringLength()),
+                array('%size%' => $this->getMinStringLength()),
             ),
             array(
                 'Hi!',
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
-                array('size' => $this->getMinStringLength()),
+                array('%size%' => $this->getMinStringLength()),
             ),
             array(
                 '0123456789!',
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
-                array('size' => $this->getMaxStringLength()),
+                array('%size%' => $this->getMaxStringLength()),
+            ),
+            array(
+                'ABC♔',
+                'The string can not be shorter than %size% character.',
+                'The string can not be shorter than %size% characters.',
+                array('%size%' => $this->getMinStringLength()),
             ),
         );
     }
@@ -292,7 +301,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
 
         foreach ($expectedMessages as $index => $expectedMessage) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+                Message::class,
                 $messages[0]->getTranslatableMessage()
             );
             $this->assertEquals(
@@ -315,7 +324,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'minStringLength'),
+                    array('%parameter%' => 'minStringLength'),
                 ),
             ),
             array(
@@ -324,7 +333,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'minStringLength'),
+                    array('%parameter%' => 'minStringLength'),
                 ),
             ),
             array(
@@ -334,7 +343,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'minStringLength'),
+                    array('%parameter%' => 'minStringLength'),
                 ),
             ),
             array(
@@ -344,7 +353,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'maxStringLength'),
+                    array('%parameter%' => 'maxStringLength'),
                 ),
             ),
             array(
@@ -354,7 +363,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of integer type"),
                 array(
-                    array('parameter' => 'minStringLength'),
+                    array('%parameter%' => 'minStringLength'),
                 ),
             ),
             array(
@@ -367,8 +376,8 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                     "Validator parameter '%parameter%' value must be of integer type",
                 ),
                 array(
-                    array('parameter' => 'minStringLength'),
-                    array('parameter' => 'maxStringLength'),
+                    array('%parameter%' => 'minStringLength'),
+                    array('%parameter%' => 'maxStringLength'),
                 ),
             ),
             array(
@@ -377,7 +386,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('parameter' => 'brljix'),
+                    array('%parameter%' => 'brljix'),
                 ),
             ),
             array(
@@ -387,7 +396,7 @@ class StringLengthValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('parameter' => 'brljix'),
+                    array('%parameter%' => 'brljix'),
                 ),
             ),
         );

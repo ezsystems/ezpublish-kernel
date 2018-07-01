@@ -6,6 +6,7 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
          colors="true"
          >
     <php>
@@ -14,6 +15,7 @@
         <env name="fixtureDir" value="Solr" />
         <env name="solrServer" value="http://localhost:8983/" />
         <env name="CORES_SETUP" value="dedicated" />
+        <ini name="error_reporting" value="-1" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
@@ -48,6 +50,7 @@
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/SearchServiceFulltextTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTranslationLanguageFallbackTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceLocationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>

@@ -5,16 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Validator;
 
 use eZ\Publish\Core\FieldType\RichText\Validator;
 use DOMDocument;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DocbookTest extends PHPUnit_Framework_TestCase
+class DocbookTest extends TestCase
 {
     public function providerForTestValidate()
     {

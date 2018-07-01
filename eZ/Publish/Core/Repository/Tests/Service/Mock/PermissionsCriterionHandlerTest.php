@@ -5,34 +5,41 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\PermissionsCriterionHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\PermissionResolver;
+use eZ\Publish\API\Repository\Values\User\Limitation as APILimitation;
 use eZ\Publish\Core\Repository\Values\User\Policy;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
 
 /**
  * Mock test case for PermissionCriterionHandler.
+ *
+ * @deprecated
  */
 class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 {
-    protected $repositoryMock;
-
     /**
      * Test for the __construct() method.
      */
     public function testConstructor()
     {
-        $repositoryMock = $this->getRepositoryMock();
-        $handler = new PermissionsCriterionHandler($repositoryMock);
+        $permissionResolverMock = $this->getPermissionResolverMock();
+        $limitationServiceMock = $this->getLimitationServiceMock();
+        $handler = $this->getPermissionsCriterionHandlerMock();
 
         $this->assertAttributeSame(
-            $repositoryMock,
-            'repository',
+            $permissionResolverMock,
+            'permissionResolver',
+            $handler
+        );
+        $this->assertAttributeSame(
+            $limitationServiceMock,
+            'limitationService',
             $handler
         );
     }
@@ -52,11 +59,8 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
      */
     public function testAddPermissionsCriterionWithBooleanPermission($permissionsCriterion)
     {
-        $handler = $this->getPartlyMockedPermissionsCriterionHandler(array('getPermissionsCriterion'));
-        $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $handler = $this->getPermissionsCriterionHandlerMock(array('getPermissionsCriterion'));
+        $criterionMock = $this->createMock(Criterion::class);
 
         $handler
             ->expects($this->once())
@@ -71,10 +75,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
     public function providerForTestAddPermissionsCriterion()
     {
-        $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $criterionMock = $this->createMock(Criterion::class);
 
         return array(
             array(
@@ -97,7 +98,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
      */
     public function testAddPermissionsCriterion($permissionsCriterionMock, $givenCriterion, $expectedCriterion)
     {
-        $handler = $this->getPartlyMockedPermissionsCriterionHandler(array('getPermissionsCriterion'));
+        $handler = $this->getPermissionsCriterionHandlerMock(array('getPermissionsCriterion'));
         $handler
             ->expects($this->once())
             ->method('getPermissionsCriterion')
@@ -112,11 +113,10 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
     public function providerForTestGetPermissionsCriterion()
     {
-        $criterionMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Query\\Criterion')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $limitationMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation');
+        $criterionMock = $this->createMock(Criterion::class);
+        $limitationMock = $this
+            ->getMockBuilder(APILimitation::class)
+            ->getMockForAbstractClass();
         $limitationMock
             ->expects($this->any())
             ->method('getIdentifier')
@@ -150,25 +150,25 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
             ),
             array(
                 $criterionMock,
-                1,
+                0,
                 array(
                     array(
                         'limitation' => null,
                         'policies' => array(new Policy(array('limitations' => '*')), $policy1),
                     ),
                 ),
-                $criterionMock,
+                false,
             ),
             array(
                 $criterionMock,
-                1,
+                0,
                 array(
                     array(
                         'limitation' => null,
                         'policies' => array(new Policy(array('limitations' => array())), $policy1),
                     ),
                 ),
-                $criterionMock,
+                false,
             ),
             array(
                 $criterionMock,
@@ -307,45 +307,43 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
         );
     }
 
-    protected function getMockedRepository($criterionMock, $limitationCount, $permissionSets)
+    protected function mockServices($criterionMock, $limitationCount, $permissionSets)
     {
-        $repositoryMock = $this->getRepositoryMock();
-        $roleServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\RoleService');
-        $userMock = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
-        $limitationTypeMock = $this->getMock('eZ\\Publish\\SPI\\Limitation\\Type');
+        $userMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
+        $limitationTypeMock = $this->createMock('eZ\\Publish\\SPI\\Limitation\\Type');
+        $limitationServiceMock = $this->getLimitationServiceMock(['getLimitationType']);
+        $permissionResolverMock = $this->getPermissionResolverMock(
+            [
+                'hasAccess',
+                'getCurrentUserReference',
+            ]
+        );
 
         $limitationTypeMock
             ->expects($this->any())
             ->method('getCriterion')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation'),
+                $this->isInstanceOf(APILimitation::class),
                 $this->equalTo($userMock)
             )
             ->will($this->returnValue($criterionMock));
 
-        $roleServiceMock
+        $limitationServiceMock
             ->expects($this->exactly($limitationCount))
             ->method('getLimitationType')
             ->with($this->equalTo('limitationIdentifier'))
             ->will($this->returnValue($limitationTypeMock));
 
-        $repositoryMock
+        $permissionResolverMock
             ->expects($this->once())
             ->method('hasAccess')
             ->with($this->equalTo('content'), $this->equalTo('read'))
             ->will($this->returnValue($permissionSets));
 
-        $repositoryMock
-            ->expects($this->once())
-            ->method('getRoleService')
-            ->will($this->returnValue($roleServiceMock));
-
-        $repositoryMock
+        $permissionResolverMock
             ->expects($this->once())
             ->method('getCurrentUserReference')
             ->will($this->returnValue($userMock));
-
-        return $repositoryMock;
     }
 
     /**
@@ -359,12 +357,8 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
         $permissionSets,
         $expectedCriterion
     ) {
-        $repositoryMock = $this->getMockedRepository(
-            $criterionMock,
-            $limitationCount,
-            $permissionSets
-        );
-        $handler = new PermissionsCriterionHandler($repositoryMock);
+        $this->mockServices($criterionMock, $limitationCount, $permissionSets);
+        $handler = $this->getPermissionsCriterionHandlerMock(null);
 
         $permissionsCriterion = $handler->getPermissionsCriterion();
 
@@ -386,13 +380,13 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
      */
     public function testGetPermissionsCriterionBooleanPermissionSets($permissionSets)
     {
-        $repositoryMock = $this->getRepositoryMock();
-        $repositoryMock
+        $permissionResolverMock = $this->getPermissionResolverMock(['hasAccess']);
+        $permissionResolverMock
             ->expects($this->once())
             ->method('hasAccess')
             ->with($this->equalTo('testModule'), $this->equalTo('testFunction'))
             ->will($this->returnValue($permissionSets));
-        $handler = new PermissionsCriterionHandler($this->getRepositoryMock());
+        $handler = $this->getPermissionsCriterionHandlerMock(null);
 
         $permissionsCriterion = $handler->getPermissionsCriterion('testModule', 'testFunction');
 
@@ -402,18 +396,51 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     /**
      * Returns the PermissionsCriterionHandler to test with $methods mocked.
      *
-     * Injected Repository comes from {@see getRepositoryMock()}
+     * @param string[]|null $methods
      *
-     * @param string[] $methods
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\PermissionsCriterionHandler
      */
-    protected function getPartlyMockedPermissionsCriterionHandler(array $methods = array())
+    protected function getPermissionsCriterionHandlerMock($methods = [])
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\PermissionsCriterionHandler',
-            $methods,
-            array($this->getRepositoryMock())
-        );
+        return $this
+            ->getMockBuilder(PermissionsCriterionHandler::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                [
+                    $this->getPermissionResolverMock(),
+                    $this->getLimitationServiceMock(),
+                ]
+            )
+            ->getMock();
+    }
+
+    protected $permissionResolverMock;
+
+    protected function getPermissionResolverMock($methods = [])
+    {
+        if ($this->permissionResolverMock === null) {
+            $this->permissionResolverMock = $this
+                ->getMockBuilder(PermissionResolver::class)
+                ->setMethods($methods)
+                ->disableOriginalConstructor()
+                ->getMockForAbstractClass();
+        }
+
+        return $this->permissionResolverMock;
+    }
+
+    protected $limitationServiceMock;
+
+    protected function getLimitationServiceMock($methods = [])
+    {
+        if ($this->limitationServiceMock === null) {
+            $this->limitationServiceMock = $this
+                ->getMockBuilder(LimitationService::class)
+                ->setMethods($methods)
+                ->disableOriginalConstructor()
+                ->getMock();
+        }
+
+        return $this->limitationServiceMock;
     }
 }

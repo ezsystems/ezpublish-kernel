@@ -5,14 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
-namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher;
+namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Depth as DepthMatcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
 
 class DepthTest extends BaseTest
@@ -81,8 +79,8 @@ class DepthTest extends BaseTest
 
     /**
      * @dataProvider matchContentInfoProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Depth::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Depth::matchContentInfo
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
      * @param int|int[] $matchingConfig
@@ -130,14 +128,11 @@ class DepthTest extends BaseTest
      *
      * @param int $depth
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForDepth($depth)
     {
-        $locationServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\LocationService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $locationServiceMock = $this->createMock(LocationService::class);
         $locationServiceMock->expects($this->once())
             ->method('loadLocation')
             ->with(42)
@@ -152,6 +147,10 @@ class DepthTest extends BaseTest
             ->expects($this->once())
             ->method('getLocationService')
             ->will($this->returnValue($locationServiceMock));
+        $repository
+            ->expects($this->once())
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         return $repository;
     }

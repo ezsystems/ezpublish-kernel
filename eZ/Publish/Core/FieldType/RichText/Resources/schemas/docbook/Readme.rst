@@ -39,3 +39,11 @@ ISO Schematron is handled through XSLT transformation, so XSLT stylesheet
 generated from ISO Schematron is also provided:
 
  - docbook.iso.sch.xsl
+
+To generate XSLT stylesheet from a Schematron file, `xsltproc` - command line XSLT processor, needs
+to be installed on the system. XSLT stylesheet can be generated issuing the following command:
+
+.. code:: bash
+
+   # Usage: sch2xsl.sh source_file target_file
+   ../../stylesheets/schematron/sch2xsl.sh docbook.iso.sch docbook.iso.sch.xsl

@@ -5,17 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Cache\Warmer;
 
 use eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ConfigResolverCleanup;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\DependencyInjection\Container;
 
-class ConfigResolverCleanupTest extends PHPUnit_Framework_TestCase
+class ConfigResolverCleanupTest extends TestCase
 {
     public function testIsOptional()
     {

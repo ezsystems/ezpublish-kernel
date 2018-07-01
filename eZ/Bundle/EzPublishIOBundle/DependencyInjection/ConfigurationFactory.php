@@ -52,7 +52,7 @@ interface ConfigurationFactory
      * Arguments or calls can be added to the $serviceDefinition, extra services or parameters can be added to the
      * container.
      *
-     * Note: if the factory extends ContainerAware, the ContainerBuilder will be made available as $this->container.
+     * Note: if the factory implements ContainerAwareInterface, the ContainerBuilder will be made available as $this->container.
      *
      * @param ServiceDefinition $serviceDefinition
      * @param array $config

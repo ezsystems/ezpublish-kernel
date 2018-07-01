@@ -5,19 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleFilterLoader;
+use Imagine\Image\ImageInterface;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 use Imagine\Image\Box;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ScaleFilterLoaderTest extends PHPUnit_Framework_TestCase
+class ScaleFilterLoaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $innerLoader;
 
@@ -29,7 +29,7 @@ class ScaleFilterLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->getMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock(LoaderInterface::class);
         $this->loader = new ScaleFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -40,7 +40,7 @@ class ScaleFilterLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load($this->getMock('\Imagine\Image\ImageInterface'), $options);
+        $this->loader->load($this->createMock(ImageInterface::class), $options);
     }
 
     public function loadInvalidProvider()
@@ -60,7 +60,7 @@ class ScaleFilterLoaderTest extends PHPUnit_Framework_TestCase
         $origHeight = 377;
         $box = new Box($origWidth, $origHeight);
 
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('getSize')
@@ -83,7 +83,7 @@ class ScaleFilterLoaderTest extends PHPUnit_Framework_TestCase
         $origHeight = 377;
         $box = new Box($origWidth, $origHeight);
 
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $image
             ->expects($this->once())
             ->method('getSize')

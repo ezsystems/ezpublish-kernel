@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\LocationService;
 use eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -36,7 +35,7 @@ class LocationCreateTest extends BaseTest
         $result = $locationCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationCreateStruct',
+            LocationCreateStruct::class,
             $result,
             'LocationCreateStruct not created correctly.'
         );
@@ -183,13 +182,7 @@ class LocationCreateTest extends BaseTest
      */
     protected function getLocationServiceMock()
     {
-        $locationServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\LocationService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $locationServiceMock = $this->createMock(LocationService::class);
 
         $locationServiceMock->expects($this->any())
             ->method('newLocationCreateStruct')

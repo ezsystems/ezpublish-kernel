@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
@@ -14,19 +12,21 @@ use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\SPI\Variation\VariationPurger;
 use Liip\ImagineBundle\Model\Binary;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RequestContext;
 
-class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
+class IORepositoryResolverTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $ioService;
 
@@ -36,7 +36,7 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
     private $requestContext;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
@@ -50,22 +50,22 @@ class IORepositoryResolverTest extends PHPUnit_Framework_TestCase
      */
     private $filterConfiguration;
 
-    /** @var \eZ\Publish\SPI\Variation\VariationPurger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\SPI\Variation\VariationPurger|\PHPUnit\Framework\MockObject\MockObject */
     protected $variationPurger;
 
-    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $variationPathGenerator;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->ioService = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->ioService = $this->createMock(IOServiceInterface::class);
         $this->requestContext = new RequestContext();
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
         $this->filterConfiguration = new FilterConfiguration();
         $this->filterConfiguration->setConfigResolver($this->configResolver);
-        $this->variationPurger = $this->getMock('eZ\Publish\SPI\Variation\VariationPurger');
-        $this->variationPathGenerator = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
+        $this->variationPurger = $this->createMock(VariationPurger::class);
+        $this->variationPathGenerator = $this->createMock(VariationPathGenerator::class);
         $this->imageResolver = new IORepositoryResolver(
             $this->ioService,
             $this->requestContext,

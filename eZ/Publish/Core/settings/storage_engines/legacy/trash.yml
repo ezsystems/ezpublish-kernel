@@ -3,10 +3,10 @@ parameters:
 
 services:
     ezpublish.spi.persistence.legacy.trash.handler:
-        class: %ezpublish.spi.persistence.legacy.trash.handler.class%
+        class: "%ezpublish.spi.persistence.legacy.trash.handler.class%"
         arguments:
-            - @ezpublish.spi.persistence.legacy.location.handler
-            - @ezpublish.persistence.legacy.location.gateway.exception_conversion
-            - @ezpublish.persistence.legacy.location.mapper
-            - @ezpublish.spi.persistence.legacy.content.handler
+            - "@ezpublish.spi.persistence.legacy.location.handler"
+            - "@ezpublish.persistence.legacy.location.gateway.exception_conversion"
+            - "@ezpublish.persistence.legacy.location.mapper"
+            - "@ezpublish.spi.persistence.legacy.content.handler"
         lazy: true

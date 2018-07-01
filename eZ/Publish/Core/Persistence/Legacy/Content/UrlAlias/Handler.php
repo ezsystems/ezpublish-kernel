@@ -5,16 +5,22 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\SwappedLocationProperties;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\UrlAliasForSwappedLocation;
+use eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
  * The UrlAlias Handler provides nice urls management.
@@ -34,6 +40,11 @@ class Handler implements UrlAliasHandlerInterface
      * @deprecated
      */
     const CONTENT_REPOSITORY_ROOT_LOCATION_ID = 2;
+
+    /**
+     * The maximum level of alias depth.
+     */
+    const MAX_URL_ALIAS_DEPTH_LEVEL = 60;
 
     /**
      * UrlAlias Gateway.
@@ -71,6 +82,20 @@ class Handler implements UrlAliasHandlerInterface
     protected $slugConverter;
 
     /**
+     * Gateway for handling content data.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     */
+    protected $contentGateway;
+
+    /**
+     * Language mask generator.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected $maskGenerator;
+
+    /**
      * Creates a new UrlAlias Handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $gateway
@@ -78,36 +103,27 @@ class Handler implements UrlAliasHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
      */
     public function __construct(
         Gateway $gateway,
         Mapper $mapper,
         LocationGateway $locationGateway,
         LanguageHandler $languageHandler,
-        SlugConverter $slugConverter
+        SlugConverter $slugConverter,
+        ContentGateway $contentGateway,
+        MaskGenerator $maskGenerator
     ) {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
         $this->locationGateway = $locationGateway;
         $this->languageHandler = $languageHandler;
         $this->slugConverter = $slugConverter;
+        $this->contentGateway = $contentGateway;
+        $this->maskGenerator = $maskGenerator;
     }
 
-    /**
-     * This method creates or updates an urlalias from a new or changed content name in a language
-     * (if published). It also can be used to create an alias for a new location of content.
-     * On update the old alias is linked to the new one (i.e. a history alias is generated).
-     *
-     * $alwaysAvailable controls whether the url alias is accessible in all
-     * languages.
-     *
-     * @param mixed $locationId
-     * @param mixed $parentLocationId
-     * @param string $name the new name computed by the name schema or url alias schema
-     * @param string $languageCode
-     * @param bool $alwaysAvailable
-     * @param bool $updatePathIdentificationString legacy storage specific for updating ezcontentobject_tree.path_identification_string
-     */
     public function publishUrlAliasForLocation(
         $locationId,
         $parentLocationId,
@@ -116,10 +132,44 @@ class Handler implements UrlAliasHandlerInterface
         $alwaysAvailable = false,
         $updatePathIdentificationString = false
     ) {
-        $parentId = $this->getRealAliasId($parentLocationId);
-        $uniqueCounter = $this->slugConverter->getUniqueCounterValue($name, $parentId == 0);
-        $name = $this->slugConverter->convert($name, 'location_' . $locationId);
         $languageId = $this->languageHandler->loadByLanguageCode($languageCode)->id;
+
+        $this->internalPublishUrlAliasForLocation(
+            $locationId,
+            $parentLocationId,
+            $name,
+            $languageId,
+            $alwaysAvailable,
+            $updatePathIdentificationString
+        );
+    }
+
+    /**
+     * Internal publish method, accepting language ID instead of language code and optionally
+     * new alias ID (used when swapping Locations).
+     *
+     * @see \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationSwapped()
+     *
+     * @param int $locationId
+     * @param int $parentLocationId
+     * @param string $name
+     * @param int $languageId
+     * @param bool $alwaysAvailable
+     * @param bool $updatePathIdentificationString legacy storage specific for updating ezcontentobject_tree.path_identification_string
+     * @param int $newId
+     */
+    private function internalPublishUrlAliasForLocation(
+        $locationId,
+        $parentLocationId,
+        $name,
+        $languageId,
+        $alwaysAvailable = false,
+        $updatePathIdentificationString = false,
+        $newId = null
+    ) {
+        $parentId = $this->getRealAliasId($parentLocationId);
+        $name = $this->slugConverter->convert($name, 'location_' . $locationId);
+        $uniqueCounter = $this->slugConverter->getUniqueCounterValue($name, $parentId == 0);
         $languageMask = $languageId | (int)$alwaysAvailable;
         $action = 'eznode:' . $locationId;
         $cleanup = false;
@@ -142,21 +192,33 @@ class Handler implements UrlAliasHandlerInterface
                 if (!empty($existingLocationEntry)) {
                     $cleanup = true;
                     $newId = $existingLocationEntry['id'];
-                } else {
-                    $newId = null;
                 }
 
-                $newId = $this->gateway->insertRow(
-                    array(
-                        'id' => $newId,
-                        'link' => $newId,
-                        'parent' => $parentId,
-                        'action' => $action,
-                        'lang_mask' => $languageMask,
-                        'text' => $newText,
-                        'text_md5' => $newTextMD5,
-                    )
-                );
+                try {
+                    $newId = $this->gateway->insertRow(
+                        array(
+                            'id' => $newId,
+                            'link' => $newId,
+                            'parent' => $parentId,
+                            'action' => $action,
+                            'lang_mask' => $languageMask,
+                            'text' => $newText,
+                            'text_md5' => $newTextMD5,
+                        )
+                    );
+                } catch (\RuntimeException $e) {
+                    while ($e->getPrevious() !== null) {
+                        $e = $e->getPrevious();
+                        if ($e instanceof UniqueConstraintViolationException) {
+                            // Concurrency! someone else inserted the same row that we where going to.
+                            // let's do another loop pass
+                            $uniqueCounter += 1;
+                            continue 2;
+                        }
+                    }
+
+                    throw $e;
+                }
 
                 break;
             }
@@ -170,16 +232,20 @@ class Handler implements UrlAliasHandlerInterface
                 // entry id then reusable entry should be updated with the existing location entry id.
                 // Note: existing location entry may be downgraded and relinked later, depending on its language.
                 $existingLocationEntry = $this->gateway->loadAutogeneratedEntry($action, $parentId);
-                $newId = $row['id'];
+
                 if (!empty($existingLocationEntry)) {
-                    if ($existingLocationEntry['id'] != $row['id']) {
-                        $cleanup = true;
-                        $newId = $existingLocationEntry['id'];
-                    } else {
+                    // Always cleanup when active autogenerated entry exists on the same level
+                    $cleanup = true;
+                    $newId = $existingLocationEntry['id'];
+                    if ($existingLocationEntry['id'] == $row['id']) {
                         // If we are reusing existing location entry merge existing language mask
                         $languageMask |= ($row['lang_mask'] & ~1);
                     }
+                } elseif ($newId === null) {
+                    // Use reused row ID only if publishing normally, else use given $newId
+                    $newId = $row['id'];
                 }
+
                 $this->gateway->updateRow(
                     $parentId,
                     $newTextMD5,
@@ -209,6 +275,7 @@ class Handler implements UrlAliasHandlerInterface
             $uniqueCounter += 1;
         }
 
+        /* @var $newText */
         if ($updatePathIdentificationString) {
             $this->locationGateway->updatePathIdentificationString(
                 $locationId,
@@ -456,6 +523,7 @@ class Handler implements UrlAliasHandlerInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \RuntimeException
      * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      *
      * @param string $url
      *
@@ -468,12 +536,16 @@ class Handler implements UrlAliasHandlerInterface
             $urlHashes[$level] = $this->getHash($text);
         }
 
+        $pathDepth = count($urlHashes);
+        if ($pathDepth > self::MAX_URL_ALIAS_DEPTH_LEVEL) {
+            throw new InvalidArgumentException('$urlHashes', 'Exceeded maximum depth level of content url alias.');
+        }
+
         $data = $this->gateway->loadUrlAliasData($urlHashes);
         if (empty($data)) {
             throw new NotFoundException('URLAlias', $url);
         }
 
-        $pathDepth = count($urlHashes);
         $hierarchyData = array();
         $isPathHistory = false;
         for ($level = 0; $level < $pathDepth; ++$level) {
@@ -548,12 +620,12 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
-     * Notifies the underlying engine that a location has moved.
+     * Notifies the underlying engine that a location was copied.
      *
      * This method triggers the creation of the autogenerated aliases for the copied locations
      *
      * @param mixed $locationId
-     * @param mixed $oldParentId
+     * @param mixed $newLocationId
      * @param mixed $newParentId
      */
     public function locationCopied($locationId, $newLocationId, $newParentId)
@@ -566,9 +638,235 @@ class Handler implements UrlAliasHandlerInterface
         $this->copySubtree(
             $actionMap,
             $oldParentAliasId,
-            $newParentAliasId,
-            $locationId
+            $newParentAliasId
         );
+    }
+
+    /**
+     * Notify the underlying engine that a Location has been swapped.
+     *
+     * This method triggers the change of the autogenerated aliases.
+     *
+     * @param int $location1Id
+     * @param int $location1ParentId
+     * @param int $location2Id
+     * @param int $location2ParentId
+     */
+    public function locationSwapped($location1Id, $location1ParentId, $location2Id, $location2ParentId)
+    {
+        $location1 = new SwappedLocationProperties($location1Id, $location1ParentId);
+        $location2 = new SwappedLocationProperties($location2Id, $location2ParentId);
+
+        $location1->entries = $this->gateway->loadLocationEntries($location1Id);
+        $location2->entries = $this->gateway->loadLocationEntries($location2Id);
+
+        $location1->mainLanguageId = $this->gateway->getLocationContentMainLanguageId($location1Id);
+        $location2->mainLanguageId = $this->gateway->getLocationContentMainLanguageId($location2Id);
+
+        // Load autogenerated entries to find alias ID
+        $location1->autogeneratedId = $this->gateway->loadAutogeneratedEntry("eznode:{$location1Id}")['id'];
+        $location2->autogeneratedId = $this->gateway->loadAutogeneratedEntry("eznode:{$location2Id}")['id'];
+
+        $contentInfo1 = $this->contentGateway->loadContentInfoByLocationId($location1Id);
+        $contentInfo2 = $this->contentGateway->loadContentInfoByLocationId($location2Id);
+
+        $names1 = $this->getNamesForAllLanguages($contentInfo1);
+        $names2 = $this->getNamesForAllLanguages($contentInfo2);
+
+        $location1->isAlwaysAvailable = $this->maskGenerator->isAlwaysAvailable($contentInfo1['language_mask']);
+        $location2->isAlwaysAvailable = $this->maskGenerator->isAlwaysAvailable($contentInfo2['language_mask']);
+
+        $languages = $this->languageHandler->loadAll();
+
+        // Historize everything first to avoid name conflicts in case swapped Locations are siblings
+        $this->historizeBeforeSwap($location1->entries, $location2->entries);
+
+        foreach ($languages as $languageCode => $language) {
+            $location1->name = isset($names1[$languageCode]) ? $names1[$languageCode] : null;
+            $location2->name = isset($names2[$languageCode]) ? $names2[$languageCode] : null;
+            $urlAliasesForSwappedLocations = $this->getUrlAliasesForSwappedLocations(
+                $language,
+                $location1,
+                $location2
+            );
+            foreach ($urlAliasesForSwappedLocations as $urlAliasForLocation) {
+                $this->internalPublishUrlAliasForLocation(
+                    $urlAliasForLocation->id,
+                    $urlAliasForLocation->parentId,
+                    $urlAliasForLocation->name,
+                    $language->id,
+                    $urlAliasForLocation->isAlwaysAvailable,
+                    $urlAliasForLocation->isPathIdentificationStringModified,
+                    $urlAliasForLocation->newId
+                );
+            }
+        }
+    }
+
+    /**
+     * @param array $contentInfo
+     *
+     * @return array
+     */
+    private function getNamesForAllLanguages(array $contentInfo)
+    {
+        $nameDataArray = $this->contentGateway->loadVersionedNameData([
+            [
+                'id' => $contentInfo['id'],
+                'version' => $contentInfo['current_version'],
+            ],
+        ]);
+
+        $namesForAllLanguages = [];
+        foreach ($nameDataArray as $nameData) {
+            $namesForAllLanguages[$nameData['ezcontentobject_name_content_translation']]
+                = $nameData['ezcontentobject_name_name'];
+        }
+
+        return $namesForAllLanguages;
+    }
+
+    /**
+     * Historizes given existing active entries for two swapped Locations.
+     *
+     * This should be done before republishing URL aliases, in order to avoid unnecessary
+     * conflicts when swapped Locations are siblings.
+     *
+     * We need to historize everything separately per language (mask), in case the entries
+     * remain history future publishing reusages need to be able to take them over cleanly.
+     *
+     * @see \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationSwapped()
+     *
+     * @param array $location1Entries
+     * @param array $location2Entries
+     */
+    private function historizeBeforeSwap($location1Entries, $location2Entries)
+    {
+        foreach ($location1Entries as $row) {
+            $this->gateway->historizeBeforeSwap($row['action'], $row['lang_mask']);
+        }
+
+        foreach ($location2Entries as $row) {
+            $this->gateway->historizeBeforeSwap($row['action'], $row['lang_mask']);
+        }
+    }
+
+    /**
+     * Decides if UrlAlias for $location2 should be published first.
+     *
+     * The order in which Locations are published only matters if swapped Locations are siblings and they have the same
+     * name in a given language. In this case, the UrlAlias for Location which previously had lower number at the end of
+     * its UrlAlias text (or no number at all) should be published first. This ensures that the number still stays lower
+     * for this Location after the swap. If it wouldn't stay lower, then swapping Locations in conjunction with swapping
+     * UrlAliases would effectively cancel each other.
+     *
+     * @param array $location1Entries
+     * @param int $location1ParentId
+     * @param string $name1
+     * @param array $location2Entries
+     * @param int $location2ParentId
+     * @param string $name2
+     * @param int $languageId
+     *
+     * @return bool
+     */
+    private function shouldUrlAliasForSecondLocationBePublishedFirst(
+        array $location1Entries,
+        $location1ParentId,
+        $name1,
+        array $location2Entries,
+        $location2ParentId,
+        $name2,
+        $languageId
+    ) {
+        if ($location1ParentId === $location2ParentId && $name1 === $name2) {
+            $locationEntry1 = $this->getLocationEntryInLanguage($location1Entries, $languageId);
+            $locationEntry2 = $this->getLocationEntryInLanguage($location2Entries, $languageId);
+
+            if ($locationEntry1 === null || $locationEntry2 === null) {
+                return false;
+            }
+
+            if ($locationEntry2['text'] < $locationEntry1['text']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Get in a proper order - to be published - a list of URL aliases for swapped Locations.
+     *
+     * @see shouldUrlAliasForSecondLocationBePublishedFirst
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $language
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\SwappedLocationProperties $location1
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\SwappedLocationProperties $location2
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\UrlAliasForSwappedLocation[]
+     */
+    private function getUrlAliasesForSwappedLocations(
+        Language $language,
+        SwappedLocationProperties $location1,
+        SwappedLocationProperties $location2
+    ) {
+        $isMainLanguage1 = $language->id == $location1->mainLanguageId;
+        $isMainLanguage2 = $language->id == $location2->mainLanguageId;
+        $urlAliases = [];
+        if (isset($location1->name)) {
+            $urlAliases[] = new UrlAliasForSwappedLocation(
+                $location1->id,
+                $location1->parentId,
+                $location1->name,
+                $isMainLanguage2 && $location1->isAlwaysAvailable,
+                $isMainLanguage2,
+                $location1->autogeneratedId
+            );
+        }
+
+        if (isset($location2->name)) {
+            $urlAliases[] = new UrlAliasForSwappedLocation(
+                $location2->id,
+                $location2->parentId,
+                $location2->name,
+                $isMainLanguage1 && $location2->isAlwaysAvailable,
+                $isMainLanguage1,
+                $location2->autogeneratedId
+            );
+
+            if (isset($location1->name) && $this->shouldUrlAliasForSecondLocationBePublishedFirst(
+                    $location1->entries,
+                    $location1->parentId,
+                    $location1->name,
+                    $location2->entries,
+                    $location2->parentId,
+                    $location2->name,
+                    $language->id
+                )) {
+                $urlAliases = array_reverse($urlAliases);
+            }
+        }
+
+        return $urlAliases;
+    }
+
+    /**
+     * @param array $locationEntries
+     * @param int $languageId
+     *
+     * @return array|null
+     */
+    private function getLocationEntryInLanguage(array $locationEntries, $languageId)
+    {
+        $entries = array_filter(
+            $locationEntries,
+            function (array $row) use ($languageId) {
+                return (bool) ($row['lang_mask'] & $languageId);
+            }
+        );
+
+        return !empty($entries) ? array_shift($entries) : null;
     }
 
     /**
@@ -594,7 +892,7 @@ class Handler implements UrlAliasHandlerInterface
         $data = $this->gateway->loadAutogeneratedEntry('eznode:' . $locationId);
 
         // Root entries (URL wise) can return 0 as the returned value is used as parent (parent is 0 for root entries)
-        if (empty($data) || $data['id'] != 0 && $data['parent'] == 0 && strlen($data['text']) == 0) {
+        if (empty($data) || ($data['id'] != 0 && $data['parent'] == 0 && strlen($data['text']) == 0)) {
             $id = 0;
         } else {
             $id = $data['id'];
@@ -668,6 +966,23 @@ class Handler implements UrlAliasHandlerInterface
     }
 
     /**
+     * Notifies the underlying engine that Locations Content Translation was removed.
+     *
+     * @param int[] $locationIds all Locations of the Content that got Translation removed
+     * @param string $languageCode language code of the removed Translation
+     */
+    public function translationRemoved(array $locationIds, $languageCode)
+    {
+        $languageId = $this->languageHandler->loadByLanguageCode($languageCode)->id;
+
+        $actions = [];
+        foreach ($locationIds as $locationId) {
+            $actions[] = 'eznode:' . $locationId;
+        }
+        $this->gateway->bulkRemoveTranslation($languageId, $actions);
+    }
+
+    /**
      * Recursively removes aliases by given $id and $action.
      *
      * $original parameter is used to limit removal of moved Location aliases to history entries only.
@@ -705,5 +1020,42 @@ class Handler implements UrlAliasHandlerInterface
     protected function getHash($text)
     {
         return md5(mb_strtolower($text, 'UTF-8'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes)
+    {
+        $parentId = $this->getRealAliasId($parentLocationId);
+
+        // filter removed Translations
+        $urlAliases = $this->listURLAliasesForLocation($locationId);
+        $removedLanguages = [];
+        foreach ($urlAliases as $urlAlias) {
+            $removedLanguages = array_merge(
+                $removedLanguages,
+                array_filter(
+                    $urlAlias->languageCodes,
+                    function ($languageCode) use ($languageCodes) {
+                        return !in_array($languageCode, $languageCodes);
+                    }
+                )
+            );
+        }
+
+        if (empty($removedLanguages)) {
+            return;
+        }
+
+        // map languageCodes to their IDs
+        $languageIds = array_map(
+            function ($languageCode) {
+                return $this->languageHandler->loadByLanguageCode($languageCode)->id;
+            },
+            $removedLanguages
+        );
+
+        $this->gateway->archiveUrlAliasesForDeletedTranslations($locationId, $parentId, $languageIds);
     }
 }

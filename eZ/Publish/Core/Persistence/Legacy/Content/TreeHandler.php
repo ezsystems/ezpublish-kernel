@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
@@ -116,13 +114,17 @@ class TreeHandler
     /**
      * Returns the versions for $contentId.
      *
-     * @param int $contentId
+     * Result is returned with oldest version first (using version id as it has index and is auto increment).
+     *
+     * @param mixed $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function listVersions($contentId)
+    public function listVersions($contentId, $status = null, $limit = -1)
     {
-        $rows = $this->contentGateway->listVersions($contentId);
+        $rows = $this->contentGateway->listVersions($contentId, $status, $limit);
         if (empty($rows)) {
             return array();
         }
@@ -193,9 +195,7 @@ class TreeHandler
 
                 $this->changeMainLocation(
                     $contentId,
-                    $newMainLocationRow['node_id'],
-                    $newMainLocationRow['contentobject_version'],
-                    $newMainLocationRow['parent_node_id']
+                    $newMainLocationRow['node_id']
                 );
             }
         }

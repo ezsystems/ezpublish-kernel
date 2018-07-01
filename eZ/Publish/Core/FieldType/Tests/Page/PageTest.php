@@ -5,21 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PageTest extends PHPUnit_Framework_TestCase
+class PageTest extends TestCase
 {
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\Parts\Page::__construct
-     * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::__construct
-     * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::getState
+     * @covers \eZ\Publish\Core\FieldType\Page\Parts\Page::__construct
+     * @covers \eZ\Publish\Core\FieldType\Page\Parts\Base::__construct
+     * @covers \eZ\Publish\Core\FieldType\Page\Parts\Base::getState
      */
     public function testGetState()
     {

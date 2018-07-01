@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
@@ -96,6 +94,10 @@ class ContentExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'ez_trans_prop',
                 array($this, 'getTranslatedProperty')
+            ),
+            new Twig_SimpleFunction(
+                'ez_first_filled_image_field_identifier',
+                array($this, 'getFirstFilledImageFieldIdentifier')
             ),
         );
     }
@@ -281,5 +283,27 @@ class ContentExtension extends Twig_Extension
         } elseif ($content instanceof ContentInfo) {
             return $this->repository->getContentTypeService()->loadContentType($content->contentTypeId);
         }
+    }
+
+    public function getFirstFilledImageFieldIdentifier(Content $content)
+    {
+        foreach ($content->getFieldsByLanguage() as $field) {
+            $fieldTypeIdentifier = $this->fieldHelper->getFieldDefinition(
+                $content->contentInfo,
+                $field->fieldDefIdentifier
+            )->fieldTypeIdentifier;
+
+            if ($fieldTypeIdentifier !== 'ezimage') {
+                continue;
+            }
+
+            if ($this->fieldHelper->isFieldEmpty($content, $field->fieldDefIdentifier)) {
+                continue;
+            }
+
+            return $field->fieldDefIdentifier;
+        }
+
+        return null;
     }
 }

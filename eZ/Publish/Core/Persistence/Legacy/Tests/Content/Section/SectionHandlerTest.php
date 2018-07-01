@@ -5,14 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Section;
 use eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
 
 /**
  * Test case for Section Handler.
@@ -34,7 +33,7 @@ class SectionHandlerTest extends TestCase
     protected $gatewayMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::create
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::create
      */
     public function testCreate()
     {
@@ -63,7 +62,7 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::update
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::update
      */
     public function testUpdate()
     {
@@ -93,8 +92,8 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
      */
     public function testLoad()
     {
@@ -132,9 +131,9 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::loadAll
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionsFromArray
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::loadAll
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionsFromArray
      */
     public function testLoadAll()
     {
@@ -180,8 +179,8 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::loadByIdentifier
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::loadByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
      */
     public function testLoadByIdentifier()
     {
@@ -219,7 +218,7 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::delete
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::delete
      */
     public function testDelete()
     {
@@ -242,8 +241,8 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::delete
-     * @expectedException RuntimeException
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::delete
+     * @expectedException \RuntimeException
      */
     public function testDeleteFailure()
     {
@@ -263,7 +262,7 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::assign
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::assign
      */
     public function testAssign()
     {
@@ -282,7 +281,7 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::policiesCount
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::policiesCount
      */
     public function testPoliciesCount()
     {
@@ -303,7 +302,7 @@ class SectionHandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::countRoleAssignmentsUsingSection
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::countRoleAssignmentsUsingSection
      */
     public function testCountRoleAssignmentsUsingSection()
     {
@@ -347,9 +346,7 @@ class SectionHandlerTest extends TestCase
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Section\\Gateway'
-            );
+            $this->gatewayMock = $this->getMockForAbstractClass(Gateway::class);
         }
 
         return $this->gatewayMock;

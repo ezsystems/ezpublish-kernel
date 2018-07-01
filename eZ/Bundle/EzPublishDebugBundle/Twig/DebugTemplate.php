@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishDebugBundle\Twig;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Twig_Template;
 
 /**
@@ -18,10 +17,14 @@ use Twig_Template;
  * Wraps the display method to:
  * - Inject debug info into template to be able to see in the markup which one is used
  */
-abstract class DebugTemplate extends Twig_Template
+class DebugTemplate extends Twig_Template
 {
+    private $fileSystem;
+
     public function display(array $context, array $blocks = array())
     {
+        $this->fileSystem = $this->fileSystem ?: new Filesystem();
+
         // Bufferize to be able to insert template name as HTML comments if applicable.
         // Layout template name will only appear at the end, to avoid potential quirks with old browsers
         // when comments appear before doctype declaration.
@@ -29,9 +32,10 @@ abstract class DebugTemplate extends Twig_Template
         parent::display($context, $blocks);
         $templateResult = ob_get_clean();
 
-        $templateName = $this->getTemplateName();
+        $templateName = trim($this->fileSystem->makePathRelative($this->getSourceContext()->getPath(), dirname(getcwd())), '/');
         // Check if template name ends with "html.twig", indicating this is an HTML template.
         $isHtmlTemplate = substr($templateName, -strlen('html.twig')) === 'html.twig';
+        $templateName = $isHtmlTemplate ? $templateName . ' (' . $this->getSourceContext()->getName() . ')' : $templateName;
 
         // Display start template comment, if applicable.
         if ($isHtmlTemplate) {
@@ -61,5 +65,37 @@ abstract class DebugTemplate extends Twig_Template
         } else {
             echo $templateResult;
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTemplateName()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSource()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doDisplay(array $context, array $blocks = array())
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDebugInfo()
+    {
+        return array();
     }
 }

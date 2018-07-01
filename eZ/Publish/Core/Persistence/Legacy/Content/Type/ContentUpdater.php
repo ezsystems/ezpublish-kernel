@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
@@ -64,7 +62,6 @@ class ContentUpdater
     ) {
         $this->contentGateway = $contentGateway;
         $this->converterRegistry = $converterRegistry;
-        $this->storageHandler = $storageHandler;
         $this->storageHandler = $storageHandler;
         $this->contentMapper = $contentMapper;
     }

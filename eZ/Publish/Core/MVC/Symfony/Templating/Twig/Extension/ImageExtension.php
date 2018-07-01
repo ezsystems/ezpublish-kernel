@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
@@ -15,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\SPI\Variation\VariationHandler;
+use InvalidArgumentException;
 use Twig_Extension;
 use Twig_SimpleFunction;
 
@@ -53,7 +52,7 @@ class ImageExtension extends Twig_Extension
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param string $variationName
      *
-     * @return \eZ\Publish\SPI\Variation\Values\Variation
+     * @return \eZ\Publish\SPI\Variation\Values\Variation|null
      */
     public function getImageVariation(Field $field, VersionInfo $versionInfo, $variationName)
     {

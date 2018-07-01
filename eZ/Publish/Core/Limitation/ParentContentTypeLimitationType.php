@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Limitation;
 
@@ -104,7 +102,7 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
-     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
+     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
@@ -179,12 +177,14 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $targets does not contain
      *         objects of type LocationCreateStruct
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param array $targets
      *
      * @return bool
      */
-    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets)
+    protected function evaluateForContentCreateStruct(APILimitationValue $value, array $targets = null)
     {
         // If targets is empty/null return false as user does not have access
         // to content w/o location with this limitation

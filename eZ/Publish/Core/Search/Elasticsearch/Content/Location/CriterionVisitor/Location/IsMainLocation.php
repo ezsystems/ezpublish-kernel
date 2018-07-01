@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\Location\CriterionVisitor\Location;
 
@@ -46,7 +44,7 @@ class IsMainLocation extends CriterionVisitor
     {
         return array(
             'term' => array(
-                'is_main_location_b' => ($criterion->value[0] === Criterion\Location\IsMainLocation::MAIN ? true : false),
+                'is_main_location_b' => ($criterion->value[0] === Criterion\Location\IsMainLocation::MAIN),
             ),
         );
     }

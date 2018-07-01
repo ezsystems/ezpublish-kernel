@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Signal\LocationService;
 
@@ -37,4 +35,13 @@ class HideLocationSignal extends Signal
      * @var int
      */
     public $currentVersionNo;
+
+    /**
+     * Location ID of parent location of the hidden location.
+     *
+     * @since 6.7.7
+     *
+     * @var mixed
+     */
+    public $parentLocationId;
 }

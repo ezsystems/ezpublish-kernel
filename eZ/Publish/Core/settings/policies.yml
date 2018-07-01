@@ -1,0 +1,60 @@
+parameters:
+    ezpublish.api.role.policy_map:
+        content:
+            read: { Class: true, Section: true, Owner: true, Group: true, Node: true, Subtree: true, State: true }
+            diff: { Class: true, Section: true, Owner: true, Node: true, Subtree: true }
+            view_embed: { Class: true, Section: true, Owner: true, Node: true, Subtree: true }
+            create: { Class: true, Section: true, ParentOwner: true, ParentGroup: true, ParentClass: true, ParentDepth: true, Node: true, Subtree: true, Language: true }
+            edit: { Class: true, Section: true, Owner: true, Group: true, Node: true, Subtree: true, Language: true, State: true }
+            publish: { Class: true, Section: true, Owner: true, Group: true, Node: true, Subtree: true, Language: true, State: true }
+            manage_locations: { Class: true , Section: true , Owner: true, Subtree: true, State: true }
+            hide: { Class: true, Section: true, Owner: true, Group: true, Node: true, Subtree: true, Language: true }
+            reverserelatedlist: ~
+            translate: { Class: true, Section: true, Owner: true, Node: true, Subtree: true, Language: true }
+            remove: { Class: true, Section: true, Owner: true, Node: true, Subtree: true, State: true }
+            versionread: { Class: true, Section: true, Owner: true, Status: true, Node: true, Subtree: true, State: true }
+            versionremove: { Class: true, Section: true, Owner: true, Status: true, Node: true, Subtree: true, State: true }
+            translations: ~
+            urltranslator: ~
+            pendinglist: ~
+            restore: ~
+            cleantrash: ~
+
+        class:
+            update: ~
+            create: ~
+            delete: ~
+
+        state:
+            assign: { Class: true, Section: true, Owner: true, Group: true, Node: true, Subtree: true, State: true, NewState: true }
+            administrate: ~
+
+        role:
+            assign: ~
+            update: ~
+            create: ~
+            delete: ~
+            read: ~
+
+        section:
+            assign: { Class: true, Section: true, Owner: true, NewSection: true }
+            edit: ~
+            view: ~
+
+        setup:
+            administrate: ~
+            install: ~
+            setup: ~
+            system_info: ~
+
+        user:
+            login: { SiteAccess: true }
+            password: ~
+            preferences: ~
+            register: ~
+            selfedit: ~
+            activation: ~
+
+        url:
+            view: ~
+            update: ~

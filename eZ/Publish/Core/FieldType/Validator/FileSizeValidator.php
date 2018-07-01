@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Validator;
 
@@ -39,12 +37,12 @@ class FileSizeValidator extends Validator
         foreach ($constraints as $name => $value) {
             switch ($name) {
                 case 'maxFileSize':
-                    if ($value !== false && !is_integer($value)) {
+                    if ($value !== false && !is_int($value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
                             array(
-                                'parameter' => $name,
+                                '%parameter%' => $name,
                             )
                         );
                     }
@@ -54,7 +52,7 @@ class FileSizeValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            'parameter' => $name,
+                            '%parameter%' => $name,
                         )
                     );
             }
@@ -79,7 +77,7 @@ class FileSizeValidator extends Validator
                 'The file size cannot exceed %size% byte.',
                 'The file size cannot exceed %size% bytes.',
                 array(
-                    'size' => $this->constraints['maxFileSize'],
+                    '%size%' => $this->constraints['maxFileSize'],
                 )
             );
             $isValid = false;

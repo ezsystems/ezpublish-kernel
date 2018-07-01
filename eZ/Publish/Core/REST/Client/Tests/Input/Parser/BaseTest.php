@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Tests;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 
 abstract class BaseTest extends Tests\BaseTest
 {
@@ -30,13 +29,7 @@ abstract class BaseTest extends Tests\BaseTest
     protected function getParsingDispatcherMock()
     {
         if (!isset($this->parsingDispatcherMock)) {
-            $this->parsingDispatcherMock = $this->getMock(
-                '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->parsingDispatcherMock = $this->createMock(ParsingDispatcher::class);
         }
 
         return $this->parsingDispatcherMock;

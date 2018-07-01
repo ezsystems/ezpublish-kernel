@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
@@ -154,6 +152,16 @@ abstract class Gateway
     abstract public function load($contentId, $version, array $translations = null);
 
     /**
+     * Loads current version for a list of content objects.
+     *
+     * @param array[] $IdVersionTranslationPairs Hashes with 'id', optionally 'version', & optionally 'languages'
+     *                If version is not set current version will be loaded, if languages is not set ALL will be loaded.
+     *
+     * @return array[]
+     */
+    abstract public function loadContentList(array $IdVersionTranslationPairs): array;
+
+    /**
      * Loads info for a content object identified by its remote ID.
      *
      * Returns an array with the relevant data.
@@ -163,6 +171,19 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadContentInfoByRemoteId($remoteId);
+
+    /**
+     * Loads info for a content object identified by its location ID (node ID).
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
+     */
+    abstract public function loadContentInfoByLocationId($locationId);
 
     /**
      * Loads info for content identified by $contentId.
@@ -177,6 +198,18 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadContentInfo($contentId);
+
+    /**
+     * Loads rows of info for content identified by $contentIds.
+     *
+     * @see loadContentInfo For the returned structure.
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfoList For how this will only return items found and not throw.
+     *
+     * @param array $contentIds
+     *
+     * @return array[]
+     */
+    abstract public function loadContentInfoList(array $contentIds);
 
     /**
      * Loads version info for content identified by $contentId and $versionNo.
@@ -205,11 +238,15 @@ abstract class Gateway
     /**
      * Returns all version data for the given $contentId.
      *
+     * Result is returned with oldest version first (using version id as it has index and is auto increment).
+     *
      * @param mixed $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return string[][]
      */
-    abstract public function listVersions($contentId);
+    abstract public function listVersions($contentId, $status = null, $limit = -1);
 
     /**
      * Returns all version numbers for the given $contentId.
@@ -241,13 +278,15 @@ abstract class Gateway
     /**
      * Returns all field IDs of $contentId grouped by their type.
      * If $versionNo is set only field IDs for that version are returned.
+     * If $languageCode is set, only field IDs for that language are returned.
      *
      * @param int $contentId
      * @param int|null $versionNo
+     * @param string|null $languageCode
      *
      * @return int[][]
      */
-    abstract public function getFieldIdsByType($contentId, $versionNo = null);
+    abstract public function getFieldIdsByType($contentId, $versionNo = null, $languageCode = null);
 
     /**
      * Deletes relations to and from $contentId.
@@ -391,4 +430,31 @@ abstract class Gateway
      * @param int|null $versionNo If specified only copy for a given version number, otherwise all.
      */
     abstract public function copyRelations($originalContentId, $copiedContentId, $versionNo = null);
+
+    /**
+     * Remove the specified translation from all the Versions of a Content Object.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     */
+    abstract public function deleteTranslationFromContent($contentId, $languageCode);
+
+    /**
+     * Delete Content fields (attributes) for the given Translation.
+     * If $versionNo is given, fields for that Version only will be deleted.
+     *
+     * @param string $languageCode
+     * @param int $contentId
+     * @param int $versionNo (optional) filter by versionNo
+     */
+    abstract public function deleteTranslatedFields($languageCode, $contentId, $versionNo = null);
+
+    /**
+     * Delete the specified Translation from the given Version.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     * @param string $languageCode
+     */
+    abstract public function deleteTranslationFromVersion($contentId, $versionNo, $languageCode);
 }

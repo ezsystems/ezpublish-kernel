@@ -10,9 +10,11 @@ namespace eZ\Bundle\EzPublishIOBundle\EventListener;
 
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
 use eZ\Publish\Core\IO\IOServiceInterface;
+use eZ\Publish\Core\IO\Values\MissingBinaryFile;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -49,16 +51,26 @@ class StreamFileListener implements EventSubscriberInterface
             return;
         }
 
-        $uri = $event->getRequest()->attributes->get('semanticPathinfo');
+        $request = $event->getRequest();
+        $urlPrefix = $this->configResolver->getParameter('io.url_prefix');
+        if (strpos($urlPrefix, '://') !== false) {
+            $uri = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        } else {
+            $uri = $request->attributes->get('semanticPathinfo');
+        }
 
-        if (!$this->isIoUri($uri)) {
+        if (!$this->isIoUri($uri, $urlPrefix)) {
             return;
         }
 
-        // Will throw an API 404 if not found, we can let it pass
+        $binaryFile = $this->ioService->loadBinaryFileByUri($uri);
+        if ($binaryFile instanceof MissingBinaryFile) {
+            throw new NotFoundHttpException("Could not find 'BinaryFile' with identifier '$uri'");
+        }
+
         $event->setResponse(
             new BinaryStreamResponse(
-                $this->ioService->loadBinaryFileByUri($uri),
+                $binaryFile,
                 $this->ioService
             )
         );
@@ -71,8 +83,8 @@ class StreamFileListener implements EventSubscriberInterface
      *
      * @return bool
      */
-    private function isIoUri($uri)
+    private function isIoUri($uri, $urlPrefix)
     {
-        return (strpos(ltrim($uri, '/'), $this->configResolver->getParameter('io.url_prefix')) === 0);
+        return strpos(ltrim($uri, '/'), $this->configResolver->getParameter('io.url_prefix')) === 0;
     }
 }

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
@@ -48,8 +46,17 @@ class ContentTypeIdentifier extends BaseParser
         if (!array_key_exists('ContentTypeIdentifierCriterion', $data)) {
             throw new Exceptions\Parser('Invalid <ContentTypeIdCriterion> format');
         }
-        $contentType = $this->contentTypeService->loadContentTypeByIdentifier($data['ContentTypeIdentifierCriterion']);
+        if (!is_array($data['ContentTypeIdentifierCriterion'])) {
+            $data['ContentTypeIdentifierCriterion'] = [$data['ContentTypeIdentifierCriterion']];
+        }
 
-        return new ContentTypeIdCriterion($contentType->id);
+        return new ContentTypeIdCriterion(
+            array_map(
+                function ($contentTypeIdentifier) {
+                    return $this->contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier)->id;
+                },
+                $data['ContentTypeIdentifierCriterion']
+            )
+        );
     }
 }

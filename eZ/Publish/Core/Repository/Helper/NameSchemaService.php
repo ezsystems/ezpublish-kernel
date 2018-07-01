@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
@@ -38,7 +36,7 @@ use eZ\Publish\SPI\Persistence\Content\Type as SPIContentType;
  *
  * Tokens are the field definition identifiers which are used in the class edit-interface.
  *
- * @internal
+ * @internal Meant for internal use by Repository.
  */
 class NameSchemaService
 {
@@ -55,9 +53,14 @@ class NameSchemaService
     protected $contentTypeHandler;
 
     /**
-     * @var FieldTypeRegistry
+     * @var ContentTypeDomainMapper
      */
-    protected $fieldTypeRegistry;
+    protected $contentTypeDomainMapper;
+
+    /**
+     * @var NameableFieldTypeRegistry
+     */
+    protected $nameableFieldTypeRegistry;
 
     /**
      * @var array
@@ -68,13 +71,19 @@ class NameSchemaService
      * Constructs a object to resolve $nameSchema with $contentVersion fields values.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param FieldTypeRegistry $fieldTypeRegistry
+     * @param ContentTypeDomainMapper $contentTypeDomainMapper
+     * @param NameableFieldTypeRegistry $nameableFieldTypeRegistry
      * @param array $settings
      */
-    public function __construct(ContentTypeHandler $contentTypeHandler, FieldTypeRegistry $fieldTypeRegistry, array $settings = array())
+    public function __construct(
+        ContentTypeHandler $contentTypeHandler,
+        ContentTypeDomainMapper $contentTypeDomainMapper,
+        NameableFieldTypeRegistry $nameableFieldTypeRegistry,
+        array $settings = array())
     {
         $this->contentTypeHandler = $contentTypeHandler;
-        $this->fieldTypeRegistry = $fieldTypeRegistry;
+        $this->contentTypeDomainMapper = $contentTypeDomainMapper;
+        $this->nameableFieldTypeRegistry = $nameableFieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'limit' => 150,
@@ -170,7 +179,7 @@ class NameSchemaService
      * @param array $fieldMap
      * @param array $languageCodes
      *
-     * @return string
+     * @return string[]
      */
     public function resolve($nameSchema, $contentType, array $fieldMap, array $languageCodes)
     {
@@ -192,8 +201,8 @@ class NameSchemaService
             }
 
             // Make sure length is not longer then $limit unless it's 0
-            if ($this->settings['limit'] && strlen($name) > $this->settings['limit']) {
-                $name = rtrim(substr($name, 0, $this->settings['limit'] - strlen($this->settings['sequence']))) . $this->settings['sequence'];
+            if ($this->settings['limit'] && mb_strlen($name) > $this->settings['limit']) {
+                $name = rtrim(mb_substr($name, 0, $this->settings['limit'] - strlen($this->settings['sequence']))) . $this->settings['sequence'];
             }
 
             $names[$languageCode] = $name;
@@ -227,7 +236,11 @@ class NameSchemaService
                     $fieldDefinition = null;
                     foreach ($contentType->fieldDefinitions as $spiFieldDefinition) {
                         if ($spiFieldDefinition->identifier === $fieldDefinitionIdentifier) {
-                            $fieldDefinition = $spiFieldDefinition;
+                            $fieldDefinition = $this->contentTypeDomainMapper->buildFieldDefinitionDomainObject(
+                                $spiFieldDefinition,
+                                // This is probably not main language, but as we don't expose it, it's ok for now.
+                                $languageCode
+                            );
                             break;
                         }
                     }
@@ -236,21 +249,20 @@ class NameSchemaService
                         $fieldTitles[$fieldDefinitionIdentifier] = '';
                         continue;
                     }
-
-                    $fieldType = $this->fieldTypeRegistry->getFieldType(
-                        $fieldDefinition->fieldType
-                    );
                 } elseif ($contentType instanceof ContentType) {
                     $fieldDefinition = $contentType->getFieldDefinition($fieldDefinitionIdentifier);
-                    $fieldType = $this->fieldTypeRegistry->getFieldType(
-                        $fieldDefinition->fieldTypeIdentifier
-                    );
                 } else {
                     throw new InvalidArgumentType('$contentType', 'API or SPI variant of ContentType');
                 }
 
-                $fieldTitles[$fieldDefinitionIdentifier] = $fieldType->getName(
-                    $fieldMap[$fieldDefinitionIdentifier][$languageCode]
+                $nameableFieldTypeService = $this->nameableFieldTypeRegistry->getFieldType(
+                    $fieldDefinition->fieldTypeIdentifier
+                );
+
+                $fieldTitles[$fieldDefinitionIdentifier] = $nameableFieldTypeService->getFieldName(
+                    $fieldMap[$fieldDefinitionIdentifier][$languageCode],
+                    $fieldDefinition,
+                    $languageCode
                 );
             }
         }

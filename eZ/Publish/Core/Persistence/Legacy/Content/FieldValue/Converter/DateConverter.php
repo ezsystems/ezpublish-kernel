@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
@@ -17,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\FieldType\Date\Type as DateType;
 use eZ\Publish\Core\FieldType\FieldSettings;
-use DateTime;
 
 /**
  * Date field value converter class.
@@ -27,7 +24,9 @@ class DateConverter implements Converter
     /**
      * Factory for current class.
      *
-     * @note Class should instead be configured as service if it gains dependencies.
+     * Note: Class should instead be configured as service if it gains dependencies.
+     *
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter
      */
@@ -95,11 +94,10 @@ class DateConverter implements Converter
         // Building default value
         switch ($fieldDef->fieldTypeConstraints->fieldSettings['defaultType']) {
             case DateType::DEFAULT_CURRENT_DATE:
-                $dateTime = new DateTime();
-                $dateTime->setTime(0, 0, 0);
                 $data = array(
-                    'timestamp' => $dateTime->getTimestamp(),
+                    'timestamp' => time(), // @deprecated timestamp is no longer used and will be removed in a future version.
                     'rfc850' => null,
+                    'timestring' => 'now',
                 );
                 break;
             default:

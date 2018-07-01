@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 
@@ -88,8 +86,6 @@ abstract class Value extends BaseValue
 
     /**
      * Returns a string representation of the field value.
-     * This string representation must be compatible with format accepted via
-     * {@link \eZ\Publish\SPI\FieldType\FieldType::buildValue}.
      *
      * @return string
      */

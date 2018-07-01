@@ -5,21 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Xslt;
 
 use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
 use eZ\Publish\Core\FieldType\RichText\Validator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DOMDocument;
 use DOMXpath;
 
 /**
  * Base class for XSLT converter tests.
  */
-abstract class BaseTest extends PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\FieldType\RichText\Converter
@@ -111,13 +109,22 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $convertedDocumentNormalized = new DOMDocument();
         $convertedDocumentNormalized->loadXML($convertedDocument->saveXML());
 
-        $this->assertEquals($outputDocument, $convertedDocumentNormalized);
+        $this->assertEquals(
+            $outputDocument,
+            $convertedDocumentNormalized,
+            sprintf(
+                "Failed asserting that two DOM documents are equal.\nInput file: %s\nOutput file %s",
+                $inputFile,
+                $outputFile
+            )
+        );
 
         $validator = $this->getConversionValidator();
         if (isset($validator)) {
-            $errors = $validator->validate($convertedDocument);
-            $this->assertTrue(
-                empty($errors),
+            // As assert below validated converted and output is the same, validate ouput here to get right line number.
+            $errors = $validator->validate($outputDocument);
+            $this->assertEmpty(
+                $errors,
                 'Conversion result did not validate against the configured schemas:' .
                 $this->formatValidationErrors($outputFile, $errors)
             );

@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -20,6 +19,7 @@ use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\MoveUserGroupSignal;
+use eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserTokenSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\UpdateUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserSignal;
@@ -96,15 +96,16 @@ class UserService implements UserServiceInterface
      * Loads a user group for the given id.
      *
      * @param mixed $id
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function loadUserGroup($id)
+    public function loadUserGroup($id, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUserGroup($id);
+        return $this->service->loadUserGroup($id, $prioritizedLanguages);
     }
 
     /**
@@ -113,14 +114,15 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      */
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25)
+    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
-        return $this->service->loadSubUserGroups($userGroup, $offset, $limit);
+        return $this->service->loadSubUserGroups($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
     /**
@@ -139,6 +141,7 @@ class UserService implements UserServiceInterface
             new DeleteUserGroupSignal(
                 array(
                     'userGroupId' => $userGroup->id,
+                    'affectedLocationIds' => $returnValue,
                 )
             )
         );
@@ -231,14 +234,15 @@ class UserService implements UserServiceInterface
      * Loads a user.
      *
      * @param mixed $userId
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
      */
-    public function loadUser($userId)
+    public function loadUser($userId, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUser($userId);
+        return $this->service->loadUser($userId, $prioritizedLanguages);
     }
 
     /**
@@ -246,7 +250,7 @@ class UserService implements UserServiceInterface
      *
      * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
      *
-     * @uses loadUser()
+     * @uses ::loadUser()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -258,46 +262,69 @@ class UserService implements UserServiceInterface
     /**
      * Loads a user for the given login and password.
      *
+     * {@inheritdoc}
+     *
      * @param string $login
      * @param string $password the plain password
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if credentials are invalid
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByCredentials($login, $password)
+    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUserByCredentials($login, $password);
+        return $this->service->loadUserByCredentials($login, $password, $prioritizedLanguages);
     }
 
     /**
      * Loads a user for the given login.
      *
+     * {@inheritdoc}
+     *
      * @param string $login
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByLogin($login)
+    public function loadUserByLogin($login, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUserByLogin($login);
+        return $this->service->loadUserByLogin($login, $prioritizedLanguages);
     }
 
     /**
      * Loads a user for the given email.
      *
-     * Returns an array of Users since eZ Publish has under certain circumstances allowed
-     * several users having same email in the past (by means of a configuration option).
+     * {@inheritdoc}
      *
      * @param string $email
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersByEmail($email)
+    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUsersByEmail($email);
+        return $this->service->loadUsersByEmail($email, $prioritizedLanguages);
+    }
+
+    /**
+     * Loads a user with user hash key.
+     *
+     * {@inheritdoc}
+     *
+     * @param string $hash
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given hash was not found
+     */
+    public function loadUserByToken($hash, array $prioritizedLanguages = [])
+    {
+        return $this->service->loadUserByToken($hash, $prioritizedLanguages);
     }
 
     /**
@@ -314,6 +341,7 @@ class UserService implements UserServiceInterface
             new DeleteUserSignal(
                 array(
                     'userId' => $user->id,
+                    'affectedLocationIds' => $returnValue,
                 )
             )
         );
@@ -349,6 +377,36 @@ class UserService implements UserServiceInterface
         );
 
         return $returnValue;
+    }
+
+    /**
+     * Update the user account key information specified by the user account key struct.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        $returnValue = $this->service->updateUserToken($user, $userTokenUpdateStruct);
+        $this->signalDispatcher->emit(
+            new UpdateUserTokenSignal(
+                ['userId' => $user->id]
+            )
+        );
+
+        return $returnValue;
+    }
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash)
+    {
+        return $this->service->expireUserToken($hash);
     }
 
     /**
@@ -407,12 +465,13 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param int $offset the start offset for paging
      * @param int $limit the number of user groups returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
      */
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25)
+    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
     {
-        return $this->service->loadUserGroupsOfUser($user, $offset, $limit);
+        return $this->service->loadUserGroupsOfUser($user, $offset, $limit, $prioritizedLanguages);
     }
 
     /**
@@ -423,12 +482,22 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param int $offset the start offset for paging
      * @param int $limit the number of users returned
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25)
-    {
-        return $this->service->loadUsersOfUserGroup($userGroup, $offset, $limit);
+    public function loadUsersOfUserGroup(
+        UserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
+        return $this->service->loadUsersOfUserGroup(
+            $userGroup,
+            $offset,
+            $limit,
+            $prioritizedLanguages
+        );
     }
 
     /**

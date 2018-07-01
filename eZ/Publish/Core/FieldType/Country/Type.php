@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Country;
 
@@ -153,7 +151,7 @@ class Type extends FieldType
                     "Country with Alpha2 code '%alpha2%' is not defined in FieldType settings.",
                     null,
                     array(
-                        'alpha2' => $alpha2,
+                        '%alpha2%' => $alpha2,
                     ),
                     'countries'
                 );
@@ -256,7 +254,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );
@@ -270,7 +268,7 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of boolean type",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
                             ),
                             "[$name]"
                         );

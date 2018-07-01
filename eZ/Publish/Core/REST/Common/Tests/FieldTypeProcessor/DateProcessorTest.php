@@ -5,15 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\DateProcessor;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class DateProcessorTest extends PHPUnit_Framework_TestCase
+class DateProcessorTest extends TestCase
 {
     protected $constants = array(
         'DEFAULT_EMPTY',

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Search;
 
@@ -106,4 +104,9 @@ interface Handler
      * @param mixed $contentId
      */
     public function deleteLocation($locationId, $contentId);
+
+    /**
+     * Purges all contents from the index.
+     */
+    public function purgeIndex();
 }

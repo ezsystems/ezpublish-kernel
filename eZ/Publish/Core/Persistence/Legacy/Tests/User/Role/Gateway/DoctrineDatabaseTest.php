@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User\Role\Gateway;
 
@@ -39,7 +37,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::__construct
      */
     public function testCtor()
     {
@@ -54,7 +52,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::createRole
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::createRole
      */
     public function testCreateRole()
     {
@@ -83,7 +81,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignment
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignment
      */
     public function testLoadRoleAssignment()
     {
@@ -104,7 +102,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignmentsByGroupId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignmentsByGroupId
      */
     public function testLoadRoleAssignmentsByGroupId()
     {
@@ -139,7 +137,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignmentsByRoleId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway\DoctrineDatabase::loadRoleAssignmentsByRoleId
      */
     public function testLoadRoleAssignmentsByRoleId()
     {

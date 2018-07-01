@@ -25,6 +25,27 @@
     </section>
   </xsl:template>
 
+  <xsl:template name="breakline">
+    <xsl:param name="node"/>
+    <xsl:choose>
+      <xsl:when test="descendant::ezxhtml5:br">
+        <xsl:for-each select="$node">
+          <xsl:choose>
+            <xsl:when test="local-name( current() ) = 'br'">
+              <xsl:text>&#xA;</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="current()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
   <xsl:template match="ezxhtml5:p">
     <para>
       <xsl:if test="@class">
@@ -46,7 +67,7 @@
         </xsl:if>
       </xsl:if>
       <xsl:choose>
-        <xsl:when test="child::ezxhtml5:br">
+        <xsl:when test="descendant::ezxhtml5:br">
           <literallayout class="normal">
             <xsl:for-each select="node()">
               <xsl:choose>
@@ -80,7 +101,9 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
@@ -92,21 +115,37 @@
           <xsl:value-of select="@class"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:u">
     <emphasis>
       <xsl:attribute name="role">underlined</xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
+    </emphasis>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:s">
+    <emphasis>
+      <xsl:attribute name="role">strikedthrough</xsl:attribute>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
   <xsl:template match="ezxhtml5:del">
     <emphasis>
       <xsl:attribute name="role">strikedthrough</xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:attribute name="revisionflag">deleted</xsl:attribute>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </emphasis>
   </xsl:template>
 
@@ -305,11 +344,25 @@
           <xsl:value-of select="./ezxhtml5:caption"/>
         </caption>
       </xsl:if>
+      <xsl:if test="./ezxhtml5:thead">
+        <thead>
+          <xsl:for-each select="./ezxhtml5:thead/ezxhtml5:tr">
+            <xsl:apply-templates select="current()"/>
+          </xsl:for-each>
+        </thead>
+      </xsl:if>
       <tbody>
         <xsl:for-each select="./ezxhtml5:tr | ./ezxhtml5:tbody/ezxhtml5:tr">
           <xsl:apply-templates select="current()"/>
         </xsl:for-each>
       </tbody>
+      <xsl:if test="./ezxhtml5:tfoot">
+        <tfoot>
+          <xsl:for-each select="./ezxhtml5:tfoot/ezxhtml5:tr">
+            <xsl:apply-templates select="current()"/>
+          </xsl:for-each>
+        </tfoot>
+      </xsl:if>
     </xsl:element>
   </xsl:template>
 
@@ -384,7 +437,9 @@
           <xsl:value-of select="@scope"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+       <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </th>
   </xsl:template>
 
@@ -438,7 +493,9 @@
           <xsl:value-of select="@rowspan"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:call-template name="breakline">
+        <xsl:with-param name="node" select="node()"/>
+      </xsl:call-template>
     </td>
   </xsl:template>
 
@@ -532,8 +589,8 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="ezxhtml5:eztemplate | ezxhtml5:eztemplateinline">
-    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
+  <xsl:template match="ezxhtml5:div[@data-ezelement='eztemplate'] | ezxhtml5:span[@data-ezelement='eztemplateinline']">
+    <xsl:element name="{@data-ezelement}" namespace="http://docbook.org/ns/docbook">
       <xsl:if test="@data-ezname">
         <xsl:attribute name="name">
           <xsl:value-of select="@data-ezname"/>
@@ -553,9 +610,9 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="ezxhtml5:eztemplate/ezxhtml5:ezcontent | ezxhtml5:eztemplateinline/ezxhtml5:ezcontent">
-    <xsl:element name="{local-name()}" namespace="http://docbook.org/ns/docbook">
-      <xsl:apply-templates select="node()|@*"/>
+  <xsl:template match="ezxhtml5:div[@data-ezelement='eztemplate']/ezxhtml5:div[@data-ezelement='ezcontent'] | ezxhtml5:span[@data-ezelement='eztemplateinline']/ezxhtml5:span[@data-ezelement='ezcontent']">
+    <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
+      <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
@@ -38,6 +36,10 @@ class LogicalAnd extends CriterionParser
 
         $criteria = array();
         foreach ($data['AND'] as $criterionName => $criterionData) {
+            if (is_array($criterionData) && !array_key_exists(0, $criterionData)) {
+                $criterionName = key($criterionData);
+                $criterionData = current($criterionData);
+            }
             $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
         }
 

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlAlias\Gateway;
 
@@ -32,7 +30,7 @@ class DoctrineDatabaseTest extends TestCase
     protected $gateway;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::__construct
      */
     public function testConstructor()
     {
@@ -49,7 +47,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataNonExistent()
     {
@@ -64,7 +62,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the loadUrlAliasData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasData()
     {
@@ -107,7 +105,7 @@ class DoctrineDatabaseTest extends TestCase
      *
      * Test with fixture containing language mask with multiple languages.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData
      */
     public function testLoadUrlaliasDataMultipleLanguages()
     {
@@ -194,7 +192,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
      * @dataProvider providerForTestLoadPathData
      */
     public function testLoadPathData($id, $pathData)
@@ -256,7 +254,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the loadPathData() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadPathData
      * @dataProvider providerForTestLoadPathDataMultipleLanguages
      */
     public function testLoadPathDataMultipleLanguages($id, $pathData)
@@ -294,10 +292,28 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
+     * Data provider for testArchiveUrlAliasesForDeletedTranslations.
+     *
+     * @see testArchiveUrlAliasesForDeletedTranslations
+     *
+     * @return array
+     */
+    public function providerForTestArchiveUrlAliasesForDeletedTranslations()
+    {
+        return [
+            [314, [2]],
+            [315, [4]],
+            [316, [4]],
+            [317, [2, 8]],
+            [318, [2, 8]],
+        ];
+    }
+
+    /**
      * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::historize
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::historize
      * @dataProvider providerForTestCleanupAfterPublishHistorize
      */
     public function testCleanupAfterPublishHistorize($action, $languageId, $parentId, $textMD5)
@@ -341,8 +357,8 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the cleanupAfterPublish() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeTranslation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::cleanupAfterPublish
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeTranslation
      * @dataProvider providerForTestCleanupAfterPublishRemovesLanguage
      */
     public function testCleanupAfterPublishRemovesLanguage($action, $languageId, $parentId, $textMD5)
@@ -365,7 +381,7 @@ class DoctrineDatabaseTest extends TestCase
      *
      * @todo document
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::reparent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::reparent
      */
     public function testReparent()
     {
@@ -395,7 +411,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the remove() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
      */
     public function testRemove()
     {
@@ -415,7 +431,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the remove() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::remove
      */
     public function testRemoveWithId()
     {
@@ -435,7 +451,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the removeCustomAlias() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
      */
     public function testRemoveCustomAlias()
     {
@@ -453,7 +469,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the removeByAction() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::removeCustomAlias
      */
     public function testRemoveCustomAliasFails()
     {
@@ -469,7 +485,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Test for the getNextId() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::getNextId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::getNextId
      */
     public function testGetNextId()
     {
@@ -477,6 +493,39 @@ class DoctrineDatabaseTest extends TestCase
 
         self::assertEquals(1, $gateway->getNextId());
         self::assertEquals(2, $gateway->getNextId());
+    }
+
+    /**
+     * @dataProvider providerForTestArchiveUrlAliasesForDeletedTranslations
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::archiveUrlAliasesForDeletedTranslations
+     *
+     * @param int $locationId
+     * @param int[] $removedLanguageIds
+     */
+    public function testArchiveUrlAliasesForDeletedTranslations($locationId, array $removedLanguageIds)
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_multilang.php');
+        $gateway = $this->getGateway();
+
+        foreach ($gateway->loadLocationEntries($locationId) as $row) {
+            $gateway->archiveUrlAliasesForDeletedTranslations(
+                $locationId,
+                (int) $row['parent'],
+                $removedLanguageIds
+            );
+        }
+
+        // check results
+        $languageMask = 0;
+        foreach ($removedLanguageIds as $languageId) {
+            $languageMask |= $languageId;
+        }
+        foreach ($gateway->loadLocationEntries($locationId) as $row) {
+            self::assertNotEquals(0, (int) $row['lang_mask']);
+            self::assertNotEquals(1, (int) $row['lang_mask']);
+            self::assertEquals(0, (int) $row['lang_mask'] & $languageMask);
+        }
     }
 
     /**

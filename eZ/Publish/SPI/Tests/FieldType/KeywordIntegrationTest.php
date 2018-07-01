@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
@@ -62,8 +60,8 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\KeywordConverter(),
             new FieldType\Keyword\KeywordStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Keyword\KeywordStorage\Gateway\LegacyStorage(),
+                new FieldType\Keyword\KeywordStorage\Gateway\DoctrineStorage(
+                    $this->getDatabaseHandler()->getConnection()
                 )
             )
         );
@@ -108,7 +106,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             array(
                 'data' => array(),
                 'externalData' => array('foo', 'bar', 'sindelfingen'),
-                'sortKey' => false,
+                'sortKey' => 'foo,bar,sindelfingen',
             )
         );
     }
@@ -130,7 +128,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
         );
 
         $this->assertEquals(array(), $field->value->data);
-        $this->assertNull($field->value->sortKey);
+        $this->assertEquals('foo,bar,sindelfingen', $field->value->sortKey);
     }
 
     /**
@@ -178,7 +176,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             array(
                 'data' => array(),
                 'externalData' => array('sindelfingen', 'baz'),
-                'sortKey' => false,
+                'sortKey' => 'sindelfingen,baz',
             )
         );
     }
@@ -201,6 +199,6 @@ class KeywordIntegrationTest extends BaseIntegrationTest
         );
 
         $this->assertEquals(array(), $field->value->data);
-        $this->assertNull($field->value->sortKey);
+        $this->assertEquals('sindelfingen,baz', $field->value->sortKey);
     }
 }

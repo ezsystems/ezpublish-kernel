@@ -5,19 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Type;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Content Type Updater.
  */
-class ContentUpdaterTest extends PHPUnit_Framework_TestCase
+class ContentUpdaterTest extends TestCase
 {
     /**
      * Content gateway mock.
@@ -60,7 +64,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     protected $contentMapperMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
     public function testCtor()
     {
@@ -79,8 +83,8 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::determineActions
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::hasFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::determineActions
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::hasFieldDefinition
      */
     public function testDetermineActions()
     {
@@ -93,9 +97,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
             ->with('ezstring')
             ->will(
                 $this->returnValue(
-                    ($converterMock = $this->getMock(
-                        '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-                    ))
+                    ($converterMock = $this->createMock(Converter::class))
                 )
             );
 
@@ -128,7 +130,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
         $updater = $this->getContentUpdater();
 
         $actionA = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action',
+            Action::class,
             array(),
             '',
             false
@@ -140,7 +142,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
             ->method('apply')
             ->with(22);
         $actionB = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action',
+            Action::class,
             array(),
             '',
             false
@@ -217,9 +219,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     protected function getContentGatewayMock()
     {
         if (!isset($this->contentGatewayMock)) {
-            $this->contentGatewayMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
-            );
+            $this->contentGatewayMock = $this->createMock(Gateway::class);
         }
 
         return $this->contentGatewayMock;
@@ -233,11 +233,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     protected function getConverterRegistryMock()
     {
         if (!isset($this->converterRegistryMock)) {
-            $this->converterRegistryMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
-                array(),
-                array(array())
-            );
+            $this->converterRegistryMock = $this->createMock(ConverterRegistry::class);
         }
 
         return $this->converterRegistryMock;
@@ -251,13 +247,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     protected function getContentStorageHandlerMock()
     {
         if (!isset($this->contentStorageHandlerMock)) {
-            $this->contentStorageHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentStorageHandlerMock = $this->createMock(StorageHandler::class);
         }
 
         return $this->contentStorageHandlerMock;
@@ -271,13 +261,7 @@ class ContentUpdaterTest extends PHPUnit_Framework_TestCase
     protected function getContentMapperMock()
     {
         if (!isset($this->contentMapperMock)) {
-            $this->contentMapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentMapperMock = $this->createMock(Mapper::class);
         }
 
         return $this->contentMapperMock;

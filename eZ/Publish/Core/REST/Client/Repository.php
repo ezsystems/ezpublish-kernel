@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client;
@@ -131,6 +129,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -141,6 +141,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserReference
@@ -151,6 +153,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -165,6 +169,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
+     *
      * @param string $module
      * @param string $function
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -177,6 +183,8 @@ class Repository implements APIRepository
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
+     *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects.
      *
@@ -464,6 +472,36 @@ class Repository implements APIRepository
     }
 
     /**
+     * Get PermissionResolver.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionResolver
+     */
+    public function getPermissionResolver()
+    {
+        throw new \RuntimeException('@todo: Implement');
+    }
+
+    /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService()
+    {
+        throw new \RuntimeException('@todo: Implement');
+    }
+
+    /**
+     * Get BookmarkService.
+     *
+     * @return \eZ\Publish\API\Repository\BookmarkService
+     */
+    public function getBookmarkService()
+    {
+        throw new \RuntimeException('@todo: Implement');
+    }
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
@@ -496,17 +534,5 @@ class Repository implements APIRepository
     public function rollback()
     {
         // @todo: Implement / discuss
-    }
-
-    /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started.
-     *
-     * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
-     *
-     * @param Callable $event
-     */
-    public function commitEvent($event)
-    {
-        $event();
     }
 }

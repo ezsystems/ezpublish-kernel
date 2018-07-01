@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler;
 
@@ -53,7 +51,7 @@ class MapLocationDistance extends Field
         /*
          * Note: this formula is precise only for short distances.
          */
-        $longitudeCorrectionByLatitude = pow(cos(deg2rad($target->latitude)), 2);
+        $longitudeCorrectionByLatitude = cos(deg2rad($target->latitude)) ** 2;
         $distanceExpression = $query->expr->add(
             $query->expr->mul(
                 $query->expr->sub(

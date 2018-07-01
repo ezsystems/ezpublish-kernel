@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
@@ -17,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Visibility;
 /**
  * Test case for Visibility issues in EZP-20018.
  *
- * @issue EZP-20018
+ * Issue EZP-20018
  */
 class EZP20018VisibilityTest extends BaseTest
 {
@@ -35,7 +33,7 @@ class EZP20018VisibilityTest extends BaseTest
         $this->assertEquals(0, $results1->totalCount);
         $this->assertCount(0, $results1->searchHits);
 
-         // Hide "Images" Folder
+        // Hide "Images" Folder
         $locationService = $repository->getLocationService();
         $locationService->hideLocation($locationService->loadLocation(54));
 
@@ -63,7 +61,7 @@ class EZP20018VisibilityTest extends BaseTest
         $this->assertEquals(18, $results1->totalCount);
         $this->assertEquals($results1->totalCount, count($results1->searchHits));
 
-         // Hide "Images" Folder
+        // Hide "Images" Folder
         $locationService = $repository->getLocationService();
         $locationService->hideLocation($locationService->loadLocation(54));
 

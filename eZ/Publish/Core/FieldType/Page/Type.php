@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Page;
 
@@ -80,7 +78,7 @@ class Type extends FieldType
                                 "Layout '{$value}' for setting '%setting%' is not available",
                                 null,
                                 array(
-                                    'setting' => $name,
+                                    '%setting%' => $name,
                                 ),
                                 "[$name]"
                             );
@@ -92,7 +90,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );
@@ -236,7 +234,7 @@ class Type extends FieldType
      */
     public function getName(SPIValue $value)
     {
-        return '';
+        return (string)$value;
     }
 
     /**

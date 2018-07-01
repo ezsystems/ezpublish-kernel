@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
@@ -106,7 +104,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'));
+            ->with($this->isInstanceOf(Content\URLAlias::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

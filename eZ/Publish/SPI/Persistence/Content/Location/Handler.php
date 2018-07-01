@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Persistence\Content\Location;
 
@@ -107,6 +105,8 @@ interface Handler
      *
      * Optionally a time stamp with the modification date may be specified,
      * otherwise the current time is used.
+     *
+     * @deprecated As of 6.8, not been used by repository since 5.x.
      *
      * @param int|string $locationId
      * @param int $timestamp

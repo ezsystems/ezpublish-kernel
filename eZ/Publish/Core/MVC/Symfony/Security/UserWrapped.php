@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
@@ -14,6 +12,7 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
+use InvalidArgumentException;
 
 /**
  * This class represents a UserWrapped object.
@@ -38,7 +37,7 @@ class UserWrapped implements UserInterface, EquatableInterface
 
     public function __construct(CoreUserInterface $wrappedUser, APIUser $apiUser)
     {
-        $this->wrappedUser = $wrappedUser;
+        $this->setWrappedUser($wrappedUser);
         $this->apiUser = $apiUser;
     }
 
@@ -84,10 +83,18 @@ class UserWrapped implements UserInterface, EquatableInterface
     }
 
     /**
+     * @throws InvalidArgumentException If $wrappedUser is instance of self or User to avoid duplicated APIUser in session.
+     *
      * @param \Symfony\Component\Security\Core\User\UserInterface $wrappedUser
      */
     public function setWrappedUser(CoreUserInterface $wrappedUser)
     {
+        if ($wrappedUser instanceof self) {
+            throw new InvalidArgumentException('Injecting UserWrapped to itself is not allowed to avoid recursion');
+        } elseif ($wrappedUser instanceof User) {
+            throw new InvalidArgumentException('Injecting User into UserWrapped causes duplication of APIUser, not wanted for session serialization');
+        }
+
         $this->wrappedUser = $wrappedUser;
     }
 

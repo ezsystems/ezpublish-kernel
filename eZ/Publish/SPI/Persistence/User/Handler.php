@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Persistence\User;
 
@@ -68,11 +66,36 @@ interface Handler
     public function loadByEmail($email);
 
     /**
+     * Loads user with user hash.
+     *
+     * @param string $hash
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If user is not found
+     *
+     * @return \eZ\Publish\SPI\Persistence\User
+     */
+    public function loadUserByToken($hash);
+
+    /**
      * Update the user information specified by the user struct.
      *
      * @param \eZ\Publish\SPI\Persistence\User $user
      */
     public function update(User $user);
+
+    /**
+     * Update the user information specified by the user token struct.
+     *
+     * @param \eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     */
+    public function updateUserToken(UserTokenUpdateStruct $userTokenUpdateStruct);
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash);
 
     /**
      * Delete user with the given ID.
@@ -247,13 +270,16 @@ interface Handler
      * Removes a policy from a role.
      *
      * @param mixed $policyId
+     * @param mixed $roleId
      *
      * @todo Throw exception on missing role / policy?
      */
-    public function deletePolicy($policyId);
+    public function deletePolicy($policyId, $roleId);
 
     /**
      * Returns the user policies associated with the user (including inherited policies from user groups).
+     *
+     * @deprecated Since 6.8, not currently in use as permission system needs to know about role assignment limitations.
      *
      * @param mixed $userId
      *              In legacy storage engine this is the content object id roles are assigned to in ezuser_role.

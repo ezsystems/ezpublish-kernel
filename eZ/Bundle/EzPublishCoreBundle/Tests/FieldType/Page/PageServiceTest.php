@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\Tests\Page\PageServiceTest as BaseTest;
+use eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
@@ -19,7 +18,7 @@ class PageServiceTest extends BaseTest
     /**
      * Class to instantiate to get the page service.
      */
-    const PAGESERVICE_CLASS = 'eZ\\Bundle\\EzPublishCoreBundle\\FieldType\\Page\\PageService';
+    const PAGESERVICE_CLASS = PageService::class;
 
     /**
      * @covers \eZ\Bundle\EzPublishCoreBundle\FieldType\Page\PageService::getValidBlockItemsAsContentInfo

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue;
 
@@ -22,6 +20,10 @@ interface Converter
 {
     /**
      * Converts data from $value to $storageFieldValue.
+     *
+     * Note: You should not throw on validation here, as it is implicitly used by ContentService->createContentDraft().
+     *       Rather allow invalid value or omit it to let validation layer in FieldType handle issues when user tried
+     *       to publish the given draft.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue

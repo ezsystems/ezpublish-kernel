@@ -5,11 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Identifier;
 
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\ContentType as ContentTypeIdentifierMatcher;
 use eZ\Publish\API\Repository\Repository;
@@ -29,8 +29,8 @@ class ContentTypeTest extends BaseTest
 
     /**
      * @dataProvider matchLocationProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\ContentType::matchLocation
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\ContentType::matchLocation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
      * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -81,7 +81,7 @@ class ContentTypeTest extends BaseTest
     /**
      * Generates a Location object in respect of a given content type identifier.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateLocationMock()
     {
@@ -100,8 +100,8 @@ class ContentTypeTest extends BaseTest
 
     /**
      * @dataProvider matchContentInfoProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\ContentType::matchLocation
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\ContentType::matchLocation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
      * @param string|string[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -156,20 +156,17 @@ class ContentTypeTest extends BaseTest
      *
      * @param int $contentTypeIdentifier
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForContentTypeIdentifier($contentTypeIdentifier)
     {
         $contentTypeMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType')
+            ->getMockBuilder(ContentType::class)
             ->setConstructorArgs(
                 array(array('identifier' => $contentTypeIdentifier))
             )
             ->getMockForAbstractClass();
-        $contentTypeServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\ContentTypeService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
             ->with(42)

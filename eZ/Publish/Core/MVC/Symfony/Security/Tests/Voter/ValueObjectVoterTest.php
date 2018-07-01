@@ -5,27 +5,29 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Voter;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Voter\ValueObjectVoter;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
+class ValueObjectVoterTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\Repository
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository
      */
     private $repository;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->repository = $this->getMock('eZ\Publish\API\Repository\Repository');
+        $this->repository = $this->createMock(Repository::class);
     }
 
     /**
@@ -49,7 +51,7 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
                 new Attribute(
                     'foo',
                     'bar',
-                    array('valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'))
+                    array('valueObject' => $this->getMockForAbstractClass(ValueObject::class))
                 ),
                 true,
             ),
@@ -70,8 +72,8 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
         return array(
             array('foo'),
             array('bar'),
-            array('eZ\Publish\API\Repository\Values\ValueObject'),
-            array('eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController'),
+            array(ValueObject::class),
+            array(ViewController::class),
         );
     }
 
@@ -84,7 +86,7 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             VoterInterface::ACCESS_ABSTAIN,
             $voter->vote(
-                $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface'),
+                $this->createMock(TokenInterface::class),
                 new \stdClass(),
                 $attributes
             )
@@ -118,7 +120,7 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
         $this->assertSame(
             $expectedResult,
             $voter->vote(
-                $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface'),
+                $this->createMock(TokenInterface::class),
                 new \stdClass(),
                 array($attribute)
             )
@@ -143,8 +145,8 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
                     'content',
                     'read',
                     array(
-                        'valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
-                        'targets' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
+                        'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
+                        'targets' => $this->getMockForAbstractClass(ValueObject::class),
                     )
                 ),
                 true,
@@ -155,8 +157,8 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
                     'content',
                     'read',
                     array(
-                        'valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
-                        'targets' => array($this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject')),
+                        'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
+                        'targets' => array($this->getMockForAbstractClass(ValueObject::class)),
                     )
                 ),
                 true,
@@ -167,8 +169,8 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
                     'content',
                     'read',
                     array(
-                        'valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
-                        'targets' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
+                        'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
+                        'targets' => $this->getMockForAbstractClass(ValueObject::class),
                     )
                 ),
                 false,
@@ -179,8 +181,8 @@ class ValueObjectVoterTest extends PHPUnit_Framework_TestCase
                     'content',
                     'read',
                     array(
-                        'valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'),
-                        'targets' => array($this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject')),
+                        'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
+                        'targets' => array($this->getMockForAbstractClass(ValueObject::class)),
                     )
                 ),
                 false,

@@ -30,7 +30,8 @@ ez_io:
     metadata_handlers:
         dfs:
             legacy_dfs_cluster:
-                connection: ezdfs
+                # Service ID of Doctrine DBAL connection for ezdfs
+                connection: doctrine.dbal.ezdfs_connection
 
 # new doctrine connection
 doctrine:
@@ -48,7 +49,7 @@ doctrine:
 # new flysystem adapter
 oneup_flysystem:
     adapters:
-        nfs:
+        nfs_adapter:
             local:
                 # The last part, $var_dir$/$storage_dir$, is required for legacy compatibility
                 directory: "/path/to/nfs/$var_dir$/$storage_dir$"

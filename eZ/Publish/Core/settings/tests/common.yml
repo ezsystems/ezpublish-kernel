@@ -1,0 +1,38 @@
+parameters:
+    ezplatform.ezrichtext.custom_tags:
+        video:
+            template: 'MyBundle:FieldType/RichText/tag:video.html.twig'
+            icon: '/bundles/mybundle/fieldtype/richtext/video.svg#video'
+            attributes:
+                title:
+                    type: 'string'
+                    required: true
+                    default_value: 'abc'
+                width:
+                    type: 'number'
+                    required: true
+                    default_value: 360
+                autoplay:
+                    type: 'boolean'
+        equation:
+            template: 'MyBundle:FieldType/RichText/tag:equation.html.twig'
+            icon: '/bundles/mybundle/fieldtype/richtext/equation.svg#equation'
+            attributes:
+                name:
+                    type: 'string'
+                    required: true
+                    default_value: 'Equation'
+                processor:
+                    type: 'choice'
+                    required: true
+                    default_value: 'latex'
+                    choices: ['latex', 'tex']
+
+services:
+    logger:
+        class: Psr\Log\NullLogger
+
+    # By default use in-memory cache for tests to avoid disk IO but still make sure we tests cache clearing works
+    ezpublish.cache_pool.driver:
+        class: Symfony\Component\Cache\Adapter\ArrayAdapter
+        arguments: [120, false]

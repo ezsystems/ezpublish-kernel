@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository;
 
@@ -22,6 +20,7 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
  * used by its users. It is only available to {@link * eZ\Publish\SPI\FieldType\EventListener} implementers through the {@link * eZ\Publish\SPI\FieldType\EventListener::handleEvent()} method.
  *
  * @todo Change this to be able to handle relations for FieldTypes in an effective manner (incl op_code handling in SPI)
+ * @deprecated (Not implemented)
  */
 class FieldTypeTools implements FieldTypeToolsInterface
 {

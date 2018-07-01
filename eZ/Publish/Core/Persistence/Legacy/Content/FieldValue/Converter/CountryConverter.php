@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
@@ -22,9 +20,11 @@ class CountryConverter implements Converter
     /**
      * Factory for current class.
      *
-     * @note Class should instead be configured as service if it gains dependencies.
+     * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return Country
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter
      */
     public static function create()
     {

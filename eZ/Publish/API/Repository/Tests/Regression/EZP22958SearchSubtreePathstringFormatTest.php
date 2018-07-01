@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\Regression;
 
@@ -15,7 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
- * @issue EZP-21906
+ * Issue EZP-21906.
  */
 class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
 {
@@ -32,7 +30,7 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
     public function testSearchContentSubtree($pathString, $expectedException = null)
     {
         if ($expectedException) {
-            $this->setExpectedException($expectedException);
+            $this->expectException($expectedException);
         }
 
         $query = new Query(

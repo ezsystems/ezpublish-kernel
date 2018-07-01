@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\MapLocation;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class MapLocationTest extends FieldTypeTest
 {
@@ -89,7 +88,7 @@ class MapLocationTest extends FieldTypeTest
         return array(
             array(
                 'some string',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new MapLocation\Value(
@@ -97,7 +96,7 @@ class MapLocationTest extends FieldTypeTest
                         'latitude' => 'foo',
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new MapLocation\Value(
@@ -106,7 +105,7 @@ class MapLocationTest extends FieldTypeTest
                         'longitude' => 'bar',
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new MapLocation\Value(
@@ -116,7 +115,7 @@ class MapLocationTest extends FieldTypeTest
                         'address' => array(),
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

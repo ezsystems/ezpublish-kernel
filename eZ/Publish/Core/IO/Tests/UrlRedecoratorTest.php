@@ -8,27 +8,29 @@
  */
 namespace eZ\Publish\Core\IO\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\IO\UrlRedecorator;
+use eZ\Publish\Core\IO\UrlDecorator;
 
-class UrlRedecoratorTest extends PHPUnit_Framework_TestCase
+class UrlRedecoratorTest extends TestCase
 {
-    /** @var UrlRedecorator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlRedecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $redecorator;
 
-    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $sourceDecoratorMock;
 
-    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $targetDecoratorMock;
 
     public function setUp()
     {
         $this->redecorator = new UrlRedecorator(
-            $this->sourceDecoratorMock = $this->getMock('eZ\Publish\Core\IO\UrlDecorator'),
-            $this->targetDecoratorMock = $this->getMock('eZ\Publish\Core\IO\UrlDecorator')
+            $this->sourceDecoratorMock = $this->createMock(UrlDecorator::class),
+            $this->targetDecoratorMock = $this->createMock(UrlDecorator::class)
         );
     }
+
     public function testRedecorateFromSource()
     {
         $this->sourceDecoratorMock

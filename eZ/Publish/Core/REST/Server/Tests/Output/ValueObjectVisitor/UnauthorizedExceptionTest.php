@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 class UnauthorizedExceptionTest extends ExceptionTest
 {
@@ -41,7 +40,7 @@ class UnauthorizedExceptionTest extends ExceptionTest
      */
     protected function getException()
     {
-        return $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Exceptions\\UnauthorizedException');
+        return $this->getMockForAbstractClass(UnauthorizedException::class);
     }
 
     /**

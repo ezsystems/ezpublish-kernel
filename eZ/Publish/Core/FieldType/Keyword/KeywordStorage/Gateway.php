@@ -5,14 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Keyword\KeywordStorage;
 
 use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 
+/**
+ * Keyword Field Type external storage gateway.
+ */
 abstract class Gateway extends StorageGateway
 {
     /**

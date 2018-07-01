@@ -5,17 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\REST\Client\Sessionable;
 use DateTime;
 use ArrayObject;
@@ -25,7 +26,7 @@ use PDOException;
 /**
  * Base class for api specific tests.
  */
-abstract class BaseTest extends PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * Maximum integer number accepted by the different backends.
@@ -42,8 +43,6 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     private $repository;
 
-    /**
-     */
     protected function setUp()
     {
         parent::setUp();
@@ -138,7 +137,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     protected function isVersion4()
     {
-        return (isset($_ENV['backendVersion']) && '4' === $_ENV['backendVersion']);
+        return isset($_ENV['backendVersion']) && '4' === $_ENV['backendVersion'];
     }
 
     /**
@@ -162,12 +161,19 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         if (null === $this->setupFactory) {
             if (false === isset($_ENV['setupFactory'])) {
-                throw new \ErrorException('Missing mandatory setting $_ENV["setupFactory"].');
+                throw new \ErrorException(
+                    'Missing mandatory setting $_ENV["setupFactory"], this should normally be set in the relevant phpunit-integration-*.xml file and refer to a setupFactory for the given StorageEngine/SearchEngine in use'
+                );
             }
 
             $setupClass = $_ENV['setupFactory'];
             if (false === class_exists($setupClass)) {
-                throw new \ErrorException('$_ENV["setupFactory"] does not reference an existing class.');
+                throw new \ErrorException(
+                    sprintf(
+                        '$_ENV["setupFactory"] does not reference an existing class: %s. Did you forget to install an package dependency?',
+                        $setupClass
+                    )
+                );
             }
 
             $this->setupFactory = new $setupClass();
@@ -186,7 +192,19 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected function assertPropertiesCorrect(array $expectedValues, ValueObject $actualObject)
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
-            $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
+            if ($propertyValue instanceof ValueObject) {
+                $this->assertStructPropertiesCorrect($propertyValue, $actualObject->$propertyName);
+            } elseif (is_array($propertyValue)) {
+                foreach ($propertyValue as $key => $value) {
+                    if ($value instanceof ValueObject) {
+                        $this->assertStructPropertiesCorrect($value, $actualObject->$propertyName[$key]);
+                    } else {
+                        $this->assertPropertiesEqual("$propertyName\[$key\]", $value, $actualObject->$propertyName[$key]);
+                    }
+                }
+            } else {
+                $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
+            }
         }
     }
 
@@ -204,7 +222,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected function assertPropertiesCorrectUnsorted(array $expectedValues, ValueObject $actualObject)
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
-            $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName, true);
+            if ($propertyValue instanceof ValueObject) {
+                $this->assertStructPropertiesCorrect($propertyValue, $actualObject->$propertyName);
+            } else {
+                $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName, true);
+            }
         }
     }
 
@@ -220,7 +242,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     protected function assertStructPropertiesCorrect(ValueObject $expectedValues, ValueObject $actualObject, array $additionalProperties = array())
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
-            $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
+            if ($propertyValue instanceof ValueObject) {
+                $this->assertStructPropertiesCorrect($propertyValue, $actualObject->$propertyName);
+            } else {
+                $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
+            }
         }
 
         foreach ($additionalProperties as $propertyName) {
@@ -273,9 +299,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Create a user in editor user group.
      *
+     * @param string $login
+     *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    protected function createUserVersion1()
+    protected function createUserVersion1($login = 'user')
     {
         $repository = $this->getRepository();
 
@@ -287,8 +315,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
+            $login,
+            "{$login}@example.com",
             'secret',
             'eng-US'
         );
@@ -311,7 +339,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * Create a user in new user group with editor rights limited to Media Library (/1/48/).
      *
-     * @uses createCustomUserVersion1()
+     * @uses ::createCustomUserVersion1()
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
@@ -335,6 +363,32 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      */
     protected function createCustomUserVersion1($userGroupName, $roleIdentifier, RoleLimitation $roleLimitation = null)
     {
+        return $this->createCustomUserWithLogin(
+            'user',
+            'user@example.com',
+            $userGroupName,
+            $roleIdentifier,
+            $roleLimitation
+        );
+    }
+
+    /**
+     * Create a user with new user group and assign a existing role (optionally with RoleLimitation).
+     *
+     * @param string $login User login
+     * @param string $email User e-mail
+     * @param string $userGroupName Name of the new user group to create
+     * @param string $roleIdentifier Role identifier to assign to the new group
+     * @param RoleLimitation|null $roleLimitation
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function createCustomUserWithLogin(
+        $login,
+        $email,
+        $userGroupName,
+        $roleIdentifier,
+        RoleLimitation $roleLimitation = null
+    ) {
         $repository = $this->getRepository();
 
         /* BEGIN: Inline */
@@ -361,8 +415,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         // Instantiate a create struct with mandatory properties
         $userCreate = $userService->newUserCreateStruct(
-            'user',
-            'user@example.com',
+            $login,
+            $email,
             'secret',
             'eng-US'
         );
@@ -370,11 +424,49 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
         // Set some fields required by the user ContentType
         $userCreate->setField('first_name', 'Example');
-        $userCreate->setField('last_name', 'User');
+        $userCreate->setField('last_name', ucfirst($login));
 
         // Create a new user instance.
         $user = $userService->createUser($userCreate, array($userGroup));
         /* END: Inline */
+
+        return $user;
+    }
+
+    /**
+     * Create a user using given data.
+     *
+     * @param string $login
+     * @param string $firstName
+     * @param string $lastName
+     * @param \eZ\Publish\API\Repository\Values\User\UserGroup|null $userGroup optional user group, Editor by default
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    protected function createUser($login, $firstName, $lastName, UserGroup $userGroup = null)
+    {
+        $repository = $this->getRepository();
+
+        $userService = $repository->getUserService();
+        if (null === $userGroup) {
+            $userGroup = $userService->loadUserGroup(13);
+        }
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            $login,
+            "{$login}@example.com",
+            'secret',
+            'eng-US'
+        );
+        $userCreate->enabled = true;
+
+        // Set some fields required by the user ContentType
+        $userCreate->setField('first_name', $firstName);
+        $userCreate->setField('last_name', $lastName);
+
+        // Create a new user instance.
+        $user = $userService->createUser($userCreate, array($userGroup));
 
         return $user;
     }
@@ -432,5 +524,101 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         $searchHandler = $searchHandlerProperty->getValue($repository);
 
         $searchHandler->commit();
+    }
+
+    /**
+     * Create role of a given name with the given policies described by an array.
+     *
+     * @param $roleName
+     * @param array $policiesData [['module' => 'content', 'function' => 'read', 'limitations' => []]
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Role
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function createRoleWithPolicies($roleName, array $policiesData)
+    {
+        $repository = $this->getRepository(false);
+        $roleService = $repository->getRoleService();
+
+        $roleCreateStruct = $roleService->newRoleCreateStruct($roleName);
+        foreach ($policiesData as $policyData) {
+            $policyCreateStruct = $roleService->newPolicyCreateStruct(
+                $policyData['module'],
+                $policyData['function']
+            );
+
+            if (isset($policyData['limitations'])) {
+                foreach ($policyData['limitations'] as $limitation) {
+                    $policyCreateStruct->addLimitation($limitation);
+                }
+            }
+
+            $roleCreateStruct->addPolicy($policyCreateStruct);
+        }
+
+        $roleDraft = $roleService->createRole($roleCreateStruct);
+
+        $roleService->publishRoleDraft($roleDraft);
+
+        return $roleService->loadRole($roleDraft->id);
+    }
+
+    /**
+     * Create user and assign new role with the given policies.
+     *
+     * @param string $login
+     * @param array $policiesData list of policies in the form of <code>[ [ 'module' => 'name', 'function' => 'name'] ]</code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \Exception
+     */
+    public function createUserWithPolicies($login, array $policiesData)
+    {
+        $repository = $this->getRepository(false);
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        $repository->beginTransaction();
+        try {
+            $userCreateStruct = $userService->newUserCreateStruct(
+                $login,
+                "{$login}@test.local",
+                $login,
+                'eng-GB'
+            );
+            $userCreateStruct->setField('first_name', $login);
+            $userCreateStruct->setField('last_name', $login);
+            $user = $userService->createUser($userCreateStruct, [$userService->loadUserGroup(4)]);
+
+            $role = $this->createRoleWithPolicies(uniqid('role_for_' . $login . '_'), $policiesData);
+            $roleService->assignRoleToUser($role, $user);
+
+            $repository->commit();
+
+            return $user;
+        } catch (\Exception $ex) {
+            $repository->rollback();
+            throw $ex;
+        }
+    }
+
+    /**
+     * Traverse all errors for all fields in all Translations to find expected one.
+     *
+     * @param \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException $exception
+     * @param string $expectedValidationErrorMessage
+     */
+    protected function assertValidationErrorOccurs(
+        ContentFieldValidationException $exception,
+        $expectedValidationErrorMessage
+    ) {
+        $constraint = new PHPUnitConstraintValidationErrorOccurs($expectedValidationErrorMessage);
+
+        self::assertThat($exception, $constraint);
     }
 }

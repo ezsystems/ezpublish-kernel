@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
@@ -72,7 +70,9 @@ class Mapper
         $contentInfo->ownerId = $struct->ownerId;
         $contentInfo->alwaysAvailable = $struct->alwaysAvailable;
         $contentInfo->remoteId = $struct->remoteId;
-        $contentInfo->mainLanguageCode = $this->languageHandler->load($struct->initialLanguageId)->languageCode;
+        $contentInfo->mainLanguageCode = $this->languageHandler
+            ->load(isset($struct->mainLanguageId) ? $struct->mainLanguageId : $struct->initialLanguageId)
+            ->languageCode;
         $contentInfo->name = isset($struct->name[$contentInfo->mainLanguageCode])
             ? $struct->name[$contentInfo->mainLanguageCode]
             : '';
@@ -80,6 +80,7 @@ class Mapper
         $contentInfo->publicationDate = 0;
         $contentInfo->modificationDate = 0;
         $contentInfo->currentVersionNo = $currentVersionNo;
+        $contentInfo->status = ContentInfo::STATUS_DRAFT;
         $contentInfo->isPublished = false;
 
         return $contentInfo;
@@ -107,14 +108,13 @@ class Mapper
         $versionInfo->modificationDate = $struct->modified;
         $versionInfo->names = $struct->name;
 
-        $languageIds = array();
+        $languages = [];
         foreach ($struct->fields as $field) {
-            if (!isset($languageIds[$field->languageCode])) {
-                $languageIds[$field->languageCode] =
-                    $this->languageHandler->loadByLanguageCode($field->languageCode)->id;
+            if (!isset($languages[$field->languageCode])) {
+                $languages[$field->languageCode] = true;
             }
         }
-        $versionInfo->languageIds = array_values($languageIds);
+        $versionInfo->languageCodes = array_keys($languages);
 
         return $versionInfo;
     }
@@ -140,7 +140,7 @@ class Mapper
         $versionInfo->creationDate = time();
         $versionInfo->modificationDate = $versionInfo->creationDate;
         $versionInfo->names = is_object($content->versionInfo) ? $content->versionInfo->names : array();
-        $versionInfo->languageIds = $content->versionInfo->languageIds;
+        $versionInfo->languageCodes = $content->versionInfo->languageCodes;
 
         return $versionInfo;
     }
@@ -178,7 +178,7 @@ class Mapper
      *
      * @return \eZ\Publish\SPI\Persistence\Content[]
      */
-    public function extractContentFromRows(array $rows, array $nameRows)
+    public function extractContentFromRows(array $rows, array $nameRows, $prefix = 'ezcontentobject_')
     {
         $versionedNameData = array();
         foreach ($nameRows as $row) {
@@ -192,9 +192,9 @@ class Mapper
         $fields = array();
 
         foreach ($rows as $row) {
-            $contentId = (int)$row['ezcontentobject_id'];
+            $contentId = (int)$row["{$prefix}id"];
             if (!isset($contentInfos[$contentId])) {
-                $contentInfos[$contentId] = $this->extractContentInfoFromRow($row, 'ezcontentobject_');
+                $contentInfos[$contentId] = $this->extractContentInfoFromRow($row, $prefix);
             }
             if (!isset($versionInfos[$contentId])) {
                 $versionInfos[$contentId] = array();
@@ -250,7 +250,7 @@ class Mapper
         $contentInfo->contentTypeId = (int)$row["{$prefix}contentclass_id"];
         $contentInfo->sectionId = (int)$row["{$prefix}section_id"];
         $contentInfo->currentVersionNo = (int)$row["{$prefix}current_version"];
-        $contentInfo->isPublished = (bool)($row["{$prefix}status"] == ContentInfo::STATUS_PUBLISHED);
+        $contentInfo->isPublished = ($row["{$prefix}status"] == ContentInfo::STATUS_PUBLISHED);
         $contentInfo->ownerId = (int)$row["{$prefix}owner_id"];
         $contentInfo->publicationDate = (int)$row["{$prefix}published"];
         $contentInfo->modificationDate = (int)$row["{$prefix}modified"];
@@ -258,6 +258,8 @@ class Mapper
         $contentInfo->mainLanguageCode = $this->languageHandler->load($row["{$prefix}initial_language_id"])->languageCode;
         $contentInfo->remoteId = $row["{$prefix}remote_id"];
         $contentInfo->mainLocationId = ($row["{$treePrefix}main_node_id"] !== null ? (int)$row["{$treePrefix}main_node_id"] : null);
+        $contentInfo->status = (int)$row["{$prefix}status"];
+        $contentInfo->isPublished = ($contentInfo->status == ContentInfo::STATUS_PUBLISHED);
 
         return $contentInfo;
     }
@@ -302,7 +304,7 @@ class Mapper
         $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
         $versionInfo->modificationDate = (int)$row['ezcontentobject_version_modified'];
         $versionInfo->initialLanguageCode = $this->languageHandler->load($row['ezcontentobject_version_initial_language_id'])->languageCode;
-        $versionInfo->languageIds = $this->extractLanguageIdsFromMask($row['ezcontentobject_version_language_mask']);
+        $versionInfo->languageCodes = $this->extractLanguageCodesFromMask($row['ezcontentobject_version_language_mask']);
         $versionInfo->status = (int)$row['ezcontentobject_version_status'];
         $versionInfo->names = $names;
 
@@ -337,7 +339,7 @@ class Mapper
                 $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
                 $versionInfo->modificationDate = (int)$row['ezcontentobject_version_modified'];
                 $versionInfo->initialLanguageCode = $this->languageHandler->load($row['ezcontentobject_version_initial_language_id'])->languageCode;
-                $versionInfo->languageIds = $this->extractLanguageIdsFromMask((int)$row['ezcontentobject_version_language_mask']);
+                $versionInfo->languageCodes = $this->extractLanguageCodesFromMask((int)$row['ezcontentobject_version_language_mask']);
                 $versionInfo->status = (int)$row['ezcontentobject_version_status'];
                 $versionInfo->names = $nameData[$versionId];
                 $versionInfoList[$versionId] = $versionInfo;
@@ -348,21 +350,19 @@ class Mapper
     }
 
     /**
-     * @todo use langmask handler for this
-     *
      * @param int $languageMask
      *
-     * @return array
+     * @return string[]
      */
-    public function extractLanguageIdsFromMask($languageMask)
+    public function extractLanguageCodesFromMask($languageMask)
     {
         $exp = 2;
-        $result = array();
+        $result = [];
 
         // Decomposition of $languageMask into its binary components.
         while ($exp <= $languageMask) {
             if ($languageMask & $exp) {
-                $result[] = $exp;
+                $result[] = $this->languageHandler->load($exp)->languageCode;
             }
 
             $exp *= 2;
@@ -387,7 +387,9 @@ class Mapper
         $field->type = $row['ezcontentobject_attribute_data_type_string'];
         $field->value = $this->extractFieldValueFromRow($row, $field->type);
         $field->languageCode = $row['ezcontentobject_attribute_language_code'];
-        $field->versionNo = (int)$row['ezcontentobject_attribute_version'];
+        $field->versionNo = isset($row['ezcontentobject_version_version']) ?
+            (int)$row['ezcontentobject_version_version'] :
+            (int)$row['ezcontentobject_attribute_version'];
 
         return $field;
     }
@@ -446,6 +448,7 @@ class Mapper
         $struct->alwaysAvailable = $content->versionInfo->contentInfo->alwaysAvailable;
         $struct->remoteId = md5(uniqid(get_class($this), true));
         $struct->initialLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->initialLanguageCode)->id;
+        $struct->mainLanguageId = $this->languageHandler->loadByLanguageCode($content->versionInfo->contentInfo->mainLanguageCode)->id;
         $struct->modified = time();
 
         foreach ($content->fields as $field) {

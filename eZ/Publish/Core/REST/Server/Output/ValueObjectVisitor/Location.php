@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
@@ -15,6 +13,7 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
+use eZ\Publish\API\Repository\Values\Content\Location as LocationValue;
 
 /**
  * Location value object visitor.
@@ -43,7 +42,12 @@ class Location extends ValueObjectVisitor
         $generator->startObjectElement('Location');
         $visitor->setHeader('Content-Type', $generator->getMediaType('Location'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('LocationUpdate'));
+        $this->visitLocationAttributes($visitor, $generator, $location);
+        $generator->endObjectElement('Location');
+    }
 
+    protected function visitLocationAttributes(Visitor $visitor, Generator $generator, LocationValue $location)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate(
@@ -147,7 +151,5 @@ class Location extends ValueObjectVisitor
         $generator->endAttribute('href');
         $visitor->visitValueObject(new RestContentValue($location->contentInfo));
         $generator->endObjectElement('ContentInfo');
-
-        $generator->endObjectElement('Location');
     }
 }

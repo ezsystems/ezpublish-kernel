@@ -5,7 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version //autogentag//
  */
 
 namespace eZ\Publish\API\Repository\Tests;
@@ -527,15 +526,8 @@ function generateUserGroupFixture(array $fixture)
         $groups[$data['id']] = array(
             '_id' => $data['id'],
             'parentId' => is_numeric($parentId) ? $parentId : 'null',
-            'subGroupCount' => 0,
             'content' => '$this->getContentService()->loadContent( ' . $data['id'] . ' )'
         );
-    }
-
-    foreach ($groups as $group) {
-        if (isset($groups[$group['parentId']])) {
-            ++$groups[$group['parentId']]['subGroupCount'];
-        }
     }
 
     return generateReturnArray(
@@ -678,7 +670,7 @@ function generateObjectStateGroupFixture(array $fixture)
         $groups[$data['id']] = array(
             'id'                  => $data['id'],
             'identifier'          => $data['identifier'],
-            'defaultLanguageCode' => $languageCodes[$data['default_language_id']],
+            'mainLanguageCode' => $languageCodes[$data['default_language_id']],
             'names'               => array(),
             'descriptions'        => array(),
         );
@@ -716,7 +708,7 @@ function generateObjectStateFixture(array $fixture)
             'id'                  => $data['id'],
             'identifier'          => $data['identifier'],
             'priority'            => (int)$data['priority'],
-            'defaultLanguageCode' => $languageCodes[$data['default_language_id']],
+            'mainLanguageCode' => $languageCodes[$data['default_language_id']],
             'languageCodes'       => resolveLanguageMask($languageCodes, $data['language_mask']),
             'stateGroup'          => '$scopeValues["groups"][' . valueToString($data['group_id']) . ']',
             'names'               => array(),
@@ -818,7 +810,7 @@ function generateReturnArray()
 {
     return '<?php' . PHP_EOL .
         'return array(' . PHP_EOL .
-        join(',' . PHP_EOL . '    ', func_get_args()) . PHP_EOL .
+        implode(',' . PHP_EOL . '    ', func_get_args()) . PHP_EOL .
         ');' . PHP_EOL;
 }
 
@@ -871,7 +863,7 @@ function valueToString($value, $indent = 4)
         $value = $value;
     } elseif (is_bool($value)) {
         $value = $value ? 'true' : 'false';
-    } elseif (is_null($value)) {
+    } elseif (null === $value) {
         $value = 'null';
     } elseif (is_string($value) && 0 !== strpos($value, 'new \\') && 0 !== strpos($value, '$scopeValues[') && 0 !== strpos($value, 'array(') && 0 !== strpos($value, '$this')) {
         $value = '"' . str_replace('"', '\"', $value) . '"';

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:jms="urn:jms:translation" version="1.2">
+  <file date="2017-01-26T14:55:58Z" source-language="en" target-language="en" datatype="plaintext" original="not.available">
+    <header>
+      <tool tool-id="JMSTranslationBundle" tool-name="JMSTranslationBundle" tool-version="1.1.0-DEV"/>
+      <note>The source node in most cases contains the sample message as written by the developer. If it looks like a dot-delimitted string such as "form.label.firstname", then the developer has not provided a default message.</note>
+    </header>
+    <body>
+      <trans-unit id="e2b8dff16cf1b8ad7848630c4d7c42cc31ac5e21" resname="Enter login or email">
+        <source>Enter login or email</source>
+        <target>Enter login or email</target>
+        <note>key: Enter login or email</note>
+        <jms:reference-file line="18">eZ/Bundle/EzPublishCoreBundle/Resources/views/Security/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="570591c060a999e9ab1592763c74d881b7654ee1" resname="Enter password">
+        <source>Enter password</source>
+        <target>Enter password</target>
+        <note>key: Enter password</note>
+        <jms:reference-file line="22">eZ/Bundle/EzPublishCoreBundle/Resources/views/Security/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="4e5a2893bdcc7d239c1db72e4c4ffbe4bea73174" resname="Login">
+        <source>Login</source>
+        <target>Login</target>
+        <note>key: Login</note>
+        <jms:reference-file line="32">eZ/Bundle/EzPublishCoreBundle/Resources/views/Security/login.html.twig</jms:reference-file>
+        <jms:reference-file line="6">eZ/Bundle/EzPublishCoreBundle/Resources/views/Security/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="be81ab98cb9ccf753975f50fa70cd32581a821fc" resname="Password:">
+        <source>Password:</source>
+        <target>Password:</target>
+        <note>key: Password:</note>
+        <jms:reference-file line="21">eZ/Bundle/EzPublishCoreBundle/Resources/views/Security/login.html.twig</jms:reference-file>
+      </trans-unit>
+      <trans-unit id="17dfb031e086e3415d71f3928e6ce08d6b1c1d4d" resname="Username:">
+        <source>Username:</source>
+        <target>Username:</target>
+        <note>key: Username:</note>
+        <jms:reference-file line="17">eZ/Bundle/EzPublishCoreBundle/Resources/views/Security/login.html.twig</jms:reference-file>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

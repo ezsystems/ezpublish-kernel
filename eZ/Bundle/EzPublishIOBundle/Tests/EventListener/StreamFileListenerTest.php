@@ -10,36 +10,33 @@ namespace eZ\Bundle\EzPublishIOBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishIOBundle\EventListener\StreamFileListener;
 use eZ\Bundle\EzPublishIOBundle\BinaryStreamResponse;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use DateTime;
 
-class StreamFileListenerTest extends PHPUnit_Framework_TestCase
+class StreamFileListenerTest extends TestCase
 {
     /** @var StreamFileListener */
     private $eventListener;
 
-    /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $ioServiceMock;
 
     private $ioUriPrefix = 'var/test/storage';
 
-    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $configResolverMock;
 
     public function setUp()
     {
-        $this->ioServiceMock = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
+        $this->ioServiceMock = $this->createMock(IOServiceInterface::class);
 
-        $this->configResolverMock = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->configResolverMock
-            ->expects($this->any())
-            ->method('getParameter')
-            ->with('io.url_prefix')
-            ->will($this->returnValue($this->ioUriPrefix));
+        $this->configResolverMock = $this->createMock(ConfigResolverInterface::class);
 
         $this->eventListener = new StreamFileListener($this->ioServiceMock, $this->configResolverMock);
     }
@@ -49,6 +46,26 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
         $request = $this->createRequest('/Not-an-image');
         $event = $this->createEvent($request);
 
+        $this->configureIoUrlPrefix('var/test/storage');
+        $this->ioServiceMock
+            ->expects($this->never())
+            ->method('loadBinaryFileByUri');
+
+        $this->eventListener->onKernelRequest($event);
+
+        self::assertNull($event->getResponse());
+    }
+
+    public function testDoesNotRespondToNoIoRequest()
+    {
+        $request = $this->createRequest('/Not-an-image', 'bar.fr');
+        $event = $this->createEvent($request);
+
+        $this->configureIoUrlPrefix('http://foo.com/var/test/storage');
+        $this->ioServiceMock
+            ->expects($this->never())
+            ->method('loadBinaryFileByUri');
+
         $this->eventListener->onKernelRequest($event);
 
         self::assertNull($event->getResponse());
@@ -57,6 +74,7 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
     public function testRespondsToIoUri()
     {
         $uri = '/var/test/storage/images/image.png';
+        $this->configureIoUrlPrefix(ltrim($uri, '/'));
         $request = $this->createRequest($uri);
 
         $event = $this->createEvent($request);
@@ -72,18 +90,64 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
         $this->eventListener->onKernelRequest($event);
 
         self::assertTrue($event->hasResponse());
+        $expectedResponse = new BinaryStreamResponse($binaryFile, $this->ioServiceMock);
+        $response = $event->getResponse();
+        // since symfony/symfony v3.2.7 Response sets Date header if not explicitly set
+        // @see https://github.com/symfony/symfony/commit/e3d90db74773406fb8fdf07f36cb8ced4d187f62
+        $expectedResponse->setDate($response->getDate());
         self::assertEquals(
-            new BinaryStreamResponse($binaryFile, $this->ioServiceMock),
-            $event->getResponse()
+            $expectedResponse,
+            $response
         );
+    }
+
+    public function testRespondsToIoRequest()
+    {
+        $uri = '/var/test/storage/images/image.png';
+        $host = 'phoenix-rises.fm';
+        $urlPrefix = "http://$host/var/test/storage";
+        $this->configureIoUrlPrefix($urlPrefix);
+        $request = $this->createRequest($uri, $host);
+
+        $event = $this->createEvent($request);
+
+        $binaryFile = new BinaryFile(array('mtime' => new DateTime()));
+
+        $this->ioServiceMock
+            ->expects($this->once())
+            ->method('loadBinaryFileByUri')
+            ->with(sprintf('http://%s%s', $host, $uri))
+            ->will($this->returnValue($binaryFile));
+
+        $this->eventListener->onKernelRequest($event);
+
+        self::assertTrue($event->hasResponse());
+        $expectedResponse = new BinaryStreamResponse($binaryFile, $this->ioServiceMock);
+        $response = $event->getResponse();
+        // since symfony/symfony v3.2.7 Response sets Date header if not explicitly set
+        // @see https://github.com/symfony/symfony/commit/e3d90db74773406fb8fdf07f36cb8ced4d187f62
+        $expectedResponse->setDate($response->getDate());
+        self::assertEquals(
+            $expectedResponse,
+            $response
+        );
+    }
+
+    private function configureIoUrlPrefix($urlPrefix)
+    {
+        $this->configResolverMock
+            ->expects($this->any())
+            ->method('getParameter')
+            ->with('io.url_prefix')
+            ->willReturn($urlPrefix);
     }
 
     /**
      * @return Request
      */
-    protected function createRequest($semanticPath)
+    protected function createRequest($semanticPath, $host = 'localhost')
     {
-        $request = new Request();
+        $request = Request::create(sprintf('http://%s%s', $host, $semanticPath));
         $request->attributes->set('semanticPathinfo', $semanticPath);
 
         return $request;
@@ -97,7 +161,7 @@ class StreamFileListenerTest extends PHPUnit_Framework_TestCase
     protected function createEvent($request)
     {
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );

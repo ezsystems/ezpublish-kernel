@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Gateway;
 
@@ -36,7 +34,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     protected $databaseGateway;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::__construct
      */
     public function testCtor()
     {
@@ -51,8 +49,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertContentObject
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertContentObject
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
      *
      * @todo Fix not available fields
      */
@@ -184,8 +182,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertVersion
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertVersion
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
      */
     public function testInsertVersion()
     {
@@ -229,7 +227,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
      */
     public function testSetStatus()
     {
@@ -267,7 +265,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
      */
     public function testSetStatusPublished()
     {
@@ -305,7 +303,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setStatus
      */
     public function testSetStatusUnknownVersion()
     {
@@ -317,7 +315,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateContent
      */
     public function testUpdateContent()
     {
@@ -390,7 +388,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateVersion
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateVersion
      */
     public function testUpdateVersion()
     {
@@ -429,7 +427,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertNewField
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertNewField
      */
     public function testInsertNewField()
     {
@@ -479,7 +477,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertNewField
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertNewField
      */
     public function testInsertNewAlwaysAvailableField()
     {
@@ -531,8 +529,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateField
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setFieldUpdateValues
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateField
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setFieldUpdateValues
      */
     public function testUpdateField()
     {
@@ -582,8 +580,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateNonTranslatableField
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setFieldUpdateValues
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::updateNonTranslatableField
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setFieldUpdateValues
      */
     public function testUpdateNonTranslatableField()
     {
@@ -645,7 +643,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::listVersions
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::listVersions
      */
     public function testListVersions()
     {
@@ -688,7 +686,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::listVersionNumbers
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::listVersionNumbers
      */
     public function testListVersionNumbers()
     {
@@ -745,8 +743,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
     public function testLoadWithAllTranslations()
     {
@@ -771,8 +769,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
     public function testCreateFixtureForMapperExtractContentFromRowsMultipleVersions()
     {
@@ -798,8 +796,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
     public function testCreateFixtureForMapperExtractContentFromRows()
     {
@@ -809,9 +807,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getDatabaseGateway();
 
-        $res = $gateway->load(226, 2);
-
-        $res = array_merge($res);
+        $res = array_merge($gateway->load(226, 2));
 
         $orig = include __DIR__ . '/../_fixtures/extract_content_from_rows.php';
 
@@ -824,8 +820,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
     public function testLoadWithSingleTranslation()
     {
@@ -853,8 +849,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder
      */
     public function testLoadNonExistentTranslation()
     {
@@ -900,7 +896,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getAllLocationIds
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getAllLocationIds
      */
     public function testGetAllLocationIds()
     {
@@ -917,7 +913,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getFieldIdsByType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getFieldIdsByType
      */
     public function testGetFieldIdsByType()
     {
@@ -958,7 +954,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelations
      */
     public function testDeleteRelationsTo()
     {
@@ -991,7 +987,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelations
      */
     public function testDeleteRelationsFrom()
     {
@@ -1055,7 +1051,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteField
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteField
      */
     public function testDeleteField()
     {
@@ -1083,7 +1079,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteFields
      */
     public function testDeleteFields()
     {
@@ -1141,7 +1137,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteVersions
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteVersions
      */
     public function testDeleteVersions()
     {
@@ -1199,30 +1195,35 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setName
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::setName
      */
     public function testSetName()
     {
-        $beforeCount = array(
-            'all' => $this->countContentNames(),
-            'this' => $this->countContentNames(14),
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
         );
 
         $gateway = $this->getDatabaseGateway();
 
         $gateway->setName(14, 2, 'Hello world!', 'eng-GB');
 
+        $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
             array(array('eng-GB', 2, 14, 4, 'Hello world!', 'eng-GB')),
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
-                ->select('*')
+            $query->select('*')
                 ->from('ezcontentobject_name')
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq('contentobject_id', 14),
+                        $query->expr->eq('content_version', 2),
+                        $query->expr->eq('content_translation', $query->bindValue('eng-GB'))
+                    )
+                )
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteNames
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteNames
      */
     public function testDeleteNames()
     {
@@ -1280,7 +1281,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteContent
      */
     public function testDeleteContent()
     {
@@ -1306,7 +1307,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
      */
     public function testLoadRelations()
     {
@@ -1337,7 +1338,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
      */
     public function testLoadRelationsByType()
     {
@@ -1363,7 +1364,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
      */
     public function testLoadRelationsByVersion()
     {
@@ -1383,7 +1384,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadRelations
      */
     public function testLoadRelationsNoResult()
     {
@@ -1397,7 +1398,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadReverseRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadReverseRelations
      */
     public function testLoadReverseRelations()
     {
@@ -1417,7 +1418,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadReverseRelations
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::loadReverseRelations
      */
     public function testLoadReverseRelationsWithType()
     {
@@ -1453,7 +1454,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /*
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getLastVersionNumber
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::getLastVersionNumber
      *
      * @return void
      */
@@ -1472,7 +1473,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertRelation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertRelation
      */
     public function testInsertRelation()
     {
@@ -1508,7 +1509,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelation
      */
     public function testDeleteRelation()
     {
@@ -1523,7 +1524,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelation
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::deleteRelation
      */
     public function testDeleteRelationWithCompositeBitmask()
     {

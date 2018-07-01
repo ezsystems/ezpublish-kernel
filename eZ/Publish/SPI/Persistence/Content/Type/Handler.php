@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Persistence\Content\Type;
 
@@ -14,8 +12,6 @@ use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 
-/**
- */
 interface Handler
 {
     /**
@@ -46,6 +42,18 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function loadGroup($groupId);
+
+    /**
+     * Return list of unique Content Type Groups, with group id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param array $groupIds
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
+     */
+    public function loadGroups(array $groupIds);
 
     /**
      * Loads Type Group by identifier.
@@ -132,7 +140,6 @@ interface Handler
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      */
     public function delete($contentTypeId, $status);
 
@@ -154,7 +161,7 @@ interface Handler
      * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}.
      *
      * New Content Type will have $userId as creator / modifier, created / modified should be updated, new remoteId created
-     * and identifier should be 'copy_of_<identifier>_' + the new remoteId or another unique number.
+     * and identifier should be 'copy_of_<originalBaseIdentifier>_<newTypeId>' or another unique string.
      *
      * @param mixed $userId
      * @param mixed $contentTypeId

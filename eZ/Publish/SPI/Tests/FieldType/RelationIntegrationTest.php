@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
@@ -77,7 +75,8 @@ class RelationIntegrationTest extends BaseIntegrationTest
             array(
                 'fieldSettings' => array(
                     'selectionMethod' => 0,
-                    'selectionRoot' => '',
+                    'selectionRoot' => null,
+                    'selectionContentTypes' => array(),
                 ),
             )
         );
@@ -94,7 +93,8 @@ class RelationIntegrationTest extends BaseIntegrationTest
     {
         $fieldSettings = array(
             'selectionMethod' => 0,
-            'selectionRoot' => '',
+            'selectionRoot' => null,
+            'selectionContentTypes' => array(),
         );
 
         return array(

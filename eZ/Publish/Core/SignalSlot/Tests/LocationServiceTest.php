@@ -5,25 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\LocationService as APILocationService;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\LocationService;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService as LocationServiceSignals;
 
 class LocationServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\LocationService'
-        );
+        return $this->createMock(APILocationService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -51,6 +49,7 @@ class LocationServiceTest extends ServiceTest
                 'path' => $rootPath,
                 'remoteId' => $rootRemoteId,
                 'contentInfo' => $rootContentInfo,
+                'parentLocationId' => 1,
             )
         );
         $locationContentInfo = $this->getContentInfo($locationContentId, $locationContentRemoteId);
@@ -60,6 +59,7 @@ class LocationServiceTest extends ServiceTest
                 'path' => $locationPath,
                 'remoteId' => $locationRemoteId,
                 'contentInfo' => $locationContentInfo,
+                'parentLocationId' => $rootId,
             )
         );
 
@@ -79,7 +79,7 @@ class LocationServiceTest extends ServiceTest
                 array($location, $root),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\CopySubtreeSignal',
+                LocationServiceSignals\CopySubtreeSignal::class,
                 array(
                     'subtreeId' => $locationId,
                     'targetParentLocationId' => $rootId,
@@ -87,28 +87,34 @@ class LocationServiceTest extends ServiceTest
             ),
             array(
                 'loadLocation',
-                array($rootId),
+                array($rootId, []),
                 $root,
                 0,
             ),
             array(
                 'loadLocationByRemoteId',
-                array($rootRemoteId),
+                array($rootRemoteId, []),
                 $root,
                 0,
             ),
             array(
                 'loadLocations',
-                array($locationContentInfo, $root),
+                array($locationContentInfo, $root, []),
                 array($location),
                 0,
             ),
             array(
                 'loadLocationChildren',
-                array($root, 0, 1),
+                array($root, 0, 1, []),
                 $rootChildren,
                 0,
             ),
+            /*array(
+                'loadParentLocationsForDraftContent',
+                array($root, 0, 1, []),
+                $rootChildren,
+                0,
+            ),*/
             array(
                 'getLocationChildCount',
                 array($root),
@@ -120,10 +126,11 @@ class LocationServiceTest extends ServiceTest
                 array($locationContentInfo, $locationCreateStruct),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal',
+                LocationServiceSignals\CreateLocationSignal::class,
                 array(
                     'contentId' => $locationContentId,
                     'locationId' => $locationId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -131,10 +138,11 @@ class LocationServiceTest extends ServiceTest
                 array($location, $locationUpdateStruct),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal',
+                LocationServiceSignals\UpdateLocationSignal::class,
                 array(
                     'contentId' => $locationContentId,
                     'locationId' => $locationId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -142,12 +150,14 @@ class LocationServiceTest extends ServiceTest
                 array($location, $root),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\SwapLocationSignal',
+                LocationServiceSignals\SwapLocationSignal::class,
                 array(
                     'location1Id' => $locationId,
                     'content1Id' => $locationContentId,
+                    'parentLocation1Id' => $rootId,
                     'location2Id' => $rootId,
                     'content2Id' => $rootContentId,
+                    'parentLocation2Id' => 1,
                 ),
             ),
             array(
@@ -155,9 +165,10 @@ class LocationServiceTest extends ServiceTest
                 array($location),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal',
+                LocationServiceSignals\HideLocationSignal::class,
                 array(
                     'locationId' => $locationId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -165,9 +176,10 @@ class LocationServiceTest extends ServiceTest
                 array($location),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal',
+                LocationServiceSignals\UnhideLocationSignal::class,
                 array(
                     'locationId' => $locationId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -175,10 +187,11 @@ class LocationServiceTest extends ServiceTest
                 array($location, $root),
                 $location,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal',
+                LocationServiceSignals\MoveSubtreeSignal::class,
                 array(
                     'locationId' => $locationId,
                     'newParentLocationId' => $rootId,
+                    'oldParentLocationId' => $rootId,
                 ),
             ),
             array(
@@ -186,10 +199,11 @@ class LocationServiceTest extends ServiceTest
                 array($location),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal',
+                LocationServiceSignals\DeleteLocationSignal::class,
                 array(
                     'locationId' => $locationId,
                     'contentId' => $locationContentId,
+                    'parentLocationId' => $rootId,
                 ),
             ),
             array(

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
@@ -14,6 +12,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\API\Repository\Values\User\Policy as PolicyValue;
 
 /**
  * Policy value object visitor.
@@ -32,7 +31,12 @@ class Policy extends ValueObjectVisitor
         $generator->startObjectElement('Policy');
         $visitor->setHeader('Content-Type', $generator->getMediaType($data instanceof PolicyDraft ? 'PolicyDraft' : 'Policy'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('PolicyUpdate'));
+        $this->visitPolicyAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('Policy');
+    }
 
+    protected function visitPolicyAttributes(Visitor $visitor, Generator $generator, PolicyValue $data)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadPolicy', array('roleId' => $data->roleId, 'policyId' => $data->id))
@@ -65,7 +69,5 @@ class Policy extends ValueObjectVisitor
             $generator->endList('limitation');
             $generator->endHashElement('limitations');
         }
-
-        $generator->endObjectElement('Policy');
     }
 }

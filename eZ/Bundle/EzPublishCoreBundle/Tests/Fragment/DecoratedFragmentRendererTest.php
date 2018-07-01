@@ -5,33 +5,33 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 
 use eZ\Bundle\EzPublishCoreBundle\Fragment\DecoratedFragmentRenderer;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface;
+use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
-class DecoratedFragmentRendererTest extends PHPUnit_Framework_TestCase
+class DecoratedFragmentRendererTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $innerRenderer;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->innerRenderer = $this->getMock('Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface');
+        $this->innerRenderer = $this->createMock(FragmentRendererInterface::class);
     }
 
     public function testSetFragmentPathNotRoutableRenderer()
     {
-        $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+        $matcher = $this->createMock(SiteAccess\URILexer::class);
         $siteAccess = new SiteAccess('test', 'test', $matcher);
         $matcher
             ->expects($this->never())
@@ -44,7 +44,7 @@ class DecoratedFragmentRendererTest extends PHPUnit_Framework_TestCase
 
     public function testSetFragmentPath()
     {
-        $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+        $matcher = $this->createMock(SiteAccess\URILexer::class);
         $siteAccess = new SiteAccess('test', 'test', $matcher);
         $matcher
             ->expects($this->once())
@@ -52,7 +52,7 @@ class DecoratedFragmentRendererTest extends PHPUnit_Framework_TestCase
             ->with('/foo')
             ->will($this->returnValue('/bar/foo'));
 
-        $innerRenderer = $this->getMock('Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer');
+        $innerRenderer = $this->createMock(RoutableFragmentRenderer::class);
         $innerRenderer
             ->expects($this->once())
             ->method('setFragmentPath')

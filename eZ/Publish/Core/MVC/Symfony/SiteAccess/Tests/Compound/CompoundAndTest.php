@@ -5,29 +5,30 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests\Compound;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalAnd;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class CompoundAndTest extends PHPUnit_Framework_TestCase
+class CompoundAndTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $matcherBuilder;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->matcherBuilder = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\MatcherBuilderInterface');
+        $this->matcherBuilder = $this->createMock(MatcherBuilderInterface::class);
     }
 
     /**
@@ -79,14 +80,14 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
             ->matcherBuilder
             ->expects($this->any())
             ->method('buildMatcher')
-            ->will($this->returnValue($this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher')));
+            ->will($this->returnValue($this->createMock(Matcher::class)));
 
-        $compoundMatcher->setRequest($this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\Routing\\SimplifiedRequest'));
+        $compoundMatcher->setRequest($this->createMock(SimplifiedRequest::class));
         $compoundMatcher->setMatcherBuilder($this->matcherBuilder);
         $matchers = $compoundMatcher->getSubMatchers();
         $this->assertInternalType('array', $matchers);
         foreach ($matchers as $matcher) {
-            $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\Matcher', $matcher);
+            $this->assertInstanceOf(Matcher::class, $matcher);
         }
     }
 
@@ -118,14 +119,14 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
             )
         );
 
-        $matcher1 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher');
-        $matcher2 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher');
+        $matcher1 = $this->createMock(Matcher::class);
+        $matcher2 = $this->createMock(Matcher::class);
         $this->matcherBuilder
             ->expects($this->exactly(2))
             ->method('buildMatcher')
             ->will($this->onConsecutiveCalls($matcher1, $matcher2));
 
-        $request = $this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest');
+        $request = $this->createMock(SimplifiedRequest::class);
         $matcher1
             ->expects($this->once())
             ->method('setRequest')
@@ -135,7 +136,7 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
             ->method('setRequest')
             ->with($request);
 
-        $compoundMatcher->setRequest($this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest'));
+        $compoundMatcher->setRequest($this->createMock(SimplifiedRequest::class));
         $compoundMatcher->setMatcherBuilder($this->matcherBuilder);
         $compoundMatcher->setRequest($request);
     }
@@ -160,16 +161,16 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
         $this->matcherBuilder
             ->expects($this->any())
             ->method('buildMatcher')
-            ->will($this->returnValue($this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher')));
+            ->will($this->returnValue($this->createMock(VersatileMatcher::class)));
 
-        $compoundMatcher->setRequest($this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest'));
+        $compoundMatcher->setRequest($this->createMock(SimplifiedRequest::class));
         $compoundMatcher->setMatcherBuilder($this->matcherBuilder);
         $this->assertNull($compoundMatcher->reverseMatch('not_configured_sa'));
     }
 
     public function testReverseMatchNotVersatile()
     {
-        $request = $this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest');
+        $request = $this->createMock(SimplifiedRequest::class);
         $siteAccessName = 'fr_eng';
         $mapUriConfig = array('eng' => true);
         $mapHostConfig = array('fr.ezpublish.dev' => true);
@@ -186,8 +187,12 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
         );
         $compoundMatcher->setRequest($request);
 
-        $matcher1 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
-        $matcher2 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher');
+        $matcher1 = $this->createMock(VersatileMatcher::class);
+        $matcher2 = $this->getMockBuilder(Matcher::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['reverseMatch'])
+            ->getMockForAbstractClass();
+
         $this->matcherBuilder
             ->expects($this->exactly(2))
             ->method('buildMatcher')
@@ -204,7 +209,7 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('reverseMatch')
             ->with($siteAccessName)
-            ->will($this->returnValue($this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher')));
+            ->will($this->returnValue($this->createMock(VersatileMatcher::class)));
         $matcher2
             ->expects($this->never())
             ->method('reverseMatch');
@@ -215,7 +220,7 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
 
     public function testReverseMatchFail()
     {
-        $request = $this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest');
+        $request = $this->createMock(SimplifiedRequest::class);
         $siteAccessName = 'fr_eng';
         $mapUriConfig = array('eng' => true);
         $mapHostConfig = array('fr.ezpublish.dev' => true);
@@ -232,8 +237,8 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
         );
         $compoundMatcher->setRequest($request);
 
-        $matcher1 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
-        $matcher2 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
+        $matcher1 = $this->createMock(VersatileMatcher::class);
+        $matcher2 = $this->createMock(VersatileMatcher::class);
         $this->matcherBuilder
             ->expects($this->exactly(2))
             ->method('buildMatcher')
@@ -250,7 +255,7 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('reverseMatch')
             ->with($siteAccessName)
-            ->will($this->returnValue($this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher')));
+            ->will($this->returnValue($this->createMock(VersatileMatcher::class)));
         $matcher2
             ->expects($this->once())
             ->method('reverseMatch')
@@ -263,7 +268,7 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
 
     public function testReverseMatch()
     {
-        $request = $this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest');
+        $request = $this->createMock(SimplifiedRequest::class);
         $siteAccessName = 'fr_eng';
         $mapUriConfig = array('eng' => true);
         $mapHostConfig = array('fr.ezpublish.dev' => true);
@@ -280,8 +285,8 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
         );
         $compoundMatcher->setRequest($request);
 
-        $matcher1 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
-        $matcher2 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
+        $matcher1 = $this->createMock(VersatileMatcher::class);
+        $matcher2 = $this->createMock(VersatileMatcher::class);
         $this->matcherBuilder
             ->expects($this->exactly(2))
             ->method('buildMatcher')
@@ -294,13 +299,13 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $reverseMatchedMatcher1 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
+        $reverseMatchedMatcher1 = $this->createMock(VersatileMatcher::class);
         $matcher1
             ->expects($this->once())
             ->method('reverseMatch')
             ->with($siteAccessName)
             ->will($this->returnValue($reverseMatchedMatcher1));
-        $reverseMatchedMatcher2 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher');
+        $reverseMatchedMatcher2 = $this->createMock(VersatileMatcher::class);
         $matcher2
             ->expects($this->once())
             ->method('reverseMatch')
@@ -309,9 +314,9 @@ class CompoundAndTest extends PHPUnit_Framework_TestCase
 
         $compoundMatcher->setMatcherBuilder($this->matcherBuilder);
         $result = $compoundMatcher->reverseMatch($siteAccessName);
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Compound\LogicalAnd', $result);
+        $this->assertInstanceOf(LogicalAnd::class, $result);
         foreach ($result->getSubMatchers() as $subMatcher) {
-            $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher', $subMatcher);
+            $this->assertInstanceOf(VersatileMatcher::class, $subMatcher);
         }
     }
 

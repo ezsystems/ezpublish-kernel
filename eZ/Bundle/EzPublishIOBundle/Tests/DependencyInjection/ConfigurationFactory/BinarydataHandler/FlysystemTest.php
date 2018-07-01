@@ -9,7 +9,7 @@
 namespace eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\ConfigurationFactory\BinarydataHandler;
 
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory\BinarydataHandler\Flysystem;
-use eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\ConfigurationFactory\BaseFlysystemTest as BaseFlysystemTest;
+use eZ\Bundle\EzPublishIOBundle\Tests\DependencyInjection\ConfigurationFactory\BaseFlysystemTest;
 
 class FlysystemTest extends BaseFlysystemTest
 {

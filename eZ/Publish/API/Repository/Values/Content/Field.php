@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
@@ -19,6 +17,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $fieldDefIdentifier the field definition identifier
  * @property-read $value the value of the field
  * @property-read string $languageCode the language code of the field
+ * @property-read string $fieldTypeIdentifier field type identifier
  */
 class Field extends ValueObject
 {
@@ -51,4 +50,11 @@ class Field extends ValueObject
      * @var string
      */
     protected $languageCode;
+
+    /**
+     * Field type identifier.
+     *
+     * @var string
+     */
+    protected $fieldTypeIdentifier;
 }

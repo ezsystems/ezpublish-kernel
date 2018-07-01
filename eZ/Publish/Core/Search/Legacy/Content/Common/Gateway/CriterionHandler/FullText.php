@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
@@ -133,12 +131,7 @@ class FullText extends CriterionHandler
      */
     protected function tokenizeString($string)
     {
-        return array_filter(
-            array_map(
-                'trim',
-                preg_split('(\\p{Z})u', strtr($string, '\'"', ''))
-            )
-        );
+        return preg_split('/[^\w|*]/u', $string, -1, PREG_SPLIT_NO_EMPTY);
     }
 
     /**
@@ -180,7 +173,7 @@ class FullText extends CriterionHandler
     /**
      * Get subquery to select relevant word IDs.
      *
-     * @uses getStopWordThresholdValue() To get threshold for words we would like to ignore in query.
+     * @uses ::getStopWordThresholdValue() To get threshold for words we would like to ignore in query.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $string

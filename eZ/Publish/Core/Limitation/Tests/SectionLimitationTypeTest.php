@@ -5,12 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
@@ -23,6 +24,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SPISectionHandler;
 
 /**
  * Test Case for LimitationType.
@@ -30,7 +32,7 @@ use eZ\Publish\SPI\Limitation\Type as LimitationType;
 class SectionLimitationTypeTest extends Base
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $sectionHandlerMock;
 
@@ -40,14 +42,7 @@ class SectionLimitationTypeTest extends Base
     public function setUp()
     {
         parent::setUp();
-
-        $this->sectionHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->sectionHandlerMock = $this->createMock(SPISectionHandler::class);
     }
 
     /**
@@ -219,7 +214,7 @@ class SectionLimitationTypeTest extends Base
         $expected = array('test', 'test' => '33');
         $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation', $value);
+        self::assertInstanceOf(SectionLimitation::class, $value);
         self::assertInternalType('array', $value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
@@ -230,21 +225,8 @@ class SectionLimitationTypeTest extends Base
     public function providerForTestEvaluate()
     {
         // Mocks for testing Content & VersionInfo objects, should only be used once because of expect rules.
-        $contentMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            array(),
-            array(),
-            '',
-            false
-        );
-
-        $versionInfoMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentMock = $this->createMock(APIContent::class);
+        $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $contentMock
             ->expects($this->once())
@@ -256,13 +238,7 @@ class SectionLimitationTypeTest extends Base
             ->method('getContentInfo')
             ->will($this->returnValue(new ContentInfo(array('sectionId' => 2))));
 
-        $versionInfoMock2 = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $versionInfoMock2 = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock2
             ->expects($this->once())
@@ -444,7 +420,7 @@ class SectionLimitationTypeTest extends Base
             $object,
             $targets
         );
-        var_dump($v);// intentional, debug in case no exception above
+        var_dump($v); // intentional, debug in case no exception above
     }
 
     /**
@@ -473,7 +449,7 @@ class SectionLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId', $criterion);
+        self::assertInstanceOf(SectionId::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
@@ -492,7 +468,7 @@ class SectionLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\SectionId', $criterion);
+        self::assertInstanceOf(SectionId::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);

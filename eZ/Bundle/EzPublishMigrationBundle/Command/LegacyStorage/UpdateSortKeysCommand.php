@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage;
 
@@ -257,7 +255,7 @@ EOT
                 $output->write("\r");
                 $output->writeln(
                     'Updated Content ' . $content->id . ', version ' . $content->versionInfo->versionNo .
-                    ', field ' . $spiField->id  . ": '" . $spiField->value->sortKey . "' => '" .
+                    ', field ' . $spiField->id . ": '" . $spiField->value->sortKey . "' => '" .
                     $persistenceValue->sortKey . "'"
                 );
                 $output->write("\r");

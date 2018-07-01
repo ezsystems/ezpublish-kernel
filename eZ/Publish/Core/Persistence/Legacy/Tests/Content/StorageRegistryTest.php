@@ -5,13 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
+use eZ\Publish\SPI\FieldType\FieldStorage;
+use eZ\Publish\Core\FieldType\NullStorage;
 
 /**
  * Test case for StorageRegistry.
@@ -19,7 +19,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 class StorageRegistryTest extends TestCase
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::register
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::register
      */
     public function testRegister()
     {
@@ -36,7 +36,7 @@ class StorageRegistryTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
      */
     public function testGetStorage()
     {
@@ -52,14 +52,14 @@ class StorageRegistryTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
-     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\StorageNotFound
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Exception\StorageNotFound
      */
     public function testGetNotFound()
     {
         $registry = new StorageRegistry(array());
         self::assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\NullStorage',
+            NullStorage::class,
             $registry->getStorage('not-found')
         );
     }
@@ -71,8 +71,6 @@ class StorageRegistryTest extends TestCase
      */
     protected function getStorageMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\SPI\\FieldType\\FieldStorage'
-        );
+        return $this->createMock(FieldStorage::class);
     }
 }

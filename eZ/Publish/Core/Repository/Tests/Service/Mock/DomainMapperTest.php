@@ -5,15 +5,16 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Helper\DomainMapper;
-use eZ\Publish\SPI\Persistence\Content\Language as SPILanguage;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 
@@ -28,27 +29,11 @@ class DomainMapperTest extends BaseServiceMockTest
      */
     public function testBuildVersionInfo(SPIVersionInfo $spiVersionInfo, array $languages, array $expected)
     {
-        $i = 0;
         $languageHandlerMock = $this->getLanguageHandlerMock();
-        foreach ($languages as $languageId => $languageCode) {
-            $languageHandlerMock->expects($this->at($i++))
-                ->method('load')
-                ->with($languageId)
-                ->will(
-                    $this->returnValue(
-                        new SPILanguage(
-                            array('id' => $languageId, 'languageCode' => $languageCode)
-                        )
-                    )
-                );
-        }
-
-        if (empty($languages)) {
-            $languageHandlerMock->expects($this->never())->method('load');
-        }
+        $languageHandlerMock->expects($this->never())->method('load');
 
         $versionInfo = $this->getDomainMapper()->buildVersionInfoDomainObject($spiVersionInfo);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\Repository\\Values\\Content\\VersionInfo', $versionInfo);
+        $this->assertInstanceOf(APIVersionInfo::class, $versionInfo);
 
         foreach ($expected as $expectedProperty => $expectedValue) {
             $this->assertAttributeSame(
@@ -97,7 +82,7 @@ class DomainMapperTest extends BaseServiceMockTest
                     array(
                         'status' => SPIVersionInfo::STATUS_ARCHIVED,
                         'contentInfo' => new SPIContentInfo(),
-                        'languageIds' => array(1, 3, 5),
+                        'languageCodes' => array('eng-GB', 'nor-NB', 'fre-FR'),
                     )
                 ),
                 array(1 => 'eng-GB', 3 => 'nor-NB', 5 => 'fre-FR'),
@@ -119,6 +104,64 @@ class DomainMapperTest extends BaseServiceMockTest
         );
     }
 
+    public function providerForBuildLocationDomainObjectsOnSearchResult()
+    {
+        $locationHits = [
+            new Location(['id' => 21, 'contentId' => 32]),
+            new Location(['id' => 22, 'contentId' => 33]),
+        ];
+
+        return [
+            [$locationHits, [32, 33], [], [32 => new ContentInfo(['id' => 32]), 33 => new ContentInfo(['id' => 33])], 0],
+            [$locationHits, [32, 33], ['languages' => ['eng-GB']], [32 => new ContentInfo(['id' => 32])], 1],
+            [$locationHits, [32, 33], ['languages' => ['eng-GB']], [], 2],
+        ];
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Repository\Helper\DomainMapper::buildLocationDomainObjectsOnSearchResult
+     * @dataProvider providerForBuildLocationDomainObjectsOnSearchResult
+     *
+     * @param array $locationHits
+     * @param array $contentIds
+     * @param array $languageFilter
+     * @param array $contentInfoList
+     * @param int $missing
+     */
+    public function testBuildLocationDomainObjectsOnSearchResult(
+        array $locationHits,
+        array $contentIds,
+        array $languageFilter,
+        array $contentInfoList,
+        int $missing
+    ) {
+        $contentHandlerMock = $this->getContentHandlerMock();
+        $contentHandlerMock
+            ->expects($this->once())
+            ->method('loadContentInfoList')
+            ->with($contentIds)
+            ->willReturn($contentInfoList);
+
+        $result = new SearchResult(['totalCount' => 10]);
+        foreach ($locationHits as $locationHit) {
+            $result->searchHits[] = new SearchHit(['valueObject' => $locationHit]);
+        }
+
+        $spiResult = clone $result;
+        $missingLocations = $this->getDomainMapper()->buildLocationDomainObjectsOnSearchResult($result, $languageFilter);
+        $this->assertInternalType('array', $missingLocations);
+
+        if (!$missing) {
+            $this->assertEmpty($missingLocations);
+        } else {
+            $this->assertNotEmpty($missingLocations);
+        }
+
+        $this->assertCount($missing, $missingLocations);
+        $this->assertEquals($spiResult->totalCount - $missing, $result->totalCount);
+        $this->assertCount(count($spiResult->searchHits) - $missing, $result->searchHits);
+    }
+
     /**
      * Returns DomainMapper.
      *
@@ -127,7 +170,7 @@ class DomainMapperTest extends BaseServiceMockTest
     protected function getDomainMapper()
     {
         return new DomainMapper(
-            $this->getPersistenceMockHandler('Content\\Handler'),
+            $this->getContentHandlerMock(),
             $this->getPersistenceMockHandler('Content\\Location\\Handler'),
             $this->getTypeHandlerMock(),
             $this->getLanguageHandlerMock(),
@@ -136,7 +179,15 @@ class DomainMapperTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getContentHandlerMock()
+    {
+        return $this->getPersistenceMockHandler('Content\\Handler');
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLanguageHandlerMock()
     {
@@ -144,7 +195,7 @@ class DomainMapperTest extends BaseServiceMockTest
     }
 
     /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTypeHandlerMock()
     {

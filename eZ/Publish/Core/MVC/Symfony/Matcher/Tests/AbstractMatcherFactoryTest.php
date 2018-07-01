@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
@@ -14,12 +12,13 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
+use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
+abstract class AbstractMatcherFactoryTest extends TestCase
 {
     /**
      * Returns a valid ValueObject (supported by current MatcherFactory), that will match the test rules.
@@ -57,7 +56,7 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      *
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::match
@@ -162,20 +161,17 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
-        return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(Repository::class);
     }
 
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
     protected function getContentView(array $contentInfoProperties = [], array $locationProperties = [])
     {
@@ -199,7 +195,7 @@ abstract class AbstractMatcherFactoryTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $blockProperties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\BlockView
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\BlockView
      */
     protected function getBlockView(array $blockProperties = array())
     {

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway;
 
@@ -41,7 +39,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::__construct
      */
     public function testCtor()
     {
@@ -56,7 +54,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertGroup
      */
     public function testInsertGroup()
     {
@@ -118,7 +116,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -211,7 +209,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countTypesInGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countTypesInGroup
      */
     public function testCountTypesInGroup()
     {
@@ -232,7 +230,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countGroupsForType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countGroupsForType
      */
     public function testCountGroupsForType()
     {
@@ -253,7 +251,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroup
      */
     public function testDeleteGroup()
     {
@@ -278,8 +276,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
      */
     public function testLoadGroupData()
     {
@@ -288,7 +286,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getGateway();
-        $data = $gateway->loadGroupData(2);
+        $data = $gateway->loadGroupData([2]);
 
         $this->assertEquals(
             array(
@@ -306,8 +304,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupDataByIdentifier
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupDataByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
      */
     public function testLoadGroupDataByIdentifier()
     {
@@ -334,8 +332,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadAllGroupsData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadAllGroupsData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::createGroupLoadQuery
      */
     public function testLoadAllGroupsData()
     {
@@ -365,7 +363,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypesDataForGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypesDataForGroup
      */
     public function testLoadTypesDataForGroup()
     {
@@ -383,9 +381,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
      */
     public function testLoadTypeData()
     {
@@ -416,9 +414,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeDataByIdentifier
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeDataByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
      */
     public function testLoadTypeDataByIdentifier()
     {
@@ -440,9 +438,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeDataByRemoteId
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadTypeDataByRemoteId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::getLoadTypeQuery
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::selectColumns
      */
     public function testLoadTypeDataByRemoteId()
     {
@@ -493,9 +491,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @dataProvider getTypeCreationExpectations
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertType
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertTypeNameData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertTypeNameData
      */
     public function testInsertType($column, $expectation)
     {
@@ -532,8 +530,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @dataProvider getTypeCreationContentClassNameExpectations
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertType
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
      */
     public function testInsertTypeContentClassName($column, $expectation)
     {
@@ -593,8 +591,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertFieldDefinition
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonFieldColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonFieldColumns
      */
     public function testInsertFieldDefinition()
     {
@@ -738,7 +736,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinition
      */
     public function testDeleteFieldDefinition()
     {
@@ -760,8 +758,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateFieldDefinition
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonFieldColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonFieldColumns
      */
     public function testUpdateFieldDefinition()
     {
@@ -837,8 +835,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertGroupAssignment
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertGroupAssignment
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::loadGroupData
      */
     public function testInsertGroupAssignment()
     {
@@ -871,7 +869,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignment
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignment
      */
     public function testDeleteGroupAssignment()
     {
@@ -895,8 +893,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateType
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::setCommonTypeColumns
      * @dataProvider getTypeUpdateExpectations
      */
     public function testUpdateType($fieldName, $expectedValue)
@@ -928,9 +926,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteTypeNameData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertTypeNameData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteTypeNameData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertTypeNameData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::updateType
      */
     public function testUpdateTypeName()
     {
@@ -1029,7 +1027,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countInstancesOfType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countInstancesOfType
      */
     public function testCountInstancesOfTypeExist()
     {
@@ -1048,7 +1046,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countInstancesOfType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::countInstancesOfType
      */
     public function testCountInstancesOfTypeNotExist()
     {
@@ -1067,7 +1065,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinitionsForType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinitionsForType
      */
     public function testDeleteFieldDefinitionsForTypeExisting()
     {
@@ -1108,7 +1106,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinitionsForType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteFieldDefinitionsForType
      */
     public function testDeleteFieldDefinitionsForTypeNotExisting()
     {
@@ -1132,7 +1130,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignmentsForType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignmentsForType
      */
     public function testDeleteGroupAssignmentsForTypeExisting()
     {
@@ -1156,7 +1154,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignmentsForType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteGroupAssignmentsForType
      */
     public function testDeleteGroupAssignmentsForTypeNotExisting()
     {
@@ -1180,7 +1178,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteType
      */
     public function testDeleteTypeExisting()
     {
@@ -1204,7 +1202,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::deleteType
      */
     public function testDeleteTypeNotExisting()
     {
@@ -1228,7 +1226,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::publishTypeAndFields
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::publishTypeAndFields
      */
     public function testPublishTypeAndFields()
     {
@@ -1282,6 +1280,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         if (!isset($this->gateway)) {
             $this->gateway = new DoctrineDatabase(
                 $this->getDatabaseHandler(),
+                $this->getDatabaseConnection(),
                 $this->getLanguageMaskGenerator()
             );
         }

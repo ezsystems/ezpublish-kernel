@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
@@ -65,7 +63,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -79,9 +77,7 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\BinaryFileConverter(),
             new FieldType\BinaryFile\BinaryFileStorage(
-                array(
-                    'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),
-                ),
+                new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage($this->getDatabaseHandler()),
                 $this->ioService,
                 new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()

@@ -5,21 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Routing\OptionsLoader;
 
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\Mapper;
 use eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
 /**
- * @covers eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper
+ * @covers \eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader\RouteCollectionMapper
  */
-class RouteCollectionMapperTest extends PHPUnit_Framework_TestCase
+class RouteCollectionMapperTest extends TestCase
 {
     /** @var RouteCollectionMapper */
     protected $collectionMapper;
@@ -46,12 +44,12 @@ class RouteCollectionMapperTest extends PHPUnit_Framework_TestCase
         );
 
         self::assertInstanceOf(
-            'Symfony\Component\Routing\Route',
+            Route::class,
             $optionsRouteCollection->get('ezpublish_rest_options_route_one')
         );
 
         self::assertInstanceOf(
-            'Symfony\Component\Routing\Route',
+            Route::class,
             $optionsRouteCollection->get('ezpublish_rest_options_route_two')
         );
 

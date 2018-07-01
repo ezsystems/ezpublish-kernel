@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client;
@@ -14,6 +12,7 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\TrashService as APITrashService;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Trash\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\REST\Common\RequestParser;
@@ -111,6 +110,7 @@ class TrashService implements APITrashService, Sessionable
     /**
      * Sends $location and all its children to trash and returns the corresponding trash item.
      *
+     * The current user may not have access to the returned trash item, check before using it.
      * Content is left untouched.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
@@ -197,13 +197,13 @@ class TrashService implements APITrashService, Sessionable
     }
 
     /**
-     * Returns a collection of Trashed locations contained in the trash.
+     * Returns a collection of Trashed locations contained in the trash, which are readable by the current user.
      *
      * $query allows to filter/sort the elements to be contained in the collection.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\SearchResult
      */
     public function findTrashItems(Query $query)
     {
@@ -222,7 +222,11 @@ class TrashService implements APITrashService, Sessionable
             $trashItems[] = $this->buildTrashItem($location);
         }
 
-        return $trashItems;
+
+        return new SearchResult([
+            'items' => $trashItems,
+            'totalCount' => count($trashItems),
+        ]);
     }
 
     /**

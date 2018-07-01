@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
@@ -39,7 +37,7 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
      * @param int|null $declaredPriority
      * @param int $expectedPriority
      *
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass::process
      * @dataProvider addRouterProvider
      */
     public function testAddRouter($declaredPriority, $expectedPriority)
@@ -66,7 +64,7 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
      * @param int|null $declaredPriority
      * @param int $expectedPriority
      *
-     * @covers eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass::process
+     * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ChainRoutingPass::process
      * @dataProvider addRouterProvider
      */
     public function testAddRouterWithDefaultRouter($declaredPriority, $expectedPriority)

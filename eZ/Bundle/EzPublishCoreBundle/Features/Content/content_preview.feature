@@ -6,7 +6,7 @@ Feature: Preview of content drafts
 
     Scenario: Previewing the first version of a content item works
         Given I have "administrator" permissions
-          And I create an article draft
+          And I create an folder draft
          When I preview this draft
          Then the output is valid
 

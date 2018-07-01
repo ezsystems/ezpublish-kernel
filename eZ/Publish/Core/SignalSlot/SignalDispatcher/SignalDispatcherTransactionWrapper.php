@@ -116,6 +116,6 @@ class SignalDispatcherTransactionWrapper extends SignalDispatcher implements Tra
 
         --$this->transactionDepth;
         unset($this->signalsQueue[$this->transactionCount]);
-        --$this->transactionCount;// In case several rollbacks will happen on hierarchical transactions.
+        --$this->transactionCount; // In case several rollbacks will happen on hierarchical transactions.
     }
 }

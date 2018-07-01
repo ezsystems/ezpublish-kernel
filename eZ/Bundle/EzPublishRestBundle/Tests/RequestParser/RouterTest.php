@@ -5,18 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\RequestParser;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Bundle\EzPublishRestBundle\RequestParser\Router as RouterRequestParser;
+use Symfony\Cmf\Component\Routing\ChainRouter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\RequestContext;
 
-class RouterTest extends PHPUnit_Framework_TestCase
+class RouterTest extends TestCase
 {
     /**
      * @var \Symfony\Cmf\Component\Routing\ChainRouter
@@ -149,12 +148,12 @@ class RouterTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Symfony\Cmf\Component\Routing\ChainRouter|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Symfony\Cmf\Component\Routing\ChainRouter|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getRouterMock()
     {
         if (!isset($this->router)) {
-            $this->router = $this->getMock('Symfony\\Cmf\\Component\\Routing\\ChainRouter');
+            $this->router = $this->createMock(ChainRouter::class);
 
             $this->router
                 ->expects($this->any())

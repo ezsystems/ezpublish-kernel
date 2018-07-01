@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map;
 
@@ -25,7 +23,7 @@ class URI extends Map implements URILexer
     {
         if (!$this->key) {
             sscanf($request->pathinfo, '/%[^/]', $key);
-            $this->setMapKey($key);
+            $this->setMapKey(rawurldecode($key));
         }
 
         parent::setRequest($request);
@@ -49,7 +47,11 @@ class URI extends Map implements URILexer
             return '/';
         }
 
-        return substr($uri, strlen($siteaccessPart));
+        if (mb_strpos($uri, $siteaccessPart) === 0) {
+            return mb_substr($uri, mb_strlen($siteaccessPart));
+        }
+
+        return $uri;
     }
 
     /**

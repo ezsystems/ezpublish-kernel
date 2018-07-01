@@ -5,12 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageName;
+use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
 
 /**
  * this class represents a content type value.
@@ -27,14 +27,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $remoteId a global unique id of the content object
  * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
  * @property-read string $nameSchema  The name schema.
- * @property-read boolean $isContainer This flag hints to UIs if type may have children or not.
+ * @property-read bool $isContainer This flag hints to UIs if type may have children or not.
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
- * @property-read boolean $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
+ * @property-read bool $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
  *
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
-abstract class ContentType extends ValueObject
+abstract class ContentType extends ValueObject implements MultiLanguageName, MultiLanguageDescription
 {
     /**
      * @var int Status constant for defined (aka "published") Type
@@ -64,49 +64,6 @@ abstract class ContentType extends ValueObject
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
     protected $status;
-
-    /**
-     * This method returns the human readable name in all provided languages
-     * of the content type.
-     *
-     * The structure of the return value is:
-     * <code>
-     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    abstract public function getNames();
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the name for the given language or null if none exists.
-     */
-    abstract public function getName($languageCode);
-
-    /**
-     * This method returns the human readable description of the content type.
-     *
-     * The structure of this field is:
-     * <code>
-     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
-     * </code>
-     *
-     * @return string[]
-     */
-    abstract public function getDescriptions();
-
-    /**
-     * This method returns the name of the content type in the given language.
-     *
-     * @param string $languageCode
-     *
-     * @return string the description for the given language or null if none exists.
-     */
-    abstract public function getDescription($languageCode);
 
     /**
      * String identifier of a content type.
@@ -181,13 +138,6 @@ abstract class ContentType extends ValueObject
     protected $isContainer;
 
     /**
-     * Main language.
-     *
-     * @var string
-     */
-    protected $mainLanguageCode;
-
-    /**
      * If an instance of a content type is created the always available flag is set
      * by default to this value.
      *
@@ -200,7 +150,7 @@ abstract class ContentType extends ValueObject
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
-     * @var mixed
+     * @var int
      */
     protected $defaultSortField;
 
@@ -209,7 +159,7 @@ abstract class ContentType extends ValueObject
      *
      * Valid values are {@link Location::SORT_ORDER_*}
      *
-     * @var mixed
+     * @var int
      */
     protected $defaultSortOrder;
 

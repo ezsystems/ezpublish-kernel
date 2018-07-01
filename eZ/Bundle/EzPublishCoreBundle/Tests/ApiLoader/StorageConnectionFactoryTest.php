@@ -5,15 +5,16 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageConnectionFactory;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 
-class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
+class StorageConnectionFactoryTest extends TestCase
 {
     /**
      * @dataProvider getConnectionProvider
@@ -29,14 +30,14 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $configResolver = $this->getConfigResolverMock();
         $configResolver
             ->expects($this->once())
             ->method('getParameter')
             ->with('repository')
             ->will($this->returnValue($repositoryAlias));
 
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $container
             ->expects($this->once())
             ->method('has')
@@ -81,7 +82,7 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
+        $configResolver = $this->getConfigResolverMock();
         $configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -90,7 +91,7 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 
         $repositoryConfigurationProvider = new RepositoryConfigurationProvider($configResolver, $repositories);
         $factory = new StorageConnectionFactory($repositoryConfigurationProvider);
-        $factory->setContainer($this->getMock('Symfony\Component\DependencyInjection\ContainerInterface'));
+        $factory->setContainer($this->getContainerMock());
         $factory->getConnection();
     }
 
@@ -99,9 +100,7 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConnectionInvalidConnection()
     {
-        $repositoryConfigurationProviderMock = $this->getMockBuilder('eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $repositoryConfigurationProviderMock = $this->createMock(RepositoryConfigurationProvider::class);
         $repositoryConfig = array(
             'alias' => 'foo',
             'storage' => array(
@@ -114,7 +113,7 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('getRepositoryConfig')
             ->will($this->returnValue($repositoryConfig));
 
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
+        $container = $this->getContainerMock();
         $container
             ->expects($this->once())
             ->method('has')
@@ -128,5 +127,15 @@ class StorageConnectionFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new StorageConnectionFactory($repositoryConfigurationProviderMock);
         $factory->setContainer($container);
         $factory->getConnection();
+    }
+
+    protected function getConfigResolverMock()
+    {
+        return $this->createMock(ConfigResolverInterface::class);
+    }
+
+    protected function getContainerMock()
+    {
+        return $this->createMock(ContainerInterface::class);
     }
 }

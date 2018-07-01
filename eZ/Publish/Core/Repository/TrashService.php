@@ -5,13 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Trash\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use DateTime;
@@ -32,7 +32,7 @@ use Exception;
 class TrashService implements TrashServiceInterface
 {
     /**
-     * @var \eZ\Publish\API\Repository\Repository
+     * @var \eZ\Publish\Core\Repository\Repository
      */
     protected $repository;
 
@@ -93,7 +93,10 @@ class TrashService implements TrashServiceInterface
         }
 
         $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem($trashItemId);
-        $trash = $this->buildDomainTrashItemObject($spiTrashItem);
+        $trash = $this->buildDomainTrashItemObject(
+            $spiTrashItem,
+            $this->repository->getContentService()->internalLoadContent($spiTrashItem->contentId)
+        );
         if (!$this->repository->canUser('content', 'read', $trash->getContentInfo())) {
             throw new UnauthorizedException('content', 'read');
         }
@@ -104,6 +107,7 @@ class TrashService implements TrashServiceInterface
     /**
      * Sends $location and all its children to trash and returns the corresponding trash item.
      *
+     * The current user may not have access to the returned trash item, check before using it.
      * Content is left untouched.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
@@ -118,8 +122,8 @@ class TrashService implements TrashServiceInterface
             throw new InvalidArgumentValue('id', $location->id, 'Location');
         }
 
-        if ($this->repository->canUser('content', 'manage_locations', $location->getContentInfo(), $location) !== true) {
-            throw new UnauthorizedException('content', 'manage_locations');
+        if (!$this->repository->canUser('content', 'remove', $location->getContentInfo(), $location)) {
+            throw new UnauthorizedException('content', 'remove');
         }
 
         $this->repository->beginTransaction();
@@ -132,9 +136,17 @@ class TrashService implements TrashServiceInterface
             throw $e;
         }
 
-        return isset($spiTrashItem)
-            ? $this->buildDomainTrashItemObject($spiTrashItem)
-            : null;
+        // Use internalLoadContent() as we want a trash item regardless of user access to the trash or not.
+        try {
+            return isset($spiTrashItem)
+                ? $this->buildDomainTrashItemObject(
+                    $spiTrashItem,
+                    $this->repository->getContentService()->internalLoadContent($spiTrashItem->contentId)
+                )
+                : null;
+        } catch (Exception $e) {
+            return null;
+        }
     }
 
     /**
@@ -253,13 +265,13 @@ class TrashService implements TrashServiceInterface
     }
 
     /**
-     * Returns a collection of Trashed locations contained in the trash.
+     * Returns a collection of Trashed locations contained in the trash, which are readable by the current user.
      *
      * $query allows to filter/sort the elements to be contained in the collection.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\SearchResult
      */
     public function findTrashItems(Query $query)
     {
@@ -288,37 +300,44 @@ class TrashService implements TrashServiceInterface
         }
 
         $spiTrashItems = $this->persistenceHandler->trashHandler()->findTrashItems(
-            $query->filter !== null ? $query->filter : null,
+            $query->filter,
             $query->offset !== null && $query->offset > 0 ? (int)$query->offset : 0,
             $query->limit !== null && $query->limit >= 1 ? (int)$query->limit : null,
-            $query->sortClauses !== null ? $query->sortClauses : null
+            $query->sortClauses
         );
 
-        $trashItems = array();
-        foreach ($spiTrashItems as $spiTrashItem) {
-            $trashItems[] = $this->buildDomainTrashItemObject($spiTrashItem);
-        }
-
+        $trashItems = $this->buildDomainTrashItems($spiTrashItems);
         $searchResult = new SearchResult();
-        $searchResult->count = count($trashItems);
+        $searchResult->totalCount = $searchResult->count = count($trashItems);
         $searchResult->items = $trashItems;
-        $searchResult->query = $query;
 
         return $searchResult;
     }
 
-    /**
-     * Builds the domain TrashItem object from provided persistence trash item.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $spiTrashItem
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
-     */
-    protected function buildDomainTrashItemObject(Trashed $spiTrashItem)
+    protected function buildDomainTrashItems(array $spiTrashItems): array
+    {
+        $trashItems = array();
+        // TODO: load content in bulk once API allows for it
+        foreach ($spiTrashItems as $spiTrashItem) {
+            try {
+                $trashItems[] = $this->buildDomainTrashItemObject(
+                    $spiTrashItem,
+                    $this->repository->getContentService()->loadContent($spiTrashItem->contentId)
+                );
+            } catch (APIUnauthorizedException $e) {
+                // Do nothing, thus exclude items the current user doesn't have read access to.
+            }
+        }
+
+        return $trashItems;
+    }
+
+    protected function buildDomainTrashItemObject(Trashed $spiTrashItem, Content $content): APITrashItem
     {
         return new TrashItem(
             array(
-                'contentInfo' => $this->repository->getContentService()->loadContentInfo($spiTrashItem->contentId),
+                'content' => $content,
+                'contentInfo' => $content->contentInfo,
                 'id' => $spiTrashItem->id,
                 'priority' => $spiTrashItem->priority,
                 'hidden' => $spiTrashItem->hidden,

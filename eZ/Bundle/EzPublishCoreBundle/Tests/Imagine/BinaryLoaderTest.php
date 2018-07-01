@@ -5,27 +5,29 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\MissingBinaryFile;
+use Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException;
 use Liip\ImagineBundle\Model\Binary;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 
-class BinaryLoaderTest extends PHPUnit_Framework_TestCase
+class BinaryLoaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $ioService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $extensionGuesser;
 
@@ -37,8 +39,8 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->ioService = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
-        $this->extensionGuesser = $this->getMock('Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface');
+        $this->ioService = $this->createMock(IOServiceInterface::class);
+        $this->extensionGuesser = $this->createMock(ExtensionGuesserInterface::class);
         $this->binaryLoader = new BinaryLoader($this->ioService, $this->extensionGuesser);
     }
 
@@ -70,6 +72,25 @@ class BinaryLoaderTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(new MissingBinaryFile()));
 
         $this->binaryLoader->find($path);
+    }
+
+    public function testFindBadPathRoot()
+    {
+        $path = 'var/site/storage/images/1/2/3/123-name/name.png';
+        $this->ioService
+            ->expects($this->once())
+            ->method('loadBinaryFile')
+            ->with($path)
+            ->will($this->throwException(new InvalidBinaryFileIdException($path)));
+
+        try {
+            $this->binaryLoader->find($path);
+        } catch (NotLoadableException $e) {
+            $this->assertContains(
+                "Suggested value: '1/2/3/123-name/name.png'",
+                $e->getMessage()
+            );
+        }
     }
 
     public function testFind()

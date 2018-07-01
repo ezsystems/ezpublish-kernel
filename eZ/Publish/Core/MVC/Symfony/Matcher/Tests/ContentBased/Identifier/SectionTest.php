@@ -5,11 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Identifier;
 
+use eZ\Publish\API\Repository\SectionService;
+use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\Section as SectionIdentifierMatcher;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
@@ -32,20 +32,17 @@ class SectionTest extends BaseTest
      *
      * @param string $sectionIdentifier
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForSectionIdentifier($sectionIdentifier)
     {
-        $sectionServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\SectionService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $sectionServiceMock = $this->createMock(SectionService::class);
         $sectionServiceMock->expects($this->once())
             ->method('loadSection')
             ->will(
                 $this->returnValue(
                     $this
-                        ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Section')
+                        ->getMockBuilder(Section::class)
                         ->setConstructorArgs(
                             array(
                                 array('identifier' => $sectionIdentifier),
@@ -60,6 +57,10 @@ class SectionTest extends BaseTest
             ->expects($this->once())
             ->method('getSectionService')
             ->will($this->returnValue($sectionServiceMock));
+        $repository
+            ->expects($this->any())
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         return $repository;
     }
@@ -121,8 +122,8 @@ class SectionTest extends BaseTest
 
     /**
      * @dataProvider matchSectionProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\Section::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Identifier\Section::matchContentInfo
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
      * @param string|string[] $matchingConfig

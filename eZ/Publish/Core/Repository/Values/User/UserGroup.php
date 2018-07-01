@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\User;
 
@@ -14,6 +12,8 @@ use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
 
 /**
  * This class represents a user group.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class UserGroup extends APIUserGroup
 {
@@ -95,13 +95,13 @@ class UserGroup extends APIUserGroup
      *
      * Override to add dynamic properties
      *
-     * @uses parent::getProperties()
+     * @uses \parent::getProperties()
      *
      * @param array $dynamicProperties
      *
      * @return array
      */
-    protected function getProperties($dynamicProperties = array('id', 'contentInfo'))
+    protected function getProperties($dynamicProperties = ['id', 'contentInfo', 'versionInfo', 'fields'])
     {
         return parent::getProperties($dynamicProperties);
     }
@@ -120,18 +120,20 @@ class UserGroup extends APIUserGroup
                 return $this->getVersionInfo()->getContentInfo();
 
             case 'id':
-                $versionInfo = $this->getVersionInfo();
-                if (empty($versionInfo)) {
-                    return null;
-                }
-
-                return $versionInfo->getContentInfo()->id;
+                return $this->getVersionInfo()->getContentInfo()->id;
 
             case 'versionInfo':
                 return $this->getVersionInfo();
 
             case 'fields':
                 return $this->getFields();
+
+            case 'content':
+                // trigger error for this, but for BC let it pass on to normal __get lookup for now
+                @trigger_error(
+                    sprintf('%s is and internal property, usage is deprecated as of 6.10. UserGroup itself exposes everything needed.', $property),
+                    E_USER_DEPRECATED
+                );
         }
 
         return parent::__get($property);

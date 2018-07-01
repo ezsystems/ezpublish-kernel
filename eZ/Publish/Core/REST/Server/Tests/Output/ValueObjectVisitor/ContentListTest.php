@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
@@ -112,7 +110,7 @@ class ContentListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\Rest\\Server\\Values\\RestContent'));
+            ->with($this->isInstanceOf(RestContent::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler;
 
@@ -60,7 +58,7 @@ class Collection extends Handler
         switch ($criterion->operator) {
             case Criterion\Operator::CONTAINS:
                 $quotedColumn = $this->dbHandler->quoteColumn($column);
-                $value = $this->lowerCase($criterion->value);
+                $value = $this->prepareLikeString($criterion->value);
                 $filter = $query->expr->lOr(
                     array(
                         $query->expr->eq(

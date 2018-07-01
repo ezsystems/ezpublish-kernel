@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Limitation;
 
@@ -30,7 +28,7 @@ interface Type
      * Currently ACCESS_ABSTAIN must mean that evaluate does not support the provided $object or $targets,
      * this is currently only supported by role limitations as policy limitations should not allow this.
      *
-     * @note In future version constant values might change to 1, 0 and -1 as used in Symfony.
+     * Note: In future version constant values might change to 1, 0 and -1 as used in Symfony.
      *
      * @since 5.3.2
      */
@@ -88,7 +86,7 @@ interface Type
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
      *         However if $object or $targets is unsupported by ROLE limitation, ACCESS_ABSTAIN should be returned!
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
-     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
+     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
@@ -109,7 +107,7 @@ interface Type
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface|\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser);
 

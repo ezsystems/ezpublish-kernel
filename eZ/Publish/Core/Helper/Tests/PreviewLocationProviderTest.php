@@ -5,24 +5,27 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Helper\Tests;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as SPILocationHandler;
+use PHPUnit\Framework\TestCase;
 
-class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
+class PreviewLocationProviderTest extends TestCase
 {
-    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject */
     private $contentService;
 
-    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject */
     private $locationService;
 
-    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $locationHandler;
 
     /** @var \eZ\Publish\Core\Helper\PreviewLocationProvider */
@@ -32,9 +35,9 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->contentService = $this->getMock('eZ\Publish\API\Repository\ContentService');
-        $this->locationService = $this->getMock('eZ\Publish\API\Repository\LocationService');
-        $this->locationHandler = $this->getMock('eZ\Publish\SPI\Persistence\Content\Location\Handler');
+        $this->contentService = $this->createMock(ContentService::class);
+        $this->locationService = $this->createMock(LocationService::class);
+        $this->locationHandler = $this->createMock(SPILocationHandler::class);
         $this->provider = new PreviewLocationProvider($this->locationService, $this->contentService, $this->locationHandler);
     }
 
@@ -44,7 +47,7 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
         $parentLocationId = 456;
 
         $contentInfo = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\ContentInfo')
+            ->getMockBuilder(APIContentInfo::class)
             ->setConstructorArgs(array(array('id' => $contentId)))
             ->getMockForAbstractClass();
 
@@ -65,7 +68,7 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(array(new Location(array('id' => $parentLocationId)))));
 
         $location = $this->provider->loadMainLocation($contentId);
-        $this->assertInstanceOf('eZ\Publish\API\Repository\Values\Content\Location', $location);
+        $this->assertInstanceOf(APILocation::class, $location);
         $this->assertSame($contentInfo, $location->contentInfo);
         $this->assertNull($location->id);
         $this->assertEquals($parentLocationId, $location->parentLocationId);
@@ -76,11 +79,11 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
         $contentId = 123;
         $locationId = 456;
         $contentInfo = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\ContentInfo')
+            ->getMockBuilder(APIContentInfo::class)
             ->setConstructorArgs(array(array('id' => $contentId, 'mainLocationId' => $locationId)))
             ->getMockForAbstractClass();
         $location = $this
-            ->getMockBuilder('eZ\Publish\Core\Repository\Values\Content\Location')
+            ->getMockBuilder(Location::class)
             ->setConstructorArgs(array(array('id' => $locationId, 'contentInfo' => $contentInfo)))
             ->getMockForAbstractClass();
         $this->contentService
@@ -105,7 +108,7 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
         $contentId = 123;
 
         $contentInfo = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\ContentInfo')
+            ->getMockBuilder(APIContentInfo::class)
             ->setConstructorArgs(array(array('id' => $contentId)))
             ->getMockForAbstractClass();
         $this->contentService
@@ -119,7 +122,7 @@ class PreviewLocationProviderTest extends PHPUnit_Framework_TestCase
             ->with($contentId)
             ->will($this->returnValue(array()));
 
-        $this->locationHandler->expects($this->never())->method('loadLocation');
+        $this->locationHandler->expects($this->never())->method('loadLocationsByContent');
 
         $this->assertNull($this->provider->loadMainLocation($contentId));
     }

@@ -5,18 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 
 /**
  * Mapper for Content Type Handler.
@@ -140,8 +139,8 @@ class Mapper
 
         $type->id = (int)$row['ezcontentclass_id'];
         $type->status = (int)$row['ezcontentclass_version'];
-        $type->name = unserialize($row['ezcontentclass_serialized_name_list']);
-        $type->description = unserialize($row['ezcontentclass_serialized_description_list']);
+        $type->name = $this->unserialize($row['ezcontentclass_serialized_name_list']);
+        $type->description = $this->unserialize($row['ezcontentclass_serialized_description_list']);
         // Unset redundant data
         unset(
             $type->name['always-available'],
@@ -183,8 +182,8 @@ class Mapper
         $field = new FieldDefinition();
 
         $field->id = (int)$row['ezcontentclass_attribute_id'];
-        $field->name = unserialize($row['ezcontentclass_attribute_serialized_name_list']);
-        $field->description = unserialize($row['ezcontentclass_attribute_serialized_description_list']);
+        $field->name = $this->unserialize($row['ezcontentclass_attribute_serialized_name_list']);
+        $field->description = $this->unserialize($row['ezcontentclass_attribute_serialized_description_list']);
         // Unset redundant data
         unset(
             $field->name['always-available'],
@@ -319,6 +318,34 @@ class Mapper
     }
 
     /**
+     * Creates an update struct from an existing $type.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct
+     */
+    public function createUpdateStructFromType(Type $type)
+    {
+        $updateStruct = new UpdateStruct();
+
+        $updateStruct->name = $type->name;
+        $updateStruct->description = $type->description;
+        $updateStruct->identifier = $type->identifier;
+        $updateStruct->modified = $type->modified;
+        $updateStruct->modifierId = $type->modifierId;
+        $updateStruct->remoteId = $type->remoteId;
+        $updateStruct->urlAliasSchema = $type->urlAliasSchema;
+        $updateStruct->nameSchema = $type->nameSchema;
+        $updateStruct->isContainer = $type->isContainer;
+        $updateStruct->initialLanguageId = $type->initialLanguageId;
+        $updateStruct->defaultAlwaysAvailable = $type->defaultAlwaysAvailable;
+        $updateStruct->sortField = $type->sortField;
+        $updateStruct->sortOrder = $type->sortOrder;
+
+        return $updateStruct;
+    }
+
+    /**
      * Maps $fieldDef to the legacy storage specific StorageFieldDefinition.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
@@ -354,5 +381,20 @@ class Mapper
             $storageFieldDef,
             $fieldDef
         );
+    }
+
+    /**
+     * Wrap unserialize to set default value in case of empty serialization.
+     *
+     * @param string $serialized Serialized structure to process
+     * @param mixed $default Default value in case of empty serialization
+     *
+     * @return array|mixed
+     */
+    protected function unserialize($serialized, $default = [])
+    {
+        return $serialized
+            ? unserialize($serialized)
+            : $default;
     }
 }

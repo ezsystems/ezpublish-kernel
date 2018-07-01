@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
@@ -65,7 +63,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -77,9 +75,7 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\MediaConverter(),
             new FieldType\Media\MediaStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Media\MediaStorage\Gateway\LegacyStorage(),
-                ),
+                new FieldType\Media\MediaStorage\Gateway\LegacyStorage($this->getDatabaseHandler()),
                 $this->ioService = self::$container->get('ezpublish.fieldType.ezbinaryfile.io_service'),
                 $legacyPathGenerator = new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()
@@ -183,8 +179,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull($field->value->externalData);
 
-        $this->assertTrue(
-            file_exists($path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id']),
+        $this->assertFileExists(
+            $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'],
             "Stored file $path does not exists"
         );
 
@@ -244,8 +240,8 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     {
         $this->assertNotNull($field->value->externalData);
 
-        $this->assertTrue(
-            file_exists($path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id']),
+        $this->assertFileExists(
+            $path = $this->getStorageDir() . '/' . $this->getStoragePrefix() . '/' . $field->value->externalData['id'],
             "Stored file $path does not exists"
         );
 

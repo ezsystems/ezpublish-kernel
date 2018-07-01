@@ -5,50 +5,60 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Security;
 
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\REST\Server\Security\RestAuthenticator;
 use eZ\Publish\Core\MVC\Symfony\Security\User as EzUser;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
+use Symfony\Component\Security\Http\Logout\SessionLogoutHandler;
 use Symfony\Component\Security\Http\SecurityEvents;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
 
-class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
+class RestSessionBasedAuthenticatorTest extends TestCase
 {
     const PROVIDER_KEY = 'test_key';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $tokenStorage;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $authenticationManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $eventDispatcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionStorage;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -60,12 +70,12 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
-        $this->authenticationManager = $this->getMock('Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface');
-        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->sessionStorage = $this->getMock('Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface');
-        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $this->authenticationManager = $this->createMock(AuthenticationManagerInterface::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->sessionStorage = $this->createMock(SessionStorageInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->authenticator = new RestAuthenticator(
             $this->tokenStorage,
             $this->authenticationManager,
@@ -82,7 +92,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $existingToken = $this->getTokenInterfaceMock();
         $this->tokenStorage
             ->expects($this->once())
             ->method('getToken')
@@ -112,7 +122,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $existingToken = $this->getTokenInterfaceMock();
         $this->tokenStorage
             ->expects($this->once())
             ->method('getToken')
@@ -149,7 +159,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $existingToken = $this->getTokenInterfaceMock();
         $existingToken
             ->expects($this->once())
             ->method('getUsername')
@@ -160,10 +170,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $request->attributes->set('password', $password);
 
         $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
-        $authenticatedToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $authenticatedToken = $this->getUsernamePasswordTokenMock();
         $this->authenticationManager
             ->expects($this->once())
             ->method('authenticate')
@@ -209,11 +216,10 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
      */
     private function createUser($userId)
     {
-        $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
+        $apiUser = $this->createMock(User::class);
         $apiUser
             ->expects($this->any())
-            ->method('__get')
-            ->with('id')
+            ->method('getUserId')
             ->will($this->returnValue($userId));
 
         return new EzUser($apiUser);
@@ -228,10 +234,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $password = 'publish';
 
         $existingUser = $this->createUser(123);
-        $existingToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $existingToken = $this->getUsernamePasswordTokenMock();
         $existingToken
             ->expects($this->once())
             ->method('getUsername')
@@ -246,10 +249,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $request->attributes->set('password', $password);
 
         $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
-        $authenticatedToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $authenticatedToken = $this->getUsernamePasswordTokenMock();
         $this->authenticationManager
             ->expects($this->once())
             ->method('authenticate')
@@ -303,10 +303,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
 
         $anonymousUserId = 10;
         $existingUser = $this->createUser($anonymousUserId);
-        $existingToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $existingToken = $this->getUsernamePasswordTokenMock();
         $existingToken
             ->expects($this->once())
             ->method('getUsername')
@@ -321,10 +318,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $request->attributes->set('password', $password);
 
         $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
-        $authenticatedToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $authenticatedToken = $this->getUsernamePasswordTokenMock();
         $this->authenticationManager
             ->expects($this->once())
             ->method('authenticate')
@@ -372,7 +366,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $existingToken = $this->getTokenInterfaceMock();
         $existingToken
             ->expects($this->once())
             ->method('getUsername')
@@ -383,10 +377,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $request->attributes->set('password', $password);
 
         $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
-        $authenticatedToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $authenticatedToken = $this->getUsernamePasswordTokenMock();
         $this->authenticationManager
             ->expects($this->once())
             ->method('authenticate')
@@ -428,11 +419,8 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
-        $existingToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $existingUser = $this->createMock(UserInterface::class);
+        $existingToken = $this->getUsernamePasswordTokenMock();
         $existingToken
             ->expects($this->once())
             ->method('getUsername')
@@ -447,10 +435,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $request->attributes->set('password', $password);
 
         $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
-        $authenticatedToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $authenticatedToken = $this->getUsernamePasswordTokenMock();
         $this->authenticationManager
             ->expects($this->once())
             ->method('authenticate')
@@ -492,7 +477,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $username = 'foo_user';
         $password = 'publish';
 
-        $existingToken = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $existingToken = $this->getTokenInterfaceMock();
         $existingToken
             ->expects($this->once())
             ->method('getUsername')
@@ -503,10 +488,7 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $request->attributes->set('password', $password);
 
         $usernamePasswordToken = new UsernamePasswordToken($username, $password, self::PROVIDER_KEY);
-        $authenticatedToken = $this
-            ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $authenticatedToken = $this->getUsernamePasswordTokenMock();
         $this->authenticationManager
             ->expects($this->once())
             ->method('authenticate')
@@ -545,34 +527,34 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
 
     public function testLogout()
     {
-        $sessionLogoutHandler = $this->getMock('Symfony\Component\Security\Http\Logout\SessionLogoutHandler');
+        $sessionLogoutHandler = $this->createMock(SessionLogoutHandler::class);
         $sessionLogoutHandler
             ->expects($this->never())
             ->method('logout');
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->getTokenInterfaceMock();
         $this->tokenStorage
             ->expects($this->once())
             ->method('getToken')
             ->will($this->returnValue($token));
 
         $request = new Request();
-        $logoutHandler1 = $this->getMock('Symfony\Component\Security\Http\Logout\LogoutHandlerInterface');
+        $logoutHandler1 = $this->createMock(LogoutHandlerInterface::class);
         $logoutHandler1
             ->expects($this->once())
             ->method('logout')
             ->with(
                 $request,
-                $this->isInstanceOf('Symfony\Component\HttpFoundation\Response'),
+                $this->isInstanceOf(Response::class),
                 $token
             );
-        $logoutHandler2 = $this->getMock('Symfony\Component\Security\Http\Logout\LogoutHandlerInterface');
+        $logoutHandler2 = $this->createMock(LogoutHandlerInterface::class);
         $logoutHandler2
             ->expects($this->once())
             ->method('logout')
             ->with(
                 $request,
-                $this->isInstanceOf('Symfony\Component\HttpFoundation\Response'),
+                $this->isInstanceOf(Response::class),
                 $token
             );
 
@@ -581,8 +563,18 @@ class RestSessionBasedAuthenticatorTest extends PHPUnit_Framework_TestCase
         $this->authenticator->addLogoutHandler($logoutHandler2);
 
         $this->assertInstanceOf(
-            'Symfony\Component\HttpFoundation\Response',
+            Response::class,
             $this->authenticator->logout($request)
         );
+    }
+
+    protected function getTokenInterfaceMock()
+    {
+        return $this->createMock(TokenInterface::class);
+    }
+
+    protected function getUsernamePasswordTokenMock()
+    {
+        return $this->createMock(UsernamePasswordToken::class);
     }
 }

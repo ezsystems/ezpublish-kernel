@@ -5,46 +5,48 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\UserWrapped;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 use Symfony\Component\Security\Core\User\User;
 
-class UserWrappedTest extends PHPUnit_Framework_TestCase
+class UserWrappedTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $apiUser;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
+        $this->apiUser = $this->createMock(APIUser::class);
     }
 
     public function testGetSetAPIUser()
     {
-        $originalUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $originalUser = $this->createMock(SymfonyUserInterface::class);
         $userWrapped = new UserWrapped($originalUser, $this->apiUser);
         $this->assertSame($this->apiUser, $userWrapped->getAPIUser());
 
-        $newApiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
+        $newApiUser = $this->createMock(APIUser::class);
         $userWrapped->setAPIUser($newApiUser);
         $this->assertSame($newApiUser, $userWrapped->getAPIUser());
     }
 
     public function testGetSetWrappedUser()
     {
-        $originalUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $originalUser = $this->createMock(SymfonyUserInterface::class);
         $userWrapped = new UserWrapped($originalUser, $this->apiUser);
         $this->assertSame($originalUser, $userWrapped->getWrappedUser());
 
-        $newWrappedUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $newWrappedUser = $this->createMock(UserInterface::class);
         $userWrapped->setWrappedUser($newWrappedUser);
         $this->assertSame($newWrappedUser, $userWrapped->getWrappedUser());
     }
@@ -84,14 +86,14 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
 
     public function testRegularUser()
     {
-        $originalUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $originalUser = $this->createMock(SymfonyUserInterface::class);
         $user = new UserWrapped($originalUser, $this->apiUser);
 
         $this->assertTrue($user->isEnabled());
         $this->assertTrue($user->isAccountNonExpired());
         $this->assertTrue($user->isAccountNonLocked());
         $this->assertTrue($user->isCredentialsNonExpired());
-        $this->assertTrue($user->isEqualTo($this->getMock('Symfony\Component\Security\Core\User\UserInterface')));
+        $this->assertTrue($user->isEqualTo($this->createMock(SymfonyUserInterface::class)));
 
         $originalUser
             ->expects($this->once())
@@ -129,9 +131,9 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
 
     public function testIsEqualTo()
     {
-        $originalUser = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User');
+        $originalUser = $this->createMock(UserEquatableInterface::class);
         $user = new UserWrapped($originalUser, $this->apiUser);
-        $otherUser = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
+        $otherUser = $this->createMock(SymfonyUserInterface::class);
         $originalUser
             ->expects($this->once())
             ->method('isEqualTo')
@@ -139,4 +141,11 @@ class UserWrappedTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->assertFalse($user->isEqualTo($otherUser));
     }
+}
+
+/**
+ * @internal For use with tests only
+ */
+interface UserEquatableInterface extends UserInterface, EquatableInterface
+{
 }

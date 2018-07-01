@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
 use eZ\Publish\Core\REST\Common\Message;
@@ -99,7 +98,7 @@ class ContentType extends RestController
                 $this->mapToGroupUpdateStruct($createStruct)
             );
 
-            return $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId);
+            return $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId, Language::ALL);
         } catch (InvalidArgumentException $e) {
             throw new ForbiddenException($e->getMessage());
         }
@@ -115,7 +114,8 @@ class ContentType extends RestController
     public function listContentTypesForGroup($contentTypeGroupId, Request $request)
     {
         $contentTypes = $this->contentTypeService->loadContentTypes(
-            $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId)
+            $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId, Language::ALL),
+            Language::ALL
         );
 
         if ($this->getMediaType($request) === 'application/vnd.ez.api.contenttypelist') {
@@ -171,7 +171,7 @@ class ContentType extends RestController
         }
 
         return new Values\ContentTypeGroupList(
-            $this->contentTypeService->loadContentTypeGroups()
+            $this->contentTypeService->loadContentTypeGroups(Language::ALL)
         );
     }
 
@@ -184,7 +184,7 @@ class ContentType extends RestController
      */
     public function loadContentTypeGroup($contentTypeGroupId)
     {
-        return $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId);
+        return $this->contentTypeService->loadContentTypeGroup($contentTypeGroupId, Language::ALL);
     }
 
     /**
@@ -196,7 +196,7 @@ class ContentType extends RestController
      */
     public function loadContentType($contentTypeId)
     {
-        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId, Language::ALL);
 
         return new Values\RestContentType(
             $contentType,
@@ -258,7 +258,8 @@ class ContentType extends RestController
     public function loadContentTypeByIdentifier(Request $request)
     {
         return $this->contentTypeService->loadContentTypeByIdentifier(
-            $request->query->get('identifier')
+            $request->query->get('identifier'),
+            Language::ALL
         );
     }
 
@@ -270,7 +271,8 @@ class ContentType extends RestController
     public function loadContentTypeByRemoteId(Request $request)
     {
         return $this->contentTypeService->loadContentTypeByRemoteId(
-            $request->query->get('remoteId')
+            $request->query->get('remoteId'),
+            Language::ALL
         );
     }
 
@@ -316,7 +318,7 @@ class ContentType extends RestController
         if ($publish) {
             $this->contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-            $contentType = $this->contentTypeService->loadContentType($contentTypeDraft->id);
+            $contentType = $this->contentTypeService->loadContentType($contentTypeDraft->id, Language::ALL);
 
             return new Values\CreatedContentType(
                 array(
@@ -339,8 +341,8 @@ class ContentType extends RestController
     }
 
     /**
-     * Copies a content type. The identifier of the copy
-     * is changed to copy_of_<identifier> and a new remoteId is generated.
+     * Copies a content type. The identifier of the copy is changed to
+     * copy_of_<originalBaseIdentifier>_<newTypeId> and a new remoteId is generated.
      *
      * @param $contentTypeId
      *
@@ -526,7 +528,7 @@ class ContentType extends RestController
      */
     public function loadContentTypeFieldDefinitionList($contentTypeId)
     {
-        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId, Language::ALL);
 
         return new Values\FieldDefinitionList(
             $contentType,
@@ -546,7 +548,7 @@ class ContentType extends RestController
      */
     public function loadContentTypeFieldDefinition($contentTypeId, $fieldDefinitionId, Request $request)
     {
-        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId, Language::ALL);
 
         foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
             if ($fieldDefinition->id == $fieldDefinitionId) {
@@ -712,7 +714,7 @@ class ContentType extends RestController
 
         $this->contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        $publishedContentType = $this->contentTypeService->loadContentType($contentTypeDraft->id);
+        $publishedContentType = $this->contentTypeService->loadContentType($contentTypeDraft->id, Language::ALL);
 
         return new Values\RestContentType(
             $publishedContentType,
@@ -766,7 +768,7 @@ class ContentType extends RestController
      */
     public function loadGroupsOfContentType($contentTypeId)
     {
-        $contentType = $this->contentTypeService->loadContentType($contentTypeId);
+        $contentType = $this->contentTypeService->loadContentType($contentTypeId, Language::ALL);
 
         return new Values\ContentTypeGroupRefList(
             $contentType,
@@ -960,7 +962,7 @@ class ContentType extends RestController
         foreach ($this->contentTypeService->loadContentTypeGroups() as $contentTypeGroup) {
             $contentTypes = array_merge(
                 $contentTypes,
-                $this->contentTypeService->loadContentTypes($contentTypeGroup)
+                $this->contentTypeService->loadContentTypes($contentTypeGroup, Language::ALL)
             );
         }
 

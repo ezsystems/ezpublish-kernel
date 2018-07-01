@@ -7,11 +7,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 use eZ\Publish\Core\Base\Container\Compiler;
 use Symfony\Component\Config\Resource\FileResource;
@@ -34,21 +33,43 @@ $loader->load('fieldtypes.yml');
 $loader->load('indexable_fieldtypes.yml');
 $loader->load('io.yml');
 $loader->load('repository.yml');
+$loader->load('repository/inner.yml');
+$loader->load('repository/signalslot.yml');
+$loader->load('repository/siteaccessaware.yml');
 $loader->load('roles.yml');
 $loader->load('storage_engines/common.yml');
 $loader->load('storage_engines/cache.yml');
 $loader->load('storage_engines/legacy.yml');
 $loader->load('storage_engines/shortcuts.yml');
 $loader->load('search_engines/common.yml');
-$loader->load('search_engines/legacy.yml');
-$loader->load('search_engines/slots.yml');
-$loader->load('search_engines/elasticsearch.yml');
 $loader->load('settings.yml');
 $loader->load('utils.yml');
+$loader->load('tests/common.yml');
+$loader->load('policies.yml');
+
+// Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
+if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
+    /*
+     * Symfony\Component\Cache\Adapter\RedisAdapter
+     * @param \Redis|\RedisArray|\RedisCluster|\Predis\Client $redisClient
+     * public function __construct($redisClient, $namespace = '', $defaultLifetime = 0)
+     *
+     * $redis = new \Redis();
+     * $redis->connect('127.0.0.1', 6379, 2.5);
+     */
+    $containerBuilder
+        ->register('ezpublish.cache_pool.driver.redis', 'Redis')
+        ->addMethodCall('connect', [(getenv('CACHE_HOST') ?: '127.0.0.1'), 6379, 2.5]);
+
+    $containerBuilder
+        ->register('ezpublish.cache_pool.driver', 'Symfony\Component\Cache\Adapter\RedisAdapter')
+        ->setArguments([new Reference('ezpublish.cache_pool.driver.redis'), '', 120]);
+}
 
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
 $containerBuilder->addCompilerPass(new Compiler\FieldTypeCollectionPass());
+$containerBuilder->addCompilerPass(new Compiler\FieldTypeNameableCollectionPass());
 $containerBuilder->addCompilerPass(new Compiler\RegisterLimitationTypePass());
 
 $containerBuilder->addCompilerPass(new Compiler\Storage\ExternalStorageRegistryPass());

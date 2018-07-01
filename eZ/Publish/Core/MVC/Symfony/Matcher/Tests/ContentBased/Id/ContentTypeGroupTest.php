@@ -5,11 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Id;
 
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup as ContentTypeGroupIdMatcher;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
@@ -29,8 +30,8 @@ class ContentTypeGroupTest extends BaseTest
 
     /**
      * @dataProvider matchLocationProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup::matchLocation
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup::matchLocation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -81,7 +82,7 @@ class ContentTypeGroupTest extends BaseTest
     /**
      * Generates a Location mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateLocationMock()
     {
@@ -100,8 +101,8 @@ class ContentTypeGroupTest extends BaseTest
 
     /**
      * @dataProvider matchContentInfoProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup::matchContentInfo
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -154,15 +155,12 @@ class ContentTypeGroupTest extends BaseTest
      *
      * @param int $contentTypeGroupId
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForContentTypeGroupId($contentTypeGroupId)
     {
-        $contentTypeServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\ContentTypeService')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $contentTypeMock = $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType');
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
+        $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
             ->with(42)
@@ -174,9 +172,9 @@ class ContentTypeGroupTest extends BaseTest
                     array(
                         // First a group that will never match, then the right group.
                         // This ensures to test even if the content type belongs to several groups at once.
-                        $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'),
+                        $this->getMockForAbstractClass(ContentTypeGroup::class),
                         $this
-                            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup')
+                            ->getMockBuilder(ContentTypeGroup::class)
                             ->setConstructorArgs(array(array('id' => $contentTypeGroupId)))
                             ->getMockForAbstractClass(),
                     )

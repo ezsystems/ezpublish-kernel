@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
@@ -54,8 +52,8 @@ class Location extends BaseParser
                 'contentInfo' => $content instanceof APIContent ? $content->getVersionInfo()->getContentInfo() : null,
                 'id' => $data['_href'],
                 'priority' => (int)$data['priority'],
-                'hidden' => $data['hidden'] === 'true' ? true : false,
-                'invisible' => $data['invisible'] === 'true' ? true : false,
+                'hidden' => $data['hidden'] === 'true',
+                'invisible' => $data['invisible'] === 'true',
                 'remoteId' => $data['remoteId'],
                 'parentLocationId' => $data['ParentLocation']['_href'],
                 'pathString' => $data['pathString'],

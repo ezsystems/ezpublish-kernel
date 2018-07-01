@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\Url\Gateway;
 
@@ -18,23 +16,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
  */
 class LegacyStorageTest extends TestCase
 {
-    public function testSetConnection()
-    {
-        $gateway = $this->getStorageGateway();
-
-        $gateway->setConnection($this->getMock('eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler'));
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testSetConnectionThrowsRuntimeException()
-    {
-        $gateway = $this->getStorageGateway();
-
-        $gateway->setConnection(new \DateTime());
-    }
-
     public function testGetIdUrlMap()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urls.php');
@@ -214,8 +195,7 @@ class LegacyStorageTest extends TestCase
     protected function getStorageGateway()
     {
         if (!isset($this->storageGateway)) {
-            $this->storageGateway = new LegacyStorage();
-            $this->storageGateway->setConnection($this->getDatabaseHandler());
+            $this->storageGateway = new LegacyStorage($this->getDatabaseHandler());
         }
 
         return $this->storageGateway;

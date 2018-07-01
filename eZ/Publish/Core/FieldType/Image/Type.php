@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Image;
 
@@ -156,13 +154,13 @@ class Type extends FieldType
             return $errors;
         }
 
-        if (isset($fieldValue->inputUri) && !getimagesize($fieldValue->inputUri)) {
-            $errors[] = new ValidationError('A valid image file is required.', null, array(), 'inputUri');
+        if (isset($fieldValue->inputUri)) {
+            $this->validateImageTypeAndContent($fieldValue->inputUri, $errors, 'inputUri');
         }
 
         // BC: Check if file is a valid image if the value of 'id' matches a local file
-        if (isset($fieldValue->id) && file_exists($fieldValue->id) && !getimagesize($fieldValue->id)) {
-            $errors[] = new ValidationError('A valid image file is required.', null, array(), 'id');
+        if (isset($fieldValue->id)) {
+            $this->validateImageTypeAndContent($fieldValue->id, $errors, 'id');
         }
 
         foreach ((array)$fieldDefinition->getValidatorConfiguration() as $validatorIdentifier => $parameters) {
@@ -179,7 +177,7 @@ class Type extends FieldType
                             'The file size cannot exceed %size% byte.',
                             'The file size cannot exceed %size% bytes.',
                             array(
-                                'size' => $parameters['maxFileSize'],
+                                '%size%' => $parameters['maxFileSize'],
                             ),
                             'fileSize'
                         );
@@ -189,6 +187,26 @@ class Type extends FieldType
         }
 
         return $errors;
+    }
+
+    /**
+     * Validates that the $filePath exists, isn't a PHP file, and has image content.
+     *
+     * @param string $filePath The file name and path
+     * @param ValidationError[] $errors Validation errors, passed by reference
+     * @param string $errorContext Context of the error, needed for translation
+     */
+    private function validateImageTypeAndContent($filePath, &$errors, $errorContext)
+    {
+        if (
+            file_exists($filePath) &&
+            (
+                strtolower(pathinfo($filePath, PATHINFO_EXTENSION)) === 'php' ||
+                !getimagesize($filePath)
+            )
+        ) {
+            $errors[] = new ValidationError('A valid image file is required.', null, array(), $errorContext);
+        }
     }
 
     /**
@@ -210,8 +228,8 @@ class Type extends FieldType
                             'Validator %validator% expects parameter %parameter% to be set.',
                             null,
                             array(
-                                'validator' => $validatorIdentifier,
-                                'parameter' => 'maxFileSize',
+                                '%validator%' => $validatorIdentifier,
+                                '%parameter%' => 'maxFileSize',
                             ),
                             "[$validatorIdentifier]"
                         );
@@ -222,9 +240,9 @@ class Type extends FieldType
                             'Validator %validator% expects parameter %parameter% to be of %type%.',
                             null,
                             array(
-                                'validator' => $validatorIdentifier,
-                                'parameter' => 'maxFileSize',
-                                'type' => 'integer',
+                                '%validator%' => $validatorIdentifier,
+                                '%parameter%' => 'maxFileSize',
+                                '%type%' => 'integer',
                             ),
                             "[$validatorIdentifier][maxFileSize]"
                         );
@@ -235,7 +253,7 @@ class Type extends FieldType
                         "Validator '%validator%' is unknown",
                         null,
                         array(
-                            'validator' => $validatorIdentifier,
+                            '%validator%' => $validatorIdentifier,
                         ),
                         "[$validatorIdentifier]"
                     );

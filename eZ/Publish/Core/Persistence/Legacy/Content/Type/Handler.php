@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
@@ -25,8 +23,6 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
-/**
- */
 class Handler implements BaseContentTypeHandler
 {
     /**
@@ -121,7 +117,7 @@ class Handler implements BaseContentTypeHandler
     public function loadGroup($groupId)
     {
         $groups = $this->mapper->extractGroupsFromRows(
-            $this->contentTypeGateway->loadGroupData($groupId)
+            $this->contentTypeGateway->loadGroupData([$groupId])
         );
 
         if (count($groups) !== 1) {
@@ -129,6 +125,23 @@ class Handler implements BaseContentTypeHandler
         }
 
         return $groups[0];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadGroups(array $groupIds)
+    {
+        $groups = $this->mapper->extractGroupsFromRows(
+            $this->contentTypeGateway->loadGroupData($groupIds)
+        );
+
+        $listByGroupIds = [];
+        foreach ($groups as $group) {
+            $listByGroupIds[$group->id] = $group;
+        }
+
+        return $listByGroupIds;
     }
 
     /**
@@ -330,7 +343,6 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      *
      * @param mixed $contentTypeId
      * @param int $status
@@ -339,16 +351,6 @@ class Handler implements BaseContentTypeHandler
      */
     public function delete($contentTypeId, $status)
     {
-        if (!$this->contentTypeGateway->loadTypeData($contentTypeId, $status)) {
-            throw new NotFoundException(
-                'ContentType',
-                array(
-                    'id' => $contentTypeId,
-                    'status' => $status,
-                )
-            );
-        }
-
         if (Type::STATUS_DEFINED === $status && $this->contentTypeGateway->countInstancesOfType($contentTypeId)) {
             throw new BadStateException(
                 '$contentTypeId',
@@ -402,14 +404,23 @@ class Handler implements BaseContentTypeHandler
         $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
         $createStruct->remoteId = md5(uniqid(get_class($createStruct), true));
-        $createStruct->identifier = 'copy_of_' . $createStruct->identifier . '_' . $createStruct->remoteId;
+
+        // extract actual identifier name, without "copy_of_" and number
+        $originalIdentifier = preg_replace('/^copy_of_(.+)_\d+$/', '$1', $createStruct->identifier);
+
+        // set temporary identifier
+        $createStruct->identifier = $createStruct->remoteId;
 
         // Set FieldDefinition ids to null to trigger creating new id
         foreach ($createStruct->fieldDefinitions as $fieldDefinition) {
             $fieldDefinition->id = null;
         }
 
-        return $this->internalCreate($createStruct);
+        $contentTypeCopy = $this->internalCreate($createStruct);
+        $updateStruct = $this->mapper->createUpdateStructFromType($contentTypeCopy);
+        $updateStruct->identifier = 'copy_of_' . $originalIdentifier . '_' . $contentTypeCopy->id;
+
+        return $this->update($contentTypeCopy->id, $contentTypeCopy->status, $updateStruct);
     }
 
     /**

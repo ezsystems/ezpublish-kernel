@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
@@ -19,6 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
  * @group integration
  * @group field-type
  * @group relation
+ * @deprecated 6.1 use RelationSearchBaseIntegrationTestTrait instead.
  */
 abstract class RelationBaseIntegrationTest extends BaseIntegrationTest
 {

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
@@ -19,8 +17,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStr
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Exception;
 
-/**
- */
 class MemoryCachingHandler implements BaseContentTypeHandler
 {
     /**
@@ -119,6 +115,23 @@ class MemoryCachingHandler implements BaseContentTypeHandler
         }
 
         return $this->groups[$groupId] = $this->innerHandler->loadGroup($groupId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadGroups(array $groupIds)
+    {
+        $groups = [];
+        foreach ($groupIds as $groupId) {
+            if (isset($this->groups[$groupId])) {
+                $groups[$groupId] = $this->groups[$groupId];
+            } else {
+                $groups[$groupId] = $this->groups[$groupId] = $this->innerHandler->loadGroup($groupId);
+            }
+        }
+
+        return $groups;
     }
 
     /**
@@ -257,7 +270,6 @@ class MemoryCachingHandler implements BaseContentTypeHandler
 
     /**
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If type is defined and still has content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type is not found
      *
      * @param mixed $contentTypeId
      * @param int $status

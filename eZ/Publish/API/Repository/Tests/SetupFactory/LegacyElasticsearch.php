@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
@@ -49,16 +47,17 @@ class LegacyElasticsearch extends Legacy
             $containerBuilder = include $config['container_builder_path'];
 
             /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load('search_engines/elasticsearch.yml');
             $loader->load('tests/integration_legacy_elasticsearch.yml');
 
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherContentPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\CriterionVisitorDispatcherLocationPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\AggregateFacetBuilderVisitorPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\AggregateFieldValueMapperPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\AggregateSortClauseVisitorContentPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\Elasticsearch\AggregateSortClauseVisitorLocationPass());
+            $containerBuilder->addCompilerPass(new Compiler\Search\AggregateFieldValueMapperPass());
             $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
-            $containerBuilder->addCompilerPass(new Compiler\Search\SignalSlotPass());
+            $containerBuilder->addCompilerPass(new Compiler\Search\SearchEngineSignalSlotPass('elasticsearch'));
 
             $containerBuilder->setParameter(
                 'legacy_dsn',

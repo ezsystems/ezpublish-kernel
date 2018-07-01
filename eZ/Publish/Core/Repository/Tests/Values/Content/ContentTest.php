@@ -5,18 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Tests\Values\Content;
 
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use PHPUnit\Framework\TestCase;
 
-/**
- *
- */
-class ContentTest extends PHPUnit_Framework_TestCase
+class ContentTest extends TestCase
 {
     /**
      * @covers \eZ\Publish\Core\Repository\Values\Content\Content::getProperties
@@ -41,5 +37,23 @@ class ContentTest extends PHPUnit_Framework_TestCase
             }
             $propertiesHash[$property] = 1;
         }
+    }
+
+    /**
+     * Test getName method.
+     *
+     * @covers \eZ\Publish\Core\Repository\Values\Content\Content::getName
+     */
+    public function testGetName()
+    {
+        $name = 'Translated name';
+        $versionInfoMock = $this->createMock(VersionInfo::class);
+        $versionInfoMock->expects($this->once())
+            ->method('getName')
+            ->willReturn($name);
+
+        $object = new Content(['versionInfo' => $versionInfoMock]);
+
+        $this->assertEquals($name, $object->getName());
     }
 }

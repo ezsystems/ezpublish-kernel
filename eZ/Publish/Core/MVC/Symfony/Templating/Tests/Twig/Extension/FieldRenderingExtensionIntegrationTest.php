@@ -5,20 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FieldRenderingExtension;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer;
+use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistryInterface;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use Psr\Log\LoggerInterface;
 
 class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 {
@@ -67,12 +70,12 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
             new FieldRenderingExtension(
                 $fieldBlockRenderer,
                 $this->getContentTypeServiceMock(),
-                $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\FieldType\\View\\ParameterProviderRegistryInterface'),
+                $this->createMock(ParameterProviderRegistryInterface::class),
                 new TranslationHelper(
                     $configResolver,
-                    $this->getMock('eZ\\Publish\\API\\Repository\\ContentService'),
+                    $this->createMock(ContentService::class),
                     array(),
-                    $this->getMock('Psr\Log\LoggerInterface')
+                    $this->createMock(LoggerInterface::class)
                 )
             ),
         );
@@ -80,7 +83,7 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
 
     public function getFixturesDir()
     {
-        return dirname(__FILE__) . '/_fixtures/field_rendering_functions/';
+        return __DIR__ . '/_fixtures/field_rendering_functions/';
     }
 
     public function getFieldDefinition($typeIdentifier, $id = null, $settings = array())
@@ -154,9 +157,7 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
 
     private function getConfigResolverMock()
     {
-        $mock = $this->getMock(
-            'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'
-        );
+        $mock = $this->createMock(ConfigResolverInterface::class);
         // Signature: ConfigResolverInterface->getParameter( $paramName, $namespace = null, $scope = null )
         $mock->expects($this->any())
             ->method('getParameter')
@@ -177,11 +178,11 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentTypeServiceMock()
     {
-        $mock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
+        $mock = $this->createMock(ContentTypeService::class);
 
         $mock->expects($this->any())
             ->method('loadContentType')

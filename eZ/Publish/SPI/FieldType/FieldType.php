@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\FieldType;
 
@@ -53,6 +51,7 @@ interface FieldType
      *
      * The used $value can be assumed to be already accepted by {@link * acceptValue()}.
      *
+     * @deprecated Since 6.3/5.4.7, use \eZ\Publish\SPI\FieldType\Nameable
      * @param \eZ\Publish\SPI\FieldType\Value $value
      *
      * @return string
@@ -375,7 +374,7 @@ interface FieldType
      *          "contentIds" => array( 12 ),
      *          "locationIds" => array( 24, 45 )
      *      ),
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD => array( 12 )
      *  )
      * </code>
      */

@@ -5,21 +5,20 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Relation;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
  */
 class TrashHandler extends AbstractHandler implements TrashHandlerInterface
 {
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function loadTrashItem($id)
     {
@@ -29,45 +28,73 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function trashSubtree($locationId)
     {
         $this->logger->logCall(__METHOD__, array('locationId' => $locationId));
+
+        $location = $this->persistenceHandler->locationHandler()->load($locationId);
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadRelations($location->contentId);
+
         $return = $this->persistenceHandler->trashHandler()->trashSubtree($locationId);
-        $this->cache->clear('location');//TIMBER!
-        $this->cache->clear('content');//TIMBER!
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+
+        $tags = [];
+        if (!empty($reverseRelations)) {
+            $tags = array_map(function (Relation $relation) {
+                return 'content-fields-' . $relation->destinationContentId;
+            }, $reverseRelations);
+        }
+
+        $this->cache->invalidateTags([
+            'content-' . $location->contentId,
+            'content-fields-' . $location->contentId,
+            'location-' . $locationId, 'location-path-' . $locationId,
+        ] + $tags);
 
         return $return;
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function recover($trashedId, $newParentId)
     {
         $this->logger->logCall(__METHOD__, array('id' => $trashedId, 'newParentId' => $newParentId));
+
         $return = $this->persistenceHandler->trashHandler()->recover($trashedId, $newParentId);
-        $this->cache->clear('location', 'subtree');
-        $this->cache->clear('content');//TIMBER!
-        $this->cache->clear('user', 'role', 'assignments', 'byGroup');
+
+        $location = $this->persistenceHandler->locationHandler()->load($return);
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadRelations($location->contentId);
+
+        $tags = [];
+        if (!empty($reverseRelations)) {
+            $tags = array_map(function (Relation $relation) {
+                return 'content-fields-' . $relation->destinationContentId;
+            }, $reverseRelations);
+        }
+
+        $this->cache->invalidateTags([
+            'content-' . $location->contentId,
+            'content-fields-' . $location->contentId,
+            'location-' . $trashedId, 'location-path-' . $trashedId,
+        ] + $tags);
 
         return $return;
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
-        $this->logger->logCall(__METHOD__, array('criterion' => get_class($criterion)));
+        $this->logger->logCall(__METHOD__, array('criterion' => $criterion ? get_class($criterion) : 'null'));
 
         return $this->persistenceHandler->trashHandler()->findTrashItems($criterion, $offset, $limit, $sort);
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function emptyTrash()
     {
@@ -76,7 +103,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
+     * {@inheritdoc}
      */
     public function deleteTrashItem($trashedId)
     {

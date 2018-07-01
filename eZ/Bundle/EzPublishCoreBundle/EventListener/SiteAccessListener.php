@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
@@ -14,7 +12,8 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -22,8 +21,10 @@ use Symfony\Component\Security\Http\HttpUtils;
 /**
  * SiteAccess match listener.
  */
-class SiteAccessListener extends ContainerAware implements EventSubscriberInterface
+class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var \Symfony\Component\Routing\RouterInterface
      */
@@ -137,13 +138,13 @@ class SiteAccessListener extends ContainerAware implements EventSubscriberInterf
 
         $vpSegments = explode('/', $vpString);
         for ($i = 0, $iMax = count($vpSegments); $i < $iMax; ++$i) {
-            if (!isset($vpSegments[$i])) {
+            if (empty($vpSegments[$i])) {
                 continue;
             }
 
             // View parameter name.
             // We extract it + the value from the following segment (next element in $vpSegments array)
-            if ($vpSegments[$i]{0} === '(') {
+            if ($vpSegments[$i][0] === '(') {
                 $paramName = str_replace(array('(', ')'), '', $vpSegments[$i]);
                 // A value is present (e.g. /(foo)/bar)
                 if (isset($vpSegments[$i + 1])) {

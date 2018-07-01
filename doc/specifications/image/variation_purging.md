@@ -8,7 +8,7 @@ Makes it possible to clear all variations generated for an alias. Uses the liip:
 Example (the `-v` option will log removals to the console), removing variations for the `large` and `gallery` aliases :
 
 ```shell
-php app/console liip:imagine:cache:remove --filters=large --filters=gallery -v
+php bin/console liip:imagine:cache:remove --filters=large --filters=gallery -v
 ```
 
 ## Internal changes

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony;
 
@@ -85,6 +83,8 @@ final class MVCEvents
      * It gives the opportunity to add related locations to clear (aka "smart cache clearing").
      *
      * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent instance.
+     *
+     * @deprecated Since 6.12, not triggered anymore when using ezplatform-http-cache package.
      */
     const CACHE_CLEAR_CONTENT = 'ezpublish.cache_clear.content';
 }

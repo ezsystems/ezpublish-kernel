@@ -5,29 +5,30 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Pagination\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Pagination\Pagerfanta\ContentSearchHitAdapter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
+class ContentSearchHitAdapterTest extends TestCase
 {
     /**
-     * @var \eZ\Publish\API\Repository\SearchService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\SearchService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $searchService;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->searchService = $this->getMock('eZ\Publish\API\Repository\SearchService');
+        $this->searchService = $this->createMock(SearchService::class);
     }
 
     /**
@@ -47,9 +48,9 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
     {
         $nbResults = 123;
         $query = new Query();
-        $query->query = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
+        $query->query = $this->createMock(CriterionInterface::class);
         $query->sortClauses = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
+            ->getMockBuilder(SortClause::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -77,9 +78,9 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
         $nbResults = 123;
 
         $query = new Query();
-        $query->query = $this->getMock('eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface');
+        $query->query = $this->createMock(CriterionInterface::class);
         $query->sortClauses = $this
-            ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Query\SortClause')
+            ->getMockBuilder(SortClause::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -92,7 +93,7 @@ class ContentSearchHitAdapterTest extends PHPUnit_Framework_TestCase
 
         $hits = array();
         for ($i = 0; $i < $limit; ++$i) {
-            $content = $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\Content\Content');
+            $content = $this->getMockForAbstractClass(APIContent::class);
             $hits[] = new SearchHit(array('valueObject' => $content));
         }
         $finalResult = $this->getExpectedFinalResultFromHits($hits);

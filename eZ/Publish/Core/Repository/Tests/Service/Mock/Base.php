@@ -1,26 +1,29 @@
 <?php
 
 /**
- * File contains: Abstract Base service test class for Mock testing.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Repository as APIRepository;
 use eZ\Publish\Core\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\FieldTypeService;
+use eZ\Publish\Core\Repository\Helper\FieldTypeRegistry;
+use eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry;
+use eZ\Publish\SPI\Persistence\Handler;
 
 /**
  * Base test case for tests on services using Mock testing.
  */
-abstract class Base extends PHPUnit_Framework_TestCase
+abstract class Base extends TestCase
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -28,28 +31,23 @@ abstract class Base extends PHPUnit_Framework_TestCase
     private $repository;
 
     /**
-     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $repositoryMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $persistenceMock;
 
     /**
      * The Content / Location / Search ... handlers for the persistence / Search / .. handler mocks.
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject[] Key is relative to "\eZ\Publish\SPI\"
+     * @var \PHPUnit\Framework\MockObject\MockObject[] Key is relative to "\eZ\Publish\SPI\"
      *
      * @see getPersistenceMockHandler()
      */
     private $spiMockHandlers = array();
-
-    /**
-     * @var \eZ\Publish\SPI\IO\Handler|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $IOMock;
 
     /**
      * Get Real repository with mocked dependencies.
@@ -64,6 +62,8 @@ abstract class Base extends PHPUnit_Framework_TestCase
             $repository = new Repository(
                 $this->getPersistenceMock(),
                 $this->getSPIMockHandler('Search\\Handler'),
+                new NullIndexer(),
+                $this->getRelationProcessorMock(),
                 $serviceSettings,
                 $this->getStubbedUser(14)
             );
@@ -81,15 +81,12 @@ abstract class Base extends PHPUnit_Framework_TestCase
     protected $fieldTypeServiceMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\FieldTypeService
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\FieldTypeService
      */
     protected function getFieldTypeServiceMock()
     {
         if (!isset($this->fieldTypeServiceMock)) {
-            $this->fieldTypeServiceMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\FieldTypeService')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->fieldTypeServiceMock = $this->createMock(FieldTypeService::class);
         }
 
         return $this->fieldTypeServiceMock;
@@ -98,27 +95,38 @@ abstract class Base extends PHPUnit_Framework_TestCase
     protected $fieldTypeRegistryMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
      */
     protected function getFieldTypeRegistryMock()
     {
         if (!isset($this->fieldTypeRegistryMock)) {
-            $this->fieldTypeRegistryMock = $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\FieldTypeRegistry')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->fieldTypeRegistryMock = $this->createMock(FieldTypeRegistry::class);
         }
 
         return $this->fieldTypeRegistryMock;
     }
 
+    protected $nameableFieldTypeRegistryMock;
+
     /**
-     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry
+     */
+    protected function getNameableFieldTypeRegistryMock()
+    {
+        if (!isset($this->nameableFieldTypeRegistryMock)) {
+            $this->nameableFieldTypeRegistryMock = $this->createMock(NameableFieldTypeRegistry::class);
+        }
+
+        return $this->nameableFieldTypeRegistryMock;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
         if (!isset($this->repositoryMock)) {
-            $this->repositoryMock = self::getMock('eZ\\Publish\\API\\Repository\\Repository');
+            $this->repositoryMock = self::createMock(APIRepository::class);
         }
 
         return $this->repositoryMock;
@@ -127,26 +135,16 @@ abstract class Base extends PHPUnit_Framework_TestCase
     /**
      * Returns a persistence Handler mock.
      *
-     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPersistenceMock()
     {
         if (!isset($this->persistenceMock)) {
-            $this->persistenceMock = $this->getMock(
-                'eZ\\Publish\\SPI\\Persistence\\Handler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->persistenceMock = $this->createMock(Handler::class);
 
             $this->persistenceMock->expects($this->any())
                 ->method('contentHandler')
                 ->will($this->returnValue($this->getPersistenceMockHandler('Content\\Handler')));
-
-            $this->persistenceMock->expects($this->any())
-                ->method('searchHandler')
-                ->will($this->returnValue($this->getSPIMockHandler('Search\\Handler')));
 
             $this->persistenceMock->expects($this->any())
                 ->method('contentTypeHandler')
@@ -183,9 +181,18 @@ abstract class Base extends PHPUnit_Framework_TestCase
             $this->persistenceMock->expects($this->any())
                 ->method('urlWildcardHandler')
                 ->will($this->returnValue($this->getPersistenceMockHandler('Content\\UrlWildcard\\Handler')));
+
+            $this->persistenceMock->expects($this->any())
+                ->method('urlWildcardHandler')
+                ->will($this->returnValue($this->getPersistenceMockHandler('URL\\Handler')));
         }
 
         return $this->persistenceMock;
+    }
+
+    protected function getRelationProcessorMock()
+    {
+        return $this->createMock(RelationProcessor::class);
     }
 
     /**
@@ -193,18 +200,16 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * @param string $handler For instance "Content\\Type\\Handler" or "Search\\Handler", must be relative to "eZ\Publish\SPI"
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getSPIMockHandler($handler)
     {
         if (!isset($this->spiMockHandlers[$handler])) {
-            $this->spiMockHandlers[$handler] = $this->getMock(
-                "eZ\\Publish\\SPI\\{$handler}",
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->spiMockHandlers[$handler] = $this->getMockBuilder("eZ\\Publish\\SPI\\{$handler}")
+                ->setMethods(array())
+                ->disableOriginalConstructor()
+                ->setConstructorArgs(array())
+                ->getMock();
         }
 
         return $this->spiMockHandlers[$handler];
@@ -215,7 +220,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * @param string $handler For instance "Content\\Type\\Handler", must be relative to "eZ\Publish\SPI\Persistence"
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPersistenceMockHandler($handler)
     {

@@ -5,21 +5,20 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\EmailAddress\Value as EmailAddressValue;
 use eZ\Publish\Core\FieldType\Validator\EmailAddressValidator;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\FieldType\Validator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @todo add more tests, like on validateConstraints method
  * @group fieldType
  * @group validator
  */
-class EmailAddressValidatorTest extends PHPUnit_Framework_TestCase
+class EmailAddressValidatorTest extends TestCase
 {
     /**
      * This test ensure an EmailAddressValidator can be created.
@@ -27,7 +26,7 @@ class EmailAddressValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new EmailAddressValidator()
         );
     }

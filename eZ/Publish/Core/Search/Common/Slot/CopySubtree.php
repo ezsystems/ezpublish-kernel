@@ -5,18 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Common\Slot;
 
 use eZ\Publish\Core\SignalSlot\Signal;
-use eZ\Publish\Core\Search\Common\Slot;
 
 /**
  * A Search Engine slot handling CopySubtreeSignal.
  */
-class CopySubtree extends Slot
+class CopySubtree extends AbstractSubtree
 {
     /**
      * Receive the given $signal and react on it.
@@ -29,18 +26,6 @@ class CopySubtree extends Slot
             return;
         }
 
-        $contentHandler = $this->persistenceHandler->contentHandler();
-
-        foreach ($this->persistenceHandler->locationHandler()->loadSubtreeIds($signal->targetNewSubtreeId) as $contentId) {
-            $contentInfo = $contentHandler->loadContentInfo($contentId);
-            $this->searchHandler->indexContent(
-                $contentHandler->load($contentInfo->id, $contentInfo->currentVersionNo)
-            );
-
-            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
-            foreach ($locations as $location) {
-                $this->searchHandler->indexLocation($location);
-            }
-        }
+        $this->indexSubtree($signal->targetNewSubtreeId);
     }
 }

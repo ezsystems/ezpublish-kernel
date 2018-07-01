@@ -5,14 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 use InvalidArgumentException;
 use PDOException;
 use Exception;
@@ -20,7 +18,7 @@ use Exception;
 /**
  * Base test case for database related tests.
  */
-abstract class TestCase extends PHPUnit_Framework_TestCase
+abstract class TestCase extends BaseTestCase
 {
     /**
      * DSN used for the DB backend.
@@ -250,7 +248,7 @@ abstract class TestCase extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param string $message
      */
-    public static function assertQueryResult(array $expectation, SelectQuery $query, $message = null)
+    public static function assertQueryResult(array $expectation, SelectQuery $query, $message = '')
     {
         $statement = $query->prepare();
         $statement->execute();

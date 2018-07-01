@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\User;
 
@@ -43,13 +41,11 @@ abstract class Limitation extends ValueObject
     abstract public function getIdentifier();
 
     /**
-     * An list of IDs or identifiers for which the limitation should be applied.
+     * A read-only list of IDs or identifiers for which the limitation should be applied.
      *
      * The value of this property must conform to a hash, which means that it
      * may only consist of array and scalar values, but must not contain objects
      * or resources.
-     *
-     * @readonly
      *
      * @var mixed[]
      */

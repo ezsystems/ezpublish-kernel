@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Variation\Values;
 
@@ -44,6 +42,9 @@ class ImageVariation extends Variation
      * Contains extra information about the image, depending on the image type.
      * It will typically contain EXIF information from digital cameras or information about animated GIFs.
      * If there is no information, the info will be a boolean FALSE.
+     *
+     * Beware: This information may contain e.g. HTML, JavaScript, or PHP code, and should be treated like any
+     * other user-submitted data. Make sure it is properly escaped before use.
      *
      * @var mixed
      */

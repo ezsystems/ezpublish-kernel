@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\RestClient;
 
@@ -18,13 +16,11 @@ trait DriverHelper
     /**
      * Make/Crypt the authentication value.
      *
-     * @param string $user
+     * @param string $username
      * @param string $password
      * @param string $type The type of authentication
      *
      * @return string Authentication value
-     *
-     * @throws \UnexpectedValueException If the $type doesn't exists
      */
     protected function makeAuthentication($username, $password, $type)
     {
@@ -33,7 +29,7 @@ trait DriverHelper
                 return 'Basic ' . base64_encode("$username:$password");
 
             default:
-                throw new \UnexpectedValueException("Authentication '$authType' invalid or not implemented yet");
+                throw new \UnexpectedValueException("Authentication '{$type}' invalid or not implemented yet");
         }
     }
 
@@ -63,10 +59,9 @@ trait DriverHelper
      */
     public function getHeader($header)
     {
-        $header = strtolower($header);
-        $headers = $this->getHeaders();
+        $response = $this->getResponse();
 
-        return empty($headers[$header]) ? null : $headers[$header];
+        return $response->hasHeader($header) ? $response->getHeader($header)[0] : null;
     }
 
     /**

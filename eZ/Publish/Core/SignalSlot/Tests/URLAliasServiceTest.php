@@ -5,23 +5,21 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\URLAliasService as APIURLAliasService;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\URLAliasService;
+use eZ\Publish\Core\SignalSlot\Signal\URLAliasService as URLAliasServiceSignals;
 
 class URLAliasServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\URLAliasService'
-        );
+        return $this->createMock(APIURLAliasService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -87,7 +85,7 @@ class URLAliasServiceTest extends ServiceTest
                 ),
                 $locationUrlAlias,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateUrlAliasSignal',
+                URLAliasServiceSignals\CreateUrlAliasSignal::class,
                 array('urlAliasId' => $urlAliasId),
             ),
             array(
@@ -101,7 +99,7 @@ class URLAliasServiceTest extends ServiceTest
                 ),
                 $globalUrlAlias,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateGlobalUrlAliasSignal',
+                URLAliasServiceSignals\CreateGlobalUrlAliasSignal::class,
                 array('urlAliasId' => $globalUrlAliasId),
             ),
             array(
@@ -121,7 +119,7 @@ class URLAliasServiceTest extends ServiceTest
                 array($aliasList),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\RemoveAliasesSignal',
+                URLAliasServiceSignals\RemoveAliasesSignal::class,
                 array(
                     'aliasList' => $aliasList,
                 ),

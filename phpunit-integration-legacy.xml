@@ -6,16 +6,19 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
          colors="true"
          >
     <php>
         <env name="setupFactory" value="eZ\Publish\API\Repository\Tests\SetupFactory\Legacy" />
         <env name="backendVersion" value="5" />
         <env name="fixtureDir" value="Legacy" />
+        <ini name="error_reporting" value="-1" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/PermissionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceMaximumSupportedLanguagesTest.php</file>
@@ -26,6 +29,7 @@
             <file>eZ/Publish/API/Repository/Tests/UserServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/RoleServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/TrashServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLAliasServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceTest.php</file>
@@ -37,6 +41,8 @@
             <file>eZ/Publish/API/Repository/Tests/UserServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/RoleServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/TrashServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLServiceAuthorizationTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/URLAliasServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/URLWildcardServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/ObjectStateServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceTest.php</file>
@@ -46,11 +52,16 @@
             <file>eZ/Publish/API/Repository/Tests/SearchEngineIndexingTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LimitationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/FieldTypeServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/BookmarkServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/NotificationServiceTest.php</file>
             <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
             <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
         </testsuite>
         <testsuite name="eZ\Publish\API\Repository\Tests\Regression">
             <directory>eZ/Publish/API/Repository/Tests/Regression/</directory>
+        </testsuite>
+        <testsuite name="eZ\Publish\Core\FieldType\Tests\Integration">
+            <directory>eZ/Publish/Core/FieldType/Tests/Integration</directory>
         </testsuite>
     </testsuites>
     <filter>

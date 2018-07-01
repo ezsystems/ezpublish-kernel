@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\RichText\Converter\Ezxml;
 
@@ -19,6 +17,8 @@ use DOMDocument;
  * Expands paragraphs and links embeds of a XML document in legacy ezxml format.
  *
  * Relies on XmlText's Expanding and EmbedLinking converters implementation.
+ *
+ * @deprecated since version 7.2, to be removed in 8.0. Use eZ\Publish\Core\FieldType\XmlText\Converter\ToRichTextPreNormalize instead. *
  */
 class ToRichTextPreNormalize implements Converter
 {

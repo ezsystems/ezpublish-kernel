@@ -5,17 +5,24 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased;
 
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
+use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\API\Repository\Values\User\UserReference;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\MVC\Symfony\View\Provider\Location\Configured;
+use eZ\Publish\Core\Repository\Repository;
+use PHPUnit\Framework\TestCase;
 
-abstract class BaseTest extends PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $repositoryMock;
 
@@ -28,12 +35,12 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $matchingConfig
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartiallyMockedViewProvider(array $matchingConfig = array())
     {
         return $this
-            ->getMockBuilder('eZ\\Publish\\Core\\MVC\\Symfony\\View\\Provider\\Location\\Configured')
+            ->getMockBuilder(Configured::class)
             ->setConstructorArgs(
                 array(
                     $this->repositoryMock,
@@ -45,11 +52,11 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $repositoryClass = Repository::class;
 
         return $this
             ->getMockBuilder($repositoryClass)
@@ -66,12 +73,12 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLocationMock(array $properties = array())
     {
         return $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Location')
+            ->getMockBuilder(Location::class)
             ->setConstructorArgs(array($properties))
             ->getMockForAbstractClass();
     }
@@ -79,13 +86,29 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     /**
      * @param array $properties
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentInfoMock(array $properties = array())
     {
         return $this->
-            getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo')
+            getMockBuilder(ContentInfo::class)
             ->setConstructorArgs(array($properties))
             ->getMockForAbstractClass();
+    }
+
+    protected function getPermissionResolverMock()
+    {
+        return $this
+            ->getMockBuilder(PermissionResolver::class)
+            ->setMethods(null)
+            ->setConstructorArgs(
+                [
+                    $this->createMock(RoleDomainMapper::class),
+                    $this->createMock(LimitationService::class),
+                    $this->createMock(SPIUserHandler::class),
+                    $this->createMock(UserReference::class),
+                ]
+            )
+            ->getMock();
     }
 }

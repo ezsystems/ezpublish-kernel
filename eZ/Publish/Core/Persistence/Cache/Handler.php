@@ -1,13 +1,11 @@
 <?php
 
 /**
- * File containing the Persistence Cache Handler class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandlerInterface;
@@ -21,75 +19,62 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
+use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
+use eZ\Publish\Core\Persistence\Cache\BookmarkHandler as CacheBookmarkHandler;
+use eZ\Publish\Core\Persistence\Cache\NotificationHandler as CacheNotificationHandler;
+use eZ\Publish\SPI\Persistence\Notification\Handler as NotificationHandler;
 
 /**
  * Persistence Cache Handler class.
  */
 class Handler implements PersistenceHandlerInterface
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
-    /**
-     * @var SectionHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\SectionHandler */
     protected $sectionHandler;
 
-    /**
-     * @var ContentHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\ContentHandler */
     protected $contentHandler;
 
-    /**
-     * @var ContentLanguageHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler */
     protected $contentLanguageHandler;
 
-    /**
-     * @var ContentTypeHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\ContentTypeHandler */
     protected $contentTypeHandler;
 
-    /**
-     * @var LocationHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\LocationHandler */
     protected $locationHandler;
 
-    /**
-     * @var UserHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\UserHandler */
     protected $userHandler;
 
-    /**
-     * @var TrashHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\TrashHandler */
     protected $trashHandler;
 
-    /**
-     * @var UrlAliasHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler */
     protected $urlAliasHandler;
 
-    /**
-     * @var ObjectStateHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler */
     protected $objectStateHandler;
 
-    /**
-     * @var TransactionHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\TransactionHandler */
     protected $transactionHandler;
 
-    /**
-     * @var PersistenceLogger
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\URLHandler */
+    protected $urlHandler;
+
+    /** @var \eZ\Publish\Core\Persistence\Cache\BookmarkHandler */
+    protected $bookmarkHandler;
+
+    /** @var \eZ\Publish\Core\Persistence\Cache\NotificationHandler */
+    protected $notificationHandler;
+
+    /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
     /**
-     * Construct the class.
-     *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler Must be factory for inner persistence, ie: legacy
      * @param \eZ\Publish\Core\Persistence\Cache\SectionHandler $sectionHandler
      * @param \eZ\Publish\Core\Persistence\Cache\LocationHandler $locationHandler
@@ -101,6 +86,9 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\TrashHandler $trashHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler $urlAliasHandler
      * @param \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler $objectStateHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\URLHandler $urlHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\BookmarkHandler $bookmarkHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\NotificationHandler $notificationHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
@@ -115,6 +103,9 @@ class Handler implements PersistenceHandlerInterface
         CacheTrashHandler $trashHandler,
         CacheUrlAliasHandler $urlAliasHandler,
         CacheObjectStateHandler $objectStateHandler,
+        CacheUrlHandler $urlHandler,
+        CacheBookmarkHandler $bookmarkHandler,
+        CacheNotificationHandler $notificationHandler,
         PersistenceLogger $logger
     ) {
         $this->persistenceHandler = $persistenceHandler;
@@ -128,6 +119,9 @@ class Handler implements PersistenceHandlerInterface
         $this->trashHandler = $trashHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->objectStateHandler = $objectStateHandler;
+        $this->urlHandler = $urlHandler;
+        $this->bookmarkHandler = $bookmarkHandler;
+        $this->notificationHandler = $notificationHandler;
         $this->logger = $logger;
     }
 
@@ -224,9 +218,31 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Begin transaction.
-     *
-     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     * @return \eZ\Publish\Core\Persistence\Cache\URLHandler
+     */
+    public function urlHandler()
+    {
+        return $this->urlHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\Cache\BookmarkHandler
+     */
+    public function bookmarkHandler()
+    {
+        return $this->bookmarkHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\Cache\NotificationHandler
+     */
+    public function notificationHandler()
+    {
+        return $this->notificationHandler;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function beginTransaction()
     {
@@ -234,13 +250,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Commit transaction.
-     *
-     * Commit transaction, or throw exceptions if no transactions has been started.
-     *
-     * @throws \RuntimeException If no transaction has been started
-     *
-     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     * {@inheritdoc}
      */
     public function commit()
     {
@@ -248,13 +258,7 @@ class Handler implements PersistenceHandlerInterface
     }
 
     /**
-     * Rollback transaction.
-     *
-     * Rollback transaction, or throw exceptions if no transactions has been started.
-     *
-     * @throws \RuntimeException If no transaction has been started
-     *
-     * @deprecated Since 5.3 {@use transactionHandler()->beginTransaction()}
+     * {@inheritdoc}
      */
     public function rollback()
     {

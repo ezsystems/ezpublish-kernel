@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
@@ -80,6 +78,11 @@ class RelationListIntegrationTest extends BaseIntegrationTest
                     'selectionDefaultLocation' => '',
                     'selectionContentTypes' => array(),
                 ),
+                'validators' => array(
+                    'RelationListValueValidator' => array(
+                        'selectionLimit' => 3,
+                    ),
+                ),
             )
         );
     }
@@ -99,9 +102,18 @@ class RelationListIntegrationTest extends BaseIntegrationTest
             'selectionContentTypes' => array(),
         );
 
+        $validators = array(
+            'RelationListValueValidator' => array(
+                'selectionLimit' => 3,
+            ),
+        );
+
         return array(
             array('fieldType', 'ezobjectrelationlist'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array('fieldSettings' => $fieldSettings))),
+            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array(
+                'fieldSettings' => $fieldSettings,
+                'validators' => $validators,
+            ))),
         );
     }
 

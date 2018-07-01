@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
@@ -21,7 +19,7 @@ interface VersatileMatcher extends Matcher
     /**
      * Returns matcher object corresponding to $siteAccessName or null if non applicable.
      *
-     * @note VersatileMatcher objects always receive a request with cleaned up pathinfo (i.e. no SiteAccess part inside).
+     * Note: VersatileMatcher objects always receive a request with cleaned up pathinfo (i.e. no SiteAccess part inside).
      *
      * @param string $siteAccessName
      *

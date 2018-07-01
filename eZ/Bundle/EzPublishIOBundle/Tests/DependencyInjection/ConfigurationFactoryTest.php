@@ -48,7 +48,7 @@ abstract class ConfigurationFactoryTest extends AbstractContainerBuilderTestCase
     {
         $node = new ArrayNodeDefinition('handler');
         $this->factory->addConfiguration($node);
-        $this->assertInstanceOf('Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition', $node);
+        $this->assertInstanceOf(ArrayNodeDefinition::class, $node);
 
         // @todo customized testing of configuration node ?
     }
@@ -81,6 +81,7 @@ abstract class ConfigurationFactoryTest extends AbstractContainerBuilderTestCase
 
         return $handlerServiceId;
     }
+
     /**
      * Returns an instance of the tested factory.
      *

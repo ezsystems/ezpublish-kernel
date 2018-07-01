@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User\Gateway;
 
@@ -38,7 +36,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase::__construct
      */
     public function testCtor()
     {
@@ -53,7 +51,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase::removeRoleAssignmentById
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase::removeRoleAssignmentById
      */
     public function testRemoveRoleByAssignmentId()
     {

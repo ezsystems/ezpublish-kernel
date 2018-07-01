@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
@@ -14,20 +12,21 @@ use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Handler
  */
 class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 {
     const ALL_TRANSLATIONS_KEY = '0';
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::create
+     * {@inheritdoc}
      */
     public function create(CreateStruct $struct)
     {
@@ -38,17 +37,19 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::createDraftFromVersion
+     * {@inheritdoc}
      */
     public function createDraftFromVersion($contentId, $srcVersion, $userId)
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $srcVersion, 'user' => $userId));
+        $draft = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId);
+        $this->cache->invalidateTags(["content-$contentId-version-list"]);
 
-        return $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId);
+        return $draft;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::copy
+     * {@inheritdoc}
      */
     public function copy($contentId, $versionNo = null)
     {
@@ -58,64 +59,134 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::load
+     * {@inheritdoc}
      */
-    public function load($contentId, $version, array $translations = null)
+    public function load($contentId, $versionNo, array $translations = null)
     {
         $translationsKey = empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations);
-        $cache = $this->cache->getItem('content', $contentId, $version, $translationsKey);
-        $content = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $version, 'translations' => $translations));
-            $content = $this->persistenceHandler->contentHandler()->load($contentId, $version, $translations);
-            $cache->set($content);
+        $cacheItem = $this->cache->getItem("ez-content-${contentId}-${versionNo}-${translationsKey}");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'translations' => $translations));
+        $content = $this->persistenceHandler->contentHandler()->load($contentId, $versionNo, $translations);
+        $cacheItem->set($content);
+        $cacheItem->tag($this->getCacheTags($content->versionInfo->contentInfo, true));
+        $this->cache->save($cacheItem);
 
         return $content;
     }
 
+    public function loadContentList(array $contentLoadStructs): array
+    {
+        // Extract id's and make key suffix for each one (handling undefined versionNo and languages)
+        $contentIds = [];
+        $keySuffixes = [];
+        foreach ($contentLoadStructs as $struct) {
+            $contentIds[] = $struct->id;
+            $keySuffixes[$struct->id] = ($struct->versionNo ? "-{$struct->versionNo}-" : '-') .
+                (empty($struct->languages) ? self::ALL_TRANSLATIONS_KEY : implode('|', $struct->languages));
+        }
+
+        return $this->getMultipleCacheItems(
+            $contentIds,
+            'ez-content-',
+            function (array $cacheMissIds) use ($contentLoadStructs) {
+                $this->logger->logCall(__CLASS__ . '::loadContentList', ['content' => $cacheMissIds]);
+
+                $filteredStructs = [];
+                /* @var $contentLoadStructs \eZ\Publish\SPI\Persistence\Content\LoadStruct[] */
+                foreach ($contentLoadStructs as $struct) {
+                    if (in_array($struct->id, $cacheMissIds)) {
+                        $filteredStructs[] = $struct;
+                    }
+                }
+
+                return $this->persistenceHandler->contentHandler()->loadContentList($filteredStructs);
+            },
+            function (Content $content) {
+                return $this->getCacheTags($content->versionInfo->contentInfo, true);
+            },
+            $keySuffixes
+        );
+    }
+
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfo
+     * {@inheritdoc}
      */
     public function loadContentInfo($contentId)
     {
-        $cache = $this->cache->getItem('content', 'info', $contentId);
-        $contentInfo = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId));
-            $cache->set($contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($contentId));
+        $cacheItem = $this->cache->getItem("ez-content-info-${contentId}");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('content' => $contentId));
+        $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($contentId);
+        $cacheItem->set($contentInfo);
+        $cacheItem->tag($this->getCacheTags($contentInfo));
+        $this->cache->save($cacheItem);
 
         return $contentInfo;
     }
 
+    public function loadContentInfoList(array $contentIds)
+    {
+        return $this->getMultipleCacheItems(
+            $contentIds,
+            'ez-content-info-',
+            function (array $cacheMissIds) {
+                $this->logger->logCall(__CLASS__ . '::loadContentInfoList', ['content' => $cacheMissIds]);
+
+                return $this->persistenceHandler->contentHandler()->loadContentInfoList($cacheMissIds);
+            },
+            function (ContentInfo $info) {
+                return $this->getCacheTags($info);
+            }
+        );
+    }
+
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfoByRemoteId
+     * {@inheritdoc}
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
-        $cache = $this->cache->getItem('content', 'info', 'remoteId', $remoteId);
-        $contentInfo = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $remoteId));
-            $cache->set($contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId));
+        $cacheItem = $this->cache->getItem("ez-content-info-byRemoteId-${remoteId}");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('content' => $remoteId));
+        $contentInfo = $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId);
+        $cacheItem->set($contentInfo);
+        $cacheItem->tag($this->getCacheTags($contentInfo));
+        $this->cache->save($cacheItem);
 
         return $contentInfo;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadVersionInfo
+     * {@inheritdoc}
      */
     public function loadVersionInfo($contentId, $versionNo)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
+        $cacheItem = $this->cache->getItem("ez-content-version-info-${contentId}-${versionNo}");
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
-        return $this->persistenceHandler->contentHandler()->loadVersionInfo($contentId, $versionNo);
+        $this->logger->logCall(__METHOD__, ['content' => $contentId, 'version' => $versionNo]);
+        $versionInfo = $this->persistenceHandler->contentHandler()->loadVersionInfo($contentId, $versionNo);
+        $cacheItem->set($versionInfo);
+        $cacheItem->tag($this->getCacheTags($versionInfo->contentInfo));
+        $this->cache->save($cacheItem);
+
+        return $versionInfo;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadDraftsForUser
+     * {@inheritdoc}
      */
     public function loadDraftsForUser($userId)
     {
@@ -125,55 +196,49 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::setStatus
+     * {@inheritdoc}
      */
-    public function setStatus($contentId, $status, $version)
+    public function setStatus($contentId, $status, $versionNo)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'status' => $status, 'version' => $version));
-        $return = $this->persistenceHandler->contentHandler()->setStatus($contentId, $status, $version);
+        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'status' => $status, 'version' => $versionNo));
+        $return = $this->persistenceHandler->contentHandler()->setStatus($contentId, $status, $versionNo);
 
-        $this->cache->clear('content', $contentId, $version);
+        $this->cache->deleteItem("ez-content-version-info-${contentId}-${versionNo}");
         if ($status === VersionInfo::STATUS_PUBLISHED) {
-            $this->cache->clear('content', 'info', $contentId);
-            $this->cache->clear('content', 'info', 'remoteId');
+            $this->cache->invalidateTags(['content-' . $contentId]);
+        } else {
+            $this->cache->invalidateTags(["content-$contentId-version-list"]);
         }
 
         return $return;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::updateMetadata
+     * {@inheritdoc}
      */
     public function updateMetadata($contentId, MetadataUpdateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'struct' => $struct));
-
-        $this->cache
-            ->getItem('content', 'info', $contentId)
-            ->set($contentInfo = $this->persistenceHandler->contentHandler()->updateMetadata($contentId, $struct));
-
-        $this->cache->clear('content', $contentId, $contentInfo->currentVersionNo);
+        $contentInfo = $this->persistenceHandler->contentHandler()->updateMetadata($contentId, $struct);
+        $this->cache->invalidateTags(['content-' . $contentId]);
 
         return $contentInfo;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::updateContent
+     * {@inheritdoc}
      */
     public function updateContent($contentId, $versionNo, UpdateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->updateContent($contentId, $versionNo, $struct);
-        $this->cache->clear('content', $contentId, $versionNo);
-        $this->cache
-            ->getItem('content', $contentId, $versionNo, self::ALL_TRANSLATIONS_KEY)
-            ->set($content);
+        $this->cache->invalidateTags(['content-' . $contentId]);
 
         return $content;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::deleteContent
+     * {@inheritdoc}
      */
     public function deleteContent($contentId)
     {
@@ -187,47 +252,56 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
         $return = $this->persistenceHandler->contentHandler()->deleteContent($contentId);
 
-        // Clear cache of the reversely related Content after main action has executed
-        foreach ($reverseRelations as $relation) {
-            $this->cache->clear('content', $relation->sourceContentId);
+        $this->cache->invalidateTags(['content-' . $contentId]);
+        if (!empty($reverseRelations)) {
+            $this->cache->invalidateTags(
+                array_map(
+                    function ($relation) {
+                        // only the full content object *with* fields is affected by this
+                        return 'content-fields-' . $relation->sourceContentId;
+                    },
+                    $reverseRelations
+                )
+            );
         }
-
-        $this->cache->clear('content', $contentId);
-        $this->cache->clear('content', 'info', $contentId);
-        $this->cache->clear('content', 'info', 'remoteId');
-        $this->cache->clear('location', 'subtree');
 
         return $return;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::deleteVersion
+     * {@inheritdoc}
      */
     public function deleteVersion($contentId, $versionNo)
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
         $return = $this->persistenceHandler->contentHandler()->deleteVersion($contentId, $versionNo);
-
-        $this->cache->clear('content', $contentId, $versionNo);
-        $this->cache->clear('content', 'info', $contentId);
-        $this->cache->clear('content', 'info', 'remoteId');
-        $this->cache->clear('location', 'subtree');
+        $this->cache->invalidateTags(['content-' . $contentId]);
 
         return $return;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::listVersions
+     * {@inheritdoc}
      */
-    public function listVersions($contentId)
+    public function listVersions($contentId, $status = null, $limit = -1)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId));
+        $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list" . ($status ? "-byStatus-${status}" : ''));
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
-        return $this->persistenceHandler->contentHandler()->listVersions($contentId);
+        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'status' => $status));
+        $versions = $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
+        $cacheItem->set($versions);
+        $tags = ["content-$contentId", "content-$contentId-version-list"];
+        $cacheItem->tag(empty($versions) ? $tags : $this->getCacheTags($versions[0]->contentInfo, false, $tags));
+        $this->cache->save($cacheItem);
+
+        return $versions;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::addRelation
+     * {@inheritdoc}
      */
     public function addRelation(RelationCreateStruct $relation)
     {
@@ -237,7 +311,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::removeRelation
+     * {@inheritdoc}
      */
     public function removeRelation($relationId, $type)
     {
@@ -246,7 +320,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadRelations
+     * {@inheritdoc}
      */
     public function loadRelations($sourceContentId, $sourceContentVersionNo = null, $type = null)
     {
@@ -263,7 +337,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadReverseRelations
+     * {@inheritdoc}
      */
     public function loadReverseRelations($destinationContentId, $type = null)
     {
@@ -273,24 +347,91 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Handler::publish
+     * {@inheritdoc}
      */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->publish($contentId, $versionNo, $struct);
-
-        $this->cache->clear('content', $contentId);
-        $this->cache->clear('content', 'info', 'remoteId');
-        $this->cache->clear('location', 'subtree');
-
-        // warm up cache
-        $contentInfo = $content->versionInfo->contentInfo;
-        $this->cache
-            ->getItem('content', $contentInfo->id, $content->versionInfo->versionNo, self::ALL_TRANSLATIONS_KEY)
-            ->set($content);
-        $this->cache->getItem('content', 'info', $contentInfo->id)->set($contentInfo);
+        $this->cache->invalidateTags(['content-' . $contentId]);
 
         return $content;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeTranslationFromContent($contentId, $languageCode)
+    {
+        $this->deleteTranslationFromContent($contentId, $languageCode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteTranslationFromContent($contentId, $languageCode)
+    {
+        $this->logger->logCall(
+            __METHOD__,
+            [
+                'contentId' => $contentId,
+                'languageCode' => $languageCode,
+            ]
+        );
+
+        $this->persistenceHandler->contentHandler()->deleteTranslationFromContent($contentId, $languageCode);
+        $this->cache->invalidateTags(['content-' . $contentId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteTranslationFromDraft($contentId, $versionNo, $languageCode)
+    {
+        $this->logger->logCall(
+            __METHOD__,
+            ['content' => $contentId, 'version' => $versionNo, 'languageCode' => $languageCode]
+        );
+        $content = $this->persistenceHandler->contentHandler()->deleteTranslationFromDraft(
+            $contentId,
+            $versionNo,
+            $languageCode
+        );
+        $this->cache->invalidateTags(['content-' . $contentId]);
+
+        return $content;
+    }
+
+    /**
+     * Return relevant content and location tags so cache can be purged reliably.
+     *
+     * For use when generating cache, not on invalidation.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $contentInfo
+     * @param bool $withFields Set to true if item contains fields which should be expired on relation or type updates.
+     * @param array $tags Optional, can be used to specify other tags.
+     *
+     * @return array
+     */
+    private function getCacheTags(ContentInfo $contentInfo, $withFields = false, array $tags = [])
+    {
+        $tags[] = 'content-' . $contentInfo->id;
+
+        if ($withFields) {
+            $tags[] = 'content-fields-' . $contentInfo->id;
+            $tags[] = 'content-fields-type-' . $contentInfo->contentTypeId;
+        }
+
+        if ($contentInfo->mainLocationId) {
+            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
+            foreach ($locations as $location) {
+                $tags[] = 'location-' . $location->id;
+                foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
+                    $tags[] = 'location-path-' . $pathId;
+                }
+            }
+        }
+
+        return array_unique($tags);
     }
 }

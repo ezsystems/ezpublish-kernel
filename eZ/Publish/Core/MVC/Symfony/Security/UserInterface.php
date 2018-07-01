@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
@@ -24,6 +22,8 @@ interface UserInterface extends AdvancedUserInterface
     public function getAPIUser();
 
     /**
+     * @deprecated Will be replaced by {@link ReferenceUserInterface::getAPIUser()}, adding LogicException to signature.
+     *
      * @param \eZ\Publish\API\Repository\Values\User\User $apiUser
      */
     public function setAPIUser(APIUser $apiUser);

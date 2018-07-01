@@ -5,14 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LanguageLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
+use eZ\Publish\API\Repository\Values\User\Policy;
+use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use Exception;
 
@@ -207,6 +208,97 @@ class RoleServiceTest extends BaseTest
         $this->assertNotNull($role->id);
 
         return $data;
+    }
+
+    /**
+     * Test creating a role with multiple policies.
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::createRole
+     */
+    public function testCreateRoleWithMultiplePolicies()
+    {
+        $repository = $this->getRepository();
+        $roleService = $repository->getRoleService();
+
+        $limitation1 = new Limitation\ContentTypeLimitation();
+        $limitation1->limitationValues = ['1', '3', '13'];
+
+        $limitation2 = new Limitation\SectionLimitation();
+        $limitation2->limitationValues = ['2', '3'];
+
+        $limitation3 = new Limitation\OwnerLimitation();
+        $limitation3->limitationValues = ['1', '2'];
+
+        $limitation4 = new Limitation\UserGroupLimitation();
+        $limitation4->limitationValues = ['1'];
+
+        $policyCreateStruct1 = $roleService->newPolicyCreateStruct('content', 'read');
+        $policyCreateStruct1->addLimitation($limitation1);
+        $policyCreateStruct1->addLimitation($limitation2);
+
+        $policyCreateStruct2 = $roleService->newPolicyCreateStruct('content', 'edit');
+        $policyCreateStruct2->addLimitation($limitation3);
+        $policyCreateStruct2->addLimitation($limitation4);
+
+        $roleCreateStruct = $roleService->newRoleCreateStruct('ultimate_permissions');
+        $roleCreateStruct->addPolicy($policyCreateStruct1);
+        $roleCreateStruct->addPolicy($policyCreateStruct2);
+
+        $createdRole = $roleService->createRole($roleCreateStruct);
+
+        self::assertInstanceOf(Role::class, $createdRole);
+        self::assertGreaterThan(0, $createdRole->id);
+
+        $this->assertPropertiesCorrect(
+            [
+                'identifier' => $roleCreateStruct->identifier,
+            ],
+            $createdRole
+        );
+
+        self::assertCount(2, $createdRole->getPolicies());
+
+        foreach ($createdRole->getPolicies() as $policy) {
+            self::assertInstanceOf(Policy::class, $policy);
+            self::assertGreaterThan(0, $policy->id);
+            self::assertEquals($createdRole->id, $policy->roleId);
+
+            self::assertCount(2, $policy->getLimitations());
+
+            foreach ($policy->getLimitations() as $limitation) {
+                self::assertInstanceOf(Limitation::class, $limitation);
+
+                if ($policy->module == 'content' && $policy->function == 'read') {
+                    switch ($limitation->getIdentifier()) {
+                        case Limitation::CONTENTTYPE:
+                            self::assertEquals($limitation1->limitationValues, $limitation->limitationValues);
+                            break;
+
+                        case Limitation::SECTION:
+                            self::assertEquals($limitation2->limitationValues, $limitation->limitationValues);
+                            break;
+
+                        default:
+                            self::fail('Created role contains limitations not defined with create struct');
+                    }
+                } elseif ($policy->module == 'content' && $policy->function == 'edit') {
+                    switch ($limitation->getIdentifier()) {
+                        case Limitation::OWNER:
+                            self::assertEquals($limitation3->limitationValues, $limitation->limitationValues);
+                            break;
+
+                        case Limitation::USERGROUP:
+                            self::assertEquals($limitation4->limitationValues, $limitation->limitationValues);
+                            break;
+
+                        default:
+                            self::fail('Created role contains limitations not defined with create struct');
+                    }
+                } else {
+                    self::fail('Created role contains policy not defined with create struct');
+                }
+            }
+        }
     }
 
     /**
@@ -1608,47 +1700,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the removePolicy() method.
-     *
-     * @see \eZ\Publish\API\Repository\RoleService::removePolicy()
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
-     */
-    public function testRemovePolicy()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        // Instantiate a new role create
-        $roleCreate = $roleService->newRoleCreateStruct('newRole');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        // Create a new role with two policies
-        $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'create')
-        );
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'delete')
-        );
-        $roleService->publishRoleDraft($roleDraft);
-        $role = $roleService->loadRole($roleDraft->id);
-
-        // Delete all policies from the new role
-        foreach ($role->getPolicies() as $policy) {
-            $role = $roleService->removePolicy($role, $policy);
-        }
-        /* END: Use Case */
-
-        $this->assertSame(array(), $role->getPolicies());
-    }
-
-    /**
      * Test for the removePolicyByRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::removePolicyByRoleDraft()
@@ -2273,6 +2324,36 @@ class RoleServiceTest extends BaseTest
 
         // Administrator + Example Group
         $this->assertEquals(2, count($roleAssignments));
+    }
+
+    /**
+     * Test for the assignRoleToUserGroup() method.
+     *
+     * Related issue: EZP-29113
+     *
+     * @covers \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup()
+     */
+    public function testAssignRoleToUserGroupAffectsRoleAssignmentsForUser()
+    {
+        $roleService = $this->getRepository()->getRoleService();
+
+        /* BEGIN: Use Case */
+        $userGroup = $this->createUserGroupVersion1();
+        $user = $this->createUser('user', 'John', 'Doe', $userGroup);
+
+        $initRoleAssignments = $roleService->getRoleAssignmentsForUser($user, true);
+
+        // Load the existing "Administrator" role
+        $role = $roleService->loadRoleByIdentifier('Administrator');
+
+        // Assign the "Administrator" role to the newly created user group
+        $roleService->assignRoleToUserGroup($role, $userGroup);
+
+        $updatedRoleAssignments = $roleService->getRoleAssignmentsForUser($user, true);
+        /* END: Use Case */
+
+        $this->assertEmpty($initRoleAssignments);
+        $this->assertEquals(1, count($updatedRoleAssignments));
     }
 
     /**

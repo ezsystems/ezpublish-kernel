@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway;
 
@@ -16,6 +14,9 @@ use eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway\LegacyStorage
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use eZ\Publish\Core\Persistence\Database\InsertQuery;
 
+/**
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\BinaryFile\BinaryFileStorage\Gateway\DoctrineStorage} instead.
+ */
 class LegacyStorage extends BaseLegacyStorage
 {
     /**

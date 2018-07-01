@@ -6,15 +6,18 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPurger;
 
 use ArrayIterator;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger;
+use eZ\Publish\Core\IO\IOServiceInterface;
 use eZ\Publish\Core\IO\Values\BinaryFile;
+use PHPUnit\Framework\TestCase;
 
-class ImageFileVariationPurgerTest extends \PHPUnit_Framework_TestCase
+class ImageFileVariationPurgerTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $ioServiceMock;
 
-    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $pathGeneratorMock;
 
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\ImageFileVariationPurger */
@@ -22,8 +25,8 @@ class ImageFileVariationPurgerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->ioServiceMock = $this->getMock('eZ\Publish\Core\IO\IOServiceInterface');
-        $this->pathGeneratorMock = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator');
+        $this->ioServiceMock = $this->createMock(IOServiceInterface::class);
+        $this->pathGeneratorMock = $this->createMock(VariationPathGenerator::class);
     }
 
     public function testIteratesOverItems()
@@ -72,7 +75,7 @@ class ImageFileVariationPurgerTest extends \PHPUnit_Framework_TestCase
         $this->ioServiceMock
             ->expects($this->once())
             ->method('deleteBinaryFile')
-            ->with($this->isInstanceOf('eZ\Publish\Core\IO\Values\BinaryFile'));
+            ->with($this->isInstanceOf(BinaryFile::class));
 
         $purger->purge(array('large'));
     }

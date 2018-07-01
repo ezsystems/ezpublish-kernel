@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Routing\OptionsLoader;
 
@@ -24,11 +22,11 @@ class Mapper
      */
     public function mapRoute(Route $route)
     {
-        $optionsRoute = clone($route);
+        $optionsRoute = clone $route;
         $optionsRoute->setMethods(array('OPTIONS'));
         $optionsRoute->setDefault(
             '_controller',
-            '_ezpublish_rest.controller.options:getRouteOptions'
+            'ezpublish_rest.controller.options:getRouteOptions'
         );
 
         $optionsRoute->setDefault(
@@ -49,7 +47,7 @@ class Mapper
      */
     public function mergeMethodsDefault(Route $optionsRoute, Route $restRoute)
     {
-        $mergedRoute = clone($optionsRoute);
+        $mergedRoute = clone $optionsRoute;
         $mergedRoute->setDefault(
             'allowedMethods',
             implode(

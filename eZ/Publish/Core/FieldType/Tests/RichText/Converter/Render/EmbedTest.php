@@ -5,16 +5,16 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Render;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed;
+use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use DOMDocument;
+use Psr\Log\LoggerInterface;
 
-class EmbedTest extends PHPUnit_Framework_TestCase
+class EmbedTest extends TestCase
 {
     public function setUp()
     {
@@ -525,32 +525,28 @@ class EmbedTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRendererMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\FieldType\\RichText\\RendererInterface'
-        );
+        return $this->createMock(RendererInterface::class);
     }
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $loggerMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLoggerMock()
     {
-        return $this->getMock(
-            'Psr\\Log\\LoggerInterface'
-        );
+        return $this->createMock(LoggerInterface::class);
     }
 }

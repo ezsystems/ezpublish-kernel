@@ -5,47 +5,39 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
-use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
-use eZ\Publish\Core\FieldType\Relation\Type;
-
-class RelationProcessor extends FieldTypeProcessor
+class RelationProcessor extends BaseRelationProcessor
 {
     /**
-     * {@inheritdoc}
+     * In addition to the destinationContentId, adds a destinationContentHref entry.
+     *
+     * @param array $outgoingValueHash
+     *
+     * @return array
      */
-    public function preProcessFieldSettingsHash($incomingSettingsHash)
+    public function postProcessValueHash($outgoingValueHash)
     {
-        if (isset($incomingSettingsHash['selectionMethod'])) {
-            switch ($incomingSettingsHash['selectionMethod']) {
-                case 'SELECTION_BROWSE':
-                    $incomingSettingsHash['selectionMethod'] = Type::SELECTION_BROWSE;
-                    break;
-                case 'SELECTION_DROPDOWN':
-                    $incomingSettingsHash['selectionMethod'] = Type::SELECTION_DROPDOWN;
-            }
+        if (!isset($outgoingValueHash['destinationContentId']) || !$this->canMapContentHref()) {
+            return $outgoingValueHash;
         }
 
-        return $incomingSettingsHash;
+        $outgoingValueHash['destinationContentHref'] = $this->mapToContentHref(
+            $outgoingValueHash['destinationContentId']
+        );
+
+        return $outgoingValueHash;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function postProcessFieldSettingsHash($outgoingSettingsHash)
     {
-        if (isset($outgoingSettingsHash['selectionMethod'])) {
-            switch ($outgoingSettingsHash['selectionMethod']) {
-                case Type::SELECTION_BROWSE:
-                    $outgoingSettingsHash['selectionMethod'] = 'SELECTION_BROWSE';
-                    break;
-                case Type::SELECTION_DROPDOWN:
-                    $outgoingSettingsHash['selectionMethod'] = 'SELECTION_DROPDOWN';
-            }
+        $outgoingSettingsHash = parent::postProcessFieldSettingsHash($outgoingSettingsHash);
+
+        if (!empty($outgoingSettingsHash['selectionRoot'])) {
+            $outgoingSettingsHash['selectionRootHref'] = $this->mapToLocationHref(
+                $outgoingSettingsHash['selectionRoot']
+            );
         }
 
         return $outgoingSettingsHash;

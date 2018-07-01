@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Persistence\Content;
 
@@ -21,7 +19,10 @@ class ContentInfo extends ValueObject
 {
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
-    const STATUS_ARCHIVED = 2;
+    const STATUS_TRASHED = 2;
+
+    /** @deprecated Use ContentInfo::STATUS_TRASHED */
+    const STATUS_ARCHIVED = self::STATUS_TRASHED;
 
     /**
      * Content's unique ID.
@@ -60,6 +61,8 @@ class ContentInfo extends ValueObject
     public $currentVersionNo;
 
     /**
+     * @deprecated Use SPI\ContentInfo::$status (with value ContentInfo::STATUS_PUBLISHED)
+     *
      * Flag indicating if content is currently published.
      *
      * @var bool
@@ -117,4 +120,13 @@ class ContentInfo extends ValueObject
      * @var mixed
      */
     public $mainLocationId;
+
+    /**
+     * Status of the content.
+     *
+     * Replaces deprecated SPI\ContentInfo::$isPublished.
+     *
+     * @var int
+     */
+    public $status;
 }

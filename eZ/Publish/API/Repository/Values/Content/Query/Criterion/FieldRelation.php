@@ -5,14 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches Content based on the relations in relation field.
@@ -24,7 +21,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: will match if Content relates to one or more of the given ids through given relation field
  * - CONTAINS: will match if Content relates to all of the given ids through given relation field
  */
-class FieldRelation extends Criterion implements CriterionInterface
+class FieldRelation extends Criterion
 {
     public function getSpecifications()
     {
@@ -36,8 +33,13 @@ class FieldRelation extends Criterion implements CriterionInterface
         );
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new self($target, $operator, $value);
     }
 }

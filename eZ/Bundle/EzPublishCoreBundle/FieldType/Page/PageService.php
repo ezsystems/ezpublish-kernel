@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\FieldType\Page;
 
 use eZ\Publish\Core\FieldType\Page\PageService as BasePageService;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 
 class PageService extends BasePageService
 {

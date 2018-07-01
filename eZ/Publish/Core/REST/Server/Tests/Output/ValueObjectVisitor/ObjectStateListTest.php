@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+use eZ\Publish\Core\REST\Common\Values\RestObjectState;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ObjectStateList;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
@@ -113,7 +112,7 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
 
         $this->getVisitorMock()->expects($this->exactly(2))
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Common\\Values\\RestObjectState'));
+            ->with($this->isInstanceOf(RestObjectState::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

@@ -5,25 +5,28 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
 /**
  * RelationProcessor is an internal service used for handling field relations upon Content creation or update.
  *
- * @internal
+ * @internal Meant for internal use by Repository.
  */
 class RelationProcessor
 {
+    use LoggerAwareTrait;
+
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
@@ -37,6 +40,7 @@ class RelationProcessor
     public function __construct(Handler $handler)
     {
         $this->persistenceHandler = $handler;
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -72,12 +76,19 @@ class RelationProcessor
 
                 if (isset($destinationIds['locationIds'])) {
                     foreach ($destinationIds['locationIds'] as $locationId) {
-                        if (!isset($locationIdToContentIdMapping[$locationId])) {
-                            $location = $this->persistenceHandler->locationHandler()->load($locationId);
-                            $locationIdToContentIdMapping[$locationId] = $location->contentId;
-                        }
+                        try {
+                            if (!isset($locationIdToContentIdMapping[$locationId])) {
+                                $location = $this->persistenceHandler->locationHandler()->load($locationId);
+                                $locationIdToContentIdMapping[$locationId] = $location->contentId;
+                            }
 
-                        $relations[$relationType][$locationIdToContentIdMapping[$locationId]] = true;
+                            $relations[$relationType][$locationIdToContentIdMapping[$locationId]] = true;
+                        } catch (NotFoundException $e) {
+                            $this->logger->error('Invalid relation: destination location not found', [
+                                'fieldDefinitionId' => $fieldDefinitionId,
+                                'locationId' => $locationId,
+                            ]);
+                        }
                     }
                 }
 
@@ -110,8 +121,10 @@ class RelationProcessor
         $mappedRelations = array();
         foreach ($existingRelations as $relation) {
             if ($relation->type === Relation::FIELD) {
-                $fieldDefinitionId = $contentType->getFieldDefinition($relation->sourceFieldDefinitionIdentifier)->id;
-                $mappedRelations[$relation->type][$fieldDefinitionId][$relation->destinationContentInfo->id] = $relation;
+                $fieldDefinition = $contentType->getFieldDefinition($relation->sourceFieldDefinitionIdentifier);
+                if ($fieldDefinition !== null) {
+                    $mappedRelations[$relation->type][$fieldDefinition->id][$relation->destinationContentInfo->id] = $relation;
+                }
             }
             // Using bitwise AND as Legacy Stack stores COMMON, LINK and EMBED relation types
             // in the same entry using bitmask

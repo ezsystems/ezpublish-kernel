@@ -1,12 +1,10 @@
 <?php
 
 /**
- * File containing the SignalSlotPass class.
+ * This file is part of the eZ Publish Kernel package.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Base\Container\Compiler\Search;
 
@@ -17,6 +15,8 @@ use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * This compiler pass will attach Search Engine slots to SignalDispatcher.
+ *
+ * @deprecated Use {@see \eZ\Publish\Core\Base\Container\Compiler\Search\SearchEngineSignalSlotPass}
  */
 class SignalSlotPass implements CompilerPassInterface
 {

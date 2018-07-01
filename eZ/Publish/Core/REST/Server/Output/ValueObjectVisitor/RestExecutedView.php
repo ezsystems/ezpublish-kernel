@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
@@ -116,10 +114,10 @@ class RestExecutedView extends ValueObjectVisitor
         foreach ($data->searchResults->searchHits as $searchHit) {
             $generator->startObjectElement('searchHit');
 
-            $generator->startAttribute('score', 0);
+            $generator->startAttribute('score', (float)$searchHit->score);
             $generator->endAttribute('score');
 
-            $generator->startAttribute('index', 0);
+            $generator->startAttribute('index', (string)$searchHit->index);
             $generator->endAttribute('index');
 
             $generator->startObjectElement('value');

@@ -3,6 +3,7 @@ Feature: users can be manipulated using the Content API
     Background:
         Given I have "administrator" permissions
 
+    @broken
     Scenario: Creating and publishing a user with the Content API works
          When I create a "POST" request to "/content/objects"
           And I set header "content-type" with "ContentCreate" object
@@ -22,6 +23,7 @@ Feature: users can be manipulated using the Content API
          Then response status code is "204"
           And the User this Content referred to is deleted
 
+    @broken
     Scenario: Editing a User Content with the Content API works
         Given there is a User Content
          When I create a draft of this content

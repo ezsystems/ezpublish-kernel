@@ -5,28 +5,31 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\ViewControllerListener;
+use eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder;
+use eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use eZ\Publish\Core\MVC\Symfony\View\View;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpKernel\Controller\ControllerResolverInterface;
+use Symfony\Component\HttpKernel\Event\FilterControllerArgumentsEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
+class ViewControllerListenerTest extends TestCase
 {
     /**
-     * @var \Symfony\Component\HttpKernel\Controller\ControllerResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\HttpKernel\Controller\ControllerResolver|\PHPUnit\Framework\MockObject\MockObject
      */
     private $controllerResolver;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -36,7 +39,7 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
     private $controllerListener;
 
     /**
-     * @var \Symfony\Component\HttpKernel\Event\FilterControllerEvent|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\HttpKernel\Event\FilterControllerEvent|\PHPUnit\Framework\MockObject\MockObject
      */
     private $event;
 
@@ -45,25 +48,25 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
      */
     private $request;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry|\PHPUnit\Framework\MockObject\MockObject */
     private $viewBuilderRegistry;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject */
     private $viewConfigurator;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $viewBuilderMock;
 
-    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $eventDispatcher;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->controllerResolver = $this->getMock('Symfony\\Component\\HttpKernel\\Controller\\ControllerResolverInterface');
-        $this->viewBuilderRegistry = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilderRegistry');
-        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->controllerResolver = $this->createMock(ControllerResolverInterface::class);
+        $this->viewBuilderRegistry = $this->createMock(ViewBuilderRegistry::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->controllerListener = new ViewControllerListener(
             $this->controllerResolver,
             $this->viewBuilderRegistry,
@@ -72,16 +75,13 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         );
 
         $this->request = new Request();
-        $this->event = $this
-            ->getMockBuilder('Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->event = $this->createMock(FilterControllerArgumentsEvent::class);
         $this->event
             ->expects($this->any())
             ->method('getRequest')
             ->will($this->returnValue($this->request));
 
-        $this->viewBuilderMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Builder\ViewBuilder');
+        $this->viewBuilderMock = $this->createMock(ViewBuilder::class);
     }
 
     public function testGetSubscribedEvents()
@@ -101,6 +101,24 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getFromRegistry')
             ->with('Foo::bar')
+            ->willReturn(null);
+
+        $this->event
+            ->expects($this->never())
+            ->method('setController');
+
+        $this->controllerListener->getController($this->event);
+    }
+
+    public function testGetControllerWithClosure()
+    {
+        $initialController = function () {};
+        $this->request->attributes->set('_controller', $initialController);
+
+        $this->viewBuilderRegistry
+            ->expects($this->once())
+            ->method('getFromRegistry')
+            ->with($initialController)
             ->willReturn(null);
 
         $this->event
@@ -142,6 +160,11 @@ class ViewControllerListenerTest extends PHPUnit_Framework_TestCase
         $this->event
             ->expects($this->once())
             ->method('setController');
+
+        $this->controllerResolver
+            ->expects($this->once())
+            ->method('getController')
+            ->will($this->returnValue(function () {}));
 
         $this->controllerListener->getController($this->event);
         $this->assertEquals($customController, $this->request->attributes->get('_controller'));

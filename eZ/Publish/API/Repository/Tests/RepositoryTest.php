@@ -5,12 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
 use Exception;
+use eZ\Publish\API\Repository\NotificationService;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 
 /**
@@ -21,6 +21,14 @@ use eZ\Publish\Core\Repository\Values\User\UserReference;
  */
 class RepositoryTest extends BaseTest
 {
+    /**
+     * Test for the getRepository() method.
+     */
+    public function testGetRepository()
+    {
+        $this->assertInstanceOf(Repository::class, $this->getSetupFactory()->getRepository(true));
+    }
+
     /**
      * Test for the getContentService() method.
      *
@@ -117,6 +125,22 @@ class RepositoryTest extends BaseTest
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\UserService',
             $repository->getUserService()
+        );
+    }
+
+    /**
+     * Test for the getNotificationService() method.
+     *
+     * @group user
+     *
+     * @see \eZ\Publish\API\Repository\Repository::getNotificationService()
+     */
+    public function testGetNotificationService()
+    {
+        $repository = $this->getRepository();
+        $this->assertInstanceOf(
+            NotificationService::class,
+            $repository->getNotificationService()
         );
     }
 
@@ -230,6 +254,23 @@ class RepositoryTest extends BaseTest
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\SearchService',
             $repository->getSearchService()
+        );
+    }
+
+    /**
+     * Test for the getSearchService() method.
+     *
+     * @group permission
+     *
+     * @see \eZ\Publish\API\Repository\Repository::getPermissionResolver()
+     */
+    public function testGetPermissionResolver()
+    {
+        $repository = $this->getRepository();
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\PermissionResolver',
+            $repository->getPermissionResolver()
         );
     }
 

@@ -109,14 +109,14 @@ class EzPublishIOExtension extends Extension
     {
         $handlers = array();
         if (isset($config[$key])) {
-            foreach ($config[$key] as $name => $config) {
-                list($type, $config) = each($config);
+            foreach ($config[$key] as $name => $value) {
                 if (isset($handlers[$name])) {
                     throw new InvalidConfigurationException("A $key named $name already exists");
                 }
-                $config['type'] = $type;
-                $config['name'] = $name;
-                $handlers[$name] = $config;
+                $handlerConfig = current($value);
+                $handlerConfig['type'] = key($value);
+                $handlerConfig['name'] = $name;
+                $handlers[$name] = $handlerConfig;
             }
         }
         $container->setParameter("ez_io.{$key}", $handlers);

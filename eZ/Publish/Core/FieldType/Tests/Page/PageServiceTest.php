@@ -5,29 +5,30 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\Core\FieldType\Page\PageStorage;
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\FieldType\Page\Parts\Item;
 use eZ\Publish\Core\FieldType\Page\Parts\Page;
 use eZ\Publish\Core\FieldType\Page\Parts\Zone;
 use eZ\Publish\Core\FieldType\Page\Value;
+use eZ\Publish\Core\FieldType\Page\PageService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class PageServiceTest extends PHPUnit_Framework_TestCase
+class PageServiceTest extends TestCase
 {
     /**
      * Class to instantiate to get the page service.
      */
-    const PAGESERVICE_CLASS = 'eZ\\Publish\\Core\\FieldType\\Page\\PageService';
+    const PAGESERVICE_CLASS = PageService::class;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $storageGateway;
 
@@ -47,7 +48,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     protected $blockDefinition;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\ContentService
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\ContentService
      */
     protected $contentService;
 
@@ -57,8 +58,8 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
         $this->zoneDefinition = $this->getZoneDefinition();
         $this->blockDefinition = $this->getBlockDefinition();
 
-        $this->storageGateway = $this->getMockForAbstractClass('eZ\\Publish\\Core\\FieldType\\Page\\PageStorage\\Gateway');
-        $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        $this->storageGateway = $this->createMock(PageStorage\Gateway::class);
+        $this->contentService = $this->createMock(ContentService::class);
         $pageServiceClass = static::PAGESERVICE_CLASS;
         $this->pageService = new $pageServiceClass(
             $this->contentService,
@@ -128,7 +129,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinition
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinition
      */
     public function testGetZoneDefinition()
     {
@@ -136,7 +137,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinitionByLayout
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinitionByLayout
      */
     public function testGetZoneDefinitionByLayout()
     {
@@ -144,9 +145,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      *
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinitionByLayout
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getZoneDefinitionByLayout
      */
     public function testGetZoneDefinitionByLayoutInvalidLayout()
     {
@@ -163,7 +164,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getLayoutTemplateProvider
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
      */
     public function testGetLayoutTemplate($zoneLayout, $expectedTemplate)
     {
@@ -171,9 +172,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      *
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getLayoutTemplate
      */
     public function testGetLayoutTemplateInvalidLayout()
     {
@@ -192,7 +193,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider hasZoneLayoutProvider
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasZoneLayout
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasZoneLayout
      *
      * @param string $layout
      * @param bool $expectedResult
@@ -203,7 +204,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getAvailableZoneLayouts
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getAvailableZoneLayouts
      */
     public function testGetAvailableZoneLayouts()
     {
@@ -211,7 +212,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinition
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinition
      */
     public function testGetBlockDefinition()
     {
@@ -219,7 +220,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinitionByIdentifier
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinitionByIdentifier
      */
     public function testGetBlockDefinitionByIdentifier()
     {
@@ -227,9 +228,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException OutOfBoundsException
+     * @expectedException \OutOfBoundsException
      *
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinitionByIdentifier
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getBlockDefinitionByIdentifier
      */
     public function testGetBlockDefinitionByIdentifierInvalidBlock()
     {
@@ -248,7 +249,7 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider hasBlockDefinitionProvider
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasBlockDefinition
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasBlockDefinition
      *
      * @param string $blockIdentifier
      * @param bool $expectedResult
@@ -269,8 +270,8 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::setStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::setStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
      */
     public function testGetStorageGateway()
     {
@@ -280,11 +281,11 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      *
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getValidBlockItems
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getValidBlockItems
      */
     public function testGetValidBlockItemsNoGateway()
     {
@@ -292,9 +293,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getValidBlockItems
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getValidBlockItems
      */
     public function testGetValidBlockItems()
     {
@@ -316,9 +317,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getLastValidBlockItem
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getLastValidBlockItem
      */
     public function testGetLastValidBlockItem()
     {
@@ -337,9 +338,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getWaitingBlockItems
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getWaitingBlockItems
      */
     public function testGetWaitingBlockItems()
     {
@@ -361,9 +362,9 @@ class PageServiceTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
-     * @covers eZ\Publish\Core\FieldType\Page\PageService::getArchivedBlockItems
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::hasStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getStorageGateway
+     * @covers \eZ\Publish\Core\FieldType\Page\PageService::getArchivedBlockItems
      */
     public function testGetArchivedBlockItems()
     {

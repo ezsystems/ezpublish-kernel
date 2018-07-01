@@ -5,11 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
@@ -85,6 +86,8 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
             array('/View/Result'),
             array('/View/Result[@media-type="application/vnd.ez.api.ViewResult+xml"]'),
             array('/View/Result[@href="/content/views/test_view/results"]'),
+            array('/View/Result/searchHits/searchHit[@score="0.123" and @index="alexandria"]'),
+            array('/View/Result/searchHits/searchHit[@score="0.234" and @index="waze"]'),
         );
     }
 
@@ -115,27 +118,27 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getLocationServiceMock()
     {
-        return $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
+        return $this->createMock(LocationService::class);
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getContentServiceMock()
     {
-        return $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
+        return $this->createMock(ContentService::class);
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getContentTypeServiceMock()
     {
-        return $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
+        return $this->createMock(ContentTypeService::class);
     }
 
     /**
@@ -144,6 +147,8 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
     protected function buildContentSearchHit()
     {
         return new SearchHit([
+            'score' => 0.123,
+            'index' => 'alexandria',
             'valueObject' => new ApiValues\Content([
                 'versionInfo' => new Content\VersionInfo(['contentInfo' => new ContentInfo()]),
             ]),
@@ -155,6 +160,10 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
      */
     protected function buildLocationSearchHit()
     {
-        return new SearchHit(['valueObject' => new ApiValues\Location()]);
+        return new SearchHit([
+            'score' => 0.234,
+            'index' => 'waze',
+            'valueObject' => new ApiValues\Location(),
+        ]);
     }
 }

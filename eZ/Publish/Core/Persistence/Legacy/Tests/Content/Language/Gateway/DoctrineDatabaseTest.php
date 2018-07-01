@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway;
 
@@ -39,7 +37,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::__construct
      */
     public function testCtor()
     {
@@ -54,8 +52,8 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::insertLanguage
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::insertLanguage
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
      */
     public function testInsertLanguage()
     {
@@ -96,8 +94,8 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::updateLanguage
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::updateLanguage
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::setCommonLanguageColumns
      */
     public function testUpdateLanguage()
     {
@@ -125,8 +123,8 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadLanguageData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadLanguageData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
      */
     public function testLoadLanguageData()
     {
@@ -148,8 +146,8 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadAllLanguagesData
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadAllLanguagesData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
      */
     public function testLoadAllLanguagesData()
     {
@@ -177,7 +175,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::deleteLanguage
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::deleteLanguage
      */
     public function testDeleteLanguage()
     {

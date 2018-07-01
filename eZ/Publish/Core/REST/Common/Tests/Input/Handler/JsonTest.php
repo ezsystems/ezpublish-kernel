@@ -5,18 +5,16 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Input\Handler;
 
 use eZ\Publish\Core\REST\Common;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Json input handler test.
  */
-class JsonTest extends PHPUnit_Framework_TestCase
+class JsonTest extends TestCase
 {
     /**
      * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser

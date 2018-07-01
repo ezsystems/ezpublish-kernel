@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\TextLine;
 
@@ -56,7 +54,7 @@ class Type extends FieldType
                     "Validator '%validator%' is unknown",
                     null,
                     array(
-                        'validator' => $validatorIdentifier,
+                        '%validator%' => $validatorIdentifier,
                     )
                 );
                 continue;
@@ -93,12 +91,12 @@ class Type extends FieldType
         if (isset($constraints['maxStringLength']) &&
             $constraints['maxStringLength'] !== false &&
             $constraints['maxStringLength'] !== 0 &&
-            strlen($fieldValue->text) > $constraints['maxStringLength']) {
+            mb_strlen($fieldValue->text) > $constraints['maxStringLength']) {
             $validationErrors[] = new ValidationError(
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
                 array(
-                    'size' => $constraints['maxStringLength'],
+                    '%size%' => $constraints['maxStringLength'],
                 ),
                 'text'
             );
@@ -107,12 +105,12 @@ class Type extends FieldType
         if (isset($constraints['minStringLength']) &&
             $constraints['minStringLength'] !== false &&
             $constraints['minStringLength'] !== 0 &&
-            strlen($fieldValue->text) < $constraints['minStringLength']) {
+            mb_strlen($fieldValue->text) < $constraints['minStringLength']) {
             $validationErrors[] = new ValidationError(
                 'The string can not be shorter than %size% character.',
                 'The string can not be shorter than %size% characters.',
                 array(
-                    'size' => $constraints['minStringLength'],
+                    '%size%' => $constraints['minStringLength'],
                 ),
                 'text'
             );

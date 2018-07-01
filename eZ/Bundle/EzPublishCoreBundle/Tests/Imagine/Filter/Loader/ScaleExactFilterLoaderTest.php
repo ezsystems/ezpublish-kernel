@@ -5,18 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\ScaleExactFilterLoader;
-use PHPUnit_Framework_TestCase;
+use Imagine\Image\ImageInterface;
+use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
+use PHPUnit\Framework\TestCase;
 
-class ScaleExactFilterLoaderTest extends PHPUnit_Framework_TestCase
+class ScaleExactFilterLoaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $innerLoader;
 
@@ -28,7 +28,7 @@ class ScaleExactFilterLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerLoader = $this->getMock('\Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface');
+        $this->innerLoader = $this->createMock(LoaderInterface::class);
         $this->loader = new ScaleExactFilterLoader();
         $this->loader->setInnerLoader($this->innerLoader);
     }
@@ -39,7 +39,7 @@ class ScaleExactFilterLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadInvalidOptions(array $options)
     {
-        $this->loader->load($this->getMock('\Imagine\Image\ImageInterface'), $options);
+        $this->loader->load($this->createMock(ImageInterface::class), $options);
     }
 
     public function loadInvalidProvider()
@@ -54,7 +54,7 @@ class ScaleExactFilterLoaderTest extends PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $options = array(123, 456);
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $this->innerLoader
             ->expects($this->once())
             ->method('load')

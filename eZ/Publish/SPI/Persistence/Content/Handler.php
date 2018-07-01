@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Persistence\Content;
 
@@ -70,6 +68,21 @@ interface Handler
     public function load($id, $version, array $translations = null);
 
     /**
+     * Return list of unique Content, with content id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * NOTE: Even if LoadStruct technically allows to load several versions of same content, this method does not allow
+     * this by design as content is returned as Map with key being content id.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\LoadStruct[] $contentLoadStructs
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content[<int>]
+     */
+    public function loadContentList(array $contentLoadStructs): array;
+
+    /**
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId
@@ -77,6 +90,18 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function loadContentInfo($contentId);
+
+    /**
+     * Return list of unique Content Info, with content id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param array $contentIds
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
+     */
+    public function loadContentInfoList(array $contentIds);
 
     /**
      * Returns the metadata object for a content identified by $remoteId.
@@ -170,11 +195,15 @@ interface Handler
     /**
      * Returns the versions for $contentId.
      *
+     * Result is returned with oldest version first (sorted by created, alternatively version number or id if auto increment).
+     *
      * @param int $contentId
+     * @param mixed|null $status Optional argument to filter versions by status, like {@see VersionInfo::STATUS_ARCHIVED}.
+     * @param int $limit Limit for items returned, -1 means none.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\VersionInfo[]
      */
-    public function listVersions($contentId);
+    public function listVersions($contentId, $status = null, $limit = -1);
 
     /**
      * Copy Content with Fields, Versions & Relations from $contentId in $version.
@@ -256,4 +285,33 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish($contentId, $versionNo, MetadataUpdateStruct $metaDataUpdateStruct);
+
+    /**
+     * Remove the specified translation from all the Versions of a Content Object.
+     *
+     * @deprecated since 6.13, use {@see deleteTranslationFromContent} instead
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     */
+    public function removeTranslationFromContent($contentId, $languageCode);
+
+    /**
+     * Delete the specified translation from all the Versions of a Content Object.
+     *
+     * @param int $contentId
+     * @param string $languageCode language code of the translation
+     */
+    public function deleteTranslationFromContent($contentId, $languageCode);
+
+    /**
+     * Remove the specified Translation from the given Version Draft of a Content Object.
+     *
+     * @param int $contentId
+     * @param int $versionNo
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content The Content Draft w/o removed Translation
+     */
+    public function deleteTranslationFromDraft($contentId, $versionNo, $languageCode);
 }

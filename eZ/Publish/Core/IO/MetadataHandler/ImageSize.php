@@ -10,6 +10,9 @@ namespace eZ\Publish\Core\IO\MetadataHandler;
 
 use eZ\Publish\Core\IO\MetadataHandler;
 
+/**
+ * @deprecated Not in use anymore by the kernel.
+ */
 class ImageSize implements MetadataHandler
 {
     public function extract($filePath)

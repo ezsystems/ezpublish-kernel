@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\User;
 
@@ -35,7 +33,7 @@ class Mapper
         $user->login = $data['login'];
         $user->email = $data['email'];
         $user->passwordHash = $data['password_hash'];
-        $user->hashAlgorithm = $data['password_hash_type'];
+        $user->hashAlgorithm = (int)$data['password_hash_type'];
         $user->isEnabled = (bool)$data['is_enabled'];
         $user->maxLogin = $data['max_login'];
 
@@ -172,7 +170,7 @@ class Mapper
             $id = (int)$row['id'];
             $roleId = (int)$row['role_id'];
             $contentId = (int)$row['contentobject_id'];
-             // if user already have full access to a role, continue
+            // if user already have full access to a role, continue
             if (isset($roleAssignmentData[$roleId][$contentId])
               && $roleAssignmentData[$roleId][$contentId] instanceof RoleAssignment) {
                 continue;

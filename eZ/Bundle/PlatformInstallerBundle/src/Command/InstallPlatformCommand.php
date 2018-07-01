@@ -9,15 +9,14 @@
 namespace EzSystems\PlatformInstallerBundle\Command;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\ConnectionException;
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 
 class InstallPlatformCommand extends Command
 {
@@ -27,25 +26,15 @@ class InstallPlatformCommand extends Command
     /** @var \Symfony\Component\Console\Output\OutputInterface */
     private $output;
 
-    /** @var \Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface */
-    private $cacheClearer;
-
-    /** @var \Symfony\Component\Filesystem\Filesystem */
-    private $filesystem;
-
-    /** @var string */
-    private $cacheDir;
+    /** @var \Psr\Cache\CacheItemPoolInterface */
+    private $cachePool;
 
     /** @var string */
     private $environment;
 
-    /** @var string */
-    private $searchEngine;
-
     /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
     private $installers = array();
 
-    const EXIT_DATABASE_NOT_FOUND_ERROR = 3;
     const EXIT_GENERAL_DATABASE_ERROR = 4;
     const EXIT_PARAMETERS_NOT_FOUND = 5;
     const EXIT_UNKNOWN_INSTALL_TYPE = 6;
@@ -54,19 +43,13 @@ class InstallPlatformCommand extends Command
     public function __construct(
         Connection $db,
         array $installers,
-        CacheClearerInterface $cacheClearer,
-        Filesystem $filesystem,
-        $cacheDir,
-        $environment,
-        $searchEngine
+        CacheItemPoolInterface $cachePool,
+        $environment
     ) {
         $this->db = $db;
         $this->installers = $installers;
-        $this->cacheClearer = $cacheClearer;
-        $this->filesystem = $filesystem;
-        $this->cacheDir = $cacheDir;
+        $this->cachePool = $cachePool;
         $this->environment = $environment;
-        $this->searchEngine = $searchEngine;
         parent::__construct();
     }
 
@@ -85,12 +68,15 @@ class InstallPlatformCommand extends Command
         $this->output = $output;
         $this->checkPermissions();
         $this->checkParameters();
-        $this->checkDatabase();
+        $this->checkCreateDatabase($output);
 
         $type = $input->getArgument('type');
         $installer = $this->getInstaller($type);
         if ($installer === false) {
-            $output->writeln("Unknown install type '$type'");
+            $output->writeln(
+                "Unknown install type '$type', available options in currently installed eZ Platform package: " .
+                implode(', ', array_keys($this->installers))
+            );
             exit(self::EXIT_UNKNOWN_INSTALL_TYPE);
         }
 
@@ -105,8 +91,8 @@ class InstallPlatformCommand extends Command
 
     private function checkPermissions()
     {
-        if (!is_writable('app/config')) {
-            $this->output->writeln('app/config is not writable');
+        if (!is_writable('web') && !is_writable('web/var')) {
+            $this->output->writeln('[web/ | web/var] is not writable');
             exit(self::EXIT_MISSING_PERMISSIONS);
         }
     }
@@ -115,70 +101,47 @@ class InstallPlatformCommand extends Command
     {
         $parametersFile = 'app/config/parameters.yml';
         if (!is_file($parametersFile)) {
-            $this->output->writeln("Required configuration file $parametersFile not found");
+            $this->output->writeln("Required configuration file '$parametersFile' not found");
             exit(self::EXIT_PARAMETERS_NOT_FOUND);
         }
     }
 
-    /**
-     * @throws \Exception if an unexpected database error occurs
-     */
-    private function configuredDatabaseExists()
+    private function checkCreateDatabase(OutputInterface $output)
     {
+        $output->writeln(
+            sprintf(
+                'Creating the database <comment>%s</comment> if it does not exist, executing command doctrine:database:create --if-not-exists',
+                $this->db->getDatabase()
+            )
+        );
         try {
-            $this->db->connect();
-        } catch (ConnectionException $e) {
-            // @todo 1049 is MySQL's code for "database doesn't exist", refactor
-            if ($e->getPrevious()->getCode() == 1049) {
-                return false;
-            }
-            throw $e;
-        }
-
-        return true;
-    }
-
-    private function checkDatabase()
-    {
-        try {
-            if (!$this->configuredDatabaseExists()) {
-                $this->output->writeln(
-                    sprintf(
-                        "The configured database '%s' does not exist",
-                        $this->db->getDatabase()
-                    )
-                );
-                exit(self::EXIT_DATABASE_NOT_FOUND_ERROR);
-            }
-        } catch (ConnectionException $e) {
-            $this->output->writeln('An error occured connecting to the database:');
-            $this->output->writeln($e->getMessage());
-            $this->output->writeln('Please check the database configuration in parameters.yml');
+            $bufferedOutput = new BufferedOutput();
+            $this->executeCommand($bufferedOutput, 'doctrine:database:create --if-not-exists');
+            $output->writeln($bufferedOutput->fetch());
+        } catch (\RuntimeException $exception) {
+            $this->output->writeln(
+                sprintf(
+                    "<error>The configured database '%s' does not exist or cannot be created.</error>",
+                    $this->db->getDatabase()
+                )
+            );
+            $this->output->writeln("Please check the database configuration in 'app/config/parameters.yml'");
             exit(self::EXIT_GENERAL_DATABASE_ERROR);
         }
     }
 
+    /**
+     * Clear all content related cache (persistence cache).
+     *
+     * @param OutputInterface $output
+     */
     private function cacheClear(OutputInterface $output)
     {
-        if (!is_writable($this->cacheDir)) {
-            throw new \RuntimeException(sprintf('Unable to write in the "%s" directory', $this->cacheDir));
-        }
-
-        $output->writeln(sprintf('Clearing cache for directory <info>%s</info>', $this->cacheDir));
-        $oldCacheDir = $this->cacheDir . '_old';
-
-        if ($this->filesystem->exists($oldCacheDir)) {
-            $this->filesystem->remove($oldCacheDir);
-        }
-
-        $this->cacheClearer->clear($this->cacheDir);
-
-        $this->filesystem->rename($this->cacheDir, $oldCacheDir);
-        $this->filesystem->remove($oldCacheDir);
+        $this->cachePool->clear();
     }
 
     /**
-     * Calls indexing commands on search engines known to need that.
+     * Calls indexing commands.
      *
      * @todo This should not be needed once/if the Installer starts using API in the future.
      *       So temporary measure until it is not raw SQL based for the data itself (as opposed to the schema).
@@ -190,15 +153,10 @@ class InstallPlatformCommand extends Command
      */
     private function indexData(OutputInterface $output)
     {
-        if ($this->searchEngine === 'solr') {
-            $output->writeln('Solr search engine configured, executing command ezplatform:solr_create_index');
-            $this->executeCommand($output, 'ezplatform:solr_create_index');
-        }
-
-        if ($this->searchEngine === 'elasticsearch') {
-            $output->writeln('Elasticsearch search engine configured, executing command ezplatform:elasticsearch_create_index');
-            $this->executeCommand($output, 'ezplatform:elasticsearch_create_index');
-        }
+        $output->writeln(
+            sprintf('Search engine re-indexing, executing command ezplatform:reindex')
+        );
+        $this->executeCommand($output, 'ezplatform:reindex');
     }
 
     /**
@@ -218,7 +176,7 @@ class InstallPlatformCommand extends Command
     /**
      * Executes a Symfony command in separate process.
      *
-     * Typically usefull when configuration has changed, our you are outside of Symfony context (Composer commands).
+     * Typically useful when configuration has changed, or you are outside of Symfony context (Composer commands).
      *
      * Based on {@see \Sensio\Bundle\DistributionBundle\Composer\ScriptHandler::executeCommand}.
      *
@@ -249,7 +207,7 @@ class InstallPlatformCommand extends Command
         $php = escapeshellarg($phpPath) . ($phpArgs ? ' ' . $phpArgs : '');
 
         // Make sure to pass along relevant global Symfony options to console command
-        $console = escapeshellarg('app/console');
+        $console = escapeshellarg('bin/console');
         if ($output->getVerbosity() > OutputInterface::VERBOSITY_NORMAL) {
             $console .= ' -' . str_repeat('v', $output->getVerbosity() - 1);
         }

@@ -5,20 +5,21 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server;
 
 use eZ\Publish\API\Repository\Repository;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Routing\RouterInterface;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher as InputDispatcher;
 use Symfony\Component\HttpFoundation\Request;
-use eZ\Publish\Core\REST\Common\RequestParser as RequestParser;
+use eZ\Publish\Core\REST\Common\RequestParser;
 
-abstract class Controller extends ContainerAware
+abstract class Controller implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
      */

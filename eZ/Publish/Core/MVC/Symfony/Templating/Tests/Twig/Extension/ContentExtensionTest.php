@@ -5,19 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ContentExtension;
 use eZ\Publish\Core\Helper\TranslationHelper;
+use eZ\Publish\Core\Helper\FieldHelper;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use Psr\Log\LoggerInterface;
 
 /**
  * Integration tests for ContentExtension templates.
@@ -27,7 +31,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
 {
     /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject
      */
     private $fieldHelperMock;
 
@@ -35,8 +39,7 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
 
     public function getExtensions()
     {
-        $this->fieldHelperMock = $this->getMockBuilder('eZ\\Publish\\Core\\Helper\\FieldHelper')
-            ->disableOriginalConstructor()->getMock();
+        $this->fieldHelperMock = $this->createMock(FieldHelper::class);
         $configResolver = $this->getConfigResolverMock();
 
         return array(
@@ -44,9 +47,9 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
                 $this->getRepositoryMock(),
                 new TranslationHelper(
                     $configResolver,
-                    $this->getMock('eZ\\Publish\\API\\Repository\\ContentService'),
+                    $this->createMock(ContentService::class),
                     array(),
-                    $this->getMock('Psr\Log\LoggerInterface')
+                    $this->createMock(LoggerInterface::class)
                 ),
                 $this->fieldHelperMock
             ),
@@ -55,7 +58,7 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
 
     public function getFixturesDir()
     {
-        return dirname(__FILE__) . '/_fixtures/content_functions/';
+        return __DIR__ . '/_fixtures/content_functions/';
     }
 
     /**
@@ -113,9 +116,7 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
 
     private function getConfigResolverMock()
     {
-        $mock = $this->getMock(
-            'eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'
-        );
+        $mock = $this->createMock(ConfigResolverInterface::class);
         // Signature: ConfigResolverInterface->getParameter( $paramName, $namespace = null, $scope = null )
         $mock->expects($this->any())
             ->method('getParameter')
@@ -148,11 +149,11 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRepositoryMock()
     {
-        $mock = $this->getMock('eZ\\Publish\\API\\Repository\\Repository');
+        $mock = $this->createMock(Repository::class);
 
         $mock->expects($this->any())
             ->method('getContentTypeService')
@@ -162,11 +163,11 @@ class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentTypeServiceMock()
     {
-        $mock = $this->getMock('eZ\\Publish\\API\\Repository\\ContentTypeService');
+        $mock = $this->createMock(ContentTypeService::class);
 
         $mock->expects($this->any())
             ->method('loadContentType')

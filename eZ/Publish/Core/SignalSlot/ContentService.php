@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot;
 
@@ -22,6 +20,8 @@ use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteTranslationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentDraftSignal;
@@ -284,6 +284,8 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return mixed[] Affected Location Id's
      */
     public function deleteContent(ContentInfo $contentInfo)
     {
@@ -292,6 +294,7 @@ class ContentService implements ContentServiceInterface
             new DeleteContentSignal(
                 array(
                     'contentId' => $contentInfo->id,
+                    'affectedLocationIds' => $returnValue,
                 )
             )
         );
@@ -322,6 +325,7 @@ class ContentService implements ContentServiceInterface
                 array(
                     'contentId' => $contentInfo->id,
                     'versionNo' => ($versionInfo !== null ? $versionInfo->versionNo : null),
+                    'newVersionNo' => $returnValue->getVersionInfo()->versionNo,
                     'userId' => ($user !== null ? $user->id : null),
                 )
             )
@@ -631,7 +635,72 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function removeTranslation(ContentInfo $contentInfo, $languageCode)
+    {
+        @trigger_error(
+            __METHOD__ . ' is deprecated, use deleteTranslation instead',
+            E_USER_DEPRECATED
+        );
+        $this->deleteTranslation($contentInfo, $languageCode);
+    }
+
+    /**
+     * Delete Content item Translation from all Versions (including archived ones) of a Content Object.
+     *
+     * NOTE: this operation is risky and permanent, so user interface should provide a warning before performing it.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+     *         is the Main Translation of a Content Item.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to delete the content (in one of the locations of the given Content Item).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $languageCode
+     *
+     * @since 6.13
+     */
+    public function deleteTranslation(ContentInfo $contentInfo, $languageCode)
+    {
+        $this->service->deleteTranslation($contentInfo, $languageCode);
+        $this->signalDispatcher->emit(
+            new RemoveTranslationSignal(['contentId' => $contentInfo->id, 'languageCode' => $languageCode])
+        );
+        $this->signalDispatcher->emit(
+            new DeleteTranslationSignal(['contentId' => $contentInfo->id, 'languageCode' => $languageCode])
+        );
+    }
+
+    /**
+     * Delete specified Translation from a Content Draft.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+     *         is the only one the Content Draft has or it is the main Translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to edit the Content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given Draft.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if specified Version was not found
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo Content Version Draft
+     * @param string $languageCode Language code of the Translation to be removed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft w/o the specified Translation
+     *
+     * @since 6.12
+     */
+    public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode)
+    {
+        return $this->service->deleteTranslationFromDraft($versionInfo, $languageCode);
+    }
+
+    /**
      * Instantiates a new content create struct object.
+     *
+     * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $mainLanguageCode
@@ -661,25 +730,5 @@ class ContentService implements ContentServiceInterface
     public function newContentUpdateStruct()
     {
         return $this->service->newContentUpdateStruct();
-    }
-
-    /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public function newTranslationInfo()
-    {
-        return $this->service->newTranslationInfo();
-    }
-
-    /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues()
-    {
-        return $this->service->newTranslationValues();
     }
 }

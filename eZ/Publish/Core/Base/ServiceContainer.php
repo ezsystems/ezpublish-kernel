@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Base;
 
@@ -227,7 +225,7 @@ class ServiceContainer implements Container
     protected function prepareDirectory($directory, $name)
     {
         if (!is_dir($directory)) {
-            if (false === @mkdir($directory, 0777, true)) {
+            if (!@mkdir($directory, 0777, true) && !is_dir($directory)) {
                 throw new RuntimeException(
                     sprintf(
                         "Unable to create the %s directory (%s)\n",

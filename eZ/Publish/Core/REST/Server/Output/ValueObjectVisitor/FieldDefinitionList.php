@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
@@ -41,7 +39,7 @@ class FieldDefinitionList extends RestContentTypeBase
         $generator->startAttribute(
             'href',
             $this->router->generate(
-                'ezpublish_rest_loadContentType' . $urlTypeSuffix  . 'FieldDefinitionList',
+                'ezpublish_rest_loadContentType' . $urlTypeSuffix . 'FieldDefinitionList',
                 array(
                     'contentTypeId' => $contentType->id,
                 )

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Security;
 
@@ -195,9 +193,9 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
             return false;
         }
 
-        $wasAnonymous = $previousUser->getAPIUser()->id == $this->configResolver->getParameter('anonymous_user_id');
+        $wasAnonymous = $previousUser->getAPIUser()->getUserId() == $this->configResolver->getParameter('anonymous_user_id');
         // TODO: isEqualTo is not on the interface
-        return (!$wasAnonymous && !$user->isEqualTo($previousUser));
+        return !$wasAnonymous && !$user->isEqualTo($previousUser);
     }
 
     public function addLogoutHandler(LogoutHandlerInterface $handler)

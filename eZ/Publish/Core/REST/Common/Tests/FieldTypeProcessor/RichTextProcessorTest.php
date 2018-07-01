@@ -5,16 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\FieldTypeProcessor;
 
 use eZ\Publish\Core\REST\Common\FieldTypeProcessor\RichTextProcessor;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\FieldType\RichText\Converter;
+use PHPUnit\Framework\TestCase;
 use DOMDocument;
 
-class RichTextProcessorTest extends PHPUnit_Framework_TestCase
+class RichTextProcessorTest extends TestCase
 {
     public function testPostProcessValueHash()
     {
@@ -55,7 +54,7 @@ EOT;
     }
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $converter;
 
@@ -64,7 +63,7 @@ EOT;
      */
     protected function getProcessor()
     {
-        $this->converter = $this->getMock('eZ\\Publish\\Core\\FieldType\\RichText\\Converter');
+        $this->converter = $this->createMock(Converter::class);
 
         return new RichTextProcessor($this->converter);
     }

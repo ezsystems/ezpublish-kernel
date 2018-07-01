@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
@@ -15,62 +13,75 @@ use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\Language\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler
  */
 class ContentLanguageHandler extends AbstractHandler implements ContentLanguageHandlerInterface
 {
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::create
+     * {@inheritdoc}
      */
     public function create(CreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
-        $language = $this->persistenceHandler->contentLanguageHandler()->create($struct);
-        $this->cache->getItem('language', $language->id)->set($language);
 
-        return $language;
+        return $this->persistenceHandler->contentLanguageHandler()->create($struct);
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::update
+     * {@inheritdoc}
      */
     public function update(Language $struct)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
-        $this->cache->clear('language', $struct->id);
+        $this->cache->invalidateTags(['language-' . $struct->id]);
 
         return $return;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::load
+     * {@inheritdoc}
      */
     public function load($id)
     {
-        $cache = $this->cache->getItem('language', $id);
-        $language = $cache->get();
-        if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('language' => $id));
-            $cache->set($language = $this->persistenceHandler->contentLanguageHandler()->load($id));
+        $cacheItem = $this->cache->getItem('ez-language-' . $id);
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
         }
+
+        $this->logger->logCall(__METHOD__, array('language' => $id));
+        $language = $this->persistenceHandler->contentLanguageHandler()->load($id);
+
+        $cacheItem->set($language);
+        $cacheItem->tag('language-' . $language->id);
+        $this->cache->save($cacheItem);
 
         return $language;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::loadByLanguageCode
+     * {@inheritdoc}
      */
     public function loadByLanguageCode($languageCode)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $languageCode));
+        $cacheItem = $this->cache->getItem('ez-language-' . $languageCode . '-by-code');
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
-        return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+        $this->logger->logCall(__METHOD__, array('language' => $languageCode));
+        $language = $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+
+        $cacheItem->set($language);
+        $cacheItem->tag('language-' . $language->id);
+        $this->cache->save($cacheItem);
+
+        return $language;
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::loadAll
+     * {@inheritdoc}
      */
     public function loadAll()
     {
@@ -80,14 +91,14 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     }
 
     /**
-     * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler::delete
+     * {@inheritdoc}
      */
     public function delete($id)
     {
         $this->logger->logCall(__METHOD__, array('language' => $id));
         $return = $this->persistenceHandler->contentLanguageHandler()->delete($id);
 
-        $this->cache->clear('language', $id);
+        $this->cache->invalidateTags(['language-' . $id]);
 
         return $return;
     }

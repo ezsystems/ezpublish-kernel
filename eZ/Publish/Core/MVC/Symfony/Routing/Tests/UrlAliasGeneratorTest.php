@@ -5,42 +5,52 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
+use eZ\Publish\API\Repository\LocationService;
+use eZ\Publish\API\Repository\URLAliasService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
+use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Routing\RouterInterface;
 
-class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
+class UrlAliasGeneratorTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlAliasService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $locationService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -50,23 +60,23 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
     private $urlAliasGenerator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $siteAccessRouter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->router = $this->getMock('Symfony\\Component\\Routing\\RouterInterface');
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
-        $this->siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $repositoryClass = 'eZ\\Publish\\Core\\Repository\\Repository';
+        $this->router = $this->createMock(RouterInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->siteAccessRouter = $this->createMock(SiteAccessRouterInterface::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $repositoryClass = Repository::class;
         $this->repository = $repository = $this
             ->getMockBuilder($repositoryClass)
             ->disableOriginalConstructor()
@@ -77,8 +87,8 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
                 )
             )
             ->getMock();
-        $this->urlAliasService = $this->getMock('eZ\\Publish\\API\\Repository\\URLAliasService');
-        $this->locationService = $this->getMock('eZ\\Publish\\API\\Repository\\LocationService');
+        $this->urlAliasService = $this->createMock(URLAliasService::class);
+        $this->locationService = $this->createMock(LocationService::class);
         $this->repository
             ->expects($this->any())
             ->method('getURLAliasService')
@@ -87,6 +97,10 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getLocationService')
             ->will($this->returnValue($this->locationService));
+        $repository
+            ->expects($this->any())
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         $urlAliasCharmap = array(
             '"' => '%22',
@@ -179,7 +193,7 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
             ->with($location, false)
             ->will($this->returnValue(array($urlAlias)));
 
-        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer')));
+        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->createMock(SiteAccess\URILexer::class)));
 
         $this->assertSame($expected, $this->urlAliasGenerator->doGenerate($location, $parameters));
     }
@@ -270,7 +284,7 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer')));
+        $this->urlAliasGenerator->setSiteAccess(new SiteAccess('test', 'fake', $this->createMock(SiteAccess\URILexer::class)));
 
         $this->assertSame($expected, $this->urlAliasGenerator->doGenerate($location, $parameters));
     }
@@ -414,5 +428,21 @@ class UrlAliasGeneratorTest extends PHPUnit_Framework_TestCase
                 '/my/root-folder',
             ),
         );
+    }
+
+    protected function getPermissionResolverMock()
+    {
+        return $this
+            ->getMockBuilder(PermissionResolver::class)
+            ->setMethods(null)
+            ->setConstructorArgs(
+                [
+                    $this->createMock(RoleDomainMapper::class),
+                    $this->createMock(LimitationService::class),
+                    $this->createMock(SPIUserHandler::class),
+                    $this->createMock(UserReference::class),
+                ]
+            )
+            ->getMock();
     }
 }

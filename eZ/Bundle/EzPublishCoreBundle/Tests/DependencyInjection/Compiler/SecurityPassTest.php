@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Compiler;
 
@@ -22,6 +20,7 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition('security.authentication.provider.dao', new Definition());
+        $this->setDefinition('security.authentication.provider.rememberme', new Definition());
         $this->setDefinition('security.authentication.provider.anonymous', new Definition());
         $this->setDefinition('security.http_utils', new Definition());
         $this->setDefinition('security.authentication.success_handler', new Definition());
@@ -37,6 +36,11 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
         $this->compile();
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'security.authentication.provider.dao',
+            'setRepository',
+            array(new Reference('ezpublish.api.repository'))
+        );
+        $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
+            'security.authentication.provider.rememberme',
             'setRepository',
             array(new Reference('ezpublish.api.repository'))
         );

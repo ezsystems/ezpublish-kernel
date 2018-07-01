@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\EventListener\Tests;
 
@@ -14,20 +12,21 @@ use eZ\Publish\Core\MVC\Symfony\Event\RouteReferenceGenerationEvent;
 use eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Routing\RouteReference;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Helper\TranslationHelper;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 
-class LanguageSwitchListenerTest extends PHPUnit_Framework_TestCase
+class LanguageSwitchListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $translationHelper;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->translationHelper = $this->getMockBuilder('eZ\Publish\Core\Helper\TranslationHelper')
+        $this->translationHelper = $this->getMockBuilder(TranslationHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

@@ -5,42 +5,50 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\SessionSetDynamicNameListener;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface as SymfonySessionInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
-class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
+class SessionSetDynamicNameListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $session;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $sessionStorage;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
-        $this->sessionStorage = $this->getMock('Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage');
+        $this->configResolver = $this->getMockBuilder(ConfigResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->session = $this->getMockBuilder(SymfonySessionInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->sessionStorage = $this->getMockBuilder(NativeSessionStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     public function testGetSubscribedEvents()
@@ -80,7 +88,7 @@ class SessionSetDynamicNameListenerTest extends PHPUnit_Framework_TestCase
         $listener = new SessionSetDynamicNameListener(
             $this->configResolver,
             $this->session,
-            $this->getMock('Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface')
+            $this->createMock(SessionStorageInterface::class)
         );
         $listener->onSiteAccessMatch(new PostSiteAccessMatchEvent(new SiteAccess(), new Request(), HttpKernelInterface::SUB_REQUEST));
     }

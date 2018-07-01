@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
@@ -21,6 +20,8 @@ use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
+use eZ\Publish\Core\REST\Server\Exceptions\ContentFieldValidationException as RESTContentFieldValidationException;
+use eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -78,7 +79,7 @@ class Content extends RestController
         $contentVersion = null;
         $relations = null;
         if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
-            $languages = null;
+            $languages = Language::ALL;
             if ($request->query->has('languages')) {
                 $languages = explode(',', $request->query->get('languages'));
             }
@@ -188,7 +189,7 @@ class Content extends RestController
      */
     public function loadContentInVersion($contentId, $versionNumber, Request $request)
     {
-        $languages = null;
+        $languages = Language::ALL;
         if ($request->query->has('languages')) {
             $languages = explode(',', $request->query->get('languages'));
         }
@@ -209,7 +210,7 @@ class Content extends RestController
             $request->getPathInfo()
         );
 
-        if ($content->contentInfo->mainLocationId === null) {
+        if ($content->contentInfo->mainLocationId === null || $content->versionInfo->status === VersionInfo::STATUS_DRAFT) {
             return $versionValue;
         }
 
@@ -228,50 +229,15 @@ class Content extends RestController
      * object in the source server). The user has to publish the content if
      * it should be visible.
      *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContent
      */
     public function createContent(Request $request)
     {
-        $contentCreate = $this->inputDispatcher->parse(
-            new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
-                $request->getContent()
-            )
-        );
+        $contentCreate = $this->parseContentRequest($request);
 
-        try {
-            $content = $this->repository->getContentService()->createContent(
-                $contentCreate->contentCreateStruct,
-                array($contentCreate->locationCreateStruct)
-            );
-        } catch (ContentValidationException $e) {
-            throw new BadRequestException($e->getMessage());
-        } catch (ContentFieldValidationException $e) {
-            throw new BadRequestException($e->getMessage());
-        }
-
-        $contentValue = null;
-        $contentType = null;
-        $relations = null;
-        if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
-            $contentValue = $content;
-            $contentType = $this->repository->getContentTypeService()->loadContentType(
-                $content->getVersionInfo()->getContentInfo()->contentTypeId
-            );
-            $relations = $this->repository->getContentService()->loadRelations($contentValue->getVersionInfo());
-        }
-
-        return new Values\CreatedContent(
-            array(
-                'content' => new Values\RestContent(
-                    $content->contentInfo,
-                    null,
-                    $contentValue,
-                    $contentType,
-                    $relations
-                ),
-            )
-        );
+        return $this->doCreateContent($request, $contentCreate);
     }
 
     /**
@@ -317,6 +283,39 @@ class Content extends RestController
     }
 
     /**
+     * Deletes a translation from all the Versions of the given Content Object.
+     *
+     * If any non-published Version contains only the Translation to be deleted, that entire Version will be deleted
+     *
+     * @param int $contentId
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     *
+     * @throws \Exception
+     */
+    public function deleteContentTranslation($contentId, $languageCode)
+    {
+        $contentService = $this->repository->getContentService();
+
+        $this->repository->beginTransaction();
+        try {
+            $contentInfo = $contentService->loadContentInfo($contentId);
+            $contentService->deleteTranslation(
+                $contentInfo,
+                $languageCode
+            );
+
+            $this->repository->commit();
+
+            return new Values\NoContent();
+        } catch (\Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+    }
+
+    /**
      * Returns a list of all versions of the content. This method does not
      * include fields and relations in the Version elements of the response.
      *
@@ -328,18 +327,9 @@ class Content extends RestController
     {
         $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
 
-        $versionList = new Values\VersionList(
+        return new Values\VersionList(
             $this->repository->getContentService()->loadVersions($contentInfo),
             $request->getPathInfo()
-        );
-
-        if ($contentInfo->mainLocationId === null) {
-            return $versionList;
-        }
-
-        return new Values\CachedValue(
-            $versionList,
-            array('locationId' => $contentInfo->mainLocationId)
         );
     }
 
@@ -360,13 +350,38 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status === VersionInfo::STATUS_PUBLISHED) {
+        if ($versionInfo->isPublished()) {
             throw new ForbiddenException('Version in status PUBLISHED cannot be deleted');
         }
 
         $this->repository->getContentService()->deleteVersion(
             $versionInfo
         );
+
+        return new Values\NoContent();
+    }
+
+    /**
+     * Remove the given Translation from the given Version Draft.
+     *
+     * @param int $contentId
+     * @param int $versionNumber
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\NoContent
+     *
+     * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
+     */
+    public function deleteTranslationFromDraft($contentId, $versionNumber, $languageCode)
+    {
+        $contentService = $this->repository->getContentService();
+        $versionInfo = $contentService->loadVersionInfoById($contentId, $versionNumber);
+
+        if (!$versionInfo->isDraft()) {
+            throw new ForbiddenException('Translation can be deleted from DRAFT Version only');
+        }
+
+        $contentService->deleteTranslationFromDraft($versionInfo, $languageCode);
 
         return new Values\NoContent();
     }
@@ -416,7 +431,7 @@ class Content extends RestController
             $contentInfo
         );
 
-        if ($versionInfo->status === VersionInfo::STATUS_DRAFT) {
+        if ($versionInfo->isDraft()) {
             throw new ForbiddenException('Current version is already in status DRAFT');
         }
 
@@ -467,7 +482,7 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Only version in status DRAFT can be updated');
         }
 
@@ -476,7 +491,7 @@ class Content extends RestController
         } catch (ContentValidationException $e) {
             throw new BadRequestException($e->getMessage());
         } catch (ContentFieldValidationException $e) {
-            throw new BadRequestException($e->getMessage());
+            throw new RESTContentFieldValidationException($e);
         }
 
         $languages = null;
@@ -519,7 +534,7 @@ class Content extends RestController
             $versionNumber
         );
 
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Only version in status DRAFT can be published');
         }
 
@@ -655,7 +670,7 @@ class Content extends RestController
                     throw new ForbiddenException('Relation is not of type COMMON');
                 }
 
-                if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+                if (!$versionInfo->isDraft()) {
                     throw new ForbiddenException('Relation of type COMMON can only be removed from drafts');
                 }
 
@@ -690,7 +705,7 @@ class Content extends RestController
 
         $contentInfo = $this->repository->getContentService()->loadContentInfo($contentId);
         $versionInfo = $this->repository->getContentService()->loadVersionInfo($contentInfo, $versionNumber);
-        if ($versionInfo->status !== VersionInfo::STATUS_DRAFT) {
+        if (!$versionInfo->isDraft()) {
             throw new ForbiddenException('Relation of type COMMON can only be added to drafts');
         }
 
@@ -745,5 +760,67 @@ class Content extends RestController
         $subRequest = $this->container->get('request_stack')->getCurrentRequest()->duplicate(null, null, $path);
 
         return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return mixed
+     */
+    protected function parseContentRequest(Request $request)
+    {
+        return $this->inputDispatcher->parse(
+            new Message(
+                array('Content-Type' => $request->headers->get('Content-Type'), 'Url' => $request->getPathInfo()),
+                $request->getContent()
+            )
+        );
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct $contentCreate
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedContent
+     */
+    protected function doCreateContent(Request $request, RestContentCreateStruct $contentCreate)
+    {
+        try {
+            $content = $this->repository->getContentService()->createContent(
+                $contentCreate->contentCreateStruct,
+                array($contentCreate->locationCreateStruct)
+            );
+        } catch (ContentValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (ContentFieldValidationException $e) {
+            throw new RESTContentFieldValidationException($e);
+        }
+
+        $contentValue = null;
+        $contentType = null;
+        $relations = null;
+        if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
+            $contentValue = $content;
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $content->getVersionInfo()->getContentInfo()->contentTypeId
+            );
+            $relations = $this->repository->getContentService()->loadRelations($contentValue->getVersionInfo());
+        }
+
+        return new Values\CreatedContent(
+            array(
+                'content' => new Values\RestContent(
+                    $content->contentInfo,
+                    null,
+                    $contentValue,
+                    $contentType,
+                    $relations
+                ),
+            )
+        );
     }
 }

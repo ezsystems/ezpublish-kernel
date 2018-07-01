@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Date;
 
@@ -31,16 +29,17 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        // The field type stores date value as a timestamp of the start of the day in the
-        // environment's timezone.
-        // We format this as Y-m-d and add Z to signify UTC (zero offset).
-        $dateTime = new DateTime();
-        $dateTime->setTimestamp($field->value->data['timestamp']);
+        if ($field->value->data !== null) {
+            $dateTime = new DateTime("@{$field->value->data['timestamp']}");
+            $value = $dateTime->format('Y-m-d\\Z');
+        } else {
+            $value = null;
+        }
 
         return array(
             new Search\Field(
                 'value',
-                $dateTime->format('Y-m-d\\Z'),
+                $value,
                 new Search\FieldType\DateField()
             ),
         );

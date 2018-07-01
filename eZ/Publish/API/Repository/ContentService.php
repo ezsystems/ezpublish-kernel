@@ -5,15 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -95,8 +91,9 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned
+     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                         returned value object. If not given all languages are returned.
+     * @param int $versionNo the version number. If not given the current version is returned from $contentInfo
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
@@ -109,7 +106,8 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param array $languages A language filter for fields. If not given all languages are returned
+     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                         returned value object. If not given all languages are returned.
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
@@ -125,7 +123,8 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
      *
      * @param mixed $contentId
-     * @param array $languages A language filter for fields. If not given all languages are returned
+     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                         returned value object. If not given all languages are returned.
      * @param int $versionNo the version number. If not given the current version is returned
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
@@ -142,7 +141,8 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the user has no access to read content and in case of un-published content: read versions
      *
      * @param string $remoteId
-     * @param array $languages A language filter for fields. If not given all languages are returned
+     * @param array $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                         returned value object. If not given all languages are returned.
      * @param int $versionNo the version number. If not given the current version is returned
      * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
      *
@@ -195,6 +195,8 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete the content (in one of the locations of the given content object)
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return mixed[] Affected Location Id's (List of Locations of the Content that was deleted)
      */
     public function deleteContent(ContentInfo $contentInfo);
 
@@ -229,28 +231,6 @@ interface ContentService
     public function loadContentDrafts(User $user = null);
 
     /**
-     * Translate a version.
-     *
-     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
-     * @param \eZ\Publish\API\Repository\Values\User\User $modifier Taken as modifier of the version, otherwise current-user is used
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
-     *
-     * @since 5.0
-     */
-    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $modifier = null);
-
-    /**
      * Updates the fields of a draft.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
@@ -268,6 +248,10 @@ interface ContentService
 
     /**
      * Publishes a content version.
+     *
+     * Publishes a content version and deletes archive versions if they overflow max archive versions.
+     * Max archive versions are currently a configuration for default max limit, by default set to 5.
+     * @todo Introduce null|int ContentType->versionArchiveLimit to be able to let admins override this per type.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
@@ -367,36 +351,70 @@ interface ContentService
     public function deleteRelation(VersionInfo $sourceVersion, ContentInfo $destinationContent);
 
     /**
-     * Adds translation information to the content object.
+     * Remove Content Object translation from all Versions (including archived ones) of a Content Object.
      *
-     * @example Examples/translation_5x.php
+     * NOTE: this operation is risky and permanent, so user interface (ideally CLI) should provide
+     *       a warning before performing it.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
+     * @deprecated since 6.13, use {@see deleteTranslation} instead
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     *
-     * @since 5.0
-     */
-    public function addTranslationInfo(TranslationInfo $translationInfo);
-
-    /**
-     * lists the translations done on this content object.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified translation
+     *         is the only one a Version has or it is the main translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to delete the content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given content.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter
+     * @param string $languageCode
      *
-     * @todo TBD - filter by sourceversion destination version and languages
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
-     *
-     * @since 5.0
+     * @since 6.11
      */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array());
+    public function removeTranslation(ContentInfo $contentInfo, $languageCode);
+
+    /**
+     * Delete Content item Translation from all Versions (including archived ones) of a Content Object.
+     *
+     * NOTE: this operation is risky and permanent, so user interface should provide a warning before performing it.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+     *         is the Main Translation of a Content Item.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to delete the content (in one of the locations of the given Content Item).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param string $languageCode
+     *
+     * @since 6.13
+     */
+    public function deleteTranslation(ContentInfo $contentInfo, $languageCode);
+
+    /**
+     * Delete specified Translation from a Content Draft.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
+     *         is the only one the Content Draft has or it is the main Translation of a Content Object.
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
+     *         to edit the Content (in one of the locations of the given Content Object).
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
+     *         is invalid for the given Draft.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if specified Version was not found
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo Content Version Draft
+     * @param string $languageCode Language code of the Translation to be removed
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft w/o the specified Translation
+     *
+     * @since 6.12
+     */
+    public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode);
 
     /**
      * Instantiates a new content create struct object.
+     *
+     * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $mainLanguageCode
@@ -418,18 +436,4 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public function newContentUpdateStruct();
-
-    /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public function newTranslationInfo();
-
-    /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues();
 }

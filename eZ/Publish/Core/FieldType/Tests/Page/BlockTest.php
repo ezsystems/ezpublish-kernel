@@ -5,15 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\Page;
 
 use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\FieldType\Page\Parts\Item;
+use PHPUnit\Framework\TestCase;
 
-class BlockTest extends PHPUnit_Framework_TestCase
+class BlockTest extends TestCase
 {
     /**
      * @param array $properties
@@ -26,15 +25,12 @@ class BlockTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::__construct
-     * @covers eZ\Publish\Core\FieldType\Page\Parts\Base::getState
+     * @covers \eZ\Publish\Core\FieldType\Page\Parts\Base::__construct
+     * @covers \eZ\Publish\Core\FieldType\Page\Parts\Base::getState
      */
     public function testGetState()
     {
-        $item = $this
-            ->getMockBuilder('eZ\\Publish\\Core\\FieldType\\Page\\Parts\\Item')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $item = $this->createMock(Item::class);
 
         $properties = array(
             'id' => '4efd68496edd8184aade729b4d2ee17b',

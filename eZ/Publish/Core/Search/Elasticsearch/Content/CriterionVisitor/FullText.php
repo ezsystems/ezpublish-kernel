@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
@@ -97,7 +95,7 @@ class FullText extends FieldFilterBase
                 // Might make sense to use percentage in addition
                 'minimum_should_match' => 1,
                 // Default is OR, changed per FullText criterion spec
-                'default_operator' => 'AND',
+                'default_operator' => 'OR',
             ),
         );
 

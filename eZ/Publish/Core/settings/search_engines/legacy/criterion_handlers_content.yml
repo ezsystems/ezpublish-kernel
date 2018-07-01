@@ -12,29 +12,29 @@ services:
     #  - ezpublish.search.legacy.gateway.criterion_handler.content
     # are registered to this one using compilation pass
     ezpublish.search.legacy.gateway.criteria_converter.content:
-        class: %ezpublish.search.legacy.gateway.criteria_converter.class%
+        class: "%ezpublish.search.legacy.gateway.criteria_converter.class%"
 
     ezpublish.search.legacy.gateway.criterion_handler.content.ancestor:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: %ezpublish.search.legacy.gateway.criterion_handler.content.ancestor.class%
+        class: "%ezpublish.search.legacy.gateway.criterion_handler.content.ancestor.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.location_id:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: %ezpublish.search.legacy.gateway.criterion_handler.content.location_id.class%
+        class: "%ezpublish.search.legacy.gateway.criterion_handler.content.location_id.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.location_remote_id:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: %ezpublish.search.legacy.gateway.criterion_handler.content.location_remote_id.class%
+        class: "%ezpublish.search.legacy.gateway.criterion_handler.content.location_remote_id.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.parent_location_id:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: %ezpublish.search.legacy.gateway.criterion_handler.content.parent_location_id.class%
+        class: "%ezpublish.search.legacy.gateway.criterion_handler.content.parent_location_id.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
@@ -43,18 +43,18 @@ services:
     # locations leads to peformance issues: https://jira.ez.no/browse/EZP-23037
     ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: %ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree.class%
+        class: "%ezpublish.search.legacy.gateway.criterion_handler.content.permission_subtree.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.subtree:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: %ezpublish.search.legacy.gateway.criterion_handler.content.subtree.class%
+        class: "%ezpublish.search.legacy.gateway.criterion_handler.content.subtree.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}
 
     ezpublish.search.legacy.gateway.criterion_handler.content.visibility:
         parent: ezpublish.search.legacy.gateway.criterion_handler.base
-        class: %ezpublish.search.legacy.gateway.criterion_handler.content.visibility.class%
+        class: "%ezpublish.search.legacy.gateway.criterion_handler.content.visibility.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.criterion_handler.content}

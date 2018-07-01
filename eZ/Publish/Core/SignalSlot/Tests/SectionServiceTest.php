@@ -5,24 +5,22 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\SectionService as APISectionService;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SectionService;
+use eZ\Publish\Core\SignalSlot\Signal\SectionService as SectionServiceSignal;
 
 class SectionServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\SectionService'
-        );
+        return $this->createMock(APISectionService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -55,7 +53,7 @@ class SectionServiceTest extends ServiceTest
                 array($sectionCreateStruct),
                 $section,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\SectionService\CreateSectionSignal',
+                SectionServiceSignal\CreateSectionSignal::class,
                 array('sectionId' => $sectionId),
             ),
             array(
@@ -63,7 +61,7 @@ class SectionServiceTest extends ServiceTest
                 array($section, $sectionUpdateStruct),
                 $section,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\SectionService\UpdateSectionSignal',
+                SectionServiceSignal\UpdateSectionSignal::class,
                 array('sectionId' => $sectionId),
             ),
             array(
@@ -101,7 +99,7 @@ class SectionServiceTest extends ServiceTest
                 array($contentInfo, $section),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal',
+                SectionServiceSignal\AssignSectionSignal::class,
                 array(
                     'contentId' => $contentId,
                     'sectionId' => $sectionId,
@@ -112,7 +110,7 @@ class SectionServiceTest extends ServiceTest
                 array($section),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\SectionService\DeleteSectionSignal',
+                SectionServiceSignal\DeleteSectionSignal::class,
                 array(
                     'sectionId' => $sectionId,
                 ),

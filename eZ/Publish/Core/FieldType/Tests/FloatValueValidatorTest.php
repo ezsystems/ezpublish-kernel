@@ -5,20 +5,21 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
 use eZ\Publish\Core\FieldType\Validator\FloatValueValidator;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\Translation\Message;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group fieldType
  * @group validator
  */
-class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
+class FloatValueValidatorTest extends TestCase
 {
     /**
      * @return float
@@ -42,7 +43,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new FloatValueValidator()
         );
     }
@@ -190,11 +191,11 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
         $messages = $validator->getMessage();
         $this->assertCount(1, $messages);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+            ValidationError::class,
             $messages[0]
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+            Message::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(
@@ -210,10 +211,10 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
     public function providerForValidateKO()
     {
         return array(
-            array(-10 / 7, 'The value can not be lower than %size%.', array('size' => $this->getMinFloatValue())),
-            array(0, 'The value can not be lower than %size%.', array('size' => $this->getMinFloatValue())),
-            array(99 / 70, 'The value can not be lower than %size%.', array('size' => $this->getMinFloatValue())),
-            array(111 / 70, 'The value can not be higher than %size%.', array('size' => $this->getMaxFloatValue())),
+            array(-10 / 7, 'The value can not be lower than %size%.', array('%size%' => $this->getMinFloatValue())),
+            array(0, 'The value can not be lower than %size%.', array('%size%' => $this->getMinFloatValue())),
+            array(99 / 70, 'The value can not be lower than %size%.', array('%size%' => $this->getMinFloatValue())),
+            array(111 / 70, 'The value can not be higher than %size%.', array('%size%' => $this->getMaxFloatValue())),
         );
     }
 
@@ -276,7 +277,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
 
         foreach ($expectedMessages as $index => $expectedMessage) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+                Message::class,
                 $messages[0]->getTranslatableMessage()
             );
             $this->assertEquals(
@@ -299,7 +300,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('parameter' => 'minFloatValue'),
+                    array('%parameter%' => 'minFloatValue'),
                 ),
             ),
             array(
@@ -308,7 +309,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('parameter' => 'minFloatValue'),
+                    array('%parameter%' => 'minFloatValue'),
                 ),
             ),
             array(
@@ -318,7 +319,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('parameter' => 'minFloatValue'),
+                    array('%parameter%' => 'minFloatValue'),
                 ),
             ),
             array(
@@ -328,7 +329,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('parameter' => 'maxFloatValue'),
+                    array('%parameter%' => 'maxFloatValue'),
                 ),
             ),
             array(
@@ -338,7 +339,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' value must be of numeric type"),
                 array(
-                    array('parameter' => 'minFloatValue'),
+                    array('%parameter%' => 'minFloatValue'),
                 ),
             ),
             array(
@@ -351,8 +352,8 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                     "Validator parameter '%parameter%' value must be of numeric type",
                 ),
                 array(
-                    array('parameter' => 'minFloatValue'),
-                    array('parameter' => 'maxFloatValue'),
+                    array('%parameter%' => 'minFloatValue'),
+                    array('%parameter%' => 'maxFloatValue'),
                 ),
             ),
             array(
@@ -361,7 +362,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('parameter' => 'brljix'),
+                    array('%parameter%' => 'brljix'),
                 ),
             ),
             array(
@@ -371,7 +372,7 @@ class FloatValueValidatorTest extends PHPUnit_Framework_TestCase
                 ),
                 array("Validator parameter '%parameter%' is unknown"),
                 array(
-                    array('parameter' => 'brljix'),
+                    array('%parameter%' => 'brljix'),
                 ),
             ),
         );

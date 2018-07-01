@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Base\Exceptions;
 
@@ -18,7 +16,7 @@ use eZ\Publish\Core\Base\TranslatableBase;
 /**
  * BadState Exception implementation.
  *
- * @use: throw new BadState( 'nodes', 'array' );
+ * Usage: throw new BadState( 'nodes', 'array' );
  */
 class BadStateException extends APIBadStateException implements Translatable
 {

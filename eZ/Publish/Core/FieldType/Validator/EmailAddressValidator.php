@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Validator;
 
@@ -52,7 +50,7 @@ class EmailAddressValidator extends Validator
                             "Validator parameter '%parameter%' value must be regex for now",
                             null,
                             array(
-                                'parameter' => $name,
+                                '%parameter%' => $name,
                             ),
                             "[EmailAddressValidator][$name]"
                         );
@@ -63,7 +61,7 @@ class EmailAddressValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            'parameter' => $name,
+                            '%parameter%' => $name,
                         ),
                         "[EmailAddressValidator][$name]"
                     );

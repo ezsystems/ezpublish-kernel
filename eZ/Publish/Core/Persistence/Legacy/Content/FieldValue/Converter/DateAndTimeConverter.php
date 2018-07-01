@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
@@ -27,9 +25,11 @@ class DateAndTimeConverter implements Converter
     /**
      * Factory for current class.
      *
-     * @note Class should instead be configured as service if it gains dependencies.
+     * Note: Class should instead be configured as service if it gains dependencies.
      *
-     * @return DateAndTime
+     * @deprecated since 6.8, will be removed in 7.x, use default constructor instead.
+     *
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter
      */
     public static function create()
     {
@@ -111,7 +111,8 @@ class DateAndTimeConverter implements Converter
             case DateAndTimeType::DEFAULT_CURRENT_DATE:
                 $data = array(
                     'rfc850' => null,
-                    'timestamp' => time(),
+                    'timestamp' => time(), // @deprecated timestamp is no longer used and will be removed in a future version.
+                    'timestring' => 'now',
                 );
                 break;
 
@@ -123,7 +124,8 @@ class DateAndTimeConverter implements Converter
                 $date->add($dateInterval);
                 $data = array(
                     'rfc850' => null,
-                    'timestamp' => $date->getTimestamp(),
+                    'timestamp' => $date->getTimestamp(), // @deprecated timestamp is no longer used and will be removed in a future version.
+                    'timestring' => $dateInterval->format('%y years, %m months, %d days, %h hours, %i minutes, %s seconds'),
                 );
                 break;
 

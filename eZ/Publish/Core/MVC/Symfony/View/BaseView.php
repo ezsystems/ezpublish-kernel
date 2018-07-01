@@ -71,7 +71,7 @@ abstract class BaseView implements View
      */
     public function addParameters(array $parameters)
     {
-        $this->parameters += $parameters;
+        $this->parameters = array_replace($this->parameters, $parameters);
     }
 
     /**

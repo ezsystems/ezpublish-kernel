@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher;
 
@@ -141,7 +139,7 @@ class URIElement implements VersatileMatcher, URILexer
         if ($uri == $uriElements) {
             $uri = '';
         } elseif (strpos($uri, $uriElements) === 0) {
-            sscanf($uri, "$uriElements%s", $uri);
+            $uri = mb_substr($uri, mb_strlen($uriElements));
         }
 
         return $uri;

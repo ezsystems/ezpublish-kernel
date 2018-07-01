@@ -7,7 +7,7 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use EzSystems\BehatBundle\Context\EzContext;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
 
 class ConsoleContext extends EzContext implements Context, SnippetAcceptingContext
 {
@@ -116,7 +116,7 @@ class ConsoleContext extends EzContext implements Context, SnippetAcceptingConte
         }
         $php = escapeshellarg($phpPath);
         $phpArgs = implode(' ', array_map('escapeshellarg', $arguments));
-        $console = escapeshellarg('app/console');
+        $console = escapeshellarg('bin/console');
         $cmd = escapeshellarg($command);
 
         $console .= ' --env=' . escapeshellarg('behat');

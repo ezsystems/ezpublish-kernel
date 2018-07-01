@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
@@ -15,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class ContentTypeTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers POST /content/typegroups
+     * Covers POST /content/typegroups.
      */
     public function testCreateContentTypeGroup()
     {
@@ -25,14 +23,19 @@ class ContentTypeTest extends RESTFunctionalTestCase
   <identifier>testCreateContentTypeGroup</identifier>
 </ContentTypeGroupInput>
 XML;
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/typegroups', 'ContentTypeGroupInput+xml', 'ContentTypeGroup+json');
-        $request->setContent($body);
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/typegroups',
+            'ContentTypeGroupInput+xml',
+            'ContentTypeGroup+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -40,7 +43,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeGroup
-     * @covers PATCH /content/typegroups/<contentTypeGroupId>
+     * Covers PATCH /content/typegroups/<contentTypeGroupId>
      *
      * @return string the updated content type href
      */
@@ -53,8 +56,13 @@ XML;
 </ContentTypeGroupInput>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $contentTypeGroupHref, 'ContentTypeGroupInput+xml', 'ContentTypeGroup+json');
-        $request->setContent($body);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $contentTypeGroupHref,
+            'ContentTypeGroupInput+xml',
+            'ContentTypeGroup+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -65,7 +73,7 @@ XML;
     /**
      * @depends testCreateContentTypeGroup
      * @returns string The created content type href
-     * @covers POST /content/typegroups/<contentTypeGroupId>/types?publish=true
+     * Covers POST /content/typegroups/<contentTypeGroupId>/types?publish=true
      *
      * @todo write test with full workflow (draft, edit, publish)
      */
@@ -74,7 +82,7 @@ XML;
         $body = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentTypeCreate>
-  <identifier>testCreateContentType</identifier>
+  <identifier>tCreate</identifier>
   <names>
     <value languageCode="eng-GB">testCreateContentType</value>
   </names>
@@ -112,22 +120,22 @@ XML;
             'POST',
             "$contentTypeGroupHref/types?publish=true",
             'ContentTypeCreate+xml',
-            'ContentType+json'
+            'ContentType+json',
+            $body
         );
-        $request->setContent($body);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $this->addCreatedElement($response->getHeader('Location'));
+        $this->addCreatedElement($response->getHeader('Location')[0]);
 
-        return $response->getHeader('Location');
+        return $response->getHeader('Location')[0];
     }
 
     /**
      * @depends testCreateContentTypeGroup
-     * @covers GET /content/typegroups/<contentTypeGroupId>
+     * Covers GET /content/typegroups/<contentTypeGroupId>
      *
      * @param string $contentTypeGroupHref
      */
@@ -141,7 +149,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/typegroups
+     * Covers GET /content/typegroups.
      */
     public function testLoadContentTypeGroupList()
     {
@@ -155,7 +163,7 @@ XML;
 
     /**
      * @depends testUpdateContentTypeGroup
-     * @covers GET /content/typegroups?identifier=<contentTypeGroupIdentifier>
+     * Covers GET /content/typegroups?identifier=<contentTypeGroupIdentifier>
      */
     public function testLoadContentTypeGroupListWithIdentifier()
     {
@@ -168,7 +176,7 @@ XML;
 
     /**
      * @depends testUpdateContentTypeGroup
-     * @covers GET /content/typegroups/<contentTypeGroupId>
+     * Covers GET /content/typegroups/<contentTypeGroupId>
      *
      * @param string $contentTypeGroupHref
      */
@@ -183,7 +191,7 @@ XML;
 
     /**
      * @depends testUpdateContentTypeGroup
-     * @covers GET /content/typegroups/<contentTypeGroupId>
+     * Covers GET /content/typegroups/<contentTypeGroupId>
      *
      * @param string $contentTypeGroupHref
      */
@@ -198,7 +206,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types/<contentTypeId>
+     * Covers GET /content/types/<contentTypeId>
      */
     public function testLoadContentType($contentTypeHref)
     {
@@ -211,7 +219,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types/<contentTypeId>
+     * Covers GET /content/types/<contentTypeId>
      */
     public function testLoadContentTypeNotFound($contentTypeHref)
     {
@@ -224,7 +232,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types
+     * Covers GET /content/types
      */
     public function testListContentTypes()
     {
@@ -237,12 +245,12 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types?identifier=<contentTypeIdentifier>
+     * Covers GET /content/types?identifier=<contentTypeIdentifier>
      */
     public function testListContentTypesByIdentifier()
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=testCreateContentType')
+            $this->createHttpRequest('GET', '/api/ezp/v2/content/types?identifier=tCreate')
         );
 
         // @todo This isn't consistent with the behaviour of /content/typegroups?identifier=
@@ -251,7 +259,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types?remoteid=<contentTypeRemoteId>
+     * Covers GET /content/types?remoteid=<contentTypeRemoteId>
      */
     public function testListContentTypesByRemoteId()
     {
@@ -265,7 +273,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers COPY /content/types/<contentTypeId>
+     * Covers COPY /content/types/<contentTypeId>
      *
      * @return string The copied content type href
      */
@@ -278,16 +286,16 @@ XML;
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
 
-        // @todo test identifier (copy_of_<sourceIdentifier)
+        // @todo test identifier (copy_of_<originalBaseIdentifier>_<newTypeId>)
     }
 
     /**
-     * @covers POST /content/type/<contentTypeId>
+     * Covers POST /content/type/<contentTypeId>.
      * @depends testCopyContentType
      *
      * @return string the created content type draft href
@@ -303,16 +311,19 @@ XML;
 </ContentTypeUpdate>
 XML;
 
-        $request = $this->createHttpRequest('POST', $contentTypeHref, 'ContentTypeUpdate+xml', 'ContentTypeInfo+json');
-        $request->setContent($content);
-        $response = $this->sendHttpRequest(
-            $request
+        $request = $this->createHttpRequest(
+            'POST',
+            $contentTypeHref,
+            'ContentTypeUpdate+xml',
+            'ContentTypeInfo+json',
+            $content
         );
+        $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -320,7 +331,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeDraft
-     * @covers GET /content/types/<contentTypeId>/draft
+     * Covers GET /content/types/<contentTypeId>/draft
      */
     public function testLoadContentTypeDraft($contentTypeDraftHref)
     {
@@ -333,7 +344,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeDraft
-     * @covers PATCH /content/types/<contentTypeId>/draft
+     * Covers PATCH /content/types/<contentTypeId>/draft
      */
     public function testUpdateContentTypeDraft($contentTypeDraftHref)
     {
@@ -346,17 +357,20 @@ XML;
 </ContentTypeUpdate>
 XML;
 
-        $request = $this->createHttpRequest('PATCH', $contentTypeDraftHref, 'ContentTypeUpdate+xml', 'ContentTypeInfo+json');
-        $request->setContent($content);
-        $response = $this->sendHttpRequest(
-            $request
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $contentTypeDraftHref,
+            'ContentTypeUpdate+xml',
+            'ContentTypeInfo+json',
+            $content
         );
+        $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
-     * @covers POST /content/types/<contentTypeId>/draft/fielddefinitions
+     * Covers POST /content/types/<contentTypeId>/draft/fielddefinitions.
      * @depends testCreateContentTypeDraft
      *
      * @return string The content type draft field definition href
@@ -385,20 +399,20 @@ XML;
             'POST',
             "$contentTypeDraftHref/fieldDefinitions",
             'FieldDefinitionCreate+xml',
-            'FieldDefinition+json'
+            'FieldDefinition+json',
+            $body
         );
-        $request->setContent($body);
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        return $response->getHeader('Location');
+        return $response->getHeader('Location')[0];
     }
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types/<contentTypeId>/fieldDefinitions
+     * Covers GET /content/types/<contentTypeId>/fieldDefinitions
      *
      * @return string the href of the first field definition in the list
      */
@@ -410,16 +424,20 @@ XML;
 
         self::assertHttpResponseCodeEquals($response, 200);
 
-        $data = json_decode($response->getContent(), true);
+        $data = json_decode($response->getBody(), true);
 
         return $data['FieldDefinitions']['FieldDefinition'][0]['_href'];
     }
 
     /**
      * @depends testAddContentTypeDraftFieldDefinition
-     * @covers GET /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
+     * Covers GET /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
+     *
+     * @param string $fieldDefinitionHref
+     *
+     * @throws \Psr\Http\Client\ClientException
      */
-    public function testLoadContentTypeFieldDefinition($fieldDefinitionHref)
+    public function testLoadContentTypeFieldDefinition(string $fieldDefinitionHref)
     {
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('GET', $fieldDefinitionHref)
@@ -430,7 +448,7 @@ XML;
 
     /**
      * @depends testAddContentTypeDraftFieldDefinition
-     * @covers PATCH /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
+     * Covers PATCH /content/types/<contentTypeId>/fieldDefinitions/<fieldDefinitionId>
      *
      * @todo the spec says PUT...
      */
@@ -451,29 +469,31 @@ XML;
             'PATCH',
             $fieldDefinitionHref,
             'FieldDefinitionUpdate+xml',
-            'FieldDefinition+json'
+            'FieldDefinition+json',
+            $body
         );
-        $request->setContent($body);
-
         $response = $this->sendHttpRequest($request);
+
         self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
-     * @covers DELETE /content/types/<contentTypeId>/draft/fieldDefinitions/<fieldDefinitionId>
+     * Covers DELETE /content/types/<contentTypeId>/draft/fieldDefinitions/<fieldDefinitionId>.
      * @depends testAddContentTypeDraftFieldDefinition
+     *
+     * @param string $fieldDefinitionHref
      */
-    public function deleteContentTypeDraftFieldDefinition($fieldDefinitionHref)
+    public function deleteContentTypeDraftFieldDefinition(string $fieldDefinitionHref)
     {
         $response = $this->sendHttpRequest(
             $this->createHttpRequest('DELETE', $fieldDefinitionHref)
         );
 
-        self::testLoadContentTypeFieldDefinition($response, 204);
+        self::assertHttpResponseCodeEquals($response, 204);
     }
 
     /**
-     * @covers DELETE /content/types/<contentTypeId>/draft
+     * Covers DELETE /content/types/<contentTypeId>/draft.
      * @depends testCreateContentTypeDraft
      */
     public function testDeleteContentTypeDraft($contentTypeDraftHref)
@@ -487,7 +507,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers PUBLISH /content/types/<contentTypeId>/draft
+     * Covers PUBLISH /content/types/<contentTypeId>/draft
      */
     public function testPublishContentTypeDraft($contentTypeHref)
     {
@@ -503,7 +523,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers GET /content/types/<contentTypeId>/groups
+     * Covers GET /content/types/<contentTypeId>/groups
      */
     public function testLoadGroupsOfContentType($contentTypeHref)
     {
@@ -516,7 +536,7 @@ XML;
 
     /**
      * @depends testCreateContentType
-     * @covers POST /content/types/<contentTypeId>/groups
+     * Covers POST /content/types/<contentTypeId>/groups
      *
      * @return string the content type href
      */
@@ -532,7 +552,7 @@ XML;
 
     /**
      * @depends testLinkContentTypeToGroup
-     * @covers DELETE /content/types/{contentTypeId}/groups/{contentTypeGroupId}
+     * Covers DELETE /content/types/{contentTypeId}/groups/{contentTypeGroupId}
      */
     public function testUnlinkContentTypeFromGroup($contentTypeHref)
     {
@@ -557,7 +577,7 @@ XML;
 
     /**
      * @depends testCreateContentTypeGroup
-     * @covers DELETE /content/typegroups/<contentTypeGroupId>
+     * Covers DELETE /content/typegroups/<contentTypeGroupId>
      */
     public function testDeleteContentTypeGroupNotEmpty($contentTypeGroupHref)
     {

@@ -5,15 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use PHPUnit\Framework\TestCase;
 
-class RepositoryConfigurationProviderTest extends PHPUnit_Framework_TestCase
+class RepositoryConfigurationProviderTest extends TestCase
 {
     public function testGetRepositoryConfigSpecifiedRepository()
     {
@@ -97,10 +96,10 @@ class RepositoryConfigurationProviderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     protected function getConfigResolverMock()
     {
-        return $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        return $this->createMock(ConfigResolverInterface::class);
     }
 }

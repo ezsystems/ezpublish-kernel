@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\BinaryBase;
 
@@ -301,7 +299,7 @@ abstract class Type extends FieldType
                             'The file size cannot exceed %size% byte.',
                             'The file size cannot exceed %size% bytes.',
                             array(
-                                'size' => $parameters['maxFileSize'],
+                                '%size%' => $parameters['maxFileSize'],
                             ),
                             'fileSize'
                         );
@@ -332,8 +330,8 @@ abstract class Type extends FieldType
                             'Validator %validator% expects parameter %parameter% to be set.',
                             null,
                             array(
-                                'validator' => $validatorIdentifier,
-                                'parameter' => 'maxFileSize',
+                                '%validator%' => $validatorIdentifier,
+                                '%parameter%' => 'maxFileSize',
                             ),
                             "[$validatorIdentifier][maxFileSize]"
                         );
@@ -344,9 +342,9 @@ abstract class Type extends FieldType
                             'Validator %validator% expects parameter %parameter% to be of %type%.',
                             null,
                             array(
-                                'validator' => $validatorIdentifier,
-                                'parameter' => 'maxFileSize',
-                                'type' => 'integer',
+                                '%validator%' => $validatorIdentifier,
+                                '%parameter%' => 'maxFileSize',
+                                '%type%' => 'integer',
                                 "[$validatorIdentifier][maxFileSize]",
                             )
                         );
@@ -357,7 +355,7 @@ abstract class Type extends FieldType
                         "Validator '%validator%' is unknown",
                         null,
                         array(
-                            'validator' => $validatorIdentifier,
+                            '%validator%' => $validatorIdentifier,
                         ),
                         "[$validatorIdentifier]"
                     );

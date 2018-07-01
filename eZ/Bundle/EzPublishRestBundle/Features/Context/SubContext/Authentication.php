@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
@@ -91,7 +89,7 @@ trait Authentication
             throw new \RuntimeException(
                 $message ?: 'UserSession value expected, got ' . get_class($this->userSession),
                 0,
-                isset($exceptionValue) ? $exceptionValue : null
+                null
             );
         }
 
@@ -111,7 +109,7 @@ trait Authentication
     {
         if ($this->userSession) {
             $this->resetDriver();
-            $this->createRequest('post', "/user/sessions/{$this->userSession->sessionId}");
+            $this->createRequest('delete', "/user/sessions/{$this->userSession->sessionId}");
             $this->restDriver->setHeader('cookie', "{$this->userSession->sessionName}={$this->userSession->sessionId}");
             $this->restDriver->setHeader('x-csrf-token', $this->userSession->csrfToken);
             $this->sendRequest();

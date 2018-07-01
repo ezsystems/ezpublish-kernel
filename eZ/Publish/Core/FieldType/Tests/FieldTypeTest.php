@@ -5,16 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Exception;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\Persistence\TransformationProcessor;
+use eZ\Publish\SPI\FieldType\ValidationError;
 
-abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
+abstract class FieldTypeTest extends TestCase
 {
     /**
      * Generic cache for the getFieldTypeUnderTest() method.
@@ -24,12 +25,12 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     private $fieldTypeUnderTest;
 
     /**
-     * @return \eZ\Publish\Core\Persistence\TransformationProcessor|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\TransformationProcessor|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTransformationProcessorMock()
     {
         return $this->getMockForAbstractClass(
-            'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
+            TransformationProcessor::class,
             array(),
             '',
             false,
@@ -432,7 +433,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(),
-                $this->getMock('eZ\\Publish\\SPI\\FieldType\\Value'),
+                $this->createMock(SPIValue::class),
             ),
         );
     }
@@ -464,7 +465,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
      *                  "The value can not be lower than %size%.",
      *                  null,
      *                  array(
-     *                      "size" => 5
+     *                      "%size%" => 5
      *                  ),
      *              ),
      *          ),
@@ -506,7 +507,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
         return array(
             array(
                 array(),
-                $this->getMock('eZ\\Publish\\SPI\\FieldType\\Value'),
+                $this->createMock(SPIValue::class),
                 array(),
             ),
         );
@@ -540,7 +541,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideDataForGetName
      *
-     * @param SPIValue $spiValue
+     * @param SPIValue $value
      * @param string $expected
      */
     public function testGetName(SPIValue $value, $expected)
@@ -665,11 +666,19 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 
         $this->assertIsValidHashValue($actualResult);
 
-        $this->assertEquals(
-            $expectedResult,
-            $actualResult,
-            'toHash() method did not create expected result.'
-        );
+        if (is_object($expectedResult) || is_array($expectedResult)) {
+            $this->assertEquals(
+                $expectedResult,
+                $actualResult,
+                'toHash() method did not create expected result.'
+            );
+        } else {
+            $this->assertSame(
+                $expectedResult,
+                $actualResult,
+                'toHash() method did not create expected result.'
+            );
+        }
     }
 
     /**
@@ -686,11 +695,19 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 
         $actualResult = $fieldType->fromHash($inputHash);
 
-        $this->assertEquals(
-            $expectedResult,
-            $actualResult,
-            'fromHash() method did not create expected result.'
-        );
+        if (is_object($expectedResult) || is_array($expectedResult)) {
+            $this->assertEquals(
+                $expectedResult,
+                $actualResult,
+                'fromHash() method did not create expected result.'
+            );
+        } else {
+            $this->assertSame(
+                $expectedResult,
+                $actualResult,
+                'fromHash() method did not create expected result.'
+            );
+        }
     }
 
     public function testEmptyValueIsEmpty()
@@ -750,7 +767,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 
         foreach ($validationResult as $actualResultElement) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+                ValidationError::class,
                 $actualResultElement,
                 'Validation result of incorrect type.'
             );
@@ -805,7 +822,7 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
 
         foreach ($validationResult as $actualResultElement) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+                ValidationError::class,
                 $actualResultElement,
                 'Validation result of incorrect type.'
             );
@@ -935,10 +952,8 @@ abstract class FieldTypeTest extends PHPUnit_Framework_TestCase
     {
         $fieldType = $this->getFieldTypeUnderTest();
 
-        /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit_Framework_MockObject_MockObject $fieldDefinitionMock */
-        $fieldDefinitionMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinition'
-        );
+        /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit\Framework\MockObject\MockObject $fieldDefinitionMock */
+        $fieldDefinitionMock = $this->createMock(APIFieldDefinition::class);
 
         foreach ($fieldDefinitionData as $method => $data) {
             if ($method === 'validatorConfiguration') {

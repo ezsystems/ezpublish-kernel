@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\RoleService;
 use eZ\Publish\Core\REST\Server\Input\Parser\RoleInput;
 use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
 
@@ -47,7 +46,7 @@ class RoleInputTest extends BaseTest
         $result = $roleInput->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct',
+            RoleCreateStruct::class,
             $result,
             'RoleCreateStruct not created correctly.'
         );
@@ -93,13 +92,7 @@ class RoleInputTest extends BaseTest
      */
     protected function getRoleServiceMock()
     {
-        $roleServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\RoleService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $roleServiceMock = $this->createMock(RoleService::class);
 
         $roleServiceMock->expects($this->any())
             ->method('newRoleCreateStruct')

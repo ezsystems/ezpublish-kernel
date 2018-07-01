@@ -1,12 +1,8 @@
 <?php
 
 /**
- * Repository class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository;
 
@@ -14,15 +10,19 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
-use eZ\Publish\API\Repository\Values\User\Limitation;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
+use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
+use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
+use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
-use eZ\Publish\SPI\Limitation\Type as LimitationType;
+use Closure;
 use Exception;
 use RuntimeException;
+use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 
 /**
  * Repository class.
@@ -44,6 +44,8 @@ class Repository implements RepositoryInterface
     protected $searchHandler;
 
     /**
+     * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
+     *
      * Currently logged in user object if already loaded.
      *
      * @var \eZ\Publish\API\Repository\Values\User\User|null
@@ -51,18 +53,13 @@ class Repository implements RepositoryInterface
     protected $currentUser;
 
     /**
+     * @deprecated since 6.6, to be removed. Current user handling is moved to PermissionResolver.
+     *
      * Currently logged in user reference for permission purposes.
      *
      * @var \eZ\Publish\API\Repository\Values\User\UserReference
      */
     protected $currentUserRef;
-
-    /**
-     * Counter for the current sudo nesting level {@see sudo()}.
-     *
-     * @var int
-     */
-    private $sudoNestingLevel = 0;
 
     /**
      * Instance of content service.
@@ -149,6 +146,13 @@ class Repository implements RepositoryInterface
     private $fieldTypeRegistry;
 
     /**
+     * Instance of NameableFieldTypeRegistry.
+     *
+     * @var \eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry
+     */
+    private $nameableFieldTypeRegistry;
+
+    /**
      * Instance of name schema resolver service.
      *
      * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
@@ -177,6 +181,27 @@ class Repository implements RepositoryInterface
     protected $urlWildcardService;
 
     /**
+     * Instance of URL service.
+     *
+     * @var \eZ\Publish\Core\Repository\URLService
+     */
+    protected $urlService;
+
+    /**
+     * Instance of Bookmark service.
+     *
+     * @var \eZ\Publish\API\Repository\BookmarkService
+     */
+    protected $bookmarkService;
+
+    /**
+     * Instance of Notification service.
+     *
+     * @var \eZ\Publish\API\Repository\NotificationService
+     */
+    protected $notificationService;
+
+    /**
      * Service settings, first level key is service name.
      *
      * @var array
@@ -203,28 +228,21 @@ class Repository implements RepositoryInterface
     protected $domainMapper;
 
     /**
-     * Instance of permissions criterion handler.
+     * Instance of content type domain mapper.
      *
-     * @var \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
      */
-    protected $permissionsCriterionHandler;
+    protected $contentTypeDomainMapper;
 
     /**
-     * Array of arrays of commit events indexed by the transaction count.
+     * Instance of permissions-resolver and -criterion resolver.
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\PermissionCriterionResolver|\eZ\Publish\API\Repository\PermissionResolver
      */
-    protected $commitEventsQueue = array();
+    protected $permissionsHandler;
 
-    /**
-     * @var int
-     */
-    protected $transactionDepth = 0;
-
-    /**
-     * @var int
-     */
-    private $transactionCount = 0;
+    /** @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null */
+    protected $backgroundIndexer;
 
     /**
      * Constructor.
@@ -239,11 +257,15 @@ class Repository implements RepositoryInterface
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
+        BackgroundIndexer $backgroundIndexer,
+        RelationProcessor $relationProcessor,
         array $serviceSettings = array(),
         APIUserReference $user = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
+        $this->backgroundIndexer = $backgroundIndexer;
+        $this->relationProcessor = $relationProcessor;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
             'contentType' => array(),
@@ -259,6 +281,7 @@ class Repository implements RepositoryInterface
             'objectState' => array(),
             'search' => array(),
             'fieldType' => array(),
+            'nameableFieldTypes' => array(),
             'urlAlias' => array(),
             'urlWildcard' => array(),
             'nameSchema' => array(),
@@ -280,6 +303,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * Loads the full user object if not already loaded, if you only need to know user id use {@see getCurrentUserReference()}
@@ -290,7 +315,7 @@ class Repository implements RepositoryInterface
     {
         if ($this->currentUser === null) {
             $this->currentUser = $this->getUserService()->loadUser(
-                $this->currentUserRef->getUserId()
+                $this->getPermissionResolver()->getCurrentUserReference()->getUserId()
             );
         }
 
@@ -298,6 +323,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user reference.
      *
      * @since 5.4.5
@@ -305,10 +332,12 @@ class Repository implements RepositoryInterface
      */
     public function getCurrentUserReference()
     {
-        return $this->currentUserRef;
+        return $this->getPermissionResolver()->getCurrentUserReference();
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -329,6 +358,8 @@ class Repository implements RepositoryInterface
             $this->currentUser = null;
             $this->currentUserRef = $user;
         }
+
+        return $this->getPermissionResolver()->setCurrentUserReference($this->currentUserRef);
     }
 
     /**
@@ -354,22 +385,17 @@ class Repository implements RepositoryInterface
      *
      * @return mixed
      */
-    public function sudo(\Closure $callback, RepositoryInterface $outerRepository = null)
+    public function sudo(Closure $callback, RepositoryInterface $outerRepository = null)
     {
-        ++$this->sudoNestingLevel;
-        try {
-            $returnValue = $callback($outerRepository !== null ? $outerRepository : $this);
-        } catch (Exception $e) {
-            --$this->sudoNestingLevel;
-            throw $e;
-        }
-
-        --$this->sudoNestingLevel;
-
-        return $returnValue;
+        return $this->getPermissionResolver()->sudo(
+            $callback,
+            $outerRepository !== null ? $outerRepository : $this
+        );
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
+     *
      * Check if user has access to a given module / function.
      *
      * Low level function, use canUser instead if you have objects to check against.
@@ -382,67 +408,12 @@ class Repository implements RepositoryInterface
      */
     public function hasAccess($module, $function, APIUserReference $user = null)
     {
-        // Full access if sudo nesting level is set by {@see sudo()}
-        if ($this->sudoNestingLevel > 0) {
-            return true;
-        }
-
-        if ($user === null) {
-            $user = $this->getCurrentUserReference();
-        }
-
-        // Uses SPI to avoid triggering permission checks in Role/User service
-        $permissionSets = array();
-        $roleDomainMapper = $this->getRoleDomainMapper();
-        $limitationService = $this->getLimitationService();
-        $spiRoleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId($user->getUserId(), true);
-        foreach ($spiRoleAssignments as $spiRoleAssignment) {
-            $permissionSet = array('limitation' => null, 'policies' => array());
-
-            $spiRole = $this->persistenceHandler->userHandler()->loadRole($spiRoleAssignment->roleId);
-            foreach ($spiRole->policies as $spiPolicy) {
-                if ($spiPolicy->module === '*' && $spiRoleAssignment->limitationIdentifier === null) {
-                    return true;
-                }
-
-                if ($spiPolicy->module !== $module && $spiPolicy->module !== '*') {
-                    continue;
-                }
-
-                if ($spiPolicy->function === '*' && $spiRoleAssignment->limitationIdentifier === null) {
-                    return true;
-                }
-
-                if ($spiPolicy->function !== $function && $spiPolicy->function !== '*') {
-                    continue;
-                }
-
-                if ($spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null) {
-                    return true;
-                }
-
-                $permissionSet['policies'][] = $roleDomainMapper->buildDomainPolicyObject($spiPolicy);
-            }
-
-            if (!empty($permissionSet['policies'])) {
-                if ($spiRoleAssignment->limitationIdentifier !== null) {
-                    $permissionSet['limitation'] = $limitationService
-                        ->getLimitationType($spiRoleAssignment->limitationIdentifier)
-                        ->buildValue($spiRoleAssignment->values);
-                }
-
-                $permissionSets[] = $permissionSet;
-            }
-        }
-
-        if (!empty($permissionSets)) {
-            return $permissionSets;
-        }
-
-        return false;// No policies matching $module and $function, or they contained limitations
+        return $this->getPermissionResolver()->hasAccess($module, $function, $user);
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
+     *
      * Check if user has access to a given action on a given value object.
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
@@ -460,14 +431,11 @@ class Repository implements RepositoryInterface
      */
     public function canUser($module, $function, ValueObject $object, $targets = null)
     {
-        $permissionSets = $this->hasAccess($module, $function);
-        if ($permissionSets === false || $permissionSets === true) {
-            return $permissionSets;
-        }
-
         if ($targets instanceof ValueObject) {
             $targets = array($targets);
-        } elseif ($targets !== null && !is_array($targets)) {
+        } elseif ($targets === null) {
+            $targets = [];
+        } elseif (!is_array($targets)) {
             throw new InvalidArgumentType(
                 '$targets',
                 'null|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject|\\eZ\\Publish\\API\\Repository\\Values\\ValueObject[]',
@@ -475,73 +443,7 @@ class Repository implements RepositoryInterface
             );
         }
 
-        $limitationService = $this->getLimitationService();
-        $currentUserRef = $this->getCurrentUserReference();
-        foreach ($permissionSets as $permissionSet) {
-            /**
-             * First deal with Role limitation if any.
-             *
-             * Here we accept ACCESS_GRANTED and ACCESS_ABSTAIN, the latter in cases where $object and $targets
-             * are not supported by limitation.
-             *
-             * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
-             */
-            if ($permissionSet['limitation'] instanceof Limitation) {
-                $type = $limitationService->getLimitationType($permissionSet['limitation']->getIdentifier());
-                $accessVote = $type->evaluate($permissionSet['limitation'], $currentUserRef, $object, $targets);
-                if ($accessVote === LimitationType::ACCESS_DENIED) {
-                    continue;
-                }
-            }
-
-            /**
-             * Loop over all policies.
-             *
-             * These are already filtered by hasAccess and given hasAccess did not return boolean
-             * there must be some, so only return true if one of them says yes.
-             *
-             * @var \eZ\Publish\API\Repository\Values\User\Policy
-             */
-            foreach ($permissionSet['policies'] as $policy) {
-                $limitations = $policy->getLimitations();
-
-                /*
-                 * Return true if policy gives full access (aka no limitations)
-                 */
-                if ($limitations === '*') {
-                    return true;
-                }
-
-                /*
-                 * Loop over limitations, all must return ACCESS_GRANTED for policy to pass.
-                 * If limitations was empty array this means same as '*'
-                 */
-                $limitationsPass = true;
-                foreach ($limitations as $limitation) {
-                    $type = $limitationService->getLimitationType($limitation->getIdentifier());
-                    $accessVote = $type->evaluate($limitation, $currentUserRef, $object, $targets);
-                    /*
-                     * For policy limitation atm only support ACCESS_GRANTED
-                     *
-                     * Reasoning: Right now, use of a policy limitation not valid for a policy is per definition a
-                     * BadState. To reach this you would have to configure the "policyMap" wrongly, like using
-                     * Node (Location) limitation on state/assign. So in this case Role Limitations will return
-                     * ACCESS_ABSTAIN (== no access here), and other limitations will throw InvalidArgument above,
-                     * both cases forcing dev to investigate to find miss configuration. This might be relaxed in
-                     * the future if valid use cases for ACCESS_ABSTAIN on policy limitations becomes known.
-                     */
-                    if ($accessVote !== LimitationType::ACCESS_GRANTED) {
-                        $limitationsPass = false;
-                        break;// Break to next policy, all limitations must pass
-                    }
-                }
-                if ($limitationsPass) {
-                    return true;
-                }
-            }
-        }
-
-        return false;// None of the limitation sets wanted to let you in, sorry!
+        return $this->getPermissionResolver()->canUser($module, $function, $object, $targets);
     }
 
     /**
@@ -610,6 +512,7 @@ class Repository implements RepositoryInterface
             $this,
             $this->persistenceHandler->contentTypeHandler(),
             $this->getDomainMapper(),
+            $this->getContentTypeDomainMapper(),
             $this->getFieldTypeRegistry(),
             $this->serviceSettings['contentType']
         );
@@ -635,7 +538,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler,
             $this->getDomainMapper(),
             $this->getNameSchemaService(),
-            $this->getPermissionsCriterionHandler(),
+            $this->getPermissionCriterionResolver(),
             $this->serviceSettings['location']
         );
 
@@ -751,6 +654,42 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService()
+    {
+        if ($this->urlService !== null) {
+            return $this->urlService;
+        }
+
+        $this->urlService = new URLService(
+            $this,
+            $this->persistenceHandler->urlHandler()
+        );
+
+        return $this->urlService;
+    }
+
+    /**
+     * Get BookmarkService.
+     *
+     * @return \eZ\Publish\API\Repository\BookmarkService
+     */
+    public function getBookmarkService()
+    {
+        if ($this->bookmarkService === null) {
+            $this->bookmarkService = new BookmarkService(
+                $this,
+                $this->persistenceHandler->bookmarkHandler()
+            );
+        }
+
+        return $this->bookmarkService;
+    }
+
+    /**
      * Get ObjectStateService.
      *
      * @return \eZ\Publish\API\Repository\ObjectStateService
@@ -839,7 +778,8 @@ class Repository implements RepositoryInterface
             $this,
             $this->searchHandler,
             $this->getDomainMapper(),
-            $this->getPermissionsCriterionHandler(),
+            $this->getPermissionCriterionResolver(),
+            $this->backgroundIndexer,
             $this->serviceSettings['search']
         );
 
@@ -863,6 +803,16 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * Get PermissionResolver.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionResolver
+     */
+    public function getPermissionResolver()
+    {
+        return $this->getCachedPermissionsResolver();
+    }
+
+    /**
      * @return Helper\FieldTypeRegistry
      */
     protected function getFieldTypeRegistry()
@@ -874,6 +824,20 @@ class Repository implements RepositoryInterface
         $this->fieldTypeRegistry = new Helper\FieldTypeRegistry($this->serviceSettings['fieldType']);
 
         return $this->fieldTypeRegistry;
+    }
+
+    /**
+     * @return Helper\NameableFieldTypeRegistry
+     */
+    protected function getNameableFieldTypeRegistry()
+    {
+        if ($this->nameableFieldTypeRegistry !== null) {
+            return $this->nameableFieldTypeRegistry;
+        }
+
+        $this->nameableFieldTypeRegistry = new Helper\NameableFieldTypeRegistry($this->serviceSettings['nameableFieldTypes']);
+
+        return $this->nameableFieldTypeRegistry;
     }
 
     /**
@@ -895,11 +859,29 @@ class Repository implements RepositoryInterface
 
         $this->nameSchemaService = new Helper\NameSchemaService(
             $this->persistenceHandler->contentTypeHandler(),
-            $this->getFieldTypeRegistry(),
+            $this->getContentTypeDomainMapper(),
+            $this->getNameableFieldTypeRegistry(),
             $this->serviceSettings['nameSchema']
         );
 
         return $this->nameSchemaService;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\NotificationService
+     */
+    public function getNotificationService(): NotificationServiceInterface
+    {
+        if (null !== $this->notificationService) {
+            return $this->notificationService;
+        }
+
+        $this->notificationService = new NotificationService(
+            $this->persistenceHandler->notificationHandler(),
+            $this->getPermissionResolver()
+        );
+
+        return $this->notificationService;
     }
 
     /**
@@ -912,18 +894,11 @@ class Repository implements RepositoryInterface
      */
     protected function getRelationProcessor()
     {
-        if ($this->relationProcessor !== null) {
-            return $this->relationProcessor;
-        }
-
-        $this->relationProcessor = new Helper\RelationProcessor($this->persistenceHandler);
-
         return $this->relationProcessor;
     }
 
     /**
-     * Get RelationProcessor.
-     *
+     * Get Content Domain Mapper.
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
@@ -947,18 +922,61 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Get PermissionsCriterionHandler.
-     *
+     * Get ContentType Domain Mapper.
      *
      * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
      *
-     * @return \eZ\Publish\Core\Repository\PermissionsCriterionHandler
+     * @return \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
      */
-    protected function getPermissionsCriterionHandler()
+    protected function getContentTypeDomainMapper()
     {
-        return $this->permissionsCriterionHandler !== null ?
-            $this->permissionsCriterionHandler :
-            $this->permissionsCriterionHandler = new PermissionsCriterionHandler($this);
+        if ($this->contentTypeDomainMapper !== null) {
+            return $this->contentTypeDomainMapper;
+        }
+
+        $this->contentTypeDomainMapper = new Helper\ContentTypeDomainMapper(
+            $this->persistenceHandler->contentTypeHandler(),
+            $this->persistenceHandler->contentLanguageHandler(),
+            $this->getFieldTypeRegistry()
+        );
+
+        return $this->contentTypeDomainMapper;
+    }
+
+    /**
+     * Get PermissionCriterionResolver.
+     *
+     * @todo Move out from this & other repo instances when services becomes proper services in DIC terms using factory.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionCriterionResolver
+     */
+    protected function getPermissionCriterionResolver()
+    {
+        return $this->getCachedPermissionsResolver();
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\PermissionCriterionResolver|\eZ\Publish\API\Repository\PermissionResolver
+     */
+    protected function getCachedPermissionsResolver()
+    {
+        if ($this->permissionsHandler === null) {
+            $this->permissionsHandler = new CachedPermissionService(
+                $permissionResolver = new Permission\PermissionResolver(
+                    $this->getRoleDomainMapper(),
+                    $this->getLimitationService(),
+                    $this->persistenceHandler->userHandler(),
+                    $this->currentUserRef,
+                    $this->serviceSettings['role']['policyMap']
+                ),
+                new PermissionCriterionResolver(
+                    $permissionResolver,
+                    $this->getLimitationService()
+                )
+            );
+        }
+
+        return $this->permissionsHandler;
     }
 
     /**
@@ -970,9 +988,6 @@ class Repository implements RepositoryInterface
     public function beginTransaction()
     {
         $this->persistenceHandler->beginTransaction();
-
-        ++$this->transactionDepth;
-        $this->commitEventsQueue[++$this->transactionCount] = array();
     }
 
     /**
@@ -986,27 +1001,6 @@ class Repository implements RepositoryInterface
     {
         try {
             $this->persistenceHandler->commit();
-
-            --$this->transactionDepth;
-
-            if ($this->transactionDepth === 0) {
-                $queueCountDown = count($this->commitEventsQueue);
-                foreach ($this->commitEventsQueue as $eventsQueue) {
-                    --$queueCountDown;
-                    if (empty($eventsQueue)) {
-                        continue;
-                    }
-
-                    $eventCountDown = count($eventsQueue);
-                    foreach ($eventsQueue as $event) {
-                        --$eventCountDown;
-                        // event expects a boolean param, if true it means it is last event (for commit use)
-                        $event($queueCountDown === 0 && $eventCountDown === 0);
-                    }
-                }
-
-                $this->commitEventsQueue = array();
-            }
         } catch (Exception $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
@@ -1023,45 +1017,8 @@ class Repository implements RepositoryInterface
     {
         try {
             $this->persistenceHandler->rollback();
-
-            --$this->transactionDepth;
-            unset($this->commitEventsQueue[$this->transactionCount]);
         } catch (Exception $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
         }
-    }
-
-    /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started.
-     *
-     * @param Callable $event
-     */
-    public function commitEvent($event)
-    {
-        if ($this->transactionDepth !== 0) {
-            $this->commitEventsQueue[$this->transactionCount][] = $event;
-        } else {
-            // event expects a boolean param, if true it means it is last event (for commit use)
-            $event(true);
-        }
-    }
-
-    /**
-     * Only for internal use.
-     *
-     * Creates a \DateTime object for $timestamp in the current time zone
-     *
-     * @param int $timestamp
-     *
-     * @return \DateTime
-     */
-    public function createDateTime($timestamp = null)
-    {
-        $dateTime = new \DateTime();
-        if ($timestamp !== null) {
-            $dateTime->setTimestamp($timestamp);
-        }
-
-        return $dateTime;
     }
 }

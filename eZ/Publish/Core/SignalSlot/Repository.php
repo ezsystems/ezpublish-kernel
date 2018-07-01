@@ -1,19 +1,17 @@
 <?php
 
 /**
- * Repository class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot;
 
+use eZ\Publish\API\Repository\BookmarkService;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\TransactionHandler;
+use Closure;
 
 /**
  * Repository class.
@@ -98,13 +96,6 @@ class Repository implements RepositoryInterface
     protected $contentTypeService;
 
     /**
-     * Instance of IO service.
-     *
-     * @var \eZ\Publish\API\Repository\IOService
-     */
-    protected $ioService;
-
-    /**
      * Instance of object state service.
      *
      * @var \eZ\Publish\API\Repository\ObjectStateService
@@ -133,6 +124,27 @@ class Repository implements RepositoryInterface
     protected $urlWildcardService;
 
     /**
+     * Instance of URL service.
+     *
+     * @var \eZ\Publish\API\Repository\URLService
+     */
+    protected $urlService;
+
+    /**
+     * Instance of Bookmark service.
+     *
+     * @var \eZ\Publish\API\Repository\BookmarkService
+     */
+    protected $bookmarkService;
+
+    /**
+     * Instance of Notification service.
+     *
+     * @var \eZ\Publish\API\Repository\NotificationService
+     */
+    protected $notificationService;
+
+    /**
      * Constructor.
      *
      * Construct repository object from aggregated repository and signal
@@ -140,14 +152,66 @@ class Repository implements RepositoryInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
+     * @param \eZ\Publish\Core\SignalSlot\ContentService $contentService
+     * @param \eZ\Publish\Core\SignalSlot\ContentTypeService $contentTypeService
+     * @param \eZ\Publish\Core\SignalSlot\FieldTypeService $fieldTypeService
+     * @param \eZ\Publish\Core\SignalSlot\RoleService $roleService
+     * @param \eZ\Publish\Core\SignalSlot\ObjectStateService $objectStateService
+     * @param \eZ\Publish\Core\SignalSlot\URLWildcardService $urlWildcardService
+     * @param \eZ\Publish\Core\SignalSlot\URLAliasService $urlAliasService
+     * @param \eZ\Publish\Core\SignalSlot\UserService $userService
+     * @param \eZ\Publish\Core\SignalSlot\SearchService $searchService
+     * @param \eZ\Publish\Core\SignalSlot\SectionService $sectionService
+     * @param \eZ\Publish\Core\SignalSlot\TrashService $trashService
+     * @param \eZ\Publish\Core\SignalSlot\LocationService $locationService
+     * @param \eZ\Publish\Core\SignalSlot\LanguageService $languageService
+     * @param \eZ\Publish\Core\SignalSlot\URLService $urlService
+     * @param \eZ\Publish\Core\SignalSlot\BookmarkService $bookmarkService
+     * @param \eZ\Publish\API\Repository\NotificationService $notificationService
      */
-    public function __construct(RepositoryInterface $repository, SignalDispatcher $signalDispatcher)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        RepositoryInterface $repository,
+        SignalDispatcher $signalDispatcher,
+        ContentService $contentService,
+        ContentTypeService $contentTypeService,
+        FieldTypeService $fieldTypeService,
+        RoleService $roleService,
+        ObjectStateService $objectStateService,
+        URLWildcardService $urlWildcardService,
+        URLAliasService $urlAliasService,
+        UserService $userService,
+        SearchService $searchService,
+        SectionService $sectionService,
+        TrashService $trashService,
+        LocationService $locationService,
+        LanguageService $languageService,
+        URLService $urlService,
+        BookmarkService $bookmarkService,
+        NotificationService $notificationService
+    ) {
         $this->signalDispatcher = $signalDispatcher;
+        $this->repository = $repository;
+        $this->contentService = $contentService;
+        $this->contentTypeService = $contentTypeService;
+        $this->fieldTypeService = $fieldTypeService;
+        $this->roleService = $roleService;
+        $this->objectStateService = $objectStateService;
+        $this->urlWildcardService = $urlWildcardService;
+        $this->urlAliasService = $urlAliasService;
+        $this->userService = $userService;
+        $this->searchService = $searchService;
+        $this->sectionService = $sectionService;
+        $this->trashService = $trashService;
+        $this->locationService = $locationService;
+        $this->languageService = $languageService;
+        $this->urlService = $urlService;
+        $this->bookmarkService = $bookmarkService;
+        $this->notificationService = $notificationService;
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -158,6 +222,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user ref.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserReference
@@ -168,6 +234,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -199,12 +267,14 @@ class Repository implements RepositoryInterface
      *
      * @return mixed
      */
-    public function sudo(\Closure $callback)
+    public function sudo(Closure $callback)
     {
         return $this->repository->sudo($callback, $this);
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
+     *
      * Check if user has access to a given module / function.
      *
      * Low level function, use canUser instead if you have objects to check against.
@@ -221,6 +291,8 @@ class Repository implements RepositoryInterface
     }
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
+     *
      * Check if user has access to a given action on a given value object.
      *
      * Indicates if the current user is allowed to perform an action given by the function on the given
@@ -250,12 +322,6 @@ class Repository implements RepositoryInterface
      */
     public function getContentService()
     {
-        if ($this->contentService !== null) {
-            return $this->contentService;
-        }
-
-        $this->contentService = new ContentService($this->repository->getContentService(), $this->signalDispatcher);
-
         return $this->contentService;
     }
 
@@ -268,12 +334,6 @@ class Repository implements RepositoryInterface
      */
     public function getContentLanguageService()
     {
-        if ($this->languageService !== null) {
-            return $this->languageService;
-        }
-
-        $this->languageService = new LanguageService($this->repository->getContentLanguageService(), $this->signalDispatcher);
-
         return $this->languageService;
     }
 
@@ -287,12 +347,6 @@ class Repository implements RepositoryInterface
      */
     public function getContentTypeService()
     {
-        if ($this->contentTypeService !== null) {
-            return $this->contentTypeService;
-        }
-
-        $this->contentTypeService = new ContentTypeService($this->repository->getContentTypeService(), $this->signalDispatcher);
-
         return $this->contentTypeService;
     }
 
@@ -305,12 +359,6 @@ class Repository implements RepositoryInterface
      */
     public function getLocationService()
     {
-        if ($this->locationService !== null) {
-            return $this->locationService;
-        }
-
-        $this->locationService = new LocationService($this->repository->getLocationService(), $this->signalDispatcher);
-
         return $this->locationService;
     }
 
@@ -324,12 +372,6 @@ class Repository implements RepositoryInterface
      */
     public function getTrashService()
     {
-        if ($this->trashService !== null) {
-            return $this->trashService;
-        }
-
-        $this->trashService = new TrashService($this->repository->getTrashService(), $this->signalDispatcher);
-
         return $this->trashService;
     }
 
@@ -342,12 +384,6 @@ class Repository implements RepositoryInterface
      */
     public function getSectionService()
     {
-        if ($this->sectionService !== null) {
-            return $this->sectionService;
-        }
-
-        $this->sectionService = new SectionService($this->repository->getSectionService(), $this->signalDispatcher);
-
         return $this->sectionService;
     }
 
@@ -360,12 +396,6 @@ class Repository implements RepositoryInterface
      */
     public function getUserService()
     {
-        if ($this->userService !== null) {
-            return $this->userService;
-        }
-
-        $this->userService = new UserService($this->repository->getUserService(), $this->signalDispatcher);
-
         return $this->userService;
     }
 
@@ -376,12 +406,6 @@ class Repository implements RepositoryInterface
      */
     public function getURLAliasService()
     {
-        if ($this->urlAliasService !== null) {
-            return $this->urlAliasService;
-        }
-
-        $this->urlAliasService = new URLAliasService($this->repository->getURLAliasService(), $this->signalDispatcher);
-
         return $this->urlAliasService;
     }
 
@@ -392,13 +416,37 @@ class Repository implements RepositoryInterface
      */
     public function getURLWildcardService()
     {
-        if ($this->urlWildcardService !== null) {
-            return $this->urlWildcardService;
-        }
-
-        $this->urlWildcardService = new URLWildcardService($this->repository->getURLWildcardService(), $this->signalDispatcher);
-
         return $this->urlWildcardService;
+    }
+
+    /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService()
+    {
+        return $this->urlService;
+    }
+
+    /**
+     * Get BookmarkService.
+     *
+     * @return \eZ\Publish\API\Repository\BookmarkService
+     */
+    public function getBookmarkService()
+    {
+        return $this->bookmarkService;
+    }
+
+    /**
+     * Get NotificationService.
+     *
+     * @return \eZ\Publish\API\Repository\NotificationService
+     */
+    public function getNotificationService()
+    {
+        return $this->notificationService;
     }
 
     /**
@@ -408,12 +456,6 @@ class Repository implements RepositoryInterface
      */
     public function getObjectStateService()
     {
-        if ($this->objectStateService !== null) {
-            return $this->objectStateService;
-        }
-
-        $this->objectStateService = new ObjectStateService($this->repository->getObjectStateService(), $this->signalDispatcher);
-
         return $this->objectStateService;
     }
 
@@ -424,12 +466,6 @@ class Repository implements RepositoryInterface
      */
     public function getRoleService()
     {
-        if ($this->roleService !== null) {
-            return $this->roleService;
-        }
-
-        $this->roleService = new RoleService($this->repository->getRoleService(), $this->signalDispatcher);
-
         return $this->roleService;
     }
 
@@ -440,12 +476,6 @@ class Repository implements RepositoryInterface
      */
     public function getSearchService()
     {
-        if ($this->searchService !== null) {
-            return $this->searchService;
-        }
-
-        $this->searchService = new SearchService($this->repository->getSearchService(), $this->signalDispatcher);
-
         return $this->searchService;
     }
 
@@ -456,13 +486,17 @@ class Repository implements RepositoryInterface
      */
     public function getFieldTypeService()
     {
-        if ($this->fieldTypeService !== null) {
-            return $this->fieldTypeService;
-        }
-
-        $this->fieldTypeService = new FieldTypeService($this->repository->getFieldTypeService(), $this->signalDispatcher);
-
         return $this->fieldTypeService;
+    }
+
+    /**
+     * Get PermissionResolver.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionResolver
+     */
+    public function getPermissionResolver()
+    {
+        return $this->repository->getPermissionResolver();
     }
 
     /**
@@ -514,31 +548,5 @@ class Repository implements RepositoryInterface
         }
 
         return $this->repository->rollback();
-    }
-
-    /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started.
-     *
-     * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
-     *
-     * @param Callable $event
-     */
-    public function commitEvent($event)
-    {
-        return $this->repository->commitEvent($event);
-    }
-
-    /**
-     * Only for internal use.
-     *
-     * Creates a \DateTime object for $timestamp in the current time zone
-     *
-     * @param int $timestamp
-     *
-     * @return \DateTime
-     */
-    public function createDateTime($timestamp = null)
-    {
-        return $this->repository->createDateTime($timestamp);
     }
 }

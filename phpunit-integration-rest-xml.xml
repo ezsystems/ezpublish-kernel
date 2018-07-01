@@ -5,12 +5,14 @@
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
+         beStrictAboutTestsThatDoNotTestAnything="false"
          colors="true"
          >
     <php>
         <env name="setupFactory" value="\eZ\Publish\Core\REST\Client\Tests\SetupFactory" />
         <env name="backendVersion" value="5" />
         <env name="backendEncoding" value="xml" />
+        <ini name="error_reporting" value="-1" />
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">

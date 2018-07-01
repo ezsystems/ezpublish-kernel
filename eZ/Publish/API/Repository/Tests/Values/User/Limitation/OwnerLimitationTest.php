@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
@@ -84,7 +82,7 @@ class OwnerLimitationTest extends BaseLimitationTest
         );
         /* END: Use Case */
 
-        $this->setExpectedException(
+        $this->expectException(
             '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'
         );
         $contentService->loadContent($content->id);

@@ -5,21 +5,25 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\Core\Repository\Values\User\UserReference;
 use Symfony\Component\Security\Core\User\UserInterface as BaseUserInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 
-class User implements UserInterface, EquatableInterface
+class User implements ReferenceUserInterface, EquatableInterface
 {
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */
     private $user;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\User\UserReference
+     */
+    private $reference;
 
     /**
      * @var array
@@ -29,6 +33,7 @@ class User implements UserInterface, EquatableInterface
     public function __construct(APIUser $user = null, array $roles = array())
     {
         $this->user = $user;
+        $this->reference = new UserReference($user ? $user->getUserId() : null);
         $this->roles = $roles;
     }
 
@@ -63,7 +68,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getPassword()
     {
-        return $this->user->passwordHash;
+        return $this->getAPIUser()->passwordHash;
     }
 
     /**
@@ -85,7 +90,7 @@ class User implements UserInterface, EquatableInterface
      */
     public function getUsername()
     {
-        return $this->user->login;
+        return $this->getAPIUser()->login;
     }
 
     /**
@@ -99,10 +104,24 @@ class User implements UserInterface, EquatableInterface
     }
 
     /**
+     * @return \eZ\Publish\API\Repository\Values\User\UserReference
+     */
+    public function getAPIUserReference()
+    {
+        return $this->reference;
+    }
+
+    /**
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function getAPIUser()
     {
+        if (!$this->user instanceof APIUser) {
+            throw new \LogicException(
+                'Attempts to get APIUser before it has been set by UserProvider, APIUser is not serialized to session'
+            );
+        }
+
         return $this->user;
     }
 
@@ -112,12 +131,16 @@ class User implements UserInterface, EquatableInterface
     public function setAPIUser(APIUser $user)
     {
         $this->user = $user;
+        $this->reference = new UserReference($user->getUserId());
     }
 
     public function isEqualTo(BaseUserInterface $user)
     {
-        if ($user instanceof self && $this->user instanceof APIUser) {
-            return $user->getAPIUser()->id === $this->user->id;
+        // Check for the lighter ReferenceUserInterface first
+        if ($user instanceof ReferenceUserInterface) {
+            return $user->getAPIUserReference()->getUserId() === $this->reference->getUserId();
+        } elseif ($user instanceof UserInterface) {
+            return $user->getAPIUser()->getUserId() === $this->reference->getUserId();
         }
 
         return false;
@@ -125,7 +148,7 @@ class User implements UserInterface, EquatableInterface
 
     public function __toString()
     {
-        return $this->user->contentInfo->name;
+        return $this->getAPIUser()->contentInfo->name;
     }
 
     /**
@@ -134,13 +157,13 @@ class User implements UserInterface, EquatableInterface
      * Internally, if this method returns false, the authentication system
      * will throw an AccountExpiredException and prevent login.
      *
-     * @return Boolean true if the user's account is non expired, false otherwise
+     * @return bool true if the user's account is non expired, false otherwise
      *
      * @see AccountExpiredException
      */
     public function isAccountNonExpired()
     {
-        return $this->user->enabled;
+        return $this->getAPIUser()->enabled;
     }
 
     /**
@@ -149,13 +172,13 @@ class User implements UserInterface, EquatableInterface
      * Internally, if this method returns false, the authentication system
      * will throw a LockedException and prevent login.
      *
-     * @return Boolean true if the user is not locked, false otherwise
+     * @return bool true if the user is not locked, false otherwise
      *
      * @see LockedException
      */
     public function isAccountNonLocked()
     {
-        return $this->user->enabled;
+        return $this->getAPIUser()->enabled;
     }
 
     /**
@@ -164,7 +187,7 @@ class User implements UserInterface, EquatableInterface
      * Internally, if this method returns false, the authentication system
      * will throw a CredentialsExpiredException and prevent login.
      *
-     * @return Boolean true if the user's credentials are non expired, false otherwise
+     * @return bool true if the user's credentials are non expired, false otherwise
      *
      * @see CredentialsExpiredException
      */
@@ -179,12 +202,24 @@ class User implements UserInterface, EquatableInterface
      * Internally, if this method returns false, the authentication system
      * will throw a DisabledException and prevent login.
      *
-     * @return Boolean true if the user is enabled, false otherwise
+     * @return bool true if the user is enabled, false otherwise
      *
      * @see DisabledException
      */
     public function isEnabled()
     {
-        return $this->user->enabled;
+        return $this->getAPIUser()->enabled;
+    }
+
+    /**
+     * Make sure we don't serialize the whole API user object given it's a full fledged api content object. We set
+     * (& either way refresh) the user object in \eZ\Publish\Core\MVC\Symfony\Security\User\Provider->refreshUser()
+     * when object wakes back up from session.
+     *
+     * @return array
+     */
+    public function __sleep()
+    {
+        return ['reference', 'roles'];
     }
 }

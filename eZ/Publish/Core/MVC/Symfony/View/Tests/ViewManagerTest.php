@@ -5,23 +5,29 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests;
 
+use eZ\Publish\API\Repository\ContentService as APIContentService;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\View\Manager;
 use eZ\Publish\Core\MVC\Symfony\View\View;
+use eZ\Publish\Core\MVC\Symfony\View\ViewProvider;
+use eZ\Publish\Core\MVC\Symfony\View\Configurator;
+use eZ\Publish\Core\Repository\ContentService;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @group mvc
  */
-class ViewManagerTest extends PHPUnit_Framework_TestCase
+class ViewManagerTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
@@ -29,27 +35,27 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
     private $viewManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Templating\EngineInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Templating\EngineInterface
      */
     private $templateEngineMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\EventDispatcher\EventDispatcherInterface
      */
     private $eventDispatcherMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\API\Repository\Repository
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository
      */
     private $repositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     private $configResolverMock;
 
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $viewConfigurator;
 
@@ -58,13 +64,11 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->templateEngineMock = $this->getMock('Symfony\\Component\\Templating\\EngineInterface');
-        $this->eventDispatcherMock = $this->getMock('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface');
-        $this->repositoryMock = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configResolverMock = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
-        $this->viewConfigurator = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\Configurator');
+        $this->templateEngineMock = $this->createMock(EngineInterface::class);
+        $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $this->repositoryMock = $this->createMock(Repository::class);
+        $this->configResolverMock = $this->createMock(ConfigResolverInterface::class);
+        $this->viewConfigurator = $this->createMock(Configurator::class);
         $this->viewManager = new Manager(
             $this->templateEngineMock,
             $this->eventDispatcherMock,
@@ -78,7 +82,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
     public function testAddContentViewProvider()
     {
         self::assertSame(array(), $this->viewManager->getAllContentViewProviders());
-        $viewProvider = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\ViewProvider');
+        $viewProvider = $this->createMock(ViewProvider::class);
         $this->viewManager->addContentViewProvider($viewProvider);
         self::assertSame(array($viewProvider), $this->viewManager->getAllContentViewProviders());
     }
@@ -86,7 +90,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
     public function testAddLocationViewProvider()
     {
         self::assertSame(array(), $this->viewManager->getAllLocationViewProviders());
-        $viewProvider = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider');
+        $viewProvider = $this->createMock(ViewProvider::class);
         $this->viewManager->addLocationViewProvider($viewProvider);
         self::assertSame(array($viewProvider), $this->viewManager->getAllLocationViewProviders());
     }
@@ -209,7 +213,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
             ->with('languages')
             ->will($this->returnValue($languages));
 
-        $contentService = $this->getMock('eZ\Publish\API\Repository\ContentService');
+        $contentService = $this->createMock(APIContentService::class);
 
         $contentService->expects($this->any())
             ->method('loadContentByContentInfo')
@@ -251,9 +255,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $contentService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contentService = $this->createMock(ContentService::class);
 
         $contentService->expects($this->any())
             ->method('loadContentByContentInfo')
@@ -305,9 +307,7 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
                 )
             );
 
-        $contentService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\ContentService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $contentService = $this->createMock(ContentService::class);
 
         $contentService->expects($this->any())
             ->method('loadContentByContentInfo')
@@ -342,18 +342,18 @@ class ViewManagerTest extends PHPUnit_Framework_TestCase
     private function createContentViewProviderMocks()
     {
         return array(
-            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
-            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
-            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
+            $this->createMock(ViewProvider::class),
+            $this->createMock(ViewProvider::class),
+            $this->createMock(ViewProvider::class),
         );
     }
 
     private function createLocationViewProviderMocks()
     {
         return array(
-            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
-            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
-            $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
+            $this->createMock(ViewProvider::class),
+            $this->createMock(ViewProvider::class),
+            $this->createMock(ViewProvider::class),
         );
     }
 }

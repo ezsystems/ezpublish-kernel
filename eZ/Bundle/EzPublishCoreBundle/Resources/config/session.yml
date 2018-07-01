@@ -5,17 +5,19 @@ parameters:
 
 services:
     ezpublish.session_set_dynamic_name_listener:
-        class: %ezpublish.session_set_dynamic_name_listener.class%
-        arguments: [@ezpublish.config.resolver, @?session, @?session.storage]
+        class: "%ezpublish.session_set_dynamic_name_listener.class%"
+        arguments: ["@ezpublish.config.resolver", "@?session", "@?session.storage"]
         tags:
             - { name: kernel.event_subscriber }
 
     ezpublish.session_init_by_post_listener:
-        class: %ezpublish.session_init_by_post_listener.class%
-        arguments: [@?session]
+        class: "%ezpublish.session_init_by_post_listener.class%"
+        arguments: ["@?session"]
         tags:
             - { name: kernel.event_subscriber }
 
+    # Override the session attribute bag to set custom storage key so same is used as legacy
+    # @deprecated To be removed in 7.0 kernel, see 594b083d94f1cff7008fb0d7d54f40d0ce0a2ace
     session.attribute_bag:
-        class: %session.attribute_bag.class%
-        arguments: [%ezpublish.session.attribute_bag.storage_key%]
+        class: Symfony\Component\HttpFoundation\Session\Attribute\AttributeBag
+        arguments: ["%ezpublish.session.attribute_bag.storage_key%"]

@@ -5,17 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Converter;
 
-abstract class AbstractParamConverterTest extends \PHPUnit_Framework_TestCase
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use PHPUnit\Framework\TestCase;
+
+abstract class AbstractParamConverterTest extends TestCase
 {
     public function createConfiguration($class = null, $name = null)
     {
         $config = $this
-            ->getMockBuilder('Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter')
+            ->getMockBuilder(ParamConverter::class)
             ->setMethods(['getClass', 'getAliasName', 'getOptions', 'getName', 'allowArray', 'isOptional'])
             ->disableOriginalConstructor()
             ->getMock();

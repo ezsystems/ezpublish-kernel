@@ -5,16 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Render;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\FieldType\RichText\Converter\Render\Template;
+use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use DOMDocument;
 
-class TemplateTest extends PHPUnit_Framework_TestCase
+class TemplateTest extends TestCase
 {
     public function setUp()
     {
@@ -229,6 +228,41 @@ class TemplateTest extends PHPUnit_Framework_TestCase
                     ),
                 ),
             ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <eztemplate name="custom_tag" ezxhtml:align="right">
+    <ezcontent><para>Param: value</para></ezcontent>
+    <ezconfig>
+        <ezvalue key="param">value</ezvalue>
+    </ezconfig>
+  </eztemplate>
+</section>',
+                '<?xml version="1.0"?>
+ <section xmlns="http://docbook.org/ns/docbook" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml">
+  <eztemplate name="custom_tag" ezxhtml:align="right">
+    <ezcontent>
+      <para>Param: value</para>
+    </ezcontent>
+    <ezconfig>
+      <ezvalue key="param">value</ezvalue>
+    </ezconfig>
+    <ezpayload>custom_tag</ezpayload>
+  </eztemplate>
+</section>',
+                array(
+                    array(
+                        'name' => 'custom_tag',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'custom_tag',
+                            'content' => '<para>Param: value</para>',
+                            'params' => array('param' => 'value'),
+                            'align' => 'right',
+                        ),
+                    ),
+                ),
+            ),
         );
     }
 
@@ -277,17 +311,15 @@ class TemplateTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $rendererMock;
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRendererMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\FieldType\\RichText\\RendererInterface'
-        );
+        return $this->createMock(RendererInterface::class);
     }
 }

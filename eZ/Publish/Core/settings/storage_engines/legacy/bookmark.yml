@@ -1,0 +1,19 @@
+services:
+    eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\DoctrineDatabase:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+
+    eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\ExceptionConversion:
+        arguments:
+            $innerGateway: '@eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\DoctrineDatabase'
+
+    eZ\Publish\Core\Persistence\Legacy\Bookmark\Mapper: ~
+
+    eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler:
+        arguments:
+            $gateway: '@eZ\Publish\Core\Persistence\Legacy\Bookmark\Gateway\ExceptionConversion'
+            $mapper: '@eZ\Publish\Core\Persistence\Legacy\Bookmark\Mapper'
+        lazy: true
+
+    ezpublish.spi.persistence.legacy.bookmark.handler:
+        alias: 'eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler'

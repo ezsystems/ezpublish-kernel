@@ -5,16 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests;
 
 use eZ\Publish\Core\REST\Client\ObjectCache;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class ObjectCacheTest extends PHPUnit_Framework_TestCase
+class ObjectCacheTest extends TestCase
 {
     public function testStoreRestore()
     {

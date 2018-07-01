@@ -5,49 +5,45 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener;
 
 use eZ\Bundle\EzPublishCoreBundle\EventListener\RoutingListener;
+use eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class RoutingListenerTest extends PHPUnit_Framework_TestCase
+class RoutingListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlAliasRouter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $urlAliasGenerator;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->urlAliasRouter = $this
-            ->getMockBuilder('eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->urlAliasGenerator = $this
-            ->getMockBuilder('eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->urlAliasRouter = $this->createMock(UrlAliasRouter::class);
+        $this->urlAliasGenerator = $this->createMock(UrlAliasGenerator::class);
     }
 
     public function testGetSubscribedEvents()

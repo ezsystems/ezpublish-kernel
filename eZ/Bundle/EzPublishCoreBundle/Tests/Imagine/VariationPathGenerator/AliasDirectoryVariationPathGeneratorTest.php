@@ -6,8 +6,9 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\VariationPathGenerator;
 
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator\AliasDirectoryVariationPathGenerator;
+use PHPUnit\Framework\TestCase;
 
-class AliasDirectoryVariationPathGeneratorTest extends \PHPUnit_Framework_TestCase
+class AliasDirectoryVariationPathGeneratorTest extends TestCase
 {
     public function testGetVariationPath()
     {

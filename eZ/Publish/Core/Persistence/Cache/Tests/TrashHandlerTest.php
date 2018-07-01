@@ -5,223 +5,148 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\SPI\Persistence\Content\Location\Trashed as SPITrashed;
+use eZ\Publish\Core\Persistence\Cache\ContentHandler;
+use eZ\Publish\Core\Persistence\Cache\LocationHandler;
+use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandler;
 
 /**
  * Test case for Persistence\Cache\SectionHandler.
  */
-class TrashHandlerTest extends HandlerTest
+class TrashHandlerTest extends AbstractCacheHandlerTest
 {
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::loadTrashItem
-     */
-    public function testLoadTrashItem()
+    public function getHandlerMethodName(): string
     {
-        $this->loggerMock->expects($this->once())->method('logCall');
-        $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('trashHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $trashed = new SPITrashed(
-            array('id' => 33, 'contentId' => 31)
-        );
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('loadTrashItem')
-            ->with(33)
-            ->will(
-                $this->returnValue(
-                    $trashed
-                )
-            );
-
-        $handler = $this->persistenceCacheHandler->trashHandler();
-        $this->assertSame($trashed, $handler->loadTrashItem(33));
+        return 'trashHandler';
     }
 
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::trashSubtree
-     */
-    public function testTrashSubtree()
+    public function getHandlerClassName(): string
     {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('trashHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $trashed = new SPITrashed(
-            array('id' => 33, 'contentId' => 31)
-        );
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('trashSubtree')
-            ->with(33)
-            ->will(
-                $this->returnValue($trashed)
-            );
-
-        $this->cacheMock
-            ->expects($this->at(0))
-            ->method('clear')
-            ->with('location')
-            ->will($this->returnValue(true));
-
-        $this->cacheMock
-            ->expects($this->at(1))
-            ->method('clear')
-            ->with('content')
-            ->will($this->returnValue(true));
-
-        $this->cacheMock
-            ->expects($this->at(2))
-            ->method('clear')
-            ->with('user', 'role', 'assignments', 'byGroup')
-            ->will($this->returnValue(true));
-
-        $handler = $this->persistenceCacheHandler->trashHandler();
-        $this->assertSame($trashed, $handler->trashSubtree(33));
+        return TrashHandler::class;
     }
 
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::recover
-     */
+    public function providerForUnCachedMethods(): array
+    {
+        // string $method, array $arguments, array? $tags, string? $key
+        return [
+            ['loadTrashItem', [6]],
+            ['emptyTrash', []],
+            ['deleteTrashItem', [6]],
+        ];
+    }
+
+    public function providerForCachedLoadMethods(): array
+    {
+        // string $method, array $arguments, string $key, mixed? $data
+        return [
+        ];
+    }
+
     public function testRecover()
     {
+        $originalLocationId = 6;
+        $targetLocationId = 2;
+        $contentId = 42;
+
+        $tags = [
+            'content-' . $contentId,
+            'content-fields-' . $contentId,
+            'location-' . $originalLocationId,
+            'location-path-' . $originalLocationId,
+        ];
+
+        $handlerMethodName = $this->getHandlerMethodName();
+
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
+        $innerHandler = $this->createMock($this->getHandlerClassName());
+        $contentHandlerMock = $this->createMock(ContentHandler::class);
+        $locationHandlerMock = $this->createMock(LocationHandler::class);
+
+        $locationHandlerMock
+            ->method('load')
+            ->will($this->returnValue(new Location(['id' => $originalLocationId, 'contentId' => $contentId])));
+
+        $this->persistenceHandlerMock
+            ->method('contentHandler')
+            ->will($this->returnValue($contentHandlerMock));
+
+        $this->persistenceHandlerMock
+            ->method('locationHandler')
+            ->will($this->returnValue($locationHandlerMock));
+
         $this->persistenceHandlerMock
             ->expects($this->once())
-            ->method('trashHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->method($handlerMethodName)
+            ->will($this->returnValue($innerHandler));
 
-        $innerHandlerMock
+        $innerHandler
             ->expects($this->once())
             ->method('recover')
-            ->with(33, 66)
-            ->will(
-                $this->returnValue(99)
-            );
+            ->with($originalLocationId, $targetLocationId)
+            ->will($this->returnValue(null));
 
         $this->cacheMock
-            ->expects($this->at(0))
-            ->method('clear')
-            ->with('location', 'subtree')
-            ->will($this->returnValue(true));
+            ->expects($this->once())
+            ->method('invalidateTags')
+            ->with($tags);
 
-        $this->cacheMock
-            ->expects($this->at(1))
-            ->method('clear')
-            ->with('content')
-            ->will($this->returnValue(true));
-
-        $this->cacheMock
-            ->expects($this->at(2))
-            ->method('clear')
-            ->with('user', 'role', 'assignments', 'byGroup')
-            ->will($this->returnValue(true));
-
-        $handler = $this->persistenceCacheHandler->trashHandler();
-        $this->assertEquals(99, $handler->recover(33, 66));
+        $handler = $this->persistenceCacheHandler->$handlerMethodName();
+        $handler->recover($originalLocationId, $targetLocationId);
     }
 
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::findTrashItems
-     */
-    public function testFindTrashItems()
+    public function testTrashSubtree()
     {
+        $locationId = 6;
+        $contentId = 42;
+
+        $tags = [
+            'content-' . $contentId,
+            'content-fields-' . $contentId,
+            'location-' . $locationId,
+            'location-path-' . $locationId,
+        ];
+
+        $handlerMethodName = $this->getHandlerMethodName();
+
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
+        $innerHandler = $this->createMock($this->getHandlerClassName());
+        $contentHandlerMock = $this->createMock(ContentHandler::class);
+        $locationHandlerMock = $this->createMock(LocationHandler::class);
+
+        $locationHandlerMock
+            ->method('load')
+            ->will($this->returnValue(new Location(['id' => $locationId, 'contentId' => $contentId])));
+
+        $this->persistenceHandlerMock
+            ->method('contentHandler')
+            ->will($this->returnValue($contentHandlerMock));
+
+        $this->persistenceHandlerMock
+            ->method('locationHandler')
+            ->will($this->returnValue($locationHandlerMock));
+
         $this->persistenceHandlerMock
             ->expects($this->once())
-            ->method('trashHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->method($handlerMethodName)
+            ->will($this->returnValue($innerHandler));
 
-        $criterion = new Criterion\ContentId(33);
-
-        $innerHandlerMock
+        $innerHandler
             ->expects($this->once())
-            ->method('findTrashItems')
-            ->with($criterion, 10, 11, array())
-            ->will(
-                $this->returnValue(array())
-            );
+            ->method('trashSubtree')
+            ->with($locationId)
+            ->will($this->returnValue(null));
 
         $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
-
-        $handler = $this->persistenceCacheHandler->trashHandler();
-        $this->assertEquals(array(), $handler->findTrashItems($criterion, 10, 11, array()));
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::emptyTrash
-     */
-    public function testEmptyTrash()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
-        $this->persistenceHandlerMock
             ->expects($this->once())
-            ->method('trashHandler')
-            ->will($this->returnValue($innerHandlerMock));
+            ->method('invalidateTags')
+            ->with($tags);
 
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('emptyTrash')
-            ->with();
-
-        $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
-
-        $handler = $this->persistenceCacheHandler->trashHandler();
-        $handler->emptyTrash();
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\TrashHandler::deleteTrashItem
-     */
-    public function testDeleteTrashItem()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trash\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('trashHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('deleteTrashItem')
-            ->with(33);
-
-        $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
-
-        $handler = $this->persistenceCacheHandler->trashHandler();
-        $handler->deleteTrashItem(33);
+        $handler = $this->persistenceCacheHandler->$handlerMethodName();
+        $handler->trashSubtree($locationId);
     }
 }

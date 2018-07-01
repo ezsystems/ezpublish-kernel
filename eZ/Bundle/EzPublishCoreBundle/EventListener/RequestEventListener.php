@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
@@ -126,10 +124,15 @@ class RequestEventListener implements EventSubscriberInterface
                     $semanticPathinfo = $siteaccess->matcher->analyseLink($semanticPathinfo);
                 }
 
+                $headers = [];
+                if ($request->attributes->has('locationId')) {
+                    $headers['X-Location-Id'] = $request->attributes->get('locationId');
+                }
                 $event->setResponse(
                     new RedirectResponse(
                         $semanticPathinfo . ($queryString ? "?$queryString" : ''),
-                        301
+                        301,
+                        $headers
                     )
                 );
                 $event->stopPropagation();

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content;
 
@@ -18,10 +16,15 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read mixed $id the language id
  * @property-read string $languageCode the language code in
  * @property-read string $name human readable name of the language
- * @property-read boolean $enabled indicates if the language is enabled or not.
+ * @property-read bool $enabled indicates if the language is enabled or not.
  */
 class Language extends ValueObject
 {
+    /**
+     * Constant for use in API's to specify that you want to load all languages.
+     */
+    const ALL = [];
+
     /**
      * The language id (auto generated).
      *

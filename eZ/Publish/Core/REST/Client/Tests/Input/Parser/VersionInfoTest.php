@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
@@ -15,6 +13,7 @@ use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
 use eZ\Publish\API\Repository\Values;
 use eZ\Publish\Core\REST\Common\RequestParser;
+use eZ\Publish\Core\REST\Client\ContentService;
 
 class VersionInfoTest extends BaseTest
 {
@@ -205,27 +204,21 @@ class VersionInfoTest extends BaseTest
     protected function getContentServiceMock()
     {
         if (!isset($this->contentServiceMock)) {
-            $this->contentServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Client\\ContentService',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentServiceMock = $this->createMock(ContentService::class);
         }
 
         return $this->contentServiceMock;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\REST\Common\RequestParser
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\REST\Common\RequestParser
      */
     protected function getRequestParserMock()
     {
         static $parser = null;
 
         if (!isset($parser)) {
-            $parser =$this->getMock('eZ\Publish\Core\REST\Common\RequestParser');
+            $parser =$this->createMock(RequestParser::class);
         }
 
         return $parser;

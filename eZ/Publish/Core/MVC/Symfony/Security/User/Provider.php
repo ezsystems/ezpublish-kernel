@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\User;
 
@@ -14,6 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\MVC\Symfony\Security\User;
 use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
+use eZ\Publish\Core\MVC\Symfony\Security\ReferenceUserInterface;
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface as CoreUserInterface;
@@ -55,7 +54,7 @@ class Provider implements APIUserProviderInterface
                 return $user;
             }
 
-            return new User($this->repository->getUserService()->loadUserByLogin($user), array('ROLE_USER'));
+            return new User($this->repository->getUserService()->loadUserByLogin($user), ['ROLE_USER']);
         } catch (NotFoundException $e) {
             throw new UsernameNotFoundException($e->getMessage(), 0, $e);
         }
@@ -82,7 +81,11 @@ class Provider implements APIUserProviderInterface
         }
 
         try {
-            $refreshedAPIUser = $this->repository->getUserService()->loadUser($user->getAPIUser()->id);
+            $refreshedAPIUser = $this->repository->getUserService()->loadUser(
+                $user instanceof ReferenceUserInterface ?
+                $user->getAPIUserReference()->getUserId() :
+                $user->getAPIUser()->id
+            );
             $user->setAPIUser($refreshedAPIUser);
             $this->repository->setCurrentUser($refreshedAPIUser);
 
@@ -97,7 +100,7 @@ class Provider implements APIUserProviderInterface
      *
      * @param string $class
      *
-     * @return Boolean
+     * @return bool
      */
     public function supportsClass($class)
     {
@@ -115,6 +118,6 @@ class Provider implements APIUserProviderInterface
      */
     public function loadUserByAPIUser(APIUser $apiUser)
     {
-        return new User($apiUser);
+        return new User($apiUser, ['ROLE_USER']);
     }
 }

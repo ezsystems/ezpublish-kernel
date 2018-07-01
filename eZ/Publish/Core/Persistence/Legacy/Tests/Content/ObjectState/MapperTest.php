@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState;
 
@@ -22,7 +20,7 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\InputStruct;
 class MapperTest extends LanguageAwareTestCase
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateFromData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateFromData
      */
     public function testCreateObjectStateFromData()
     {
@@ -40,7 +38,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateListFromData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateListFromData
      */
     public function testCreateObjectStateListFromData()
     {
@@ -58,7 +56,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupFromData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupFromData
      */
     public function testCreateObjectStateGroupFromData()
     {
@@ -76,7 +74,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupListFromData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupListFromData
      */
     public function testCreateObjectStateGroupListFromData()
     {
@@ -94,7 +92,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateFromInputStruct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateFromInputStruct
      */
     public function testCreateObjectStateFromInputStruct()
     {
@@ -112,7 +110,7 @@ class MapperTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupFromInputStruct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Mapper::createObjectStateGroupFromInputStruct
      */
     public function testCreateObjectStateGroupFromInputStruct()
     {

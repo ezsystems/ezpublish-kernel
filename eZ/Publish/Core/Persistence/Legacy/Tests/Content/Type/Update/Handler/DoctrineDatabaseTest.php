@@ -5,19 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\UpdateHandler;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Content Type Handler.
  */
-class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
+class DoctrineDatabaseTest extends TestCase
 {
     /**
      * Gateway mock.
@@ -34,7 +34,7 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
     protected $contentUpdaterMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::updateContentObjects
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::updateContentObjects
      */
     public function testUpdateContentObjects()
     {
@@ -46,10 +46,10 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
             ->method('determineActions')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
+                    Type::class
                 ),
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
+                    Type::class
                 )
             )->will($this->returnValue(array()));
 
@@ -66,7 +66,7 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::deleteOldType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::deleteOldType
      */
     public function testDeleteOldType()
     {
@@ -87,7 +87,7 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::publishNewType
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\DoctrineDatabase::publishNewType
      */
     public function testPublishNewType()
     {
@@ -146,9 +146,7 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
-            );
+            $this->gatewayMock = $this->getMockForAbstractClass(Gateway::class);
         }
 
         return $this->gatewayMock;
@@ -162,13 +160,7 @@ class DoctrineDatabaseTest extends PHPUnit_Framework_TestCase
     protected function getContentUpdaterMock()
     {
         if (!isset($this->contentUpdaterMock)) {
-            $this->contentUpdaterMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentUpdaterMock = $this->createMock(ContentUpdater::class);
         }
 
         return $this->contentUpdaterMock;

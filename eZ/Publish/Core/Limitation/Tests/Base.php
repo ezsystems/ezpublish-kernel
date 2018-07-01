@@ -5,29 +5,29 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\SPI\Persistence\Handler as SPIHandler;
 
-abstract class Base extends PHPUnit_Framework_TestCase
+abstract class Base extends TestCase
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $persistenceHandlerMock;
 
     /**
-     * @var \eZ\Publish\API\Repository\Values\User\User|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\API\Repository\Values\User\User|\PHPUnit\Framework\MockObject\MockObject
      */
     private $userMock;
 
     /**
      * @param array $mockMethods For specifying the methods to mock, all by default
      *
-     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getPersistenceMock(array $mockMethods = array())
     {
@@ -35,19 +35,13 @@ abstract class Base extends PHPUnit_Framework_TestCase
             return $this->persistenceHandlerMock;
         }
 
-        return $this->persistenceHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Handler',
-            $mockMethods,
-            array(),
-            '',
-            false
-        );
+        return $this->persistenceHandlerMock = $this->createMock(SPIHandler::class);
     }
 
     /**
      * @param array $mockMethods For specifying the methods to mock, all by default
      *
-     * @return \eZ\Publish\API\Repository\Values\User\User|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\API\Repository\Values\User\User|\PHPUnit\Framework\MockObject\MockObject
      */
     public function getUserMock(array $mockMethods = array())
     {
@@ -55,13 +49,10 @@ abstract class Base extends PHPUnit_Framework_TestCase
             return $this->userMock;
         }
 
-        return $this->userMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\User\\User',
-            $mockMethods,
-            array(),
-            '',
-            false
-        );
+        return $this->userMock = $this->getMockBuilder(APIUser::class)
+            ->setConstructorArgs(array())
+            ->setMethods($mockMethods)
+            ->getMock();
     }
 
     /**

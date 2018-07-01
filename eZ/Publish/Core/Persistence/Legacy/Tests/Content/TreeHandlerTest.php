@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
@@ -15,6 +13,11 @@ use eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 
 /**
  * Test case for Tree Handler.
@@ -233,7 +236,7 @@ class TreeHandlerTest extends TestCase
         $treeHandler
             ->expects($this->once())
             ->method('changeMainLocation')
-            ->with(102, 203, 1, 204);
+            ->with(102, 203);
         $this->getLocationGatewayMock()
             ->expects($this->at(11))
             ->method('removeLocation')
@@ -358,117 +361,95 @@ class TreeHandlerTest extends TestCase
     }
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGatewayMock;
 
     /**
      * Returns Location Gateway mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected function getLocationGatewayMock()
     {
         if (!isset($this->locationGatewayMock)) {
-            $this->locationGatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway'
-            );
+            $this->locationGatewayMock = $this->getMockForAbstractClass(LocationGateway::class);
         }
 
         return $this->locationGatewayMock;
     }
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapperMock;
 
     /**
      * Returns a Location Mapper mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected function getLocationMapperMock()
     {
         if (!isset($this->locationMapperMock)) {
-            $this->locationMapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->locationMapperMock = $this->createMock(LocationMapper::class);
         }
 
         return $this->locationMapperMock;
     }
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGatewayMock;
 
     /**
      * Returns Content Gateway mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
         if (!isset($this->contentGatewayMock)) {
-            $this->contentGatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
-            );
+            $this->contentGatewayMock = $this->getMockForAbstractClass(Gateway::class);
         }
 
         return $this->contentGatewayMock;
     }
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $contentMapper;
 
     /**
      * Returns a Content Mapper mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected function getContentMapperMock()
     {
         if (!isset($this->contentMapper)) {
-            $this->contentMapper = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentMapper = $this->createMock(Mapper::class);
         }
 
         return $this->contentMapper;
     }
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected $fieldHandlerMock;
 
     /**
      * Returns a FieldHandler mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected function getFieldHandlerMock()
     {
         if (!isset($this->fieldHandlerMock)) {
-            $this->fieldHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->fieldHandlerMock = $this->createMock(FieldHandler::class);
         }
 
         return $this->fieldHandlerMock;
@@ -477,21 +458,22 @@ class TreeHandlerTest extends TestCase
     /**
      * @param array $methods
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler
      */
     protected function getPartlyMockedTreeHandler(array $methods)
     {
-        return $this->getMock(
-            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\TreeHandler',
-            $methods,
-            array(
-                $this->getLocationGatewayMock(),
-                $this->getLocationMapperMock(),
-                $this->getContentGatewayMock(),
-                $this->getContentMapperMock(),
-                $this->getFieldHandlerMock(),
+        return $this->getMockBuilder(TreeHandler::class)
+            ->setMethods($methods)
+            ->setConstructorArgs(
+                array(
+                    $this->getLocationGatewayMock(),
+                    $this->getLocationMapperMock(),
+                    $this->getContentGatewayMock(),
+                    $this->getContentMapperMock(),
+                    $this->getFieldHandlerMock(),
+                )
             )
-        );
+            ->getMock();
     }
 
     /**

@@ -5,14 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
 use eZ\Publish\Core\Persistence\Legacy;
 use eZ\Publish\Core\IO;
 use eZ\Publish\Core\FieldType;
+use eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface;
+use eZ\Publish\Core\FieldType\Image\AliasCleanerInterface;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use RecursiveIteratorIterator;
@@ -44,7 +44,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     private $deprecationWarnerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $aliasCleanerMock;
 
@@ -78,17 +78,18 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         $fieldType = new FieldType\Image\Type();
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
-        $urlRedecorator = self::$container->get('ezpublish.core.io.image_fieldtype.legacy_url_redecorator');
-
         $this->ioService = self::$container->get('ezpublish.fieldType.ezimage.io_service');
+        /** @var \eZ\Publish\Core\IO\UrlRedecoratorInterface $urlRedecorator */
+        $urlRedecorator = self::$container->get('ezpublish.core.io.image_fieldtype.legacy_url_redecorator');
 
         return $this->getHandler(
             'ezimage',
             $fieldType,
             new Legacy\Content\FieldValue\Converter\ImageConverter($this->ioService, $urlRedecorator),
             new FieldType\Image\ImageStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage($urlRedecorator),
+                new FieldType\Image\ImageStorage\Gateway\DoctrineStorage(
+                    $urlRedecorator,
+                    $this->getDatabaseHandler()->getConnection()
                 ),
                 $this->ioService,
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
@@ -102,7 +103,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getDeprecationWarnerMock()
     {
         if (!isset($this->deprecationWarnerMock)) {
-            $this->deprecationWarnerMock = $this->getMock('eZ\Publish\Core\Base\Utils\DeprecationWarnerInterface');
+            $this->deprecationWarnerMock = $this->createMock(DeprecationWarnerInterface::class);
         }
 
         return $this->deprecationWarnerMock;
@@ -111,7 +112,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getAliasCleanerMock()
     {
         if (!isset($this->aliasCleanerMock)) {
-            $this->aliasCleanerMock = $this->getMock('\eZ\Publish\Core\FieldType\Image\AliasCleanerInterface');
+            $this->aliasCleanerMock = $this->createMock(AliasCleanerInterface::class);
         }
 
         return $this->aliasCleanerMock;
@@ -175,7 +176,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data' => null,
                 'externalData' => array(
-                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
+                    'inputUri' => __DIR__ . '/_fixtures/image.jpg',
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
                 ),
@@ -218,7 +219,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
                 'externalData' => array(
                     // should be ignored
                     'id' => 'some/value',
-                    'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
+                    'inputUri' => __DIR__ . '/_fixtures/image.png',
                     'fileName' => 'Blueish-Blue.jpg',
                     'alternativeText' => 'This blue is so blueish.',
                 ),
@@ -304,7 +305,7 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             array(
                 'data' => null,
                 'externalData' => array(
-                    'id' => ($path = __DIR__ . '/_fixtures/image.jpg'),
+                    'id' => __DIR__ . '/_fixtures/image.jpg',
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
                 ),

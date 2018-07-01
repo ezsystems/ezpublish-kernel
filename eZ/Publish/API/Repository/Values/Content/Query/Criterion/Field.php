@@ -5,14 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
 
 /**
@@ -20,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CustomFieldInterface;
  *
  * Provides content filtering based on Fields contents & values.
  */
-class Field extends Criterion implements CriterionInterface, CustomFieldInterface
+class Field extends Criterion implements CustomFieldInterface
 {
     /**
      * Custom field definitions to query instead of default field.

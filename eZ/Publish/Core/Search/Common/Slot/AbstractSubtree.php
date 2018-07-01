@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Common\Slot;
 
@@ -22,8 +20,9 @@ abstract class AbstractSubtree extends Slot
         $contentHandler = $this->persistenceHandler->contentHandler();
         $locationHandler = $this->persistenceHandler->locationHandler();
 
-        $processedContentIdSet = array();
+        $processedContentIdSet = [];
         $subtreeIds = $locationHandler->loadSubtreeIds($locationId);
+        $contentInfoList = $contentHandler->loadContentInfoList(array_values($subtreeIds));
 
         foreach ($subtreeIds as $locationId => $contentId) {
             $this->searchHandler->indexLocation(
@@ -37,7 +36,7 @@ abstract class AbstractSubtree extends Slot
             $this->searchHandler->indexContent(
                 $contentHandler->load(
                     $contentId,
-                    $contentHandler->loadContentInfo($contentId)->currentVersionNo
+                    $contentInfoList[$contentId]->currentVersionNo
                 )
             );
 

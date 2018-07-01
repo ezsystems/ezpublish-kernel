@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
@@ -60,10 +58,7 @@ class LocationTest extends BaseTest
      */
     public function testResultIsLocation($result)
     {
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
-            $result
-        );
+        $this->assertInstanceOf(Location::class, $result);
     }
 
     /**

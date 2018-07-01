@@ -5,15 +5,16 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader\Storage;
 
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class ExternalStorageRegistryFactory extends ContainerAware
+class ExternalStorageRegistryFactory implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * Collection of external storage handlers for field types that need them.
      *

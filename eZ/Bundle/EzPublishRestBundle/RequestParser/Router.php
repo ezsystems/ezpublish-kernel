@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\RequestParser;
 
@@ -95,6 +93,6 @@ class Router implements RequestParser
             throw new InvalidArgumentException('Invalid $match parameter, no _route key');
         }
 
-        return (strpos($match['_route'], 'ezpublish_rest_') === 0);
+        return strpos($match['_route'], 'ezpublish_rest_') === 0;
     }
 }

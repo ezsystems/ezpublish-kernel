@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy;
 
@@ -74,7 +72,7 @@ class TransactionHandler implements TransactionHandlerInterface
         try {
             $this->dbHandler->commit();
         } catch (Exception $e) {
-            throw new RuntimeException($e->getMessage());
+            throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
 
@@ -99,7 +97,7 @@ class TransactionHandler implements TransactionHandlerInterface
                 $this->languageHandler->clearCache();
             }
         } catch (Exception $e) {
-            throw new RuntimeException($e->getMessage());
+            throw new RuntimeException($e->getMessage(), 0, $e);
         }
     }
 }

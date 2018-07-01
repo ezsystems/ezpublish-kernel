@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
@@ -136,7 +134,7 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
         $this->siteAccess = new $siteAccessClass();
 
         // Request header always have precedence
-        // @note: request headers are always in lower cased.
+        // Note: request headers are always in lower cased.
         if (!empty($request->headers['x-siteaccess'])) {
             $siteaccessName = $request->headers['x-siteaccess'][0];
             if (!isset($this->siteAccessList[$siteaccessName])) {
@@ -220,10 +218,11 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
 
         $request = clone $this->request;
         // Be sure to have a clean pathinfo, without SiteAccess part in it.
-        if ($this->siteAccess->matcher instanceof URILexer) {
+        if ($this->siteAccess && $this->siteAccess->matcher instanceof URILexer) {
             $request->setPathinfo($this->siteAccess->matcher->analyseURI($request->pathinfo));
         }
 
+        $siteAccessClass = $this->siteAccessClass;
         foreach ($this->siteAccessesConfiguration as $matchingClass => $matchingConfiguration) {
             $matcher = $this->matcherBuilder->buildMatcher($matchingClass, $matchingConfiguration, $request);
             if (!$matcher instanceof VersatileMatcher) {
@@ -239,7 +238,6 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
                 continue;
             }
 
-            $siteAccessClass = $this->siteAccessClass;
             /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess */
             $siteAccess = new $siteAccessClass();
             $siteAccess->name = $siteAccessName;
@@ -250,9 +248,9 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
         }
 
         // No VersatileMatcher configured for $siteAccessName.
-        $this->logger->notice("Siteaccess '$siteAccessName' could not be reverse-matched against configuration. No VersatileMatcher found.");
+        $this->logger->notice("Siteaccess '$siteAccessName' could not be reverse-matched against configuration. No VersatileMatcher found. Returning default SiteAccess.");
 
-        return null;
+        return new $siteAccessClass($this->defaultSiteAccess, 'default');
     }
 
     /**

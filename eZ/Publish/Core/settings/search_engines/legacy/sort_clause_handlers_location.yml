@@ -11,40 +11,40 @@ services:
     #  - ezpublish.search.legacy.gateway.sort_clause_handler.location
     # are registered to this one using compilation pass
     ezpublish.search.legacy.gateway.sort_clause_converter.location:
-        class: %ezpublish.search.legacy.gateway.sort_clause_converter.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_converter.class%"
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.id:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.id.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.location.id.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.depth:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.depth.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.location.depth.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.path:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.path.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.location.path.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.location.is_main_location.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.priority:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.priority.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.location.priority.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
     ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: %ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.location.visibility.class%"
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}

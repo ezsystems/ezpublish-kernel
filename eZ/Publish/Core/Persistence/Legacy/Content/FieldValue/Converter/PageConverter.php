@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
@@ -219,7 +217,6 @@ class PageConverter implements Converter
                     $this->addNewXmlElement($dom, $blockNode, 'overflow_id', $attrValue);
                     break;
                 case 'rotation':
-                case 'customAttributes':
                     if ($attrValue === null) {
                         continue 2;
                     }
@@ -228,7 +225,19 @@ class PageConverter implements Converter
                     $blockNode->appendChild($node);
 
                     foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
-                        $this->addNewXmlElement($dom, $blockNode, $arrayItemKey, $arrayItemValue);
+                        $this->addNewXmlElement($dom, $node, $arrayItemKey, $arrayItemValue);
+                    }
+                    break;
+                case 'customAttributes':
+                    if ($attrValue === null) {
+                        continue 2;
+                    }
+
+                    $node = $dom->createElement('custom_attributes');
+                    $blockNode->appendChild($node);
+
+                    foreach ($attrValue as $arrayItemKey => $arrayItemValue) {
+                        $this->addNewXmlElement($dom, $node, $arrayItemKey, $arrayItemValue);
                     }
                     break;
                 case 'attributes':

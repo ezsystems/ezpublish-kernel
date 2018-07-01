@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
@@ -88,7 +86,7 @@ class SearchServiceAuthorizationTest extends BaseTest
      * Test for the findSingle() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findSingle()
-     * @expectedException eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindSingle
      */
     public function testFindSingleThrowsNotFoundException()

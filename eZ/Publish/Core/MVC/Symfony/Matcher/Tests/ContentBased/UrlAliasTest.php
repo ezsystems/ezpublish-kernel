@@ -5,11 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher;
 
+use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias as UrlAliasMatcher;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 use eZ\Publish\API\Repository\Repository;
@@ -29,8 +30,8 @@ class UrlAliasTest extends BaseTest
 
     /**
      * @dataProvider setMatchingConfigProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias::setMatchingConfig
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
      * @param string $matchingConfig
      * @param string[] $expectedValues
@@ -60,35 +61,32 @@ class UrlAliasTest extends BaseTest
      *
      * @param string $path
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForUrlAlias($path)
     {
         // First an url alias that will never match, then the right url alias.
         // This ensures to test even if the location has several url aliases.
         $urlAliasList = array(
-            $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias'),
+            $this->createMock(URLAlias::class),
             $this
-                ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\URLAlias')
+                ->getMockBuilder(URLAlias::class)
                 ->setConstructorArgs(array(array('path' => $path)))
                 ->getMockForAbstractClass(),
         );
 
-        $urlAliasServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\URLAliasService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlAliasServiceMock = $this->createMock(URLAliasService::class);
         $urlAliasServiceMock->expects($this->at(0))
             ->method('listLocationAliases')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Location'),
+                $this->isInstanceOf(Location::class),
                 true
             )
             ->will($this->returnValue(array()));
         $urlAliasServiceMock->expects($this->at(1))
             ->method('listLocationAliases')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Location'),
+                $this->isInstanceOf(Location::class),
                 false
             )
             ->will($this->returnValue($urlAliasList));
@@ -155,8 +153,8 @@ class UrlAliasTest extends BaseTest
 
     /**
      * @expectedException \RuntimeException
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias::matchContentInfo
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias::setMatchingConfig
      */
     public function testMatchContentInfo()
     {

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Keyword;
 
@@ -100,16 +98,13 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * @todo Review this, created from copy/paste to unblock failing tests!
-     *       According to me (PA) sorting on keywords should not be supported.
-     *
      * @param \eZ\Publish\Core\FieldType\Keyword\Value $value
      *
      * @return array
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return false;
+        return implode(',', $value->values);
     }
 
     /**

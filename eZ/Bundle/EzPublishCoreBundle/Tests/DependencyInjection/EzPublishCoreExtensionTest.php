@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection;
 
@@ -183,6 +181,38 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->assertSame($customFilters['wow'], $filters['wow']);
     }
 
+    public function testImagePlaceholderConfiguration()
+    {
+        $this->load([
+            'image_placeholder' => [
+                'default' => [
+                    'provider' => 'generic',
+                    'options' => [
+                        'foo' => 'Foo',
+                        'bar' => 'Bar',
+                    ],
+                ],
+                'fancy' => [
+                    'provider' => 'remote',
+                ],
+            ],
+        ]);
+
+        $this->assertEquals([
+            'default' => [
+                'provider' => 'generic',
+                'options' => [
+                    'foo' => 'Foo',
+                    'bar' => 'Bar',
+                ],
+            ],
+            'fancy' => [
+                'provider' => 'remote',
+                'options' => [],
+            ],
+        ], $this->container->getParameter('image_alias.placeholder_providers'));
+    }
+
     public function testEzPageConfiguration()
     {
         $customLayouts = array(
@@ -233,56 +263,43 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
      * @dataProvider cacheConfigurationProvider
      *
      * @param array $customCacheConfig
-     * @param string $expectedPurgeService
-     * @param int $expectedTimeout
+     * @param string $expectedPurgeType
      */
-    public function testCacheConfiguration(array $customCacheConfig, $expectedPurgeService)
+    public function testCacheConfiguration(array $customCacheConfig, $expectedPurgeType)
     {
         $this->load($customCacheConfig);
 
-        $this->assertContainerBuilderHasAlias('ezpublish.http_cache.purge_client', $expectedPurgeService);
+        $this->assertContainerBuilderHasParameter('ezpublish.http_cache.purge_type', $expectedPurgeType);
     }
 
     public function cacheConfigurationProvider()
     {
         return array(
-            array(array(), 'ezpublish.http_cache.purge_client.local', 1),
+            array(array(), 'local'),
             array(
                 array(
                     'http_cache' => array('purge_type' => 'local'),
                 ),
-                'ezpublish.http_cache.purge_client.local',
+                'local',
             ),
             array(
                 array(
                     'http_cache' => array('purge_type' => 'multiple_http'),
                 ),
-                'ezpublish.http_cache.purge_client.fos',
+                'http',
             ),
             array(
                 array(
                     'http_cache' => array('purge_type' => 'single_http'),
                 ),
-                'ezpublish.http_cache.purge_client.fos',
+                'http',
             ),
             array(
                 array(
                     'http_cache' => array('purge_type' => 'http'),
                 ),
-                'ezpublish.http_cache.purge_client.fos',
+                'http',
             ),
-        );
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testCacheConfigurationWrongPurgeType()
-    {
-        $this->load(
-            array(
-                'http_cache' => array('purge_type' => 'foobar', 'timeout' => 12),
-            )
         );
     }
 
@@ -295,6 +312,8 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'http_cache' => array('purge_type' => 'foobar', 'timeout' => 12),
             )
         );
+
+        $this->assertContainerBuilderHasParameter('ezpublish.http_cache.purge_type', 'foobar');
     }
 
     public function testLocaleConfiguration()
@@ -317,6 +336,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'engine' => 'elasticsearch',
                     'connection' => 'blabla',
                 ),
+                'fields_groups' => array(
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
+                ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
             'foo' => array(
                 'storage' => array(
@@ -327,6 +353,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'engine' => 'solr',
                     'connection' => 'lalala',
                 ),
+                'fields_groups' => array(
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
+                ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -337,6 +370,144 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $repositoryConfig['search']['config'] = array();
         }
         $this->assertSame($repositories, $this->container->getParameter('ezpublish.repositories'));
+    }
+
+    /**
+     * @dataProvider repositoriesConfigurationFieldGroupsProvider
+     */
+    public function testRepositoriesConfigurationFieldGroups($repositories, $expectedRepositories)
+    {
+        $this->load(['repositories' => $repositories]);
+        $this->assertTrue($this->container->hasParameter('ezpublish.repositories'));
+
+        $repositoriesPar = $this->container->getParameter('ezpublish.repositories');
+        $this->assertEquals(count($repositories), count($repositoriesPar));
+
+        foreach ($repositoriesPar as $key => $repo) {
+            $this->assertArrayHasKey($key, $expectedRepositories);
+            $this->assertArrayHasKey('fields_groups', $repo);
+            $this->assertEquals($expectedRepositories[$key]['fields_groups'], $repo['fields_groups'], 'Invalid fields groups element', 0.0, 10, true);
+        }
+    }
+
+    public function repositoriesConfigurationFieldGroupsProvider()
+    {
+        return [
+            //empty config
+            [
+                ['main' => null],
+                ['main' => [
+                        'fields_groups' => [
+                            'list' => ['content', 'metadata'],
+                            'default' => '%ezsettings.default.content.field_groups.default%',
+                        ],
+                    ],
+                ],
+            ],
+            //single item with custom fields
+            [
+                ['foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                ],
+                ['foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                ],
+            ],
+            //mixed item with custom config and empty item
+            [
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john', 'doe'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                    'anotherone' => null,
+                ],
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john', 'doe'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                    'anotherone' => [
+                        'fields_groups' => [
+                            'list' => ['content', 'metadata'],
+                            'default' => '%ezsettings.default.content.field_groups.default%',
+                        ],
+                    ],
+                ],
+            ],
+            //items with only one field configured
+            [
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john'],
+                        ],
+                    ],
+                    'bar' => [
+                        'fields_groups' => [
+                            'default' => 'metadata',
+                        ],
+                    ],
+                ],
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john'],
+                            'default' => '%ezsettings.default.content.field_groups.default%',
+                        ],
+                    ],
+                    'bar' => [
+                        'fields_groups' => [
+                            'list' => ['content', 'metadata'],
+                            'default' => 'metadata',
+                        ],
+                    ],
+                ],
+            ],
+            //two different repositories
+            [
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john', 'doe'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                    'bar' => [
+                        'fields_groups' => [
+                            'list' => ['lorem', 'ipsum'],
+                            'default' => 'lorem',
+                        ],
+                    ],
+                ],
+                [
+                    'foo' => [
+                        'fields_groups' => [
+                            'list' => ['bar', 'baz', 'john', 'doe'],
+                            'default' => 'bar',
+                        ],
+                    ],
+                    'bar' => [
+                        'fields_groups' => [
+                            'list' => ['lorem', 'ipsum'],
+                            'default' => 'lorem',
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     public function testRepositoriesConfigurationEmpty()
@@ -356,6 +527,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => null,
                     'config' => array(),
                 ),
+                'fields_groups' => array(
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
+                ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -389,6 +567,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => null,
                     'config' => array(),
                 ),
+                'fields_groups' => array(
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
+                ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -422,6 +607,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => null,
                     'config' => array(),
                 ),
+                'fields_groups' => array(
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
+                ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -465,6 +657,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => 'default',
                     'config' => array(),
                 ),
+                'fields_groups' => array(
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
+                ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
             'foo' => array(
                 'search' => array(
@@ -477,6 +676,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => 'default',
                     'config' => array(),
                 ),
+                'fields_groups' => array(
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
+                ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -508,6 +714,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => null,
                     'config' => array(),
                 ),
+                'fields_groups' => array(
+                    'list' => ['content', 'metadata'],
+                    'default' => '%ezsettings.default.content.field_groups.default%',
+                ),
+                'options' => [
+                    'default_version_archive_limit' => 5,
+                ],
             ),
         );
         $this->load(array('repositories' => $repositories));
@@ -600,6 +813,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testRegisteredPolicies()
     {
+        $this->load();
+        self::assertContainerBuilderHasParameter('ezpublish.api.role.policy_map');
+        $previousPolicyMap = $this->container->getParameter('ezpublish.api.role.policy_map');
+
         $policies1 = [
             'custom_module' => [
                 'custom_function_1' => null,
@@ -641,8 +858,103 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         ];
 
         $this->load();
-
         self::assertContainerBuilderHasParameter('ezpublish.api.role.policy_map');
+        $expectedPolicies = array_merge_recursive($expectedPolicies, $previousPolicyMap);
         self::assertEquals($expectedPolicies, $this->container->getParameter('ezpublish.api.role.policy_map'));
+    }
+
+    /**
+     * Test RichText Semantic Configuration.
+     */
+    public function testRichTextConfiguration()
+    {
+        $config = Yaml::parse(
+            file_get_contents(__DIR__ . '/Fixtures/FieldType/RichText/ezrichtext.yml')
+        );
+        $this->load($config);
+
+        // Validate Custom Tags
+        $this->assertTrue(
+            $this->container->hasParameter($this->extension::RICHTEXT_CUSTOM_TAGS_PARAMETER)
+        );
+        $expectedCustomTagsConfig = [
+            'video' => [
+                'template' => 'MyBundle:FieldType/RichText/tag:video.html.twig',
+                'icon' => '/bundles/mybundle/fieldtype/richtext/video.svg#video',
+                'attributes' => [
+                    'title' => [
+                        'type' => 'string',
+                        'required' => true,
+                        'default_value' => 'abc',
+                    ],
+                    'width' => [
+                        'type' => 'number',
+                        'required' => true,
+                        'default_value' => 360,
+                    ],
+                    'autoplay' => [
+                        'type' => 'boolean',
+                        'required' => false,
+                        'default_value' => null,
+                    ],
+                ],
+            ],
+            'equation' => [
+                'template' => 'MyBundle:FieldType/RichText/tag:equation.html.twig',
+                'icon' => '/bundles/mybundle/fieldtype/richtext/equation.svg#equation',
+                'attributes' => [
+                    'name' => [
+                        'type' => 'string',
+                        'required' => true,
+                        'default_value' => 'Equation',
+                    ],
+                    'processor' => [
+                        'type' => 'choice',
+                        'required' => true,
+                        'default_value' => 'latex',
+                        'choices' => ['latex', 'tex'],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->assertSame(
+            $expectedCustomTagsConfig,
+            $this->container->getParameter($this->extension::RICHTEXT_CUSTOM_TAGS_PARAMETER)
+        );
+    }
+
+    public function testUrlAliasConfiguration()
+    {
+        $configuration = [
+            'transformation' => 'urlalias_lowercase',
+            'separator' => 'dash',
+            'transformation_groups' => [
+                'urlalias' => [
+                    'commands' => [
+                        'ascii_lowercase',
+                        'cyrillic_lowercase',
+                    ],
+                    'cleanup_method' => 'url_cleanup',
+                ],
+                'urlalias_compact' => [
+                    'commands' => [
+                        'greek_normalize',
+                        'exta_lowercase',
+                    ],
+                    'cleanup_method' => 'compact_cleanup',
+                ],
+            ],
+        ];
+        $this->load([
+            'url_alias' => [
+                'slug_converter' => $configuration,
+            ],
+        ]);
+        $parsedConfig = $this->container->getParameter('ezpublish.url_alias.slug_converter');
+        $this->assertSame(
+            $configuration,
+            $parsedConfig
+        );
     }
 }

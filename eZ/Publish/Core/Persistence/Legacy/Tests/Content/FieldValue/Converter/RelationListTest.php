@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
@@ -16,15 +14,15 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for RelationList converter in Legacy storage.
  */
-class RelationListTest extends PHPUnit_Framework_TestCase
+class RelationListTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RelationListConverter
      */
     protected $converter;
 
@@ -210,6 +208,11 @@ EOT;
                             'selectionDefaultLocation' => 12345,
                             'selectionContentTypes' => array('article', 'blog_post'),
                         ),
+                        'validators' => array(
+                            'RelationListValueValidator' => array(
+                                'selectionLimit' => 5,
+                            ),
+                        ),
                     )
                 ),
             )
@@ -218,7 +221,7 @@ EOT;
         $expectedStorageFieldDefinition = new StorageFieldDefinition();
         $expectedStorageFieldDefinition->dataText5 = <<<EOT
 <?xml version="1.0" encoding="utf-8"?>
-<related-objects><constraints><allowed-class contentclass-identifier="article"/><allowed-class contentclass-identifier="blog_post"/></constraints><type value="2"/><object_class value=""/><selection_type value="0"/><contentobject-placement node-id="12345"/></related-objects>
+<related-objects><constraints><allowed-class contentclass-identifier="article"/><allowed-class contentclass-identifier="blog_post"/></constraints><type value="2"/><object_class value=""/><selection_type value="0"/><contentobject-placement node-id="12345"/><selection_limit value="5"/></related-objects>
 
 EOT;
 
@@ -248,6 +251,7 @@ EOT;
     </constraints><type value="2"/>
     <object_class value=""/>
     <selection_type value="1"/>
+    <selection_limit value="1"/>
     <contentobject-placement node-id="54321"/>
 </related-objects>
 
@@ -261,6 +265,11 @@ EOT;
                             'selectionMethod' => Type::SELECTION_DROPDOWN,
                             'selectionDefaultLocation' => 54321,
                             'selectionContentTypes' => array('forum', 'folder'),
+                        ),
+                        'validators' => array(
+                            'RelationListValueValidator' => array(
+                                'selectionLimit' => 1,
+                            ),
                         ),
                     )
                 ),

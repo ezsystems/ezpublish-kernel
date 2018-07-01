@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Selection;
 
@@ -62,9 +60,9 @@ class Type extends FieldType
                             "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
                             array(
-                                'fieldType' => $this->getFieldTypeIdentifier(),
-                                'setting' => $settingKey,
-                                'type' => 'bool',
+                                '%fieldType%' => $this->getFieldTypeIdentifier(),
+                                '%setting%' => $settingKey,
+                                '%type%' => 'bool',
                             ),
                             "[$settingKey]"
                         );
@@ -76,9 +74,9 @@ class Type extends FieldType
                             "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
                             array(
-                                'fieldType' => $this->getFieldTypeIdentifier(),
-                                'setting' => $settingKey,
-                                'type' => 'hash',
+                                '%fieldType%' => $this->getFieldTypeIdentifier(),
+                                '%setting%' => $settingKey,
+                                '%type%' => 'hash',
                             ),
                             "[$settingKey]"
                         );
@@ -89,7 +87,7 @@ class Type extends FieldType
                         "Setting '%setting%' is unknown",
                         null,
                         array(
-                            'setting' => $settingKey,
+                            '%setting%' => $settingKey,
                         ),
                         "[$settingKey]"
                     );
@@ -121,7 +119,7 @@ class Type extends FieldType
      */
     public function getName(SPIValue $value)
     {
-        throw new \RuntimeException('Implement this method');
+        throw new \RuntimeException('Name generation provided via NameableField set via "ezpublish.fieldType.nameable" service tag');
     }
 
     /**
@@ -207,7 +205,7 @@ class Type extends FieldType
                     'Option with index %index% does not exist in the field definition.',
                     null,
                     array(
-                        'index' => $optionIndex,
+                        '%index%' => $optionIndex,
                     ),
                     'selection'
                 );

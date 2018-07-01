@@ -5,16 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
-use PHPUnit_Framework_TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 
-class ConfigResolverTest extends PHPUnit_Framework_TestCase
+class ConfigResolverTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
@@ -22,7 +21,7 @@ class ConfigResolverTest extends PHPUnit_Framework_TestCase
     private $siteAccess;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $containerMock;
 
@@ -30,7 +29,7 @@ class ConfigResolverTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->siteAccess = new SiteAccess('test');
-        $this->containerMock = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
+        $this->containerMock = $this->createMock(ContainerInterface::class);
     }
 
     /**

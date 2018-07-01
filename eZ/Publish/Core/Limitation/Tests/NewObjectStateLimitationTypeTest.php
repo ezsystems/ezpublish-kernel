@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
@@ -21,6 +19,7 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
+use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as SPIHandler;
 
 /**
  * Test Case for LimitationType.
@@ -28,7 +27,7 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
 class NewObjectStateLimitationTypeTest extends Base
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $objectStateHandlerMock;
 
@@ -38,14 +37,7 @@ class NewObjectStateLimitationTypeTest extends Base
     public function setUp()
     {
         parent::setUp();
-
-        $this->objectStateHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\ObjectState\\Handler',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->objectStateHandlerMock = $this->createMock(SPIHandler::class);
     }
 
     /**
@@ -209,7 +201,7 @@ class NewObjectStateLimitationTypeTest extends Base
         $expected = array('test', 'test' => 9);
         $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation', $value);
+        self::assertInstanceOf(NewObjectStateLimitation::class, $value);
         self::assertInternalType('array', $value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
@@ -353,7 +345,7 @@ class NewObjectStateLimitationTypeTest extends Base
             $object,
             $targets
         );
-        var_dump($v);// intentional, debug in case no exception above
+        var_dump($v); // intentional, debug in case no exception above
     }
 
     /**

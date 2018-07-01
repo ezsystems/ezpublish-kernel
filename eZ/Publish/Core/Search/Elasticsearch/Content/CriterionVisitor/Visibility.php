@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor;
 
@@ -41,7 +39,7 @@ class Visibility extends CriterionVisitor
      */
     protected function getInternalValue(Criterion $criterion)
     {
-        return ($criterion->value[0] === Criterion\Visibility::HIDDEN ? true : false);
+        return $criterion->value[0] === Criterion\Visibility::HIDDEN;
     }
 
     /**

@@ -6,49 +6,32 @@ use eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 
+/**
+ * @deprecated since 6.11. Use {@see \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\DoctrineStorage} instead.
+ */
 class LegacyStorage extends Gateway
 {
     /**
-     * Connection.
-     *
-     * @var mixed
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $dbHandler;
 
-    /**
-     * Set database handler for this gateway.
-     *
-     * @param mixed $dbHandler
-     *
-     * @throws \RuntimeException if $dbHandler is not an instance of
-     *         {@link \eZ\Publish\Core\Persistence\Database\DatabaseHandler}
-     */
-    public function setConnection($dbHandler)
+    public function __construct(DatabaseHandler $dbHandler)
     {
-        // This obviously violates the Liskov substitution Principle, but with
-        // the given class design there is no sane other option. Actually the
-        // dbHandler *should* be passed to the constructor, and there should
-        // not be the need to post-inject it.
-        if (!$dbHandler instanceof DatabaseHandler) {
-            throw new \RuntimeException('Invalid dbHandler passed');
-        }
-
+        @trigger_error(
+            sprintf('%s is deprecated, use %s instead', self::class, DoctrineStorage::class),
+            E_USER_DEPRECATED
+        );
         $this->dbHandler = $dbHandler;
     }
 
     /**
      * Returns the active connection.
      *
-     * @throws \RuntimeException if no connection has been set, yet.
-     *
      * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected function getConnection()
     {
-        if ($this->dbHandler === null) {
-            throw new \RuntimeException('Missing database connection.');
-        }
-
         return $this->dbHandler;
     }
 
@@ -60,6 +43,12 @@ class LegacyStorage extends Gateway
      */
     public function storeFieldData(Field $field, $contentTypeId)
     {
+        if (empty($field->value->externalData) && !empty($field->id)) {
+            $this->deleteFieldData($field->id);
+
+            return;
+        }
+
         $existingKeywordMap = $this->getExistingKeywords($field->value->externalData, $contentTypeId);
 
         $this->deleteOldKeywordAssignments($field->id);
@@ -219,6 +208,10 @@ class LegacyStorage extends Gateway
         $existingKeywordMap = array();
 
         foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
+            // filter out keywords that aren't the exact match (e.g. differ by case)
+            if (!in_array($row['keyword'], $keywordList)) {
+                continue;
+            }
             $existingKeywordMap[$row['keyword']] = $row['id'];
         }
 

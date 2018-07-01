@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\REST\Common\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Common\Values\RestObjectState;
@@ -128,7 +127,7 @@ class ObjectState extends RestController
      */
     public function loadObjectStateGroup($objectStateGroupId)
     {
-        return $this->objectStateService->loadObjectStateGroup($objectStateGroupId);
+        return $this->objectStateService->loadObjectStateGroup($objectStateGroupId, Language::ALL);
     }
 
     /**
@@ -142,7 +141,7 @@ class ObjectState extends RestController
     public function loadObjectState($objectStateGroupId, $objectStateId)
     {
         return new RestObjectState(
-            $this->objectStateService->loadObjectState($objectStateId),
+            $this->objectStateService->loadObjectState($objectStateId, Language::ALL),
             $objectStateGroupId
         );
     }
@@ -155,7 +154,7 @@ class ObjectState extends RestController
     public function loadObjectStateGroups()
     {
         return new Values\ObjectStateGroupList(
-            $this->objectStateService->loadObjectStateGroups()
+            $this->objectStateService->loadObjectStateGroups(0, -1, Language::ALL)
         );
     }
 
@@ -171,7 +170,7 @@ class ObjectState extends RestController
         $objectStateGroup = $this->objectStateService->loadObjectStateGroup($objectStateGroupId);
 
         return new Values\ObjectStateList(
-            $this->objectStateService->loadObjectStates($objectStateGroup),
+            $this->objectStateService->loadObjectStates($objectStateGroup, Language::ALL),
             $objectStateGroup->id
         );
     }

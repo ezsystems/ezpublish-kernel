@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
@@ -32,17 +30,17 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     protected $suffixes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB');
 
     /**
-     * @param TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $translatorMock;
 
     /**
-     * @param ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $configResolverInterfaceMock;
 
     /**
-     * @param LocaleConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @param LocaleConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $localeConverterInterfaceMock;
 
@@ -83,11 +81,11 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     }
 
     /**
-     * @return ConfigResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getConfigResolverInterfaceMock()
     {
-        $configResolverInterfaceMock = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $configResolverInterfaceMock = $this->createMock(ConfigResolverInterface::class);
         $configResolverInterfaceMock->expects($this->any())
             ->method('getParameter')
             ->with('languages')
@@ -97,11 +95,11 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     }
 
     /**
-     * @return LocaleConverterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LocaleConverterInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLocaleConverterInterfaceMock()
     {
-        $this->localeConverterInterfaceMock = $this->getMock('eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface');
+        $this->localeConverterInterfaceMock = $this->createMock(LocaleConverterInterface::class);
         $this->localeConverterInterfaceMock->expects($this->any())
         ->method('convertToPOSIX')
         ->will(
@@ -117,12 +115,12 @@ class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
     }
 
     /**
-     * @return TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getTranslatorInterfaceMock()
     {
         $that = $this;
-        $this->translatorMock = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $this->translatorMock = $this->createMock(TranslatorInterface::class);
         $this->translatorMock
             ->expects($this->any())->method('trans')->will(
                 $this->returnCallback(

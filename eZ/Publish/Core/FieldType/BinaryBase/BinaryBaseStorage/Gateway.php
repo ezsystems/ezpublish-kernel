@@ -5,14 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage;
 
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
-use eZ\Publish\Core\FieldType\StorageGateway;
+use eZ\Publish\SPI\FieldType\StorageGateway;
 
 abstract class Gateway extends StorageGateway
 {

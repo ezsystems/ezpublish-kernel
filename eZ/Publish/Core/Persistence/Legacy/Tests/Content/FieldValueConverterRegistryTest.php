@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 /**
  * Test case for FieldValue Converter Registry.
@@ -19,7 +18,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as R
 class FieldValueConverterRegistryTest extends TestCase
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::register
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::register
      */
     public function testRegister()
     {
@@ -36,7 +35,7 @@ class FieldValueConverterRegistryTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
      */
     public function testGetStorage()
     {
@@ -52,9 +51,9 @@ class FieldValueConverterRegistryTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
-     * @expectedException eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @expectedException \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     public function testGetNotFound()
     {
@@ -70,8 +69,6 @@ class FieldValueConverterRegistryTest extends TestCase
      */
     protected function getFieldValueConverterMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
-        );
+        return $this->createMock(Converter::class);
     }
 }

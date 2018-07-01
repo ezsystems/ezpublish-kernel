@@ -5,14 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications;
-use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches content based on its ContentType Identifier.
@@ -21,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
  * - IN: will match from a list of ContentTypeIdentifier
  * - EQ: will match against one ContentTypeIdentifier
  */
-class ContentTypeIdentifier extends Criterion implements CriterionInterface
+class ContentTypeIdentifier extends Criterion
 {
     /**
      * Creates a new ContentType criterion.
@@ -53,8 +50,13 @@ class ContentTypeIdentifier extends Criterion implements CriterionInterface
         );
     }
 
+    /**
+     * @deprecated since 7.2, will be removed in 8.0. Use the constructor directly instead.
+     */
     public static function createFromQueryBuilder($target, $operator, $value)
     {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
         return new self($value);
     }
 }

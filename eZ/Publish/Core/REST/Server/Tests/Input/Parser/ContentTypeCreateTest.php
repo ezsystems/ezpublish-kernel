@@ -5,14 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionCreate;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentTypeCreate;
 
 class ContentTypeCreateTest extends BaseTest
@@ -28,7 +28,7 @@ class ContentTypeCreateTest extends BaseTest
         $result = $contentTypeCreate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeCreateStruct',
+            ContentTypeCreateStruct::class,
             $result,
             'ContentTypeCreateStruct not created correctly.'
         );
@@ -113,7 +113,7 @@ class ContentTypeCreateTest extends BaseTest
 
         foreach ($result->fieldDefinitions as $fieldDefinition) {
             $this->assertInstanceOf(
-                '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinitionCreateStruct',
+                FieldDefinitionCreateStruct::class,
                 $fieldDefinition,
                 'ContentTypeCreateStruct field definition not created correctly.'
             );
@@ -263,13 +263,7 @@ class ContentTypeCreateTest extends BaseTest
      */
     private function getFieldDefinitionCreateParserMock()
     {
-        $fieldDefinitionCreateParserMock = $this->getMock(
-            '\\eZ\\Publish\\Core\\REST\\Server\\Input\\Parser\\FieldDefinitionCreate',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $fieldDefinitionCreateParserMock = $this->createMock(FieldDefinitionCreate::class);
 
         $fieldDefinitionCreateParserMock->expects($this->any())
             ->method('parse')
@@ -286,13 +280,7 @@ class ContentTypeCreateTest extends BaseTest
      */
     protected function getContentTypeServiceMock()
     {
-        $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
 
         $contentTypeServiceMock->expects($this->any())
             ->method('newContentTypeCreateStruct')

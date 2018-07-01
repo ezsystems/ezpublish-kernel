@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
@@ -120,6 +118,7 @@ class Exception extends ValueObjectVisitor
         $generator->endValueElement('errorMessage');
 
         if ($data instanceof Translatable && $this->translator) {
+            /** @Ignore */
             $errorDescription = $this->translator->trans($data->getMessageTemplate(), $data->getParameters(), 'repository_exceptions');
         } else {
             $errorDescription = $data->getMessage();
@@ -136,6 +135,12 @@ class Exception extends ValueObjectVisitor
 
             $generator->startValueElement('line', $data->getLine());
             $generator->endValueElement('line');
+        }
+
+        if ($previous = $data->getPrevious()) {
+            $generator->startObjectElement('Previous', 'ErrorMessage');
+            $visitor->visitValueObject($previous);
+            $generator->endObjectElement('Previous');
         }
 
         $generator->endObjectElement('ErrorMessage');

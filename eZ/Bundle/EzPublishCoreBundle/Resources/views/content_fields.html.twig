@@ -10,6 +10,8 @@
  #              containing <fieldtypeidentifier>-field
  #}
 
+{% trans_default_domain "content_fields" %}
+
 {% block ezstring_field %}
 {% spaceless %}
     {% set field_value = field.value.text %}
@@ -93,9 +95,9 @@
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
-            {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale ) %}
+            {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale, 'UTC' ) %}
         {% else %}
-            {% set field_value = field.value.time|localizeddate( 'none', 'short', parameters.locale ) %}
+            {% set field_value = field.value.time|localizeddate( 'none', 'short', parameters.locale, 'UTC' ) %}
         {% endif %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
@@ -160,13 +162,14 @@
 
 {% block ezselection_field %}
 {% spaceless %}
-    {% if fieldSettings.isMultiple and field.value.selection|length() > 0  %}
+    {% if field.value.selection|length() <= 0 %}
+    {% elseif fieldSettings.isMultiple %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for selectedIndex in field.value.selection %}
             <li>{{ fieldSettings.options[selectedIndex] }}</li>
         {% endfor %}
         </ul>
-    {% elseif not fieldSettings.isMultiple %}
+    {% else %}
         {% set field_value = fieldSettings.options[field.value.selection.0] %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
@@ -263,7 +266,8 @@
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
-        {% for contentId in field.value.destinationContentIds %}
+        {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
+        {{ fos_httpcache_tag('relation-' ~ contentId) }}
         <li>
             {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
         </li>
@@ -274,21 +278,24 @@
 {% endblock %}
 
 {# @todo:
- # - include Gmaps JS only once if the field is used several times in the page
  # - add translate filter
  #}
 {% block ezgmaplocation_field %}
 {##
  # This field type block accepts the following parameters:
- # - string mapType the Google map type (ROADMAP, SATELLITE, HYBRID or TERRAIN), default is ROADMAP
- # - boolean showMap whether to show the Google map or not, default is true
+ # - boolean showMap whether to show the map or not, default is true
  # - boolean showInfo whether to show the latitude, longitude and address or not, default is true
  # - integer zoom the default zoom level, default is 13
  # - boolean draggable whether to enable or not draggable map (useful on mobile / responsive layout), default is true
  # - string|false width the width of the rendered map with its unit (ie "500px" or "50em"),
  #                      set to false to not set any width style inline, default is 500px
- # - string|boolean height the height of the rendered map with its unit (ie "200px" or "20em"),
+ # - string|false height the height of the rendered map with its unit (ie "200px" or "20em"),
  #                         set to false to not set any height style inline, default is 200px
+ # - boolean scrollWheel If false, disables scrollwheel zooming on the map. Enabled by default.
+ #
+ # For further reading:
+ # - https://wiki.openstreetmap.org
+ # - http://leafletjs.com/reference-1.3.0.html
  #}
 {% spaceless %}
 <div {{ block( 'field_attributes' ) }}>
@@ -296,18 +303,18 @@
     {% set defaultHeight = '200px' %}
     {% set defaultShowMap = true %}
     {% set defaultShowInfo = true %}
-    {% set defaultZoom = 13 %}
-    {% set defaultMapType = 'ROADMAP' %}
     {% set defaultDraggable = 'true' %}
+    {% set defaultScrollWheel = 'true' %}
 
     {% set hasContent = field.value is not null %}
-    {% set latitude = field.value.latitude|default( 0 ) %}
-    {% set longitude = field.value.longitude|default( 0 ) %}
+    {% set latitude = field.value.latitude %}
+    {% set longitude = field.value.longitude %}
     {% set address = field.value.address|default( "" ) %}
     {% set mapId = "maplocation-map-" ~ field.id %}
 
+    {% set defaultZoom = latitude is null and longitude is null ? 1 : 15 %}
+
     {% set zoom = parameters.zoom|default( defaultZoom ) %}
-    {% set mapType = parameters.mapType|default( defaultMapType ) %}
 
     {% set mapWidth, mapHeight = defaultWidth, defaultHeight %}
     {% if parameters.width is defined %}
@@ -333,12 +340,17 @@
         {% set draggable = 'false' %}
     {% endif %}
 
+    {% set scrollWheel = defaultScrollWheel %}
+    {% if parameters.scrollWheel is defined and not parameters.scrollWheel %}
+        {% set scrollWheel = 'false' %}
+    {% endif %}
+
     {% if showInfo %}
     <dl>
         <dt>Latitude</dt>
-        <dd>{{ hasContent ? latitude : "Not set" }}</dd>
+        <dd>{{ latitude is not null ? latitude : 'content-field.latitude.not_set'|trans|desc("Not set") }}</dd>
         <dt>Longitude</dt>
-        <dd>{{ longitude ? longitude : "Not set" }}</dd>
+        <dd>{{ longitude is not null ? longitude : 'content-field.longitude.not_set'|trans|desc("Not set") }}</dd>
         {% if address %}
         <dt>Address</dt>
         <dd>{{ address }}</dd>
@@ -347,26 +359,40 @@
     {% endif %}
 
     {% if hasContent and showMap %}
-        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
-        <script type="text/javascript">
-        (function(win, doc) {
-            var mapView = function (mapId, latitude, longitude) {
-                var mapElt = doc.getElementById("{{ mapId }}"),
-                    startPoint = new google.maps.LatLng(latitude, longitude),
-                    zoom = {{ zoom }},
-                    draggable = {{ draggable }};
-
-                new google.maps.Marker({
-                    map: new google.maps.Map(mapElt, {
-                        center: startPoint,
-                        zoom: zoom,
-                        draggable: draggable,
-                        mapTypeId: google.maps.MapTypeId.{{ mapType }}
-                    }),
-                    position: startPoint
-                });
+    {% set latitude = latitude|default(0) %}
+    {% set longitude = longitude|default(0) %}
+        <script>
+            if (typeof(window.ezgmaplocationMapsScriptLoaded) == 'undefined') {
+                (function (win, doc) {
+                    var myScript = document.createElement('script');
+                    var myCss = document.createElement('link');
+                    myScript.src = 'https://unpkg.com/leaflet@1.3.1/dist/leaflet.js';
+                    myCss.rel = "stylesheet";
+                    myCss.href = "https://unpkg.com/leaflet@1.3.1/dist/leaflet.css";
+                    win.ezgmaplocationMapsScriptLoaded = true;
+                    doc.body.appendChild(myCss);
+                    doc.body.appendChild(myScript);
+                })(window, document)
             }
-            if ( win.addEventListener ) {
+        </script>
+        <script type="text/javascript">
+            (function (win) {
+                var mapView = function (mapId, latitude, longitude) {
+                    var coordinates = [latitude, longitude];
+                    var mapConfig = {
+                        dragging: {{ draggable }},
+                        scrollWheelZoom: {{ scrollWheel }},
+                        zoom: {{ zoom }},
+                        center: coordinates
+                    };
+                    var map = L.map(mapId, mapConfig);
+
+                    L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    L.marker(coordinates).addTo(map);
+                };
                 win.addEventListener(
                     'load',
                     function () {
@@ -374,18 +400,10 @@
                     },
                     false
                 );
-            } else if ( win.attachEvent ) {
-                win.attachEvent(
-                    'onload',
-                    function () {
-                        mapView("{{ mapId }}", {{ latitude }}, {{ longitude }});
-                    }
-                );
-            }
-        })(window, document);
+            })(window);
         </script>
         {% set mapStyle = mapWidth ? "width:" ~ mapWidth  ~ ";": "" %}
-        {% set mapStyle =  mapHeight ? mapStyle ~ " height:" ~ mapHeight : mapStyle %}
+        {% set mapStyle = mapHeight ? mapStyle ~ " height:" ~ mapHeight : mapStyle %}
         <div class="maplocation-map" id="{{ mapId }}" style="{{ mapStyle }}"></div>
     {% endif %}
 </div>
@@ -404,8 +422,8 @@
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
     {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
-    {% set width = parameters.width is defined ? parameters.width : imageAlias.width %}
-    {% set height = parameters.height is defined ? parameters.height : imageAlias.height %}
+    {% set width = parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : '') %}
+    {% set height = parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : '') %}
     <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}"{% if parameters.class is defined and parameters.class is not empty %} class="{{ parameters.class }}"{% endif %} />
 </figure>
 {% endif %}
@@ -414,7 +432,8 @@
 
 {% block ezobjectrelation_field %}
 {% spaceless %}
-{% if not ez_is_field_empty( content, field ) %}
+{% if not ez_is_field_empty( content, field ) and parameters.available %}
+    {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
     <div {{ block( 'field_attributes' ) }}>
         {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
     </div>

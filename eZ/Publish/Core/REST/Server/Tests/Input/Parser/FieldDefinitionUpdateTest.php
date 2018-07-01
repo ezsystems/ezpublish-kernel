@@ -5,15 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
+use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
+use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
 
 /**
  * @todo Test with fieldSettings and validatorConfiguration when specified
@@ -31,7 +31,7 @@ class FieldDefinitionUpdateTest extends BaseTest
         $result = $fieldDefinitionUpdate->parse($inputArray, $this->getParsingDispatcherMock());
 
         $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\FieldDefinitionUpdateStruct',
+            FieldDefinitionUpdateStruct::class,
             $result,
             'FieldDefinitionUpdateStruct not created correctly.'
         );
@@ -165,13 +165,7 @@ class FieldDefinitionUpdateTest extends BaseTest
      */
     protected function getFieldTypeParserMock()
     {
-        $fieldTypeParserMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\Input\\FieldTypeParser',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $fieldTypeParserMock = $this->createMock(FieldTypeParser::class);
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseValue')
@@ -204,13 +198,7 @@ class FieldDefinitionUpdateTest extends BaseTest
      */
     protected function getContentTypeServiceMock()
     {
-        $contentTypeServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\ContentTypeService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentTypeServiceMock = $this->createMock(ContentTypeService::class);
 
         $contentTypeServiceMock->expects($this->any())
             ->method('newFieldDefinitionUpdateStruct')

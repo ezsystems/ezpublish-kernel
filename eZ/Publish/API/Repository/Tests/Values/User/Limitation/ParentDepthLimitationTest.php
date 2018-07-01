@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\Values\User\Limitation;
 
@@ -29,8 +27,10 @@ class ParentDepthLimitationTest extends BaseLimitationTest
      *
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testParentDepthLimitationAllow()
+    public function testParentDepthLimitationForbid()
     {
         $repository = $this->getRepository();
 
@@ -45,7 +45,7 @@ class ParentDepthLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentDepthLimitation(
-                array('limitationValues' => array(2))
+                array('limitationValues' => array(3))
             )
         );
         $policyCreate->addLimitation(
@@ -74,9 +74,8 @@ class ParentDepthLimitationTest extends BaseLimitationTest
      *
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testParentDepthLimitationForbid()
+    public function testParentDepthLimitationAllow()
     {
         $repository = $this->getRepository();
 
@@ -91,7 +90,7 @@ class ParentDepthLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentDepthLimitation(
-                array('limitationValues' => array(1, 3, 4))
+                array('limitationValues' => array(1, 2, 3, 4))
             )
         );
         $policyCreate->addLimitation(
@@ -107,6 +106,52 @@ class ParentDepthLimitationTest extends BaseLimitationTest
         $repository->setCurrentUser($user);
 
         $this->createWikiPageDraft();
+        /* END: Use Case */
+    }
+
+    /**
+     * Tests a combination of ParentDepthLimitation and ContentTypeLimitation.
+     *
+     * @depends testParentDepthLimitationAllow
+     *
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
+     */
+    public function testParentDepthLimitationAllowPublish()
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeId = $this->generateId('contentType', 22);
+        /* BEGIN: Use Case */
+        $user = $this->createUserVersion1();
+
+        $roleService = $repository->getRoleService();
+
+        $role = $roleService->loadRoleByIdentifier('Editor');
+
+        $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
+        $policyCreate->addLimitation(
+            new ParentDepthLimitation(
+                array('limitationValues' => array(1, 2, 3, 4))
+            )
+        );
+        $policyCreate->addLimitation(
+            new ContentTypeLimitation(
+                array('limitationValues' => array($contentTypeId))
+            )
+        );
+
+        $role = $roleService->addPolicy($role, $policyCreate);
+
+        $roleService->assignRoleToUser($role, $user);
+
+        $repository->setCurrentUser($user);
+
+        $draft = $this->createWikiPageDraft();
+
+        $contentService = $repository->getContentService();
+
+        $content = $contentService->publishVersion($draft->versionInfo);
         /* END: Use Case */
     }
 }

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Locale;
 
@@ -52,7 +50,7 @@ class LocaleConverter implements LocaleConverterInterface
     public function convertToPOSIX($ezpLocale)
     {
         if (!isset($this->conversionMap[$ezpLocale])) {
-            $this->logger->warning("Could not convert locale '$ezpLocale' to POSIX format. Please check your locale configuration in ezpublish.yml");
+            $this->logger->warning("Could not convert locale '$ezpLocale' to POSIX format. Please check your locale configuration in ezplatform.yml");
 
             return;
         }
@@ -71,7 +69,7 @@ class LocaleConverter implements LocaleConverterInterface
     public function convertToEz($posixLocale)
     {
         if (!isset($this->reverseConversionMap[$posixLocale])) {
-            $this->logger->warning("Could not convert locale '$posixLocale' to eZ Publish format. Please check your locale configuration in ezpublish.yml");
+            $this->logger->warning("Could not convert locale '$posixLocale' to eZ Publish format. Please check your locale configuration in ezplatform.yml");
 
             return;
         }

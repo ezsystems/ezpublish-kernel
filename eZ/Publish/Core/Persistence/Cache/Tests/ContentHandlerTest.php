@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
@@ -20,431 +18,80 @@ use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Handler as SPIContentHandler;
 
 /**
  * Test case for Persistence\Cache\ContentHandler.
  */
-class ContentHandlerTest extends HandlerTest
+class ContentHandlerTest extends AbstractCacheHandlerTest
 {
+    public function getHandlerMethodName(): string
+    {
+        return 'contentHandler';
+    }
+
+    public function getHandlerClassName(): string
+    {
+        return SPIContentHandler::class;
+    }
+
     /**
      * @return array
      */
-    public function providerForUnCachedMethods()
+    public function providerForUnCachedMethods(): array
     {
-        return array(
-            array('create', array(new CreateStruct())),
-            array('createDraftFromVersion', array(2, 1, 14)),
-            array('copy', array(2, 1)),
-            //array( 'load', array( 2, 1, array( 'eng-GB' ) ) ),
-            //array( 'load', array( 2, 1 ) ),
-            //array( 'loadContentInfo', array( 2 ) ),
-            array('loadVersionInfo', array(2, 1)),
-            array('loadDraftsForUser', array(14)),
-            //array( 'setStatus', array( 2, 0, 1 ) ),
-            //array( 'updateMetadata', array( 2, new MetadataUpdateStruct ) ),
-            //array( 'updateContent', array( 2, 1, new UpdateStruct ) ),
-            //array( 'deleteContent', array( 2 ) ),
-            //array( 'deleteVersion', array( 2, 1 ) ),
-            array('listVersions', array(2)),
-            array('addRelation', array(new RelationCreateStruct())),
-            array('removeRelation', array(66, APIRelation::COMMON)),
-            array('loadRelations', array(2, 1, 3)),
-            array('loadReverseRelations', array(2, 3)),
-            //array( 'publish', array( 2, 3, new MetadataUpdateStruct ) ),
-        );
+        // string $method, array $arguments, array? $tags, string? $key
+        return [
+            ['create', [new CreateStruct()]],
+            ['createDraftFromVersion', [2, 1, 14], ['content-2-version-list']],
+            ['copy', [2, 1]],
+            ['loadDraftsForUser', [14]],
+            ['setStatus', [2, 0, 1], ['content-2-version-list'], 'ez-content-version-info-2-1'],
+            ['setStatus', [2, 1, 1], ['content-2'], 'ez-content-version-info-2-1'],
+            ['updateMetadata', [2, new MetadataUpdateStruct()], ['content-2']],
+            ['updateContent', [2, 1, new UpdateStruct()], ['content-2']],
+            //['deleteContent', [2]], own tests for relations complexity
+            ['deleteVersion', [2, 1], ['content-2']],
+            ['addRelation', [new RelationCreateStruct()]],
+            ['removeRelation', [66, APIRelation::COMMON]],
+            ['loadRelations', [2, 1, 3]],
+            ['loadReverseRelations', [2, 3]],
+            ['publish', [2, 3, new MetadataUpdateStruct()], ['content-2']],
+        ];
     }
 
     /**
-     * @dataProvider providerForUnCachedMethods
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler
+     * @return array
      */
-    public function testUnCachedMethods($method, array $arguments)
+    public function providerForCachedLoadMethods(): array
     {
-        $this->loggerMock->expects($this->once())->method('logCall');
-        $this->cacheMock
-            ->expects($this->never())
-            ->method($this->anything());
+        $info = new ContentInfo(['id' => 2]);
+        $version = new VersionInfo(['versionNo' => 1, 'contentInfo' => $info]);
+        $content = new Content(['fields' => [], 'versionInfo' => $version]);
 
-        $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandler));
-
-        $expects = $innerHandler
-            ->expects($this->once())
-            ->method($method);
-
-        if (isset($arguments[2])) {
-            $expects->with($arguments[0], $arguments[1], $arguments[2]);
-        } elseif (isset($arguments[1])) {
-            $expects->with($arguments[0], $arguments[1]);
-        } elseif (isset($arguments[0])) {
-            $expects->with($arguments[0]);
-        }
-
-        $expects->will($this->returnValue(null));
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        call_user_func_array(array($handler, $method), $arguments);
+        // string $method, array $arguments, string $key, mixed? $data, bool $multi = false
+        return [
+            ['load', [2, 1], 'ez-content-2-1-' . ContentHandler::ALL_TRANSLATIONS_KEY, $content],
+            ['load', [2, 1, ['eng-GB', 'eng-US']], 'ez-content-2-1-eng-GB|eng-US', $content],
+            ['loadContentList', [[new Content\LoadStruct(['id' => 2, 'versionNo' => 3])]], 'ez-content-2-3-' . ContentHandler::ALL_TRANSLATIONS_KEY, [2 => $content], true],
+            ['loadContentList', [[new Content\LoadStruct(['id' => 5, 'languages' => ['eng-GB', 'eng-US']])]], 'ez-content-5-eng-GB|eng-US', [5 => $content], true],
+            ['loadContentInfo', [2], 'ez-content-info-2', $info],
+            ['loadContentInfoList', [[2]], 'ez-content-info-2', [2 => $info], true],
+            ['loadContentInfoByRemoteId', ['3d8jrj'], 'ez-content-info-byRemoteId-3d8jrj', $info],
+            ['loadVersionInfo', [2, 1], 'ez-content-version-info-2-1', $version],
+            ['listVersions', [2], 'ez-content-2-version-list', [$version]],
+            ['listVersions', [2, 1], 'ez-content-2-version-list-byStatus-1', [$version]],
+        ];
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::load
-     */
-    public function testLoadCacheIsMiss()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('getItem')
-            ->with('content', 2, 1, 'eng-GB|eng-US')
-            ->will($this->returnValue($cacheItemMock));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue(null));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('isMiss')
-            ->will($this->returnValue(true));
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('load')
-            ->with(2, 1, array('eng-GB', 'eng-US'))
-            ->will(
-                $this->returnValue(
-                    new Content(
-                        array(
-                            'fields' => array(),
-                            'versionInfo' => new VersionInfo(
-                                array(
-                                    'versionNo' => 1,
-                                    'contentInfo' => new ContentInfo(array('id' => 2)),
-                                )
-                            ),
-                        )
-                    )
-                )
-            );
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->load(2, 1, array('eng-GB', 'eng-US'));
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::load
-     */
-    public function testLoadHasCache()
-    {
-        $this->loggerMock->expects($this->never())->method($this->anything());
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('getItem')
-            ->with('content', 2, 1, ContentHandler::ALL_TRANSLATIONS_KEY)
-            ->will($this->returnValue($cacheItemMock));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('isMiss')
-            ->will($this->returnValue(false));
-
-        $this->persistenceHandlerMock
-            ->expects($this->never())
-            ->method('contentHandler');
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('get')
-            ->will(
-                $this->returnValue(
-                    new Content(
-                        array(
-                            'fields' => array(),
-                            'versionInfo' => new VersionInfo(
-                                array(
-                                    'versionNo' => 1,
-                                    'contentInfo' => new ContentInfo(array('id' => 2)),
-                                )
-                            ),
-                        )
-                    )
-                )
-            );
-
-        $cacheItemMock
-            ->expects($this->never())
-            ->method('set');
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->load(2, 1);
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::loadContentInfo
-     */
-    public function testLoadContentInfoCacheIsMiss()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('getItem')
-            ->with('content', 'info', 2)
-            ->will($this->returnValue($cacheItemMock));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('get')
-            ->will($this->returnValue(null));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('isMiss')
-            ->will($this->returnValue(true));
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('loadContentInfo')
-            ->with(2)
-            ->will(
-                $this->returnValue(
-                    new ContentInfo(array('id' => 2))
-                )
-            );
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'));
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->loadContentInfo(2, 1);
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::loadContentInfo
-     */
-    public function testLoadContentInfoHasCache()
-    {
-        $this->loggerMock->expects($this->never())->method($this->anything());
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('getItem')
-            ->with('content', 'info', 2)
-            ->will($this->returnValue($cacheItemMock));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('isMiss')
-            ->will($this->returnValue(false));
-
-        $this->persistenceHandlerMock
-            ->expects($this->never())
-            ->method('contentHandler');
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('get')
-            ->will(
-                $this->returnValue(
-                    new ContentInfo(array('id' => 2))
-                )
-            );
-
-        $cacheItemMock
-            ->expects($this->never())
-            ->method('set');
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->loadContentInfo(2);
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::setStatus
-     */
-    public function testSetStatus()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('setStatus')
-            ->with(2, VersionInfo::STATUS_ARCHIVED, 1)
-            ->will($this->returnValue(true));
-
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('clear')
-            ->with('content', 2, 1)
-            ->will($this->returnValue(null));
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->setStatus(2, VersionInfo::STATUS_ARCHIVED, 1);
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::setStatus
-     */
-    public function testSetStatusPublished()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('setStatus')
-            ->with(2, VersionInfo::STATUS_PUBLISHED, 1)
-            ->will($this->returnValue(true));
-
-        $this->cacheMock
-            ->expects($this->at(0))
-            ->method('clear')
-            ->with('content', 2, 1)
-            ->will($this->returnValue(null));
-
-        $this->cacheMock
-            ->expects($this->at(1))
-            ->method('clear')
-            ->with('content', 'info', 2)
-            ->will($this->returnValue(null));
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->setStatus(2, VersionInfo::STATUS_PUBLISHED, 1);
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::updateMetadata
-     */
-    public function testUpdateMetadata()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('updateMetadata')
-            ->with(2, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct'))
-            ->will($this->returnValue(new ContentInfo(array('id' => 2))));
-
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('getItem')
-            ->with('content', 'info', 2)
-            ->will($this->returnValue($cacheItemMock));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'));
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->updateMetadata(2, new MetadataUpdateStruct());
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::updateContent
-     */
-    public function testUpdateContent()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('updateContent')
-            ->with(2, 1, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct'))
-            ->will(
-                $this->returnValue(
-                    new Content(
-                        array(
-                            'fields' => array(),
-                            'versionInfo' => new VersionInfo(
-                                array(
-                                    'versionNo' => 1,
-                                    'contentInfo' => new ContentInfo(array('id' => 2)),
-                                )
-                            ),
-                        )
-                    )
-                )
-            );
-
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('clear')
-            ->with('content', 2, 1)
-            ->will($this->returnValue(null));
-
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->once())
-            ->method('getItem')
-            ->with('content', 2, 1, ContentHandler::ALL_TRANSLATIONS_KEY)
-            ->will($this->returnValue($cacheItemMock));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->updateContent(2, 1, new UpdateStruct());
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::deleteContent
+     * @covers \eZ\Publish\Core\Persistence\Cache\ContentHandler::deleteContent
      */
     public function testDeleteContent()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
+        $innerHandlerMock = $this->createMock(SPIContentHandler::class);
         $this->persistenceHandlerMock
             ->expects($this->exactly(2))
             ->method('contentHandler')
@@ -469,170 +116,20 @@ class ContentHandlerTest extends HandlerTest
             ->will($this->returnValue(true));
 
         $this->cacheMock
+            ->expects($this->never())
+            ->method('deleteItem');
+
+        $this->cacheMock
             ->expects($this->at(0))
-            ->method('clear')
-            ->with('content', 42)
-            ->will($this->returnValue(null));
+            ->method('invalidateTags')
+            ->with(['content-2']);
 
         $this->cacheMock
             ->expects($this->at(1))
-            ->method('clear')
-            ->with('content', 2)
-            ->will($this->returnValue(null));
-
-        $this->cacheMock
-            ->expects($this->at(2))
-            ->method('clear')
-            ->with('content', 'info', 2)
-            ->will($this->returnValue(null));
-
-        $this->cacheMock
-            ->expects($this->at(3))
-            ->method('clear')
-            ->with('content', 'info', 'remoteId')
-            ->will($this->returnValue(null));
-
-        $this->cacheMock
-            ->expects($this->at(4))
-            ->method('clear')
-            ->with('location', 'subtree')
-            ->will($this->returnValue(null));
+            ->method('invalidateTags')
+            ->with(['content-fields-42']);
 
         $handler = $this->persistenceCacheHandler->contentHandler();
         $handler->deleteContent(2);
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::deleteVersion
-     */
-    public function testDeleteVersion()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('deleteVersion')
-            ->with(2, 1)
-            ->will($this->returnValue(true));
-
-        $this->cacheMock
-            ->expects($this->at(0))
-            ->method('clear')
-            ->with('content', 2, 1)
-            ->will($this->returnValue(null));
-
-        $this->cacheMock
-            ->expects($this->at(1))
-            ->method('clear')
-            ->with('content', 'info', 2)
-            ->will($this->returnValue(null));
-
-        $this->cacheMock
-            ->expects($this->at(2))
-            ->method('clear')
-            ->with('content', 'info', 'remoteId')
-            ->will($this->returnValue(null));
-
-        $this->cacheMock
-            ->expects($this->at(3))
-            ->method('clear')
-            ->with('location', 'subtree')
-            ->will($this->returnValue(null));
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->deleteVersion(2, 1);
-    }
-
-    /**
-     * @covers eZ\Publish\Core\Persistence\Cache\ContentHandler::publish
-     */
-    public function testPublish()
-    {
-        $this->loggerMock->expects($this->once())->method('logCall');
-
-        $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
-        $this->persistenceHandlerMock
-            ->expects($this->once())
-            ->method('contentHandler')
-            ->will($this->returnValue($innerHandlerMock));
-
-        $innerHandlerMock
-            ->expects($this->once())
-            ->method('publish')
-            ->with(2, 1, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct'))
-            ->will(
-                $this->returnValue(
-                    new Content(
-                        array(
-                            'fields' => array(),
-                            'versionInfo' => new VersionInfo(
-                                array(
-                                    'versionNo' => 1,
-                                    'contentInfo' => new ContentInfo(array('id' => 2)),
-                                )
-                            ),
-                        )
-                    )
-                )
-            );
-
-        $this->cacheMock
-            ->expects($this->at(0))
-            ->method('clear')
-            ->with('content', 2)
-            ->will($this->returnValue(true));
-
-        $this->cacheMock
-            ->expects($this->at(1))
-            ->method('clear')
-            ->with('content', 'info', 'remoteId')
-            ->will($this->returnValue(true));
-
-        $this->cacheMock
-            ->expects($this->at(2))
-            ->method('clear')
-            ->with('location', 'subtree')
-            ->will($this->returnValue(true));
-
-        $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->at(3))
-            ->method('getItem')
-            ->with('content', 2, 1, ContentHandler::ALL_TRANSLATIONS_KEY)
-            ->will($this->returnValue($cacheItemMock));
-
-        $cacheItemMock
-            ->expects($this->once())
-            ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content'));
-
-        $cacheItemMock
-            ->expects($this->never())
-            ->method('get');
-
-        $cacheItemMock2 = $this->getMock('Stash\Interfaces\ItemInterface');
-        $this->cacheMock
-            ->expects($this->at(4))
-            ->method('getItem')
-            ->with('content', 'info', 2)
-            ->will($this->returnValue($cacheItemMock2));
-
-        $cacheItemMock2
-            ->expects($this->once())
-            ->method('set')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\ContentInfo'));
-
-        $cacheItemMock2
-            ->expects($this->never())
-            ->method('get');
-
-        $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->publish(2, 1, new MetadataUpdateStruct());
     }
 }

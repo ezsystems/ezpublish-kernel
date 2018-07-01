@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -18,7 +17,7 @@ use eZ\Publish\Core\Repository\Values\Content\Location;
 
 class LocationCreateStructTest extends ValueObjectVisitorBaseTest
 {
-    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit\Framework\MockObject\MockObject */
     private $locationServiceMock;
 
     /**
@@ -239,7 +238,7 @@ class LocationCreateStructTest extends ValueObjectVisitorBaseTest
      */
     protected function internalGetVisitor()
     {
-        $this->locationServiceMock = $this->getMock('eZ\Publish\API\Repository\LocationService');
+        $this->locationServiceMock = $this->createMock(LocationService::class);
         return new ValueObjectVisitor\LocationCreateStruct($this->locationServiceMock);
     }
 }

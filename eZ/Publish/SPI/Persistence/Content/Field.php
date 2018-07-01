@@ -5,15 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Persistence\Content;
 
 use eZ\Publish\SPI\Persistence\ValueObject;
 
-/**
- */
 class Field extends ValueObject
 {
     /**
@@ -57,4 +53,16 @@ class Field extends ValueObject
      * @todo Normally we would use a create struct here
      */
     public $versionNo;
+
+    /**
+     * Clone object properties.
+     *
+     * Note: `clone` keyword performs shallow copy of an object.
+     * For properties being objects this means that a reference
+     * is copied instead of the actual object.
+     */
+    public function __clone()
+    {
+        $this->value = clone $this->value;
+    }
 }

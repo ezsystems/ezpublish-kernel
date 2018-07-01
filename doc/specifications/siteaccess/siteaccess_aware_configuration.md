@@ -274,3 +274,44 @@ A few limitation exist with this scope hash merge:
 * Semantic setting name and internal name will be the same (like `foo_setting` in the examples above).
 * Applicable to 1st level semantic parameter only (i.e. settings right under the SiteAccess name).
 * Merge is not recursive. Only 2nd level merge is possible by using `ContextualizerInterface::MERGE_FROM_SECOND_LEVEL` option.
+
+## SiteAccess configuration filtering
+Since kernel v6.9, the SiteAccess configuration can be customized by 3rd party bundles before
+it gets processed. It can be used to declare custom siteaccesses, prevent some names from being used...
+
+To do so, you need to:
+- define a `SiteAccessConfigurationFilter` that implements `eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter`,
+- add this filter to the CoreBundle's extension.
+
+Example of a SiteAccessConfigurationFilter:
+```php
+namespace AppBundle\Platform;
+
+use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter;
+
+class MySiteAccessConfigurationFilter implements SiteAccessConfigurationFilter
+{
+    function filter(array $configuration)
+    {
+        $configuration['list'][] = 'foo';
+
+        return $configuration;
+    }
+}
+```
+
+Registering the filter:
+```
+namespace AppBundle;
+
+use AppBundle\Platform\MySiteAccessConfigurationFilter;
+
+class AppBundle
+{
+    public function build(ContainerBuilder $container)
+    {
+        $eZExtension = $container->getExtension('ezpublish');
+        $eZExtension->addSiteAccessConfigurationFilter(new MySiteAccessConfigurationFilter());
+    }
+}
+```

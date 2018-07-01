@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
@@ -30,7 +28,6 @@ class Trash extends ValueObjectVisitor
     {
         $generator->startObjectElement('Trash');
         $visitor->setHeader('Content-Type', $generator->getMediaType('Trash'));
-
         $generator->startAttribute('href', $data->path);
         $generator->endAttribute('href');
 
@@ -41,7 +38,6 @@ class Trash extends ValueObjectVisitor
         }
 
         $generator->endList('TrashItem');
-
         $generator->endObjectElement('Trash');
     }
 }

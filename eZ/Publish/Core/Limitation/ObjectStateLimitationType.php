@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Limitation;
 
@@ -103,7 +101,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If any of the arguments are invalid
      *         Example: If LimitationValue is instance of ContentTypeLimitationValue, and Type is SectionLimitationType.
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If value of the LimitationValue is unsupported
-     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
+     *         Example if OwnerLimitationValue->limitationValues[0] is not one of: [ 1,  2 ]
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
@@ -118,6 +116,8 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
             throw new InvalidArgumentException('$value', 'Must be of type: APIObjectStateLimitation');
         }
 
+        $limitationValues = $value->limitationValues;
+
         if ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
         } elseif ($object instanceof VersionInfo) {
@@ -126,11 +126,16 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
             throw new InvalidArgumentException('$object', 'Must be of type: Content, VersionInfo or ContentInfo');
         }
 
-        if (empty($value->limitationValues)) {
+        // Skip evaluating for RootLocation
+        if (1 === $object->mainLocationId) {
+            return true;
+        }
+
+        if (empty($limitationValues)) {
             return false;
         }
 
-        $objectStateIdArray = array();
+        $objectStateIdsToVerify = array();
         $objectStateHandler = $this->persistence->objectStateHandler();
         $stateGroups = $objectStateHandler->loadAllGroups();
 
@@ -158,20 +163,65 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
                     );
                 }
 
-                $objectStateIdArray[] = $defaultStateId;
+                foreach ($states as $state) {
+                    // check using loose types as limitation values are strings and id's can be int
+                    if (in_array($state->id, $limitationValues)) {
+                        $objectStateIdsToVerify[] = $defaultStateId;
+                    }
+                }
             }
         } else {
-            /*
-             * @var $object ContentInfo
-             */
             foreach ($stateGroups as $stateGroup) {
-                $objectStateIdArray[] = $objectStateHandler->getContentState($object->id, $stateGroup->id)->id;
+                if ($this->isStateGroupUsedForLimitation($stateGroup->id, $limitationValues)) {
+                    $objectStateIdsToVerify[] = $objectStateHandler->getContentState($object->id, $stateGroup->id)->id;
+                }
             }
         }
 
-        $intersect = array_intersect($value->limitationValues, $objectStateIdArray);
+        return $this->areObjectStatesMatchingTheLimitation($objectStateIdsToVerify, $limitationValues);
+    }
 
-        return !empty($intersect);
+    /**
+     * Checks if the State Group contains at least one State that is used by Limitation.
+     *
+     * @param int $stateGroupId
+     * @param string[] $limitationValues
+     *
+     * @return bool
+     */
+    private function isStateGroupUsedForLimitation($stateGroupId, array $limitationValues)
+    {
+        $objectStateHandler = $this->persistence->objectStateHandler();
+        $states = $objectStateHandler->loadObjectStates($stateGroupId);
+
+        foreach ($states as $state) {
+            // check using loose types as limitation values are strings and id's can be int
+            if (in_array($state->id, $limitationValues)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Verifies if all the Object States are matching the Limitation Values.
+     *
+     * @param int[] $objectStateIds
+     * @param string[] $limitationValues
+     *
+     * @return bool
+     */
+    private function areObjectStatesMatchingTheLimitation(array $objectStateIds, array $limitationValues)
+    {
+        foreach ($objectStateIds as $objectStateId) {
+            // check using loose types as limitation values are strings and id's can be int
+            if (!in_array($objectStateId, $limitationValues)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -180,7 +230,7 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUser
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface|\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator
      */
     public function getCriterion(APILimitationValue $value, APIUserReference $currentUser)
     {
@@ -194,8 +244,46 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
             return new Criterion\ObjectStateId($value->limitationValues[0]);
         }
 
-        // several limitation values: IN operation
-        return new Criterion\ObjectStateId($value->limitationValues);
+        $groupedLimitationValues = $this->groupLimitationValues($value->limitationValues);
+
+        if (count($groupedLimitationValues) === 1) {
+            // one group, several limitation values: IN operation
+            return new Criterion\ObjectStateId($groupedLimitationValues[0]);
+        }
+
+        // limitations from different groups require logical AND between them
+        $criterions = [];
+        foreach ($groupedLimitationValues as $limitationGroup) {
+            $criterions[] = new Criterion\ObjectStateId($limitationGroup);
+        }
+
+        return new Criterion\LogicalAnd($criterions);
+    }
+
+    /**
+     * Groups limitation values by the State Group.
+     *
+     * @param string[] $limitationValues
+     *
+     * @return int[][]
+     */
+    private function groupLimitationValues(array $limitationValues)
+    {
+        $objectStateHandler = $this->persistence->objectStateHandler();
+        $stateGroups = $objectStateHandler->loadAllGroups();
+        $groupedLimitationValues = [];
+        foreach ($stateGroups as $stateGroup) {
+            $states = $objectStateHandler->loadObjectStates($stateGroup->id);
+            $stateIds = array_map(function ($state) {
+                return $state->id;
+            }, $states);
+            $limitationValuesGroup = array_intersect($stateIds, $limitationValues);
+            if (!empty($limitationValuesGroup)) {
+                $groupedLimitationValues[] = array_values($limitationValuesGroup);
+            }
+        }
+
+        return $groupedLimitationValues;
     }
 
     /**
@@ -203,6 +291,8 @@ class ObjectStateLimitationType extends AbstractPersistenceLimitationType implem
      *
      * @return mixed[]|int In case of array, a hash with key as valid limitations value and value as human readable name
      *                     of that option, in case of int on of VALUE_SCHEMA_ constants.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
     public function valueSchema()
     {

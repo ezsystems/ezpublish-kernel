@@ -5,46 +5,56 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\EventListener;
 
+use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener;
+use eZ\Publish\Core\MVC\Symfony\Security\InteractiveLoginToken;
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
+use eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent as BaseInteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
+use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
-class SecurityListenerTest extends PHPUnit_Framework_TestCase
+class SecurityListenerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $eventDispatcher;
 
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $tokenStorage;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $authChecker;
 
@@ -56,11 +66,11 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->repository = $this->getMock('eZ\Publish\API\Repository\Repository');
-        $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
-        $this->tokenStorage = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
-        $this->authChecker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        $this->repository = $this->createMock(Repository::class);
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
+        $this->authChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->listener = $this->generateListener();
     }
 
@@ -91,8 +101,8 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
 
     public function testOnInteractiveLoginAlreadyEzUser()
     {
-        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $user = $this->createMock(UserInterface::class);
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->once())
             ->method('getUser')
@@ -109,7 +119,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     public function testOnInteractiveLoginNotUserObject()
     {
         $user = 'foobar';
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->once())
             ->method('getUser')
@@ -125,8 +135,8 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
 
     public function testOnInteractiveLogin()
     {
-        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $user = $this->createMock(SymfonyUserInterface::class);
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->once())
             ->method('getUser')
@@ -149,8 +159,8 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
             ->with('anonymous_user_id')
             ->will($this->returnValue($anonymousUserId));
 
-        $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
-        $userService = $this->getMock('eZ\Publish\API\Repository\UserService');
+        $apiUser = $this->createMock(APIUser::class);
+        $userService = $this->createMock(UserService::class);
         $userService
             ->expects($this->once())
             ->method('loadUser')
@@ -169,7 +179,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $this->tokenStorage
             ->expects($this->once())
             ->method('setToken')
-            ->with($this->isInstanceOf('eZ\Publish\Core\MVC\Symfony\Security\InteractiveLoginToken'));
+            ->with($this->isInstanceOf(InteractiveLoginToken::class));
 
         $this->listener->onInteractiveLogin($event);
     }
@@ -179,8 +189,8 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
      */
     public function testCheckSiteAccessPermissionDenied()
     {
-        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $user = $this->createMock(UserInterface::class);
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->once())
             ->method('getUser')
@@ -201,8 +211,8 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
 
     public function testCheckSiteAccessPermissionGranted()
     {
-        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $user = $this->createMock(UserInterface::class);
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->once())
             ->method('getUser')
@@ -224,8 +234,8 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
 
     public function testCheckSiteAccessNotEzUser()
     {
-        $user = $this->getMock('Symfony\Component\Security\Core\User\UserInterface');
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $user = $this->createMock(SymfonyUserInterface::class);
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->once())
             ->method('getUser')
@@ -244,8 +254,8 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
 
     public function testCheckSiteAccessNoSiteAccess()
     {
-        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $user = $this->createMock(UserInterface::class);
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->once())
             ->method('getUser')
@@ -261,7 +271,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     public function testOnKernelRequestSubRequest()
     {
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             new Request(),
             HttpKernelInterface::SUB_REQUEST
         );
@@ -279,7 +289,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     public function testOnKernelRequestSubRequestFragment()
     {
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             Request::create('/_fragment'),
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -300,7 +310,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
     public function testOnKernelRequestNoSiteAccess()
     {
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             new Request(),
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -320,7 +330,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('siteaccess', new SiteAccess());
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -342,7 +352,7 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $request->attributes->set('siteaccess', new SiteAccess());
         $request->attributes->set('_route', 'login');
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
@@ -360,17 +370,17 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
 
     public function testOnKernelRequestAccessDenied()
     {
-        $this->setExpectedException('eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException');
+        $this->expectException(UnauthorizedSiteAccessException::class);
 
         $request = new Request();
         $request->attributes->set('siteaccess', new SiteAccess());
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->any())
             ->method('getUsername')
@@ -393,12 +403,12 @@ class SecurityListenerTest extends PHPUnit_Framework_TestCase
         $request = new Request();
         $request->attributes->set('siteaccess', new SiteAccess());
         $event = new GetResponseEvent(
-            $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface'),
+            $this->createMock(HttpKernelInterface::class),
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
 
-        $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
+        $token = $this->createMock(TokenInterface::class);
         $token
             ->expects($this->any())
             ->method('getUsername')

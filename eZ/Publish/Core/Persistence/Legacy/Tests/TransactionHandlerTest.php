@@ -5,19 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 use eZ\Publish\Core\Persistence\Legacy\TransactionHandler;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use Exception;
 
 /**
  * Test case for TransactionHandler.
  */
-class TransactionHandlerTest extends PHPUnit_Framework_TestCase
+class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Transaction handler to test.
@@ -27,22 +27,22 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     protected $transactionHandler;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $dbHandlerMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentTypeHandlerMock;
 
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $languageHandlerMock;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::__construct
      */
     public function testConstruct()
     {
@@ -66,7 +66,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::beginTransaction
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::beginTransaction
      */
     public function testBeginTransaction()
     {
@@ -85,7 +85,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
      */
     public function testCommit()
     {
@@ -104,7 +104,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage test
@@ -127,7 +127,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
      */
     public function testRollback()
     {
@@ -146,7 +146,7 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
+     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
      *
      * @expectedException \RuntimeException
      * @expectedExceptionMessage test
@@ -189,14 +189,12 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a mock object for the Content Gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Database\DatabaseHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getDatabaseHandlerMock()
     {
         if (!isset($this->dbHandlerMock)) {
-            $this->dbHandlerMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler'
-            );
+            $this->dbHandlerMock = $this->getMockForAbstractClass(DatabaseHandler::class);
         }
 
         return $this->dbHandlerMock;
@@ -205,18 +203,12 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a mock object for the Content Type Handler.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\MemoryCachingHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getContentTypeHandlerMock()
     {
         if (!isset($this->contentTypeHandlerMock)) {
-            $this->contentTypeHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\MemoryCachingHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentTypeHandlerMock = $this->createMock(MemoryCachingHandler::class);
         }
 
         return $this->contentTypeHandlerMock;
@@ -225,18 +217,12 @@ class TransactionHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a mock object for the Content Language Gateway.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler|\PHPUnit_Framework_MockObject_MockObject
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLanguageHandlerMock()
     {
         if (!isset($this->languageHandlerMock)) {
-            $this->languageHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->languageHandlerMock = $this->createMock(CachingHandler::class);
         }
 
         return $this->languageHandlerMock;

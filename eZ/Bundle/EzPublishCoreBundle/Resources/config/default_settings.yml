@@ -1,6 +1,6 @@
 parameters:
     # Kernel related params
-    webroot_dir: %kernel.root_dir%/../web
+    webroot_dir: "%kernel.root_dir%/../web"
 
     ###
     # ezsettings namespace, default scope
@@ -15,46 +15,67 @@ parameters:
     # Default view templates
     ezplatform.default_view_templates.content.full: 'EzPublishCoreBundle:default:content/full.html.twig'
     ezplatform.default_view_templates.content.line: 'EzPublishCoreBundle:default:content/line.html.twig'
+    ezplatform.default_view_templates.content.text_linked: 'EzPublishCoreBundle:default:content/text_linked.html.twig'
     ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
+    ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
+
+    # Rich Text Custom Tags global configuration
+    ezplatform.ezrichtext.custom_tags: {}
+    # Rich Text Custom Tags default scope (for SiteAccess) configuration
+    ezsettings.default.fieldtypes.ezrichtext.custom_tags: []
+
+    ezsettings.default.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
+
+    # List of content type identifiers to display as image when embedded
+    ezplatform.content_view.image_embed_content_types_identifiers: ['image']
 
     ezsettings.default.content_view_defaults:
         full:
             default:
-                template: %ezplatform.default_view_templates.content.full%
+                template: "%ezplatform.default_view_templates.content.full%"
                 match: []
         line:
             default:
-                template: %ezplatform.default_view_templates.content.line%
+                template: "%ezplatform.default_view_templates.content.line%"
+                match: []
+        text_linked:
+            default:
+                template: "%ezplatform.default_view_templates.content.text_linked%"
                 match: []
         embed:
+            image:
+                template: '%ezplatform.default_view_templates.content.embed_image%'
+                match:
+                    Identifier\ContentType: '%ezplatform.content_view.image_embed_content_types_identifiers%'
             default:
-                template: %ezplatform.default_view_templates.content.embed%
+                template: "%ezplatform.default_view_templates.content.embed%"
                 match: []
 
     ezsettings.default.block_view_defaults:
         block:
             default:
-                template: %ezplatform.default_view_templates.block%
+                template: "%ezplatform.default_view_templates.block%"
                 match: []
 
     # Common settings
     ezpublish.repositories: {}
     ezsettings.default.repository: ~
     ezpublish.session_name.default: "eZSESSID{siteaccess_hash}"
-    ezsettings.default.session_name: %ezpublish.session_name.default%    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
-    ezsettings.default.session: { name: %ezpublish.session_name.default% } # Session options that will override options from framework
+    ezsettings.default.session_name: "%ezpublish.session_name.default%"    # Using "{siteaccess_hash}" in session name makes it unique per siteaccess
+    ezsettings.default.session: { name: "%ezpublish.session_name.default%" } # Session options that will override options from framework
     ezsettings.default.url_alias_router: true                       # Use UrlAliasRouter by default
     ezsettings.default.index_page: ~                    # The page to show when accessing IndexPage (/)
     ezsettings.default.default_page: ~                  # The default page to show, e.g. after user login this will be used for default redirection
     ezsettings.default.languages: []
     ezsettings.default.translation_siteaccesses: []
     ezsettings.default.related_siteaccesses: []
-    ezsettings.default.cache_pool_name: "default"       # The cache pool name to use for a siteaccess / siteaccess-group
+    ezsettings.default.cache_service_name: "cache.app"       # The cache pool serive name to use for a siteaccess / siteaccess-group
     ezsettings.default.var_dir: "var"                   # The root directory where all log files, cache files and other stored files are created
     ezsettings.default.storage_dir: "storage"           # Where to place new files for storage, it's relative to var directory
     ezsettings.default.binary_dir: "original"
     ezsettings.default.anonymous_user_id: 10            # The ID of the user to be used for everyone who is not logged in
+    ezsettings.default.api_keys: { google_maps: ~ }     # Google Maps APIs v3 key (https://developers.google.com/maps/documentation/javascript/get-api-key)
 
     # IO
     ezsettings.default.io.metadata_handler: "default"
@@ -62,6 +83,8 @@ parameters:
     ezsettings.default.io.url_prefix: "$var_dir$/$storage_dir$"
     ezsettings.default.io.legacy_url_prefix: "$var_dir$/$storage_dir$"
     ezsettings.default.io.root_dir: "%webroot_dir%/$var_dir$/$storage_dir$"
+    ezsettings.default.io.permissions.files: 0644
+    ezsettings.default.io.permissions.directories: 0755
 
     # Content settings
     ezsettings.default.content.view_cache: true         # Whether to use content view cache or not (Etag/Last-Modified based)
@@ -69,18 +92,20 @@ parameters:
     ezsettings.default.content.default_ttl: 60          # Default TTL cache value for content
     ezsettings.default.content.tree_root.location_id: 2 # Root locationId for routing and link generation. Useful for multisite apps with one repository.
     ezsettings.default.content.tree_root.excluded_uri_prefixes: [] # URI prefixes that are allowed to be outside the content tree
+    ezsettings.default.content.field_groups.list: ['content', 'metadata']
+    ezsettings.default.content.field_groups.default: 'content'
 
     # FieldType settings
     # Default XSL stylesheets for RichText rendering to HTML5.
     # Built-in stylesheets are treated as custom for the sake of extensibility.
     ezsettings.default.fieldtypes.ezrichtext.output_custom_xsl:
         -
-            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl
+            path: "%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl"
             priority: 0
 
     ezsettings.default.fieldtypes.ezrichtext.edit_custom_xsl:
         -
-            path: %kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl
+            path: "%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl"
             priority: 0
 
     ezsettings.default.fieldtypes.ezrichtext.input_custom_xsl: []
@@ -134,7 +159,7 @@ parameters:
 
     # Security settings
     ezsettings.default.security.login_template: "EzPublishCoreBundle:Security:login.html.twig"
-    ezsettings.default.security.base_layout: %ezpublish.content_view.viewbase_layout%
+    ezsettings.default.security.base_layout: "%ezsettings.default.pagelayout%"
 
     # Image settings
     ezsettings.default.image.temporary_dir: imagetmp
@@ -269,6 +294,18 @@ parameters:
         GMapItems:
             name: Google Map Items
 
+    ezsettings.default.url_handler.http.options:
+        timeout: 10
+        connection_timeout: 5
+        batch_size: 25
+        ignore_certificate: false
+    ezsettings.default.url_handler.https.options:
+        timeout: 10
+        connection_timeout: 5
+        batch_size: 25
+        ignore_certificate: false
+    ezsettings.default.url_handler.mailto.options: {}
+
     ###
     # Internal settings
     ###
@@ -282,3 +319,4 @@ parameters:
     ezpublish.siteaccess.relation_map: {}
     # SiteAccesses, indexed by language.
     ezpublish.siteaccesses_by_language: {}
+

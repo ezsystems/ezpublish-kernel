@@ -5,16 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
+use DirectoryIterator;
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use DOMDocument;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\SPI\FieldType\ValidationError;
 
 /**
  * Integration test for use field type.
@@ -31,17 +34,19 @@ class RichTextIntegrationTest extends SearchBaseIntegrationTest
      */
     private $createdDOMValue;
 
+    /**
+     * @var \DOMDocument
+     */
     private $updatedDOMValue;
 
-    protected function setUp()
+    public function __construct($name = null, array $data = array(), $dataName = '')
     {
-        parent::setUp();
         $this->createdDOMValue = new DOMDocument();
         $this->createdDOMValue->loadXML(<<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para><link xlink:href="ezlocation://58" xlink:show="none">link1</link></para>
-    <para><link xlink:href="ezcontent://54" xlink:show="none">link2</link></para>
+    <para><link xlink:href="ezcontent://54" xlink:show="none">link2</link> <ezembedinline xlink:href="ezlocation://60" view="embed" xml:id="embed-id-1" ezxhtml:class="embed-class" ezxhtml:align="left"></ezembedinline></para>
 </section>
 EOT
         );
@@ -52,9 +57,18 @@ EOT
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para><link xlink:href="ezlocation://60" xlink:show="none">link1</link></para>
     <para><link xlink:href="ezcontent://56" xlink:show="none">link2</link></para>
+    <ezembed xlink:href="ezcontent://54" view="embed" xml:id="embed-id-1" ezxhtml:class="embed-class" ezxhtml:align="left">
+      <ezconfig>
+        <ezvalue key="size">medium</ezvalue>
+        <ezvalue key="offset">10</ezvalue>
+        <ezvalue key="limit">5</ezvalue>
+      </ezconfig>
+    </ezembed>
 </section>
 EOT
         );
+
+        parent::__construct($name, $data, $dataName);
     }
 
     /**
@@ -79,6 +93,13 @@ EOT
                     'type' => Relation::LINK,
                     'sourceContentInfo' => $content->contentInfo,
                     'destinationContentInfo' => $contentService->loadContentInfo(54),
+                )
+            ),
+            new Relation(
+                array(
+                    'type' => Relation::EMBED,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(58),
                 )
             ),
         );
@@ -108,6 +129,15 @@ EOT
                     'destinationContentInfo' => $contentService->loadContentInfo(56),
                 )
             ),
+            new Relation(
+                array(
+                    // @todo Won't be possible to add before we break how we store relations with legacy kernel.
+                    //'sourceFieldDefinitionIdentifier' => 'data',
+                    'type' => Relation::EMBED,
+                    'sourceContentInfo' => $content->contentInfo,
+                    'destinationContentInfo' => $contentService->loadContentInfo(54),
+                )
+            ),
         );
     }
 
@@ -128,12 +158,7 @@ EOT
      */
     public function getSettingsSchema()
     {
-        return array(
-            'numRows' => array(
-                'type' => 'int',
-                'default' => 10,
-            ),
-        );
+        return [];
     }
 
     /**
@@ -143,9 +168,7 @@ EOT
      */
     public function getValidFieldSettings()
     {
-        return array(
-            'numRows' => 0,
-        );
+        return [];
     }
 
     /**
@@ -195,23 +218,21 @@ EOT
     /**
      * Get initial field data for valid object creation.
      *
-     * @todo add embeds when implemented
-     *
      * @return mixed
      */
     public function getValidCreationFieldData()
     {
-        $doc = new DOMDocument();
-        $doc->loadXML(<<<EOT
-<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
-    <para><link xlink:href="ezlocation://58" xlink:show="none">link1</link></para>
-    <para><link xlink:href="ezcontent://54" xlink:show="none">link2</link></para>
-</section>
-EOT
-        );
+        return new RichTextValue($this->createdDOMValue);
+    }
 
-        return new RichTextValue($doc);
+    /**
+     * Get name generated by the given field type (either via Nameable or fieldType->getName()).
+     *
+     * @return string
+     */
+    public function getFieldName()
+    {
+        return 'link1 link2';
     }
 
     /**
@@ -498,7 +519,7 @@ EOT;
     </para>
 </section>
 ',
-            ),/*, @TODO adapt and enable when embeds are implemented
+            ), /*, @TODO adapt and enable when embeds are implemented with remote id support
             array(
                 // test embed
             '<?xml version="1.0" encoding="utf-8"?>
@@ -600,6 +621,247 @@ EOT;
             str_replace('[ObjectId]', $objectId, $expected),
             $test->getField('description')->value->xml->saveXML()
         );
+    }
+
+    /**
+     * @param string $xmlDocumentPath
+     * @dataProvider providerForTestCreateContentWithValidCustomTag
+     */
+    public function testCreateContentWithValidCustomTag($xmlDocumentPath)
+    {
+        $validXmlDocument = $this->createDocument($xmlDocumentPath);
+        $this->createContent(new RichTextValue($validXmlDocument));
+    }
+
+    /**
+     * Data provider for testCreateContentWithValidCustomTag.
+     *
+     * @return array
+     */
+    public function providerForTestCreateContentWithValidCustomTag()
+    {
+        $data = [];
+        $iterator = new DirectoryIterator(__DIR__ . '/_fixtures/ezrichtext/custom_tags/valid');
+        foreach ($iterator as $fileInfo) {
+            if ($fileInfo->isFile() && $fileInfo->getExtension() === 'xml') {
+                $data[] = [
+                    $fileInfo->getRealPath(),
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param string $xmlDocumentPath
+     * @param string $expectedValidationMessage
+     *
+     * @dataProvider providerForTestCreateContentWithInvalidCustomTag
+     */
+    public function testCreateContentWithInvalidCustomTag(
+        $xmlDocumentPath,
+        $expectedValidationMessage
+    ) {
+        try {
+            $invalidXmlDocument = $this->createDocument($xmlDocumentPath);
+            $this->createContent(new RichTextValue($invalidXmlDocument));
+        } catch (ContentFieldValidationException $e) {
+            $this->assertValidationErrorOccurs($e, $expectedValidationMessage);
+
+            return;
+        }
+
+        self::fail("Expected ValidationError '{$expectedValidationMessage}' did not occur.");
+    }
+
+    /**
+     * Data provider for testCreateContentWithInvalidCustomTag.
+     *
+     * @return array
+     */
+    public function providerForTestCreateContentWithInvalidCustomTag()
+    {
+        $data = [
+            [
+                __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/equation.xml',
+                "The attribute 'processor' of RichText Custom Tag 'equation' cannot be empty",
+            ],
+            [
+                __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/video.xml',
+                "Unknown attribute 'unknown_attribute' of RichText Custom Tag 'video'",
+            ],
+        ];
+
+        return $data;
+    }
+
+    /**
+     * @param string $filename
+     *
+     * @return \DOMDocument
+     */
+    protected function createDocument($filename)
+    {
+        $document = new DOMDocument();
+
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = false;
+
+        $document->loadXml(file_get_contents($filename), LIBXML_NOENT);
+
+        return $document;
+    }
+
+    /**
+     * Prepare Content structure with link to deleted Location.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     *
+     * @return array [$deletedLocation, $brokenContent]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function prepareInternalLinkValidatorBrokenLinksTestCase(Repository $repository)
+    {
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        // Create first content with single Language
+        $primaryContent = $contentService->publishVersion(
+            $this->createMultilingualContent(
+                ['eng-US' => 'ContentA'],
+                ['eng-US' => $this->getValidCreationFieldData()],
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+        // Create secondary Location (to be deleted) for the first Content
+        $deletedLocation = $locationService->createLocation(
+            $primaryContent->contentInfo,
+            $locationService->newLocationCreateStruct(60)
+        );
+
+        // Create second Content with two Languages, one of them linking to secondary Location
+        $brokenContent = $contentService->publishVersion(
+            $this->createMultilingualContent(
+                [
+                    'eng-US' => 'ContentB',
+                    'eng-GB' => 'ContentB',
+                ],
+                [
+                    'eng-US' => $this->getValidCreationFieldData(),
+                    'eng-GB' => $this->getDocumentWithLocationLink($deletedLocation),
+                ],
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        // delete Location making second Content broken
+        $locationService->deleteLocation($deletedLocation);
+
+        return [$deletedLocation, $brokenContent];
+    }
+
+    /**
+     * Test updating Content which contains links to deleted Location doesn't fail when updating not broken field only.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testInternalLinkValidatorIgnoresMissingRelationOnNotUpdatedField()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        list(, $contentB) = $this->prepareInternalLinkValidatorBrokenLinksTestCase($repository);
+
+        // update field w/o erroneous link to trigger validation
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('data', $this->getValidUpdateFieldData(), 'eng-US');
+
+        $contentDraftB = $contentService->updateContent(
+            $contentService->createContentDraft($contentB->contentInfo)->versionInfo,
+            $contentUpdateStruct
+        );
+
+        $contentService->publishVersion($contentDraftB->versionInfo);
+    }
+
+    /**
+     * Test updating Content which contains links to deleted Location fails when updating broken field.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     */
+    public function testInternalLinkValidatorReturnsErrorOnMissingRelationInUpdatedField()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        list($deletedLocation, $brokenContent) = $this->prepareInternalLinkValidatorBrokenLinksTestCase(
+            $repository
+        );
+
+        // update field containing erroneous link to trigger validation
+        /** @var \DOMDocument $document */
+        $document = $brokenContent->getField('data', 'eng-GB')->value->xml;
+        $newParagraph = $document->createElement('para', 'Updated content');
+        $document
+            ->getElementsByTagName('section')->item(0)
+            ->appendChild($newParagraph);
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $contentUpdateStruct->setField('data', new RichTextValue($document), 'eng-GB');
+
+        $expectedValidationErrorMessage = sprintf(
+            'Invalid link "ezlocation://%s": target location cannot be found',
+            $deletedLocation->id
+        );
+        try {
+            $contentDraftB = $contentService->updateContent(
+                $contentService->createContentDraft($brokenContent->contentInfo)->versionInfo,
+                $contentUpdateStruct
+            );
+
+            $contentService->publishVersion($contentDraftB->versionInfo);
+        } catch (ContentFieldValidationException $e) {
+            $this->assertValidationErrorOccurs($e, $expectedValidationErrorMessage);
+
+            return;
+        }
+
+        self::fail("Expected ValidationError '{$expectedValidationErrorMessage}' didn't occur");
+    }
+
+    /**
+     * Get XML Document in DocBook format, containing link to the given Location.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @return \DOMDocument
+     */
+    private function getDocumentWithLocationLink(Location $location)
+    {
+        $document = new DOMDocument();
+        $document->loadXML(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para><link xlink:href="ezlocation://{$location->id}" xlink:show="none">link1</link></para>
+</section>
+XML
+        );
+
+        return $document;
     }
 
     protected function checkSearchEngineSupport()

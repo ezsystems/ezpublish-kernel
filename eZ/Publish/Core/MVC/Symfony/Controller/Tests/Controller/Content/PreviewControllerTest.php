@@ -5,47 +5,50 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests\Controller\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\PreviewLocationProvider;
+use eZ\Publish\Core\Helper\ContentPreviewHelper;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class PreviewControllerTest extends PHPUnit_Framework_TestCase
+class PreviewControllerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $contentService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $httpKernel;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $previewHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $authorizationChecker;
 
-    /** @var PreviewLocationProvider|\PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker */
+    /** @var PreviewLocationProvider|\PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker */
     protected $locationProvider;
 
     protected $controllerChecker;
@@ -54,18 +57,12 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->contentService = $this->getMock('eZ\Publish\API\Repository\ContentService');
-        $this->httpKernel = $this->getMock('Symfony\Component\HttpKernel\HttpKernelInterface');
-        $this->previewHelper = $this
-            ->getMockBuilder('eZ\Publish\Core\Helper\ContentPreviewHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->authorizationChecker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
-        $this->locationProvider = $this
-            ->getMockBuilder('eZ\Publish\Core\Helper\PreviewLocationProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->controllerChecker = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker');
+        $this->contentService = $this->createMock(ContentService::class);
+        $this->httpKernel = $this->createMock(HttpKernelInterface::class);
+        $this->previewHelper = $this->createMock(ContentPreviewHelper::class);
+        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $this->locationProvider = $this->createMock(PreviewLocationProvider::class);
+        $this->controllerChecker = $this->createMock(CustomLocationControllerChecker::class);
     }
 
     /**
@@ -111,8 +108,8 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $contentId = 123;
         $lang = 'eng-GB';
         $versionNo = 3;
-        $content = $this->getMock('eZ\Publish\API\Repository\Values\Content\Content');
-        $contentInfo = $this->getMockBuilder('eZ\Publish\API\Repository\Values\Content\ContentInfo')
+        $content = $this->createMock(Content::class);
+        $contentInfo = $this->getMockBuilder(ContentInfo::class)
             ->setConstructorArgs(array(array('id' => $contentId)))
             ->getMockForAbstractClass();
 
@@ -120,7 +117,7 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('loadMainLocation')
             ->with($contentId)
-            ->will($this->returnValue($this->getMock('eZ\Publish\API\Repository\Values\Content\Location')));
+            ->will($this->returnValue($this->createMock(Location::class)));
         $this->contentService
             ->expects($this->once())
             ->method('loadContent')
@@ -141,8 +138,8 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $lang = 'eng-GB';
         $versionNo = 3;
         $locationId = 456;
-        $content = $this->getMock('eZ\Publish\API\Repository\Values\Content\Content');
-        $location = $this->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Location')
+        $content = $this->createMock(Content::class);
+        $location = $this->getMockBuilder(Location::class)
             ->setConstructorArgs(array(array('id' => $locationId)))
             ->getMockForAbstractClass();
 
@@ -167,7 +164,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $previewSiteAccess = new SiteAccess($previewSiteAccessName, 'preview');
         $previousSiteAccessName = 'foo';
         $previousSiteAccess = new SiteAccess($previousSiteAccessName);
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request', array('duplicate'));
+        $request = $this->getMockBuilder(Request::class)
+            ->setMethods(array('duplicate'))
+            ->getMock();
 
         // PreviewHelper expectations
         $this->previewHelper
@@ -230,8 +229,8 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
         $lang = 'eng-GB';
         $versionNo = 3;
         $locationId = 456;
-        $content = $this->getMock('eZ\Publish\API\Repository\Values\Content\Content');
-        $location = $this->getMockBuilder('eZ\Publish\API\Repository\Values\Content\Location')
+        $content = $this->createMock(Content::class);
+        $location = $this->getMockBuilder(Location::class)
             ->setConstructorArgs(array(array('id' => $locationId)))
             ->getMockForAbstractClass();
 
@@ -254,7 +253,9 @@ class PreviewControllerTest extends PHPUnit_Framework_TestCase
 
         $previousSiteAccessName = 'foo';
         $previousSiteAccess = new SiteAccess($previousSiteAccessName);
-        $request = $this->getMock('Symfony\Component\HttpFoundation\Request', array('duplicate'));
+        $request = $this->getMockBuilder(Request::class)
+            ->setMethods(array('duplicate'))
+            ->getMock();
 
         $this->previewHelper
             ->expects($this->once())

@@ -5,25 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\TrashService as APITrashService;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\TrashService;
+use eZ\Publish\Core\SignalSlot\Signal\TrashService as TrashServiceSignals;
 
 class TrashServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\TrashService'
-        );
+        return $this->createMock(APITrashService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -33,14 +31,23 @@ class TrashServiceTest extends ServiceTest
 
     public function serviceProvider()
     {
-        $rootId = 2;
+        $newParentLocationId = 2;
         $trashItemId = $locationId = 60;
         $trashItemContentInfo = $this->getContentInfo(59, md5('trash'));
+        $trashItemParentLocationId = 17;
 
         $trashItem = new TrashItem(
             array(
                 'id' => $trashItemId,
                 'contentInfo' => $trashItemContentInfo,
+                'parentLocationId' => $trashItemParentLocationId,
+            )
+        );
+
+        $newParentLocation = new Location(
+            array(
+                'id' => $newParentLocationId,
+                'contentInfo' => $this->getContentInfo(53, md5('root')),
             )
         );
 
@@ -48,12 +55,15 @@ class TrashServiceTest extends ServiceTest
             array(
                 'id' => $locationId,
                 'contentInfo' => $trashItemContentInfo,
+                'parentLocationId' => $trashItemParentLocationId,
             )
         );
-        $root = new Location(
+
+        $locationWithNewParent = new Location(
             array(
-                'id' => $rootId,
-                'contentInfo' => $this->getContentInfo(53, md5('root')),
+                'id' => $locationId,
+                'contentInfo' => $trashItemContentInfo,
+                'parentLocationId' => $newParentLocationId,
             )
         );
 
@@ -69,18 +79,30 @@ class TrashServiceTest extends ServiceTest
                 array($location),
                 $trashItem,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal',
+                TrashServiceSignals\TrashSignal::class,
                 array('locationId' => $locationId),
             ),
             array(
                 'recover',
-                array($trashItem, $root),
-                $location,
+                array($trashItem, $newParentLocation),
+                $locationWithNewParent,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal',
                 array(
                     'trashItemId' => $trashItemId,
-                    'newParentLocationId' => $rootId,
+                    'newParentLocationId' => $newParentLocationId,
+                    'newLocationId' => $locationId,
+                ),
+            ),
+            array(
+                'recover',
+                array($trashItem, null),
+                $location,
+                1,
+                TrashServiceSignals\RecoverSignal::class,
+                array(
+                    'trashItemId' => $trashItemId,
+                    'newParentLocationId' => $trashItemParentLocationId,
                     'newLocationId' => $locationId,
                 ),
             ),
@@ -89,7 +111,7 @@ class TrashServiceTest extends ServiceTest
                 array(),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\TrashService\EmptyTrashSignal',
+                TrashServiceSignals\EmptyTrashSignal::class,
                 array(),
             ),
             array(
@@ -97,7 +119,7 @@ class TrashServiceTest extends ServiceTest
                 array($trashItem),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\TrashService\DeleteTrashItemSignal',
+                TrashServiceSignals\DeleteTrashItemSignal::class,
                 array('trashItemId' => $trashItemId),
             ),
             array(

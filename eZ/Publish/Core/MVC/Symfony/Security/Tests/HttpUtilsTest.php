@@ -5,25 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Symfony\Component\HttpFoundation\Request;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class HttpUtilsTest extends PHPUnit_Framework_TestCase
+class HttpUtilsTest extends TestCase
 {
     /**
      * @dataProvider generateUriStandardProvider
      */
     public function testGenerateUriStandard($uri, $isUriRouteName, $expected)
     {
-        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $httpUtils = new HttpUtils($urlGenerator);
         $httpUtils->setSiteAccess(new SiteAccess());
         $request = Request::create('http://ezpublish.dev/');
@@ -60,7 +58,7 @@ class HttpUtilsTest extends PHPUnit_Framework_TestCase
     {
         $siteAccess = new SiteAccess('test', 'test');
         if ($uri[0] === '/') {
-            $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+            $matcher = $this->createMock(SiteAccess\URILexer::class);
             $matcher
                 ->expects($this->once())
                 ->method('analyseLink')
@@ -69,7 +67,7 @@ class HttpUtilsTest extends PHPUnit_Framework_TestCase
             $siteAccess->matcher = $matcher;
         }
 
-        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $httpUtils = new HttpUtils($urlGenerator);
         $httpUtils->setSiteAccess($siteAccess);
         $request = Request::create('http://ezpublish.dev/');
@@ -115,7 +113,7 @@ class HttpUtilsTest extends PHPUnit_Framework_TestCase
     {
         $siteAccess = new SiteAccess('test', 'test');
         if ($siteAccessUri !== null) {
-            $matcher = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer');
+            $matcher = $this->createMock(SiteAccess\URILexer::class);
             $matcher
                 ->expects($this->once())
                 ->method('analyseLink')

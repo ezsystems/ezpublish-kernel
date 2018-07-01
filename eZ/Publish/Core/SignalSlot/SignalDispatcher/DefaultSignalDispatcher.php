@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\SignalDispatcher;
 
@@ -84,6 +82,8 @@ class DefaultSignalDispatcher extends SignalDispatcher
      *
      * @param string $signalIdentifier
      * @param \eZ\Publish\Core\SignalSlot\Slot $slot
+     *
+     * @deprecated pass signal slots directly to the constructor ({@see __construct()})
      */
     public function attach($signalIdentifier, Slot $slot)
     {

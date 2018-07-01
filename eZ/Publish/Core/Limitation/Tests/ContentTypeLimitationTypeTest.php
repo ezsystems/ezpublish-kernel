@@ -5,14 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Limitation\Tests;
 
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
@@ -20,6 +21,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Limitation\ContentTypeLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIHandler;
 
 /**
  * Test Case for LimitationType.
@@ -27,7 +29,7 @@ use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 class ContentTypeLimitationTypeTest extends Base
 {
     /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
      */
     private $contentTypeHandlerMock;
 
@@ -37,14 +39,7 @@ class ContentTypeLimitationTypeTest extends Base
     public function setUp()
     {
         parent::setUp();
-
-        $this->contentTypeHandlerMock = $this->getMock(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->contentTypeHandlerMock = $this->createMock(SPIHandler::class);
     }
 
     /**
@@ -208,7 +203,7 @@ class ContentTypeLimitationTypeTest extends Base
         $expected = array('test', 'test' => 9);
         $value = $limitationType->buildValue($expected);
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation', $value);
+        self::assertInstanceOf(ContentTypeLimitation::class, $value);
         self::assertInternalType('array', $value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
@@ -219,21 +214,8 @@ class ContentTypeLimitationTypeTest extends Base
     public function providerForTestEvaluate()
     {
         // Mocks for testing Content & VersionInfo objects, should only be used once because of expect rules.
-        $contentMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\Content',
-            array(),
-            array(),
-            '',
-            false
-        );
-
-        $versionInfoMock = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $contentMock = $this->createMock(APIContent::class);
+        $versionInfoMock = $this->createMock(APIVersionInfo::class);
 
         $contentMock
             ->expects($this->once())
@@ -245,13 +227,7 @@ class ContentTypeLimitationTypeTest extends Base
             ->method('getContentInfo')
             ->will($this->returnValue(new ContentInfo(array('contentTypeId' => 66))));
 
-        $versionInfoMock2 = $this->getMock(
-            'eZ\\Publish\\API\\Repository\\Values\\Content\\VersionInfo',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $versionInfoMock2 = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock2
             ->expects($this->once())
@@ -393,7 +369,7 @@ class ContentTypeLimitationTypeTest extends Base
             $object,
             $targets
         );
-        var_dump($v);// intentional, debug in case no exception above
+        var_dump($v); // intentional, debug in case no exception above
     }
 
     /**
@@ -422,7 +398,7 @@ class ContentTypeLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId', $criterion);
+        self::assertInstanceOf(ContentTypeId::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
@@ -441,7 +417,7 @@ class ContentTypeLimitationTypeTest extends Base
             $this->getUserMock()
         );
 
-        self::assertInstanceOf('\eZ\Publish\API\Repository\Values\Content\Query\Criterion\ContentTypeId', $criterion);
+        self::assertInstanceOf(ContentTypeId::class, $criterion);
         self::assertInternalType('array', $criterion->value);
         self::assertInternalType('string', $criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);

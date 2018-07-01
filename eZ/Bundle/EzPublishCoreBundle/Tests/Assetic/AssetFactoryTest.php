@@ -5,42 +5,45 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Assetic;
 
 use eZ\Bundle\EzPublishCoreBundle\Assetic\AssetFactory;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParserInterface;
 use Symfony\Bundle\AsseticBundle\Tests\Factory\AssetFactoryTest as BaseTest;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Assetic\Asset\AssetCollectionInterface;
+use Assetic\Asset\AssetInterface;
 use ReflectionObject;
 
 class AssetFactoryTest extends BaseTest
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $configResolver;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $parser;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->configResolver = $this->getMock('\eZ\Publish\Core\MVC\ConfigResolverInterface');
-        $this->parser = $this->getMock(
-            '\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParserInterface'
-        );
+        $this->configResolver = $this->createMock(ConfigResolverInterface::class);
+        $this->parser = $this->createMock(DynamicSettingParserInterface::class);
     }
 
     protected function getAssetFactory()
     {
         $assetFactory = new AssetFactory(
-            $this->getMock('\Symfony\Component\HttpKernel\KernelInterface'),
-            $this->getMock('\Symfony\Component\DependencyInjection\ContainerInterface'),
-            $this->getMock('\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface'),
+            $this->createMock(KernelInterface::class),
+            $this->createMock(ContainerInterface::class),
+            $this->createMock(ParameterBagInterface::class),
             '/root/dir/'
         );
         $assetFactory->setConfigResolver($this->configResolver);
@@ -82,7 +85,7 @@ class AssetFactoryTest extends BaseTest
         $refMethod->setAccessible(true);
         $parseInputResult = $refMethod->invoke($assetFactory, $input, array('vars' => array()));
 
-        $this->assertInstanceOf('\Assetic\Asset\AssetCollectionInterface', $parseInputResult);
+        $this->assertInstanceOf(AssetCollectionInterface::class, $parseInputResult);
         $this->assertCount(count($fooValues), $parseInputResult->all());
     }
 
@@ -118,6 +121,6 @@ class AssetFactoryTest extends BaseTest
         $refMethod->setAccessible(true);
         $parseInputResult = $refMethod->invoke($assetFactory, $input, array('vars' => array()));
 
-        $this->assertInstanceOf('\Assetic\Asset\AssetInterface', $parseInputResult);
+        $this->assertInstanceOf(AssetInterface::class, $parseInputResult);
     }
 }

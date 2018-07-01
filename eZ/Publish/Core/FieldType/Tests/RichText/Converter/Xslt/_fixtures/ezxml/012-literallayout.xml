@@ -8,7 +8,8 @@
   <paragraph>
     <line>This is a paragraph</line>
     <line>with some</line>
-    <line>extra <emphasize>CHEESE!</emphasize></line>
-    <line>and line breaks.</line>
+    <line>extra <emphasize>CHEESE!
+and line breaks</emphasize></line>
+    <line>and more line breaks.</line>
   </paragraph>
 </section>

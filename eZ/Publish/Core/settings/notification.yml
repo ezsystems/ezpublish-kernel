@@ -1,0 +1,10 @@
+services:
+    eZ\Publish\Core\Notification\Renderer\Registry:
+        autowire: true
+        autoconfigure: false
+        public: false
+
+    notification.renderer.registry: '@eZ\Publish\Core\Notification\Renderer\Registry'
+
+    eZ\Publish\API\Repository\NotificationService:
+        alias: eZ\Publish\Core\SignalSlot\NotificationService

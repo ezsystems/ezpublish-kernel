@@ -12,20 +12,21 @@ use eZ\Publish\Core\IO\IOMetadataHandler\Flysystem;
 use eZ\Publish\SPI\IO\BinaryFile as SPIBinaryFile;
 use eZ\Publish\SPI\IO\BinaryFileCreateStruct as SPIBinaryFileCreateStruct;
 use League\Flysystem\FileNotFoundException;
-use PHPUnit_Framework_TestCase;
+use League\Flysystem\FilesystemInterface;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
-class FlysystemTest extends PHPUnit_Framework_TestCase
+class FlysystemTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \eZ\Publish\Core\IO\IOMetadataHandler|\PHPUnit\Framework\MockObject\MockObject */
     private $handler;
 
-    /** @var \League\Flysystem\FilesystemInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \League\Flysystem\FilesystemInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $filesystem;
 
     public function setUp()
     {
-        $this->filesystem = $this->getMock('League\Flysystem\FilesystemInterface');
+        $this->filesystem = $this->createMock(FilesystemInterface::class);
         $this->handler = new Flysystem($this->filesystem);
     }
 
@@ -57,7 +58,7 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
 
         $spiBinaryFile = $this->handler->create($spiCreateStruct);
 
-        $this->assertInstanceOf('eZ\Publish\SPI\IO\BinaryFile', $spiBinaryFile);
+        $this->assertInstanceOf(SPIBinaryFile::class, $spiBinaryFile);
         $this->assertEquals($expectedSpiBinaryFile, $spiBinaryFile);
     }
 
@@ -89,8 +90,29 @@ class FlysystemTest extends PHPUnit_Framework_TestCase
 
         $spiBinaryFile = $this->handler->load('prefix/my/file.png');
 
-        $this->assertInstanceOf('eZ\Publish\SPI\IO\BinaryFile', $spiBinaryFile);
+        $this->assertInstanceOf(SPIBinaryFile::class, $spiBinaryFile);
         $this->assertEquals($expectedSpiBinaryFile, $spiBinaryFile);
+    }
+
+    /**
+     * The timestamp index can be unset with some handlers, like AWS/S3.
+     */
+    public function testLoadNoTimestamp()
+    {
+        $this->filesystem
+            ->expects($this->once())
+            ->method('getMetadata')
+            ->with('prefix/my/file.png')
+            ->will(
+                $this->returnValue(
+                    array(
+                        'size' => 123,
+                    )
+                )
+            );
+
+        $spiBinaryFile = $this->handler->load('prefix/my/file.png');
+        $this->assertNull($spiBinaryFile->mtime);
     }
 
     /**

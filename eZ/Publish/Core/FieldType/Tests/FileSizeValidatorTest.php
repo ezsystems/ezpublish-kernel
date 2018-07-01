@@ -5,21 +5,24 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\BinaryFile\Value as BinaryFileValue;
 use eZ\Publish\Core\FieldType\Validator\FileSizeValidator;
 use eZ\Publish\Core\IO\Values\BinaryFile;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\FieldType\Validator;
+use eZ\Publish\API\Repository\IOServiceInterface;
+use eZ\Publish\API\Repository\Values\Translation\Message;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\Translation\Plural;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group fieldType
  * @group validator
  */
-class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
+class FileSizeValidatorTest extends TestCase
 {
     /**
      * @return int
@@ -35,7 +38,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Validator',
+            Validator::class,
             new FileSizeValidator()
         );
     }
@@ -158,7 +161,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
     protected function getBinaryFileValue($size)
     {
         $this->markTestSkipped('BinaryFile field type does not use this validator anymore.');
-        $value = new BinaryFileValue($this->getMock('eZ\\Publish\\API\\Repository\\IOServiceInterface'));
+        $value = new BinaryFileValue($this->createMock(IOServiceInterface::class));
         $value->file = new BinaryFile(array('size' => $size));
 
         return $value;
@@ -188,11 +191,11 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
         $messages = $validator->getMessage();
         $this->assertCount(1, $messages);
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\FieldType\\ValidationError',
+            ValidationError::class,
             $messages[0]
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Plural',
+            Plural::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(
@@ -218,7 +221,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
                     'The file size cannot exceed %size% byte.',
                     'The file size cannot exceed %size% bytes.',
                 ),
-                array('size' => $this->getMaxFileSize()),
+                array('%size%' => $this->getMaxFileSize()),
             ),
         );
     }
@@ -263,7 +266,7 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
         $messages = $validator->validateConstraints($constraints);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\API\\Repository\\Values\\Translation\\Message',
+            Message::class,
             $messages[0]->getTranslatableMessage()
         );
         $this->assertEquals(
@@ -282,22 +285,22 @@ class FileSizeValidatorTest extends PHPUnit_Framework_TestCase
             array(
                 array('maxFileSize' => true),
                 array("Validator parameter '%parameter%' value must be of integer type"),
-                array('parameter' => 'maxFileSize'),
+                array('%parameter%' => 'maxFileSize'),
             ),
             array(
                 array('maxFileSize' => 'five thousand bytes'),
                 array("Validator parameter '%parameter%' value must be of integer type"),
-                array('parameter' => 'maxFileSize'),
+                array('%parameter%' => 'maxFileSize'),
             ),
             array(
                 array('maxFileSize' => new \DateTime()),
                 array("Validator parameter '%parameter%' value must be of integer type"),
-                array('parameter' => 'maxFileSize'),
+                array('%parameter%' => 'maxFileSize'),
             ),
             array(
                 array('brljix' => 12345),
                 array("Validator parameter '%parameter%' is unknown"),
-                array('parameter' => 'brljix'),
+                array('%parameter%' => 'brljix'),
             ),
         );
     }

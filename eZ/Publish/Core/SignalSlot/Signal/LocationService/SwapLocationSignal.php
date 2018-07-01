@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Signal\LocationService;
 
@@ -32,6 +30,15 @@ class SwapLocationSignal extends Signal
     public $location1Id;
 
     /**
+     * Parent Location ID of location1.
+     *
+     * @since 6.7.7
+     *
+     * @var mixed
+     */
+    public $parentLocation1Id;
+
+    /**
      * Content2 Id.
      *
      * @var mixed
@@ -44,4 +51,13 @@ class SwapLocationSignal extends Signal
      * @var mixed
      */
     public $location2Id;
+
+    /**
+     * Parent Location ID of location2.
+     *
+     * @since 6.7.7
+     *
+     * @var mixed
+     */
+    public $parentLocation2Id;
 }

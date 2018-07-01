@@ -5,26 +5,25 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Fragment;
 
 use eZ\Bundle\EzPublishCoreBundle\Fragment\FragmentListenerFactory;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\UriSigner;
+use Symfony\Component\HttpKernel\EventListener\FragmentListener;
 use ReflectionObject;
 
-class FragmentListenerFactoryTest extends PHPUnit_Framework_TestCase
+class FragmentListenerFactoryTest extends TestCase
 {
     /**
      * @dataProvider buildFragmentListenerProvider
      */
     public function testBuildFragmentListener($requestUri, $isFragmentCandidate)
     {
-        $listenerClass = 'Symfony\Component\HttpKernel\EventListener\FragmentListener';
+        $listenerClass = FragmentListener::class;
         $uriSigner = new UriSigner('my_precious_secret');
         $baseFragmentPath = '/_fragment';
         $request = Request::create($requestUri);
@@ -56,5 +55,19 @@ class FragmentListenerFactoryTest extends PHPUnit_Framework_TestCase
             array('/foo/_fragment/something', false),
             array('/_fragment/something', false),
         );
+    }
+
+    public function testBuildFragmentListenerNoRequest()
+    {
+        $factory = new FragmentListenerFactory();
+        $factory->setRequestStack(new RequestStack());
+
+        $listener = $factory->buildFragmentListener(
+            new UriSigner('my_precious_secret'),
+            '/_fragment',
+            FragmentListener::class
+        );
+
+        $this->assertNull($listener);
     }
 }

@@ -5,14 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler;
+use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct as SPILanguageCreateStruct;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway as LanguageGateway;
 
 /**
  * Test case for Language Handler.
@@ -52,7 +53,7 @@ class LanguageHandlerTest extends TestCase
             ->method('createLanguageFromCreateStruct')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\CreateStruct'
+                    SPILanguageCreateStruct::class
                 )
             )->will($this->returnValue(new Language()));
 
@@ -61,7 +62,7 @@ class LanguageHandlerTest extends TestCase
             ->method('insertLanguage')
             ->with(
                 $this->isInstanceOf(
-                    'eZ\\Publish\\SPI\\Persistence\\Content\\Language'
+                    Language::class
                 )
             )->will($this->returnValue(2));
 
@@ -70,7 +71,7 @@ class LanguageHandlerTest extends TestCase
         $result = $handler->create($createStruct);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
+            Language::class,
             $result
         );
         $this->assertEquals(
@@ -99,7 +100,7 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects($this->once())
             ->method('updateLanguage')
-            ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Language'));
+            ->with($this->isInstanceOf(Language::class));
 
         $handler->update($this->getLanguageFixture());
     }
@@ -136,7 +137,7 @@ class LanguageHandlerTest extends TestCase
         $result = $handler->load(2);
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
+            Language::class,
             $result
         );
     }
@@ -187,7 +188,7 @@ class LanguageHandlerTest extends TestCase
         $result = $handler->loadByLanguageCode('eng-US');
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
+            Language::class,
             $result
         );
     }
@@ -263,7 +264,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::delete
-     * @expectedException LogicException
+     * @expectedException \LogicException
      */
     public function testDeleteFail()
     {
@@ -305,9 +306,7 @@ class LanguageHandlerTest extends TestCase
     protected function getMapperMock()
     {
         if (!isset($this->mapperMock)) {
-            $this->mapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Mapper'
-            );
+            $this->mapperMock = $this->createMock(LanguageMapper::class);
         }
 
         return $this->mapperMock;
@@ -321,9 +320,7 @@ class LanguageHandlerTest extends TestCase
     protected function getGatewayMock()
     {
         if (!isset($this->gatewayMock)) {
-            $this->gatewayMock = $this->getMockForAbstractClass(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\Gateway'
-            );
+            $this->gatewayMock = $this->getMockForAbstractClass(LanguageGateway::class);
         }
 
         return $this->gatewayMock;

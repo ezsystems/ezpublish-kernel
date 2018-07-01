@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard;
 
@@ -51,7 +49,7 @@ class Mapper
         $urlWildcard->id = (int)$row['id'];
         $urlWildcard->destinationUrl = $this->cleanUrl($row['destination_url']);
         $urlWildcard->sourceUrl = $this->cleanUrl($row['source_url']);
-        $urlWildcard->forward = (int)$row['type'] === 1 ? true : false;
+        $urlWildcard->forward = (int)$row['type'] === 1;
 
         return $urlWildcard;
     }

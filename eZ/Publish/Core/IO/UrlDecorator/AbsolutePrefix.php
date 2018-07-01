@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\IO\UrlDecorator;
 
@@ -26,7 +24,10 @@ class AbsolutePrefix extends Prefix implements UrlDecorator
     {
         if ($prefix != '') {
             $urlParts = parse_url($prefix);
-            if (isset($urlParts['scheme'])) {
+
+            // Since PHP 5.4.7 parse_url will return host when url scheme is ommited.
+            // This allows urls like //static.example.com to be used
+            if (isset($urlParts['scheme']) || isset($urlParts['host'])) {
                 $prefix = rtrim($prefix, '/') . '/';
             } else {
                 $prefix = '/' . trim($prefix, '/') . '/';

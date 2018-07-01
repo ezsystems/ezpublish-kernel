@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Values\Content;
 
@@ -14,6 +12,8 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
 
 /**
  * this class represents a trash item, which is actually a trashed location.
+ *
+ * @internal Meant for internal use by Repository, type hint against API object instead.
  */
 class TrashItem extends APITrashItem
 {
@@ -23,6 +23,11 @@ class TrashItem extends APITrashItem
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     protected $contentInfo;
+
+    /**
+     * @var array
+     */
+    protected $path;
 
     /**
      * Returns the content info of the content object of this trash item.
@@ -39,7 +44,7 @@ class TrashItem extends APITrashItem
      *
      * Override to add dynamic properties
      *
-     * @uses parent::getProperties()
+     * @uses \parent::getProperties()
      *
      * @param array $dynamicProperties
      *

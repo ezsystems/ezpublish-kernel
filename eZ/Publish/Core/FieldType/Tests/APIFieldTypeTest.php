@@ -5,18 +5,20 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\FieldType\Value;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
+use PHPUnit\Framework\TestCase;
 
-class APIFieldTypeTest extends PHPUnit_Framework_TestCase
+class APIFieldTypeTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $innerFieldType;
 
@@ -28,7 +30,7 @@ class APIFieldTypeTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->innerFieldType = $this->getMock('\eZ\Publish\SPI\FieldType\FieldType');
+        $this->innerFieldType = $this->createMock(SPIFieldType::class);
         $this->fieldType = new FieldType($this->innerFieldType);
     }
 
@@ -49,9 +51,9 @@ class APIFieldTypeTest extends PHPUnit_Framework_TestCase
     {
         $validatorConfig = ['foo' => 'bar'];
         $validationErrors = [
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
         ];
         $this->innerFieldType
             ->expects($this->once())
@@ -79,9 +81,9 @@ class APIFieldTypeTest extends PHPUnit_Framework_TestCase
     {
         $fieldSettings = ['foo' => 'bar'];
         $validationErrors = [
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
         ];
         $this->innerFieldType
             ->expects($this->once())
@@ -94,8 +96,8 @@ class APIFieldTypeTest extends PHPUnit_Framework_TestCase
 
     public function testValidateValueNoError()
     {
-        $fieldDefinition = $this->getMockForAbstractClass('\eZ\Publish\API\Repository\Values\ContentType\FieldDefinition');
-        $value = $this->getMockForAbstractClass('\eZ\Publish\Core\FieldType\Value');
+        $fieldDefinition = $this->getMockForAbstractClass(APIFieldDefinition::class);
+        $value = $this->getMockForAbstractClass(Value::class);
         $validationErrors = [];
         $this->innerFieldType
             ->expects($this->once())
@@ -108,12 +110,12 @@ class APIFieldTypeTest extends PHPUnit_Framework_TestCase
 
     public function testValidateValue()
     {
-        $fieldDefinition = $this->getMockForAbstractClass('\eZ\Publish\API\Repository\Values\ContentType\FieldDefinition');
-        $value = $this->getMockForAbstractClass('\eZ\Publish\Core\FieldType\Value');
+        $fieldDefinition = $this->getMockForAbstractClass(APIFieldDefinition::class);
+        $value = $this->getMockForAbstractClass(Value::class);
         $validationErrors = [
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
-            $this->getMock('\eZ\Publish\SPI\FieldType\ValidationError'),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
+            $this->createMock(ValidationError::class),
         ];
         $this->innerFieldType
             ->expects($this->once())

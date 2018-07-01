@@ -5,18 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Tests;
 
+use eZ\Publish\Core\MVC\Symfony\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
-use PHPUnit_Framework_TestCase;
+use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @mvc
  */
-class ControllerTest extends PHPUnit_Framework_TestCase
+class ControllerTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Controller\Controller
@@ -24,20 +25,20 @@ class ControllerTest extends PHPUnit_Framework_TestCase
     protected $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $templateEngineMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $containerMock;
 
     protected function setUp()
     {
-        $this->templateEngineMock = $this->getMock('Symfony\\Component\\Templating\\EngineInterface');
-        $this->containerMock = $this->getMock('Symfony\\Component\\DependencyInjection\\ContainerInterface');
-        $this->controller = $this->getMockForAbstractClass('eZ\\Publish\\Core\\MVC\\Symfony\\Controller\\Controller');
+        $this->templateEngineMock = $this->createMock(EngineInterface::class);
+        $this->containerMock = $this->createMock(ContainerInterface::class);
+        $this->controller = $this->getMockForAbstractClass(Controller::class);
         $this->controller->setContainer($this->containerMock);
         $this->containerMock
             ->expects($this->any())
@@ -45,6 +46,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
             ->with('templating')
             ->will($this->returnValue($this->templateEngineMock));
     }
+
     /**
      * @covers \eZ\Publish\Core\MVC\Symfony\Controller\Controller::render
      */
@@ -59,7 +61,7 @@ class ControllerTest extends PHPUnit_Framework_TestCase
             ->with($view, $params)
             ->will($this->returnValue($tplResult));
         $response = $this->controller->render($view, $params);
-        self::assertInstanceOf('Symfony\\Component\\HttpFoundation\\Response', $response);
+        self::assertInstanceOf(Response::class, $response);
         self::assertSame($tplResult, $response->getContent());
     }
 

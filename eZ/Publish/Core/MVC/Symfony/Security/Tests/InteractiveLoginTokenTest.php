@@ -5,20 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Security\InteractiveLoginToken;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\Security\UserInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Role\Role;
 
-class InteractiveLoginTokenTest extends PHPUnit_Framework_TestCase
+class InteractiveLoginTokenTest extends TestCase
 {
     public function testConstruct()
     {
-        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
+        $user = $this->createMock(UserInterface::class);
         $originalTokenType = 'FooBar';
         $credentials = 'my_credentials';
         $providerKey = 'key';
@@ -43,7 +42,7 @@ class InteractiveLoginTokenTest extends PHPUnit_Framework_TestCase
 
     public function testSerialize()
     {
-        $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
+        $user = $this->createMock(UserInterface::class);
         $originalTokenType = 'FooBar';
         $credentials = 'my_credentials';
         $providerKey = 'key';

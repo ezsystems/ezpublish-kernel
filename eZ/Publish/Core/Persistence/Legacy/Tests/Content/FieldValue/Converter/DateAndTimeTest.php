@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
@@ -18,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 use DateInterval;
 use SimpleXMLElement;
@@ -28,7 +26,7 @@ use ReflectionObject;
 /**
  * Test case for DateAndTime converter in Legacy storage.
  */
-class DateAndTimeTest extends PHPUnit_Framework_TestCase
+class DateAndTimeTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter
@@ -256,10 +254,14 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        sleep(1);
+        $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
+
         self::assertInternalType('array', $fieldDef->defaultValue->data);
-        self::assertCount(2, $fieldDef->defaultValue->data);
+        self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($time, $fieldDef->defaultValue->data['timestamp']);
+        self::assertEquals($time + 1, $dateTimeFromString->getTimestamp(), 'Time does not match within 1s delta', 1);
     }
 
     /**
@@ -284,12 +286,16 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
+
         self::assertInternalType('array', $fieldDef->defaultValue->data);
-        self::assertCount(2, $fieldDef->defaultValue->data);
+        self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($timestamp, $fieldDef->defaultValue->data['timestamp']);
+        self::assertGreaterThanOrEqual($timestamp, $dateTimeFromString->getTimestamp());
         // Giving a margin of 1 second for test execution
         self::assertLessThanOrEqual($timestamp + 1, $fieldDef->defaultValue->data['timestamp']);
+        self::assertLessThanOrEqual($timestamp + 1, $dateTimeFromString->getTimestamp());
     }
 
     /**
@@ -316,12 +322,16 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
+        $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
+
         self::assertInternalType('array', $fieldDef->defaultValue->data);
-        self::assertCount(2, $fieldDef->defaultValue->data);
+        self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($timestamp, $fieldDef->defaultValue->data['timestamp']);
+        self::assertGreaterThanOrEqual($timestamp, $dateTimeFromString->getTimestamp());
         // Giving a margin of 1 second for test execution
         self::assertLessThanOrEqual($timestamp + 1, $fieldDef->defaultValue->data['timestamp']);
+        self::assertLessThanOrEqual($timestamp + 1, $dateTimeFromString->getTimestamp());
     }
 
     /**

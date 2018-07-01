@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware;
 
@@ -100,6 +98,10 @@ class Contextualizer implements ContextualizerInterface
             $scopeSettings = array();
             if (isset($config[$this->siteAccessNodeName][$scope][$id])) {
                 $scopeSettings = $config[$this->siteAccessNodeName][$scope][$id];
+            }
+
+            if (empty($groupsSettings) && empty($scopeSettings)) {
+                continue;
             }
 
             if ($options & static::MERGE_FROM_SECOND_LEVEL) {

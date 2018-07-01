@@ -3,5 +3,5 @@
 {% if location is defined %}
     <h3><a href="{{ path(location) }}">{{ content_name }}</a></h3>
 {% else %}
-    <h3>{{ content_name }}</h3>
+    <h3><a href="{{ path( "ez_urlalias", {"contentId": content.id} ) }}">{{ content_name }}</a></h3>
 {% endif %}

@@ -5,40 +5,42 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
 use eZ\Publish\Core\Repository\Values\Content\Location;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\Symfony\Routing\Generator;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;
 
-class GeneratorTest extends PHPUnit_Framework_TestCase
+class GeneratorTest extends TestCase
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator|\PHPUnit_Framework_MockObject_MockObject
+     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator|\PHPUnit\Framework\MockObject\MockObject
      */
     private $generator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $siteAccessRouter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->siteAccessRouter = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface');
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
-        $this->generator = $this->getMockForAbstractClass('eZ\Publish\Core\MVC\Symfony\Routing\Generator');
+        $this->siteAccessRouter = $this->createMock(SiteAccessRouterInterface::class);
+        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->generator = $this->getMockForAbstractClass(Generator::class);
         $this->generator->setSiteAccessRouter($this->siteAccessRouter);
         $this->generator->setLogger($this->logger);
     }
@@ -63,7 +65,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testSimpleGenerate($urlResource, array $parameters, $referenceType)
     {
-        $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
+        $matcher = $this->createMock(URILexer::class);
         $this->generator->setSiteAccess(new SiteAccess('test', 'fake', $matcher));
 
         $baseUrl = '/base/url';
@@ -96,7 +98,7 @@ class GeneratorTest extends PHPUnit_Framework_TestCase
      */
     public function testGenerateWithSiteAccessNoReverseMatch($urlResource, array $parameters, $referenceType)
     {
-        $matcher = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess\\URILexer');
+        $matcher = $this->createMock(URILexer::class);
         $this->generator->setSiteAccess(new SiteAccess('test', 'test', $matcher));
 
         $baseUrl = '/base/url';

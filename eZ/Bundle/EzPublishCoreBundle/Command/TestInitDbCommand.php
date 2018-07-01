@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
@@ -21,6 +19,7 @@ class TestInitDbCommand extends ContainerAwareCommand
     {
         $this
             ->setName('ezpublish:test:init_db')
+            ->setHidden(true)
             ->setDescription('Inits the configured database for test use based on existing fixtures for eZ Demo install (4.7 atm)')
             ->setHelp(
                 <<<EOT

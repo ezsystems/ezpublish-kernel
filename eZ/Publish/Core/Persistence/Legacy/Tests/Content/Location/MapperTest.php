@@ -5,14 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 
 /**
  * Test case for Location\Mapper.
@@ -80,7 +79,7 @@ class MapperTest extends TestCase
     );
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateLocationFromRow()
     {
@@ -97,7 +96,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationsFromRows
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationsFromRows
      */
     public function testCreateLocationsFromRows()
     {
@@ -115,14 +114,14 @@ class MapperTest extends TestCase
         $this->assertCount(3, $locations);
         foreach ($locations as $location) {
             $this->assertInstanceOf(
-                'eZ\\Publish\\SPI\\Persistence\\Content\\Location',
+                SPILocation::class,
                 $location
             );
         }
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateTrashedFromRow()
     {
@@ -142,7 +141,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateLocationFromRowWithPrefix()
     {
@@ -164,7 +163,7 @@ class MapperTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::getLocationCreateStruct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::getLocationCreateStruct
      */
     public function testGetLocationCreateStruct()
     {

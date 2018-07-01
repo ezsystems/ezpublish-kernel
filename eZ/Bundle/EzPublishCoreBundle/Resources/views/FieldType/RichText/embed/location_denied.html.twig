@@ -1,3 +1,4 @@
 <div class="{% if embedParams.align is defined %}align-{{ embedParams.align }}{% endif %}{% if embedParams.class is defined %} {{ embedParams.class }}{% endif %}">
+    {{ fos_httpcache_tag('relation-location-' ~ embedParams.id) }}
     Location #{{ embedParams.id }}: You do not have permission to view this Location
 </div>

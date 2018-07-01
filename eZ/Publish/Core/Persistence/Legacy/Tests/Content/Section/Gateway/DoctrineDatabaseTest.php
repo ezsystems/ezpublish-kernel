@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section\Gateway;
 
@@ -38,7 +36,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::__construct
      */
     public function testCtor()
     {
@@ -53,7 +51,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::insertSection
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::insertSection
      */
     public function testInsertSection()
     {
@@ -79,7 +77,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::updateSection
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::updateSection
      */
     public function testUpdateSection()
     {
@@ -104,7 +102,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadSectionData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadSectionData
      */
     public function testLoadSectionData()
     {
@@ -125,7 +123,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadAllSectionData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadAllSectionData
      */
     public function testLoadAllSectionData()
     {
@@ -177,7 +175,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadSectionDataByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::loadSectionDataByIdentifier
      */
     public function testLoadSectionDataByIdentifier()
     {
@@ -198,7 +196,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::countContentObjectsInSection
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::countContentObjectsInSection
      */
     public function testCountContentObjectsInSection()
     {
@@ -217,7 +215,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::countRoleAssignmentsUsingSection
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::countRoleAssignmentsUsingSection
      */
     public function testCountRoleAssignmentsUsingSection()
     {
@@ -236,7 +234,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::deleteSection
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::deleteSection
      */
     public function testDeleteSection()
     {
@@ -269,7 +267,7 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::assignSectionToContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::assignSectionToContent
      * @depends testCountContentObjectsInSection
      */
     public function testAssignSectionToContent()

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\UrlWildcard;
 
@@ -22,7 +20,7 @@ class UrlWildcardMapperTest extends TestCase
     /**
      * Test for the createUrlWildcard() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::createUrlWildcard
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::createUrlWildcard
      */
     public function testCreateUrlWildcard()
     {
@@ -50,7 +48,7 @@ class UrlWildcardMapperTest extends TestCase
     /**
      * Test for the extractUrlWildcardFromRow() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::extractUrlWildcardFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::extractUrlWildcardFromRow
      */
     public function testExtractUrlWildcardFromRow()
     {
@@ -80,7 +78,7 @@ class UrlWildcardMapperTest extends TestCase
     /**
      * Test for the extractUrlWildcardFromRow() method.
      *
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::extractUrlWildcardFromRow
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper::extractUrlWildcardFromRow
      */
     public function testExtractUrlWildcardsFromRows()
     {

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
@@ -15,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class SectionTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers GET /content/sections
+     * Covers GET /content/sections.
      */
     public function testListSections()
     {
@@ -27,7 +25,7 @@ class SectionTest extends RESTFunctionalTestCase
     }
 
     /**
-     * @covers POST /content/sections
+     * Covers POST /content/sections.
      *
      * @return string The created section href
      */
@@ -39,14 +37,19 @@ class SectionTest extends RESTFunctionalTestCase
   <name>testCreateSection</name>
 </SectionInput>
 XML;
-        $request = $this->createHttpRequest('POST', '/api/ezp/v2/content/sections', 'SectionInput+xml', 'Section+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'POST',
+            '/api/ezp/v2/content/sections',
+            'SectionInput+xml',
+            'Section+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
@@ -55,7 +58,7 @@ XML;
     /**
      * @param $sectionHref
      * @depends testCreateSection
-     * @covers PATCH /content/sections/{sectionId}
+     * Covers PATCH /content/sections/{sectionId}
      */
     public function testUpdateSection($sectionHref)
     {
@@ -65,15 +68,20 @@ XML;
   <name>testUpdateSection</name>
 </SectionInput>
 XML;
-        $request = $this->createHttpRequest('PATCH', $sectionHref, 'SectionInput+xml', 'Section+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $sectionHref,
+            'SectionInput+xml',
+            'Section+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
-     * @covers GET /content/sections/{sectionId}
+     * Covers GET /content/sections/{sectionId}.
      * @depends testCreateSection
      */
     public function testLoadSection($sectionHref)
@@ -87,7 +95,7 @@ XML;
 
     /**
      * @depends testCreateSection
-     * @covers GET /content/sections?identifier={sectionIdentifier}
+     * Covers GET /content/sections?identifier={sectionIdentifier}
      */
     public function testLoadSectionByIdentifier($sectionHref)
     {
@@ -100,7 +108,7 @@ XML;
 
     /**
      * @depends testCreateSection
-     * @covers DELETE /content/sections/{sectionId}
+     * Covers DELETE /content/sections/{sectionId}
      */
     public function testDeleteSection($sectionHref)
     {

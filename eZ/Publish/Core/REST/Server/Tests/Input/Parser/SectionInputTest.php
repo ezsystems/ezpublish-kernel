@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
+use eZ\Publish\Core\Repository\SectionService;
 use eZ\Publish\Core\REST\Server\Input\Parser\SectionInput;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
@@ -86,13 +85,7 @@ class SectionInputTest extends BaseTest
      */
     protected function getSectionServiceMock()
     {
-        $sectionServiceMock = $this->getMock(
-            'eZ\\Publish\\Core\\Repository\\SectionService',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $sectionServiceMock = $this->createMock(SectionService::class);
 
         $sectionServiceMock->expects($this->any())
             ->method('newSectionCreateStruct')

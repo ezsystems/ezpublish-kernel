@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests;
 
@@ -19,13 +17,12 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
-use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 
 /**
- * Test case for operations in the SearchService using in memory storage.
+ * Test case for operations in the SearchService.
  *
  * @see eZ\Publish\API\Repository\SearchService
  * @group integration
@@ -33,6 +30,10 @@ use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
  */
 class SearchServiceTest extends BaseTest
 {
+    const QUERY_CLASS = Query::class;
+
+    use Common\FacetedSearchProvider;
+
     public function getFilterContentSearches()
     {
         $fixtureDir = $this->getFixtureDir();
@@ -887,7 +888,7 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    public function getRelationFieldFilterContentSearches()
+    public function getRelationFieldFilterSearches()
     {
         $fixtureDir = $this->getFixtureDir();
 
@@ -962,24 +963,28 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
-     * Purely for creating relation data needed for testFindRelationFieldContentInfoFiltered().
+     * Purely for creating relation data needed for testFindRelationFieldContentInfoFiltered()
+     * and testFindRelationFieldLocationsFiltered().
      */
     public function testRelationContentCreation()
     {
         $repository = $this->getRepository();
         $galleryType = $repository->getContentTypeService()->loadContentTypeByIdentifier('gallery');
         $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct(2); // Home
 
         $createStruct = $contentService->newContentCreateStruct($galleryType, 'eng-GB');
         $createStruct->setField('name', 'Image gallery');
-        $createStruct->setField('image', 49);// Images folder
-        $draft = $contentService->createContent($createStruct);
+        $createStruct->setField('image', 49); // Images folder
+        $draft = $contentService->createContent($createStruct, [$locationCreateStruct]);
         $contentService->publishVersion($draft->getVersionInfo());
 
         $createStruct = $contentService->newContentCreateStruct($galleryType, 'eng-GB');
         $createStruct->setField('name', 'User gallery');
-        $createStruct->setField('image', 4);// User folder
-        $draft = $contentService->createContent($createStruct);
+        $createStruct->setField('image', 4); // User folder
+        $draft = $contentService->createContent($createStruct, [$locationCreateStruct]);
         $contentService->publishVersion($draft->getVersionInfo());
 
         $this->refreshSearch($repository);
@@ -988,15 +993,29 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for FieldRelation using findContentInfo() method.
      *
-     * @dataProvider getRelationFieldFilterContentSearches
+     * @dataProvider getRelationFieldFilterSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testRelationContentCreation
      */
-    public function testFindRelationFieldContentInfoFiltered($queryData, $fixture, $closure = null)
+    public function testFindRelationFieldContentInfoFiltered($queryData, $fixture)
     {
-        $this->getRepository(false);// To make sure repo is setup w/o removing data from testRelationContentCreation
+        $this->getRepository(false); // To make sure repo is setup w/o removing data from getRelationFieldFilterContentSearches
         $query = new Query($queryData);
-        $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure($closure), true, true, false);
+        $this->assertQueryFixture($query, $fixture, null, true, true, false);
+    }
+
+    /**
+     * Test for FieldRelation using findLocations() method.
+     *
+     * @dataProvider getRelationFieldFilterSearches
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testRelationContentCreation
+     */
+    public function testFindRelationFieldLocationsFiltered($queryData, $fixture)
+    {
+        $this->getRepository(false); // To make sure repo is setup w/o removing data from getRelationFieldFilterContentSearches
+        $query = new LocationQuery($queryData);
+        $this->assertQueryFixture($query, $fixture, null, true, false, false);
     }
 
     public function testFindSingle()
@@ -2076,7 +2095,7 @@ class SearchServiceTest extends BaseTest
         // field does not affect sort
         $dummySortClause = new SortClause\Field('article', 'title', Query::SORT_ASC);
         array_unshift($sortClauses, $dummySortClause);
-        array_push($sortClauses, $dummySortClause);
+        $sortClauses[] = $dummySortClause;
 
         $searchService = $repository->getSearchService();
         if ($contentSearch) {
@@ -2471,252 +2490,14 @@ class SearchServiceTest extends BaseTest
         $this->assertQueryFixture($query, $fixture, $closure);
     }
 
-    public function getFacettedSearches()
-    {
-        $fixtureDir = $this->getFixtureDir();
-
-        return array(
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
-                                    'name' => 'type',
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetContentType.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
-                                    'name' => 'type',
-                                    'minCount' => 3,
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetContentTypeMinCount.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
-                                    'name' => 'type',
-                                    'limit' => 5,
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetContentTypeMinLimit.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\SectionFacetBuilder(
-                                array(
-                                    'name' => 'section',
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetSection.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\UserFacetBuilder(
-                                array(
-                                    'name' => 'creator',
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetUser.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\TermFacetBuilder(),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetTerm.php',
-            ),
-            /* @todo: It needs to be defined how this one is supposed to work.
-            array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\CriterionFacetBuilder()
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . '/FacetCriterion.php',
-            ), // */
-            /* @todo: Add sane ranges here:
-            array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\DateRangeFacetBuilder( array() )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . '/FacetDateRange.php',
-            ), // */
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetFieldSimple.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                    'regex' => '(a|b|c)',
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetFieldRegexp.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                    'regex' => '(a|b|c)',
-                                    'sort' => FacetBuilder\FieldFacetBuilder::TERM_DESC,
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetFieldRegexpSortTerm.php',
-            ),
-            array(
-                new Query(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
-                        'offset' => 0,
-                        'limit' => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                    'regex' => '(a|b|c)',
-                                    'sort' => FacetBuilder\FieldFacetBuilder::COUNT_DESC,
-                                )
-                            ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
-                ),
-                $fixtureDir . '/FacetFieldRegexpSortCount.php',
-            ),
-            /* @todo: Add sane ranges here:
-            array(
-                new Query(
-                    array(
-                        'filter'      => new Criterion\SectionId( array( 1 ) ),
-                        'offset'      => 0,
-                        'limit'       => 10,
-                        'facetBuilders' => array(
-                            new FacetBuilder\FieldRangeFacetBuilder( array(
-                                'fieldPath' => 'product/price',
-                            ) )
-                        ),
-                        'sortClauses' => array( new SortClause\ContentId() )
-                    )
-                ),
-                $fixtureDir . '/FacetFieldRegexpSortCount.php',
-            ), // */
-        );
-    }
-
     /**
      * Test for the findContent() method.
      *
-     * @dataProvider getFacettedSearches
+     * @dataProvider getFacetedSearches
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
      */
-    public function testFindFacettedContent(Query $query, $fixture)
+    public function testFindFacetedContent(Query $query, $fixture)
     {
         $this->assertQueryFixture($query, $fixture);
     }
@@ -2724,10 +2505,10 @@ class SearchServiceTest extends BaseTest
     /**
      * Test for the findContentInfo() method.
      *
-     * @dataProvider getFacettedSearches
+     * @dataProvider getFacetedSearches
      * @see \eZ\Publish\API\Repository\SearchService::findContentInfo()
      */
-    public function testFindFacettedContentInfo(Query $query, $fixture)
+    public function testFindFacetedContentInfo(Query $query, $fixture)
     {
         $this->assertQueryFixture($query, $fixture, $this->getContentInfoFixtureClosure(), true);
     }
@@ -4111,6 +3892,47 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for FullText on the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFullTextOnNewContent()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $contentCreateStruct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
+            'eng-GB'
+        );
+
+        $contentCreateStruct->setField('name', 'foxes');
+
+        $englishContent = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                array($locationService->newLocationCreateStruct(2))
+            )->versionInfo
+        );
+
+        $this->refreshSearch($repository);
+
+        $query = new Query(
+            array(
+                'query' => new Criterion\FullText('foxes'),
+            )
+        );
+
+        $searchResult = $searchService->findContentInfo($query);
+
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertEquals($englishContent->id, $searchResult->searchHits[0]->valueObject->id);
+    }
+
+    /**
      * Test for the findContent() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
@@ -4285,6 +4107,215 @@ class SearchServiceTest extends BaseTest
     }
 
     /**
+     * Test for the findContent() method searching for content filtered by languages.
+     *
+     * @covers \eZ\Publish\Core\Repository\SearchService::findContent
+     */
+    public function testFindContentWithLanguageFilter()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $query = new Query(
+            [
+                'filter' => new Criterion\ContentId([4]),
+                'offset' => 0,
+            ]
+        );
+        $searchResult = $searchService->findContent(
+            $query,
+            ['languages' => ['eng-US']],
+            false
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            SearchResult::class,
+            $searchResult
+        );
+
+        $this->assertEquals(1, $searchResult->totalCount);
+        $this->assertCount($searchResult->totalCount, $searchResult->searchHits);
+        foreach ($searchResult->searchHits as $searchHit) {
+            $this->assertInstanceOf(
+                SearchHit::class,
+                $searchHit
+            );
+        }
+    }
+
+    /**
+     * This test prepares data for other tests.
+     *
+     * @see testFulltextContentSearchComplex
+     * @see testFulltextLocationSearchComplex
+     *
+     * @return array
+     */
+    public function testFulltextComplex()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+        $contentCreateStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+
+        $contentCreateStruct->setField('name', 'red');
+        $contentCreateStruct->setField('short_name', 'red apple');
+        $content1 = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        $contentCreateStruct->setField('name', 'apple');
+        $contentCreateStruct->setField('short_name', 'two');
+        $content2 = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        $contentCreateStruct->setField('name', 'red apple');
+        $contentCreateStruct->setField('short_name', 'three');
+        $content3 = $contentService->publishVersion(
+            $contentService->createContent(
+                $contentCreateStruct,
+                [$locationService->newLocationCreateStruct(2)]
+            )->versionInfo
+        );
+
+        $this->refreshSearch($repository);
+
+        $criterion = new Criterion\FullText(
+            'red apple',
+            [
+                'boost' => [
+                    'short_name' => 2,
+                ],
+                'fuzziness' => .1,
+            ]
+        );
+
+        return [$criterion, $content1, $content2, $content3];
+    }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     * @depends testFulltextComplex
+     *
+     * @param array $data
+     */
+    public function testFulltextContentSearchComplex(array $data)
+    {
+        // Do not initialize from scratch
+        $repository = $this->getRepository(false);
+        $searchService = $repository->getSearchService();
+        list($criterion, $content1, $content2, $content3) = $data;
+
+        $searchResult = $searchService->findContent(
+            new Query(['query' => $criterion]),
+            ['languages' => ['eng-GB']]
+        );
+        $searchHits = $searchResult->searchHits;
+
+        $this->assertEquals(3, $searchResult->totalCount);
+
+        // Legacy search engine does have scoring, sorting the results by ID in that case
+        $setupFactory = $this->getSetupFactory();
+        if (get_class($setupFactory) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            usort(
+                $searchHits,
+                function ($a, $b) {
+                    return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
+                }
+            );
+
+            $this->assertEquals($content1->id, $searchHits[0]->valueObject->id);
+            $this->assertEquals($content2->id, $searchHits[1]->valueObject->id);
+            $this->assertEquals($content3->id, $searchHits[2]->valueObject->id);
+
+            return;
+        }
+
+        // Assert scores are descending
+        $this->assertGreaterThan($searchHits[1]->score, $searchHits[0]->score);
+        $this->assertGreaterThan($searchHits[2]->score, $searchHits[1]->score);
+
+        // Assert order
+        $this->assertEquals($content1->id, $searchHits[0]->valueObject->id);
+        $this->assertEquals($content3->id, $searchHits[1]->valueObject->id);
+        $this->assertEquals($content2->id, $searchHits[2]->valueObject->id);
+    }
+
+    /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     * @depends testFulltextComplex
+     *
+     * @param array $data
+     */
+    public function testFulltextLocationSearchComplex(array $data)
+    {
+        $setupFactory = $this->getSetupFactory();
+        if ($setupFactory instanceof LegacyElasticsearch) {
+            $this->markTestIncomplete(
+                'Fulltext criterion is not supported with Location search in Elasticsearch engine'
+            );
+        }
+
+        if ($setupFactory instanceof LegacySolrSetupFactory && getenv('SOLR_VERSION') === '4.10.4') {
+            $this->markTestSkipped('Skipping location search score test on Solr 4.10, you need Solr 6 for this!');
+        }
+
+        // Do not initialize from scratch
+        $repository = $this->getRepository(false);
+        list($criterion, $content1, $content2, $content3) = $data;
+        $searchService = $repository->getSearchService();
+
+        $searchResult = $searchService->findLocations(
+            new LocationQuery(['query' => $criterion]),
+            ['languages' => ['eng-GB']]
+        );
+        $searchHits = $searchResult->searchHits;
+
+        $this->assertEquals(3, $searchResult->totalCount);
+
+        // Legacy search engine does have scoring, sorting the results by ID in that case
+        $setupFactory = $this->getSetupFactory();
+        if (get_class($setupFactory) === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
+            usort(
+                $searchHits,
+                function ($a, $b) {
+                    return ($a->valueObject->id < $b->valueObject->id) ? -1 : 1;
+                }
+            );
+
+            $this->assertEquals($content1->id, $searchHits[0]->valueObject->contentId);
+            $this->assertEquals($content2->id, $searchHits[1]->valueObject->contentId);
+            $this->assertEquals($content3->id, $searchHits[2]->valueObject->contentId);
+
+            return;
+        }
+
+        // Assert scores are descending
+        $this->assertGreaterThan($searchHits[1]->score, $searchHits[0]->score);
+        $this->assertGreaterThan($searchHits[2]->score, $searchHits[1]->score);
+
+        // Assert order
+        $this->assertEquals($content1->id, $searchHits[0]->valueObject->contentId);
+        $this->assertEquals($content3->id, $searchHits[1]->valueObject->contentId);
+        $this->assertEquals($content2->id, $searchHits[2]->valueObject->contentId);
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param Query $query
@@ -4335,7 +4366,7 @@ class SearchServiceTest extends BaseTest
                 );
                 $this->markTestIncomplete("No fixture available. Result recorded at $record. Result: \n" . $this->printResult($result));
             } else {
-                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate it.");
+                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate:\n " . $fixture);
             }
         }
 
@@ -4467,5 +4498,85 @@ class SearchServiceTest extends BaseTest
                 $closure($data);
             }
         };
+    }
+
+    /**
+     * Test searching using Field Criterion where the given Field Identifier exists in
+     * both searchable and non-searchable Fields.
+     * Number of returned results depends on used storage.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testFieldCriterionForContentsWithIdenticalFieldIdentifiers()
+    {
+        $this->createContentWithFieldType(
+            'url',
+            'title',
+            'foo'
+        );
+        $this->createContentWithFieldType(
+            'string',
+            'title',
+            'foo'
+        );
+        $query = new Query(
+            array(
+                'query' => new Criterion\Field(
+                    'title',
+                    Criterion\Operator::EQ,
+                    'foo'
+                ),
+            )
+        );
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent($query);
+
+        $this->assertTrue(($result->totalCount === 1 || $result->totalCount === 2));
+    }
+
+    private function createContentWithFieldType(
+        string $fieldType,
+        string $fieldName,
+        string $fieldValue
+    ) {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $createStruct = $contentTypeService->newContentTypeCreateStruct($fieldType . uniqid());
+        $createStruct->mainLanguageCode = 'eng-GB';
+        $createStruct->remoteId = $fieldType . '-123';
+        $createStruct->names = ['eng-GB' => $fieldType];
+        $createStruct->creatorId = 14;
+        $createStruct->creationDate = new \DateTime();
+
+        $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct($fieldName, 'ez' . $fieldType);
+        $fieldCreate->names = ['eng-GB' => $fieldName];
+        $fieldCreate->fieldGroup = 'main';
+        $fieldCreate->position = 1;
+
+        $createStruct->addFieldDefinition($fieldCreate);
+
+        $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
+        $contentTypeDraft = $contentTypeService->createContentType($createStruct, [$contentGroup]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        $createStruct = $contentService->newContentCreateStruct($contentType, 'eng-GB');
+        $createStruct->remoteId = $fieldType . '-456';
+        $createStruct->alwaysAvailable = false;
+        $createStruct->setField(
+            $fieldName,
+            $fieldValue
+        );
+
+        $draft = $contentService->createContent($createStruct);
+        $content = $contentService->publishVersion($draft->getVersionInfo());
+
+        $this->refreshSearch($repository);
+
+        return $content;
     }
 }

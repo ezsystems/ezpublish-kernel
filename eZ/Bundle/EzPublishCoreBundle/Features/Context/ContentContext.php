@@ -27,15 +27,15 @@ class ContentContext implements Context, SnippetAcceptingContext
     }
 
     /**
-     * @Given /^I create an article draft$/
+     * @Given /^I create an folder draft$/
      */
-    public function iCreateAnArticleDraft()
+    public function iCreateAnFolderDraft()
     {
         $this->currentDraft = $this->createDraft(
-            'article',
+            'folder',
             [
-                'title' => 'Preview draft ' . date('c'),
-                'intro' => '<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>This is a paragraph.</para></section>',
+                'name' => 'Preview draft ' . date('c'),
+                'short_description' => '<?xml version="1.0" encoding="UTF-8"?><section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0"><para>This is a paragraph.</para></section>',
             ]
         );
     }

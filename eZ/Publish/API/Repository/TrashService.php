@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository;
 
@@ -36,6 +34,7 @@ interface TrashService
     /**
      * Sends $location and all its children to trash and returns the corresponding trash item.
      *
+     * The current user may not have access to the returned trash item, check before using it.
      * Content is left untouched.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to trash the given location
@@ -82,13 +81,13 @@ interface TrashService
     public function deleteTrashItem(TrashItem $trashItem);
 
     /**
-     * Returns a collection of Trashed locations contained in the trash.
+     * Returns a collection of Trashed locations contained in the trash, which are readable by the current user.
      *
      * $query allows to filter/sort the elements to be contained in the collection.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\SearchResult
      */
     public function findTrashItems(Query $query);
 }

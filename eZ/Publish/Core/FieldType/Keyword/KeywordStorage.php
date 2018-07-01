@@ -5,12 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Keyword;
 
-use eZ\Publish\Core\FieldType\GatewayBasedStorage;
+use eZ\Publish\SPI\FieldType\GatewayBasedStorage;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
 
@@ -24,19 +22,22 @@ use eZ\Publish\SPI\Persistence\Content\Field;
 class KeywordStorage extends GatewayBasedStorage
 {
     /**
+     * @var \eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway
+     */
+    protected $gateway;
+
+    /**
      * @see \eZ\Publish\SPI\FieldType\FieldStorage
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param array $context
+     * @return mixed
      */
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        if (empty($field->value->externalData)) {
-            return;
-        }
+        $contentTypeId = $this->gateway->getContentTypeId($field);
 
-        $gateway = $this->getGateway($context);
-
-        $contentTypeId = $gateway->getContentTypeId($field);
-
-        return $gateway->storeFieldData($field, $contentTypeId);
+        return $this->gateway->storeFieldData($field, $contentTypeId);
     }
 
     /**
@@ -50,9 +51,8 @@ class KeywordStorage extends GatewayBasedStorage
      */
     public function getFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $gateway = $this->getGateway($context);
         // @todo: This should already retrieve the ContentType ID
-        return $gateway->getFieldData($field);
+        return $this->gateway->getFieldData($field);
     }
 
     /**
@@ -64,10 +64,19 @@ class KeywordStorage extends GatewayBasedStorage
      */
     public function deleteFieldData(VersionInfo $versionInfo, array $fieldIds, array $context)
     {
-        $gateway = $this->getGateway($context);
-        foreach ($fieldIds as $fieldId) {
-            $gateway->deleteFieldData($fieldId);
+        // If current version being asked to be deleted is not published, then don't delete keywords
+        // if there is some other version which is published (as keyword table is not versioned)
+        if ($versionInfo->status !== VersionInfo::STATUS_PUBLISHED &&
+            $versionInfo->contentInfo->isPublished
+        ) {
+            return false;
         }
+
+        foreach ($fieldIds as $fieldId) {
+            $this->gateway->deleteFieldData($fieldId);
+        }
+
+        return true;
     }
 
     /**
@@ -81,8 +90,10 @@ class KeywordStorage extends GatewayBasedStorage
     }
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
+     * @return \eZ\Publish\SPI\Search\Field[]|null
      */
     public function getIndexData(VersionInfo $versionInfo, Field $field, array $context)
     {

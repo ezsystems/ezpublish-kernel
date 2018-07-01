@@ -11,7 +11,8 @@ namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition as ServiceDefinition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -22,8 +23,10 @@ use Symfony\Component\DependencyInjection\Reference;
  *
  * Binarydata & metadata are identical, except for the parent service.
  */
-abstract class Flysystem extends ContainerAware implements ConfigurationFactory
+abstract class Flysystem implements ConfigurationFactory, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     public function addConfiguration(ArrayNodeDefinition $node)
     {
         $node

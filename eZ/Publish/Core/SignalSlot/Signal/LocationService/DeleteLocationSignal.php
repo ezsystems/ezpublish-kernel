@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Signal\LocationService;
 
@@ -30,4 +28,11 @@ class DeleteLocationSignal extends Signal
      * @var mixed
      */
     public $locationId;
+
+    /**
+     * Location ID of parent location of the deleted location.
+     *
+     * @var mixed
+     */
+    public $parentLocationId;
 }

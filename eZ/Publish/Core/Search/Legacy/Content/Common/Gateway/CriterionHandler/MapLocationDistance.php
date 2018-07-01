@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
@@ -48,8 +46,6 @@ class MapLocationDistance extends FieldBase
      * Returns a list of IDs of searchable FieldDefinitions for the given criterion target.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
-     *
-     * @caching
      *
      * @param string $fieldIdentifier
      *
@@ -121,7 +117,7 @@ class MapLocationDistance extends FieldBase
          * @todo if ABS function was available in Zeta Database component it should be possible to account for
          * distances across the date line. Revisit when Doctrine DBAL is introduced.
          */
-        $longitudeCorrectionByLatitude = pow(cos(deg2rad($location->latitude)), 2);
+        $longitudeCorrectionByLatitude = cos(deg2rad($location->latitude)) ** 2;
         $distanceExpression = $subSelect->expr->add(
             $subSelect->expr->mul(
                 $subSelect->expr->sub(
@@ -154,7 +150,7 @@ class MapLocationDistance extends FieldBase
             case Criterion\Operator::LT:
             case Criterion\Operator::LTE:
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
-                $distanceInDegrees = pow($this->kilometersToDegrees($criterion->value), 2);
+                $distanceInDegrees = $this->kilometersToDegrees($criterion->value) ** 2;
                 $distanceFilter = $subSelect->expr->$operatorFunction(
                     $distanceExpression,
                     $subSelect->expr->round(
@@ -165,8 +161,8 @@ class MapLocationDistance extends FieldBase
                 break;
 
             case Criterion\Operator::BETWEEN:
-                $distanceInDegrees1 = pow($this->kilometersToDegrees($criterion->value[0]), 2);
-                $distanceInDegrees2 = pow($this->kilometersToDegrees($criterion->value[1]), 2);
+                $distanceInDegrees1 = $this->kilometersToDegrees($criterion->value[0]) ** 2;
+                $distanceInDegrees2 = $this->kilometersToDegrees($criterion->value[1]) ** 2;
                 $distanceFilter = $subSelect->expr->between(
                     $distanceExpression,
                     $subSelect->expr->round(

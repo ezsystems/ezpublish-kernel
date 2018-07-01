@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Input;
 
@@ -97,7 +95,7 @@ class ParsingDispatcher
         if (count($contentType) > 1) {
             $mediaType = $contentType[0];
             foreach (array_slice($contentType, 1) as $parameterString) {
-                if (($equalPos = strpos($contentType[1], '=')) === false) {
+                if (strpos($contentType[1], '=') === false) {
                     throw new Exceptions\Parser("Unknown parameter format: '{$parameterString}'");
                 }
                 list($parameterName, $parameterValue) = explode('=', $parameterString);

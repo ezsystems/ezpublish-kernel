@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
@@ -15,7 +13,7 @@ use eZ\Bundle\EzPublishRestBundle\Tests\Functional\TestCase as RESTFunctionalTes
 class ObjectStateTest extends RESTFunctionalTestCase
 {
     /**
-     * @covers POST /content/objectstategroups
+     * Covers POST /content/objectstategroups.
      *
      * @return string Object state group href
      */
@@ -39,23 +37,23 @@ XML;
             'POST',
             '/api/ezp/v2/content/objectstategroups',
             'ObjectStateGroupCreate+xml',
-            'ObjectStateGroup+json'
+            'ObjectStateGroup+json',
+            $body
         );
-        $request->setContent($body);
 
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
     }
 
     /**
-     * @covers POST /content/objectstategroups/{objectStateGroupId}/objectstates
+     * Covers POST /content/objectstategroups/{objectStateGroupId}/objectstates.
      *
      * @return string Object state href
      * @depends testCreateObjectStateGroup
@@ -81,23 +79,23 @@ XML;
             'POST',
             "$objectStateGroupHref/objectstates",
             'ObjectStateCreate+xml',
-            'ObjectState+json'
+            'ObjectState+json',
+            $body
         );
-        $request->setContent($body);
 
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
 
-        $href = $response->getHeader('Location');
+        $href = $response->getHeader('Location')[0];
         $this->addCreatedElement($href);
 
         return $href;
     }
 
     /**
-     * @covers GET /content/objectstategroups/{objectStateGroupId}
+     * Covers GET /content/objectstategroups/{objectStateGroupId}.
      * @depends testCreateObjectStateGroup
      */
     public function testLoadObjectStateGroup($objectStateGroupHref)
@@ -110,7 +108,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+     * Covers GET /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}.
      * @depends testCreateObjectState
      */
     public function testLoadObjectState($objectStateHref)
@@ -123,7 +121,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objectstategroups
+     * Covers GET /content/objectstategroups.
      */
     public function testLoadObjectStateGroups()
     {
@@ -135,7 +133,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objectstategroups/{objectStateGroupId}/objectstates
+     * Covers GET /content/objectstategroups/{objectStateGroupId}/objectstates.
      * @depends testCreateObjectStateGroup
      */
     public function testLoadObjectStates($objectStateGroupHref)
@@ -148,7 +146,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /content/objects/{contentId}/objectstates
+     * Covers PATCH /content/objects/{contentId}/objectstates.
      * @depends testCreateObjectState
      *
      * @return string The created folder content href
@@ -165,8 +163,13 @@ XML;
 XML;
 
         $folderHref = $folder['_href'];
-        $request = $this->createHttpRequest('PATCH', "$folderHref/objectstates", 'ContentObjectStates+xml', 'ContentObjectStates+json');
-        $request->setContent($xml);
+        $request = $this->createHttpRequest(
+            'PATCH',
+            "$folderHref/objectstates",
+            'ContentObjectStates+xml',
+            'ContentObjectStates+json',
+            $xml
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
@@ -175,7 +178,7 @@ XML;
     }
 
     /**
-     * @covers GET /content/objects/{contentId}/objectstates
+     * Covers GET /content/objects/{contentId}/objectstates.
      * @depends testSetObjectStatesForContent
      */
     public function testGetObjectStatesForContent($contentHref)
@@ -188,7 +191,7 @@ XML;
     }
 
     /**
-     * @covers PATCH /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}
+     * Covers PATCH /content/objectstategroups/{objectStateGroupId}/objectstates/{objectStateId}.
      * @depends testCreateObjectState
      */
     public function testUpdateObjectState($objectStateHref)
@@ -206,16 +209,20 @@ XML;
   </descriptions>
 </ObjectStateUpdate>
 XML;
-        $request = $this->createHttpRequest('PATCH', $objectStateHref, 'ObjectStateUpdate+xml', 'ObjectState+json');
-        $request->setContent($body);
-
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $objectStateHref,
+            'ObjectStateUpdate+xml',
+            'ObjectState+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
-     * @covers PATCH /content/objectstategroups/{objectStateGroupId}
+     * Covers PATCH /content/objectstategroups/{objectStateGroupId}.
      * @depends testCreateObjectStateGroup
      */
     public function testUpdateObjectStateGroup($objectStateGroupHref)
@@ -233,16 +240,20 @@ XML;
   </descriptions>
 </ObjectStateGroupUpdate>
 XML;
-        $request = $this->createHttpRequest('PATCH', $objectStateGroupHref, 'ObjectStateGroupUpdate+xml', 'ObjectStateGroup+json');
-        $request->setContent($body);
-
+        $request = $this->createHttpRequest(
+            'PATCH',
+            $objectStateGroupHref,
+            'ObjectStateGroupUpdate+xml',
+            'ObjectStateGroup+json',
+            $body
+        );
         $response = $this->sendHttpRequest($request);
 
         self::assertHttpResponseCodeEquals($response, 200);
     }
 
     /**
-     * @covers DELETE
+     * Covers DELETE.
      * @depends testCreateObjectState
      */
     public function testDeleteObjectState($objectStateHref)
@@ -255,7 +266,7 @@ XML;
     }
 
     /**
-     * @covers DELETE /content/objectstategroups/{objectStateGroupId}
+     * Covers DELETE /content/objectstategroups/{objectStateGroupId}.
      * @depends testCreateObjectStateGroup
      */
     public function testDeleteObjectStateGroup($objectStateGroupHref)

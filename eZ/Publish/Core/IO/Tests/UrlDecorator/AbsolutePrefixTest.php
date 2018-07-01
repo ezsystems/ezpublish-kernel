@@ -43,6 +43,16 @@ class AbsolutePrefixTest extends PrefixTest
                 'http://static.example.com/',
                 'http://static.example.com/images/file.png',
             ),
+            array(
+                'images/file.png',
+                '//static.example.com',
+                '//static.example.com/images/file.png',
+            ),
+            array(
+                'images/file.png',
+                '//static.example.com/',
+                '//static.example.com/images/file.png',
+            ),
         );
     }
 }

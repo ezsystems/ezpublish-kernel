@@ -5,18 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter\Loader;
 
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\Loader\SwirlFilterLoader;
-use PHPUnit_Framework_TestCase;
+use Imagine\Image\ImageInterface;
+use PHPUnit\Framework\TestCase;
 
-class SwirlFilterLoaderTest extends PHPUnit_Framework_TestCase
+class SwirlFilterLoaderTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $filter;
 
@@ -28,13 +28,13 @@ class SwirlFilterLoaderTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->filter = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterInterface');
+        $this->filter = $this->createMock(FilterInterface::class);
         $this->loader = new SwirlFilterLoader($this->filter);
     }
 
     public function testLoadNoOption()
     {
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $this->filter
             ->expects($this->never())
             ->method('setOption');
@@ -53,7 +53,7 @@ class SwirlFilterLoaderTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadWithOption($degrees)
     {
-        $image = $this->getMock('\Imagine\Image\ImageInterface');
+        $image = $this->createMock(ImageInterface::class);
         $this->filter
             ->expects($this->once())
             ->method('setOption')

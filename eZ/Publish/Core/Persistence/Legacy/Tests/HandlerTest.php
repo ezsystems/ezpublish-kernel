@@ -5,13 +5,25 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 use eZ\Publish\Core\Base\ServiceContainer;
 use eZ\Publish\Core\Persistence\Legacy\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler;
+use eZ\Publish\Core\Persistence\Legacy\User\Handler as UserHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler as SectionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler as UrlAliasHandler;
+use eZ\Publish\Core\Persistence\Legacy\TransactionHandler;
+use eZ\Publish\SPI\Persistence\Content\Handler as SPIContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIContentTypeHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as SPILanguageHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as SPILocationHandler;
+use eZ\Publish\SPI\Persistence\User\Handler as SPIUserHandler;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SPISectionHandler;
+use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as SPIUrlAliasHandler;
+use eZ\Publish\SPI\Persistence\TransactionHandler as SPITransactionHandler;
 
 /**
  * Test case for Repository Handler.
@@ -19,7 +31,7 @@ use eZ\Publish\Core\Persistence\Legacy\Handler;
 class HandlerTest extends TestCase
 {
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      */
     public function testContentHandler()
     {
@@ -27,17 +39,17 @@ class HandlerTest extends TestCase
         $contentHandler = $handler->contentHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Handler',
+            SPIContentHandler::class,
             $contentHandler
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler',
+            ContentHandler::class,
             $contentHandler
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      */
     public function testContentHandlerTwice()
     {
@@ -50,7 +62,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
      */
     public function testContentTypeHandler()
     {
@@ -58,13 +70,13 @@ class HandlerTest extends TestCase
         $contentTypeHandler = $handler->contentTypeHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler',
+            SPIContentTypeHandler::class,
             $contentTypeHandler
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentLanguageHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentLanguageHandler
      */
     public function testContentLanguageHandler()
     {
@@ -72,13 +84,13 @@ class HandlerTest extends TestCase
         $contentLanguageHandler = $handler->contentLanguageHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler',
+            SPILanguageHandler::class,
             $contentLanguageHandler
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
      */
     public function testContentTypeHandlerTwice()
     {
@@ -91,7 +103,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
      */
     public function testLocationHandler()
     {
@@ -99,17 +111,17 @@ class HandlerTest extends TestCase
         $locationHandler = $handler->locationHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler',
+            SPILocationHandler::class,
             $locationHandler
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler',
+            LocationHandler::class,
             $locationHandler
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
      */
     public function testLocationHandlerTwice()
     {
@@ -122,7 +134,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
      */
     public function testUserHandler()
     {
@@ -130,17 +142,17 @@ class HandlerTest extends TestCase
         $userHandler = $handler->userHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\User\\Handler',
+            SPIUserHandler::class,
             $userHandler
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\User\\Handler',
+            UserHandler::class,
             $userHandler
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
      */
     public function testUserHandlerTwice()
     {
@@ -153,7 +165,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
      */
     public function testSectionHandler()
     {
@@ -161,17 +173,17 @@ class HandlerTest extends TestCase
         $sectionHandler = $handler->sectionHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler',
+            SPISectionHandler::class,
             $sectionHandler
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Section\\Handler',
+            SectionHandler::class,
             $sectionHandler
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
      */
     public function testSectionHandlerTwice()
     {
@@ -184,7 +196,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
      */
     public function testUrlAliasHandler()
     {
@@ -192,17 +204,17 @@ class HandlerTest extends TestCase
         $urlAliasHandler = $handler->urlAliasHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler',
+            SPIUrlAliasHandler::class,
             $urlAliasHandler
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\UrlAlias\\Handler',
+            UrlAliasHandler::class,
             $urlAliasHandler
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::urlAliasHandler
      */
     public function testUrlAliasHandlerTwice()
     {
@@ -215,7 +227,20 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::notificationHandler()
+     */
+    public function testNotificationHandlerTwice()
+    {
+        $handler = $this->getHandlerFixture();
+
+        $this->assertSame(
+            $handler->notificationHandler(),
+            $handler->notificationHandler()
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
      */
     public function testTransactionHandler()
     {
@@ -223,17 +248,17 @@ class HandlerTest extends TestCase
         $transactionHandler = $handler->transactionHandler();
 
         $this->assertInstanceOf(
-            'eZ\\Publish\\SPI\\Persistence\\TransactionHandler',
+            SPITransactionHandler::class,
             $transactionHandler
         );
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\Persistence\\Legacy\\TransactionHandler',
+            TransactionHandler::class,
             $transactionHandler
         );
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Handler::transactionHandler
      */
     public function testTransactionHandlerTwice()
     {
@@ -273,6 +298,9 @@ class HandlerTest extends TestCase
 
             /** @var \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder */
             $containerBuilder = include $config['container_builder_path'];
+
+            /* @var \Symfony\Component\DependencyInjection\Loader\YamlFileLoader $loader */
+            $loader->load('search_engines/legacy.yml');
 
             $containerBuilder->setParameter(
                 'languages',

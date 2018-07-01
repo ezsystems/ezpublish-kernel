@@ -5,23 +5,22 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use eZ\Publish\Core\FieldType\FieldType;
 
-class FieldTypeMockTest extends PHPUnit_Framework_TestCase
+class FieldTypeMockTest extends TestCase
 {
     /**
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testApplyDefaultSettingsThrowsInvalidArgumentException()
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false
@@ -39,9 +38,9 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
      */
     public function testApplyDefaultSettings($initialSettings, $expectedSettings)
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false,
@@ -168,9 +167,9 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
      */
     public function testApplyDefaultValidatorConfigurationEmptyThrowsInvalidArgumentException()
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false
@@ -183,9 +182,9 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
 
     public function testApplyDefaultValidatorConfigurationEmpty()
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false,
@@ -214,9 +213,9 @@ class FieldTypeMockTest extends PHPUnit_Framework_TestCase
      */
     public function testApplyDefaultValidatorConfiguration($initialConfiguration, $expectedConfiguration)
     {
-        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit_Framework_MockObject_MockObject $stub */
+        /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
-            '\\eZ\\Publish\\Core\\FieldType\\FieldType',
+            FieldType::class,
             array(),
             '',
             false,

@@ -5,30 +5,27 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\StorageEngineFactory;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use PHPUnit\Framework\TestCase;
 
-class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
+class StorageEngineFactoryTest extends TestCase
 {
     public function testRegisterStorageEngine()
     {
         /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider $repositoryConfigurationProvider */
-        $repositoryConfigurationProvider = $this
-            ->getMockBuilder('eZ\\Bundle\\EzPublishCoreBundle\\ApiLoader\\RepositoryConfigurationProvider')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $repositoryConfigurationProvider = $this->createMock(RepositoryConfigurationProvider::class);
         $factory = new StorageEngineFactory($repositoryConfigurationProvider);
 
         $storageEngines = array(
-            'foo' => $this->getMock('eZ\Publish\SPI\Persistence\Handler'),
-            'bar' => $this->getMock('eZ\Publish\SPI\Persistence\Handler'),
-            'baz' => $this->getMock('eZ\Publish\SPI\Persistence\Handler'),
+            'foo' => $this->getPersistenceHandlerMock(),
+            'bar' => $this->getPersistenceHandlerMock(),
+            'baz' => $this->getPersistenceHandlerMock(),
         );
 
         foreach ($storageEngines as $identifier => $persistenceHandler) {
@@ -54,11 +51,11 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
                 ),
             ),
         );
-        $expectedStorageEngine = $this->getMock('eZ\Publish\SPI\Persistence\Handler');
+        $expectedStorageEngine = $this->getPersistenceHandlerMock();
         $storageEngines = array(
             'foo' => $expectedStorageEngine,
-            'bar' => $this->getMock('eZ\Publish\SPI\Persistence\Handler'),
-            'baz' => $this->getMock('eZ\Publish\SPI\Persistence\Handler'),
+            'bar' => $this->getPersistenceHandlerMock(),
+            'baz' => $this->getPersistenceHandlerMock(),
         );
         $repositoryConfigurationProvider = new RepositoryConfigurationProvider($configResolver, $repositories);
         $factory = new StorageEngineFactory($repositoryConfigurationProvider);
@@ -96,9 +93,9 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
         );
 
         $storageEngines = array(
-            'foo' => $this->getMock('eZ\Publish\SPI\Persistence\Handler'),
-            'bar' => $this->getMock('eZ\Publish\SPI\Persistence\Handler'),
-            'baz' => $this->getMock('eZ\Publish\SPI\Persistence\Handler'),
+            'foo' => $this->getPersistenceHandlerMock(),
+            'bar' => $this->getPersistenceHandlerMock(),
+            'baz' => $this->getPersistenceHandlerMock(),
         );
 
         $repositoryConfigurationProvider = new RepositoryConfigurationProvider($configResolver, $repositories);
@@ -113,14 +110,19 @@ class StorageEngineFactoryTest extends PHPUnit_Framework_TestCase
             ->with('repository')
             ->will($this->returnValue($repositoryAlias));
 
-        $this->assertSame($this->getMock('eZ\Publish\SPI\Persistence\Handler'), $factory->buildStorageEngine());
+        $this->assertSame($this->getPersistenceHandlerMock(), $factory->buildStorageEngine());
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     protected function getConfigResolverMock()
     {
-        return $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        return $this->createMock(ConfigResolverInterface::class);
+    }
+
+    protected function getPersistenceHandlerMock()
+    {
+        return $this->createMock(Handler::class);
     }
 }

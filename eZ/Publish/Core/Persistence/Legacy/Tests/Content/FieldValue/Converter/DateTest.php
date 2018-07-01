@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
@@ -18,7 +16,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use DateTime;
 
 /**
@@ -27,7 +25,7 @@ use DateTime;
  * @group fieldType
  * @group date
  */
-class DateTest extends PHPUnit_Framework_TestCase
+class DateTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter
@@ -159,8 +157,7 @@ class DateTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinitionDefaultCurrentDate()
     {
-        $dateTime = new DateTime();
-        $timestamp = $dateTime->setTime(0, 0, 0)->getTimestamp();
+        $timestamp = time();
         $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
             array(
@@ -170,8 +167,9 @@ class DateTest extends PHPUnit_Framework_TestCase
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
         self::assertInternalType('array', $fieldDef->defaultValue->data);
-        self::assertCount(2, $fieldDef->defaultValue->data);
+        self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertSame($timestamp, $fieldDef->defaultValue->data['timestamp']);
+        self::assertSame('now', $fieldDef->defaultValue->data['timestring']);
     }
 }

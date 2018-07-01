@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Validator;
 
@@ -54,7 +52,7 @@ class FloatValueValidator extends Validator
                             "Validator parameter '%parameter%' value must be of numeric type",
                             null,
                             array(
-                                'parameter' => $name,
+                                '%parameter%' => $name,
                             )
                         );
                     }
@@ -64,7 +62,7 @@ class FloatValueValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            'parameter' => $name,
+                            '%parameter%' => $name,
                         )
                     );
             }
@@ -95,7 +93,7 @@ class FloatValueValidator extends Validator
                 'The value can not be higher than %size%.',
                 null,
                 array(
-                    'size' => $this->constraints['maxFloatValue'],
+                    '%size%' => $this->constraints['maxFloatValue'],
                 )
             );
             $isValid = false;
@@ -106,7 +104,7 @@ class FloatValueValidator extends Validator
                 'The value can not be lower than %size%.',
                 null,
                 array(
-                    'size' => $this->constraints['minFloatValue'],
+                    '%size%' => $this->constraints['minFloatValue'],
                 )
             );
             $isValid = false;

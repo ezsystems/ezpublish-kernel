@@ -4,15 +4,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Security\PolicyProvider;
 
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubYamlPolicyProvider;
-use PHPUnit_Framework_TestCase;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Resource\FileResource;
 
-class YamlPolicyProviderTest extends PHPUnit_Framework_TestCase
+class YamlPolicyProviderTest extends TestCase
 {
     public function testSingleYaml()
     {
@@ -29,7 +29,7 @@ class YamlPolicyProviderTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $configBuilder = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface');
+        $configBuilder = $this->createMock(ConfigBuilderInterface::class);
         foreach ($files as $file) {
             $configBuilder
                 ->expects($this->once())
@@ -66,7 +66,7 @@ class YamlPolicyProviderTest extends PHPUnit_Framework_TestCase
             ],
         ];
 
-        $configBuilder = $this->getMock('\eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigBuilderInterface');
+        $configBuilder = $this->createMock(ConfigBuilderInterface::class);
         $configBuilder
             ->expects($this->exactly(count($files)))
             ->method('addResource')

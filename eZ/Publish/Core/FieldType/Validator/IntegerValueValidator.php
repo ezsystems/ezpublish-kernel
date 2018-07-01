@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Validator;
 
@@ -23,8 +21,8 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class IntegerValueValidator extends Validator
 {
     protected $constraints = array(
-        'minIntegerValue' => false,
-        'maxIntegerValue' => false,
+        'minIntegerValue' => null,
+        'maxIntegerValue' => null,
     );
 
     protected $constraintsSchema = array(
@@ -34,7 +32,7 @@ class IntegerValueValidator extends Validator
         ),
         'maxIntegerValue' => array(
             'type' => 'int',
-            'default' => false,
+            'default' => null,
         ),
     );
 
@@ -45,12 +43,19 @@ class IntegerValueValidator extends Validator
             switch ($name) {
                 case 'minIntegerValue':
                 case 'maxIntegerValue':
-                    if ($value !== false && !is_integer($value)) {
+                    if ($value === false) {
+                        @trigger_error(
+                            "The IntegerValueValidator constraint value 'false' is deprecated, and will be removed in 7.0. Use 'null' instead.",
+                            E_USER_DEPRECATED
+                        );
+                        $value = null;
+                    }
+                    if ($value !== null && !is_int($value)) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
                             array(
-                                'parameter' => $name,
+                                '%parameter%' => $name,
                             )
                         );
                     }
@@ -60,7 +65,7 @@ class IntegerValueValidator extends Validator
                         "Validator parameter '%parameter%' is unknown",
                         null,
                         array(
-                            'parameter' => $name,
+                            '%parameter%' => $name,
                         )
                     );
             }
@@ -86,23 +91,23 @@ class IntegerValueValidator extends Validator
     {
         $isValid = true;
 
-        if ($this->constraints['maxIntegerValue'] !== false && $value->value > $this->constraints['maxIntegerValue']) {
+        if ($this->constraints['maxIntegerValue'] !== null && $value->value > $this->constraints['maxIntegerValue']) {
             $this->errors[] = new ValidationError(
                 'The value can not be higher than %size%.',
                 null,
                 array(
-                    'size' => $this->constraints['maxIntegerValue'],
+                    '%size%' => $this->constraints['maxIntegerValue'],
                 )
             );
             $isValid = false;
         }
 
-        if ($this->constraints['minIntegerValue'] !== false && $value->value < $this->constraints['minIntegerValue']) {
+        if ($this->constraints['minIntegerValue'] !== null && $value->value < $this->constraints['minIntegerValue']) {
             $this->errors[] = new ValidationError(
                 'The value can not be lower than %size%.',
                 null,
                 array(
-                    'size' => $this->constraints['minIntegerValue'],
+                    '%size%' => $this->constraints['minIntegerValue'],
                 )
             );
             $isValid = false;

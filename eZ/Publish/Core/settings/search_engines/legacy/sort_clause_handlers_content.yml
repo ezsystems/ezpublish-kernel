@@ -5,4 +5,4 @@ services:
     #  - ezpublish.search.legacy.gateway.sort_clause_handler.content
     # are registered to this one using compilation pass
     ezpublish.search.legacy.gateway.sort_clause_converter.content:
-        class: %ezpublish.search.legacy.gateway.sort_clause_converter.class%
+        class: "%ezpublish.search.legacy.gateway.sort_clause_converter.class%"

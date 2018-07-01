@@ -1,0 +1,80 @@
+parameters:
+    ezpublish.search.common.field_value_mapper.boolean.class: eZ\Publish\Core\Search\Common\FieldValueMapper\BooleanMapper
+    ezpublish.search.common.field_value_mapper.date.class: eZ\Publish\Core\Search\Common\FieldValueMapper\DateMapper
+    ezpublish.search.common.field_value_mapper.document.class: eZ\Publish\Core\Search\Common\FieldValueMapper\DocumentMapper
+    ezpublish.search.common.field_value_mapper.geo_location.class: eZ\Publish\Core\Search\Common\FieldValueMapper\GeoLocationMapper
+    ezpublish.search.common.field_value_mapper.float.class: eZ\Publish\Core\Search\Common\FieldValueMapper\FloatMapper
+    ezpublish.search.common.field_value_mapper.identifier.class: eZ\Publish\Core\Search\Common\FieldValueMapper\IdentifierMapper
+    ezpublish.search.common.field_value_mapper.integer.class: eZ\Publish\Core\Search\Common\FieldValueMapper\IntegerMapper
+    ezpublish.search.common.field_value_mapper.multiple_integer.class: eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleIntegerMapper
+    ezpublish.search.common.field_value_mapper.multiple_boolean.class: eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleBooleanMapper
+    ezpublish.search.common.field_value_mapper.multiple_identifier.class: eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleIdentifierMapper
+    ezpublish.search.common.field_value_mapper.multiple_string.class: eZ\Publish\Core\Search\Common\FieldValueMapper\MultipleStringMapper
+    ezpublish.search.common.field_value_mapper.price.class: eZ\Publish\Core\Search\Common\FieldValueMapper\PriceMapper
+    ezpublish.search.common.field_value_mapper.string.class: eZ\Publish\Core\Search\Common\FieldValueMapper\StringMapper
+
+services:
+    ezpublish.search.common.field_value_mapper.boolean:
+        class: "%ezpublish.search.common.field_value_mapper.boolean.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.date:
+        class: "%ezpublish.search.common.field_value_mapper.date.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.document:
+        class: "%ezpublish.search.common.field_value_mapper.document.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.geo_location:
+        class: "%ezpublish.search.common.field_value_mapper.geo_location.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.float:
+        class: "%ezpublish.search.common.field_value_mapper.float.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.identifier:
+        class: "%ezpublish.search.common.field_value_mapper.identifier.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.multiple_integer:
+        class: "%ezpublish.search.common.field_value_mapper.multiple_integer.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.integer:
+        class: "%ezpublish.search.common.field_value_mapper.integer.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.multiple_boolean:
+        class: "%ezpublish.search.common.field_value_mapper.multiple_boolean.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.multiple_identifier:
+        class: "%ezpublish.search.common.field_value_mapper.multiple_identifier.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.multiple_string:
+        class: "%ezpublish.search.common.field_value_mapper.multiple_string.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.price:
+        class: "%ezpublish.search.common.field_value_mapper.price.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}
+
+    ezpublish.search.common.field_value_mapper.string:
+        class: "%ezpublish.search.common.field_value_mapper.string.class%"
+        tags:
+            - {name: ezpublish.search.common.field_value_mapper}

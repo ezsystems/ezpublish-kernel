@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
@@ -220,11 +218,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
     public function checkFullTextSupport()
     {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                "'ezrichtext' field type is not searchable with Legacy Search Engine"
-            );
-        }
+        // Does nothing by default, override in a concrete test case as needed
     }
 
     /**
@@ -248,7 +242,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         if ($this->getSetupFactory() instanceof LegacyElasticsearch) {
             $this->markTestSkipped(
-                'Legacy Search Engine does not support custom fields'
+                'Elasticsearch Search Engine does not support custom fields'
             );
         }
     }
@@ -352,7 +346,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
-                array_push($template, $additionalField[0]);
+                $template[] = $additionalField[0];
                 array_unshift($template, $additionalField[2]);
                 array_unshift($template, $additionalField[1]);
 
@@ -1158,7 +1152,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
-                array_push($template, $additionalField[0]);
+                $template[] = $additionalField[0];
                 $fixture[] = $template;
             }
         }

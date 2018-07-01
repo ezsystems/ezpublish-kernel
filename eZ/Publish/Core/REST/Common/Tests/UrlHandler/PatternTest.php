@@ -5,18 +5,16 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\UrlHandler;
 
 use eZ\Publish\Core\REST\Common;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Pattern based url handler.
  */
-class PatternTest extends PHPUnit_Framework_TestCase
+class PatternTest extends TestCase
 {
     /**
      * Tests parsing unknown URL type.

@@ -5,27 +5,28 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
 use eZ\Publish\Core\REST\Common;
+use eZ\Publish\Core\REST\Common\Output\Generator;
+use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use stdClass;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Visitor test.
  */
-class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
+class ValueObjectVisitorDispatcherTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Common\Output\Visitor
+     * @var \PHPUnit\Framework\MockObject\MockObject|Common\Output\Visitor
      */
     private $outputVisitorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Common\Output\Generator
+     * @var \PHPUnit\Framework\MockObject\MockObject|Common\Output\Generator
      */
     private $outputGeneratorMock;
 
@@ -83,7 +84,6 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
     {
         $data = new ValueObject();
 
-        $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $valueObjectVisitor1 = $this->getValueObjectVisitorMock();
         $valueObjectVisitor2 = $this->getValueObjectVisitorMock();
 
@@ -116,34 +116,32 @@ class ValueObjectVisitorDispatcherTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor
      */
     private function getValueObjectVisitorMock()
     {
-        return $this->getMockForAbstractClass('\\eZ\\Publish\\Core\\REST\\Common\\Output\\ValueObjectVisitor');
+        return $this->getMockForAbstractClass(ValueObjectVisitor::class);
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Common\Output\Visitor
+     * @return \PHPUnit\Framework\MockObject\MockObject|Common\Output\Visitor
      */
     private function getOutputVisitorMock()
     {
         if (!isset($this->outputVisitorMock)) {
-            $this->outputVisitorMock = $this->getMockBuilder('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor')
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->outputVisitorMock = $this->createMock(Visitor::class);
         }
 
         return $this->outputVisitorMock;
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|Common\Output\Generator
+     * @return \PHPUnit\Framework\MockObject\MockObject|Common\Output\Generator
      */
     private function getOutputGeneratorMock()
     {
         if (!isset($this->outputGeneratorMock)) {
-            $this->outputGeneratorMock = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
+            $this->outputGeneratorMock = $this->createMock(Generator::class);
         }
 
         return $this->outputGeneratorMock;

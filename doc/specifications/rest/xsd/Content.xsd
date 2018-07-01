@@ -27,6 +27,7 @@
             minOccurs="0" />
           <xsd:element name="lastModificationDate" type="xsd:dateTime" />
           <xsd:element name="mainLanguageCode" type="xsd:string" />
+          <xsd:element name="currentVersionNo" type="xsd:int" />
           <xsd:element name="alwaysAvailable" type="xsd:boolean" />
           <xsd:element name="ObjectStates" type="ref" />
         </xsd:all>

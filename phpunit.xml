@@ -5,8 +5,12 @@
   convertErrorsToExceptions="true"
   convertNoticesToExceptions="true"
   convertWarningsToExceptions="true"
-  colors="false"
+  beStrictAboutTestsThatDoNotTestAnything="false"
+  colors="true"
   >
+  <php>
+    <ini name="error_reporting" value="-1" />
+  </php>
   <testsuites>
     <testsuite name="eZ\Publish\Core\Base">
       <directory>eZ/Publish/Core/Base/Tests</directory>
@@ -16,6 +20,7 @@
     </testsuite>
     <testsuite name="eZ\Publish\Core\FieldType">
       <directory>eZ/Publish/Core/FieldType/Tests</directory>
+      <exclude>eZ/Publish/Core/FieldType/Tests/Integration</exclude>
     </testsuite>
     <testsuite name="eZ\Publish\Core\Limitation">
       <directory>eZ/Publish/Core/Limitation/Tests</directory>
@@ -64,11 +69,17 @@
     <testsuite name="eZ Publish SignalSlot test suite">
         <directory>eZ/Publish/Core/SignalSlot</directory>
     </testsuite>
+    <testsuite name="eZ\Publish\Core\Repository\SiteAccessAware">
+        <directory>eZ/Publish/Core/Repository/SiteAccessAware</directory>
+    </testsuite>
     <testsuite name="eZ\Publish\Core\Pagination">
         <directory>eZ/Publish/Core/Pagination</directory>
     </testsuite>
     <testsuite name="eZ\Publish\Core\Helper">
         <directory>eZ/Publish/Core/Helper</directory>
+    </testsuite>
+    <testsuite name="eZ\Publish\API\Repository\Values\Content">
+      <directory>eZ/Publish/API/Repository/Tests/Values/Content</directory>
     </testsuite>
   </testsuites>
   <filter>
@@ -90,7 +101,4 @@
       </exclude>
     </whitelist>
   </filter>
-  <listeners>
-    <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
-  </listeners>
 </phpunit>

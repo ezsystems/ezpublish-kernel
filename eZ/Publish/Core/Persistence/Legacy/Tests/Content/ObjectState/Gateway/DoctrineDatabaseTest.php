@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\ObjectState\Gateway;
 
@@ -51,7 +49,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::__construct
      */
     public function testCtor()
     {
@@ -66,7 +64,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateData
      */
     public function testLoadObjectStateData()
     {
@@ -93,7 +91,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateDataByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateDataByIdentifier
      */
     public function testLoadObjectStateDataByIdentifier()
     {
@@ -120,7 +118,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateListData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateListData
      */
     public function testLoadObjectStateListData()
     {
@@ -162,7 +160,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupData
      */
     public function testLoadObjectStateGroupData()
     {
@@ -188,7 +186,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupDataByIdentifier
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupDataByIdentifier
      */
     public function testLoadObjectStateGroupDataByIdentifier()
     {
@@ -214,7 +212,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupListData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateGroupListData
      */
     public function testLoadObjectStateGroupListData()
     {
@@ -242,7 +240,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectState
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectState
      */
     public function testInsertObjectState()
     {
@@ -272,7 +270,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectState
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectState
      */
     public function testInsertObjectStateInEmptyGroup()
     {
@@ -310,7 +308,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectState
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectState
      */
     public function testUpdateObjectState()
     {
@@ -340,7 +338,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectState
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectState
      */
     public function testDeleteObjectState()
     {
@@ -355,7 +353,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStateLinks
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStateLinks
      */
     public function testUpdateObjectStateLinks()
     {
@@ -394,7 +392,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectStateLinks
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectStateLinks
      */
     public function testDeleteObjectStateLinks()
     {
@@ -418,7 +416,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectStateGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::insertObjectStateGroup
      */
     public function testInsertObjectStateGroup()
     {
@@ -446,7 +444,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStateGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStateGroup
      */
     public function testUpdateObjectStateGroup()
     {
@@ -475,7 +473,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectStateGroup
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::deleteObjectStateGroup
      */
     public function testDeleteObjectStateGroup()
     {
@@ -490,7 +488,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::setContentState
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::setContentState
      */
     public function testSetContentState()
     {
@@ -513,7 +511,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateDataForContent
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::loadObjectStateDataForContent
      */
     public function testLoadObjectStateDataForContent()
     {
@@ -540,7 +538,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::getContentCount
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::getContentCount
      */
     public function testGetContentCount()
     {
@@ -553,7 +551,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStatePriority
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway\DoctrineDatabase::updateObjectStatePriority
      */
     public function testUpdateObjectStatePriority()
     {

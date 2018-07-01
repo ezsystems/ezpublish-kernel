@@ -5,23 +5,21 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
+use eZ\Publish\API\Repository\URLWildcardService as APIURLWildcardService;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\URLWildcardService;
+use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService as URLWildcardServiceSignals;
 
 class URLWildcardServiceTest extends ServiceTest
 {
     protected function getServiceMock()
     {
-        return $this->getMock(
-            'eZ\\Publish\\API\\Repository\\URLWildcardService'
-        );
+        return $this->createMock(APIURLWildcardService::class);
     }
 
     protected function getSignalSlotService($coreService, SignalDispatcher $dispatcher)
@@ -50,7 +48,7 @@ class URLWildcardServiceTest extends ServiceTest
                 array($sourceUrl, $destinationUrl, $forward),
                 $wildcard,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\CreateSignal',
+                URLWildcardServiceSignals\CreateSignal::class,
                 array('urlWildcardId' => $wildcardId),
             ),
             array(
@@ -58,7 +56,7 @@ class URLWildcardServiceTest extends ServiceTest
                 array($wildcard),
                 null,
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\RemoveSignal',
+                URLWildcardServiceSignals\RemoveSignal::class,
                 array('urlWildcardId' => $wildcardId),
             ),
             array(
@@ -83,7 +81,7 @@ class URLWildcardServiceTest extends ServiceTest
                     )
                 ),
                 1,
-                'eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\TranslateSignal',
+                URLWildcardServiceSignals\TranslateSignal::class,
                 array('url' => $sourceUrl),
             ),
         );

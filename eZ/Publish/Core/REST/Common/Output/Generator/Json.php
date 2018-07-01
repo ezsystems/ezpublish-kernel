@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Output\Generator;
 
@@ -57,7 +55,7 @@ class Json extends Generator
 
         $this->isEmpty = true;
 
-        $this->json = new Json\Object();
+        $this->json = new Json\JsonObject();
     }
 
     /**
@@ -112,7 +110,7 @@ class Json extends Generator
             foreach ($data as $key => $value) {
                 $data[$key] = $this->convertArrayObjects($value);
             }
-        } elseif ($data instanceof Json\Object) {
+        } elseif ($data instanceof Json\JsonObject) {
             foreach ($data as $key => $value) {
                 $data->$key = $this->convertArrayObjects($value);
             }
@@ -135,7 +133,7 @@ class Json extends Generator
 
         $mediaTypeName = $mediaTypeName ?: $name;
 
-        $object = new Json\Object($this->json);
+        $object = new Json\JsonObject($this->json);
 
         if ($this->json instanceof Json\ArrayObject) {
             $this->json[] = $object;
@@ -172,7 +170,7 @@ class Json extends Generator
 
         $this->isEmpty = false;
 
-        $object = new Json\Object($this->json);
+        $object = new Json\JsonObject($this->json);
 
         if ($this->json instanceof Json\ArrayObject) {
             $this->json[] = $object;
@@ -211,7 +209,7 @@ class Json extends Generator
         if (empty($attributes)) {
             $jsonValue = $value;
         } else {
-            $jsonValue = new Json\Object($this->json);
+            $jsonValue = new Json\JsonObject($this->json);
             foreach ($attributes as $attributeName => $attributeValue) {
                 $jsonValue->{'_' . $attributeName} = $attributeValue;
             }

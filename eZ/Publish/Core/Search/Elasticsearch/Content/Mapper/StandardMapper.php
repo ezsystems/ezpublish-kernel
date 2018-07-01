@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\Mapper;
 
@@ -328,7 +326,7 @@ class StandardMapper implements MapperInterface
                             $indexField->type
                         );
 
-                        if ($indexField->type instanceof FieldType\FullTextField) {
+                        if ($indexField->type instanceof FieldType\FullTextField && $fieldDefinition->isSearchable) {
                             $fields[] = new Field(
                                 $name . '_meta_all_' . str_replace('-', '_', $languageCode),
                                 $indexField->value,

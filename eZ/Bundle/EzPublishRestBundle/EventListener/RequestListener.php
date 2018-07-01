@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\EventListener;
 
@@ -22,18 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RequestListener implements EventSubscriberInterface
 {
-    /**
-     * @var string
-     */
-    private $restPrefix;
-
-    /**
-     * @param string $restPrefix
-     */
-    public function __construct($restPrefix)
-    {
-        $this->restPrefix = $restPrefix;
-    }
+    const REST_PREFIX_PATTERN = '/^\/api\/[a-zA-Z0-9-_]+\/v\d+(\.\d+)?\//';
 
     /**
      * @return array
@@ -69,11 +56,6 @@ class RequestListener implements EventSubscriberInterface
      */
     protected function hasRestPrefix(Request $request)
     {
-        return (
-            strpos(
-                $request->getPathInfo(),
-                $this->restPrefix
-            ) === 0
-        );
+        return preg_match(self::REST_PREFIX_PATTERN, $request->getPathInfo());
     }
 }

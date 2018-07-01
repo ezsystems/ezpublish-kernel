@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
@@ -16,7 +14,6 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldV
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -95,11 +92,11 @@ class Field extends FieldBase
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If no searchable fields are found for the given $fieldIdentifier.
      * @throws \RuntimeException if no converter is found
      *
-     * @caching
-     *
      * @param string $fieldIdentifier
      *
      * @return array
+     *
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     protected function getFieldsInformation($fieldIdentifier)
     {
@@ -142,6 +139,9 @@ class Field extends FieldBase
      * @param array $languageSettings
      *
      * @return \eZ\Publish\Core\Persistence\Database\Expression
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     public function handle(
         CriteriaConverter $converter,
@@ -159,11 +159,10 @@ class Field extends FieldBase
         );
 
         $whereExpressions = array();
+
         foreach ($fieldsInformation as $fieldTypeIdentifier => $fieldsInfo) {
             if ($fieldsInfo['column'] === false) {
-                throw new NotImplementedException(
-                    "A field of type '{$fieldTypeIdentifier}' is not searchable in the legacy search engine."
-                );
+                continue;
             }
 
             $filter = $this->fieldValueConverter->convertCriteria(
@@ -179,6 +178,15 @@ class Field extends FieldBase
                     $fieldsInfo['ids']
                 ),
                 $filter
+            );
+        }
+
+        if (empty($whereExpressions)) {
+            throw new NotImplementedException(
+                sprintf(
+                    'Following fieldtypes are not searchable in the legacy search engine: %s',
+                    implode(', ', array_keys($fieldsInformation))
+                )
             );
         }
 

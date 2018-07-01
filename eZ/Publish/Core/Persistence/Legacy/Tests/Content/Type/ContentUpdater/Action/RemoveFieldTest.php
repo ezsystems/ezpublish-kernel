@@ -5,19 +5,20 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\SPI\Persistence\Content;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test case for Content Type Updater.
  */
-class RemoveFieldTest extends PHPUnit_Framework_TestCase
+class RemoveFieldTest extends TestCase
 {
     /**
      * Content gateway mock.
@@ -46,7 +47,7 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     protected $removeFieldAction;
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
     public function testCtor()
     {
@@ -65,7 +66,7 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApplySingleVersionSingleTranslation()
     {
@@ -115,7 +116,7 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApplyMultipleVersionsSingleTranslation()
     {
@@ -188,7 +189,7 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApplyMultipleVersionsMultipleTranslations()
     {
@@ -305,14 +306,12 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a Content Gateway mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
         if (!isset($this->contentGatewayMock)) {
-            $this->contentGatewayMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
-            );
+            $this->contentGatewayMock = $this->createMock(Gateway::class);
         }
 
         return $this->contentGatewayMock;
@@ -321,18 +320,12 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a Content StorageHandler mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getContentStorageHandlerMock()
     {
         if (!isset($this->contentStorageHandlerMock)) {
-            $this->contentStorageHandlerMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentStorageHandlerMock = $this->createMock(StorageHandler::class);
         }
 
         return $this->contentStorageHandlerMock;
@@ -341,18 +334,12 @@ class RemoveFieldTest extends PHPUnit_Framework_TestCase
     /**
      * Returns a Content mapper mock.
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Mapper
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected function getContentMapperMock()
     {
         if (!isset($this->contentMapperMock)) {
-            $this->contentMapperMock = $this->getMock(
-                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentMapperMock = $this->createMock(ContentMapper::class);
         }
 
         return $this->contentMapperMock;

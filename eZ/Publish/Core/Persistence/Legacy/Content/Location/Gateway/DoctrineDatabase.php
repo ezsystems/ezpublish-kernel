@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
@@ -43,6 +41,11 @@ class DoctrineDatabase extends Gateway
     protected $handler;
 
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
@@ -50,6 +53,7 @@ class DoctrineDatabase extends Gateway
     public function __construct(DatabaseHandler $handler)
     {
         $this->handler = $handler;
+        $this->connection = $handler->getConnection();
     }
 
     /**
@@ -163,7 +167,6 @@ class DoctrineDatabase extends Gateway
         )->innerJoin(
             $this->handler->quoteTable('eznode_assignment'),
             $query->expr->lAnd(
-
                 $query->expr->eq(
                     $this->handler->quoteColumn('node_id', 'ezcontentobject_tree'),
                     $this->handler->quoteColumn('parent_node', 'eznode_assignment')
@@ -376,9 +379,9 @@ class DoctrineDatabase extends Gateway
     private function isHiddenByParent($pathString, array $rows)
     {
         $parentNodeIds = explode('/', trim($pathString, '/'));
-        array_pop($parentNodeIds);// remove self
+        array_pop($parentNodeIds); // remove self
         foreach ($rows as $row) {
-            if ($row['is_hidden'] &&  in_array($row['node_id'], $parentNodeIds)) {
+            if ($row['is_hidden'] && in_array($row['node_id'], $parentNodeIds)) {
                 return true;
             }
         }
@@ -1147,7 +1150,7 @@ class DoctrineDatabase extends Gateway
         $query->prepare()->execute();
 
         $this->removeLocation($locationRow['node_id']);
-        $this->setContentStatus($locationRow['contentobject_id'], ContentInfo::STATUS_ARCHIVED);
+        $this->setContentStatus($locationRow['contentobject_id'], ContentInfo::STATUS_TRASHED);
     }
 
     /**
@@ -1333,39 +1336,49 @@ class DoctrineDatabase extends Gateway
     /**
      * Set section on all content objects in the subtree.
      *
-     * @param mixed $pathString
-     * @param mixed $sectionId
+     * @param string $pathString
+     * @param int $sectionId
      *
      * @return bool
      */
     public function setSectionForSubtree($pathString, $sectionId)
     {
-        $query = $this->handler->createUpdateQuery();
-
-        $subSelect = $query->subSelect();
-        $subSelect
-            ->select($this->handler->quoteColumn('contentobject_id'))
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
+        $selectContentIdsQuery = $this->connection->createQueryBuilder();
+        $selectContentIdsQuery
+            ->select('t.contentobject_id')
+            ->from('ezcontentobject_tree', 't')
             ->where(
-                $subSelect->expr->like(
-                    $this->handler->quoteColumn('path_string'),
-                    $subSelect->bindValue($pathString . '%')
+                $selectContentIdsQuery->expr()->like(
+                    't.path_string',
+                    $selectContentIdsQuery->createPositionalParameter("{$pathString}%")
                 )
             );
 
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject'))
+        $contentIds = array_map(
+            'intval',
+            $selectContentIdsQuery->execute()->fetchAll(PDO::FETCH_COLUMN)
+        );
+
+        if (empty($contentIds)) {
+            return false;
+        }
+
+        $updateSectionQuery = $this->connection->createQueryBuilder();
+        $updateSectionQuery
+            ->update('ezcontentobject')
             ->set(
-                $this->handler->quoteColumn('section_id'),
-                $query->bindValue($sectionId)
+                'section_id',
+                $updateSectionQuery->createPositionalParameter($sectionId, PDO::PARAM_INT)
             )
             ->where(
-                $query->expr->in(
-                    $this->handler->quoteColumn('id'),
-                    $subSelect
+                $updateSectionQuery->expr()->in(
+                    'id',
+                    $contentIds
                 )
             );
-        $query->prepare()->execute();
+        $affectedRows = $updateSectionQuery->execute();
+
+        return $affectedRows > 0;
     }
 
     /**

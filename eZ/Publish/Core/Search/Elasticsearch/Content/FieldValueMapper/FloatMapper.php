@@ -5,17 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
 
-use eZ\Publish\Core\Search\Elasticsearch\Content\FieldValueMapper;
+use eZ\Publish\Core\Search\Common\FieldValueMapper;
 use eZ\Publish\SPI\Search\FieldType\FloatField;
 use eZ\Publish\SPI\Search\Field;
 
 /**
- * Maps FloatField document field values to something Elasticsearch can index.
+ * Maps raw field values to something search engine can understand.
  */
 class FloatMapper extends FieldValueMapper
 {
@@ -32,7 +30,7 @@ class FloatMapper extends FieldValueMapper
     }
 
     /**
-     * Map field value to a proper Elasticsearch representation.
+     * Map field value to a proper search engine representation.
      *
      * @param \eZ\Publish\SPI\Search\Field $field
      *

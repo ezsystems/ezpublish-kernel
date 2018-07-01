@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
@@ -574,6 +572,9 @@ abstract class BaseIntegrationTest extends TestCase
         $loader->load('fieldtypes.yml');
         $loader->load('io.yml');
         $loader->load('repository.yml');
+        $loader->load('repository/inner.yml');
+        $loader->load('repository/signalslot.yml');
+        $loader->load('repository/siteaccessaware.yml');
         $loader->load('fieldtype_external_storages.yml');
         $loader->load('storage_engines/common.yml');
         $loader->load('storage_engines/shortcuts.yml');
@@ -583,6 +584,8 @@ abstract class BaseIntegrationTest extends TestCase
         $loader->load('settings.yml');
         $loader->load('fieldtype_services.yml');
         $loader->load('utils.yml');
+        $loader->load('tests/common.yml');
+        $loader->load('policies.yml');
 
         $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
@@ -600,7 +603,7 @@ abstract class BaseIntegrationTest extends TestCase
      * Returns the Handler.
      *
      * @param string $identifier
-     * @param \eZ\Publish\SPI\Persistence\FieldType $fieldType
+     * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $fieldValueConverter
      * @param \eZ\Publish\SPI\FieldType\FieldStorage $externalStorage
      *

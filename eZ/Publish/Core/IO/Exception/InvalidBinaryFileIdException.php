@@ -12,7 +12,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 
 class InvalidBinaryFileIdException extends InvalidArgumentValue
 {
-    public function __construct($id, $message = null)
+    public function __construct($id)
     {
         parent::__construct('BinaryFile::id', $id, 'BinaryFile');
     }

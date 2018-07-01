@@ -27,7 +27,7 @@ class ValueObjectsIds implements EventSubscriberInterface
 
         if ($view instanceof View\LocationValueView) {
             if (($location = $view->getLocation()) instanceof Location) {
-                $parameterBag->set('locationId', $view->getLocation()->id);
+                $parameterBag->set('locationId', $location->id);
             }
         }
         if ($view instanceof View\ContentValueView) {

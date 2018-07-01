@@ -5,14 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Imagine\Filter;
 
-use PHPUnit_Framework_TestCase;
+use eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\AbstractFilter;
+use PHPUnit\Framework\TestCase;
 
-class AbstractFilterTest extends PHPUnit_Framework_TestCase
+class AbstractFilterTest extends TestCase
 {
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\AbstractFilter
@@ -27,7 +26,7 @@ class AbstractFilterTest extends PHPUnit_Framework_TestCase
 
     protected function getFilter()
     {
-        return $this->getMockForAbstractClass('\eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\AbstractFilter');
+        return $this->getMockForAbstractClass(AbstractFilter::class);
     }
 
     public function testGetSetOptions()

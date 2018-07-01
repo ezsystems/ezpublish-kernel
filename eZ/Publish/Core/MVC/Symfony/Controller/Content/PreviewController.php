@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
@@ -153,7 +151,6 @@ EOF;
             '_route_params' => array(
                 'contentId' => $content->id,
                 'locationId' => $location->id,
-                'language' => $language,
             ),
             'location' => $location,
             'content' => $content,
@@ -163,6 +160,7 @@ EOF;
                 'content' => $content,
                 'location' => $location,
                 'isPreview' => true,
+                'language' => $language,
             ),
             'siteaccess' => $previewSiteAccess,
             'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),

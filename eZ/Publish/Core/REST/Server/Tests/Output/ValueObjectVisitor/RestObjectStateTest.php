@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
@@ -35,7 +33,7 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
                     'id' => 42,
                     'identifier' => 'test-state',
                     'priority' => '0',
-                    'defaultLanguageCode' => 'eng-GB',
+                    'mainLanguageCode' => 'eng-GB',
                     'languageCodes' => array('eng-GB', 'eng-US'),
                     'names' => array(
                         'eng-GB' => 'State name EN',

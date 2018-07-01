@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
@@ -54,6 +52,10 @@ class RelationListConverter implements Converter
         $priority = 0;
 
         foreach ($value->data['destinationContentIds'] as $id) {
+            if (!isset($data[$id][0])) {
+                // Ignore deleted content items (we can't throw as it would block ContentService->createContentDraft())
+                continue;
+            }
             $row = $data[$id][0];
             $row['ezcontentobject_id'] = $id;
             $row['priority'] = ($priority += 1);
@@ -61,7 +63,8 @@ class RelationListConverter implements Converter
             $relationItem = $doc->createElement('relation-item');
             foreach (self::dbAttributeMap() as $domAttrKey => $propertyKey) {
                 if (!isset($row[$propertyKey])) {
-                    throw new \RuntimeException("Missing relation-item external data property: $propertyKey");
+                    // left join data missing, ignore the given attribute (content in trash missing location)
+                    continue;
                 }
 
                 $relationItem->setAttribute($domAttrKey, $row[$propertyKey]);
@@ -114,6 +117,7 @@ class RelationListConverter implements Converter
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
         $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+        $validators = $fieldDef->fieldTypeConstraints->validators;
         $doc = new DOMDocument('1.0', 'utf-8');
         $root = $doc->createElement('related-objects');
         $doc->appendChild($root);
@@ -130,11 +134,11 @@ class RelationListConverter implements Converter
         $root->appendChild($constraints);
 
         $type = $doc->createElement('type');
-        $type->setAttribute('value', 2);//Deprecated advance object relation list type, set since 4.x does
+        $type->setAttribute('value', 2); //Deprecated advance object relation list type, set since 4.x does
         $root->appendChild($type);
 
         $objectClass = $doc->createElement('object_class');
-        $objectClass->setAttribute('value', '');//Deprecated advance object relation class type, set since 4.x does
+        $objectClass->setAttribute('value', ''); //Deprecated advance object relation class type, set since 4.x does
         $root->appendChild($objectClass);
 
         $selectionType = $doc->createElement('selection_type');
@@ -151,6 +155,14 @@ class RelationListConverter implements Converter
         }
         $root->appendChild($defaultLocation);
 
+        $selectionLimit = $doc->createElement('selection_limit');
+        if (isset($validators['RelationListValueValidator']['selectionLimit'])) {
+            $selectionLimit->setAttribute('value', (int)$validators['RelationListValueValidator']['selectionLimit']);
+        } else {
+            $selectionLimit->setAttribute('value', 0);
+        }
+        $root->appendChild($selectionLimit);
+
         $doc->appendChild($root);
         $storageDef->dataText5 = $doc->saveXML();
     }
@@ -158,25 +170,28 @@ class RelationListConverter implements Converter
     /**
      * Converts field definition data in $storageDef into $fieldDef.
      *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints>
-     *     <allowed-class contentclass-identifier="blog_post"/>
-     *   </constraints>
-     *   <type value="2"/>
-     *   <selection_type value="1"/>
-     *   <object_class value=""/>
-     *   <contentobject-placement node-id="67"/>
-     * </related-objects>
+     * <code>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints>
+     *       <allowed-class contentclass-identifier="blog_post"/>
+     *     </constraints>
+     *     <type value="2"/>
+     *     <selection_type value="1"/>
+     *     <selection_limit value="5"/>
+     *     <object_class value=""/>
+     *     <contentobject-placement node-id="67"/>
+     *   </related-objects>
      *
-     * <?xml version="1.0" encoding="utf-8"?>
-     * <related-objects>
-     *   <constraints/>
-     *   <type value="2"/>
-     *   <selection_type value="0"/>
-     *   <object_class value=""/>
-     *   <contentobject-placement/>
-     * </related-objects>
+     *   <?xml version="1.0" encoding="utf-8"?>
+     *   <related-objects>
+     *     <constraints/>
+     *     <type value="2"/>
+     *     <selection_type value="0"/>
+     *     <object_class value=""/>
+     *     <contentobject-placement/>
+     *   </related-objects>
+     * </code>
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
@@ -184,11 +199,17 @@ class RelationListConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         // default settings
-        $fieldDef->fieldTypeConstraints->fieldSettings = array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = [
             'selectionMethod' => 0,
             'selectionDefaultLocation' => null,
-            'selectionContentTypes' => array(),
-        );
+            'selectionContentTypes' => [],
+        ];
+
+        $fieldDef->fieldTypeConstraints->validators = [
+            'RelationListValueValidator' => [
+                'selectionLimit' => 0,
+            ],
+        ];
 
         // default value
         $fieldDef->defaultValue = new FieldValue();
@@ -198,22 +219,25 @@ class RelationListConverter implements Converter
             return;
         }
 
-        // read settings from storage
-        $fieldSettings = &$fieldDef->fieldTypeConstraints->fieldSettings;
         $dom = new DOMDocument('1.0', 'utf-8');
-        if ($dom->loadXML($storageDef->dataText5) !== true) {
+        if (empty($storageDef->dataText5) || $dom->loadXML($storageDef->dataText5) !== true) {
             return;
         }
 
-        if ($selectionType = $dom->getElementsByTagName('selection_type')) {
-            $fieldSettings['selectionMethod'] = (int)$selectionType->item(0)->getAttribute('value');
+        // read settings from storage
+        $fieldSettings = &$fieldDef->fieldTypeConstraints->fieldSettings;
+        if (
+            ($selectionType = $dom->getElementsByTagName('selection_type')->item(0)) &&
+            $selectionType->hasAttribute('value')
+        ) {
+            $fieldSettings['selectionMethod'] = (int)$selectionType->getAttribute('value');
         }
 
         if (
-            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')) &&
-            $defaultLocation->item(0)->hasAttribute('node-id')
+            ($defaultLocation = $dom->getElementsByTagName('contentobject-placement')->item(0)) &&
+            $defaultLocation->hasAttribute('node-id')
         ) {
-            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->item(0)->getAttribute('node-id');
+            $fieldSettings['selectionDefaultLocation'] = (int)$defaultLocation->getAttribute('node-id');
         }
 
         if (!($constraints = $dom->getElementsByTagName('constraints'))) {
@@ -222,6 +246,15 @@ class RelationListConverter implements Converter
 
         foreach ($constraints->item(0)->getElementsByTagName('allowed-class') as $allowedClass) {
             $fieldSettings['selectionContentTypes'][] = $allowedClass->getAttribute('contentclass-identifier');
+        }
+
+        // read validators configuration from storage
+        $validators = &$fieldDef->fieldTypeConstraints->validators;
+        if (
+            ($selectionLimit = $dom->getElementsByTagName('selection_limit')->item(0)) &&
+            $selectionLimit->hasAttribute('value')
+        ) {
+            $validators['RelationListValueValidator']['selectionLimit'] = (int)$selectionLimit->getAttribute('value');
         }
     }
 
@@ -232,7 +265,7 @@ class RelationListConverter implements Converter
      * "sort_key_int" or "sort_key_string". This column is then used for
      * filtering and sorting for this type.
      *
-     * @return bool
+     * @return string
      */
     public function getIndexColumn()
     {
@@ -298,15 +331,8 @@ class RelationListConverter implements Converter
             );
         $stmt = $q->prepare();
         $stmt->execute();
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
 
-        if (empty($rows)) {
-            throw new \Exception("Could find Content with id's" . var_export($destinationContentIds, true));
-        } elseif (count($rows) !== count($destinationContentIds)) {
-            throw new \Exception('Miss match of rows & id count:' . var_export($destinationContentIds, true));
-        }
-
-        return $rows;
+        return $stmt->fetchAll(PDO::FETCH_ASSOC | PDO::FETCH_GROUP);
     }
 
     /**

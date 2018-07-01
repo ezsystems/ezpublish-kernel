@@ -5,14 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\Core\REST\Server\Values\UserSession as UserSessionValue;
 
 /**
  * UserSession value object visitor.
@@ -32,13 +31,17 @@ class UserSession extends ValueObjectVisitor
         $visitor->setStatus($status);
 
         $visitor->setHeader('Content-Type', $generator->getMediaType('Session'));
-
-        $sessionHref = $this->router->generate('ezpublish_rest_deleteSession', array('sessionId' => $data->sessionId));
-
         //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader('Accept-Patch', false);
 
         $generator->startObjectElement('Session');
+        $this->visitUserSessionAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('Session');
+    }
+
+    protected function visitUserSessionAttributes(Visitor $visitor, Generator $generator, UserSessionValue $data)
+    {
+        $sessionHref = $this->router->generate('ezpublish_rest_deleteSession', array('sessionId' => $data->sessionId));
 
         $generator->startAttribute('href', $sessionHref);
         $generator->endAttribute('href');
@@ -59,7 +62,5 @@ class UserSession extends ValueObjectVisitor
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('User');
-
-        $generator->endObjectElement('Session');
     }
 }

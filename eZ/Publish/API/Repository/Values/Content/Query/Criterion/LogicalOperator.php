@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
+use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use InvalidArgumentException;
 
@@ -53,5 +52,16 @@ abstract class LogicalOperator extends Criterion
             }
             $this->criteria[] = $criterion;
         }
+    }
+
+    /**
+     * @deprecated in LogicalOperators since 7.2.
+     * It will be removed in 8.0 when Logical Operator no longer extends Criterion.
+     */
+    public function getSpecifications()
+    {
+        @trigger_error('The ' . __METHOD__ . ' method is deprecated since version 7.2 and will be removed in 8.0.', E_USER_DEPRECATED);
+
+        throw new NotImplementedException('getSpecifications() not implemented for LogicalOperators');
     }
 }

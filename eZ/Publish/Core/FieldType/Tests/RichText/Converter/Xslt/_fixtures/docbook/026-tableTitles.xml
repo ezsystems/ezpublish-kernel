@@ -16,6 +16,13 @@
           <title ezxhtml:level="3">Heading 3</title>
           <title ezxhtml:level="3">Heading 3</title>
           <informaltable border="1" class="class2" style="border-width:1px;" title="summary2" width="100%">
+            <thead>
+              <tr>
+                <td>
+                  <para>head</para>
+                </td>
+              </tr>
+            </thead>
             <tbody>
               <tr>
                 <td>
@@ -24,6 +31,13 @@
                 </td>
               </tr>
             </tbody>
+            <tfoot>
+              <tr>
+                <td>
+                  <para>foot</para>
+                </td>
+              </tr>
+            </tfoot>
           </informaltable>
         </td>
       </tr>

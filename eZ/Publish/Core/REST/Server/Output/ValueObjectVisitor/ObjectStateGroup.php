@@ -5,14 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup as ObjectStateGroupValue;
 
 /**
  * ObjectStateGroup value object visitor.
@@ -31,7 +30,12 @@ class ObjectStateGroup extends ValueObjectVisitor
         $generator->startObjectElement('ObjectStateGroup');
         $visitor->setHeader('Content-Type', $generator->getMediaType('ObjectStateGroup'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('ObjectStateGroupUpdate'));
+        $this->visitObjectStateGroupAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('ObjectStateGroup');
+    }
 
+    protected function visitObjectStateGroupAttributes(Visitor $visitor, Generator $generator, ObjectStateGroupValue $data)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadObjectStateGroup', array('objectStateGroupId' => $data->id))
@@ -60,7 +64,5 @@ class ObjectStateGroup extends ValueObjectVisitor
 
         $this->visitNamesList($generator, $data->getNames());
         $this->visitDescriptionsList($generator, $data->getDescriptions());
-
-        $generator->endObjectElement('ObjectStateGroup');
     }
 }

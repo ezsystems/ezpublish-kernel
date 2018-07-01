@@ -5,13 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Gateway;
 
 use eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage;
-use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorage;
+use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage as UrlStorageLegacyGateway;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 
 /**
@@ -19,23 +17,6 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
  */
 class LegacyStorageTest extends TestCase
 {
-    public function testSetConnection()
-    {
-        $gateway = $this->getStorageGateway();
-
-        $gateway->setConnection($this->getMock('eZ\\Publish\\Core\\Persistence\\Database\\DatabaseHandler'));
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testSetConnectionThrowsRuntimeException()
-    {
-        $gateway = $this->getStorageGateway();
-
-        $gateway->setConnection(new \DateTime());
-    }
-
     public function testGetContentIds()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/contentobjects.php');
@@ -70,10 +51,9 @@ class LegacyStorageTest extends TestCase
     protected function getStorageGateway()
     {
         if (!isset($this->storageGateway)) {
-            $this->storageGateway = new LegacyStorage(
-                new UrlStorage()
-            );
-            $this->storageGateway->setConnection($this->getDatabaseHandler());
+            $dbHandler = $this->getDatabaseHandler();
+            $urlGateway = new UrlStorageLegacyGateway($dbHandler);
+            $this->storageGateway = new LegacyStorage($urlGateway, $dbHandler);
         }
 
         return $this->storageGateway;

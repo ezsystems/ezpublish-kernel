@@ -5,15 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Locale\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class LocaleConverterTest extends PHPUnit_Framework_TestCase
+class LocaleConverterTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter
@@ -21,7 +20,7 @@ class LocaleConverterTest extends PHPUnit_Framework_TestCase
     private $localeConverter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $logger;
 
@@ -39,14 +38,14 @@ class LocaleConverterTest extends PHPUnit_Framework_TestCase
             'cro-HR' => 'hr_HR',
         );
 
-        $this->logger = $this->getMock('Psr\\Log\\LoggerInterface');
+        $this->logger = $this->createMock(LoggerInterface::class);
         $this->localeConverter = new LocaleConverter($this->conversionMap, $this->logger);
     }
 
     /**
      * @dataProvider convertToPOSIXProvider
      *
-     * @covers eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter::convertToPOSIX
+     * @covers \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter::convertToPOSIX
      *
      * @param $ezpLocale
      * @param $expected
@@ -77,7 +76,7 @@ class LocaleConverterTest extends PHPUnit_Framework_TestCase
     /**
      * @dataProvider convertToEzProvider
      *
-     * @covers eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter::convertToEz
+     * @covers \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter::convertToEz
      *
      * @param $posixLocale
      * @param $expected

@@ -5,15 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Input;
 
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use PHPUnit\Framework\TestCase;
 
-class ParserToolsTest extends PHPUnit_Framework_TestCase
+class ParserToolsTest extends TestCase
 {
     public function testIsEmbeddedObjectReturnsTrue()
     {
@@ -48,13 +47,7 @@ class ParserToolsTest extends PHPUnit_Framework_TestCase
     {
         $parserTools = $this->getParserTools();
 
-        $dispatcherMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $dispatcherMock = $this->createMock(ParsingDispatcher::class);
         $dispatcherMock->expects($this->once())
             ->method('parse')
             ->with(
@@ -78,13 +71,7 @@ class ParserToolsTest extends PHPUnit_Framework_TestCase
     {
         $parserTools = $this->getParserTools();
 
-        $dispatcherMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $dispatcherMock = $this->createMock(ParsingDispatcher::class);
         $dispatcherMock->expects($this->never())
             ->method('parse');
 
@@ -111,7 +98,7 @@ class ParserToolsTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      */
     public function testUnexpectedValueParseBooleanValue()
     {

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
@@ -130,17 +128,10 @@ class ExceptionConversion extends Gateway
         }
     }
 
-    /**
-     * Returns an array with data about the Group with $groupId.
-     *
-     * @param int $groupId
-     *
-     * @return array
-     */
-    public function loadGroupData($groupId)
+    public function loadGroupData(array $groupIds)
     {
         try {
-            return $this->innerGateway->loadGroupData($groupId);
+            return $this->innerGateway->loadGroupData($groupIds);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

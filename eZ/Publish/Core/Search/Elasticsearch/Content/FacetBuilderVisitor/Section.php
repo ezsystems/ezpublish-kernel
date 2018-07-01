@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor;
 
@@ -28,7 +26,7 @@ class Section extends FacetBuilderVisitor
      */
     public function canMap($name)
     {
-        return (substr($name, 0, 9) === 'section__');
+        return substr($name, 0, 9) === 'section__';
     }
 
     /**

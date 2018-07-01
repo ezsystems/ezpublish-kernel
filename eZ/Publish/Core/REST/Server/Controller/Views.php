@@ -6,6 +6,7 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\API\Repository\Exceptions\NotImplementedException;
 use eZ\Publish\API\Repository\SearchService;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\REST\Server\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +27,7 @@ class Views extends Controller
     {
         $this->searchService = $searchService;
     }
+
     /**
      * Creates and executes a content view.
      *
@@ -49,7 +51,10 @@ class Views extends Controller
         return new Values\RestExecutedView(
             array(
                 'identifier' => $viewInput->identifier,
-                'searchResults' => $this->searchService->$method($viewInput->query),
+                'searchResults' => $this->searchService->$method(
+                    $viewInput->query,
+                    ['languages' => Language::ALL]
+                ),
             )
         );
     }

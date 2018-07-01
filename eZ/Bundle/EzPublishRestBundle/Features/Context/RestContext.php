@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
@@ -17,7 +15,8 @@ use EzSystems\BehatBundle\Context\Api\Context;
 use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Behat\Gherkin\Node\TableNode;
-use PHPUnit_Framework_Assert as Assertion;
+use PHPUnit\Framework\Assert as Assertion;
+use Exception;
 
 /**
  * RestContext is the core of the REST testing
@@ -134,7 +133,7 @@ class RestContext extends Context implements MinkAwareContext
      */
     private function setRestDriver($restDriver)
     {
-        $namespace = '\\' . __NAMESPACE__ .  '\\RestClient\\';
+        $namespace = '\\' . __NAMESPACE__ . '\\RestClient\\';
         $driver = $namespace . $restDriver;
         $parent = $namespace . 'DriverInterface';
 
@@ -220,10 +219,33 @@ class RestContext extends Context implements MinkAwareContext
             if ($errorMessage instanceof ErrorMessage) {
                 $exceptionMessage = <<< EOF
 
-Exception ({$errorMessage->code}): {$errorMessage->description}
+Server Error ({$errorMessage->code}): {$errorMessage->message}
+
+{$errorMessage->description}
+
+In {$errorMessage->file}:{$errorMessage->line}
 
 {$errorMessage->trace}
 EOF;
+            } elseif ($errorMessage instanceof Exception) {
+                $exceptionMessage = <<< EOF
+
+Client Exception ({$errorMessage->getCode()}): {$errorMessage->getMessage()}
+
+In {$errorMessage->getFile()}:{$errorMessage->getLine()}
+EOF;
+                // If previous exception is available it is most likely carrying info on server exception.
+                if ($previous = $errorMessage->getPrevious()) {
+                    $exceptionName = get_class($previous);
+                    $exceptionMessage .= <<< EOF
+
+Previous Exception $exceptionName ({$previous->getCode()}): {$previous->getMessage()}
+
+In {$previous->getFile()}:{$previous->getLine()}
+
+{$previous->getTraceAsString()}
+EOF;
+                }
             }
         }
 

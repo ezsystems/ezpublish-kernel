@@ -16,11 +16,21 @@ class ViewbaseLayout implements EventSubscriberInterface
     /**
      * @var string
      */
+    private $pageLayout;
+
+    /**
+     * @var string
+     */
     private $viewbaseLayout;
 
     public function __construct($viewbaseLayout)
     {
         $this->viewbaseLayout = $viewbaseLayout;
+    }
+
+    public function setPageLayout($pageLayout)
+    {
+        $this->pageLayout = $pageLayout;
     }
 
     public static function getSubscribedEvents()
@@ -31,5 +41,6 @@ class ViewbaseLayout implements EventSubscriberInterface
     public function injectViewbaseLayout(FilterViewParametersEvent $event)
     {
         $event->getParameterBag()->set('viewbaseLayout', $this->viewbaseLayout);
+        $event->getParameterBag()->set('pagelayout', $this->pageLayout);
     }
 }

@@ -5,17 +5,18 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Server\Values\Version;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
 
 class VersionTest extends ValueObjectVisitorBaseTest
 {
@@ -23,13 +24,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
 
     public function setUp()
     {
-        $this->fieldTypeSerializerMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\Output\\FieldTypeSerializer',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->fieldTypeSerializerMock = $this->createMock(FieldTypeSerializer::class);
     }
 
     /**
@@ -64,6 +59,7 @@ class VersionTest extends ValueObjectVisitorBaseTest
                                 'id' => 1,
                                 'languageCode' => 'eng-US',
                                 'fieldDefIdentifier' => 'ezauthor',
+                                'fieldTypeIdentifier' => 'ezauthor',
                             )
                         ),
                         new Field(
@@ -71,21 +67,22 @@ class VersionTest extends ValueObjectVisitorBaseTest
                                 'id' => 2,
                                 'languageCode' => 'eng-US',
                                 'fieldDefIdentifier' => 'ezimage',
+                                'fieldTypeIdentifier' => 'ezauthor',
                             )
                         ),
                     ),
                 )
             ),
-            $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
+            $this->getMockForAbstractClass(ContentType::class),
             array()
         );
 
         $this->fieldTypeSerializerMock->expects($this->exactly(2))
             ->method('serializeFieldValue')
             ->with(
-                $this->isInstanceOf('eZ\\Publish\\Core\\REST\\Common\\Output\\Generator'),
-                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
-                $this->isInstanceOf('eZ\\Publish\\API\\Repository\\Values\\Content\\Field')
+                $this->isInstanceOf(Generator::class),
+                $this->isInstanceOf(ContentType::class),
+                $this->isInstanceOf(Field::class)
             );
 
         $this->getVisitorMock()->expects($this->exactly(2))

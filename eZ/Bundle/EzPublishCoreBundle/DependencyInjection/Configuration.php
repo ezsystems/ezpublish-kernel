@@ -5,19 +5,20 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Configuration as SiteAccessConfiguration;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
+use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 
 class Configuration extends SiteAccessConfiguration
 {
+    const CUSTOM_TAG_ATTRIBUTE_TYPES = ['number', 'string', 'boolean', 'choice'];
+
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
      */
@@ -28,10 +29,20 @@ class Configuration extends SiteAccessConfiguration
      */
     private $suggestionCollector;
 
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter[]
+     */
+    private $siteAccessConfigurationFilters;
+
     public function __construct(ParserInterface $mainConfigParser, SuggestionCollectorInterface $suggestionCollector)
     {
         $this->suggestionCollector = $suggestionCollector;
         $this->mainConfigParser = $mainConfigParser;
+    }
+
+    public function setSiteAccessConfigurationFilters(array $filters)
+    {
+        $this->siteAccessConfigurationFilters = $filters;
     }
 
     /**
@@ -50,6 +61,9 @@ class Configuration extends SiteAccessConfiguration
         $this->addHttpCacheSection($rootNode);
         $this->addPageSection($rootNode);
         $this->addRouterSection($rootNode);
+        $this->addRichTextSection($rootNode);
+        $this->addUrlAliasSection($rootNode);
+        $this->addImagePlaceholderSection($rootNode);
 
         // Delegate SiteAccess config to configuration parsers
         $this->mainConfigParser->addSemanticConfig($this->generateScopeBaseNode($rootNode));
@@ -66,8 +80,10 @@ class Configuration extends SiteAccessConfiguration
                     ->example(
                         array(
                             'main' => array(
-                                'engine' => 'legacy',
-                                'connection' => 'my_doctrine_connection_name',
+                                'storage' => array(
+                                    'engine' => 'legacy',
+                                    'connection' => 'my_doctrine_connection_name',
+                                ),
                             ),
                         )
                     )
@@ -116,6 +132,14 @@ class Configuration extends SiteAccessConfiguration
                                         $v['search'] = array();
                                     }
 
+                                    if (!isset($v['fields_groups']['list'])) {
+                                        $v['fields_groups']['list'] = [];
+                                    }
+
+                                    if (!isset($v['options'])) {
+                                        $v['options'] = [];
+                                    }
+
                                     return $v;
                                 }
                             )
@@ -152,6 +176,22 @@ class Configuration extends SiteAccessConfiguration
                                         ->info('Arbitrary configuration options, supported by your search engine')
                                         ->useAttributeAsKey('key')
                                         ->prototype('variable')->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('fields_groups')
+                                ->info('Definitions of fields groups.')
+                                ->children()
+                                    ->arrayNode('list')->prototype('scalar')->end()->end()
+                                    ->scalarNode('default')->defaultValue('%ezsettings.default.content.field_groups.default%')->end()
+                                ->end()
+                            ->end()
+                            ->arrayNode('options')
+                                ->info('Options for repository.')
+                                ->children()
+                                    ->scalarNode('default_version_archive_limit')
+                                        ->defaultValue(5)
+                                        ->info('Default version archive limit (0-50), only enforced on publish, not on un-publish.')
                                     ->end()
                                 ->end()
                             ->end()
@@ -240,6 +280,17 @@ class Configuration extends SiteAccessConfiguration
                             ->end()
                         ->end()
                     ->end()
+                    ->beforeNormalization()
+                        ->always()->then(function ($v) {
+                            if (isset($this->siteAccessConfigurationFilters)) {
+                                foreach ($this->siteAccessConfigurationFilters as $filter) {
+                                    $v = $filter->filter($v);
+                                }
+                            }
+
+                            return $v;
+                        })
+                    ->end()
                 ->end()
                 ->arrayNode('locale_conversion')
                     ->info('Locale conversion map between eZ Publish format (i.e. fre-FR) to POSIX (i.e. fr_FR). The key is the eZ Publish locale. Check locale.yml in EzPublishCoreBundle to see natively supported locales.')
@@ -303,14 +354,20 @@ EOT;
 Http cache purge type.
 
 Cache purge for content/locations is triggered when needed (e.g. on publish) and will result in one or several Http PURGE requests.
-Can be "local" or "http" or a valid service ID:
+Can be "local", "http" or a valid symfony service id:
 - If "local" is used, an Http PURGE request will be emulated when needed (e.g. when using Symfony internal reverse proxy).
-- If "http" is used, only one Http BAN request will be sent, with X-Location-Id header containing locationIds to ban.
-  X-Location-Id consists in a Regexp containing locationIds to ban.
-  Examples:
+- If "http" is used, a full HTTP PURGE/BAN is done to a real reverse proxy (Varnish, ..) depending on your config
+- If custom symfony service id is used, then check documentation on that service for how it behaves and how you need to configure your system for it.
+
+If ezplatform-http-cache package is enabled (default as of 1.12 and up), then go to documentation on this package for further
+info on how it supports multiple response tagging, purges and allow plugins for custom purge types.
+
+If that is not enabled, then the (deprecated as of 1.8) default BAN based system will be used instead.
+Where ressponses can be tagged by a single  X-Location-Id header, and for purges a single Http BAN request will be sent,
+where X-Location-Id header consists of a Regexp containing locationIds to ban.
+  BAN Examples:
    - (123|456|789) => Purge locations #123, #456, #789.
    - .* => Purge all locations.
-- If a serviceId is provided, it must be defined in the ServiceContainer and must implement eZ\Publish\Core\MVC\Symfony\Cache\PurgeClientInterface.
 EOT;
 
         $rootNode
@@ -411,6 +468,177 @@ EOT;
                         ->end()
                     ->end()
                     ->info('Router related settings')
+                ->end()
+            ->end();
+    }
+
+    /**
+     * Define global Semantic Configuration for RichText.
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
+     */
+    private function addRichTextSection(ArrayNodeDefinition $rootNode)
+    {
+        $this->addCustomTagsSection(
+            $rootNode->children()->arrayNode('ezrichtext')->children()
+        )->end()->end()->end();
+    }
+
+    /**
+     * Define RichText Custom Tags Semantic Configuration.
+     *
+     * The configuration is available at:
+     * <code>
+     * ezpublish:
+     *     ezrichtext:
+     *         custom_tags:
+     * </code>
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $ezRichTextNode
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
+    private function addCustomTagsSection(NodeBuilder $ezRichTextNode)
+    {
+        return $ezRichTextNode
+                ->arrayNode('custom_tags')
+                // workaround: take into account Custom Tag names when merging configs
+                ->useAttributeAsKey('tag')
+                ->arrayPrototype()
+                    ->children()
+                        ->scalarNode('template')
+                            ->isRequired()
+                        ->end()
+                        ->scalarNode('icon')
+                            ->defaultNull()
+                        ->end()
+                        ->arrayNode('attributes')
+                            ->useAttributeAsKey('attribute')
+                            ->isRequired()
+                            ->arrayPrototype()
+                                ->beforeNormalization()
+                                    ->always(
+                                        function ($v) {
+                                            // Workaround: set empty value to be able to unset it later on (see validation for "choices")
+                                            if (!isset($v['choices'])) {
+                                                $v['choices'] = [];
+                                            }
+
+                                            return $v;
+                                        }
+                                    )
+                                ->end()
+                                ->validate()
+                                    ->ifTrue(
+                                        function ($v) {
+                                            return $v['type'] === 'choice' && !empty($v['required']) && empty($v['choices']);
+                                        }
+                                    )
+                                    ->thenInvalid('List of choices for required choice type attribute has to be non-empty')
+                                ->end()
+                                ->validate()
+                                    ->ifTrue(
+                                        function ($v) {
+                                            return !empty($v['choices']) && $v['type'] !== 'choice';
+                                        }
+                                    )
+                                    ->thenInvalid('List of choices is supported by choices type only.')
+                                ->end()
+                                ->children()
+                                    ->enumNode('type')
+                                        ->isRequired()
+                                        ->values(static::CUSTOM_TAG_ATTRIBUTE_TYPES)
+                                    ->end()
+                                    ->booleanNode('required')
+                                        ->defaultFalse()
+                                    ->end()
+                                    ->scalarNode('default_value')
+                                        ->defaultNull()
+                                    ->end()
+                                    ->arrayNode('choices')
+                                        ->scalarPrototype()->end()
+                                        ->performNoDeepMerging()
+                                        ->validate()
+                                            ->ifEmpty()->thenUnset()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    /**
+     * Defines configuration the images placeholder generation.
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
+     */
+    private function addImagePlaceholderSection(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode
+            ->children()
+                ->arrayNode('image_placeholder')
+                    ->info('Configuration for strategy of replacing missing images')
+                    ->useAttributeAsKey('name')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('provider')
+                            ->end()
+                            ->variableNode('options')
+                                ->defaultValue([])
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+    }
+
+    /**
+     * Define Url Alias Slug converter Semantic Configuration.
+     *
+     * The configuration is available at:
+     * <code>
+     * ezpublish:
+     *     url_alias:
+     *         slug_converter:
+     *             transformation: name_of_transformation_group_to_use
+     *             separator:  name_of_separator_to_use
+     *             transformation_groups:
+     *                 transformation_group_name: name of existing or new transformation group
+     *                     commands : [] array of commands which will be added to group
+     *                     cleanup_method: name_of_cleanup_method
+     * </code>
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
+    private function addUrlAliasSection(ArrayNodeDefinition $rootNode)
+    {
+        return $rootNode
+            ->children()
+                ->arrayNode('url_alias')
+                    ->children()
+                        ->arrayNode('slug_converter')
+                            ->children()
+                                ->scalarNode('transformation')->end()
+                                ->scalarNode('separator')->end()
+                                ->arrayNode('transformation_groups')
+                                    ->arrayPrototype()
+                                        ->children()
+                                            ->arrayNode('commands')
+                                                ->scalarPrototype()->end()
+                                            ->end()
+                                            ->scalarNode('cleanup_method')->end()
+                                        ->end()
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end();
     }

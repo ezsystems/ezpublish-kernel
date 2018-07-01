@@ -5,19 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests\Image\PathGenerator;
 
 use eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @group fieldType
  * @group ezimage
  */
-class LegacyPathGeneratorTest extends PHPUnit_Framework_TestCase
+class LegacyPathGeneratorTest extends TestCase
 {
     /**
      * @param mixed $data

@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Url;
 
@@ -84,7 +82,7 @@ class Type extends FieldType
      */
     protected function checkValueStructure(BaseValue $value)
     {
-        if (!is_string($value->link)) {
+        if (null !== $value->link && !is_string($value->link)) {
             throw new InvalidArgumentType(
                 '$value->link',
                 'string',
@@ -92,7 +90,7 @@ class Type extends FieldType
             );
         }
 
-        if (isset($value->text) && !is_string($value->text)) {
+        if (null !== $value->text && !is_string($value->text)) {
             throw new InvalidArgumentType(
                 '$value->text',
                 'string',

@@ -5,14 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
 use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use eZ\Publish\Core\REST\Client\ContentTypeService;
 use eZ\Publish\API\Repository\Values;
 
 class ContentTypeTest extends BaseTest
@@ -197,13 +196,7 @@ class ContentTypeTest extends BaseTest
     protected function getContentTypeServiceMock()
     {
         if (!isset($this->contentTypeServiceMock)) {
-            $this->contentTypeServiceMock = $this->getMock(
-                'eZ\\Publish\\Core\\REST\\Client\\ContentTypeService',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->contentTypeServiceMock = $this->createMock(ContentTypeService::class);
         }
 
         return $this->contentTypeServiceMock;

@@ -5,17 +5,16 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Security\Tests\Authentication;
 
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\DefaultAuthenticationSuccessHandler;
 use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
-use PHPUnit_Framework_TestCase;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use PHPUnit\Framework\TestCase;
 use ReflectionObject;
 
-class DefaultAuthenticationSuccessHandlerTest extends PHPUnit_Framework_TestCase
+class DefaultAuthenticationSuccessHandlerTest extends TestCase
 {
     public function testSetConfigResolver()
     {
@@ -27,7 +26,7 @@ class DefaultAuthenticationSuccessHandlerTest extends PHPUnit_Framework_TestCase
         $this->assertSame('/', $options['default_target_path']);
 
         $defaultPage = '/foo/bar';
-        $configResolver = $this->getMock('eZ\Publish\Core\MVC\ConfigResolverInterface');
+        $configResolver = $this->createMock(ConfigResolverInterface::class);
         $configResolver
             ->expects($this->once())
             ->method('getParameter')

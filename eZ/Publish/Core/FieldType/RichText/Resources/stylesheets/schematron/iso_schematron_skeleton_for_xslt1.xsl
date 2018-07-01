@@ -896,6 +896,7 @@
           <xsl:with-param name="test" select="normalize-space(@test)" />
           <xsl:with-param name="diagnostics" select="@diagnostics"/>
           <xsl:with-param name="flag" select="@flag"/>
+          <xsl:with-param name="mode" select="@mode" />
 
           <!-- "Rich" properties -->
           <xsl:with-param name="fpi" select="@fpi"/>
@@ -928,6 +929,7 @@
         <xsl:with-param name="test" select="normalize-space(@test)" />
         <xsl:with-param name="diagnostics" select="@diagnostics"/>
           <xsl:with-param name="flag" select="@flag"/>
+          <xsl:with-param name="mode" select="@mode" />
 
           <!-- "Rich" properties -->
           <xsl:with-param name="fpi" select="@fpi"/>
@@ -1650,6 +1652,7 @@
     <xsl:param name="diagnostics" />
     <xsl:param name="id" />
     <xsl:param name="flag" />
+    <xsl:param name="mode" />
 
             <!-- "Linkable" parameters -->
     <xsl:param name="role"/>
@@ -1683,6 +1686,7 @@
     <xsl:param name="diagnostics" />
     <xsl:param name="id" />
     <xsl:param name="flag" />
+    <xsl:param name="mode" />
 
             <!-- "Linkable" parameters -->
     <xsl:param name="role"/>

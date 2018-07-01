@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\RelationList;
 
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -31,8 +30,8 @@ class Type extends FieldType
     /**
      * @todo Consider to add all 6 selection options
      */
-    const SELECTION_BROWSE = 0,
-          SELECTION_DROPDOWN = 1;
+    const SELECTION_BROWSE = 0;
+    const SELECTION_DROPDOWN = 1;
 
     protected $settingsSchema = array(
         'selectionMethod' => array(
@@ -46,6 +45,15 @@ class Type extends FieldType
         'selectionContentTypes' => array(
             'type' => 'array',
             'default' => array(),
+        ),
+    );
+
+    protected $validatorConfigurationSchema = array(
+        'RelationListValueValidator' => array(
+            'selectionLimit' => array(
+                'type' => 'int',
+                'default' => 0,
+            ),
         ),
     );
 
@@ -66,7 +74,7 @@ class Type extends FieldType
                     "Setting '%setting%' is unknown",
                     null,
                     array(
-                        'setting' => $name,
+                        '%setting%' => $name,
                     ),
                     "[$name]"
                 );
@@ -80,9 +88,9 @@ class Type extends FieldType
                             "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
                             null,
                             array(
-                                'setting' => $name,
-                                'selection_browse' => self::SELECTION_BROWSE,
-                                'selection_dropdown' => self::SELECTION_DROPDOWN,
+                                '%setting%' => $name,
+                                '%selection_browse%' => self::SELECTION_BROWSE,
+                                '%selection_dropdown%' => self::SELECTION_DROPDOWN,
                             ),
                             "[$name]"
                         );
@@ -94,7 +102,7 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of either null, string or integer",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
                             ),
                             "[$name]"
                         );
@@ -106,13 +114,138 @@ class Type extends FieldType
                             "Setting '%setting%' value must be of array type",
                             null,
                             array(
-                                'setting' => $name,
+                                '%setting%' => $name,
+                            ),
+                            "[$name]"
+                        );
+                    }
+                    break;
+                case 'selectionLimit':
+                    if (!is_int($value)) {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value must be of integer type",
+                            null,
+                            array(
+                                '%setting%' => $name,
+                            ),
+                            "[$name]"
+                        );
+                    }
+                    if ($value < 0) {
+                        $validationErrors[] = new ValidationError(
+                            "Setting '%setting%' value cannot be lower than 0",
+                            null,
+                            array(
+                                '%setting%' => $name,
                             ),
                             "[$name]"
                         );
                     }
                     break;
             }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
+     *
+     * @param mixed $validatorConfiguration
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateValidatorConfiguration($validatorConfiguration)
+    {
+        $validationErrors = array();
+
+        foreach ($validatorConfiguration as $validatorIdentifier => $constraints) {
+            if ($validatorIdentifier !== 'RelationListValueValidator') {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    array(
+                        '%validator%' => $validatorIdentifier,
+                    ),
+                    "[$validatorIdentifier]"
+                );
+
+                continue;
+            }
+
+            foreach ($constraints as $name => $value) {
+                if ($name === 'selectionLimit') {
+                    if (!is_int($value) && !ctype_digit($value)) {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value must be an integer",
+                            null,
+                            array(
+                                '%parameter%' => $name,
+                            ),
+                            "[$validatorIdentifier][$name]"
+                        );
+                    }
+                    if ($value < 0) {
+                        $validationErrors[] = new ValidationError(
+                            "Validator parameter '%parameter%' value must be equal to/greater than 0",
+                            null,
+                            array(
+                                '%parameter%' => $name,
+                            ),
+                            "[$validatorIdentifier][$name]"
+                        );
+                    }
+                } else {
+                    $validationErrors[] = new ValidationError(
+                        "Validator parameter '%parameter%' is unknown",
+                        null,
+                        array(
+                            '%parameter%' => $name,
+                        ),
+                        "[$validatorIdentifier][$name]"
+                    );
+                }
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates a field based on the validators in the field definition.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition The field definition of the field
+     * @param \eZ\Publish\Core\FieldType\RelationList\Value $fieldValue The field value for which an action is performed
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
+    {
+        $validationErrors = array();
+
+        if ($this->isEmptyValue($fieldValue)) {
+            return $validationErrors;
+        }
+
+        $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
+        $constraints = isset($validatorConfiguration['RelationListValueValidator']) ?
+            $validatorConfiguration['RelationListValueValidator'] :
+            array();
+
+        $validationErrors = array();
+
+        if (isset($constraints['selectionLimit']) &&
+            $constraints['selectionLimit'] > 0 && count($fieldValue->destinationContentIds) > $constraints['selectionLimit']) {
+            $validationErrors[] = new ValidationError(
+                'The selected content items number cannot be higher than %limit%.',
+                null,
+                array(
+                    '%limit%' => $constraints['selectionLimit'],
+                ),
+                'destinationContentIds'
+            );
         }
 
         return $validationErrors;
@@ -140,7 +273,7 @@ class Type extends FieldType
      */
     public function getName(SPIValue $value)
     {
-        throw new \RuntimeException('@todo Implement this method');
+        throw new \RuntimeException('Name generation provided via NameableField set via "ezpublish.fieldType.nameable" service tag');
     }
 
     /**
@@ -166,7 +299,7 @@ class Type extends FieldType
         // ContentInfo
         if ($inputValue instanceof ContentInfo) {
             $inputValue = new Value(array($inputValue->id));
-        } elseif (is_integer($inputValue) || is_string($inputValue)) {
+        } elseif (is_int($inputValue) || is_string($inputValue)) {
             // content id
             $inputValue = new Value(array($inputValue));
         } elseif (is_array($inputValue)) {
@@ -195,7 +328,7 @@ class Type extends FieldType
         }
 
         foreach ($value->destinationContentIds as $key => $destinationContentId) {
-            if (!is_integer($destinationContentId) && !is_string($destinationContentId)) {
+            if (!is_int($destinationContentId) && !is_string($destinationContentId)) {
                 throw new InvalidArgumentType(
                     "\$value->destinationContentIds[$key]",
                     'string|int',
@@ -273,7 +406,7 @@ class Type extends FieldType
      *          "contentIds" => array( 12 ),
      *          "locationIds" => array( 24, 45 )
      *      ),
-     *      \eZ\Publish\API\Repository\Values\Content\Relation::ATTRIBUTE => array( 12 )
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD => array( 12 )
      *  )
      * </code>
      */

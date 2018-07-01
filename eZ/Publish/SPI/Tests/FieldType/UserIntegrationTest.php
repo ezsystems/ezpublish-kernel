@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
@@ -16,6 +14,7 @@ use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\Core\Persistence\Cache\UserHandler;
 
 /**
  * Integration test for legacy storage field types.
@@ -52,11 +51,12 @@ class UserIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
-        $fieldType = new FieldType\User\Type();
+        $userHandler = $this->createMock(UserHandler::class);
+        $fieldType = new FieldType\User\Type($userHandler);
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(
@@ -64,8 +64,8 @@ class UserIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\NullConverter(),
             new FieldType\User\UserStorage(
-                array(
-                    'LegacyStorage' => new FieldType\User\UserStorage\Gateway\LegacyStorage(),
+                new FieldType\User\UserStorage\Gateway\DoctrineStorage(
+                    $this->getDatabaseHandler()->getConnection()
                 )
             )
         );

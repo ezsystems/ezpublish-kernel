@@ -5,15 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
+
+use eZ\Publish\Core\MVC\Symfony\Matcher\Block\Type;
 
 abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
 {
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      *
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::match
@@ -29,7 +29,7 @@ abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
                     'test' => array(
                         'template' => 'foo.html.twig',
                         'match' => array(
-                            '\\eZ\Publish\Core\MVC\Symfony\Matcher\Block\\Type' => true,
+                            Type::class => true,
                         ),
                     ),
                 ),

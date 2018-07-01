@@ -5,16 +5,17 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Repository\Helper;
 
+use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as TypeHandler;
 use eZ\Publish\Core\Repository\Values\Content\Content;
+use eZ\Publish\Core\Repository\Values\Content\ContentProxy;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -39,10 +40,13 @@ use DateTime;
 /**
  * DomainMapper is an internal service.
  *
- * @internal
+ * @internal Meant for internal use by Repository.
  */
 class DomainMapper
 {
+    const MAX_LOCATION_PRIORITY = 2147483647;
+    const MIN_LOCATION_PRIORITY = -2147483648;
+
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
      */
@@ -96,25 +100,123 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
      * @param ContentType|SPIType $contentType
-     * @param array|null $fieldLanguages Language codes to filter fields on
-     * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $fieldLanguages
+     * @param array $prioritizedLanguages Prioritized language codes to filter fields on
+     * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\Content
      */
-    public function buildContentDomainObject(SPIContent $spiContent, $contentType = null, array $fieldLanguages = null, $fieldAlwaysAvailableLanguage = null)
-    {
+    public function buildContentDomainObject(
+        SPIContent $spiContent,
+        $contentType = null,
+        array $prioritizedLanguages = [],
+        string $fieldAlwaysAvailableLanguage = null
+    ) {
         if ($contentType === null) {
             $contentType = $this->contentTypeHandler->load(
                 $spiContent->versionInfo->contentInfo->contentTypeId
             );
         }
 
+        $prioritizedFieldLanguageCode = null;
+        if (!empty($prioritizedLanguages)) {
+            $availableFieldLanguageMap = array_fill_keys($spiContent->versionInfo->languageCodes, true);
+            foreach ($prioritizedLanguages as $prioritizedLanguage) {
+                if (isset($availableFieldLanguageMap[$prioritizedLanguage])) {
+                    $prioritizedFieldLanguageCode = $prioritizedLanguage;
+                    break;
+                }
+            }
+        }
+
         return new Content(
             array(
-                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $fieldLanguages, $fieldAlwaysAvailableLanguage),
-                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo),
+                'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $prioritizedLanguages, $fieldAlwaysAvailableLanguage),
+                'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $prioritizedLanguages),
+                'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
             )
         );
+    }
+
+    /**
+     * Builds a Content proxy object (lazy loaded, loads as soon as used).
+     */
+    public function buildContentProxy(
+        SPIContent\ContentInfo $info,
+        array $prioritizedLanguages = [],
+        bool $useAlwaysAvailable = true
+    ): APIContent {
+        $generator = $this->generatorForContentList([$info], $prioritizedLanguages, $useAlwaysAvailable);
+
+        return new ContentProxy($generator, $info->id);
+    }
+
+    /**
+     * Builds a list of Content proxy objects (lazy loaded, loads all as soon as one of them loads).
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo[] $infoList
+     * @param string[] $prioritizedLanguages
+     * @param bool $useAlwaysAvailable
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[<int>]
+     */
+    public function buildContentProxyList(
+        array $infoList,
+        array $prioritizedLanguages = [],
+        bool $useAlwaysAvailable = true
+    ): array {
+        $list = [];
+        $generator = $this->generatorForContentList($infoList, $prioritizedLanguages, $useAlwaysAvailable);
+        foreach ($infoList as $info) {
+            $list[$info->id] = new ContentProxy($generator, $info->id);
+        }
+
+        return $list;
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo[] $infoList
+     * @param string[] $prioritizedLanguages
+     * @param bool $useAlwaysAvailable
+     *
+     * @return \Generator
+     */
+    private function generatorForContentList(
+        array $infoList,
+        array $prioritizedLanguages = [],
+        bool $useAlwaysAvailable = true
+    ): \Generator {
+        // Create list of LoadStruct, take into account main language as fallback language if alwaysAvailable
+        // And skip setting versionNo to make sure we always get the current version when proxy is eventually loaded
+        $loadStructList = [];
+        foreach ($infoList as $info) {
+            if ($useAlwaysAvailable && $info->alwaysAvailable) {
+                $languages = $prioritizedLanguages;
+                $languages[] = $info->mainLanguageCode;
+                $loadStructList[] = new SPIContent\LoadStruct(['id' => $info->id, 'languages' => $languages]);
+            } else {
+                $loadStructList[] = new SPIContent\LoadStruct([
+                    'id' => $info->id,
+                    'languages' => $prioritizedLanguages,
+                ]);
+            }
+        }
+
+        $list = $this->contentHandler->loadContentList($loadStructList);
+        unset($loadStructList);
+
+        while (!empty($list)) {
+            $id = yield;
+            $info = $list[$id]->versionInfo->contentInfo;
+            yield $this->buildContentDomainObject(
+                $list[$id],
+                null,
+                //@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                $prioritizedLanguages,
+                $info->alwaysAvailable ? $info->mainLanguageCode : null
+            );
+
+            unset($list[$id]);
+        }
     }
 
     /**
@@ -124,13 +226,18 @@ class DomainMapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $spiFields
      * @param ContentType|SPIType $contentType
-     * @param array|null $languages Language codes to filter fields on
-     * @param string|null $alwaysAvailableLanguage Language code fallback if a given field is not found in $languages
+     * @param array $prioritizedLanguages A language priority, filters returned fields and is used as prioritized language code on
+     *                         returned value object. If not given all languages are returned.
+     * @param string|null $alwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
      *
      * @return array
      */
-    public function buildDomainFields(array $spiFields, $contentType, array $languages = null, $alwaysAvailableLanguage = null)
-    {
+    public function buildDomainFields(
+        array $spiFields,
+        $contentType,
+        array $prioritizedLanguages = [],
+        string $alwaysAvailableLanguage = null
+    ) {
         if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
         }
@@ -141,9 +248,9 @@ class DomainMapper
         }
 
         $fieldInFilterLanguagesMap = array();
-        if ($languages !== null && $alwaysAvailableLanguage !== null) {
+        if (!empty($prioritizedLanguages) && $alwaysAvailableLanguage !== null) {
             foreach ($spiFields as $spiField) {
-                if (in_array($spiField->languageCode, $languages)) {
+                if (in_array($spiField->languageCode, $prioritizedLanguages)) {
                     $fieldInFilterLanguagesMap[$spiField->fieldDefinitionId] = true;
                 }
             }
@@ -156,8 +263,8 @@ class DomainMapper
                 continue;
             }
 
-            if ($languages !== null && !in_array($spiField->languageCode, $languages)) {
-                // If filtering is enabled we ignore fields in other languages then $fieldLanguages, if:
+            if (!empty($prioritizedLanguages) && !in_array($spiField->languageCode, $prioritizedLanguages)) {
+                // If filtering is enabled we ignore fields in other languages then $prioritizedLanguages, if:
                 if ($alwaysAvailableLanguage === null) {
                     // Ignore field if we don't have $alwaysAvailableLanguageCode fallback
                     continue;
@@ -177,6 +284,7 @@ class DomainMapper
                         ->fromPersistenceValue($spiField->value),
                     'languageCode' => $spiField->languageCode,
                     'fieldDefIdentifier' => $fieldIdentifierMap[$spiField->fieldDefinitionId],
+                    'fieldTypeIdentifier' => $spiField->type,
                 )
             );
         }
@@ -188,16 +296,12 @@ class DomainMapper
      * Builds a VersionInfo domain object from value object returned from persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $spiVersionInfo
+     * @param array $prioritizedLanguages
      *
      * @return \eZ\Publish\Core\Repository\Values\Content\VersionInfo
      */
-    public function buildVersionInfoDomainObject(SPIVersionInfo $spiVersionInfo)
+    public function buildVersionInfoDomainObject(SPIVersionInfo $spiVersionInfo, array $prioritizedLanguages = [])
     {
-        $languageCodes = array();
-        foreach ($spiVersionInfo->languageIds as $languageId) {
-            $languageCodes[] = $this->contentLanguageHandler->load($languageId)->languageCode;
-        }
-
         // Map SPI statuses to API
         switch ($spiVersionInfo->status) {
             case SPIVersionInfo::STATUS_ARCHIVED:
@@ -213,6 +317,15 @@ class DomainMapper
                 $status = APIVersionInfo::STATUS_DRAFT;
         }
 
+        // Find prioritised language among names
+        $prioritizedNameLanguageCode = null;
+        foreach ($prioritizedLanguages as $prioritizedLanguage) {
+            if (isset($spiVersionInfo->names[$prioritizedLanguage])) {
+                $prioritizedNameLanguageCode = $prioritizedLanguage;
+                break;
+            }
+        }
+
         return new VersionInfo(
             array(
                 'id' => $spiVersionInfo->id,
@@ -222,9 +335,10 @@ class DomainMapper
                 'creationDate' => $this->getDateTime($spiVersionInfo->creationDate),
                 'status' => $status,
                 'initialLanguageCode' => $spiVersionInfo->initialLanguageCode,
-                'languageCodes' => $languageCodes,
+                'languageCodes' => $spiVersionInfo->languageCodes,
                 'names' => $spiVersionInfo->names,
                 'contentInfo' => $this->buildContentInfoDomainObject($spiVersionInfo->contentInfo),
+                'prioritizedNameLanguageCode' => $prioritizedNameLanguageCode,
             )
         );
     }
@@ -238,6 +352,21 @@ class DomainMapper
      */
     public function buildContentInfoDomainObject(SPIContentInfo $spiContentInfo)
     {
+        // Map SPI statuses to API
+        switch ($spiContentInfo->status) {
+            case SPIContentInfo::STATUS_TRASHED:
+                $status = ContentInfo::STATUS_TRASHED;
+                break;
+
+            case SPIContentInfo::STATUS_PUBLISHED:
+                $status = ContentInfo::STATUS_PUBLISHED;
+                break;
+
+            case SPIContentInfo::STATUS_DRAFT:
+            default:
+                $status = ContentInfo::STATUS_DRAFT;
+        }
+
         return new ContentInfo(
             array(
                 'id' => $spiContentInfo->id,
@@ -257,6 +386,7 @@ class DomainMapper
                 'remoteId' => $spiContentInfo->remoteId,
                 'mainLanguageCode' => $spiContentInfo->mainLanguageCode,
                 'mainLocationId' => $spiContentInfo->mainLocationId,
+                'status' => $status,
             )
         );
     }
@@ -300,19 +430,34 @@ class DomainMapper
     }
 
     /**
-     * Builds domain location object from provided persistence location.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @deprecated Since 7.2, use buildLocationWithContent(), buildLocation() or (private) mapLocation() instead.
      */
-    public function buildLocationDomainObject(SPILocation $spiLocation)
-    {
-        // TODO: this is hardcoded workaround for missing ContentInfo on root location
+    public function buildLocationDomainObject(
+        SPILocation $spiLocation,
+        SPIContentInfo $contentInfo = null
+    ) {
+        if ($contentInfo === null) {
+            return $this->buildLocation($spiLocation);
+        }
+
+        return $this->mapLocation(
+            $spiLocation,
+            $this->buildContentInfoDomainObject($contentInfo),
+            $this->buildContentProxy($contentInfo)
+        );
+    }
+
+    public function buildLocation(
+        SPILocation $spiLocation,
+        array $prioritizedLanguages = [],
+        bool $useAlwaysAvailable = true
+    ): APILocation {
         if ($spiLocation->id == 1) {
-            $legacyDateTime = $this->getDateTime(1030968000); //  first known commit of eZ Publish 3.x 
-            $contentInfo = new ContentInfo(
-                array(
+            $legacyDateTime = $this->getDateTime(1030968000); //  first known commit of eZ Publish 3.x
+            // NOTE: this is hardcoded workaround for missing ContentInfo on root location
+            return $this->mapLocation(
+                $spiLocation,
+                new ContentInfo([
                     'id' => 0,
                     'name' => 'Top Level Nodes',
                     'sectionId' => 1,
@@ -326,16 +471,39 @@ class DomainMapper
                     'alwaysAvailable' => 1,
                     'remoteId' => null,
                     'mainLanguageCode' => 'eng-GB',
-                )
-            );
-        } else {
-            $contentInfo = $this->buildContentInfoDomainObject(
-                $this->contentHandler->loadContentInfo($spiLocation->contentId)
+                ]),
+                new Content([])
             );
         }
 
+        $spiContentInfo = $this->contentHandler->loadContentInfo($spiLocation->contentId);
+
+        return $this->mapLocation(
+            $spiLocation,
+            $this->buildContentInfoDomainObject($spiContentInfo),
+            $this->buildContentProxy($spiContentInfo, $prioritizedLanguages, $useAlwaysAvailable)
+        );
+    }
+
+    public function buildLocationWithContent(
+        SPILocation $spiLocation,
+        APIContent $content,
+        SPIContentInfo $spiContentInfo = null
+    ): APILocation {
+        if ($spiContentInfo !== null) {
+            $contentInfo = $this->buildContentInfoDomainObject($spiContentInfo);
+        } else {
+            $contentInfo = $content->contentInfo;
+        }
+
+        return $this->mapLocation($spiLocation, $contentInfo, $content);
+    }
+
+    private function mapLocation(SPILocation $spiLocation, ContentInfo $contentInfo, APIContent $content): APILocation
+    {
         return new Location(
             array(
+                'content' => $content,
                 'contentInfo' => $contentInfo,
                 'id' => $spiLocation->id,
                 'priority' => $spiLocation->priority,
@@ -349,6 +517,106 @@ class DomainMapper
                 'sortOrder' => $spiLocation->sortOrder,
             )
         );
+    }
+
+    /**
+     * Build API Content domain objects in bulk and apply to ContentSearchResult.
+     *
+     * Loading of Content objects are done in bulk.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result SPI search result with SPI ContentInfo items as hits
+     * @param array $languageFilter
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[] ContentInfo we did not find content for is returned.
+     */
+    public function buildContentDomainObjectsOnSearchResult(SearchResult $result, array $languageFilter)
+    {
+        if (empty($result->searchHits)) {
+            return [];
+        }
+
+        $loadStructList = [];
+        $prioritizedLanguages = $languageFilter['languages'] ?? [];
+        $useAlwaysAvailable = $languageFilter['useAlwaysAvailable'] ?? true;
+        foreach ($result->searchHits as $hit) {
+            if ($useAlwaysAvailable && $hit->valueObject->alwaysAvailable) {
+                $languages = $prioritizedLanguages;
+                $languages[] = $hit->valueObject->mainLanguageCode;
+                $loadStructList[] = new SPIContent\LoadStruct([
+                    'id' => $hit->valueObject->id,
+                    'languages' => $languages,
+                ]);
+            } else {
+                $loadStructList[] = new SPIContent\LoadStruct([
+                    'id' => $hit->valueObject->id,
+                    'languages' => $prioritizedLanguages,
+                ]);
+            }
+        }
+
+        $missingContentList = [];
+        $contentList = $this->contentHandler->loadContentList($loadStructList);
+        foreach ($result->searchHits as $key => $hit) {
+            if (isset($contentList[$hit->valueObject->id])) {
+                $hit->valueObject = $this->buildContentDomainObject(
+                    $contentList[$hit->valueObject->id],
+                    null,//@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                    $languageFilter['languages'] ?? [],
+                    $useAlwaysAvailable ? $hit->valueObject->mainLanguageCode : null
+                );
+            } else {
+                $missingContentList[] = $hit->valueObject;
+                unset($result->searchHits[$key]);
+                --$result->totalCount;
+            }
+        }
+
+        return $missingContentList;
+    }
+
+    /**
+     * Build API Location and corresponding ContentInfo domain objects and apply to LocationSearchResult.
+     *
+     * This is done in order to be able to:
+     * Load ContentInfo objects in bulk, generate proxy objects for Content that will loaded in bulk on-demand (on use).
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Search\SearchResult $result SPI search result with SPI Location items as hits
+     * @param array $languageFilter
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[] Locations we did not find content info for is returned.
+     */
+    public function buildLocationDomainObjectsOnSearchResult(SearchResult $result, array $languageFilter)
+    {
+        if (empty($result->searchHits)) {
+            return [];
+        }
+
+        $contentIds = [];
+        foreach ($result->searchHits as $hit) {
+            $contentIds[] = $hit->valueObject->contentId;
+        }
+
+        $missingLocations = [];
+        $contentInfoList = $this->contentHandler->loadContentInfoList($contentIds);
+        $contentList = $this->buildContentProxyList(
+            $contentInfoList,
+            !empty($languageFilter['languages']) ? $languageFilter['languages'] : []
+        );
+        foreach ($result->searchHits as $key => $hit) {
+            if (isset($contentInfoList[$hit->valueObject->contentId])) {
+                $hit->valueObject = $this->buildLocationWithContent(
+                    $hit->valueObject,
+                    $contentList[$hit->valueObject->contentId],
+                    $contentInfoList[$hit->valueObject->contentId]
+                );
+            } else {
+                $missingLocations[] = $hit->valueObject;
+                unset($result->searchHits[$key]);
+                --$result->totalCount;
+            }
+        }
+
+        return $missingLocations;
     }
 
     /**
@@ -371,7 +639,7 @@ class DomainMapper
         $contentId,
         $contentVersionNo
     ) {
-        if ($locationCreateStruct->priority !== null && !is_int($locationCreateStruct->priority)) {
+        if (!$this->isValidLocationPriority($locationCreateStruct->priority)) {
             throw new InvalidArgumentValue('priority', $locationCreateStruct->priority, 'LocationCreateStruct');
         }
 
@@ -472,6 +740,22 @@ class DomainMapper
         }
 
         return false;
+    }
+
+    /**
+     * Checks if given $priority is valid.
+     *
+     * @param int $priority
+     *
+     * @return bool
+     */
+    public function isValidLocationPriority($priority)
+    {
+        if ($priority === null) {
+            return true;
+        }
+
+        return is_int($priority) && $priority >= self::MIN_LOCATION_PRIORITY && $priority <= self::MAX_LOCATION_PRIORITY;
     }
 
     /**

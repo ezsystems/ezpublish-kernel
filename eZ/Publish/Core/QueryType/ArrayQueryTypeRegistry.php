@@ -10,7 +10,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 /**
  * A QueryType registry based on an array.
  */
-class ArrayQueryTypeRegistry
+class ArrayQueryTypeRegistry implements QueryTypeRegistry
 {
     /** @var QueryType[] */
     private $registry = [];

@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
 use eZ\Publish\Core\REST\Server;
 use eZ\Publish\Core\Repository\Values;
 
@@ -21,13 +20,7 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
 
     public function setUp()
     {
-        $this->fieldTypeSerializerMock = $this->getMock(
-            'eZ\\Publish\\Core\\REST\\Common\\Output\\FieldTypeSerializer',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $this->fieldTypeSerializerMock = $this->createMock(FieldTypeSerializer::class);
     }
 
     /**

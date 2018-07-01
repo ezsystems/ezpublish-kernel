@@ -5,14 +5,14 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Image\Type as ImageType;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\BinaryBase\MimeTypeDetector;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -31,13 +31,7 @@ class ImageTest extends FieldTypeTest
     protected function getMimeTypeDetectorMock()
     {
         if (!isset($this->mimeTypeDetectorMock)) {
-            $this->mimeTypeDetectorMock = $this->getMock(
-                'eZ\\Publish\\SPI\\FieldType\\BinaryBase\\MimeTypeDetector',
-                array(),
-                array(),
-                '',
-                false
-            );
+            $this->mimeTypeDetectorMock = $this->createMock(MimeTypeDetector::class);
         }
 
         return $this->mimeTypeDetectorMock;
@@ -127,7 +121,7 @@ class ImageTest extends FieldTypeTest
         return array(
             array(
                 'foo',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new ImageValue(
@@ -135,7 +129,7 @@ class ImageTest extends FieldTypeTest
                         'id' => 'non/existent/path',
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new ImageValue(
@@ -144,7 +138,7 @@ class ImageTest extends FieldTypeTest
                         'fileName' => array(),
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new ImageValue(
@@ -154,7 +148,7 @@ class ImageTest extends FieldTypeTest
                         'fileSize' => 'truebar',
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new ImageValue(
@@ -165,7 +159,7 @@ class ImageTest extends FieldTypeTest
                         'alternativeText' => array(),
                     )
                 ),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }
@@ -633,7 +627,7 @@ class ImageTest extends FieldTypeTest
                         'The file size cannot exceed %size% byte.',
                         'The file size cannot exceed %size% bytes.',
                         array(
-                            'size' => 0.01,
+                            '%size%' => 0.01,
                         ),
                         'fileSize'
                     ),
@@ -687,9 +681,59 @@ class ImageTest extends FieldTypeTest
                         'The file size cannot exceed %size% byte.',
                         'The file size cannot exceed %size% bytes.',
                         array(
-                            'size' => 0.01,
+                            '%size%' => 0.01,
                         ),
                         'fileSize'
+                    ),
+                ),
+            ),
+
+            // file is an image file but filename ends with .php
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'FileSizeValidator' => array(
+                            'maxFileSize' => 1,
+                        ),
+                    ),
+                ),
+                new ImageValue(
+                    array(
+                        'id' => __DIR__ . '/phppng.php',
+                        'fileName' => basename(__DIR__ . '/phppng.php'),
+                        'fileSize' => filesize(__DIR__ . '/phppng.php'),
+                        'alternativeText' => null,
+                        'uri' => '',
+                    )
+                ),
+                array(
+                    new ValidationError(
+                        'A valid image file is required.', null, [], 'id'
+                    ),
+                ),
+            ),
+
+            // file is an image file but filename ends with .PHP (upper case)
+            array(
+                array(
+                    'validatorConfiguration' => array(
+                        'FileSizeValidator' => array(
+                            'maxFileSize' => 1,
+                        ),
+                    ),
+                ),
+                new ImageValue(
+                    array(
+                        'id' => __DIR__ . '/phppng2.PHP',
+                        'fileName' => basename(__DIR__ . '/phppng2.PHP'),
+                        'fileSize' => filesize(__DIR__ . '/phppng2.PHP'),
+                        'alternativeText' => null,
+                        'uri' => '',
+                    )
+                ),
+                array(
+                    new ValidationError(
+                        'A valid image file is required.', null, [], 'id'
                     ),
                 ),
             ),

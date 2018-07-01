@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Controller\Content;
 
@@ -19,7 +17,6 @@ use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\APIContentExceptionEvent;
 use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -144,7 +141,7 @@ class ViewController extends Controller
      */
     public function viewLocation($locationId, $viewType, $layout = false, array $params = array())
     {
-        trigger_error(
+        @trigger_error(
             "ViewController::viewLocation() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
             'Use ViewController::viewAction() instead.',
             E_USER_DEPRECATED
@@ -204,7 +201,7 @@ class ViewController extends Controller
      */
     public function embedLocation($locationId, $viewType, $layout = false, array $params = array())
     {
-        trigger_error(
+        @trigger_error(
             "ViewController::embedLocation() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
             'Use ViewController::viewAction() instead.',
             E_USER_DEPRECATED
@@ -283,10 +280,12 @@ class ViewController extends Controller
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @deprecated Since 6.0.0. Viewing content is now done with ViewAction.
      */
     public function viewContent($contentId, $viewType, $layout = false, array $params = array())
     {
-        trigger_error(
+        @trigger_error(
             "ViewController::viewContent() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
             'Use ViewController::viewAction() instead.',
             E_USER_DEPRECATED
@@ -338,10 +337,12 @@ class ViewController extends Controller
      * @throws \Exception
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @deprecated Since 6.0.0. Embedding content is now done with EmbedAction.
      */
     public function embedContent($contentId, $viewType, $layout = false, array $params = array())
     {
-        trigger_error(
+        @trigger_error(
             "ViewController::embedContent() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
             'Use ViewController::viewAction() instead.',
             E_USER_DEPRECATED
@@ -372,7 +373,7 @@ class ViewController extends Controller
 
             // Check that Content is published, since sudo allows loading unpublished content.
             if (
-                $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
+                !$content->getVersionInfo()->isPublished()
                 && !$this->authorizationChecker->isGranted(
                     new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
                 )

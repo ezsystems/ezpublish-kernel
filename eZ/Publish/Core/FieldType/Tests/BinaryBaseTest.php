@@ -5,10 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
+
+use eZ\Publish\Core\FieldType\Value;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * Base class for binary field types.
@@ -38,12 +39,12 @@ abstract class BinaryBaseTest extends FieldTypeTest
     {
         return array(
             array(
-                $this->getMockForAbstractClass('eZ\Publish\Core\FieldType\Value'),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                $this->getMockForAbstractClass(Value::class),
+                InvalidArgumentException::class,
             ),
             array(
                 array('id' => '/foo/bar'),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }

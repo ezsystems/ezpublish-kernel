@@ -5,14 +5,13 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Float\Type as FloatType;
 use eZ\Publish\Core\FieldType\Float\Value as FloatValue;
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -108,15 +107,15 @@ class FloatTest extends FieldTypeTest
         return array(
             array(
                 'foo',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 array(),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 new FloatValue('foo'),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }
@@ -527,7 +526,7 @@ class FloatTest extends FieldTypeTest
      *                  "The value can not be lower than %size%.",
      *                  null,
      *                  array(
-     *                      "size" => 5
+     *                      "%size%" => 5
      *                  ),
      *              ),
      *          ),
@@ -582,7 +581,7 @@ class FloatTest extends FieldTypeTest
                         'The value can not be lower than %size%.',
                         null,
                         array(
-                            'size' => 5.1,
+                            '%size%' => 5.1,
                         ),
                         'value'
                     ),
@@ -603,7 +602,7 @@ class FloatTest extends FieldTypeTest
                         'The value can not be higher than %size%.',
                         null,
                         array(
-                            'size' => 10.5,
+                            '%size%' => 10.5,
                         ),
                         'value'
                     ),
@@ -624,7 +623,7 @@ class FloatTest extends FieldTypeTest
                         'The value can not be higher than %size%.',
                         null,
                         array(
-                            'size' => 5.1,
+                            '%size%' => 5.1,
                         ),
                         'value'
                     ),
@@ -632,7 +631,7 @@ class FloatTest extends FieldTypeTest
                         'The value can not be lower than %size%.',
                         null,
                         array(
-                            'size' => 10.5,
+                            '%size%' => 10.5,
                         ),
                         'value'
                     ),

@@ -135,6 +135,9 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         $loader->load('fieldtypes.yml');
         $loader->load('io.yml');
         $loader->load('repository.yml');
+        $loader->load('repository/inner.yml');
+        $loader->load('repository/signalslot.yml');
+        $loader->load('repository/siteaccessaware.yml');
         $loader->load('fieldtype_external_storages.yml');
         $loader->load('storage_engines/common.yml');
         $loader->load('storage_engines/shortcuts.yml');
@@ -144,6 +147,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
         $loader->load('settings.yml');
         $loader->load('fieldtype_services.yml');
         $loader->load('utils.yml');
+        $loader->load('tests/common.yml');
+        $loader->load('policies.yml');
 
         $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
@@ -168,8 +173,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function assertIOUriExists($uri)
     {
-        $this->assertTrue(
-            file_exists(self::$tmpDir . '/' . $uri),
+        $this->assertFileExists(
+            self::$tmpDir . '/' . $uri,
             "Stored file uri $uri does not exist"
         );
     }
@@ -182,8 +187,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     protected function assertIOIdExists($id)
     {
         $path = $this->getPathFromId($id);
-        $this->assertTrue(
-            file_exists($path),
+        $this->assertFileExists(
+            $path,
             "Stored file $path does not exists"
         );
     }

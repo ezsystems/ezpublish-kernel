@@ -1,12 +1,8 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Repository class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\API\Repository;
 
@@ -19,6 +15,8 @@ use eZ\Publish\API\Repository\Values\User\UserReference;
 interface Repository
 {
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user.
      *
      * Loads the full user object if not already loaded, if you only need to know user id use {@see getCurrentUserReference()}
@@ -28,6 +26,8 @@ interface Repository
     public function getCurrentUser();
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::getCurrentUserReference() instead.
+     *
      * Get current user reference.
      *
      * @since 5.4.5
@@ -36,6 +36,8 @@ interface Repository
     public function getCurrentUserReference();
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::setCurrentUserReference() instead.
+     *
      * Sets the current user to the given $user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -43,6 +45,10 @@ interface Repository
     public function setCurrentUser(UserReference $user);
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::hasAccess() instead.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If module or function is invalid.
+     *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $user
@@ -52,6 +58,8 @@ interface Repository
     public function hasAccess($module, $function, UserReference $user = null);
 
     /**
+     * @deprecated since 6.6, to be removed. Use PermissionResolver::canUser() instead.
+     *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects.
      *
@@ -184,6 +192,34 @@ interface Repository
     public function getFieldTypeService();
 
     /**
+     * Get PermissionResolver.
+     *
+     * @return \eZ\Publish\API\Repository\PermissionResolver
+     */
+    public function getPermissionResolver();
+
+    /**
+     * Get URLService.
+     *
+     * @return \eZ\Publish\API\Repository\URLService
+     */
+    public function getURLService();
+
+    /**
+     * Get BookmarkService.
+     *
+     * @return \eZ\Publish\API\Repository\BookmarkService
+     */
+    public function getBookmarkService();
+
+    /**
+     * Get NotificationService.
+     *
+     * @return \eZ\Publish\API\Repository\NotificationService
+     */
+    public function getNotificationService();
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
@@ -208,13 +244,4 @@ interface Repository
      * @throws \RuntimeException If no transaction has been started
      */
     public function rollback();
-
-    /**
-     * Enqueue an event to be triggered at commit or directly if no transaction has started.
-     *
-     * @deprecated In 5.3.3, to be removed. Signals are emitted after transaction instead of being required to use this.
-     *
-     * @param Callable $event
-     */
-    public function commitEvent($event);
 }

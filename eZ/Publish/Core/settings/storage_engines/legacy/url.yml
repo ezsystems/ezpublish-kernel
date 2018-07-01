@@ -1,0 +1,37 @@
+parameters:
+    ezpublish.persistence.legacy.url.gateway.inner.class: eZ\Publish\Core\Persistence\Legacy\URL\Gateway\DoctrineDatabase
+    ezpublish.persistence.legacy.url.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\URL\Gateway\ExceptionConversion
+    ezpublish.persistence.legacy.url.mapper.class: eZ\Publish\Core\Persistence\Legacy\URL\Mapper
+    ezpublish.spi.persistence.legacy.url.handler.class: eZ\Publish\Core\Persistence\Legacy\URL\Handler
+    ezpublish.spi.persistence.legacy.url.criterion_converter.class: eZ\Publish\Core\Persistence\Legacy\URL\Query\CriteriaConverter
+
+services:
+    ezpublish.persistence.legacy.url.gateway.inner:
+        class: '%ezpublish.persistence.legacy.url.gateway.inner.class%'
+        arguments:
+            - '@ezpublish.api.storage_engine.legacy.dbhandler'
+            - '@ezpublish.spi.persistence.legacy.url.criterion_converter'
+
+    ezpublish.persistence.legacy.url.gateway.exception_conversion:
+        class: '%ezpublish.persistence.legacy.url.gateway.exception_conversion.class%'
+        arguments:
+            - '@ezpublish.persistence.legacy.url.gateway.inner'
+
+    # To disable exception conversion layer override this alias so that it points to inner gateway
+    ezpublish.persistence.legacy.url.gateway:
+        alias: ezpublish.persistence.legacy.url.gateway.exception_conversion
+
+    ezpublish.persistence.legacy.url.mapper:
+        class: '%ezpublish.persistence.legacy.url.mapper.class%'
+
+    ezpublish.spi.persistence.legacy.url.handler:
+        class: '%ezpublish.spi.persistence.legacy.url.handler.class%'
+        arguments:
+            - "@ezpublish.persistence.legacy.url.gateway"
+            - "@ezpublish.persistence.legacy.url.mapper"
+        lazy: true
+
+    ezpublish.spi.persistence.legacy.url.criterion_converter:
+        class: '%ezpublish.spi.persistence.legacy.url.criterion_converter.class%'
+
+

@@ -5,10 +5,7 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\ContentService as APIContentService;
@@ -220,9 +217,7 @@ class ContentService implements APIContentService, Sessionable
      */
     protected function isErrorResponse(Message $response)
     {
-        return (
-            strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0
-        );
+        return strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0;
     }
 
     /**
@@ -654,6 +649,8 @@ class ContentService implements APIContentService, Sessionable
     /**
      * Instantiates a new content create struct object.
      *
+     * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
+     *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param string $mainLanguageCode
      *
@@ -689,81 +686,25 @@ class ContentService implements APIContentService, Sessionable
     // @codeCoverageIgnoreStart
 
     /**
-     * Translate a version.
-     *
-     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
-     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
-     *
-     * @since 5.0
+     * {@inheritdoc}
      */
-    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null)
+    public function removeTranslation(ContentInfo $contentInfo, $languageCode)
     {
         throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Adds translation information to the content object.
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     *
-     * @since 5.0
+     * {@inheritdoc}
      */
-    public function addTranslationInfo(TranslationInfo $translationInfo)
+    public function deleteTranslation(ContentInfo $contentInfo, $languageCode)
     {
         throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * lists the translations done on this content object.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter
-     *
-     * @todo TBD - filter by sourceversion destination version and languages
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
-     *
-     * @since 5.0
+     * {@inheritdoc}
      */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
-    {
-        throw new \Exception('@todo: Implement.');
-    }
-
-    /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public function newTranslationInfo()
-    {
-        throw new \Exception('@todo: Implement.');
-    }
-
-    /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues()
+    public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode)
     {
         throw new \Exception('@todo: Implement.');
     }

@@ -5,20 +5,19 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Tests;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\Map\Host as HostMapMatcher;
 use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder;
+use Psr\Log\LoggerInterface;
 
-class RouterHostElementTest extends PHPUnit_Framework_TestCase
+class RouterHostElementTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder
@@ -35,7 +34,7 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
     {
         return new Router(
             $this->matcherBuilder,
-            $this->getMock('Psr\\Log\\LoggerInterface'),
+            $this->createMock(LoggerInterface::class),
             'default_sa',
             array(
                 'HostElement' => array(
@@ -62,7 +61,7 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
     public function testMatch(SimplifiedRequest $request, $siteAccess, Router $router)
     {
         $sa = $router->match($request);
-        $this->assertInstanceOf('eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess', $sa);
+        $this->assertInstanceOf(SiteAccess::class, $sa);
         $this->assertSame($siteAccess, $sa->name);
         $router->setSiteAccess();
     }
@@ -141,7 +140,7 @@ class RouterHostElementTest extends PHPUnit_Framework_TestCase
         $matcher = new HostElement(array($elementNumber));
         $matcher->setRequest($request);
         $result = $matcher->reverseMatch($siteAccessName);
-        $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher\HostElement', $result);
+        $this->assertInstanceOf(HostElement::class, $result);
         $this->assertSame($expectedHost, $result->getRequest()->host);
     }
 

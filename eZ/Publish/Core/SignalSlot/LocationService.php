@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot;
 
@@ -15,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\CopySubtreeSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal;
@@ -89,65 +88,43 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * Loads a location object from its $locationId.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
-     *
-     * @param mixed $locationId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * {@inheritdoc}
      */
-    public function loadLocation($locationId)
+    public function loadLocation($locationId, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocation($locationId);
+        return $this->service->loadLocation($locationId, $prioritizedLanguages);
     }
 
     /**
-     * Loads a location object from its $remoteId.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
-     *
-     * @param string $remoteId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * {@inheritdoc}
      */
-    public function loadLocationByRemoteId($remoteId)
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocationByRemoteId($remoteId);
+        return $this->service->loadLocationByRemoteId($remoteId, $prioritizedLanguages);
     }
 
     /**
-     * Loads the locations for the given content object.
-     *
-     * If a $rootLocation is given, only locations that belong to this location are returned.
-     * The location list is also filtered by permissions on reading locations.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[] An array of {@link Location}
+     * {@inheritdoc}
      */
-    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null)
+    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocations($contentInfo, $rootLocation);
+        return $this->service->loadLocations($contentInfo, $rootLocation, $prioritizedLanguages);
     }
 
     /**
-     * Loads children which are readable by the current user of a location object sorted by sortField and sortOrder.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
-     * @param int $offset the start offset for paging
-     * @param int $limit the number of locations returned
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\LocationList
+     * {@inheritdoc}
      */
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25)
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
     {
-        return $this->service->loadLocationChildren($location, $offset, $limit);
+        return $this->service->loadLocationChildren($location, $offset, $limit, $prioritizedLanguages);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null)
+    {
+        return $this->service->loadParentLocationsForDraftContent($versionInfo, $prioritizedLanguages);
     }
 
     /**
@@ -183,6 +160,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'contentId' => $contentInfo->id,
                     'locationId' => $returnValue->id,
+                    'parentLocationId' => $returnValue->parentLocationId,
                 )
             )
         );
@@ -209,6 +187,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'contentId' => $location->contentId,
                     'locationId' => $location->id,
+                    'parentLocationId' => $location->parentLocationId,
                 )
             )
         );
@@ -232,8 +211,10 @@ class LocationService implements LocationServiceInterface
                 array(
                     'location1Id' => $location1->id,
                     'content1Id' => $location1->contentId,
+                    'parentLocation1Id' => $location1->parentLocationId,
                     'location2Id' => $location2->id,
                     'content2Id' => $location2->contentId,
+                    'parentLocation2Id' => $location2->parentLocationId,
                 )
             )
         );
@@ -259,6 +240,7 @@ class LocationService implements LocationServiceInterface
                     'locationId' => $location->id,
                     'contentId' => $location->contentId,
                     'currentVersionNo' => $returnValue->getContentInfo()->currentVersionNo,
+                    'parentLocationId' => $returnValue->parentLocationId,
                 )
             )
         );
@@ -287,6 +269,7 @@ class LocationService implements LocationServiceInterface
                     'locationId' => $location->id,
                     'contentId' => $location->contentId,
                     'currentVersionNo' => $returnValue->getContentInfo()->currentVersionNo,
+                    'parentLocationId' => $returnValue->parentLocationId,
                 )
             )
         );
@@ -313,6 +296,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'locationId' => $location->id,
                     'newParentLocationId' => $newParentLocation->id,
+                    'oldParentLocationId' => $location->parentLocationId,
                 )
             )
         );
@@ -335,6 +319,7 @@ class LocationService implements LocationServiceInterface
                 array(
                     'contentId' => $location->contentId,
                     'locationId' => $location->id,
+                    'parentLocationId' => $location->parentLocationId,
                 )
             )
         );

@@ -5,13 +5,12 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser;
 
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Common;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class CommonTest extends AbstractParserTestCase
@@ -19,13 +18,13 @@ class CommonTest extends AbstractParserTestCase
     private $minimalConfig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $suggestionCollector;
 
     protected function getContainerExtensions()
     {
-        $this->suggestionCollector = $this->getMock('eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion\SuggestionCollectorInterface');
+        $this->suggestionCollector = $this->createMock(SuggestionCollectorInterface::class);
 
         return array(new EzPublishCoreExtension(array(new Common())));
     }
@@ -118,7 +117,7 @@ class CommonTest extends AbstractParserTestCase
     {
         $this->load();
         $this->assertConfigResolverParameterValue('url_alias_router', true, 'ezdemo_site');
-        $this->assertConfigResolverParameterValue('cache_pool_name', 'default', 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('cache_service_name', 'cache.app', 'ezdemo_site');
         $this->assertConfigResolverParameterValue('var_dir', 'var', 'ezdemo_site');
         $this->assertConfigResolverParameterValue('storage_dir', 'storage', 'ezdemo_site');
         $this->assertConfigResolverParameterValue('binary_dir', 'original', 'ezdemo_site');
@@ -146,7 +145,7 @@ class CommonTest extends AbstractParserTestCase
             array(
                 'system' => array(
                     'ezdemo_site' => array(
-                        'cache_pool_name' => $cachePoolName,
+                        'cache_service_name' => $cachePoolName,
                         'var_dir' => $varDir,
                         'storage_dir' => $storageDir,
                         'binary_dir' => $binaryDir,
@@ -161,7 +160,7 @@ class CommonTest extends AbstractParserTestCase
             )
         );
 
-        $this->assertConfigResolverParameterValue('cache_pool_name', $cachePoolName, 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('cache_service_name', $cachePoolName, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('var_dir', $varDir, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('storage_dir', $storageDir, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('binary_dir', $binaryDir, 'ezdemo_site');
@@ -169,6 +168,25 @@ class CommonTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('index_page', $indexPage, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('http_cache.purge_servers', $cachePurgeServers, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('anonymous_user_id', $anonymousUserId, 'ezdemo_site');
+    }
+
+    public function testApiKeysSettings()
+    {
+        $key = 'my_key';
+        $this->load(
+            array(
+                'system' => array(
+                    'ezdemo_group' => array(
+                        'api_keys' => array(
+                            'google_maps' => $key,
+                        ),
+                    ),
+                ),
+            )
+        );
+
+        $this->assertConfigResolverParameterValue('api_keys', ['google_maps' => $key], 'ezdemo_site');
+        $this->assertConfigResolverParameterValue('api_keys.google_maps', $key, 'ezdemo_site');
     }
 
     public function testUserSettings()
@@ -197,7 +215,7 @@ class CommonTest extends AbstractParserTestCase
         $this->load();
         $this->assertConfigResolverParameterValue(
             'security.base_layout',
-            '%ezpublish.content_view.viewbase_layout%',
+            '%ezsettings.default.pagelayout%',
             'ezdemo_site'
         );
         $this->assertConfigResolverParameterValue(

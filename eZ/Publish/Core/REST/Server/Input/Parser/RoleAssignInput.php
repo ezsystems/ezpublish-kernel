@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
@@ -65,7 +63,14 @@ class RoleAssignInput extends BaseParser
         // @todo XSD says that limitation is mandatory, but roles can be assigned without limitations
         $limitation = null;
         if (array_key_exists('limitation', $data) && is_array($data['limitation'])) {
-            $limitation = $this->parserTools->parseLimitation($data['limitation']);
+            if (!array_key_exists('_identifier', $data['limitation'])) {
+                throw new Exceptions\Parser("Missing '_identifier' attribute for Limitation.");
+            }
+
+            $limitation = $parsingDispatcher->parse(
+                $data['limitation'],
+                'application/vnd.ez.api.internal.limitation.' . $data['limitation']['_identifier']
+            );
         }
 
         return new RoleAssignment($roleId, $limitation);

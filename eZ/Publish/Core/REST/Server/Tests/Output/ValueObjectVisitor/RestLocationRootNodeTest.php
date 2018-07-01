@@ -5,12 +5,11 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
+use eZ\Publish\Core\REST\Server\Values\RestContent;
 use eZ\Publish\Core\REST\Server\Values\RestLocation;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -84,7 +83,7 @@ class RestLocationRootNodeTest extends RestLocationTest
 
         $this->getVisitorMock()->expects($this->once())
             ->method('visitValueObject')
-            ->with($this->isInstanceOf('eZ\\Publish\\Core\\REST\\Server\\Values\\RestContent'));
+            ->with($this->isInstanceOf(RestContent::class));
 
         $visitor->visit(
             $this->getVisitorMock(),

@@ -5,14 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\Core\FieldType\Author\Type as AuthorType;
 use eZ\Publish\Core\FieldType\Author\Value as AuthorValue;
+use eZ\Publish\Core\FieldType\Author\AuthorCollection;
 use eZ\Publish\Core\FieldType\Author\Author;
+use eZ\Publish\Core\FieldType\Value;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
  * @group fieldType
@@ -112,15 +113,15 @@ class AuthorTest extends FieldTypeTest
         return array(
             array(
                 'My name',
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 23,
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
             array(
                 array('foo'),
-                'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
+                InvalidArgumentException::class,
             ),
         );
     }
@@ -357,7 +358,7 @@ class AuthorTest extends FieldTypeTest
     public function testAcceptValueInvalidType()
     {
         $ft = $this->createFieldTypeUnderTest();
-        $ft->acceptValue($this->getMock('eZ\\Publish\\Core\\FieldType\\Value'));
+        $ft->acceptValue($this->createMock(Value::class));
     }
 
     /**
@@ -392,7 +393,7 @@ class AuthorTest extends FieldTypeTest
     public function testBuildFieldValueWithoutParam()
     {
         $value = new AuthorValue();
-        self::assertInstanceOf('eZ\\Publish\\Core\\FieldType\\Author\\AuthorCollection', $value->authors);
+        self::assertInstanceOf(AuthorCollection::class, $value->authors);
         self::assertSame(array(), $value->authors->getArrayCopy());
     }
 
@@ -402,7 +403,7 @@ class AuthorTest extends FieldTypeTest
     public function testBuildFieldValueWithParam()
     {
         $value = new AuthorValue($this->authors);
-        self::assertInstanceOf('eZ\\Publish\\Core\\FieldType\\Author\\AuthorCollection', $value->authors);
+        self::assertInstanceOf(AuthorCollection::class, $value->authors);
         self::assertSame($this->authors, $value->authors->getArrayCopy());
     }
 
@@ -448,7 +449,7 @@ class AuthorTest extends FieldTypeTest
     {
         $existingIds = array();
         foreach ($this->authors as $author) {
-            $id = mt_rand(1, 100);
+            $id = random_int(1, 100);
             if (in_array($id, $existingIds)) {
                 continue;
             }

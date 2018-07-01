@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\View\Provider;
 
@@ -59,6 +57,9 @@ class Configured implements ViewProvider
         }
         if (isset($viewConfig['controller'])) {
             $view->setControllerReference(new ControllerReference($viewConfig['controller']));
+        }
+        if (isset($viewConfig['params']) && is_array($viewConfig['params'])) {
+            $view->addParameters($viewConfig['params']);
         }
 
         return $view;

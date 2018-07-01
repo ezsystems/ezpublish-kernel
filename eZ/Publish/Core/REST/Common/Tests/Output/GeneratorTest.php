@@ -5,17 +5,15 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Output;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Output generator test class.
  */
-abstract class GeneratorTest extends PHPUnit_Framework_TestCase
+abstract class GeneratorTest extends TestCase
 {
     /**
      * @var \eZ\Publish\Core\REST\Common\Output\Generator

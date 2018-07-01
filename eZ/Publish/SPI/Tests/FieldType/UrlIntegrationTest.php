@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
@@ -50,7 +48,7 @@ class UrlIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -62,8 +60,8 @@ class UrlIntegrationTest extends BaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\UrlConverter(),
             new FieldType\Url\UrlStorage(
-                array(
-                    'LegacyStorage' => new FieldType\Url\UrlStorage\Gateway\LegacyStorage(),
+                new FieldType\Url\UrlStorage\Gateway\DoctrineStorage(
+                    $this->getDatabaseHandler()->getConnection()
                 )
             )
         );

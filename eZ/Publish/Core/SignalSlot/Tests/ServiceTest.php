@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
@@ -16,9 +14,9 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class ServiceTest extends PHPUnit_Framework_TestCase
+abstract class ServiceTest extends TestCase
 {
     /**
      * Returns a mock of the aggregated service.
@@ -67,7 +65,7 @@ abstract class ServiceTest extends PHPUnit_Framework_TestCase
                          )
                      );
 
-        $dispatcher = $this->getMock('eZ\\Publish\\Core\\SignalSlot\\SignalDispatcher');
+        $dispatcher = $this->createMock(SignalDispatcher::class);
         $that = $this;
         $d = $dispatcher->expects($this->exactly($emitNr))
                         ->method('emit');

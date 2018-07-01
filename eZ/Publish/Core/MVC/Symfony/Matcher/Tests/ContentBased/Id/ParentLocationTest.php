@@ -5,11 +5,10 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\Matcher\Id;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation as ParentLocationIdMatcher;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
@@ -30,8 +29,8 @@ class ParentLocationTest extends BaseTest
 
     /**
      * @dataProvider matchLocationProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation::matchLocation
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation::matchLocation
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      *
      * @param int|int[] $matchingConfig
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
@@ -71,8 +70,8 @@ class ParentLocationTest extends BaseTest
 
     /**
      * @dataProvider matchContentInfoProvider
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation::matchContentInfo
-     * @covers eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation::matchContentInfo
+     * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\MultipleValued::setMatchingConfig
      * @covers \eZ\Publish\Core\MVC\RepositoryAware::setRepository
      *
      * @param int|int[] $matchingConfig
@@ -120,14 +119,11 @@ class ParentLocationTest extends BaseTest
      *
      * @param int $parentLocationId
      *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function generateRepositoryMockForParentLocationId($parentLocationId)
     {
-        $locationServiceMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\LocationService')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $locationServiceMock = $this->createMock(LocationService::class);
         $locationServiceMock->expects($this->once())
             ->method('loadLocation')
             ->with(42)
@@ -142,6 +138,10 @@ class ParentLocationTest extends BaseTest
             ->expects($this->once())
             ->method('getLocationService')
             ->will($this->returnValue($locationServiceMock));
+        $repository
+            ->expects($this->any())
+            ->method('getPermissionResolver')
+            ->will($this->returnValue($this->getPermissionResolverMock()));
 
         return $repository;
     }

@@ -5,29 +5,23 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\IO\IOServiceInterface;
-use eZ\Publish\Core\IO\UrlRedecorator;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\IO\UrlRedecoratorInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
-use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
-class ImageConverter implements Converter
+class ImageConverter extends BinaryFileConverter
 {
-    /** @var IOServiceInterface */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $imageIoService;
 
-    /** @var UrlRedecorator */
+    /** @var \eZ\Publish\Core\IO\UrlRedecoratorInterface */
     private $urlRedecorator;
 
-    public function __construct(IOServiceInterface $imageIoService, UrlRedecorator $urlRedecorator)
+    public function __construct(IOServiceInterface $imageIoService, UrlRedecoratorInterface $urlRedecorator)
     {
         $this->imageIoService = $imageIoService;
         $this->urlRedecorator = $urlRedecorator;
@@ -68,6 +62,7 @@ class ImageConverter implements Converter
         return $this->fillXml(
             array_merge(
                 array(
+                    'uri' => '',
                     'path' => '',
                     'width' => '',
                     'height' => '',
@@ -214,54 +209,5 @@ EOT;
         $extractedData['alternativeText'] = $ezimageTag->getAttribute('alternative_text');
 
         return $extractedData;
-    }
-
-    /**
-     * Converts field definition data in $fieldDef into $storageFieldDef.
-     *
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
-     */
-    public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
-    {
-        $storageDef->dataInt1 = (isset($fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'])
-            ? round($fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] / 1024 / 1024)
-            : 0);
-    }
-
-    /**
-     * Converts field definition data in $storageDef into $fieldDef.
-     *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
-     */
-    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
-    {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints(
-            array(
-                'validators' => array(
-                    'FileSizeValidator' => array(
-                        'maxFileSize' => ($storageDef->dataInt1 != 0
-                            ? (int)$storageDef->dataInt1 * 1024 * 1024
-                            : null),
-                    ),
-                ),
-            )
-        );
-    }
-
-    /**
-     * Returns the name of the index column in the attribute table.
-     *
-     * Returns the name of the index column the datatype uses, which is either
-     * "sort_key_int" or "sort_key_string". This column is then used for
-     * filtering and sorting for this type.
-     *
-     * @return string
-     */
-    public function getIndexColumn()
-    {
-        // @todo: Correct?
-        return 'sort_key_string';
     }
 }

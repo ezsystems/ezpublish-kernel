@@ -5,18 +5,32 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\REST\Common\Tests\Output\Generator;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-abstract class FieldTypeHashGeneratorBaseTest extends PHPUnit_Framework_TestCase
+abstract class FieldTypeHashGeneratorBaseTest extends TestCase
 {
     private $generator;
 
     private $fieldTypeHashGenerator;
+
+    private $iniPrecisions;
+
+    /**
+     * To make sure float values are serialized with same precision across php versions we force precision.
+     */
+    public function setUp()
+    {
+        $this->iniPrecisions = [ini_set('precision', 17), ini_set('serialize_precision', 17)];
+    }
+
+    public function TearDown()
+    {
+        ini_set('precision', $this->iniPrecisions[0]);
+        ini_set('serialize_precision', $this->iniPrecisions[1]);
+    }
 
     /**
      * Initializes the field type hash generator.

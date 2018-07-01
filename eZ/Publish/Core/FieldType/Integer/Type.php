@@ -5,8 +5,6 @@
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
- *
- * @version //autogentag//
  */
 namespace eZ\Publish\Core\FieldType\Integer;
 
@@ -54,7 +52,7 @@ class Type extends FieldType
                     "Validator '%validator%' is unknown",
                     null,
                     array(
-                        'validator' => $validatorIdentifier,
+                        '%validator%' => $validatorIdentifier,
                     ),
                     "[$validatorIdentifier]"
                 );
@@ -65,12 +63,12 @@ class Type extends FieldType
                 switch ($name) {
                     case 'minIntegerValue':
                     case 'maxIntegerValue':
-                        if ($value !== null && !is_integer($value)) {
+                        if ($value !== null && !is_int($value)) {
                             $validationErrors[] = new ValidationError(
                                 "Validator parameter '%parameter%' value must be of integer type",
                                 null,
                                 array(
-                                    'parameter' => $name,
+                                    '%parameter%' => $name,
                                 ),
                                 "[$validatorIdentifier][$name]"
                             );
@@ -81,7 +79,7 @@ class Type extends FieldType
                             "Validator parameter '%parameter%' is unknown",
                             null,
                             array(
-                                'parameter' => $name,
+                                '%parameter%' => $name,
                             ),
                             "[$validatorIdentifier][$name]"
                         );
@@ -127,7 +125,7 @@ class Type extends FieldType
                 'The value can not be higher than %size%.',
                 null,
                 array(
-                    'size' => $constraints['maxIntegerValue'],
+                    '%size%' => $constraints['maxIntegerValue'],
                 ),
                 'value'
             );
@@ -139,7 +137,7 @@ class Type extends FieldType
                 'The value can not be lower than %size%.',
                 null,
                 array(
-                    'size' => $constraints['minIntegerValue'],
+                    '%size%' => $constraints['minIntegerValue'],
                 ),
                 'value'
             );
