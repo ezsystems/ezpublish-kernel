@@ -118,20 +118,19 @@ class ScriptHandler extends DistributionBundleScriptHandler
 
 <fg=cyan>Welcome to eZ Platform!</fg=cyan>
 
-<options=bold>Quick Install:</>
+<options=bold>Quick test install:</>
 <comment>    $  export SYMFONY_ENV="dev"</comment>
-<comment>    $  php ${consoleDir}/console ezplatform:install <type></comment>
+<comment>    $  composer ezplatform-install</comment>
 <comment>    $  php ${consoleDir}/console server:run</comment>
 
 Note:
-- "ezplatform:install" has different installer <type>s depending on your install, run command with <comment>--help</comment> to see your options.
-- Instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software,
-  otherwise see install instructions for directory permissions.
+- "composer ezplatform-install" is an alias for command <comment>php ${consoleDir}/console ezplatform:install <type></comment> 
+- Instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software.
 - The last command will give you the url to the frontend of the installation, add "/admin" to reach backend.
 
 
-For full install instructions, including setting up full web server & directory permissions, see install instructions in <fg=green>INSTALL.md</>
-or <fg=green>README.md</>.
+For full install instructions, including setting up full web server & directory permissions, see:
+https://doc.ezplatform.com/en/latest/getting_started/install_using_composer/
 
 EOT
         );
