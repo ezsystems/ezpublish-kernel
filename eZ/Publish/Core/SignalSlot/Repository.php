@@ -261,15 +261,16 @@ class Repository implements RepositoryInterface
      *
      *
      * @param \Closure $callback
+     * @param \eZ\Publish\API\Repository\Repository|null $outerRepository
      *
      * @throws \RuntimeException Thrown on recursive sudo() use.
      * @throws \Exception Re throws exceptions thrown inside $callback
      *
      * @return mixed
      */
-    public function sudo(Closure $callback)
+    public function sudo(Closure $callback, RepositoryInterface $outerRepository = null)
     {
-        return $this->repository->sudo($callback, $this);
+        return $this->repository->sudo($callback, $outerRepository ?? $this);
     }
 
     /**

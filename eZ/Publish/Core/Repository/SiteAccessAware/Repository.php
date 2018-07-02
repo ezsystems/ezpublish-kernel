@@ -100,9 +100,9 @@ class Repository implements RepositoryInterface
         return $this->repository->setCurrentUser($user);
     }
 
-    public function sudo(Closure $callback)
+    public function sudo(Closure $callback, RepositoryInterface $outerRepository = null)
     {
-        return $this->repository->sudo($callback, $this);
+        return $this->repository->sudo($callback, $outerRepository ?? $this);
     }
 
     public function hasAccess($module, $function, UserReference $user = null)
