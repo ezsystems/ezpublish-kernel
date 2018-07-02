@@ -124,7 +124,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
 <comment>    $  php ${consoleDir}/console server:run</comment>
 
 Note:
-- "composer ezplatform-install" is a alias for command <comment>php ${consoleDir}/console ezplatform:install <type></comment> 
+- "composer ezplatform-install" is an alias for command <comment>php ${consoleDir}/console ezplatform:install <type></comment> 
 - Instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software.
 - The last command will give you the url to the frontend of the installation, add "/admin" to reach backend.
 
