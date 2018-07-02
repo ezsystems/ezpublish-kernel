@@ -14,6 +14,8 @@ namespace eZ\Publish\SPI\Repository\Values;
  * Provides a uniform way for API consuming logic to generate translated names / labels
  * for API objects.
  * Language logic is meant to also be used for description, fields, ... lookup as well.
+ *
+ * @todo Move to API, Repository is not a SPI concept.
  */
 interface MultiLanguageName
 {

@@ -13,6 +13,8 @@ namespace eZ\Publish\SPI\Repository\Values;
  *
  * Provides a uniform way for API consuming logic to generate translated description labels
  * for API objects.
+ *
+ * @todo Move to API, Repository is not a SPI concept.
  */
 interface MultiLanguageDescription
 {
