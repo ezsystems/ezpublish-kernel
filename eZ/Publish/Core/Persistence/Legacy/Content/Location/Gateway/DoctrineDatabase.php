@@ -1143,6 +1143,7 @@ class DoctrineDatabase extends Gateway
         $query->insertInto($this->handler->quoteTable('ezcontentobject_trash'));
 
         unset($locationRow['contentobject_is_published']);
+        $locationRow['trashed'] = time();
         foreach ($locationRow as $key => $value) {
             $query->set($key, $query->bindValue($value));
         }

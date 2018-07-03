@@ -15,4 +15,10 @@ use eZ\Publish\SPI\Persistence\Content\Location;
  */
 class Trashed extends Location
 {
+    /**
+     * Trashed timestamp.
+     *
+     * @var mixed Trashed timestamp.
+     */
+    public $trashed;
 }
