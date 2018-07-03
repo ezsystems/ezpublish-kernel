@@ -49,14 +49,6 @@ class Value extends BaseValue
      */
     public function __toString()
     {
-        return implode(
-            ', ',
-            array_map(
-                function ($country) {
-                    return $country['Name'];
-                },
-                $this->countries
-            )
-        );
+        return implode(', ', array_column($this->countries, 'Name'));
     }
 }

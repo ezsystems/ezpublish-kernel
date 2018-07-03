@@ -1795,7 +1795,7 @@ class LocationServiceTest extends BaseTest
             array(
                 'depth' => $newParentLocation->depth + 1,
                 'parentLocationId' => $newParentLocation->id,
-                'pathString' => "{$newParentLocation->pathString}" . $this->parseId('location', $copiedLocation->id) . '/',
+                'pathString' => $newParentLocation->pathString . $this->parseId('location', $copiedLocation->id) . '/',
             ),
             $copiedLocation
         );
@@ -1924,7 +1924,7 @@ class LocationServiceTest extends BaseTest
         foreach ($actual as $properties) {
             $this->assertNotContains($properties['id'], $beforeIds);
             $this->assertStringStartsWith(
-                "{$newParentLocation->pathString}" . $this->parseId('location', $copiedLocation->id) . '/',
+                $newParentLocation->pathString . $this->parseId('location', $copiedLocation->id) . '/',
                 $properties['pathString']
             );
             $this->assertStringEndsWith(
@@ -2058,7 +2058,7 @@ class LocationServiceTest extends BaseTest
                 'invisible' => false,
                 'depth' => $newParentLocation->depth + 1,
                 'parentLocationId' => $newParentLocation->id,
-                'pathString' => "{$newParentLocation->pathString}" . $this->parseId('location', $movedLocation->id) . '/',
+                'pathString' => $newParentLocation->pathString . $this->parseId('location', $movedLocation->id) . '/',
             ),
             $movedLocation
         );
@@ -2111,7 +2111,7 @@ class LocationServiceTest extends BaseTest
                 'invisible' => true,
                 'depth' => $newParentLocation->depth + 1,
                 'parentLocationId' => $newParentLocation->id,
-                'pathString' => "{$newParentLocation->pathString}" . $this->parseId('location', $movedLocation->id) . '/',
+                'pathString' => $newParentLocation->pathString . $this->parseId('location', $movedLocation->id) . '/',
             ),
             $movedLocation
         );
@@ -2137,7 +2137,7 @@ class LocationServiceTest extends BaseTest
             $expected[$id]['depth'] = $properties['depth'] + 2;
             $expected[$id]['pathString'] = str_replace(
                 $locationToMove->pathString,
-                "{$newParentLocation->pathString}" . $this->parseId('location', $locationToMove->id) . '/',
+                $newParentLocation->pathString . $this->parseId('location', $locationToMove->id) . '/',
                 $properties['pathString']
             );
         }
@@ -2202,7 +2202,7 @@ class LocationServiceTest extends BaseTest
             $expected[$id]['depth'] = $properties['depth'] + 2;
             $expected[$id]['pathString'] = str_replace(
                 $locationToMove->pathString,
-                "{$newParentLocation->pathString}" . $this->parseId('location', $locationToMove->id) . '/',
+                $newParentLocation->pathString . $this->parseId('location', $locationToMove->id) . '/',
                 $properties['pathString']
             );
         }

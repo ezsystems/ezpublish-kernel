@@ -793,7 +793,7 @@ XML;
     private function createDraftFromVersion($restContentVersionHref)
     {
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('COPY', "{$restContentVersionHref}")
+            $this->createHttpRequest('COPY', $restContentVersionHref)
         );
         self::assertHttpResponseCodeEquals($response, 201);
 

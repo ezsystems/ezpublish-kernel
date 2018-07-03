@@ -28,7 +28,7 @@ class ImaginePass implements CompilerPassInterface
 
         if ($container->hasAlias('liip_imagine')) {
             $imagineAlias = (string)$container->getAlias('liip_imagine');
-            $driver = substr($imagineAlias, strripos($imagineAlias, '.') + 1);
+            $driver = substr($imagineAlias, strrpos($imagineAlias, '.') + 1);
 
             $this->processReduceNoiseFilter($container, $driver);
             $this->processSwirlFilter($container, $driver);
