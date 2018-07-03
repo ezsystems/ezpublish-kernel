@@ -62,7 +62,7 @@ services:
             - '@ezpublish.spi.search'
             - '@ezpublish.search.background_indexer'
             - '@ezpublish.repository.relation_processor'
-        lazy: true
+        lazy: false
 
     ezpublish.api.service.content:
         class: "%ezpublish.api.service.content.class%"
