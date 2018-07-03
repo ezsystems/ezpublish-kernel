@@ -296,6 +296,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $coreLoader->load('repository/inner.yml');
         $coreLoader->load('repository/event.yml');
         $coreLoader->load('repository/siteaccessaware.yml');
+        $coreLoader->load('repository/autowire.yml');
         $coreLoader->load('fieldtype_external_storages.yml');
         $coreLoader->load('fieldtypes.yml');
         $coreLoader->load('indexable_fieldtypes.yml');
