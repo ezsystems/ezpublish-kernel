@@ -241,3 +241,10 @@ WHERE def.adsrc LIKE 'nextval(%';
 
 CREATE INDEX ezcontentobject_tree_contentobject_id_path_string ON ezcontentobject_tree (path_string, contentobject_id);
 CREATE INDEX ezcontentobject_section ON ezcontentobject (section_id);
+
+--
+-- EZP-28881: Add a field to support "date object was trashed"
+--
+
+ALTER TABLE ezcontentobject_trash add  trashed integer DEFAULT 0 NOT NULL;
+

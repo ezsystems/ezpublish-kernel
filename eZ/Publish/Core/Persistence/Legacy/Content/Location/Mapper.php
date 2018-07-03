@@ -45,6 +45,9 @@ class Mapper
         $location->depth = (int)$data[$prefix . 'depth'];
         $location->sortField = (int)$data[$prefix . 'sort_field'];
         $location->sortOrder = (int)$data[$prefix . 'sort_order'];
+        if (isset($data[$prefix . 'trashed'])) {
+            $location->trashed = (int)$data[$prefix . 'trashed'];
+        }
 
         return $location;
     }

@@ -256,6 +256,7 @@ CREATE TABLE ezcontentobject_trash (
   remote_id text(100) NOT NULL,
   sort_field integer DEFAULT 1,
   sort_order integer DEFAULT 1,
+  trashed integer NOT NULL DEFAULT 0,
   PRIMARY KEY (node_id)
 );
 CREATE INDEX ezcobj_trash_co_id ON ezcontentobject_trash (contentobject_id);

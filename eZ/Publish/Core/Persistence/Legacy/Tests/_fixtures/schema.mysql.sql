@@ -290,6 +290,7 @@ CREATE TABLE ezcontentobject_trash (
   remote_id varchar(100) NOT NULL DEFAULT '',
   sort_field int(11) DEFAULT 1,
   sort_order int(11) DEFAULT 1,
+  trashed int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (node_id),
   KEY ezcobj_trash_co_id (contentobject_id),
   KEY ezcobj_trash_depth (depth),

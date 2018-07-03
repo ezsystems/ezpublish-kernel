@@ -13,4 +13,10 @@ namespace eZ\Publish\API\Repository\Values\Content;
  */
 abstract class TrashItem extends Location
 {
+    /**
+     * Trashed timestamp.
+     *
+     * @var \DateTime
+     */
+    protected $trashed;
 }
