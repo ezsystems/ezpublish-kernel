@@ -41,14 +41,12 @@ class AliasGeneratorDecorator implements VariationHandler
     /**
      * @param \eZ\Publish\SPI\Variation\VariationHandler $aliasGenerator
      * @param \Psr\Cache\CacheItemPoolInterface $cache
-     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      * @param \Symfony\Component\Routing\RequestContext $requestContext
      */
-    public function __construct(VariationHandler $aliasGenerator, CacheItemPoolInterface $cache, SiteAccess $siteAccess, RequestContext $requestContext)
+    public function __construct(VariationHandler $aliasGenerator, CacheItemPoolInterface $cache, RequestContext $requestContext)
     {
         $this->aliasGenerator = $aliasGenerator;
         $this->cache = $cache;
-        $this->siteAccess = $siteAccess;
         $this->requestContext = $requestContext;
     }
 
@@ -72,6 +70,14 @@ class AliasGeneratorDecorator implements VariationHandler
         }
 
         return $image;
+    }
+
+    /**
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     */
+    public function setSiteAccess(SiteAccess $siteAccess)
+    {
+        $this->siteAccess = $siteAccess;
     }
 
     /**
