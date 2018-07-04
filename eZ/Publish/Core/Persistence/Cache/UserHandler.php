@@ -24,8 +24,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 {
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function create(User $user)
     {
@@ -44,8 +42,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function load($userId)
     {
@@ -66,8 +62,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function loadByLogin($login)
     {
@@ -88,8 +82,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function loadByEmail($email)
     {
@@ -115,8 +107,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function loadUserByToken($hash)
     {
@@ -210,8 +200,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function loadRole($roleId, $status = Role::STATUS_DEFINED)
     {
@@ -238,8 +226,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED)
     {
@@ -286,8 +272,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function loadRoleAssignment($roleAssignmentId)
     {
@@ -308,8 +292,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function loadRoleAssignmentsByRoleId($roleId)
     {
@@ -322,7 +304,10 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $roleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($roleId);
 
         $cacheItem->set($roleAssignments);
-        $cacheTags = ['role-assignment-role-list-' . $roleId];
+        $cacheTags = [
+            'role-assignment-role-list-' . $roleId,
+            'role-' . $roleId, /* Role update (policies) changes role assignment id */
+        ];
         foreach ($roleAssignments as $roleAssignment) {
             $cacheTags = $this->getCacheTagsForRoleAssignment($roleAssignment, $cacheTags);
         }
@@ -334,8 +319,6 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
      */
     public function loadRoleAssignmentsByGroupId($groupId, $inherit = false)
     {
@@ -353,8 +336,10 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $roleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId($groupId, $inherit);
 
         $cacheItem->set($roleAssignments);
-        // Tag below is for empty results,  non empty it might have duplicated tags but cache will reduce those.
-        $cacheTags = ['role-assignment-group-list-' . $groupId];
+        $cacheTags = [
+            'role-assignment-group-list-' . $groupId, /* empty results,  non empty it might have duplicated tags but cache will reduce those. */
+            'role-' . $groupId, /* Role update (policies) changes role assignment id */
+        ];
         foreach ($roleAssignments as $roleAssignment) {
             $cacheTags = $this->getCacheTagsForRoleAssignment($roleAssignment, $cacheTags);
         }
@@ -401,28 +386,17 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function publishRoleDraft($roleDraftId)
     {
         $this->logger->logCall(__METHOD__, array('role' => $roleDraftId));
         $userHandler = $this->persistenceHandler->userHandler();
         $roleDraft = $userHandler->loadRole($roleDraftId, Role::STATUS_DRAFT);
-
-        $roleAssignments = [];
-        // If there was a original role for the draft, then we clean cache for it
-        if ($roleDraft->originalId > -1) {
-            $roleAssignments = $userHandler->loadRoleAssignmentsByRoleId($roleDraft->originalId);
-        }
-
         $return = $userHandler->publishRoleDraft($roleDraftId);
 
+        // If there was a original role for the draft, then we clean cache for it
         if ($roleDraft->originalId > -1) {
             $this->cache->invalidateTags(['role-' . $roleDraft->originalId]);
-        }
-        foreach ($roleAssignments as $roleAssignment) {
-            $this->cache->invalidateTags(['role-assignment-' . $roleAssignment->id]);
         }
 
         return $return;
@@ -444,14 +418,9 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     public function addPolicy($roleId, Policy $policy)
     {
         $this->logger->logCall(__METHOD__, array('role' => $roleId, 'struct' => $policy));
-
-        $roleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($roleId);
         $return = $this->persistenceHandler->userHandler()->addPolicy($roleId, $policy);
 
         $this->cache->invalidateTags(['role-' . $roleId]);
-        foreach ($roleAssignments as $roleAssignment) {
-            $this->cache->invalidateTags(['role-assignment-' . $roleAssignment->id]);
-        }
 
         return $return;
     }
@@ -462,14 +431,9 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     public function updatePolicy(Policy $policy)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $policy));
-
-        $roleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($policy->roleId);
         $return = $this->persistenceHandler->userHandler()->updatePolicy($policy);
 
         $this->cache->invalidateTags(['policy-' . $policy->id, 'role-' . $policy->roleId]);
-        foreach ($roleAssignments as $roleAssignment) {
-            $this->cache->invalidateTags(['role-assignment-' . $roleAssignment->id]);
-        }
 
         return $return;
     }
@@ -480,14 +444,9 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
     public function deletePolicy($policyId, $roleId)
     {
         $this->logger->logCall(__METHOD__, array('policy' => $policyId));
-
-        $roleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($roleId);
         $this->persistenceHandler->userHandler()->deletePolicy($policyId, $roleId);
 
         $this->cache->invalidateTags(['policy-' . $policyId, 'role-' . $roleId]);
-        foreach ($roleAssignments as $roleAssignment) {
-            $this->cache->invalidateTags(['role-assignment-' . $roleAssignment->id]);
-        }
     }
 
     /**
