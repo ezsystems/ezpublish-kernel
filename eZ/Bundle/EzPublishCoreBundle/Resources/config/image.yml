@@ -88,8 +88,9 @@ services:
         arguments:
             - '@ezpublish.image_alias.imagine.variation.imagine_alias_generator'
             - '@ezpublish.cache_pool'
-            - '@ezpublish.siteaccess'
             - '@router.request_context'
+        calls:
+            - [setSiteAccess, ['@ezpublish.siteaccess']]
 
     ezpublish.image_alias.imagine.variation.imagine_alias_generator:
         class: '%ezpublish.image_alias.imagine.variation.imagine_alias_generator.class%'
