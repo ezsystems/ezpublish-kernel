@@ -9,6 +9,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Imagine\Cache;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Routing\RequestContext;
@@ -16,7 +17,7 @@ use Symfony\Component\Routing\RequestContext;
 /**
  * Persistence Cache layer for AliasGenerator.
  */
-class AliasGeneratorDecorator implements VariationHandler
+class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
 {
     /**
      * @var \eZ\Publish\SPI\Variation\VariationHandler
@@ -41,14 +42,12 @@ class AliasGeneratorDecorator implements VariationHandler
     /**
      * @param \eZ\Publish\SPI\Variation\VariationHandler $aliasGenerator
      * @param \Psr\Cache\CacheItemPoolInterface $cache
-     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
      * @param \Symfony\Component\Routing\RequestContext $requestContext
      */
-    public function __construct(VariationHandler $aliasGenerator, CacheItemPoolInterface $cache, SiteAccess $siteAccess, RequestContext $requestContext)
+    public function __construct(VariationHandler $aliasGenerator, CacheItemPoolInterface $cache, RequestContext $requestContext)
     {
         $this->aliasGenerator = $aliasGenerator;
         $this->cache = $cache;
-        $this->siteAccess = $siteAccess;
         $this->requestContext = $requestContext;
     }
 
@@ -75,6 +74,14 @@ class AliasGeneratorDecorator implements VariationHandler
     }
 
     /**
+     * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess
+     */
+    public function setSiteAccess(SiteAccess $siteAccess = null)
+    {
+        $this->siteAccess = $siteAccess;
+    }
+
+    /**
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param string $variationName
@@ -85,7 +92,7 @@ class AliasGeneratorDecorator implements VariationHandler
     {
         return sprintf(
             'ez-image-variation-%s-%s-%s-%d-%d-%d-%s-%s',
-            $this->siteAccess->name,
+            $this->siteAccess ? $this->siteAccess->name : 'default',
             $this->requestContext->getScheme(),
             $this->requestContext->getHost(),
             $this->requestContext->getScheme() === 'https' ? $this->requestContext->getHttpsPort() : $this->requestContext->getHttpPort(),
