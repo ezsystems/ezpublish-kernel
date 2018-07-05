@@ -826,4 +826,18 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         self::assertContainerBuilderHasParameter('ezpublish.api.role.policy_map');
         self::assertEquals($expectedPolicies, $this->container->getParameter('ezpublish.api.role.policy_map'));
     }
+
+    public function testStashCacheConfiguration()
+    {
+        $stashConfiguration = [
+            'igbinary' => false,
+            'lzf' => false,
+        ];
+
+        $this->load(['stash_cache' => $stashConfiguration]);
+        $this->assertTrue($this->container->hasParameter('ezpublish.stash_cache.igbinary'));
+        $this->assertTrue($this->container->hasParameter('ezpublish.stash_cache.lzf'));
+        $this->assertSame($stashConfiguration['igbinary'], $this->container->getParameter('ezpublish.stash_cache.igbinary'));
+        $this->assertSame($stashConfiguration['lzf'], $this->container->getParameter('ezpublish.stash_cache.lzf'));
+    }
 }

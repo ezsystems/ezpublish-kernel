@@ -48,6 +48,7 @@ class Configuration extends SiteAccessConfiguration
         $this->addHttpCacheSection($rootNode);
         $this->addPageSection($rootNode);
         $this->addRouterSection($rootNode);
+        $this->addStashCacheSection($rootNode);
 
         // Delegate SiteAccess config to configuration parsers
         $this->mainConfigParser->addSemanticConfig($this->generateScopeBaseNode($rootNode));
@@ -441,6 +442,35 @@ EOT;
                         ->end()
                     ->end()
                     ->info('Router related settings')
+                ->end()
+            ->end();
+    }
+
+    private function addStashCacheSection(ArrayNodeDefinition $rootNode)
+    {
+        $rootNode
+            ->children()
+                ->arrayNode('stash_cache')
+                    ->children()
+                        ->booleanNode('igbinary')
+                            ->defaultFalse()
+                            ->validate()
+                                ->ifTrue(function ($igbinary) {
+                                    return $igbinary && !extension_loaded('igbinary');
+                                })
+                                ->thenInvalid('PHP extension "igbinary" is not installed!')
+                            ->end()
+                        ->end()
+                        ->booleanNode('lzf')
+                            ->defaultFalse()
+                            ->validate()
+                                ->ifTrue(function ($lzf) {
+                                    return $lzf && !extension_loaded('lzf');
+                                })
+                                ->thenInvalid('PHP extension "lzf" is not installed!')
+                            ->end()
+                        ->end()
+                    ->end()
                 ->end()
             ->end();
     }
