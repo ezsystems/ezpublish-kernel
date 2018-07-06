@@ -57,6 +57,63 @@ class DocbookTest extends TestCase
 ',
                 array(),
             ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+         xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
+         version="5.0-variant ezpublish-1.0">
+  <blockquote>
+    <para>Some comments to people\'s comments!</para>
+  </blockquote>
+  <blockquote>
+    <title ezxhtml:level="3">Header level 3</title>
+    <title ezxhtml:level="4">Header level 4</title>
+    <para>foobar quote<link xlink:href="ezurl://1044" xlink:show="none">http://ez.no</link> for more info.</para>
+  </blockquote>
+</section>
+',
+                array(),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+    xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>test
+        <superscript>1
+            <emphasis role="strong">bold</emphasis>
+            <emphasis>italic</emphasis>
+            <emphasis role="underlined">underline</emphasis> superscript
+            <link xlink:href="http://ez.no" xlink:show="none" xlink:title="link tile">link</link>
+            <emphasis role="strikedthrough">strikedthrough</emphasis>
+        </superscript>
+    </para>
+</section>',
+                array(),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section
+    xmlns="http://docbook.org/ns/docbook"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
+    xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>test
+        <subscript>1
+            <emphasis role="strong">bold</emphasis>
+            <emphasis>italic</emphasis>
+            <emphasis role="underlined">underline</emphasis> subscript
+            <link xlink:href="http://ez.no" xlink:show="none" xlink:title="link tile">link</link>
+            <emphasis role="strikedthrough">strikedthrough</emphasis>
+        </subscript>
+    </para>
+</section>',
+                array(),
+            ),
         );
     }
 
