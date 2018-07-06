@@ -44,12 +44,12 @@ class TranslationCollectorPassTest extends AbstractCompilerPassTestCase
             [
                 'xlf',
                 __DIR__ . $this->normalizePath('/../Fixtures/vendor/../vendor/ezplatform-i18n/ezplatform-i18n-nb_no/ezpublish-kernel/messages.nb_NO.xlf'),
-                'no',
+                'nb',
                 'messages',
             ]
         );
 
-        $this->assertContainerBuilderHasParameter('available_translations', ['hi', 'no']);
+        $this->assertContainerBuilderHasParameter('available_translations', ['en', 'hi', 'nb']);
     }
 
     /**
