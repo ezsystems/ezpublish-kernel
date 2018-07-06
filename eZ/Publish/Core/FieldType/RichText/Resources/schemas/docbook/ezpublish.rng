@@ -22,6 +22,7 @@
       </a:documentation>
       <ref name="db.title"/>
     </define>
+
     <define name="db.blockquote.info" combine="choice">
       <a:documentation>
         Needed by the LIBXML engine to allow for multiple title elements on the same level below blockquote
@@ -29,6 +30,26 @@
       <optional>
         <ref name="db.title"/>
       </optional>
+    </define>
+
+    <define name="db.superscript.attlist" combine="interleave">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="db.emphasis"/>
+          <ref name="db.link"/>
+        </choice>
+      </zeroOrMore>
+    </define>
+
+    <define name="db.subscript.attlist" combine="interleave">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="db.emphasis"/>
+          <ref name="db.link"/>
+        </choice>
+      </zeroOrMore>
     </define>
 
     <define name="db.orderedlist">
