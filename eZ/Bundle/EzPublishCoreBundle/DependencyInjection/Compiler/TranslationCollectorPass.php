@@ -30,7 +30,6 @@ class TranslationCollectorPass implements CompilerPassInterface
         'it_IT' => 'it',
         'ja_JP' => 'ja',
         'nb_NO' => 'nb',
-        'no_NO' => 'no',
         'pl_PL' => 'pl',
         'pt_PT' => 'pt',
         'ru_RU' => 'ru',
