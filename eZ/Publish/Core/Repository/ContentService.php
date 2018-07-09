@@ -965,8 +965,11 @@ class ContentService implements ContentServiceInterface
     public function deleteContent(ContentInfo $contentInfo)
     {
         $contentInfo = $this->internalLoadContentInfo($contentInfo->id);
+        $content = $this->internalLoadContent($contentInfo->id);
 
-        if (!$this->repository->canUser('content', 'remove', $contentInfo)) {
+        if (!$contentInfo->published && !$this->repository->canUser('content', 'versionremove', $content)) {
+            throw new UnauthorizedException('content', 'versionremove', array('contentId' => $content->id));
+        } elseif (!$this->repository->canUser('content', 'remove', $contentInfo)) {
             throw new UnauthorizedException('content', 'remove', array('contentId' => $contentInfo->id));
         }
 
