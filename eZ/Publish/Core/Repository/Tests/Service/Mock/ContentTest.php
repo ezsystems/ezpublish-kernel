@@ -688,22 +688,76 @@ class ContentTest extends BaseServiceMockTest
     public function testDeleteContentThrowsUnauthorizedException()
     {
         $repository = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
+        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
         $contentInfo = $this->createMock(APIContentInfo::class);
+        $content = $this->createMock(APIContent::class);
 
         $contentInfo->expects($this->any())
             ->method('__get')
-            ->with('id')
-            ->will($this->returnValue(42));
+            ->with($this->logicalOr(
+                $this->equalTo('id'),
+                $this->equalTo('published')
+            ))
+            ->will($this->returnValueMap([['id', 42], ['published', true]]));
 
         $contentService->expects($this->once())
             ->method('internalLoadContentInfo')
             ->with(42)
             ->will($this->returnValue($contentInfo));
 
+        $contentService->expects($this->once())
+            ->method('internalLoadContent')
+            ->with(42)
+            ->will($this->returnValue($content));
+
         $repository->expects($this->once())
             ->method('canUser')
             ->with('content', 'remove')
+            ->will($this->returnValue(false));
+
+        /* @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
+        $contentService->deleteContent($contentInfo);
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function testDeleteUnpublishedContentThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepositoryMock();
+        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
+        $contentInfo = $this->createMock(APIContentInfo::class);
+        $content = $this->createMock(APIContent::class);
+
+        $contentInfo->expects($this->any())
+            ->method('__get')
+            ->with($this->logicalOr(
+                $this->equalTo('id'),
+                $this->equalTo('published')
+            ))
+            ->will($this->returnValueMap([['id', 42], ['published', false]]));
+
+        $contentService->expects($this->once())
+            ->method('internalLoadContentInfo')
+            ->with(42)
+            ->will($this->returnValue($contentInfo));
+
+        $contentService->expects($this->once())
+            ->method('internalLoadContent')
+            ->with(42)
+            ->will($this->returnValue($content));
+
+        $repository->expects($this->at(0))
+            ->method('canUser')
+            ->with('content', 'remove')
+            ->will($this->returnValue(false));
+
+        $repository->expects($this->at(1))
+            ->method('canUser')
+            ->with('content', 'versionremove')
             ->will($this->returnValue(false));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
@@ -724,7 +778,7 @@ class ContentTest extends BaseServiceMockTest
             ->with('content', 'remove')
             ->will($this->returnValue(true));
 
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
+        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandler */
         $urlAliasHandler = $this->getPersistenceMock()->urlAliasHandler();
         /** @var \PHPUnit\Framework\MockObject\MockObject $locationHandler */
@@ -733,16 +787,95 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler = $this->getPersistenceMock()->contentHandler();
 
         $contentInfo = $this->createMock(APIContentInfo::class);
+        $content = $this->createMock(APIContent::class);
 
         $contentService->expects($this->once())
             ->method('internalLoadContentInfo')
             ->with(42)
             ->will($this->returnValue($contentInfo));
 
+        $contentService->expects($this->once())
+            ->method('internalLoadContent')
+            ->with(42)
+            ->will($this->returnValue($content));
+
         $contentInfo->expects($this->any())
             ->method('__get')
-            ->with('id')
-            ->will($this->returnValue(42));
+            ->with($this->logicalOr(
+                $this->equalTo('id'),
+                $this->equalTo('published')
+            ))
+            ->will($this->returnValueMap([['id', 42], ['published', true]]));
+
+        $repository->expects($this->once())->method('beginTransaction');
+
+        $spiLocations = array(
+            new SPILocation(array('id' => 1)),
+            new SPILocation(array('id' => 2)),
+        );
+        $locationHandler->expects($this->once())
+            ->method('loadLocationsByContent')
+            ->with(42)
+            ->will($this->returnValue($spiLocations));
+
+        $contentHandler->expects($this->once())
+            ->method('deleteContent')
+            ->with(42);
+
+        foreach ($spiLocations as $index => $spiLocation) {
+            $urlAliasHandler->expects($this->at($index))
+                ->method('locationDeleted')
+                ->with($spiLocation->id);
+        }
+
+        $repository->expects($this->once())->method('commit');
+
+        /* @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
+        $contentService->deleteContent($contentInfo);
+    }
+
+    /**
+     * Test for the deleteContent() method.
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
+     */
+    public function testDeleteUnpublishedContent()
+    {
+        $repository = $this->getRepositoryMock();
+
+        $repository->expects($this->at(0))
+            ->method('canUser')
+            ->with('content', 'remove')
+            ->will($this->returnValue(true));
+
+        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
+        /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandler */
+        $urlAliasHandler = $this->getPersistenceMock()->urlAliasHandler();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $locationHandler */
+        $locationHandler = $this->getPersistenceMock()->locationHandler();
+        /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
+        $contentHandler = $this->getPersistenceMock()->contentHandler();
+
+        $contentInfo = $this->createMock(APIContentInfo::class);
+        $content = $this->createMock(APIContent::class);
+
+        $contentService->expects($this->once())
+            ->method('internalLoadContentInfo')
+            ->with(42)
+            ->will($this->returnValue($contentInfo));
+
+        $contentService->expects($this->once())
+            ->method('internalLoadContent')
+            ->with(42)
+            ->will($this->returnValue($content));
+
+        $contentInfo->expects($this->any())
+            ->method('__get')
+            ->with($this->logicalOr(
+                $this->equalTo('id'),
+                $this->equalTo('published')
+            ))
+            ->will($this->returnValueMap([['id', 42], ['published', true]]));
 
         $repository->expects($this->once())->method('beginTransaction');
 
@@ -786,21 +919,30 @@ class ContentTest extends BaseServiceMockTest
             ->with('content', 'remove')
             ->will($this->returnValue(true));
 
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
+        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
         /** @var \PHPUnit\Framework\MockObject\MockObject $locationHandler */
         $locationHandler = $this->getPersistenceMock()->locationHandler();
 
         $contentInfo = $this->createMock(APIContentInfo::class);
+        $content = $this->createMock(APIContent::class);
 
         $contentService->expects($this->once())
             ->method('internalLoadContentInfo')
             ->with(42)
             ->will($this->returnValue($contentInfo));
 
+        $contentService->expects($this->once())
+            ->method('internalLoadContent')
+            ->with(42)
+            ->will($this->returnValue($content));
+
         $contentInfo->expects($this->any())
             ->method('__get')
-            ->with('id')
-            ->will($this->returnValue(42));
+            ->with($this->logicalOr(
+                $this->equalTo('id'),
+                $this->equalTo('published')
+            ))
+            ->will($this->returnValueMap([['id', 42], ['published', true]]));
 
         $repository->expects($this->once())->method('beginTransaction');
 
