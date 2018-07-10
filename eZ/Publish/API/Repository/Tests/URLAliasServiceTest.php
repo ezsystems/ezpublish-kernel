@@ -1029,4 +1029,64 @@ DOCBOOK
 
         $this->assertEquals('/My-Folder-Modified/My-Article', $aliases[0]->path);
     }
+
+    /**
+     * Test refreshSystemUrlAliasesForLocation historizes and changes current URL alias after
+     * changing SlugConverter configuration.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLookupOnMultilingualNestedLocations()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $locationService = $this->getRepository()->getLocationService();
+
+        $topFolderNames = [
+            'eng-GB' => 'My folder Name',
+            'ger-DE' => 'Ger folder Name',
+            'eng-US' => 'My folder Name',
+        ];
+        $nestedFolderNames = [
+            'eng-GB' => 'nested Folder name',
+            'ger-DE' => 'Ger Nested folder Name',
+            'eng-US' => 'nested Folder name',
+        ];
+        $topFolderLocation = $locationService->loadLocation(
+            $this->createFolder($topFolderNames, 2)->contentInfo->mainLocationId
+        );
+        $nestedFolderLocation = $locationService->loadLocation(
+            $this->createFolder(
+                $nestedFolderNames,
+                $topFolderLocation->id
+            )->contentInfo->mainLocationId
+        );
+
+        $urlAlias = $urlAliasService->lookup('/My-Folder-Name/Nested-Folder-Name');
+        self::assertPropertiesCorrect(
+            [
+                'destination' => $nestedFolderLocation->id,
+                'path' => '/My-folder-Name/nested-Folder-name',
+                'languageCodes' => ['eng-US', 'eng-GB'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            ],
+            $urlAlias
+        );
+
+        $urlAlias = $urlAliasService->lookup('/Ger-Folder-Name/Ger-Nested-Folder-Name');
+        self::assertPropertiesCorrect(
+            [
+                'destination' => $nestedFolderLocation->id,
+                'path' => '/Ger-folder-Name/Ger-Nested-folder-Name',
+                'languageCodes' => ['ger-DE'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            ],
+            $urlAlias
+        );
+    }
 }
