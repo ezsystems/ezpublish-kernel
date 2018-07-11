@@ -1,0 +1,9 @@
+# Config loaded as the last one just before creating the test container.
+# Effectively overrides all other settings
+
+parameters:
+    # for tests of features using prioritized languages list
+    languages:
+        - eng-US
+        - eng-GB
+        - ger-DE

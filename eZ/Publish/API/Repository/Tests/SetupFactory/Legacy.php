@@ -391,6 +391,9 @@ class Legacy extends SetupFactory
             $containerBuilder->addCompilerPass(new Compiler\Search\SearchEngineSignalSlotPass('legacy'));
             $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
 
+            // load overrides just before creating test Container
+            $loader->load('tests/override.yml');
+
             self::$serviceContainer = new ServiceContainer(
                 $containerBuilder,
                 $installDir,
