@@ -3702,6 +3702,7 @@ class UrlAliasTest extends BaseServiceMockTest
                 array(
                     $this->getRepositoryMock(),
                     $this->getPersistenceMock()->urlAliasHandler(),
+                    $this->getNameSchemaServiceMock(),
                 )
             )
             ->getMock();

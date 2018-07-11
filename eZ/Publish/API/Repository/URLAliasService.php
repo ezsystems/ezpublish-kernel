@@ -134,4 +134,11 @@ interface URLAliasService
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
      */
     public function load($id);
+
+    /**
+     * Refresh all system URL aliases for the given Location (and historize outdated if needed).
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     */
+    public function refreshSystemUrlAliasesForLocation(Location $location);
 }

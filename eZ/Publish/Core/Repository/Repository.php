@@ -624,6 +624,7 @@ class Repository implements RepositoryInterface
         $this->urlAliasService = new URLAliasService(
             $this,
             $this->persistenceHandler->urlAliasHandler(),
+            $this->getNameSchemaService(),
             $this->serviceSettings['urlAlias']
         );
 

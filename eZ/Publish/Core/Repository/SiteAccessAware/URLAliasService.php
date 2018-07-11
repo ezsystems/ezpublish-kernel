@@ -96,4 +96,9 @@ class URLAliasService implements URLAliasServiceInterface
     {
         return $this->service->load($id);
     }
+
+    public function refreshSystemUrlAliasesForLocation(Location $location)
+    {
+        $this->service->refreshSystemUrlAliasesForLocation($location);
+    }
 }
