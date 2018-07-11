@@ -100,7 +100,7 @@ ADD CONSTRAINT `ezcontentbrowsebookmark_user_fk`
 -- EZEE-2081: Move NotificationBundle into AdminUI
 --
 
-CREATE TABLE `eznotification` (
+CREATE TABLE IF NOT EXISTS `eznotification` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `owner_id` int(11) NOT NULL DEFAULT 0,
   `is_pending` tinyint(1) NOT NULL DEFAULT '1',
