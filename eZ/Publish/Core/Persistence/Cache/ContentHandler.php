@@ -207,7 +207,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         if ($status === VersionInfo::STATUS_PUBLISHED) {
             $this->cache->invalidateTags(['content-' . $contentId]);
         } else {
-            $this->cache->invalidateTags(["content-$contentId-version-list"]);
+            $this->cache->invalidateTags(["content-$contentId-version-list", "content-$contentId-version-$versionNo"]);
         }
 
         return $return;
@@ -232,7 +232,15 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->updateContent($contentId, $versionNo, $struct);
-        $this->cache->invalidateTags(['content-' . $contentId]);
+        // Not that it's supported by API, but if change was on published version we need to clear all content cache
+        if (
+            $content->versionInfo->contentInfo->status === ContentInfo::STATUS_PUBLISHED &&
+            $content->versionInfo->contentInfo->currentVersionNo == $versionNo
+        ) {
+            $this->cache->invalidateTags(["content-$contentId"]);
+        } else {
+            $this->cache->invalidateTags(["content-$contentId-version-$versionNo"]);
+        }
 
         return $content;
     }
@@ -275,7 +283,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
         $return = $this->persistenceHandler->contentHandler()->deleteVersion($contentId, $versionNo);
-        $this->cache->invalidateTags(['content-' . $contentId]);
+        $this->cache->invalidateTags(["content-$contentId-version-$versionNo"]);
 
         return $return;
     }
@@ -400,7 +408,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             $versionNo,
             $languageCode
         );
-        $this->cache->invalidateTags(['content-' . $contentId]);
+        $this->cache->invalidateTags(["content-$contentId-version-$versionNo"]);
 
         return $content;
     }
