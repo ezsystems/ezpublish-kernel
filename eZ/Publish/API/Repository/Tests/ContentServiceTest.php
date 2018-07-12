@@ -5737,6 +5737,18 @@ XML
         $contentService->deleteTranslationFromDraft($draft->versionInfo, $languageCode);
     }
 
+    public function testCreateAndDeleteWithinSameTransaction()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $repository->beginTransaction();
+        $content = $this->createContentDraft('folder', 2, ['name' => __METHOD__]);
+        $contentService->publishVersion($content->versionInfo);
+        $contentService->deleteContent($content->contentInfo);
+        $repository->commit();
+    }
+
     /**
      * Asserts that all aliases defined in $expectedAliasProperties with the
      * given properties are available in $actualAliases and not more.
