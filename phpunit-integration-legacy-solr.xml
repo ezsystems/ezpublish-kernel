@@ -25,6 +25,8 @@
                  @todo: Search service is used all over the place, so we must test
                         all services here.
             -->
+            <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
+            <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
@@ -57,8 +59,6 @@
             <file>eZ/Publish/API/Repository/Tests/SearchEngineIndexingTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LimitationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/FieldTypeServiceTest.php</file>
-            <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
-            <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
         </testsuite>
         <testsuite name="eZ\Publish\API\Repository\Tests\Regression">
             <directory>eZ/Publish/API/Repository/Tests/Regression/</directory>
