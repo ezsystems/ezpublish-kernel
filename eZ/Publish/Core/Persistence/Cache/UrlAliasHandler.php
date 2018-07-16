@@ -364,6 +364,18 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     }
 
     /**
+     * Delete corrupted URL aliases (global, custom and system).
+     *
+     * @return int Number of deleted URL aliases
+     */
+    public function deleteCorruptedUrlAliases()
+    {
+        $this->logger->logCall(__METHOD__);
+
+        return $this->persistenceHandler->urlAliasHandler()->deleteCorruptedUrlAliases();
+    }
+
+    /**
      * Return relevant UrlAlias and optionally UrlAlias location tags so cache can be purged reliably.
      *
      * For use when generating cache, not on invalidation.

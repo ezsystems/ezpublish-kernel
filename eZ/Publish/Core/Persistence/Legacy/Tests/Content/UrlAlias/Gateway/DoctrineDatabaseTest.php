@@ -536,15 +536,17 @@ class DoctrineDatabaseTest extends TestCase
     protected function getGateway()
     {
         if (!isset($this->gateway)) {
+            $databaseHandler = $this->getDatabaseHandler();
             $languageHandler = new LanguageHandler(
                 new LanguageGateway(
-                    $this->getDatabaseHandler()
+                    $databaseHandler
                 ),
                 new LanguageMapper()
             );
             $this->gateway = new DoctrineDatabase(
-                $this->getDatabaseHandler(),
-                new LanguageMaskGenerator($languageHandler)
+                $databaseHandler,
+                new LanguageMaskGenerator($languageHandler),
+                $databaseHandler->getConnection()
             );
         }
 

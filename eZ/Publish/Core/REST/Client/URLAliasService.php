@@ -218,4 +218,12 @@ class URLAliasService implements APIURLAliasService, Sessionable
     {
         throw new \Exception('@todo: Implement');
     }
+
+    /**
+     * Delete global, system or custom URL alias pointing to non-existent Locations.
+     */
+    public function deleteCorruptedUrlAliases()
+    {
+        throw new \Exception('@todo: Implement');
+    }
 }

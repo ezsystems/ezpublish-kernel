@@ -9,11 +9,11 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Database\Query;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
 
 /**
@@ -72,18 +72,27 @@ class DoctrineDatabase extends Gateway
     protected $table;
 
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
      * Creates a new DoctrineDatabase UrlAlias Gateway.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     * @param \Doctrine\DBAL\Connection $connection
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      */
     public function __construct(
         DatabaseHandler $dbHandler,
-        LanguageMaskGenerator $languageMaskGenerator
+        LanguageMaskGenerator $languageMaskGenerator,
+        Connection $connection
     ) {
         $this->dbHandler = $dbHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
         $this->table = static::TABLE;
+        $this->connection = $connection;
     }
 
     public function setTable($name)
@@ -1230,6 +1239,122 @@ class DoctrineDatabase extends Gateway
                 );
             }
         }
+    }
+
+    /**
+     * Delete URL aliases pointing to non-existent Locations.
+     *
+     * @return int Number of affected rows.
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function deleteUrlAliasesWithoutLocation()
+    {
+        // Note: creating actions from nodes instead of extracting nodes from actions due to
+        // cross DBMS compatibility
+        $locationsSubquery = $this->connection->createQueryBuilder();
+        $locationsSubquery
+            ->select(
+                $this->connection->getDatabasePlatform()->getConcatExpression(
+                    $this->connection->quote('eznode:'),
+                    'node_id'
+                )
+            )
+            ->from('ezcontentobject_tree');
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->table)
+            ->where(
+                $query->expr()->eq(
+                    $this->connection->quoteIdentifier('action_type'),
+                    $query->createPositionalParameter('eznode')
+                )
+            )
+            ->andWhere(
+                $query->expr()->notIn(
+                    $this->connection->quoteIdentifier('action'),
+                    $locationsSubquery->getSQL()
+                )
+            )
+        ;
+
+        return $query->execute();
+    }
+
+    /**
+     * Delete URL aliases pointing to non-existent parent nodes.
+     *
+     * @return int Number of affected rows.
+     */
+    public function deleteUrlAliasesWithoutParent()
+    {
+        $existingAliasesQuery = $this->getAllUrlAliasesQuery();
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->table)
+            ->where(
+                $query->expr()->neq(
+                    'parent',
+                    $query->createPositionalParameter(0, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $query->expr()->notIn(
+                    'parent',
+                    $existingAliasesQuery
+                )
+            )
+        ;
+
+        return $query->execute();
+    }
+
+    /**
+     * Delete URL aliases which do not link to any existing URL alias node.
+     *
+     * Note: Typically link column value is used to determine original alias for an archived entries.
+     */
+    public function deleteUrlAliasesWithBrokenLink()
+    {
+        $existingAliasesQuery = $this->getAllUrlAliasesQuery();
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->table)
+            ->where(
+                $query->expr()->neq('id', 'link')
+            )
+            ->andWhere(
+                $query->expr()->notIn(
+                    'link',
+                    $existingAliasesQuery
+                )
+            )
+        ;
+
+        return $query->execute();
+    }
+
+    /**
+     * Get subquery for IDs of all URL aliases.
+     *
+     * @return string Query
+     */
+    private function getAllUrlAliasesQuery()
+    {
+        $existingAliasesQueryBuilder = $this->connection->createQueryBuilder();
+        $innerQueryBuilder = $this->connection->createQueryBuilder();
+
+        return $existingAliasesQueryBuilder
+            ->select('tmp.id')
+            ->from(
+                // nest subquery to avoid same-table update error
+                '(' . $innerQueryBuilder->select('id')->from($this->table)->getSQL() . ')',
+                'tmp'
+            )
+            ->getSQL();
     }
 
     /**

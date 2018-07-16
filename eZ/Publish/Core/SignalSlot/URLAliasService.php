@@ -256,4 +256,14 @@ class URLAliasService implements URLAliasServiceInterface
             )
         );
     }
+
+    /**
+     * Delete global, system or custom URL alias pointing to non-existent Locations.
+     *
+     * @return int Number of deleted URL aliases
+     */
+    public function deleteCorruptedUrlAliases()
+    {
+        return $this->service->deleteCorruptedUrlAliases();
+    }
 }

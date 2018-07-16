@@ -10,6 +10,7 @@ services:
         arguments:
             - "@ezpublish.api.storage_engine.legacy.dbhandler"
             - "@ezpublish.persistence.legacy.language.mask_generator"
+            - "@ezpublish.api.storage_engine.legacy.connection"
 
     ezpublish.persistence.legacy.url_alias.gateway.exception_conversion:
         class: "%ezpublish.persistence.legacy.url_alias.gateway.exception_conversion.class%"
@@ -35,4 +36,5 @@ services:
             - "@ezpublish.persistence.slug_converter"
             - "@ezpublish.persistence.legacy.content.gateway"
             - "@ezpublish.persistence.legacy.language.mask_generator"
+            - '@ezpublish.spi.persistence.legacy.transactionhandler'
         lazy: true
