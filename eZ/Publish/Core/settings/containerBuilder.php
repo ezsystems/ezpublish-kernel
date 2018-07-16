@@ -25,8 +25,21 @@ $containerBuilder->addResource(new FileResource(__FILE__));
 
 // Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
 if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
+    $igbinary = getenv('REDIS_ENABLE_IGBINARY');
+    $lzf = getenv('REDIS_ENABLE_LZF');
+
+    if ($igbinary && $lzf) {
+        $class = \eZ\Bundle\EzPublishCoreBundle\Cache\Driver\Redis\RedisIgbinaryLzf::class;
+    } elseif ($igbinary && !$lzf) {
+        $class = \eZ\Bundle\EzPublishCoreBundle\Cache\Driver\Redis\RedisIgbinary::class;
+    } elseif (!$igbinary && $lzf) {
+        $class = \eZ\Bundle\EzPublishCoreBundle\Cache\Driver\Redis\RedisSerializeLzf::class;
+    } else {
+        $class = \Stash\Driver\Redis::class;
+    }
+
     $containerBuilder
-        ->register('ezpublish.cache_pool.driver', 'Stash\Driver\Redis')
+        ->register('ezpublish.cache_pool.driver', $class)
         ->addArgument(['servers' => [['server' => getenv('CACHE_HOST') ?: '127.0.0.1']]]);
 }
 
