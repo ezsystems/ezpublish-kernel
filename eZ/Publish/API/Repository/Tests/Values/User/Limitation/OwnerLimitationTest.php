@@ -27,6 +27,8 @@ class OwnerLimitationTest extends BaseLimitationTest
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation
      *
      * @throws \ErrorException
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testOwnerLimitationAllow()
     {
@@ -82,9 +84,6 @@ class OwnerLimitationTest extends BaseLimitationTest
         );
         /* END: Use Case */
 
-        $this->expectException(
-            '\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException'
-        );
         $contentService->loadContent($content->id);
     }
 

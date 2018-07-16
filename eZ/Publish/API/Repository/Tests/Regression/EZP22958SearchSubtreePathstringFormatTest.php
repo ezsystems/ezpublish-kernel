@@ -23,16 +23,29 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
     }
 
     /**
+     * Tests that invalid path string provided for subtree criterion result in exception.
+     *
+     * @dataProvider searchContentQueryWithInvalidDataProvider
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSearchContentSubtreeShouldThrowException($pathString)
+    {
+        $query = new Query(
+            array(
+                'filter' => new Criterion\Subtree($pathString),
+            )
+        );
+
+        $result = $this->getRepository()->getSearchService()->findContent($query);
+    }
+
+    /**
      * Tests that path string provided for subtree criterion is valid.
      *
      * @dataProvider searchContentQueryProvider
      */
-    public function testSearchContentSubtree($pathString, $expectedException = null)
+    public function testSearchContentSubtree($pathString)
     {
-        if ($expectedException) {
-            $this->expectException($expectedException);
-        }
-
         $query = new Query(
             array(
                 'filter' => new Criterion\Subtree($pathString),
@@ -47,27 +60,27 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
         return array(
             array(
                 '/1/2/',
-                null,
             ),
             array(
                 array('/1/2/', '/1/2/4/'),
-                null,
-            ),
-            array(
-                '/1/2',
-                'InvalidArgumentException',
-            ),
-            array(
-                array('/1/2/', '/1/2/4'),
-                'InvalidArgumentException',
             ),
             array(
                 '/1/id0/',
-                null,
+            ),
+        );
+    }
+
+    public function searchContentQueryWithInvalidDataProvider()
+    {
+        return array(
+            array(
+                '/1/2',
+            ),
+            array(
+                array('/1/2/', '/1/2/4'),
             ),
             array(
                 '/1/id0',
-                'InvalidArgumentException',
             ),
         );
     }

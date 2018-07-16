@@ -473,8 +473,8 @@ class EzPublishCoreExtension extends Extension
 
     /**
      * @param array $config
-     * @param ContainerBuilder $container
-     * @param FileLoader $loader
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
      */
     private function handleImage(array $config, ContainerBuilder $container, FileLoader $loader)
     {

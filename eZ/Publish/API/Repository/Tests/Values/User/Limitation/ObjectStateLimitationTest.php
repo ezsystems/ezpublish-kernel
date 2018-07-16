@@ -31,6 +31,8 @@ class ObjectStateLimitationTest extends BaseLimitationTest
      * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
      *
      * @throws \ErrorException
+     *
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testObjectStateLimitationAllow()
     {
@@ -84,7 +86,6 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $contentService->deleteContent($draft->contentInfo);
         /* END: Use Case */
 
-        $this->expectException('\\eZ\\Publish\\API\\Repository\\Exceptions\\NotFoundException');
         $contentService->loadContent($draft->id);
     }
 
