@@ -114,6 +114,8 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->handleLocale($config, $container, $loader);
         $this->handleHelpers($config, $container, $loader);
         $this->handleImage($config, $container, $loader);
+        // Stash Cache
+        $this->handleStashCache($config, $container, $loader);
 
         // Map settings
         $processor = new ConfigurationProcessor($container, 'ezsettings');
@@ -438,12 +440,28 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
     /**
      * @param array $config
-     * @param ContainerBuilder $container
-     * @param FileLoader $loader
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
      */
     private function handleImage(array $config, ContainerBuilder $container, FileLoader $loader)
     {
         $loader->load('image.yml');
+    }
+
+    /**
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleStashCache(array $config, ContainerBuilder $container, FileLoader $loader)
+    {
+        if (isset($config['stash_cache']['igbinary'])) {
+            $container->setParameter('ezpublish.stash_cache.igbinary', $config['stash_cache']['igbinary']);
+        }
+
+        if (isset($config['stash_cache']['lzf'])) {
+            $container->setParameter('ezpublish.stash_cache.lzf', $config['stash_cache']['lzf']);
+        }
     }
 
     private function buildPolicyMap(ContainerBuilder $container)
