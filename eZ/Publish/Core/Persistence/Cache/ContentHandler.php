@@ -424,6 +424,26 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
         if ($contentInfo->mainLocationId) {
             $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
+            $locationCount = count($locations);
+            if ($locationCount > 30) {
+                // As we don't have paging support on loadLocationsByContent(), slice it to avoid overloading tag system
+                $locations = array_slice(
+                    $locations,
+                    0,
+                    25
+                );
+                // TODO: Will this contain main location? if not, somehow make sure of it in SE or here
+                @trigger_error(
+                    sprintf(
+                        '%d locations for content %d, not able to handle that many tags so took the first 25!',
+                        $locationCount,
+                        $contentInfo->id
+                    ),
+                    E_USER_WARNING
+                );
+
+            }
+
             foreach ($locations as $location) {
                 $tags[] = 'location-' . $location->id;
                 foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
