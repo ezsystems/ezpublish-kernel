@@ -158,7 +158,7 @@ EOT
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
-        $databaseHandler = $this->getContainer()->get('ezpublish.connection');
+        $databaseHandler = $this->getContainer()->get('ezpublish.persistence.connection');
         /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $gateway */
         $gateway = $this->getContainer()->get('ezpublish.persistence.legacy.url_alias.gateway');
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandler */

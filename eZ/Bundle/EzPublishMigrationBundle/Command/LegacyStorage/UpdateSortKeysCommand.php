@@ -57,7 +57,7 @@ EOT
         $dryRun = $input->getOption('dry-run');
 
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
-        $databaseHandler = $this->getContainer()->get('ezpublish.connection');
+        $databaseHandler = $this->getContainer()->get('ezpublish.persistence.connection');
 
         /** @var \eZ\Publish\API\Repository\Repository $repository */
         $repository = $this->getContainer()->get('ezpublish.api.repository');

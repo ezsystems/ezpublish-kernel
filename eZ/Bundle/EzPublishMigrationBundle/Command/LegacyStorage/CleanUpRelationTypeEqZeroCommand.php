@@ -105,7 +105,7 @@ EOT
     protected function executeFix()
     {
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $conn */
-        $conn = $this->getContainer()->get('ezpublish.connection');
+        $conn = $this->getContainer()->get('ezpublish.persistence.connection');
         $conn->exec('DELETE FROM ezcontentobject_link WHERE relation_type = 0');
     }
 
@@ -129,7 +129,7 @@ EOT
                     . 'relation_type FROM ezcontentobject_link WHERE relation_type = 0';
 
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $conn */
-        $conn = $this->getContainer()->get('ezpublish.connection');
+        $conn = $this->getContainer()->get('ezpublish.persistence.connection');
 
         $stmt = $conn->prepare($sql);
         $stmt->execute();
@@ -140,7 +140,7 @@ EOT
     protected function getTotalCount()
     {
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $conn */
-        $conn = $this->getContainer()->get('ezpublish.connection');
+        $conn = $this->getContainer()->get('ezpublish.persistence.connection');
 
         $stmt = $conn->prepare('SELECT COUNT(id) FROM ezcontentobject_link WHERE relation_type = 0');
         $stmt->execute();

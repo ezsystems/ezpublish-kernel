@@ -65,7 +65,7 @@ EOT
         $dryRun = $input->getOption('dry-run');
 
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
-        $databaseHandler = $this->getContainer()->get('ezpublish.connection');
+        $databaseHandler = $this->getContainer()->get('ezpublish.persistence.connection');
 
         $warningStyle = new OutputFormatterStyle('red');
         $output->getFormatter()->setStyle('warning', $warningStyle);
@@ -168,7 +168,7 @@ EOT
     protected function initSelectQuery(SelectQuery $query)
     {
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
-        $databaseHandler = $this->getContainer()->get('ezpublish.connection');
+        $databaseHandler = $this->getContainer()->get('ezpublish.persistence.connection');
 
         $query
             ->select(
@@ -270,7 +270,7 @@ EOT
         }
 
         /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler */
-        $databaseHandler = $this->getContainer()->get('ezpublish.connection');
+        $databaseHandler = $this->getContainer()->get('ezpublish.persistence.connection');
 
         // Remove always available flag from all fields not in main language
         /** @var $query \eZ\Publish\Core\Persistence\Database\UpdateQuery */

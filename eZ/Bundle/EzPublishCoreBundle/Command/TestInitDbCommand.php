@@ -32,7 +32,7 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $database = $this->getContainer()->get('ezpublish.connection')->getConnection()->getParams();
+        $database = $this->getContainer()->get('ezpublish.persistence.connection')->getConnection()->getParams();
         if (is_array($database)) {
             $driverMap = array(
                 'pdo_mysql' => 'mysql',
