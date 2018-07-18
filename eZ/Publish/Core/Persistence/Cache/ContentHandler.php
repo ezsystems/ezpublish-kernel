@@ -43,7 +43,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $srcVersion, 'user' => $userId));
         $draft = $this->persistenceHandler->contentHandler()->createDraftFromVersion($contentId, $srcVersion, $userId);
-        $this->cache->invalidateTags(["content-$contentId-version-list"]);
+        $this->cache->invalidateTags(["content-{$contentId}-version-list"]);
 
         return $draft;
     }
@@ -203,11 +203,10 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'status' => $status, 'version' => $versionNo));
         $return = $this->persistenceHandler->contentHandler()->setStatus($contentId, $status, $versionNo);
 
-        $this->cache->deleteItem("ez-content-version-info-${contentId}-${versionNo}");
         if ($status === VersionInfo::STATUS_PUBLISHED) {
             $this->cache->invalidateTags(['content-' . $contentId]);
         } else {
-            $this->cache->invalidateTags(["content-$contentId-version-list", "content-$contentId-version-$versionNo"]);
+            $this->cache->invalidateTags(["content-{$contentId}-version-{$versionNo}"]);
         }
 
         return $return;
@@ -232,7 +231,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->updateContent($contentId, $versionNo, $struct);
-        $this->cache->invalidateTags(["content-$contentId-version-$versionNo"]);
+        $this->cache->invalidateTags(["content-{$contentId}-version-{$versionNo}"]);
 
         return $content;
     }
@@ -275,7 +274,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
         $return = $this->persistenceHandler->contentHandler()->deleteVersion($contentId, $versionNo);
-        $this->cache->invalidateTags(["content-$contentId-version-$versionNo"]);
+        $this->cache->invalidateTags(["content-{$contentId}-version-{$versionNo}"]);
 
         return $return;
     }
@@ -293,7 +292,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'status' => $status));
         $versions = $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
         $cacheItem->set($versions);
-        $tags = ["content-$contentId", "content-$contentId-version-list"];
+        $tags = ["content-{$contentId}", "content-{$contentId}-version-list"];
         foreach ($versions as $version) {
             $tags = $this->getCacheTagsForVersion($version, $tags);
         }
@@ -400,7 +399,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
             $versionNo,
             $languageCode
         );
-        $this->cache->invalidateTags(["content-$contentId-version-$versionNo"]);
+        $this->cache->invalidateTags(["content-{$contentId}-version-{$versionNo}"]);
 
         return $content;
     }
@@ -420,12 +419,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $tags[] = 'content-' . $contentInfo->id;
 
         if ($contentInfo->mainLocationId) {
-            // As we don't have paging support on loadLocationsByContent(), slice it to avoid overloading tag system
-            $locations = array_slice(
-                $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id),
-                0,
-                25
-            );
+            $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentInfo->id);
             foreach ($locations as $location) {
                 $tags[] = 'location-' . $location->id;
                 foreach (explode('/', trim($location->pathString, '/')) as $pathId) {

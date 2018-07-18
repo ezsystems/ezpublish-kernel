@@ -46,8 +46,8 @@ class ContentHandlerTest extends AbstractCacheHandlerTest
             ['createDraftFromVersion', [2, 1, 14], ['content-2-version-list']],
             ['copy', [2, 1]],
             ['loadDraftsForUser', [14]],
-            ['setStatus', [2, 0, 1], ['content-2-version-list', 'content-2-version-1'], 'ez-content-version-info-2-1'],
-            ['setStatus', [2, 1, 1], ['content-2'], 'ez-content-version-info-2-1'],
+            ['setStatus', [2, 0, 1], ['content-2-version-1']],
+            ['setStatus', [2, 1, 1], ['content-2']],
             ['updateMetadata', [2, new MetadataUpdateStruct()], ['content-2']],
             ['updateContent', [2, 1, new UpdateStruct()], ['content-2-version-1']],
             //['deleteContent', [2]], own tests for relations complexity
