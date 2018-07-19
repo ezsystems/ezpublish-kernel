@@ -17,6 +17,9 @@ List of tags and their meaning:
 - `content-<content-id>` :
   _Meta tag used on anything that are affected on changes to content, on content itself as well as location and so on._
 
+- `content-<content-id>-version-<version-number>`
+   _Used for specific versions, usuefull for clearing cache of a specific draft on changes for instance._
+
 - `content-fields-<content-id>` :
   _Used on content/user object itself (with fields), for use when operations affects field values but not content meta info._
 
