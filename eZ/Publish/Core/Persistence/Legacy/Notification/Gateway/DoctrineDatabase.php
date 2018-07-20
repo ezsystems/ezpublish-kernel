@@ -124,7 +124,7 @@ class DoctrineDatabase extends Gateway
             ->select('COUNT(' . self::COLUMN_ID . ')')
             ->from(self::TABLE_NOTIFICATION)
             ->where($query->expr()->eq(self::COLUMN_OWNER_ID, ':user_id'))
-            ->where($query->expr()->eq(self::COLUMN_IS_PENDING, true))
+            ->andWhere($query->expr()->eq(self::COLUMN_IS_PENDING, true))
             ->setParameter(':user_id', $userId, PDO::PARAM_INT);
 
         return (int)$query->execute()->fetchColumn();
