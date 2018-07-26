@@ -80,9 +80,14 @@ script:
   - if [ "$BEHAT_OPTS" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "bin/behat $BEHAT_OPTS" ; fi
   - if [ "$REST_TEST_CONFIG" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional"  ; fi
 
-# disable mail notifications
 notifications:
-  email: false
+  slack:
+    rooms:
+      - secure: Xb/nKrA5C4E5pNZulEVht1fT4gsOgoQp9WDNWVSBXz8i8JVPUZo20MtKt67pXK2SmxXbgY8aWbHrD1Y3Lv5YLUCHPJQKVxFiDLTh7sACxvHoEa8EuLiQo9naitMSXL1S4PaC8ptaVn9fe2Fwfg+ydSFLCsFDa+qmdBYjNaf8W4M=
+      - secure: qEgnhpVaWJZQNvJRisv5Kb1vfuZ4H0LjPGWdTk9Q1+MmQMhv/zGV1Z/H1+FEmxlZxk7zrC5ooLs5+K5Nf24XycAM1yczYWGBWJa0P+WKO1KfPx/NbOdSugXIKfbW4JcmwY5mpxPHf+9nUbEOv6zu3cOhWJg41MbTLcGRle+NZVc=
+    on_success: change
+    on_failure: always
+    on_pull_requests: false
 
 # reduce depth (history) of git checkout
 git:
