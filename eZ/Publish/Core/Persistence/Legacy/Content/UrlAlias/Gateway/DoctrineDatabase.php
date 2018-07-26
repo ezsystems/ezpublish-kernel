@@ -877,7 +877,13 @@ class DoctrineDatabase extends Gateway
             if (empty($rows)) {
                 // Normally this should never happen
                 // @todo remove throw when tested
-                $path = implode('/', $pathData);
+                $pathDataArray = [];
+
+                foreach ($pathData as $path) {
+                    $pathDataArray[] = $path[0]['text'];
+                }
+
+                $path = implode('/', $pathDataArray);
                 throw new \RuntimeException("Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__);
             }
 
