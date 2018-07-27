@@ -901,15 +901,20 @@ class DoctrineDatabase extends Gateway
             $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
             if (empty($rows)) {
                 // Normally this should never happen
-                // @todo remove throw when tested
                 $pathDataArray = [];
-
                 foreach ($pathData as $path) {
+                    if (!isset($path[0]['text'])) {
+                        continue;
+                    }
+
                     $pathDataArray[] = $path[0]['text'];
                 }
 
                 $path = implode('/', $pathDataArray);
-                throw new \RuntimeException("Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__);
+                throw new \RuntimeException(
+                    "Unable to load path data, the path ...'{$path}' is broken, alias id '{$id}' not found. " .
+                    'To fix all broken paths run the ezplatform:urls:regenerate-aliases command'
+                );
             }
 
             $id = $rows[0]['parent'];
