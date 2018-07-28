@@ -58,23 +58,28 @@ class PersistenceLogger
             $this->calls[] = array(
                 'method' => $method,
                 'arguments' => $arguments,
-                'trace' => $this->getSimpleCallTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7)),
+                'trace' => $this->getSimpleCallTrace(
+                    array_slice(
+                        debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7),
+                        2
+                    )
+                ),
             );
         }
     }
 
-    private function getSimpleCallTrace(array $backtrace) :array
+    private function getSimpleCallTrace(array $backtrace): array
     {
         $calls = [];
-        foreach (array_slice($backtrace, 2) as $call) {
-            if (strpos($call['class'], '\\') === false) {
-                // skip if class has no namspace (in the slice of call graph here that would be a Symfony lazy proxy)
+        foreach ($backtrace as $call) {
+            if (!isset($call['class']) || strpos($call['class'], '\\') === false) {
+                // skip if class has no namspace (Symfony lazy proxy) or plain function
                 continue;
             }
 
-            $calls[] = $call['class'] . $call['type'] . $call['function']. '()';
+            $calls[] = $call['class'] . $call['type'] . $call['function'] . '()';
 
-            // Break out as soon as we have listed a class outside of kernel
+            // Break out as soon as we have listed 1 class outside of kernel
             if (strpos($call['class'], 'eZ\\Publish\\Core\\') !== 0) {
                 break;
             }
