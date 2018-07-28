@@ -84,6 +84,7 @@ class PersistenceCacheCollector extends DataCollector
                 'arguments' => empty($call['arguments']) ?
                     '' :
                     preg_replace(array('/^array\s\(\s/', '/,\s\)$/'), '', var_export($call['arguments'], true)),
+                'trace' => implode(', ', $call['trace']),
             );
         }
 

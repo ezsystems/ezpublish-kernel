@@ -23,12 +23,14 @@
             <th>Class</th>
             <th>Method</th>
             <th>Arguments</th>
+            <th title="Simplified trace">Trace</th>
         </tr>
         {% for call in collector.calls %}
             <tr>
                 <td>{{ call.class }}</td>
                 <td>{{ call.method }}</td>
                 <td>{{ call.arguments }}</td>
+                <td class="text-small text-muted">{{ call.trace }}</td>
             </tr>
         {% endfor %}
     </table>
