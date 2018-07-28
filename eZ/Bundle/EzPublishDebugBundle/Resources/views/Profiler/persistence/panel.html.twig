@@ -1,6 +1,12 @@
+<h3 title="Calls made to SPI\Persistence, persistance layer beneath Repository, which where not cached in SPI\Persistence\Cache">
+    Uncached Persistence\Cache calls
+</h3>
+
+<p class="text-small text-muted">TIP: This can represent both cold cache, and calls to methods which has not been made to be cached <em>(yet)</em>. Make sure to reload a few times to warmup cache in order to only see the latter.</p>
+
 <table>
     <tr>
-        <th>Total Uncached SPI calls:</th>
+        <th>Total Uncached calls:</th>
         <td>{{ collector.count }}</td>
     </tr>
     {% if collector.handlerscount %}
@@ -12,7 +18,6 @@
 </table>
 
 {% if collector.callsLoggingEnabled %}
-    <h3>Uncached SPI calls</h3>
     <table>
         <tr>
             <th>Class</th>
