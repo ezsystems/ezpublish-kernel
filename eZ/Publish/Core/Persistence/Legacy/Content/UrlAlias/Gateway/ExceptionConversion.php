@@ -433,7 +433,7 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function deleteUrlAliasesWithoutLocation()
+    public function deleteUrlAliasesWithoutLocation(): int
     {
         try {
             return $this->innerGateway->deleteUrlAliasesWithoutLocation();
@@ -447,7 +447,7 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function deleteUrlAliasesWithoutParent()
+    public function deleteUrlAliasesWithoutParent(): int
     {
         try {
             return $this->innerGateway->deleteUrlAliasesWithoutParent();
@@ -461,7 +461,7 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function deleteUrlAliasesWithBrokenLink()
+    public function deleteUrlAliasesWithBrokenLink(): int
     {
         try {
             return $this->innerGateway->deleteUrlAliasesWithBrokenLink();

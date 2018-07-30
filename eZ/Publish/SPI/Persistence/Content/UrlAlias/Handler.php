@@ -183,5 +183,5 @@ interface Handler
      *
      * @return int Number of deleted URL aliases
      */
-    public function deleteCorruptedUrlAliases();
+    public function deleteCorruptedUrlAliases(): int;
 }

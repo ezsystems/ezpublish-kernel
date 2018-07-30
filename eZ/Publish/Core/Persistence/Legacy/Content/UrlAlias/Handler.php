@@ -1075,7 +1075,7 @@ class Handler implements UrlAliasHandlerInterface
      *
      * @throws \Exception
      */
-    public function deleteCorruptedUrlAliases()
+    public function deleteCorruptedUrlAliases(): int
     {
         $this->transactionHandler->beginTransaction();
         try {

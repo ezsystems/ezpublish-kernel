@@ -368,7 +368,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
      *
      * @return int Number of deleted URL aliases
      */
-    public function deleteCorruptedUrlAliases()
+    public function deleteCorruptedUrlAliases(): int
     {
         $this->logger->logCall(__METHOD__);
 

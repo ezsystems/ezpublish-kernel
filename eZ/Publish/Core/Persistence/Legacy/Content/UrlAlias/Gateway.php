@@ -250,19 +250,19 @@ abstract class Gateway
      *
      * @return int Number of affected rows.
      */
-    abstract public function deleteUrlAliasesWithoutLocation();
+    abstract public function deleteUrlAliasesWithoutLocation(): int;
 
     /**
      * Delete URL aliases pointing to non-existent parent nodes.
      *
      * @return int Number of affected rows.
      */
-    abstract public function deleteUrlAliasesWithoutParent();
+    abstract public function deleteUrlAliasesWithoutParent(): int;
 
     /**
      * Delete URL aliases which do not link to any existing URL alias node.
      *
      * Note: Typically link column value is used to determine original alias for an archived entries.
      */
-    abstract public function deleteUrlAliasesWithBrokenLink();
+    abstract public function deleteUrlAliasesWithBrokenLink(): int;
 }

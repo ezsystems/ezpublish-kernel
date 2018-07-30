@@ -1253,7 +1253,7 @@ class DoctrineDatabase extends Gateway
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function deleteUrlAliasesWithoutLocation()
+    public function deleteUrlAliasesWithoutLocation(): int
     {
         // Note: creating actions from nodes instead of extracting nodes from actions due to
         // cross DBMS compatibility
@@ -1292,7 +1292,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return int Number of affected rows.
      */
-    public function deleteUrlAliasesWithoutParent()
+    public function deleteUrlAliasesWithoutParent(): int
     {
         $existingAliasesQuery = $this->getAllUrlAliasesQuery();
 
@@ -1321,7 +1321,7 @@ class DoctrineDatabase extends Gateway
      *
      * Note: Typically link column value is used to determine original alias for an archived entries.
      */
-    public function deleteUrlAliasesWithBrokenLink()
+    public function deleteUrlAliasesWithBrokenLink(): int
     {
         $existingAliasesQuery = $this->getAllUrlAliasesQuery();
 
