@@ -643,6 +643,9 @@ abstract class BaseTest extends TestCase
         $contentTypeService = $repository->getContentTypeService();
         $locationService = $repository->getLocationService();
 
+        if (empty($names)) {
+            throw new \RuntimeException(sprintf('%s expects non-empty names list', __METHOD__));
+        }
         $mainLanguageCode = array_keys($names)[0];
 
         $struct = $contentService->newContentCreateStruct(
