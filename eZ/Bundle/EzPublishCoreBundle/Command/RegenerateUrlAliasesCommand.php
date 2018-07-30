@@ -4,6 +4,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use eZ\Publish\API\Repository\LocationService;
@@ -27,6 +29,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class RegenerateUrlAliasesCommand extends Command
 {
+    const DEFAULT_ITERATION_COUNT = 50;
+    const DEFAULT_REPOSITORY_USER = 'admin';
+
     /**
      * @var \eZ\Publish\API\Repository\PermissionResolver
      */
@@ -52,6 +57,13 @@ class RegenerateUrlAliasesCommand extends Command
      */
     private $urlAliasService;
 
+    /**
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
+     * @param \eZ\Publish\API\Repository\UserService $userService
+     * @param \eZ\Publish\API\Repository\SearchService $searchService
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param \eZ\Publish\API\Repository\URLAliasService $urlAliasService
+     */
     public function __construct(
         PermissionResolver $permissionResolver,
         UserService $userService,
@@ -59,7 +71,7 @@ class RegenerateUrlAliasesCommand extends Command
         LocationService $locationService,
         URLAliasService $urlAliasService
     ) {
-        parent::__construct(null);
+        parent::__construct();
 
         $this->permissionResolver = $permissionResolver;
         $this->userService = $userService;
@@ -80,18 +92,18 @@ class RegenerateUrlAliasesCommand extends Command
                 'and global URL aliases with Legacy Storage Engine'
             )
             ->addOption(
-                'bulk-count',
+                'iteration-count',
                 'c',
                 InputOption::VALUE_OPTIONAL,
                 'Number of Locations fetched into memory and processed at once',
-                50
+                self::DEFAULT_ITERATION_COUNT
             )
             ->addOption(
                 'user',
                 'u',
                 InputOption::VALUE_OPTIONAL,
                 'eZ Platform user used when running this command',
-                'admin'
+                self::DEFAULT_REPOSITORY_USER
             )
             ->setHelp(
                 <<<EOT
@@ -128,7 +140,7 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $bulkCount = (int)$input->getOption('bulk-count');
+        $iterationCount = (int)$input->getOption('iteration-count');
 
         $query = new LocationQuery(
             [
@@ -138,7 +150,7 @@ EOT
         $pager = new Pagerfanta(
             new LocationSearchAdapter($query, $this->searchService)
         );
-        $pager->setMaxPerPage($bulkCount);
+        $pager->setMaxPerPage($iterationCount);
 
         $output->writeln(
             sprintf(
@@ -167,12 +179,11 @@ EOT
      * Return configured progress bar helper.
      *
      * @param int $maxSteps
-     *
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      *
      * @return \Symfony\Component\Console\Helper\ProgressBar
      */
-    protected function getProgressBar($maxSteps, OutputInterface $output)
+    protected function getProgressBar($maxSteps, OutputInterface $output): ProgressBar
     {
         $progressBar = new ProgressBar($output, $maxSteps);
         $progressBar->setFormat(
