@@ -140,7 +140,7 @@ interface URLAliasService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
-    public function refreshSystemUrlAliasesForLocation(Location $location);
+    public function refreshSystemUrlAliasesForLocation(Location $location): void;
 
     /**
      * Delete global, system or custom URL alias pointing to non-existent Locations.

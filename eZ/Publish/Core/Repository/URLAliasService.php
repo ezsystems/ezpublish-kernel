@@ -748,7 +748,7 @@ class URLAliasService implements URLAliasServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function refreshSystemUrlAliasesForLocation(Location $location)
+    public function refreshSystemUrlAliasesForLocation(Location $location): void
     {
         if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
             throw new UnauthorizedException('content', 'urltranslator');

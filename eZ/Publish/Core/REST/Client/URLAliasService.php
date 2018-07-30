@@ -214,7 +214,7 @@ class URLAliasService implements APIURLAliasService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
-    public function refreshSystemUrlAliasesForLocation(Location $location)
+    public function refreshSystemUrlAliasesForLocation(Location $location): void
     {
         throw new \Exception('@todo: Implement');
     }

@@ -242,7 +242,7 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
-    public function refreshSystemUrlAliasesForLocation(Location $location)
+    public function refreshSystemUrlAliasesForLocation(Location $location): void
     {
         $this->service->refreshSystemUrlAliasesForLocation($location);
 
