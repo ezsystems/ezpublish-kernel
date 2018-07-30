@@ -222,7 +222,7 @@ class URLAliasService implements APIURLAliasService, Sessionable
     /**
      * Delete global, system or custom URL alias pointing to non-existent Locations.
      */
-    public function deleteCorruptedUrlAliases()
+    public function deleteCorruptedUrlAliases(): int
     {
         throw new \Exception('@todo: Implement');
     }

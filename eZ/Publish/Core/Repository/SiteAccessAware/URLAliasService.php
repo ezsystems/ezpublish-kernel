@@ -102,7 +102,7 @@ class URLAliasService implements URLAliasServiceInterface
         $this->service->refreshSystemUrlAliasesForLocation($location);
     }
 
-    public function deleteCorruptedUrlAliases()
+    public function deleteCorruptedUrlAliases(): int
     {
         return $this->service->deleteCorruptedUrlAliases();
     }

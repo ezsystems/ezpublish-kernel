@@ -788,7 +788,7 @@ class URLAliasService implements URLAliasServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function deleteCorruptedUrlAliases()
+    public function deleteCorruptedUrlAliases(): int
     {
         if ($this->repository->getPermissionResolver()->hasAccess('content', 'urltranslator') !== true) {
             throw new UnauthorizedException('content', 'urltranslator');
