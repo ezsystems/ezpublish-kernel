@@ -19,6 +19,9 @@ parameters:
 
     ezpublish.api.role.policy_map: {}
 
+    ezpublish.api.role.role_limitation_map:
+        content: true
+
 services:
     ## Implemented Limitations
     ezpublish.api.role.limitation_type.content_type:

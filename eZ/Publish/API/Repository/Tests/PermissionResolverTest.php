@@ -250,6 +250,93 @@ class PermissionResolverTest extends BaseTest
     }
 
     /**
+     * Test for the hasAccess() method.
+     * If policy by design has not any limitation then a user with this policy should have the access.
+     *
+     * @covers       \eZ\Publish\API\Repository\PermissionResolver::hasAccess()
+     *
+     * @dataProvider getDataForTestHasAccessWithLimitations
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation
+     * @param $userPolicy
+     * @param $testedPolicy
+     * @param $expectedResult
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCheckHasAccessWithRoleLimitations(
+        Limitation\RoleLimitation $roleLimitation,
+        $userPolicy,
+        $testedPolicy,
+        $expectedResult
+    ): void {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $role = $this->createRoleWithPolicies(
+            'role_' . __FUNCTION__,
+            [
+                ['module' => $userPolicy['module'], 'function' => $userPolicy['function']],
+            ]
+        );
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+        // create user in root user group to avoid overlapping of existing policies and limitations
+        $user = $this->createUser('user', 'John', 'Doe', $userService->loadUserGroup(4));
+        $roleService->assignRoleToUser($role, $user, $roleLimitation);
+
+        $permissionResolver = $repository->getPermissionResolver();
+
+        // Set created user as current user reference
+        $permissionResolver->setCurrentUserReference($user);
+
+        // This call will return an array of permission sets describing user's access
+        // to viewing section
+        $hasAccess = $permissionResolver->hasAccess($testedPolicy['module'], $testedPolicy['function']);
+        /* END: Use Case */
+
+        if (is_bool($expectedResult)) {
+            $this->assertEquals($expectedResult, $hasAccess);
+        } elseif (is_array($expectedResult)) {
+            $this->assertInternalType('array', $hasAccess);
+        }
+    }
+
+    /**
+     * Data provider for testHasAccessWithLimitations.
+     * @see testHasAccessWithLimitations
+     *
+     * @return array
+     */
+    public function getDataForTestHasAccessWithLimitations(): array
+    {
+        // return data sets, numbered for readability and debugging
+        return [
+            0 => [
+                new Limitation\SubtreeLimitation(['limitationValues' => ['/1/2/']]),
+                ['module' => 'section', 'function' => 'view'],
+                ['module' => 'section', 'function' => 'view'],
+                true,
+            ],
+            1 => [
+                new Limitation\SectionLimitation(['limitationValues' => [2]]),
+                ['module' => 'content', 'function' => 'urltranslator'],
+                ['module' => 'content', 'function' => 'urltranslator'],
+                [],
+            ],
+            2 => [
+                new Limitation\SubtreeLimitation(['limitationValues' => ['/1/2/']]),
+                ['module' => 'content', 'function' => 'urltranslator'],
+                ['module' => 'section', 'function' => 'view'],
+                false,
+            ],
+        ];
+    }
+
+    /**
      * Test for the canUser() method.
      *
      * @see \eZ\Publish\API\Repository\PermissionResolver::canUser()

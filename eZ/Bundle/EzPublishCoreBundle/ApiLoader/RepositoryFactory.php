@@ -62,18 +62,27 @@ class RepositoryFactory implements ContainerAwareInterface
      */
     private $policyMap;
 
+    /**
+     * Role Limitation map.
+     *
+     * @var array
+     */
+    protected $roleLimitationMap = array();
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         FieldTypeCollectionFactory $fieldTypeCollectionFactory,
         FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory,
         $repositoryClass,
-        array $policyMap
+        array $policyMap,
+        array $roleLimitationMap
     ) {
         $this->configResolver = $configResolver;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
         $this->fieldTypeNameableCollectionFactory = $fieldTypeNameableCollectionFactory;
         $this->repositoryClass = $repositoryClass;
         $this->policyMap = $policyMap;
+        $this->roleLimitationMap = $roleLimitationMap;
     }
 
     /**
@@ -108,6 +117,7 @@ class RepositoryFactory implements ContainerAwareInterface
                 'role' => array(
                     'limitationTypes' => $this->roleLimitations,
                     'policyMap' => $this->policyMap,
+                    'roleLimitationMap' => $this->roleLimitationMap,
                 ),
                 'languages' => $this->configResolver->getParameter('languages'),
                 'content' => ['default_version_archive_limit' => $config['options']['default_version_archive_limit']],

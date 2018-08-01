@@ -964,7 +964,8 @@ class Repository implements RepositoryInterface
                     $this->getLimitationService(),
                     $this->persistenceHandler->userHandler(),
                     $this->currentUserRef,
-                    $this->serviceSettings['role']['policyMap']
+                    $this->serviceSettings['role']['policyMap'],
+                    $this->serviceSettings['role']['roleLimitationMap']
                 ),
                 new PermissionCriterionResolver(
                     $permissionResolver,

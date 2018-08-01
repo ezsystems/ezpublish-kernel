@@ -32,6 +32,7 @@ services:
             - "@ezpublish.field_type_collection.factory"
             - "@ezpublish.field_type_nameable_collection.factory"
             - "%ezpublish.api.role.policy_map%"
+            - "%ezpublish.api.role.role_limitation_map%"
         calls:
             - [setContainer, ["@service_container"]]
 

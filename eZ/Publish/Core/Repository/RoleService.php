@@ -1318,8 +1318,10 @@ class RoleService implements RoleServiceInterface
 
         $types = array();
         try {
-            foreach (array_keys($this->settings['policyMap'][$module][$function]) as $identifier) {
-                $types[$identifier] = $this->limitationService->getLimitationType($identifier);
+            foreach ($this->settings['policyMap'][$module][$function] as $identifier => $included) {
+                if (true === $included) {
+                    $types[$identifier] = $this->limitationService->getLimitationType($identifier);
+                }
             }
         } catch (LimitationNotFoundException $e) {
             throw new BadStateException(

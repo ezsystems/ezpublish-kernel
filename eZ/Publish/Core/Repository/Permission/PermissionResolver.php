@@ -61,24 +61,34 @@ class PermissionResolver implements PermissionResolverInterface
     private $policyMap;
 
     /**
+     * Map of modules adhering to role limitations.
+     *
+     * @var array
+     */
+    private $roleLimitationMap;
+
+    /**
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $userReference
      * @param array $policyMap Map of system configured policies, for validation usage.
+     * @param array $roleLimitationMap Map of modules adhering to role limitations.
      */
     public function __construct(
         RoleDomainMapper $roleDomainMapper,
         LimitationService $limitationService,
         UserHandler $userHandler,
         APIUserReference $userReference,
-        array $policyMap = []
+        array $policyMap = [],
+        array $roleLimitationMap = []
     ) {
         $this->roleDomainMapper = $roleDomainMapper;
         $this->limitationService = $limitationService;
         $this->userHandler = $userHandler;
         $this->currentUserRef = $userReference;
         $this->policyMap = $policyMap;
+        $this->roleLimitationMap = $roleLimitationMap;
     }
 
     public function getCurrentUserReference()
@@ -138,6 +148,10 @@ class PermissionResolver implements PermissionResolverInterface
                 }
 
                 if ($spiPolicy->limitations === '*' && $spiRoleAssignment->limitationIdentifier === null) {
+                    return true;
+                }
+
+                if (empty($this->policyMap[$module][$function]) && !isset($this->roleLimitationMap[$module])) {
                     return true;
                 }
 
