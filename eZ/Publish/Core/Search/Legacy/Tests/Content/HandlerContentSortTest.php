@@ -138,7 +138,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                             'ezrichtext' => new Converter\RichTextConverter(),
                             'ezboolean' => new Converter\CheckboxConverter(),
                             'ezkeyword' => new Converter\KeywordConverter(),
-                            'ezauthor' => $this->createMock(Converter\AuthorConverter::class),
+                            'ezauthor' => new Converter\AuthorConverter(),
                             'ezimage' => new Converter\NullConverter(),
                             'ezsrrating' => new Converter\NullConverter(),
                             'ezmultioption' => new Converter\NullConverter(),

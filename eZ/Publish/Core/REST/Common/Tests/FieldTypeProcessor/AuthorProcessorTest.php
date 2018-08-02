@@ -13,19 +13,19 @@ use PHPUnit\Framework\TestCase;
 
 class AuthorProcessorTest extends TestCase
 {
-    protected $constants = array(
+    protected $constants = [
         'DEFAULT_CURRENT_USER',
         'DEFAULT_EMPTY',
-    );
+    ];
 
     public function fieldSettingsHashes()
     {
         return array_map(
             function ($constantName) {
-                return array(
-                    array('defaultAuthor' => $constantName),
-                    array('defaultAuthor' => constant("eZ\\Publish\\Core\\FieldType\\Author\\Type::{$constantName}")),
-                );
+                return [
+                    ['defaultAuthor' => $constantName],
+                    ['defaultAuthor' => constant("eZ\\Publish\\Core\\FieldType\\Author\\Type::{$constantName}")],
+                ];
             },
             $this->constants
         );

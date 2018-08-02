@@ -272,7 +272,7 @@
     {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Author\\Type::DEFAULT_EMPTY' ) %}
         {% set defaultValue = 'fielddefinition.default-value.empty'|trans|desc("Empty") %}
     {% else %}
-        {% set defaultValue = 'fielddefinition.default-value.current_author'|trans|desc("Current Author") %}
+        {% set defaultValue = 'fielddefinition.default-value.current_author'|trans|desc("Current User") %}
     {% endif %}
     {{ block( 'settings_defaultvalue' ) }}
 </ul>

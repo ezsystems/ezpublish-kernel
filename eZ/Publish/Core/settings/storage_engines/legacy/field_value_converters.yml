@@ -37,10 +37,6 @@ services:
 
     ezpublish.fieldType.ezauthor.converter:
         class: "%ezpublish.fieldType.ezauthor.converter.class%"
-        calls:
-            - method: setRepository
-              arguments:
-                  - "@ezpublish.api.repository"
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezauthor}
 

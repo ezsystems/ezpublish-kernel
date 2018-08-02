@@ -39,12 +39,12 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return [
-            'defaultAuthor' => [
+        return array(
+            'defaultAuthor' => array(
                 'type' => 'choice',
                 'default' => Type::DEFAULT_CURRENT_USER,
-            ],
-        ];
+            ),
+        );
     }
 
     /**
@@ -54,9 +54,9 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return [
+        return array(
             'defaultAuthor' => Type::DEFAULT_CURRENT_USER,
-        ];
+        );
     }
 
     /**
@@ -66,9 +66,9 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return [
+        return array(
             'somethingUnknown' => 0,
-        ];
+        );
     }
 
     /**
@@ -78,7 +78,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return [];
+        return array();
     }
 
     /**
@@ -88,7 +88,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return [];
+        return array();
     }
 
     /**
@@ -98,9 +98,9 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return [
-            'unknown' => ['value' => 42],
-        ];
+        return array(
+            'unknown' => array('value' => 42),
+        );
     }
 
     /**
@@ -111,15 +111,15 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function getValidCreationFieldData()
     {
         return new AuthorValue(
-            [
+            array(
                 new Author(
-                    [
+                    array(
                         'id' => 23,
                         'name' => 'Hans Mueller',
                         'email' => 'hans@example.com',
-                    ]
+                    )
                 ),
-            ]
+            )
         );
     }
 
@@ -148,19 +148,19 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = [
+        $expectedData = array(
             'authors' => new AuthorCollection(
-                [
+                array(
                     new Author(
-                        [
+                        array(
                             'id' => 23,
                             'name' => 'Hans Mueller',
                             'email' => 'hans@example.com',
-                        ]
+                        )
                     ),
-                ]
+                )
             ),
-        ];
+        );
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -177,22 +177,22 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      * specific!) as the second element. For example:
      *
      * <code>
-     * [
-     *      [
+     * array(
+     *      array(
      *          new DoomedValue( true ),
      *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
-     *      ],
+     *      ),
      *      // ...
      * );
-     *]</code>
+     * </code>
      *
      * @return array[]
      */
     public function provideInvalidCreationFieldData()
     {
-        return [
-            ['Sindelfingen', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'],
-        ];
+        return array(
+            array('Sindelfingen', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException'),
+        );
     }
 
     /**
@@ -203,15 +203,15 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function getValidUpdateFieldData()
     {
         return new AuthorValue(
-            [
+            array(
                 new Author(
-                    [
+                    array(
                         'id' => 42,
                         'name' => 'Lieschen Mueller',
                         'email' => 'lieschen@example.com',
-                    ]
+                    )
                 ),
-            ]
+            )
         );
     }
 
@@ -229,19 +229,19 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = [
+        $expectedData = array(
             'authors' => new AuthorCollection(
-                [
+                array(
                     new Author(
-                        [
+                        array(
                             'id' => 42,
                             'name' => 'Lieschen Mueller',
                             'email' => 'lieschen@example.com',
-                        ]
+                        )
                     ),
-                ]
+                )
             ),
-        ];
+        );
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -258,13 +258,13 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      * specific!) as the second element. For example:
      *
      * <code>
-     * [
-     *      [
+     * array(
+     *      array(
      *          new DoomedValue( true ),
      *          'eZ\\Publish\\API\\Repository\\Exceptions\\ContentValidationException'
-     *      ],
+     *      ),
      *      // ...
-     * ];
+     * );
      * </code>
      *
      * @return array[]
@@ -289,19 +289,19 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = [
+        $expectedData = array(
             'authors' => new AuthorCollection(
-                [
+                array(
                     new Author(
-                        [
+                        array(
                             'id' => 23,
                             'name' => 'Hans Mueller',
                             'email' => 'hans@example.com',
-                        ]
+                        )
                     ),
-                ]
+                )
             ),
-        ];
+        );
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -317,41 +317,41 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      * first index and the expected hash result to the second. For example:
      *
      * <code>
-     * [
-     *      [
+     * array(
+     *      array(
      *          new MyValue( true ),
      *          array( 'myValue' => true ),
-     *      ],
+     *      ),
      *      // ...
-     * ];
+     * );
      * </code>
      *
      * @return array
      */
     public function provideToHashData()
     {
-        return [
-            [
+        return array(
+            array(
                 new AuthorValue(
-                    [
+                    array(
                         new Author(
-                            [
+                            array(
                                 'id' => 23,
                                 'name' => 'Hans Mueller',
                                 'email' => 'hans@example.com',
-                            ]
+                            )
                         ),
-                    ]
+                    )
                 ),
-                [
-                    [
+                array(
+                    array(
                         'id' => 23,
                         'name' => 'Hans Mueller',
                         'email' => 'hans@example.com',
-                    ],
-                ],
-            ],
-        ];
+                    ),
+                ),
+            ),
+        );
     }
 
     /**
@@ -363,58 +363,58 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return [
-            [
-                [
-                    [
+        return array(
+            array(
+                array(
+                    array(
                         'id' => 23,
                         'name' => 'Hans Mueller',
                         'email' => 'hans@example.com',
-                    ],
-                ],
+                    ),
+                ),
                 new AuthorValue(
-                    [
+                    array(
                         new Author(
-                            [
+                            array(
                                 'id' => 23,
                                 'name' => 'Hans Mueller',
                                 'email' => 'hans@example.com',
-                            ]
+                            )
                         ),
-                    ]
+                    )
                 ),
-            ],
-        ];
+            ),
+        );
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return [
-            [new AuthorValue()],
-            [new AuthorValue([])],
-        ];
+        return array(
+            array(new AuthorValue()),
+            array(new AuthorValue(array())),
+        );
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return [
-            [
+        return array(
+            array(
                 $this->getValidCreationFieldData(),
-            ],
-            [
+            ),
+            array(
                 new AuthorValue(
-                    [
+                    array(
                         new Author(
-                            [
+                            array(
                                 'id' => 23,
                                 'name' => 'Hans Mueller',
                                 'email' => 'hans@example.com',
-                            ]
+                            )
                         ),
-                    ]
+                    )
                 ),
-            ],
-        ];
+            ),
+        );
     }
 
     protected function checkSearchEngineSupport()
@@ -428,28 +428,28 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 
     protected function getValidSearchValueOne()
     {
-        return [
+        return array(
             new Author(
-                [
+                array(
                     'id' => 2,
                     'name' => 'Ferdinand',
                     'email' => 'ferdinand@example.com',
-                ]
+                )
             ),
-        ];
+        );
     }
 
     protected function getValidSearchValueTwo()
     {
-        return [
+        return array(
             new Author(
-                [
+                array(
                     'id' => 3,
                     'name' => 'Greta',
                     'email' => 'greta@example.com',
-                ]
+                )
             ),
-        ];
+        );
     }
 
     protected function getSearchTargetValueOne()
@@ -464,102 +464,102 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 
     protected function getAdditionallyIndexedFieldData()
     {
-        return [
-            [
+        return array(
+            array(
                 'id',
                 2,
                 3,
-            ],
-            [
+            ),
+            array(
                 'email',
                 'ferdinand@example.com',
                 'greta@example.com',
-            ],
-            [
+            ),
+            array(
                 'sort_value',
                 'Ferdinand',
                 'Greta',
-            ],
-        ];
+            ),
+        );
     }
 
     protected function getValidMultivaluedSearchValuesOne()
     {
-        return [
+        return array(
             new Author(
-                [
+                array(
                     'id' => 1,
                     'name' => 'Antoinette',
                     'email' => 'antoinette@example.com',
-                ]
+                )
             ),
             new Author(
-                [
+                array(
                     'id' => 2,
                     'name' => 'Ferdinand',
                     'email' => 'ferdinand@example.com',
-                ]
+                )
             ),
-        ];
+        );
     }
 
     protected function getValidMultivaluedSearchValuesTwo()
     {
-        return [
+        return array(
             new Author(
-                [
+                array(
                     'id' => 3,
                     'name' => 'Greta',
                     'email' => 'greta@example.com',
-                ]
+                )
             ),
             new Author(
-                [
+                array(
                     'id' => 4,
                     'name' => 'Leopold',
                     'email' => 'leopold@example.com',
-                ]
+                )
             ),
             new Author(
-                [
+                array(
                     'id' => 5,
                     'name' => 'Maximilian',
                     'email' => 'maximilian@example.com',
-                ]
+                )
             ),
-        ];
+        );
     }
 
     protected function getMultivaluedSearchTargetValuesOne()
     {
-        return ['Antoinette', 'Ferdinand'];
+        return array('Antoinette', 'Ferdinand');
     }
 
     protected function getMultivaluedSearchTargetValuesTwo()
     {
-        return ['Greta', 'Leopold', 'Maximilian'];
+        return array('Greta', 'Leopold', 'Maximilian');
     }
 
     protected function getAdditionallyIndexedMultivaluedFieldData()
     {
-        return [
-            [
+        return array(
+            array(
                 'id',
-                [1, 2],
-                [3, 4, 5],
-            ],
-            [
+                array(1, 2),
+                array(3, 4, 5),
+            ),
+            array(
                 'email',
-                ['antoinette@example.com', 'ferdinand@example.com'],
-                ['greta@example.com', 'leopold@example.com', 'maximilian@example.com'],
-            ],
-        ];
+                array('antoinette@example.com', 'ferdinand@example.com'),
+                array('greta@example.com', 'leopold@example.com', 'maximilian@example.com'),
+            ),
+        );
     }
 
     protected function getFullTextIndexedFieldData()
     {
-        return [
-            ['Ferdinand', 'Greta'],
-        ];
+        return array(
+            array('Ferdinand', 'Greta'),
+        );
     }
 }
