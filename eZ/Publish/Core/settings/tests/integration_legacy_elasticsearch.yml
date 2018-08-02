@@ -15,6 +15,13 @@ parameters:
     # SignalDispatcher factory
     ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot\SignalDispatcherFactory
 
+    # Image Asset mappings
+    ezsettings.default.fieldtypes.ezimageasset.mappings:
+        content_type_identifier: image
+        content_field_identifier: image
+        name_field_identifier: name
+        parent_location_id: 51
+
 services:
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.elasticsearch
@@ -24,3 +31,11 @@ services:
         arguments:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "elasticsearch"
+
+    eZ\Publish\Core\FieldType\ImageAsset\AssetMapper:
+        arguments:
+            $contentService: '@ezpublish.api.service.content'
+            $locationService: '@ezpublish.api.service.location'
+            $contentTypeService: '@ezpublish.api.service.content_type'
+            # Siteaccess aware configuration is not available in the integration tests
+            $mappings: '%ezsettings.default.fieldtypes.ezimageasset.mappings%'
