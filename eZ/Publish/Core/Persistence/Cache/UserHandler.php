@@ -304,7 +304,10 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $roleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($roleId);
 
         $cacheItem->set($roleAssignments);
-        $cacheTags = ['role-assignment-role-list-' . $roleId];
+        $cacheTags = [
+            'role-assignment-role-list-' . $roleId,
+            'role-' . $roleId, /* Role update (policies) changes role assignment id */
+        ];
         foreach ($roleAssignments as $roleAssignment) {
             $cacheTags = $this->getCacheTagsForRoleAssignment($roleAssignment, $cacheTags);
         }
@@ -333,8 +336,10 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         $roleAssignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId($groupId, $inherit);
 
         $cacheItem->set($roleAssignments);
-        // Tag below is for empty results,  non empty it might have duplicated tags but cache will reduce those.
-        $cacheTags = ['role-assignment-group-list-' . $groupId];
+        $cacheTags = [
+            'role-assignment-group-list-' . $groupId, /* empty results,  non empty it might have duplicated tags but cache will reduce those. */
+            'role-' . $groupId, /* Role update (policies) changes role assignment id */
+        ];
         foreach ($roleAssignments as $roleAssignment) {
             $cacheTags = $this->getCacheTagsForRoleAssignment($roleAssignment, $cacheTags);
         }

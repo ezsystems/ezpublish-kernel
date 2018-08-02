@@ -1782,6 +1782,51 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
+     * Test for the addPolicyByRoleDraft() method.
+     *
+     * @see \eZ\Publish\API\Repository\RoleService::addPolicyByRoleDraft()
+     */
+    public function testAddPolicyWithRoleAssignment()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        /* Create new user group */
+        $mainGroupId = $this->generateId('group', 4);
+        $parentUserGroup = $userService->loadUserGroup($mainGroupId);
+        $userGroupCreate = $userService->newUserGroupCreateStruct('eng-US');
+        $userGroupCreate->setField('name', 'newUserGroup');
+        $userGroup = $userService->createUserGroup($userGroupCreate, $parentUserGroup);
+
+        /* Create Role */
+        $roleCreate = $roleService->newRoleCreateStruct('newRole');
+        $roleDraft = $roleService->createRole($roleCreate);
+        $roleService->publishRoleDraft($roleDraft);
+
+        $role = $roleService->loadRole($roleDraft->id);
+        $roleService->assignRoleToUserGroup($role, $userGroup);
+
+        $roleAssignmentsBeforeNewPolicy = $roleService->getRoleAssignments($role)[0];
+
+        /* Add new policy to existing role */
+        $roleUpdateDraft = $roleService->createRoleDraft($role);
+        $roleUpdateDraft = $roleService->addPolicyByRoleDraft(
+            $roleUpdateDraft,
+            $roleService->newPolicyCreateStruct('content', 'create')
+        );
+        $roleService->publishRoleDraft($roleUpdateDraft);
+
+        $roleAfterUpdate = $roleService->loadRole($role->id);
+        $roleAssignmentsAfterNewPolicy = $roleService->getRoleAssignments($roleAfterUpdate)[0];
+        /* END: Use Case */
+
+        $this->assertNotEquals($roleAssignmentsBeforeNewPolicy->id, $roleAssignmentsAfterNewPolicy->id);
+    }
+
+    /**
      * Test loading user/group role assignments.
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment
