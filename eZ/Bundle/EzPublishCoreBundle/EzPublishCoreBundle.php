@@ -115,6 +115,7 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\Common(),
                     new ConfigParser\Content(),
                     new ConfigParser\FieldType\RichText(),
+                    new ConfigParser\FieldType\ImageAsset(),
                     new ConfigParser\FieldTemplates(),
                     new ConfigParser\FieldEditTemplates(),
                     new ConfigParser\FieldDefinitionSettingsTemplates(),

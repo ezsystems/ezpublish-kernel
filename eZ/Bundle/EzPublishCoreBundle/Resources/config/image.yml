@@ -129,6 +129,15 @@ services:
             - '@ezpublish.fieldType.ezimage.io_service'
         public: false
 
+    ezpublish.image_alias.imagine.alias_generator.image_asset:
+        class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\ImageAsset\AliasGenerator'
+        decorates: 'ezpublish.image_alias.imagine.alias_generator'
+        arguments:
+            - '@ezpublish.image_alias.imagine.alias_generator.image_asset.inner'
+            - '@ezpublish.api.service.content'
+            - '@eZ\Publish\Core\FieldType\ImageAsset\AssetMapper'
+        public: false
+
     ezpublish.image_alias.imagine.placeholder_provider.registry:
         class: 'eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry'
 

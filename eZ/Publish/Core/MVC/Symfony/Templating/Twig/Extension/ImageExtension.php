@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\FieldType\ImageAsset\AssetMapper;
 use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use InvalidArgumentException;
@@ -24,9 +25,15 @@ class ImageExtension extends Twig_Extension
      */
     private $imageVariationService;
 
-    public function __construct(VariationHandler $imageVariationService)
+    /**
+     * @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper
+     */
+    protected $assetMapper;
+
+    public function __construct(VariationHandler $imageVariationService, AssetMapper $assetMapper)
     {
         $this->imageVariationService = $imageVariationService;
+        $this->assetMapper = $assetMapper;
     }
 
     public function getName()
@@ -40,6 +47,11 @@ class ImageExtension extends Twig_Extension
             new Twig_SimpleFunction(
                 'ez_image_alias',
                 array($this, 'getImageVariation'),
+                array('is_safe' => array('html'))
+            ),
+            new Twig_SimpleFunction(
+                'ez_image_asset_content_field_identifier',
+                array($this, 'getImageAssetContentFieldIdentifier'),
                 array('is_safe' => array('html'))
             ),
         );
@@ -75,5 +87,13 @@ class ImageExtension extends Twig_Extension
                 );
             }
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageAssetContentFieldIdentifier(): string
+    {
+        return $this->assetMapper->getContentFieldIdentifier();
     }
 }

@@ -91,6 +91,15 @@ services:
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelationlist}
 
+    ezpublish.fieldType.ezimageasset.parameterProvider:
+        class: \eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider
+        arguments:
+            - "@ezpublish.api.service.content"
+            - "@ezpublish.api.service.inner_field_type"
+            - "@eZ\\Publish\\Core\\FieldType\\ImageAsset\\AssetMapper"
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezimageasset}
+
     # Page
     ezpublish.fieldType.ezpage.pageService.factory:
         class: "%ezpublish.fieldType.ezpage.pageService.factory.class%"
@@ -285,3 +294,17 @@ services:
     eZ\Publish\Core\FieldType\RichText\CustomTagsValidator:
         public: false
         arguments: ['%ezplatform.ezrichtext.custom_tags%']
+
+    eZ\Publish\Core\FieldType\ImageAsset\NameableField:
+        arguments:
+            $handler: '@ezpublish.spi.persistence.cache.contentHandler'
+        tags:
+            - {name: ezpublish.fieldType.nameable, alias: ezimageasset}
+
+    eZ\Publish\Core\FieldType\ImageAsset\AssetMapper:
+        arguments:
+            $contentService: '@ezpublish.api.service.content'
+            $locationService: '@ezpublish.api.service.location'
+            $contentTypeService: '@ezpublish.api.service.content_type'
+            $mappings: '$fieldtypes.ezimageasset.mappings$'
+
