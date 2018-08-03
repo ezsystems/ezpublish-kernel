@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\FieldType\ImageAsset as ImageAsset;
 use eZ\Publish\Core\FieldType\ValidationError;
@@ -330,5 +331,21 @@ class ImageAssetTest extends FieldTypeTest
     public function testIsSearchable()
     {
         $this->assertTrue($this->getFieldTypeUnderTest()->isSearchable());
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\FieldType\Relation\Type::getRelations
+     */
+    public function testGetRelations()
+    {
+        $destinationContentId = 7;
+        $fieldType = $this->createFieldTypeUnderTest();
+
+        $this->assertEquals(
+            array(
+                Relation::ASSET => [$destinationContentId],
+            ),
+            $fieldType->getRelations($fieldType->acceptValue($destinationContentId))
+        );
     }
 }

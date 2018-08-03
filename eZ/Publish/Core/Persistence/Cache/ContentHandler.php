@@ -237,7 +237,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         // Load reverse field relations first
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
             $contentId,
-            APIRelation::FIELD
+            APIRelation::FIELD | APIRelation::ASSET
         );
 
         $return = $this->persistenceHandler->contentHandler()->deleteContent($contentId);

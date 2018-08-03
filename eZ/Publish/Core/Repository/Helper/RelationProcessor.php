@@ -62,7 +62,7 @@ class RelationProcessor
         $fieldDefinitionId
     ) {
         foreach ($fieldType->getRelations($fieldValue) as $relationType => $destinationIds) {
-            if ($relationType === Relation::FIELD) {
+            if ($relationType & (Relation::FIELD | Relation::ASSET)) {
                 if (!isset($relations[$relationType][$fieldDefinitionId])) {
                     $relations[$relationType][$fieldDefinitionId] = array();
                 }
@@ -120,12 +120,20 @@ class RelationProcessor
         // Map existing relations for easier handling
         $mappedRelations = array();
         foreach ($existingRelations as $relation) {
-            if ($relation->type === Relation::FIELD) {
+            if ($relation->type & Relation::FIELD) {
                 $fieldDefinition = $contentType->getFieldDefinition($relation->sourceFieldDefinitionIdentifier);
                 if ($fieldDefinition !== null) {
-                    $mappedRelations[$relation->type][$fieldDefinition->id][$relation->destinationContentInfo->id] = $relation;
+                    $mappedRelations[Relation::FIELD][$fieldDefinition->id][$relation->destinationContentInfo->id] = $relation;
                 }
             }
+
+            if ($relation->type & Relation::ASSET) {
+                $fieldDefinition = $contentType->getFieldDefinition($relation->sourceFieldDefinitionIdentifier);
+                if ($fieldDefinition !== null) {
+                    $mappedRelations[Relation::ASSET][$fieldDefinition->id][$relation->destinationContentInfo->id] = $relation;
+                }
+            }
+
             // Using bitwise AND as Legacy Stack stores COMMON, LINK and EMBED relation types
             // in the same entry using bitmask
             if ($relation->type & Relation::LINK) {
@@ -138,7 +146,7 @@ class RelationProcessor
 
         // Add new relations
         foreach ($inputRelations as $relationType => $relationData) {
-            if ($relationType === Relation::FIELD) {
+            if ($relationType === Relation::FIELD || $relationType === Relation::ASSET) {
                 foreach ($relationData as $fieldDefinitionId => $contentIds) {
                     foreach (array_keys($contentIds) as $destinationContentId) {
                         if (isset($mappedRelations[$relationType][$fieldDefinitionId][$destinationContentId])) {
@@ -184,6 +192,7 @@ class RelationProcessor
             foreach ($relationData as $relationEntry) {
                 switch ($relationType) {
                     case Relation::FIELD:
+                    case Relation::ASSET:
                         foreach ($relationEntry as $relation) {
                             $this->persistenceHandler->contentHandler()->removeRelation(
                                 $relation->id,

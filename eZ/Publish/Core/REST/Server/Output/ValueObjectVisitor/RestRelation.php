@@ -98,6 +98,8 @@ class RestRelation extends ValueObjectVisitor
                 return 'LINK';
             case RelationValue::FIELD:
                 return 'ATTRIBUTE';
+            case RelationValue::ASSET:
+                return 'ASSET';
         }
 
         throw new \Exception('Unknown relation type ' . $relationType . '.');

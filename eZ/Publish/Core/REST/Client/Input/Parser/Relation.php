@@ -81,6 +81,8 @@ class Relation extends BaseParser
                 return Values\Content\Relation::LINK;
             case 'FIELD':
                 return Values\Content\Relation::FIELD;
+            case 'ASSET':
+                return Values\Content\Relation::ASSET;
         }
         throw new \RuntimeException(
             sprintf('Unknown Relation type: "%s"', $stringType)
