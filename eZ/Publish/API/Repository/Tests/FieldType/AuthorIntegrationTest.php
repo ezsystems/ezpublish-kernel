@@ -106,7 +106,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     /**
      * Get initial field data for valid object creation.
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     public function getValidCreationFieldData()
     {
@@ -198,7 +198,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     /**
      * Get update field externals data.
      *
-     * @return AuthorValue
+     * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     public function getValidUpdateFieldData()
     {

@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter;
-use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition;
 use PHPUnit\Framework\TestCase;
 use DOMDocument;
 
@@ -27,7 +27,6 @@ use DOMDocument;
  */
 class AuthorTest extends TestCase
 {
-    const ADMINISTRATOR_USER_ID = 14;
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter
      */
@@ -141,7 +140,7 @@ EOT;
                 'defaultAuthor' => AuthorType::DEFAULT_CURRENT_USER,
             )
         );
-        $fieldDef = new PersistenceFieldDefinition(
+        $fieldDef = new SPIFieldDefinition(
             array(
                 'fieldTypeConstraints' => $fieldTypeConstraints,
             )
@@ -166,7 +165,7 @@ EOT;
                 'defaultAuthor' => AuthorType::DEFAULT_EMPTY,
             )
         );
-        $fieldDef = new PersistenceFieldDefinition(
+        $fieldDef = new SPIFieldDefinition(
             array(
                 'fieldTypeConstraints' => $fieldTypeConstraints,
             )
