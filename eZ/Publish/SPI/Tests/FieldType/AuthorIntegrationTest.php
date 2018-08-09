@@ -47,7 +47,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
@@ -86,7 +86,18 @@ class AuthorIntegrationTest extends BaseIntegrationTest
             // The ezauthor field type does not have any special field definition
             // properties
             array('fieldType', 'ezauthor'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array())),
+            array(
+                'fieldTypeConstraints',
+                new Content\FieldTypeConstraints(
+                    array(
+                        'fieldSettings' => new FieldType\FieldSettings(
+                            array(
+                                'defaultAuthor' => 1,
+                            )
+                        ),
+                    )
+                ),
+            ),
         );
     }
 

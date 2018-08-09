@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\Core\FieldType\Author\Author;
 use eZ\Publish\Core\FieldType\Author\AuthorCollection;
+use eZ\Publish\Core\FieldType\Author\Type;
 use eZ\Publish\Core\FieldType\Author\Value as AuthorValue;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
@@ -38,7 +39,12 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return array(
+            'defaultAuthor' => array(
+                'type' => 'choice',
+                'default' => Type::DEFAULT_CURRENT_USER,
+            ),
+        );
     }
 
     /**
@@ -48,7 +54,9 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return array(
+            'defaultAuthor' => Type::DEFAULT_CURRENT_USER,
+        );
     }
 
     /**
@@ -98,12 +106,10 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     /**
      * Get initial field data for valid object creation.
      *
-     * @return mixed
+     * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     public function getValidCreationFieldData()
     {
-        // We may only create times from timestamps here, since storing will
-        // loose information about the timezone.
         return new AuthorValue(
             array(
                 new Author(
@@ -192,7 +198,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     /**
      * Get update field externals data.
      *
-     * @return array
+     * @return \eZ\Publish\Core\FieldType\Author\Value
      */
     public function getValidUpdateFieldData()
     {
