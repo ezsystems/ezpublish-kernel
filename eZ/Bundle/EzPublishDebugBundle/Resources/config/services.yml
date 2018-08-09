@@ -12,6 +12,15 @@ services:
                 template: "EzPublishDebugBundle:Profiler:layout"
                 id: "ezpublish.debug.toolbar"
 
+    ezpublish_debug.siteaccess_collector:
+        class: "%ezpublish_debug.siteaccess_collector.class%"
+        tags:
+            -
+                name: ezpublish_data_collector
+                id: "ezpublish.debug.siteaccess"
+                panelTemplate: "EzPublishDebugBundle:Profiler/siteaccess:panel.html.twig"
+                toolbarTemplate: "EzPublishDebugBundle:Profiler/siteaccess:toolbar.html.twig"
+
     ezpublish_debug.persistence_collector:
         class: "%ezpublish_debug.persistence_collector.class%"
         arguments: ["@ezpublish.spi.persistence.cache.persistenceLogger"]
@@ -21,12 +30,3 @@ services:
                 id: "ezpublish.debug.persistence"
                 panelTemplate: "EzPublishDebugBundle:Profiler/persistence:panel.html.twig"
                 toolbarTemplate: "EzPublishDebugBundle:Profiler/persistence:toolbar.html.twig"
-
-    ezpublish_debug.siteaccess_collector:
-        class: "%ezpublish_debug.siteaccess_collector.class%"
-        tags:
-            -
-                name: ezpublish_data_collector
-                id: "ezpublish.debug.siteaccess"
-                panelTemplate: "EzPublishDebugBundle:Profiler/siteaccess:panel.html.twig"
-                toolbarTemplate: "EzPublishDebugBundle:Profiler/siteaccess:toolbar.html.twig"
