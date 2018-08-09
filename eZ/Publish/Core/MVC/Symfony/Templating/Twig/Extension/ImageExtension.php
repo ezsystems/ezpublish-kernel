@@ -90,6 +90,10 @@ class ImageExtension extends Twig_Extension
     }
 
     /**
+     * Return identifier of the field used to store Image Asset value.
+     *
+     * Typically used to create generic view of the Image Asset field.
+     *
      * @return string
      */
     public function getImageAssetContentFieldIdentifier(): string

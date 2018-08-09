@@ -23,13 +23,19 @@ class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = 'ezimageasset';
 
-    /** @var \eZ\Publish\API\Repository\ContentService */
+    /**
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
     private $contentService;
 
-    /** @var \eZ\Publish\API\Repository\ContentTypeService */
+    /**
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
     private $contentTypeService;
 
-    /** @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper */
+    /**
+     * @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper
+     */
     private $assetMapper;
 
     /**
@@ -45,30 +51,6 @@ class Type extends FieldType
         $this->contentService = $contentService;
         $this->contentTypeService = $contentTypeService;
         $this->assetMapper = $mapper;
-    }
-
-    /**
-     * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
-     *
-     * @param mixed $fieldSettings
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateFieldSettings($fieldSettings): array
-    {
-        return [];
-    }
-
-    /**
-     * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
-     *
-     * @param mixed $validatorConfiguration
-     *
-     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
-     */
-    public function validateValidatorConfiguration($validatorConfiguration): array
-    {
-        return [];
     }
 
     /**
@@ -160,7 +142,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\FieldType\ImageAsset\Value The potentially converted and structurally plausible value.
      */
-    protected function createValueFromInput($inputValue): Value
+    protected function createValueFromInput($inputValue)
     {
         if ($inputValue instanceof ContentInfo) {
             $inputValue = new Value($inputValue->id);
