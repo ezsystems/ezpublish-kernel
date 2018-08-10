@@ -1524,7 +1524,7 @@ class ContentService implements ContentServiceInterface
             2
         );
 
-        if (count($versionList) === 1) {
+        if (count($versionList) === 1 && !$versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
                 'Version is the last version of the Content and can not be removed'
