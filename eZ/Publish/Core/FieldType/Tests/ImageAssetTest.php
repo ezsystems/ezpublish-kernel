@@ -310,6 +310,6 @@ class ImageAssetTest extends FieldTypeTest
 
     public function testIsSearchable()
     {
-        $this->assertFalse($this->getFieldTypeUnderTest()->isSearchable());
+        $this->assertTrue($this->getFieldTypeUnderTest()->isSearchable());
     }
 }

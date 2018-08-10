@@ -248,4 +248,14 @@ class Type extends FieldType
 
         return $relations;
     }
+
+    /**
+     * Returns whether the field type is searchable.
+     *
+     * @return bool
+     */
+    public function isSearchable(): bool
+    {
+        return true;
+    }
 }
