@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\Tests\Service\Integration\Base as BaseServiceTest;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Repository\Values\Content\Location;
@@ -288,8 +289,9 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem(array('id' => APIBaseTest::DB_INT_MAX, 'parentLocationId' => APIBaseTest::DB_INT_MAX));
-        $trashService->recover($trashItem);
+        $trashService->recover(
+            $this->getTrashItem(APIBaseTest::DB_INT_MAX, 2, APIBaseTest::DB_INT_MAX)
+        );
     }
 
     /**
@@ -398,8 +400,9 @@ abstract class TrashBase extends BaseServiceTest
     {
         $trashService = $this->repository->getTrashService();
 
-        $trashItem = new TrashItem(array('id' => APIBaseTest::DB_INT_MAX));
-        $trashService->deleteTrashItem($trashItem);
+        $trashService->deleteTrashItem(
+            $this->getTrashItem(APIBaseTest::DB_INT_MAX)
+        );
     }
 
     /**
@@ -471,5 +474,14 @@ abstract class TrashBase extends BaseServiceTest
                 $locationCreates
             )->versionInfo
         );
+    }
+
+    private function getTrashItem($id, $contentId = 44, $parentLocationId = 2)
+    {
+        return new TrashItem([
+            'id' => $id,
+            'parentLocationId' => $parentLocationId,
+            'contentInfo' => new ContentInfo(['id' => $contentId]),
+        ]);
     }
 }
