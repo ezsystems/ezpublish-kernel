@@ -151,7 +151,7 @@ class SectionServiceAuthorizationTest extends BaseTest
         $sections = $sectionService->loadSections();
         /* END: Use Case */
 
-        $this->assertEmpty($sections, "Expected to get zero sections back as user has nada section access");
+        $this->assertEmpty($sections, 'Expected to get zero sections back as user has nada section access');
     }
 
     /**
