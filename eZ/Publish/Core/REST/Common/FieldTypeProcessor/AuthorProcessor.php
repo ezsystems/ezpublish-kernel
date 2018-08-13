@@ -20,11 +20,11 @@ class AuthorProcessor extends FieldTypeProcessor
     {
         if (isset($incomingSettingsHash['defaultAuthor'])) {
             switch ($incomingSettingsHash['defaultAuthor']) {
-                case 'DEFAULT_EMPTY':
-                    $incomingSettingsHash['defaultAuthor'] = Type::DEFAULT_EMPTY;
+                case 'DEFAULT_CURRENT_USER':
+                    $incomingSettingsHash['defaultAuthor'] = Type::DEFAULT_CURRENT_USER;
                     break;
                 default:
-                    $incomingSettingsHash['defaultAuthor'] = Type::DEFAULT_CURRENT_USER;
+                    $incomingSettingsHash['defaultAuthor'] = Type::DEFAULT_VALUE_EMPTY;
             }
         }
 
@@ -38,11 +38,11 @@ class AuthorProcessor extends FieldTypeProcessor
     {
         if (isset($outgoingSettingsHash['defaultAuthor'])) {
             switch ($outgoingSettingsHash['defaultAuthor']) {
-                case Type::DEFAULT_EMPTY:
-                    $outgoingSettingsHash['defaultAuthor'] = 'DEFAULT_EMPTY';
+                case Type::DEFAULT_CURRENT_USER:
+                    $outgoingSettingsHash['defaultAuthor'] = 'DEFAULT_CURRENT_USER';
                     break;
                 default:
-                    $outgoingSettingsHash['defaultAuthor'] = 'DEFAULT_CURRENT_USER';
+                    $outgoingSettingsHash['defaultAuthor'] = 'DEFAULT_VALUE_EMPTY';
             }
         }
 

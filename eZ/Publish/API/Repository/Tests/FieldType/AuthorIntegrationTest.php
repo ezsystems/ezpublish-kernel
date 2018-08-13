@@ -42,7 +42,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         return array(
             'defaultAuthor' => array(
                 'type' => 'choice',
-                'default' => Type::DEFAULT_CURRENT_USER,
+                'default' => Type::DEFAULT_VALUE_EMPTY,
             ),
         );
     }
@@ -55,7 +55,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function getValidFieldSettings()
     {
         return array(
-            'defaultAuthor' => Type::DEFAULT_CURRENT_USER,
+            'defaultAuthor' => Type::DEFAULT_VALUE_EMPTY,
         );
     }
 
