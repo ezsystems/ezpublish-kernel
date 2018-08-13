@@ -12,6 +12,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AsseticPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BinaryContentDownloadPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConsoleCacheWarmupPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\HttpCachePass;
@@ -95,6 +96,7 @@ class EzPublishCoreBundle extends Bundle
         );
         $container->addCompilerPass(new BinaryContentDownloadPass());
         $container->addCompilerPass(new ViewProvidersPass());
+        $container->addCompilerPass(new ConsoleCacheWarmupPass());
 
         // Storage passes
         $container->addCompilerPass(new ExternalStorageRegistryPass());
