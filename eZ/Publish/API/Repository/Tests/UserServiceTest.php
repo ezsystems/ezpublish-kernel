@@ -534,6 +534,8 @@ class UserServiceTest extends BaseTest
         $userService->moveUserGroup($userGroup, $membersUserGroup);
         /* END: Use Case */
 
+        $this->refreshSearch($repository);
+
         $mainUserGroup = $userService->loadUserGroup($this->generateId('group', 4));
 
         $this->assertEquals(5, $mainUserGroup->subGroupCount);
