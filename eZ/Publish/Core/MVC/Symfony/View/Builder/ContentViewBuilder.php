@@ -101,9 +101,14 @@ class ContentViewBuilder implements ViewBuilder
             // if we already have location load content true it so we avoid dual loading in case user does that in view
             $content = $location->getContent();
             if (!$this->canRead($content, $location, $view->isEmbed())) {
+                $missingPermission = 'read' . ($view->isEmbed() ? '|view_embed' : '');
                 throw new UnauthorizedException(
-                    'content', 'read' . ($view->isEmbed() ? '|view_embed' : ''),
-                    ['contentId' => $content->id, 'locationId' => $location->id]
+                    'content',
+                    $missingPermission,
+                    [
+                        'contentId' => $content->id,
+                        'locationId' => $location->id,
+                    ]
                 );
             }
         } else {
@@ -236,13 +241,13 @@ class ContentViewBuilder implements ViewBuilder
     /**
      * Checks if a user can read a content, or view it as an embed.
      *
-     * @param Content $content
-     * @param Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param bool $isEmbed
      *
      * @return bool
      */
-    private function canRead(Content $content, Location $location = null, $isEmbed = true)
+    private function canRead(Content $content, Location $location = null, bool $isEmbed = true): bool
     {
         $limitations = ['valueObject' => $content->contentInfo];
         if (isset($location)) {
