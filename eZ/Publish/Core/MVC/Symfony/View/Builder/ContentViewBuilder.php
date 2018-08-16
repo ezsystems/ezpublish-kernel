@@ -100,7 +100,7 @@ class ContentViewBuilder implements ViewBuilder
         } elseif ($location instanceof Location) {
             // if we already have location load content true it so we avoid dual loading in case user does that in view
             $content = $location->getContent();
-            if (!$this->canRead($content, $location)) {
+            if (!$this->canRead($content, $location, $view->isEmbed())) {
                 throw new UnauthorizedException(
                     'content', 'read|view_embed',
                     ['contentId' => $content->id, 'locationId' => $location->id]
@@ -237,11 +237,12 @@ class ContentViewBuilder implements ViewBuilder
      * Checks if a user can read a content, or view it as an embed.
      *
      * @param Content $content
-     * @param $location
+     * @param Location $location
+     * @param bool $isEmbed
      *
      * @return bool
      */
-    private function canRead(Content $content, Location $location = null)
+    private function canRead(Content $content, Location $location = null, $isEmbed = true)
     {
         $limitations = ['valueObject' => $content->contentInfo];
         if (isset($location)) {
@@ -253,7 +254,7 @@ class ContentViewBuilder implements ViewBuilder
 
         return
             $this->authorizationChecker->isGranted($readAttribute) ||
-            $this->authorizationChecker->isGranted($viewEmbedAttribute);
+            ($isEmbed && $this->authorizationChecker->isGranted($viewEmbedAttribute));
     }
 
     /**
