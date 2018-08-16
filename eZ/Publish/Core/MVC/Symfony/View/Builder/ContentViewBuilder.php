@@ -102,7 +102,7 @@ class ContentViewBuilder implements ViewBuilder
             $content = $location->getContent();
             if (!$this->canRead($content, $location, $view->isEmbed())) {
                 throw new UnauthorizedException(
-                    'content', 'read|view_embed',
+                    'content', 'read' . ($view->isEmbed() ? '|view_embed' : ''),
                     ['contentId' => $content->id, 'locationId' => $location->id]
                 );
             }
