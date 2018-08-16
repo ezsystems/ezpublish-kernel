@@ -100,6 +100,12 @@ class ContentViewBuilder implements ViewBuilder
         } elseif ($location instanceof Location) {
             // if we already have location load content true it so we avoid dual loading in case user does that in view
             $content = $location->getContent();
+            if (!$this->canRead($content, $location)) {
+                throw new UnauthorizedException(
+                    'content', 'read|view_embed',
+                    ['contentId' => $content->id, 'locationId' => $location->id]
+                );
+            }
         } else {
             if (isset($parameters['contentId'])) {
                 $contentId = $parameters['contentId'];
