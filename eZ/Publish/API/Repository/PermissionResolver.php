@@ -34,8 +34,8 @@ interface PermissionResolver
      * Note: boolean value describes full access (true) or no access at all (false), array can be seen as a maybe..
      *
      * WARNING: This is a low level method, if possible strongly prefer to use canUser() as it is able to handle limitations.
-     *          This includes Role Assignment limitations, but also future policy limitations added in kernel
-     *          or as custom configuration/extension to the system (by means of custom confiuration).
+     *          This includes Role Assignment limitations, but also future policy limitations added in kernel,
+     *          or as plain user configuration and/or extending the system.
      *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
