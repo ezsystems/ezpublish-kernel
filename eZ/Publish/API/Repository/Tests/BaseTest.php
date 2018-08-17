@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -621,5 +622,45 @@ abstract class BaseTest extends TestCase
         $constraint = new PHPUnitConstraintValidationErrorOccurs($expectedValidationErrorMessage);
 
         self::assertThat($exception, $constraint);
+    }
+
+    /**
+     * Create 'folder' Content.
+     *
+     * @param array $names Folder names in the form of <code>['&lt;language_code&gt;' => '&lt;name&gt;']</code>
+     * @param int $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function createFolder(array $names, int $parentLocationId): Location
+    {
+        $repository = $this->getRepository(false);
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        if (empty($names)) {
+            throw new \RuntimeException(sprintf('%s expects non-empty names list', __METHOD__));
+        }
+        $mainLanguageCode = array_keys($names)[0];
+
+        $struct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
+            $mainLanguageCode
+        );
+        foreach ($names as $languageCode => $translatedName) {
+            $struct->setField('name', $translatedName, $languageCode);
+        }
+        $contentDraft = $contentService->createContent(
+            $struct,
+            [$locationService->newLocationCreateStruct($parentLocationId)]
+        );
+        $content = $contentService->publishVersion($contentDraft->versionInfo);
+
+        return $locationService->loadLocation($content->contentInfo->mainLocationId);
     }
 }
