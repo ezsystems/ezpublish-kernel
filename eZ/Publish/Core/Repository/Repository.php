@@ -22,6 +22,8 @@ use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use Exception;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use RuntimeException;
 
 /**
@@ -243,14 +245,22 @@ class Repository implements RepositoryInterface
     private $transactionCount = 0;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor.
      *
      * Construct repository object with provided storage engine
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
+     * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
+     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $user
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
         PersistenceHandler $persistenceHandler,
@@ -258,7 +268,8 @@ class Repository implements RepositoryInterface
         BackgroundIndexer $backgroundIndexer,
         RelationProcessor $relationProcessor,
         array $serviceSettings = array(),
-        APIUserReference $user = null
+        APIUserReference $user = null,
+        LoggerInterface $logger = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
@@ -298,6 +309,8 @@ class Repository implements RepositoryInterface
         } else {
             $this->currentUserRef = new UserReference($this->serviceSettings['user']['anonymousUserID']);
         }
+
+        $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
     /**
@@ -537,7 +550,8 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
-            $this->serviceSettings['location']
+            $this->serviceSettings['location'],
+            $this->logger
         );
 
         return $this->locationService;
