@@ -29,14 +29,13 @@ interface PermissionResolver
     public function setCurrentUserReference(UserReference $userReference);
 
     /**
-     * Returns boolean value or an array of limitations describing user's permissions
-     * on the given module and function.
+     * Low level permission function: Returns boolean value, or an array of limitations that permission for depens on.
      *
      * Note: boolean value describes full access (true) or no access at all (false), array can be seen as a maybe..
      *
-     * WARNING: If possible strongly prefer to use canUser() as it is able to handle limitations!
+     * WARNING: This is a low level method, if possible strongly prefer to use canUser() as it is able to handle limitations.
      *          This includes Role Assignment limitations, but also future policy limitations added in kernel
-     *          or as custom configuration/extension to the system (as this is possible as well now).
+     *          or as custom configuration/extension to the system (by means of custom confiuration).
      *
      * @param string $module The module, aka controller identifier to check permissions on
      * @param string $function The function, aka the controller action to check permissions on
