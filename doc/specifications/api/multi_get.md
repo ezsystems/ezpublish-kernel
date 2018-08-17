@@ -8,14 +8,13 @@ The use cases are many, but the recurring pattern is when one list of id's needs
 having O(n) code spreading all over the architecture from bottom to top, as opposed to closer to the ideal O(1) lookups.
 
 So that is what this specification is for, defining a pattern to use to expose API endpoints to load multiple entities
-at once.
+at once, by ids/identifiers/remote-ids
 
 #### Note on Caching
 Part of the reason why this is being proposed now is that with kernel version 7.0 _(eZ Platform v2)_ and it's move to
-Symfony Cache. We can now actually also load several cache items in one call, meaning any exposure of multi load
+Symfony Cache. We can now actually load several cache items in one call, meaning any exposure of multi load
 endpoints will provide noticeable performance improvements also when cache is warm, not just when it is cold & request
 goes to database.
-
 
 ## SPI _(PHP)_
 Before we try to define how a multi lookup API endpoint should look like, we'll first cover the layer below, the _Service
@@ -52,20 +51,13 @@ Notes:
 - There is no offset or limit, given we do lookup on id's that would be up to callee.
 - Callee can easily get missing entities with `$missingIds = array_diff($contentIds, array_keys($contentInfoList))`
 
-##### Note on more complex cases
+##### Note on more complex cases: LoadStructs
 
 For loading whole Content we also need to at least specify which language each and every item should be loaded in, in
 order to take always available into account, and in order for cache layer to know enough to generate unique cache keys.
 
-To do this, we can use a LoadStruct:
-```php
-Class LoadStruct implements SPI\Persistent\ValueObject
-{
-    public mixed $id;
-    public ?int $versionNo;
-    public array $languages;
-}
-```
+To do this, we can use a LoadStruct, see current _(as of 2.2)_ SPI design for this:
+https://github.com/ezsystems/ezpublish-kernel/blob/master/eZ/Publish/SPI/Persistence/Content/LoadStruct.php
 
 
 ## API _(PHP & REST)_
@@ -92,7 +84,7 @@ strengths of the API. Taking Content as an example here we can envision the foll
      *
      * @param array $contentIds
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content[<mixed>]|\eZ\Publish\API\Repository\Values\ContentCollection
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[<int>]|\eZ\Publish\API\Repository\Values\ContentCollection
      */
     public function loadContentCollection(array $contentIds, array $prioritizedLanguages = []) : ContentCollection;
 
@@ -107,7 +99,7 @@ Interface ContentCollection implements iterable
      *
      * To get list filtered by permissing, just iterate ContentCollection itself.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content[<mixed>]
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[<int>]
      */
     public function all(): array;
 
@@ -124,5 +116,5 @@ Notes:
 
 #### REST Design
 
-_TBD:_ In general like other collections in REST API with added information on which items where not found and which where
-Unauthorized with current user.
+_TBD:_ See possible aproach for content loading here:
+https://gist.github.com/andrerom/d0c8cc9c1db75d2617e2942e5bb6e5ee
