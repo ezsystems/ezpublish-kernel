@@ -52,6 +52,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $service = new UrlALiasService(
             $repositoryMock,
             $urlAliasHandler,
+            $this->getNameSchemaServiceMock(),
             $settings
         );
 
@@ -3578,7 +3579,16 @@ class UrlAliasTest extends BaseServiceMockTest
             array(
                 $this->getRepositoryMock(),
                 $this->getPersistenceMock()->urlAliasHandler(),
+                $this->getNameSchemaServiceMock(),
             )
         );
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\NameSchemaService
+     */
+    protected function getNameSchemaServiceMock()
+    {
+        return $this->createMock('eZ\\Publish\\Core\\Repository\\Helper\\NameSchemaService');
     }
 }
