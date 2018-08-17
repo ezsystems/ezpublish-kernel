@@ -127,8 +127,12 @@ class DomainMapper
      *
      * @return array
      */
-    public function buildDomainFields(array $spiFields, $contentType, array $languages = null, $alwaysAvailableLanguage = null)
-    {
+    public function buildDomainFields(
+        array $spiFields,
+        $contentType,
+        array $languages = null,
+        $alwaysAvailableLanguage = null
+    ) {
         if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
         }
@@ -139,7 +143,7 @@ class DomainMapper
         }
 
         $fieldInFilterLanguagesMap = array();
-        if ($languages !== null && $alwaysAvailableLanguage !== null) {
+        if (!empty($languages) && $alwaysAvailableLanguage !== null) {
             foreach ($spiFields as $spiField) {
                 if (in_array($spiField->languageCode, $languages)) {
                     $fieldInFilterLanguagesMap[$spiField->fieldDefinitionId] = true;
@@ -154,7 +158,7 @@ class DomainMapper
                 continue;
             }
 
-            if ($languages !== null && !in_array($spiField->languageCode, $languages)) {
+            if (!empty($languages) && !in_array($spiField->languageCode, $languages)) {
                 // If filtering is enabled we ignore fields in other languages then $fieldLanguages, if:
                 if ($alwaysAvailableLanguage === null) {
                     // Ignore field if we don't have $alwaysAvailableLanguageCode fallback
