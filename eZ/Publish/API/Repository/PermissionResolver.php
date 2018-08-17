@@ -29,7 +29,7 @@ interface PermissionResolver
     public function setCurrentUserReference(UserReference $userReference);
 
     /**
-     * Low level permission function: Returns boolean value, or an array of limitations that permission for depens on.
+     * Low level permission function: Returns boolean value, or an array of limitations that user permission depends on.
      *
      * Note: boolean value describes full access (true) or no access at all (false), array can be seen as a maybe..
      *
