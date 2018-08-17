@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -850,36 +851,25 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoByLocationId()
+     * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList(), loadContentInfoByLocationId()
      *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
+     * @param \Doctrine\DBAL\Query\QueryBuilder $query
      *
      * @return array
      */
-    private function internalLoadContentInfo(SelectQuery $query)
+    private function internalLoadContentInfo(DoctrineQueryBuilder $query)
     {
-        $query->select(
-            'ezcontentobject.*',
-            $this->dbHandler->aliasedColumn($query, 'main_node_id', 'ezcontentobject_tree')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject')
-        )->leftJoin(
-            $this->dbHandler->quoteTable('ezcontentobject_tree'),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
-                    $this->dbHandler->quoteColumn('id', 'ezcontentobject')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree'),
-                    $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree')
-                )
-            )
-        );
-        $statement = $query->prepare();
-        $statement->execute();
+        $query
+            ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
+            ->from('ezcontentobject', 'c')
+            ->leftJoin(
+                'c',
+                'ezcontentobject_tree',
+                't',
+                'c.id = t.contentobject_id AND t.node_id = t.main_node_id'
+            );
 
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll();
     }
 
     /**
@@ -896,21 +886,25 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfo($contentId)
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-                $query->bindValue($contentId, null, PDO::PARAM_INT)
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query->where('c.id = :id')
+              ->setParameter('id', $contentId, PDO::PARAM_INT);
 
-        $row = $this->internalLoadContentInfo($query);
-
-        if (empty($row)) {
+        $results = $this->internalLoadContentInfo($query);
+        if (empty($results)) {
             throw new NotFound('content', "id: $contentId");
         }
 
-        return $row;
+        return $results[0];
+    }
+
+    public function loadContentInfoList(array $contentIds)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query->where('c.id IN (:ids)')
+              ->setParameter('ids', $contentIds, Connection::PARAM_INT_ARRAY);
+
+        return $this->internalLoadContentInfo($query);
     }
 
     /**
@@ -926,21 +920,16 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('remote_id', 'ezcontentobject'),
-                $query->bindValue($remoteId)
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query->where('c.remote_id = :id')
+              ->setParameter('id', $remoteId, PDO::PARAM_STR);
 
-        $row = $this->internalLoadContentInfo($query);
-
-        if (empty($row)) {
+        $results = $this->internalLoadContentInfo($query);
+        if (empty($results)) {
             throw new NotFound('content', "remote_id: $remoteId");
         }
 
-        return $row;
+        return $results[0];
     }
 
     /**
@@ -956,21 +945,16 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByLocationId($locationId)
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree'),
-                $query->bindValue($locationId, null, PDO::PARAM_INT)
-            )
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query->where('t.main_node_id = :id')
+              ->setParameter('id', $locationId, PDO::PARAM_INT);
 
-        $row = $this->internalLoadContentInfo($query);
-
-        if (empty($row)) {
+        $results = $this->internalLoadContentInfo($query);
+        if (empty($results)) {
             throw new NotFound('content', "main_node_id: $locationId");
         }
 
-        return $row;
+        return $results[0];
     }
 
     /**

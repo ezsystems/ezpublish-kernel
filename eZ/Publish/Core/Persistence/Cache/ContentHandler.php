@@ -87,6 +87,12 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         return $contentInfo;
     }
 
+    public function loadContentInfoList(array $contentIds)
+    {
+        // Intentionally not caching until we can handle caching multiple items (see 7.x)
+        return $this->persistenceHandler->contentHandler()->loadContentInfoList($contentIds);
+    }
+
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfoByRemoteId
      */

@@ -77,6 +77,18 @@ interface Handler
     public function loadContentInfo($contentId);
 
     /**
+     * Return list of unique Content Info, with content id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param array $contentIds
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
+     */
+    public function loadContentInfoList(array $contentIds);
+
+    /**
      * Returns the metadata object for a content identified by $remoteId.
      *
      * @param mixed $remoteId
