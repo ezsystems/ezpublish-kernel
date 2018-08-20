@@ -72,8 +72,8 @@ class ContentViewBuilderTest extends TestCase
     public function testBuildViewWithoutLocationIdAndContentId(): void
     {
         $parameters = [
-            'viewType' => '',
-            '_controller' => '',
+            'viewType' => 'full',
+            '_controller' => 'ez_content:viewContent',
         ];
 
         $this->expectException(InvalidArgumentException::class);
@@ -84,8 +84,8 @@ class ContentViewBuilderTest extends TestCase
     public function testBuildViewWithInvalidLocationId(): void
     {
         $parameters = [
-            'viewType' => '',
-            '_controller' => '',
+            'viewType' => 'full',
+            '_controller' => 'ez_content:viewContent',
             'locationId' => 865,
         ];
 
@@ -102,8 +102,8 @@ class ContentViewBuilderTest extends TestCase
     public function testBuildViewWithHiddenLocation(): void
     {
         $parameters = [
-            'viewType' => '',
-            '_controller' => '',
+            'viewType' => 'full',
+            '_controller' => 'ez_content:viewContent',
             'locationId' => 2,
         ];
 
@@ -133,8 +133,8 @@ class ContentViewBuilderTest extends TestCase
         );
 
         $parameters = [
-            'viewType' => '',
-            '_controller' => '',
+            'viewType' => 'full',
+            '_controller' => 'ez_content:viewContent',
             'locationId' => 2,
         ];
 
@@ -174,7 +174,7 @@ class ContentViewBuilderTest extends TestCase
 
         $parameters = [
             'viewType' => 'embed',
-            '_controller' => '',
+            '_controller' => 'ez_content:viewContent',
             'locationId' => 2,
         ];
 
@@ -218,8 +218,8 @@ class ContentViewBuilderTest extends TestCase
         );
 
         $parameters = [
-            'viewType' => '',
-            '_controller' => '',
+            'viewType' => 'full',
+            '_controller' => 'ez_content:viewContent',
             'locationId' => 2,
         ];
 
