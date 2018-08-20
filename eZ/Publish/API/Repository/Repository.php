@@ -220,6 +220,13 @@ interface Repository
     public function getNotificationService();
 
     /**
+     * Get UserPreferenceService.
+     *
+     * @return \eZ\Publish\API\Repository\UserPreferenceService
+     */
+    public function getUserPreferenceService();
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,
