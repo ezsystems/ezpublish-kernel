@@ -5,9 +5,13 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Builder;
 
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\ContentInfoLocationLoader;
+use eZ\Publish\Core\MVC\Exception\HiddenLocationException;
 use eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
@@ -16,7 +20,6 @@ use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use PHPUnit\Framework\TestCase;
@@ -26,25 +29,25 @@ use PHPUnit\Framework\TestCase;
  */
 class ContentViewBuilderTest extends TestCase
 {
-    /** @var \eZ\Publish\API\Repository\Repository|MockObject */
+    /** @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject */
     private $repository;
 
-    /** @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|MockObject */
+    /** @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $authorizationChecker;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject */
     private $viewConfigurator;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\ParametersInjector|MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\ParametersInjector|\PHPUnit\Framework\MockObject\MockObject */
     private $parametersInjector;
 
-    /** @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader|MockObject */
+    /** @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader|\PHPUnit\Framework\MockObject\MockObject */
     private $contentInfoLocationLoader;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder|MockObject */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder|\PHPUnit\Framework\MockObject\MockObject */
     private $contentViewBuilder;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->setMethods(['sudo'])->getMock();
         $this->authorizationChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
@@ -66,9 +69,6 @@ class ContentViewBuilderTest extends TestCase
         $this->assertFalse($this->contentViewBuilder->matches('dummy_value'));
     }
 
-    /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     */
     public function testBuildViewWithoutLocationIdAndContentId(): void
     {
         $parameters = [
@@ -76,12 +76,11 @@ class ContentViewBuilderTest extends TestCase
             '_controller' => '',
         ];
 
+        $this->expectException(InvalidArgumentException::class);
+
         $this->contentViewBuilder->buildView($parameters);
     }
 
-    /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
     public function testBuildViewWithInvalidLocationId(): void
     {
         $parameters = [
@@ -95,12 +94,11 @@ class ContentViewBuilderTest extends TestCase
             ->method('sudo')
             ->willThrowException(new NotFoundException('location', 865));
 
+        $this->expectException(APINotFoundException::class);
+
         $this->contentViewBuilder->buildView($parameters);
     }
 
-    /**
-     * @expectedException \eZ\Publish\Core\MVC\Exception\HiddenLocationException
-     */
     public function testBuildViewWithHiddenLocation(): void
     {
         $parameters = [
@@ -116,12 +114,11 @@ class ContentViewBuilderTest extends TestCase
             ->method('sudo')
             ->willReturn($location);
 
+        $this->expectException(HiddenLocationException::class);
+
         $this->contentViewBuilder->buildView($parameters);
     }
 
-    /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
-     */
     public function testBuildViewWithoutContentReadPermission(): void
     {
         $location = new Location(
@@ -152,12 +149,11 @@ class ContentViewBuilderTest extends TestCase
             ->method('isGranted')
             ->willReturn(false);
 
+        $this->expectException(UnauthorizedException::class);
+
         $this->contentViewBuilder->buildView($parameters);
     }
 
-    /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
-     */
     public function testBuildEmbedViewWithoutContentViewEmbedPermission(): void
     {
         $location = new Location(
@@ -198,12 +194,11 @@ class ContentViewBuilderTest extends TestCase
             ->method('isGranted')
             ->willReturn(false);
 
+        $this->expectException(UnauthorizedException::class);
+
         $this->contentViewBuilder->buildView($parameters);
     }
 
-    /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     */
     public function testBuildViewWithContentWhichDoesNotBelongsToLocation(): void
     {
         $location = new Location(
@@ -238,6 +233,8 @@ class ContentViewBuilderTest extends TestCase
             ->expects($this->at(0))
             ->method('isGranted')
             ->willReturn(true);
+
+        $this->expectException(InvalidArgumentException::class);
 
         $this->contentViewBuilder->buildView($parameters);
     }
