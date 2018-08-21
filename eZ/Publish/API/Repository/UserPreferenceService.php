@@ -21,23 +21,24 @@ interface UserPreferenceService
     /**
      * Set user preference.
      *
-     * @param \eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceSetStruct[] $userPreferenceSetStruct
+     * @param \eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceSetStruct[] $userPreferenceSetStructs
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to set user preference
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException If the $userPreferenceSetStruct is invalid
      */
-    public function setUserPreference(array $userPreferenceSetStruct): void;
+    public function setUserPreference(array $userPreferenceSetStructs): void;
 
     /**
      * Get currently logged user preference by key.
      *
-     * @param string $userPreferenceKey
+     * @param string $userPreferenceName
      *
      * @return \eZ\Publish\API\Repository\Values\UserPreference\UserPreference
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current user user is not allowed to fetch user preference
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function getUserPreference(string $userPreferenceKey): UserPreference;
+    public function getUserPreference(string $userPreferenceName): UserPreference;
 
     /**
      * Get currently logged user preferences.
