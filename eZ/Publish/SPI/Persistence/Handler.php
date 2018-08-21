@@ -79,6 +79,11 @@ interface Handler
     public function notificationHandler();
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\UserPreference\Handler
+     */
+    public function userPreferenceHandler();
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler
      */
     public function transactionHandler();
