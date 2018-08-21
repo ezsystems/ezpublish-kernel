@@ -17,14 +17,14 @@ class UserPreference extends ValueObject
      *
      * @var int
      */
-    protected $id;
+    public $id;
 
     /**
      * The ID of the user this user preference belongs to.
      *
-     * @var mixed
+     * @var int
      */
-    protected $userId;
+    public $userId;
 
     /**
      * Name of user preference.
@@ -33,7 +33,7 @@ class UserPreference extends ValueObject
      *
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      * Value of user preference.
@@ -42,5 +42,5 @@ class UserPreference extends ValueObject
      *
      * @var string
      */
-    protected $value;
+    public $value;
 }
