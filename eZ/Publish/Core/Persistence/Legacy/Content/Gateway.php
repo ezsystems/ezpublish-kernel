@@ -152,6 +152,16 @@ abstract class Gateway
     abstract public function load($contentId, $version, array $translations = null);
 
     /**
+     * Loads current version for a list of content objects.
+     *
+     * @param int[] $contentIds
+     * @param string[]|null $translations If languages is not set, ALL will be loaded.
+     *
+     * @return array[]
+     */
+    abstract public function loadContentList(array $contentIds, array $translations = null);
+
+    /**
      * Loads info for a content object identified by its remote ID.
      *
      * Returns an array with the relevant data.
