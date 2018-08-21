@@ -167,6 +167,13 @@ class RichText extends AbstractFieldTypeParser
                 ->info('List of RichText Custom Tags enabled for the current scope. The Custom Tags must be defined in ezpublish.ezrichtext.custom_tags Node.')
                 ->scalarPrototype()->end()
             ->end();
+
+        // RichText Custom Styles configuration (list of Custom Styles enabled for current SiteAccess scope)
+        $nodeBuilder
+            ->arrayNode('custom_styles')
+                ->info('List of RichText Custom Styles enabled for the current scope. The Custom Styles must be defined in ezpublish.ezrichtext.custom_styles Node.')
+                ->scalarPrototype()->end()
+            ->end();
     }
 
     /**
@@ -217,6 +224,17 @@ class RichText extends AbstractFieldTypeParser
                     $scopeSettings['fieldtypes']['ezrichtext']['custom_tags']
                 );
             }
+            if (isset($scopeSettings['fieldtypes']['ezrichtext']['custom_styles'])) {
+                $this->validateCustomStylesConfiguration(
+                    $contextualizer->getContainer(),
+                    $scopeSettings['fieldtypes']['ezrichtext']['custom_styles']
+                );
+                $contextualizer->setContextualParameter(
+                    'fieldtypes.ezrichtext.custom_styles',
+                    $currentScope,
+                    $scopeSettings['fieldtypes']['ezrichtext']['custom_styles']
+                );
+            }
 
             if (isset($scopeSettings['fieldtypes']['ezrichtext']['tags'])) {
                 foreach ($scopeSettings['fieldtypes']['ezrichtext']['tags'] as $name => $tagSettings) {
@@ -264,6 +282,28 @@ class RichText extends AbstractFieldTypeParser
             if (!in_array($customTagName, $definedCustomTags)) {
                 throw new InvalidConfigurationException(
                     "Unknown RichText Custom Tag '{$customTagName}'"
+                );
+            }
+        }
+    }
+
+    /**
+     * Validate SiteAccess-defined Custom Styles configuration against global one.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
+     * @param array $enabledCustomStyles List of Custom Styles enabled for the current scope/SiteAccess
+     */
+    private function validateCustomStylesConfiguration(
+        ContainerInterface $container,
+        array $enabledCustomStyles
+    ) {
+        $definedCustomStyles = array_keys(
+            $container->getParameter(EzPublishCoreExtension::RICHTEXT_CUSTOM_STYLES_PARAMETER)
+        );
+        foreach ($enabledCustomStyles as $customStyleName) {
+            if (!in_array($customStyleName, $definedCustomStyles)) {
+                throw new InvalidConfigurationException(
+                    "Unknown RichText Custom Style '{$customStyleName}'"
                 );
             }
         }

@@ -622,4 +622,27 @@
     <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( $style, $property ), ';' ), ':' ), ';' ), ' ', '' )"/>
   </xsl:template>
 
+  <xsl:template match="ezxhtml5:div[@data-ezstyle]">
+    <xsl:element name="ezstyle" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@data-ezstyle"/>
+      </xsl:attribute>
+      <xsl:if test="@data-ezalign">
+        <xsl:attribute name="ezxhtml:align">
+          <xsl:value-of select="@data-ezalign"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="ezxhtml5:span[@data-ezstyle]">
+    <xsl:element name="ezstyleinline" namespace="http://docbook.org/ns/docbook">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@data-ezstyle"/>
+      </xsl:attribute>
+      <xsl:apply-templates/>
+    </xsl:element>
+  </xsl:template>
+
 </xsl:stylesheet>

@@ -1402,6 +1402,7 @@ class RendererTest extends TestCase
                     $this->configResolverMock,
                     $this->templateEngineMock,
                     'test.name.space.tag',
+                    'test.name.space.style',
                     'test.name.space.embed',
                     $this->loggerMock,
                 )

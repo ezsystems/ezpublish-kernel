@@ -27,6 +27,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterf
 
 class EzPublishCoreExtension extends Extension
 {
+    const RICHTEXT_CUSTOM_STYLES_PARAMETER = 'ezplatform.ezrichtext.custom_styles';
     const RICHTEXT_CUSTOM_TAGS_PARAMETER = 'ezplatform.ezrichtext.custom_tags';
 
     /**
@@ -295,6 +296,12 @@ class EzPublishCoreExtension extends Extension
             $container->setParameter(
                 static::RICHTEXT_CUSTOM_TAGS_PARAMETER,
                 $config['ezrichtext']['custom_tags']
+            );
+        }
+        if (isset($config['ezrichtext']['custom_styles'])) {
+            $container->setParameter(
+                static::RICHTEXT_CUSTOM_STYLES_PARAMETER,
+                $config['ezrichtext']['custom_styles']
             );
         }
     }
