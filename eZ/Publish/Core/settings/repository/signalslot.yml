@@ -43,6 +43,7 @@ services:
             - "@ezpublish.signalslot.service.url"
             - "@ezpublish.signalslot.service.bookmark"
             - '@eZ\Publish\Core\SignalSlot\NotificationService'
+            - '@eZ\Publish\Core\SignalSlot\UserPreferenceService'
 
     ezpublish.signalslot.service.content:
         class: "%ezpublish.signalslot.service.content.class%"
@@ -137,6 +138,11 @@ services:
     eZ\Publish\Core\SignalSlot\NotificationService:
         arguments:
             - "@ezpublish.api.service.inner_notification"
+            - "@ezpublish.signalslot.signal_dispatcher_transaction_wrapper"
+
+    eZ\Publish\Core\SignalSlot\UserPreferenceService:
+        arguments:
+            - "@ezpublish.api.service.inner_user_preference"
             - "@ezpublish.signalslot.signal_dispatcher_transaction_wrapper"
 
     # Single slot internal services

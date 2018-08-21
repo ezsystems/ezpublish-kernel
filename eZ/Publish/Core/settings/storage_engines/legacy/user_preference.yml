@@ -1,0 +1,19 @@
+services:
+    eZ\Publish\Core\Persistence\Legacy\UserPreference\Gateway\DoctrineDatabase:
+        arguments:
+            $connection: '@ezpublish.persistence.connection'
+
+    eZ\Publish\Core\Persistence\Legacy\UserPreference\Gateway\ExceptionConversion:
+        arguments:
+            $innerGateway: '@eZ\Publish\Core\Persistence\Legacy\UserPreference\Gateway\DoctrineDatabase'
+
+    eZ\Publish\Core\Persistence\Legacy\UserPreference\Mapper: ~
+
+    eZ\Publish\Core\Persistence\Legacy\UserPreference\Handler:
+        arguments:
+            $gateway: '@eZ\Publish\Core\Persistence\Legacy\UserPreference\Gateway\ExceptionConversion'
+            $mapper: '@eZ\Publish\Core\Persistence\Legacy\UserPreference\Mapper'
+        lazy: true
+
+    ezpublish.spi.persistence.legacy.user_preference.handler:
+        alias: 'eZ\Publish\Core\Persistence\Legacy\UserPreference\Handler'

@@ -1,0 +1,3 @@
+services:
+    eZ\Publish\API\Repository\UserPreferenceService:
+        alias: eZ\Publish\Core\SignalSlot\UserPreferenceService
