@@ -227,4 +227,34 @@ abstract class Gateway
      * @return int
      */
     abstract public function getLocationContentMainLanguageId($locationId);
+
+    /**
+     * Archive (remove or historize) URL aliases for removed Translations.
+     *
+     * @param int $locationId
+     * @param int $parentId Parent alias used for linking historized entries
+     * @param int[] $languageIds Language IDs of removed Translations
+     */
+    abstract public function archiveUrlAliasesForDeletedTranslations($locationId, $parentId, array $languageIds);
+
+    /**
+     * Delete URL aliases pointing to non-existent Locations.
+     *
+     * @return int Number of affected rows.
+     */
+    abstract public function deleteUrlAliasesWithoutLocation();
+
+    /**
+     * Delete URL aliases pointing to non-existent parent nodes.
+     *
+     * @return int Number of affected rows.
+     */
+    abstract public function deleteUrlAliasesWithoutParent();
+
+    /**
+     * Delete URL aliases which do not link to any existing URL alias node.
+     *
+     * Note: Typically link column value is used to determine original alias for an archived entries.
+     */
+    abstract public function deleteUrlAliasesWithBrokenLink();
 }

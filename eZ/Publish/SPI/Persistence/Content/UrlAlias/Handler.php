@@ -160,4 +160,20 @@ interface Handler
      * @param mixed $locationId
      */
     public function locationDeleted($locationId);
+
+    /**
+     * Archive UrlAliases for Translations that were removed from the underlying published content.
+     *
+     * @param int $locationId Location of underlying published Content Object
+     * @param int $parentLocationId
+     * @param array $languageCodes Language codes of currently published Content Object Translations
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes);
+
+    /**
+     * Delete corrupted URL aliases (global, custom and system).
+     *
+     * @return int Number of deleted URL aliases
+     */
+    public function deleteCorruptedUrlAliases();
 }

@@ -55,6 +55,26 @@ class MaskGenerator
     }
 
     /**
+     * Generates a language mask from pre-loaded Language Ids.
+     *
+     * @param array $languageIds
+     * @param bool $alwaysAvailable
+     *
+     * @return int
+     */
+    public function generateLanguageMaskFromLanguageIds(array $languageIds, $alwaysAvailable)
+    {
+        // make sure alwaysAvailable part of bit mask always results in 1 or 0
+        $languageMask = $alwaysAvailable ? 1 : 0;
+
+        foreach ($languageIds as $languageId) {
+            $languageMask |= $languageId;
+        }
+
+        return $languageMask;
+    }
+
+    /**
      * Generates a language indicator from $languageCode and $alwaysAvailable.
      *
      * @param string $languageCode

@@ -21,6 +21,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGatew
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use eZ\Publish\SPI\Persistence\TransactionHandler;
 
 /**
  * The UrlAlias Handler provides nice urls management.
@@ -96,6 +97,11 @@ class Handler implements UrlAliasHandlerInterface
     protected $maskGenerator;
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\TransactionHandler
+     */
+    private $transactionHandler;
+
+    /**
      * Creates a new UrlAlias Handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $gateway
@@ -105,6 +111,7 @@ class Handler implements UrlAliasHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter $slugConverter
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
+     * @param \eZ\Publish\SPI\Persistence\TransactionHandler $transactionHandler
      */
     public function __construct(
         Gateway $gateway,
@@ -113,7 +120,8 @@ class Handler implements UrlAliasHandlerInterface
         LanguageHandler $languageHandler,
         SlugConverter $slugConverter,
         ContentGateway $contentGateway,
-        MaskGenerator $maskGenerator
+        MaskGenerator $maskGenerator,
+        TransactionHandler $transactionHandler
     ) {
         $this->gateway = $gateway;
         $this->mapper = $mapper;
@@ -122,6 +130,7 @@ class Handler implements UrlAliasHandlerInterface
         $this->slugConverter = $slugConverter;
         $this->contentGateway = $contentGateway;
         $this->maskGenerator = $maskGenerator;
+        $this->transactionHandler = $transactionHandler;
     }
 
     public function publishUrlAliasForLocation(
@@ -1003,5 +1012,62 @@ class Handler implements UrlAliasHandlerInterface
     protected function getHash($text)
     {
         return md5(mb_strtolower($text, 'UTF-8'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes)
+    {
+        $parentId = $this->getRealAliasId($parentLocationId);
+
+        // filter removed Translations
+        $urlAliases = $this->listURLAliasesForLocation($locationId);
+        $removedLanguages = [];
+        foreach ($urlAliases as $urlAlias) {
+            foreach ($urlAlias->languageCodes as $languageCode) {
+                if (!in_array($languageCode, $languageCodes)) {
+                    $removedLanguages[] = $languageCode;
+                }
+            }
+        }
+
+        if (empty($removedLanguages)) {
+            return;
+        }
+
+        // map languageCodes to their IDs
+        $languageIds = array_map(
+            function ($languageCode) {
+                return $this->languageHandler->loadByLanguageCode($languageCode)->id;
+            },
+            $removedLanguages
+        );
+
+        $this->gateway->archiveUrlAliasesForDeletedTranslations($locationId, $parentId, $languageIds);
+    }
+
+    /**
+     * Remove corrupted URL aliases (global, custom and system).
+     *
+     * @return int Number of removed URL aliases
+     *
+     * @throws \Exception
+     */
+    public function deleteCorruptedUrlAliases()
+    {
+        $this->transactionHandler->beginTransaction();
+        try {
+            $totalCount = $this->gateway->deleteUrlAliasesWithoutLocation();
+            $totalCount += $this->gateway->deleteUrlAliasesWithoutParent();
+            $totalCount += $this->gateway->deleteUrlAliasesWithBrokenLink();
+
+            $this->transactionHandler->commit();
+
+            return $totalCount;
+        } catch (\Exception $e) {
+            $this->transactionHandler->rollback();
+            throw $e;
+        }
     }
 }
