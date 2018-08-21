@@ -44,7 +44,7 @@ class ReindexCommand extends ContainerAwareCommand
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
-    
+
     /**
      * @var string
      */
