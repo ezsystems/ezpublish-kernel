@@ -92,8 +92,6 @@ class TrashService implements TrashServiceInterface
             throw new UnauthorizedException('content', 'read');
         }
 
-        // TODO: Need to check (integration tests + self + QA) how Role limitation will behave with this (as there is no location)
-        // we could pass trash as target (same goes for content/read above), but again would need to check how it will behave.
         if (!$this->repository->canUser('content', 'restore', $trash->getContentInfo())) {
             throw new UnauthorizedException('content', 'restore');
         }

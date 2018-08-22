@@ -1103,7 +1103,6 @@ class ContentService implements ContentServiceInterface
         }
 
         // throw early if user has absolutely no access to versionread
-
         if ($this->repository->hasAccess('content', 'versionread') === false) {
             throw new UnauthorizedException('content', 'versionread');
         }
@@ -1112,7 +1111,7 @@ class ContentService implements ContentServiceInterface
         $versionInfoList = array();
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
-            // TODO: Should we rather filter out items here? If so we can remove early permission check above and exception
+            // @todo: Change this to filter returned drafts by permissions instead of throwing
             if (!$this->repository->canUser('content', 'versionread', $versionInfo)) {
                 throw new UnauthorizedException('content', 'versionread', array('contentId' => $versionInfo->contentInfo->id));
             }

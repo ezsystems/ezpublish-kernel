@@ -192,17 +192,21 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * Loads all sections user can view.
+     * Loads all sections.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Section[]
      */
     public function loadSections()
     {
-        $sections = array();
+        $sections = [];
         foreach ($this->sectionHandler->loadAll() as $spiSection) {
-            $section = $this->buildDomainSectionObject($spiSection);
-            if ($this->permissionResolver->canUser('section', 'view', $section)) {
-                $sections[] = $section;
+            $sections[] = $section = $this->buildDomainSectionObject($spiSection);
+
+            // @todo change API to just filter instead of throwing here
+            if (!$this->permissionResolver->canUser('section', 'view', $section)) {
+                throw new UnauthorizedException('section', 'view');
             }
         }
 
@@ -282,10 +286,7 @@ class SectionService implements SectionServiceInterface
         $loadedContentInfo = $this->repository->getContentService()->loadContentInfo($contentInfo->id);
         $loadedSection = $this->loadSection($section->id);
 
-        // REVIEW NOTE: NewSection limitation expects target to be the section, while Role Subtree limitations will abstain from checking
-        // due to target being section. We could consider changing Subtree to load targets from content and check anyway. So
-        // we make sure section assignments are limited by subtree limitations which could make sense given object is content.
-        if (!$this->permissionResolver->canUser('section', 'assign', $loadedContentInfo, [$section])) {
+        if (!$this->permissionResolver->canUser('section', 'assign', $loadedContentInfo, [$loadedSection])) {
             throw new UnauthorizedException(
                 'section',
                 'assign',

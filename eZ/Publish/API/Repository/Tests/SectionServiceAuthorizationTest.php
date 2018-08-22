@@ -120,9 +120,10 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the loadSections() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
-     * @depends \eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
-    public function testLoadSectionsFiltersResults()
+    public function testLoadSectionsThrowsUnauthorizedException()
     {
         $repository = $this->getRepository();
 
@@ -148,10 +149,9 @@ class SectionServiceAuthorizationTest extends BaseTest
         // Set anonymous user
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
-        $sections = $sectionService->loadSections();
+        // This call will fail with a "UnauthorizedException"
+        $sectionService->loadSections();
         /* END: Use Case */
-
-        $this->assertEmpty($sections, 'Expected to get zero sections back as user has nada section access');
     }
 
     /**
