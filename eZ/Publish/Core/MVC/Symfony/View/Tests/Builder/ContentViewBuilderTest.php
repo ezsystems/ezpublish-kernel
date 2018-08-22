@@ -3,6 +3,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Builder;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
@@ -29,22 +31,34 @@ use PHPUnit\Framework\TestCase;
  */
 class ContentViewBuilderTest extends TestCase
 {
-    /** @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject */
+    /**
+     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
+     */
     private $repository;
 
-    /** @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /**
+     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
     private $authorizationChecker;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject */
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject
+     */
     private $viewConfigurator;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\ParametersInjector|\PHPUnit\Framework\MockObject\MockObject */
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\ParametersInjector|\PHPUnit\Framework\MockObject\MockObject
+     */
     private $parametersInjector;
 
-    /** @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader|\PHPUnit\Framework\MockObject\MockObject */
+    /**
+     * @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader|\PHPUnit\Framework\MockObject\MockObject
+     */
     private $contentInfoLocationLoader;
 
-    /** @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder|\PHPUnit\Framework\MockObject\MockObject */
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder|\PHPUnit\Framework\MockObject\MockObject
+     */
     private $contentViewBuilder;
 
     public function setUp(): void
