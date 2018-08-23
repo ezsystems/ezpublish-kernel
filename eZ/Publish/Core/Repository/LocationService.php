@@ -736,6 +736,7 @@ class LocationService implements LocationServiceInterface
             $properties['sortField'] = $contentType->defaultSortField;
             $properties['sortOrder'] = $contentType->defaultSortOrder;
         }
+
         return new LocationCreateStruct($properties);
     }
 

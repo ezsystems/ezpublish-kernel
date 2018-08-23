@@ -202,7 +202,7 @@ class LocationServiceTest extends ServiceTest
             ),
             array(
                 'newLocationCreateStruct',
-                array($rootId),
+                array($rootId, null),
                 $locationCreateStruct,
                 0,
             ),
