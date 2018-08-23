@@ -341,7 +341,6 @@
     <define name="db.productionset"><notAllowed/></define>
     <define name="db.productname"><notAllowed/></define>
     <define name="db.productnumber"><notAllowed/></define>
-    <define name="db.programlisting"><notAllowed/></define>
     <define name="db.programlistingco"><notAllowed/></define>
     <define name="db.prompt"><notAllowed/></define>
     <define name="db.property"><notAllowed/></define>
