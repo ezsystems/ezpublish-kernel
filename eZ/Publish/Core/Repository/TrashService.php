@@ -117,7 +117,7 @@ class TrashService implements TrashServiceInterface
             throw new InvalidArgumentValue('id', $location->id, 'Location');
         }
 
-        if (!$this->repository->canUser('content', 'remove', $location->getContentInfo(), $location)) {
+        if (!$this->repository->canUser('content', 'remove', $location->getContentInfo(), [$location])) {
             throw new UnauthorizedException('content', 'remove');
         }
 
@@ -175,7 +175,7 @@ class TrashService implements TrashServiceInterface
             'content',
             'restore',
             $trashItem->getContentInfo(),
-            $newParentLocation ? [$newParentLocation] : null
+            [$newParentLocation ?: $trashItem]
         )) {
             throw new UnauthorizedException('content', 'restore');
         }
