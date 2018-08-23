@@ -15,6 +15,8 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  *
  * Design implies features such as always available and language logic needs to be done in API layer, so SPI gets
  * a specifc query to deal with for the lookup that can be safely cached.
+ *
+ * @deprecated Not in use anymore as of v7.2.3 as it was causing slow storage engine performance on large amount of bulk loading.
  */
 class LoadStruct extends ValueObject
 {

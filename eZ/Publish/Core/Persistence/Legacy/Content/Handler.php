@@ -331,25 +331,17 @@ class Handler implements BaseContentHandler
     /**
      * {@inheritdoc}
      */
-    public function loadContentList(array $contentLoadStructs): array
+    public function loadContentList(array $contentIds, array $translations = null): array
     {
-        $idVersionTranslationPairs = [];
-        foreach ($contentLoadStructs as $struct) {
-            $idVersionTranslationPairs[] = [
-                'id' => $struct->id,
-                'version' => $struct->versionNo,
-                'languages' => $struct->languages,
-            ];
-        }
-
-        $rawList = $this->contentGateway->loadContentList($idVersionTranslationPairs);
+        $rawList = $this->contentGateway->loadContentList($contentIds, $translations);
         if (empty($rawList)) {
             return [];
         }
 
         $idVersionPairs = [];
         foreach ($rawList as $row) {
-            $idVersionPairs[] = [
+            // As there is only one version per id, set id as key to avoid duplicates
+            $idVersionPairs[$row['ezcontentobject_id']] = [
                 'id' => $row['ezcontentobject_id'],
                 'version' => $row['ezcontentobject_version_version'],
             ];
@@ -357,8 +349,9 @@ class Handler implements BaseContentHandler
 
         $contentObjects = $this->mapper->extractContentFromRows(
             $rawList,
-            $this->contentGateway->loadVersionedNameData($idVersionPairs)
+            $this->contentGateway->loadVersionedNameData(array_values($idVersionPairs))
         );
+
         unset($rawList, $idVersionPairs, $idVersionTranslationPairs);
 
         $result = [];

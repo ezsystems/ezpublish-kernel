@@ -279,10 +279,10 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function loadContentList(array $IdVersionTranslationPairs): array
+    public function loadContentList(array $contentIds, array $translations = null): array
     {
         try {
-            return $this->innerGateway->loadContentList($IdVersionTranslationPairs);
+            return $this->innerGateway->loadContentList($contentIds, $translations);
         } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
