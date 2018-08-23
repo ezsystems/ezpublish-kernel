@@ -17,6 +17,7 @@ use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * Location service, used for complex subtree operations.
@@ -79,16 +80,20 @@ class LocationService implements APILocationService, Sessionable
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
+     * @param ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
     {
-        return new LocationCreateStruct(
-            array(
-                'parentLocationId' => $parentLocationId,
-            )
-        );
+        $properties = [
+            'parentLocationId' => $parentLocationId,
+        ];
+        if ($contentType) {
+            $properties['sortField'] = $contentType->defaultSortField;
+            $properties['sortOrder'] = $contentType->defaultSortOrder;
+        }
+        return new LocationCreateStruct($properties);
     }
 
     /**
