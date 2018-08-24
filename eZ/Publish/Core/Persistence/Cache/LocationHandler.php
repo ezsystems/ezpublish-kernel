@@ -25,6 +25,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $cacheItem = $this->cache->getItem("ez-location-${locationId}");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['location' => $locationId]);
+
             return $cacheItem->get();
         }
 
@@ -45,6 +47,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $cacheItem = $this->cache->getItem("ez-location-subtree-${locationId}");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['location' => $locationId]);
+
             return $cacheItem->get();
         }
 
@@ -77,6 +81,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         }
 
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['content' => $contentId, 'root' => $rootLocationId]);
+
             return $cacheItem->get();
         }
 
@@ -100,6 +106,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $cacheItem = $this->cache->getItem("ez-content-locations-${contentId}-parentForDraft");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['content' => $contentId]);
+
             return $cacheItem->get();
         }
 
@@ -124,6 +132,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $cacheItem = $this->cache->getItem("ez-location-${remoteId}-by-remoteid");
         if ($cacheItem->isHit()) {
+            
+
             return $cacheItem->get();
         }
 

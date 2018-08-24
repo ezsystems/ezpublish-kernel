@@ -68,6 +68,8 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-content-type-group-' . $groupId);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['group' => $groupId]);
+
             return $cacheItem->get();
         }
 
@@ -110,6 +112,8 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-content-type-group-' . $identifier . '-by-identifier');
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['group' => $identifier]);
+
             return $cacheItem->get();
         }
 
@@ -146,6 +150,8 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
 
         $cacheItem = $this->cache->getItem('ez-content-type-list-by-group-' . $groupId);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['group' => $groupId, 'status' => $status]);
+
             return $cacheItem->get();
         }
 
@@ -171,6 +177,8 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-content-type-' . $typeId . '-' . $status);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['type' => $typeId, 'status' => $status]);
+
             return $cacheItem->get();
         }
 
@@ -191,6 +199,8 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-content-type-' . $identifier . '-by-identifier');
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['type' => $identifier]);
+
             return $cacheItem->get();
         }
 
@@ -211,6 +221,8 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-content-type-' . $remoteId . '-by-remote');
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['type' => $remoteId]);
+
             return $cacheItem->get();
         }
 

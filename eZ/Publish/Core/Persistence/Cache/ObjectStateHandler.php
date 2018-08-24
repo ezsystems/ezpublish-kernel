@@ -36,10 +36,12 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-state-group-' . $groupId);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['group' => $groupId]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
+        $this->logger->logCall(__METHOD__, ['group' => $groupId]);
         $group = $this->persistenceHandler->objectStateHandler()->loadGroup($groupId);
 
         $cacheItem->set($group);
@@ -56,10 +58,12 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-state-group-' . $identifier . '-by-identifier');
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['group' => $identifier]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('groupId' => $identifier));
+        $this->logger->logCall(__METHOD__, ['group' => $identifier]);
         $group = $this->persistenceHandler->objectStateHandler()->loadGroupByIdentifier($identifier);
 
         $cacheItem->set($group);
@@ -76,6 +80,8 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-state-group-all');
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['offset' => $offset, 'limit' => $limit]);
+
             return array_slice($cacheItem->get(), $offset, $limit > -1 ? $limit : null);
         }
 
@@ -100,10 +106,12 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-state-list-by-group-' . $groupId);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['group' => $groupId]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
+        $this->logger->logCall(__METHOD__, ['group' => $groupId]);
         $objectStates = $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
 
         $cacheItem->set($objectStates);
@@ -163,10 +171,12 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-state-' . $stateId);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['state' => $stateId]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('stateId' => $stateId));
+        $this->logger->logCall(__METHOD__, ['state' => $stateId]);
         $objectState = $this->persistenceHandler->objectStateHandler()->load($stateId);
 
         $cacheItem->set($objectState);
@@ -183,10 +193,12 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-state-identifier-' . $identifier . '-by-group-' . $groupId);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['identifier' => $identifier, 'group' => $groupId]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('identifier' => $identifier, 'groupId' => $groupId));
+        $this->logger->logCall(__METHOD__, ['identifier' => $identifier, 'group' => $groupId]);
         $objectState = $this->persistenceHandler->objectStateHandler()->loadByIdentifier($identifier, $groupId);
 
         $cacheItem->set($objectState);
@@ -255,6 +267,8 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
     {
         $cacheItem = $this->cache->getItem('ez-state-by-group-' . $stateGroupId . '-on-content-' . $contentId);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['contentId' => $contentId, 'stateGroupId' => $stateGroupId]);
+
             return $cacheItem->get();
         }
 

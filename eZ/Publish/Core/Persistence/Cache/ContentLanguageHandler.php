@@ -47,6 +47,8 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     {
         $cacheItem = $this->cache->getItem('ez-language-' . $id);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['language' => $id]);
+
             return $cacheItem->get();
         }
 
@@ -67,6 +69,8 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     {
         $cacheItem = $this->cache->getItem('ez-language-' . $languageCode . '-by-code');
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['language' => $languageCode]);
+
             return $cacheItem->get();
         }
 

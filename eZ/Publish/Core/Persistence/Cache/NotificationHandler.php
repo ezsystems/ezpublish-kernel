@@ -82,6 +82,8 @@ class NotificationHandler extends AbstractHandler implements Handler
 
         $count = $cacheItem->get();
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['ownerId' => $ownerId]);
+
             return $count;
         }
 
@@ -107,6 +109,8 @@ class NotificationHandler extends AbstractHandler implements Handler
 
         $count = $cacheItem->get();
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['ownerId' => $ownerId]);
+
             return $count;
         }
 
@@ -132,6 +136,8 @@ class NotificationHandler extends AbstractHandler implements Handler
 
         $notification = $cacheItem->get();
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(__METHOD__, ['notificationId' => $notificationId]);
+
             return $notification;
         }
 
