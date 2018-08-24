@@ -31,9 +31,9 @@ class PersistenceCacheCollector extends DataCollector
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         $this->data = [
-            'count' => $this->logger->getCount(),
             'calls_logging_enabled' => $this->logger->isCallsLoggingEnabled(),
-            'calls' => $this->logger->getCalls(),
+            'misses' => $this->logger->getCacheMisses(),
+            'hits' => $this->logger->getCacheHits(),
             'handlers' => $this->logger->getLoadedUnCachedHandlers(),
         ];
     }
@@ -44,13 +44,19 @@ class PersistenceCacheCollector extends DataCollector
     }
 
     /**
-     * Returns call count.
-     *
      * @return int
      */
-    public function getCount()
+    public function getCountMisses()
     {
-        return $this->data['count'];
+        return count($this->data['misses']);
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountHits()
+    {
+        return count($this->data['hits']);
     }
 
     /**
@@ -70,10 +76,26 @@ class PersistenceCacheCollector extends DataCollector
      *
      * @return array
      */
-    public function getCalls()
+    public function getMisses()
+    {
+        return $this->getCallData($this->data['misses']);
+    }
+
+    /**
+     * Returns hits.
+     *
+     * @return array
+     */
+    public function getHits()
+    {
+        return $this->getCallData($this->data['hits']);
+    }
+
+
+    private function getCallData(array $data): array
     {
         $calls = [];
-        foreach ($this->data['calls'] as $call) {
+        foreach ($data as $call) {
             list($class, $method) = explode('::', $call['method']);
             $namespace = explode('\\', $class);
             $class = array_pop($namespace);
@@ -81,14 +103,32 @@ class PersistenceCacheCollector extends DataCollector
                 'namespace' => $namespace,
                 'class' => $class,
                 'method' => $method,
-                'arguments' => empty($call['arguments']) ?
-                    '' :
-                    preg_replace(array('/^array\s\(\s/', '/,\s\)$/'), '', var_export($call['arguments'], true)),
+                'arguments' => $this->simplifyCallArguments($call['arguments']),
                 'trace' => implode(', ', $call['trace']),
             );
         }
 
         return $calls;
+    }
+
+    private function simplifyCallArguments(array $arguments): string
+    {
+        $string = '';
+        foreach ($arguments as $key => $value) {
+            if (empty($string)) {
+                $string = $key . ':';
+            } else {
+                $string .= ', '. $key . ':';
+            }
+
+            if (is_array($value)) {
+                $string .= '[' . implode(',', $value) . ']';
+            } else {
+                $string .= $value;
+            }
+        }
+
+        return $string;
     }
 
     /**

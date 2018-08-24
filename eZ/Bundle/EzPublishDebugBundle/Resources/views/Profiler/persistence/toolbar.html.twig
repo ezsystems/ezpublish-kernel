@@ -1,9 +1,12 @@
+{% set total = collector.countHits + collector.countMisses %}
+{% set status = (collector.countHits/total) < 0.50 ? 'red' : (collector.countHits > 100 ? 'yellow' : (collector.countHits > 10 ? '' : 'green')) %}
+
 <div class="sf-toolbar-info-piece">
     <b>SPI (persistence)</b>
 </div>
 <div class="sf-toolbar-info-piece">
-    <b>calls</b> <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.count }}</span>
+    <b>misses / hits</b> <span class="sf-toolbar-status sf-toolbar-status-{{ status }}">{{ collector.countHits }} / {{ collector.countMisses }}</span>
 </div>
 <div class="sf-toolbar-info-piece">
-    <b>handlers</b> <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.handlerscount }}</span>
+    <b>uncached handlers</b> <span class="sf-toolbar-status sf-toolbar-status-{{ collector.handlerscount > 1 ? '' : 'green' }}">{{ collector.handlerscount }}</span>
 </div>

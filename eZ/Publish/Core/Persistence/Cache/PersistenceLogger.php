@@ -17,24 +17,16 @@ class PersistenceLogger
 {
     const NAME = 'PersistenceLogger';
 
-    /**
-     * @var int
-     */
-    protected $count = 0;
-
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $logCalls = true;
 
-    /**
-     * @var array
-     */
-    protected $calls = array();
+    /** @var array */
+    protected $misses = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
+    protected $hits = [];
+
+    /** @var array */
     protected $unCachedHandlers = array();
 
     /**
@@ -46,26 +38,52 @@ class PersistenceLogger
     }
 
     /**
-     * Log SPI calls with method name and arguments until $maxLogCalls is reached.
+     * Log cache misses and SPI calls with method name and arguments.
      *
      * @param string $method
      * @param array $arguments
      */
-    public function logCall($method, array $arguments = array())
+    public function logCall($method, array $arguments = [])
     {
-        ++$this->count;
         if ($this->logCalls) {
-            $this->calls[] = array(
-                'method' => $method,
-                'arguments' => $arguments,
-                'trace' => $this->getSimpleCallTrace(
-                    array_slice(
-                        debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7),
-                        2
-                    )
-                ),
+            $this->misses[] = $this->getCacheCallData(
+                $method,
+                $arguments,
+                array_slice(
+                    debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7),
+                    2
+                )
             );
         }
+    }
+
+    /**
+     * Log a Cache hit, which means further SPI calls are not needed.
+     *
+     * @param string $method
+     * @param array $arguments
+     */
+    public function logCacheHit($method, array $arguments = [])
+    {
+        if ($this->logCalls) {
+            $this->hits[] = $this->getCacheCallData(
+                $method,
+                $arguments,
+                array_slice(
+                    debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7),
+                    2
+                )
+            );
+        }
+    }
+
+    private function getCacheCallData($method, array $arguments, array $trimmedBacktrace)
+    {
+        return [
+            'method' => $method,
+            'arguments' => $arguments,
+            'trace' => $this->getSimpleCallTrace($trimmedBacktrace),
+        ];
     }
 
     private function getSimpleCallTrace(array $backtrace): array
@@ -110,11 +128,12 @@ class PersistenceLogger
     }
 
     /**
+     * @deprecated since 7.3, count the hits or misses instead.
      * @return int
      */
     public function getCount()
     {
-        return $this->count;
+        return count($this->misses);
     }
 
     /**
@@ -126,11 +145,28 @@ class PersistenceLogger
     }
 
     /**
+     * @deprecated Since 7.3, use getCacheMisses()
      * @return array
      */
     public function getCalls()
     {
-        return $this->calls;
+        return $this->misses;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCacheMisses()
+    {
+        return $this->misses;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCacheHits()
+    {
+        return $this->hits;
     }
 
     /**

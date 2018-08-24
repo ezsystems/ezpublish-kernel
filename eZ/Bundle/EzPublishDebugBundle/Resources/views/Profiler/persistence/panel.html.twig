@@ -1,13 +1,12 @@
-<h3 title="Calls made to SPI\Persistence, persistance layer beneath Repository, which where not cached in SPI\Persistence\Cache">
-    Uncached Persistence\Cache calls
+<h3 title="Calls made to SPI\Persistence, persistance layer beneath Repository">
+    Persistence\Cache calls
 </h3>
 
-<p class="text-small text-muted">TIP: This can represent both cold cache, and calls to methods which has not been made to be cached <em>(yet)</em>. Make sure to reload a few times to warmup cache in order to only see the latter.</p>
 
 <table>
     <tr>
-        <th>Total Uncached calls:</th>
-        <td>{{ collector.count }}</td>
+        <th>Total hits / misses:</th>
+        <td>{{ collector.countHits }} / {{ collector.countMisses }}</td>
     </tr>
     {% if collector.handlerscount %}
         <tr>
@@ -18,6 +17,13 @@
 </table>
 
 {% if collector.callsLoggingEnabled %}
+
+    <h5 title="Calls made to SPI\Persistence, which where not cached in SPI\Persistence\Cache">
+        Uncached Persistence\Cache calls
+    </h5>
+
+    <p class="text-small text-muted">TIP: This can represent both cold cache, and calls to methods which has not been made to be cached <em>(yet)</em>. Make sure to reload corresponding page a few times to warmup cache in order to only see the latter.</p>
+
     <table>
         <tr>
             <th>Class</th>
@@ -25,7 +31,7 @@
             <th>Arguments</th>
             <th title="Simplified trace">Trace</th>
         </tr>
-        {% for call in collector.calls %}
+        {% for call in collector.misses %}
             <tr>
                 <td>{{ call.class }}</td>
                 <td>{{ call.method }}</td>
@@ -34,4 +40,29 @@
             </tr>
         {% endfor %}
     </table>
+
+
+    <h5 title="Calls made to SPI\Persistence, which where cached in SPI\Persistence\Cache and did not have to call backend">
+        Cached Persistence\Cache calls
+    </h5>
+
+    <p class="text-small text-muted">TIP: Lookups here will also show up in Symfony's Cache panel, but here you get context of where they where requested from.</p>
+
+    <table>
+        <tr>
+            <th>Class</th>
+            <th>Method</th>
+            <th>Arguments</th>
+            <th title="Simplified trace">Trace</th>
+        </tr>
+        {% for call in collector.hits %}
+            <tr>
+                <td>{{ call.class }}</td>
+                <td>{{ call.method }}</td>
+                <td>{{ call.arguments }}</td>
+                <td class="text-small text-muted">{{ call.trace }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
 {% endif %}

@@ -1,8 +1,6 @@
 {% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
 
 {% block toolbar %}
-    {# {% set status = (collector.hits/collector.calls) < 0.33 ? 'red' : (collector.hits/collector.calls) < 0.66 ? 'yellow' : '' %} #}
-
     {% set icon %}
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1200 1200" enable-background="new 0 0 1200 1200" xml:space="preserve">
             <g>
@@ -24,6 +22,11 @@
         {% endfor %}
 
     {% endset %}
+
+    {# Set status on eZ logo in cases of lots of uncached SPI lookups, but as this might just be cold cache only mark as yellow #}
+    {% set persistence_collector = collector.getCollector('ezpublish.debug.persistence') %}
+    {% set total = persistence_collector.countHits + persistence_collector.countMisses %}
+    {% set status = (persistence_collector.countHits/total) < 0.66 and total > 100 ? 'red' : ((persistence_collector.countHits/total) < 0.33 ? 'yellow' : '') %}
 
     {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url, status: status|default('') }) }}
 {% endblock %}
