@@ -94,19 +94,35 @@ class PersistenceCacheCollector extends DataCollector
 
     private function getCallData(array $data): array
     {
-        $calls = [];
+        if (empty($data)) {
+            return [];
+        }
+
+        $calls = $count = [];
         foreach ($data as $call) {
+            $hash = md5(json_encode($call));
+            if (isset($calls[$hash])) {
+                $calls[$hash]['count']++;
+                $count[$hash]++;
+
+                continue;
+            }
+
             list($class, $method) = explode('::', $call['method']);
             $namespace = explode('\\', $class);
             $class = array_pop($namespace);
-            $calls[] = array(
+            $calls[$hash] = array(
                 'namespace' => $namespace,
                 'class' => $class,
                 'method' => $method,
                 'arguments' => $this->simplifyCallArguments($call['arguments']),
                 'trace' => implode(', ', $call['trace']),
+                'count' => 1,
             );
+            $count[$hash] = 1;
         }
+
+        array_multisort($count, SORT_DESC, $calls);
 
         return $calls;
     }
