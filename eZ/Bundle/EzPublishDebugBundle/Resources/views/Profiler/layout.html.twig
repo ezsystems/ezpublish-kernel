@@ -25,10 +25,10 @@
 
     {# Set status on eZ logo in cases of lots of uncached SPI lookups, but as this might just be cold cache only mark as yellow #}
     {% set persistence_collector = collector.getCollector('ezpublish.debug.persistence') %}
-    {% set total = persistence_collector.countHits + persistence_collector.countMisses %}
-    {% set status = (persistence_collector.countHits/total) < 0.66 and total > 100 ? 'red' : ((persistence_collector.countHits/total) < 0.33 ? 'yellow' : '') %}
+    {% set total_hits = persistence_collector.countHits + persistence_collector.countMisses %}
+    {% set status_logo = (persistence_collector.countHits/total_hits) < 0.66 and total_hits > 100 ? 'red' : ((persistence_collector.countHits/total_hits) < 0.33 ? 'yellow' : '') %}
 
-    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url, status: status|default('') }) }}
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url, status: status_logo|default('') }) }}
 {% endblock %}
 
 {% block menu %}

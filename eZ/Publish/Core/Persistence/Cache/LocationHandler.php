@@ -132,8 +132,6 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $cacheItem = $this->cache->getItem("ez-location-${remoteId}-by-remoteid");
         if ($cacheItem->isHit()) {
-            
-
             return $cacheItem->get();
         }
 

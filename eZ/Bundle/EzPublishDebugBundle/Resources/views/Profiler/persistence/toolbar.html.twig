@@ -1,11 +1,11 @@
-{% set total = collector.countHits + collector.countMisses %}
-{% set status = (collector.countHits/total) < 0.50 ? 'red' : (collector.countHits > 100 ? 'yellow' : (collector.countHits > 10 ? '' : 'green')) %}
+{% set total_hits = collector.countHits + collector.countMisses %}
+{% set status_hits = (collector.countHits/total_hits) < 0.50 ? 'red' : (collector.countHits > 100 ? 'yellow' : (collector.countHits > 10 ? '' : 'green')) %}
 
 <div class="sf-toolbar-info-piece">
-    <b>SPI (persistence)</b>
+    <b>SPI Persistence/Cache</b>
 </div>
 <div class="sf-toolbar-info-piece">
-    <b>misses / hits</b> <span class="sf-toolbar-status sf-toolbar-status-{{ status }}">{{ collector.countHits }} / {{ collector.countMisses }}</span>
+    <b>misses / hits</b> <span class="sf-toolbar-status sf-toolbar-status-{{ status_hits }}">{{ collector.countMisses }} / {{ collector.countHits }}</span>
 </div>
 <div class="sf-toolbar-info-piece">
     <b>uncached handlers</b> <span class="sf-toolbar-status sf-toolbar-status-{{ collector.handlerscount > 1 ? '' : 'green' }}">{{ collector.handlerscount }}</span>
