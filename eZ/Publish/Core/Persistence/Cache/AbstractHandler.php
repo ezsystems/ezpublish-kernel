@@ -73,6 +73,7 @@ abstract class AbstractHandler
         string $keyPrefix,
         callable $missingLoader,
         callable $loadedTagger,
+        callable $cacheHitLogger,
         array $keySuffixes = []
     ): array {
         if (empty($ids)) {
@@ -105,6 +106,8 @@ abstract class AbstractHandler
 
         // No misses, return completely cached list
         if (empty($cacheMisses)) {
+            $cacheHitLogger();
+
             return $list;
         }
 

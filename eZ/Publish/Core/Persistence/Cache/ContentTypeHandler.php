@@ -96,6 +96,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
             },
             function (Type\Group $group) {
                 return ['type-group-' . $group->id];
+            },
+            function () use ($groupIds) {
+                $this->logger->logCacheHit(__CLASS__ . '::loadGroups', ['groups' => $groupIds]);
             }
         );
     }

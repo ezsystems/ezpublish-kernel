@@ -72,6 +72,12 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
                 }
 
                 return $tags;
+            },
+            function () use ($userId, $locationIds) {
+                $this->logger->logCacheHit(__CLASS__ . '::loadByUserIdAndLocationId', [
+                    'userId' => $userId,
+                    'locationIds' => $locationIds,
+                ]);
             }
         );
     }
