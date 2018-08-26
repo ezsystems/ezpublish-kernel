@@ -904,20 +904,22 @@ class DoctrineDatabase extends Gateway
                 'c.id = t.contentobject_id AND t.node_id = t.main_node_id'
             );
 
-        if (empty($translations)) {
-            $where = $q->expr()->in('c.id', $q->createNamedParameter($contentIds, Connection::PARAM_INT_ARRAY));
-        } else {
-            $expr = $q->expr();
-            $where = $expr->andX(
-                $expr->in('c.id', $q->createNamedParameter($contentIds, Connection::PARAM_INT_ARRAY)),
+        $expr = $q->expr();
+        $q->where(
+            $expr->in(
+                'c.id',
+                $q->createNamedParameter($contentIds, Connection::PARAM_INT_ARRAY)
+            )
+        );
+
+        if (!empty($translations)) {
+            $q->andWhere(
                 $expr->in(
                     'a.language_code',
                     $q->createNamedParameter($translations, Connection::PARAM_STR_ARRAY)
                 )
             );
         }
-
-        $q->where($where);
 
         return $q->execute()->fetchAll();
     }
