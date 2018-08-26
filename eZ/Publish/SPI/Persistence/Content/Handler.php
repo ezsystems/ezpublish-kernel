@@ -74,12 +74,14 @@ interface Handler
      * to calling logic to determine if this should cause exception or not.
      *
      * If items are missing but for other reasons then not being found, for instance exceptions during loading field
-     * data. Then the exception will be logged as warning or error depending on severity
-     * (TODO: Andrew should expand on the cases here, if it's just a matter of missing fieldtypes then maybe we should throw? In case of missing binary files, how was this handled in IO?)
+     * data. Then the exception will be logged as warning or error depending on severity.
+     * The most common case of possible exceptions during loading of Content data is migration,
+     * where either custom Field Type configuration or implementation might not be aligned with new
+     * version of the system.
      *
-     * NOTE: If you want to take always available flag into account, append main language
-     * to the list of languages. In some edge cases you'll end up with a bit more data returned, but
-     * this makes sure execution time in storage engine is able to handle up to 10k items when you need that.
+     * NOTE!!: If you want to take always available flag into account, append main language
+     * to the list of languages(unless caller is asking for all languages). In some edge cases you'll end up with a
+     * bit more data returned, but upside is that storage engine is able to handle far larger datasets.
      *
      * @param int[] $contentIds
      * @param string[]|null $translations
