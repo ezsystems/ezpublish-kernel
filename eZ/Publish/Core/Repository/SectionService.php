@@ -33,7 +33,9 @@ class SectionService implements SectionServiceInterface
      */
     protected $repository;
 
-    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    /**
+     * @var \eZ\Publish\API\Repository\PermissionResolver
+     */
     protected $permissionResolver;
 
     /**
