@@ -7,6 +7,7 @@
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\GeneratorProxyTrait;
 
 /**
@@ -88,6 +89,15 @@ class ContentProxy extends APIContent
         }
 
         return $this->object->getVersionInfo();
+    }
+
+    public function getContentType(): ContentType
+    {
+        if ($this->object === null) {
+            $this->loadObject();
+        }
+
+        return $this->object->getContentType();
     }
 
     public function getFieldValue($fieldDefIdentifier, $languageCode = null)

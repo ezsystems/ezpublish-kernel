@@ -63,6 +63,11 @@ class DomainMapper
     protected $contentTypeHandler;
 
     /**
+     * @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
+     */
+    protected $contentTypeDomainMapper;
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $contentLanguageHandler;
@@ -85,12 +90,14 @@ class DomainMapper
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         TypeHandler $contentTypeHandler,
+        ContentTypeDomainMapper $contentTypeDomainMapper,
         LanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry
     ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
@@ -99,7 +106,7 @@ class DomainMapper
      * Builds a Content domain object from value object returned from persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
-     * @param ContentType|SPIType $contentType
+     * @param ContentType $contentType
      * @param array $prioritizedLanguages Prioritized language codes to filter fields on
      * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
      *
@@ -107,16 +114,10 @@ class DomainMapper
      */
     public function buildContentDomainObject(
         SPIContent $spiContent,
-        $contentType = null,
+        ContentType $contentType,
         array $prioritizedLanguages = [],
         string $fieldAlwaysAvailableLanguage = null
     ) {
-        if ($contentType === null) {
-            $contentType = $this->contentTypeHandler->load(
-                $spiContent->versionInfo->contentInfo->contentTypeId
-            );
-        }
-
         $prioritizedFieldLanguageCode = null;
         if (!empty($prioritizedLanguages)) {
             $availableFieldLanguageMap = array_fill_keys($spiContent->versionInfo->languageCodes, true);
@@ -132,6 +133,7 @@ class DomainMapper
             array(
                 'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $prioritizedLanguages, $fieldAlwaysAvailableLanguage),
                 'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $prioritizedLanguages),
+                'contentType' => $contentType,
                 'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
             )
         );
@@ -174,6 +176,9 @@ class DomainMapper
     }
 
     /**
+     * @todo Maybe change signature to generatorForContentList($contentIds, $prioritizedLanguages, $translations)
+     * @todo to avoid keeping referance to $infoList all the way until the generator is called.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo[] $infoList
      * @param string[] $prioritizedLanguages
      * @param bool $useAlwaysAvailable
@@ -196,15 +201,20 @@ class DomainMapper
             }
         }
 
-        $list = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
+        unset($infoList);
 
+        $list = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
         while (!empty($list)) {
             $id = yield;
+            /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $info */
             $info = $list[$id]->versionInfo->contentInfo;
             yield $this->buildContentDomainObject(
                 $list[$id],
-                null,
                 //@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                $this->contentTypeDomainMapper->buildContentTypeDomainObject(
+                    $this->contentTypeHandler->load($info->contentTypeId),
+                    $prioritizedLanguages
+                ),
                 $prioritizedLanguages,
                 $info->alwaysAvailable ? $info->mainLanguageCode : null
             );
@@ -547,7 +557,11 @@ class DomainMapper
             if (isset($contentList[$hit->valueObject->id])) {
                 $hit->valueObject = $this->buildContentDomainObject(
                     $contentList[$hit->valueObject->id],
-                    null,//@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                    //@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                    $this->contentTypeDomainMapper->buildContentTypeDomainObject(
+                        $this->contentTypeHandler->load($hit->valueObject->contentTypeId),
+                        $languageFilter['languages'] ?? []
+                    ),
                     $languageFilter['languages'] ?? [],
                     $useAlwaysAvailable ? $hit->valueObject->mainLanguageCode : null
                 );
