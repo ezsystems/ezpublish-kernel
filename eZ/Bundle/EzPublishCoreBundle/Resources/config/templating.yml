@@ -180,7 +180,6 @@ services:
         class: "%ezpublish.twig.extension.field_rendering.class%"
         arguments:
             - "@ezpublish.templating.field_block_renderer"
-            - "@ezpublish.api.service.content_type"
             - "@ezpublish.fieldType.parameterProviderRegistry"
             - "@ezpublish.translation_helper"
         tags:

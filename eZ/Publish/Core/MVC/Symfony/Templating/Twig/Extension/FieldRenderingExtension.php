@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
-use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
@@ -31,11 +30,6 @@ class FieldRenderingExtension extends Twig_Extension
     private $fieldBlockRenderer;
 
     /**
-     * @var ContentTypeService
-     */
-    private $contentTypeService;
-
-    /**
      * @var ParameterProviderRegistryInterface
      */
     private $parameterProviderRegistry;
@@ -54,12 +48,10 @@ class FieldRenderingExtension extends Twig_Extension
 
     public function __construct(
         FieldBlockRendererInterface $fieldBlockRenderer,
-        ContentTypeService $contentTypeService,
         ParameterProviderRegistryInterface $parameterProviderRegistry,
         TranslationHelper $translationHelper
     ) {
         $this->fieldBlockRenderer = $fieldBlockRenderer;
-        $this->contentTypeService = $contentTypeService;
         $this->parameterProviderRegistry = $parameterProviderRegistry;
         $this->translationHelper = $translationHelper;
     }
@@ -152,7 +144,7 @@ class FieldRenderingExtension extends Twig_Extension
 
         $versionInfo = $content->getVersionInfo();
         $contentInfo = $versionInfo->getContentInfo();
-        $contentType = $this->contentTypeService->loadContentType($contentInfo->contentTypeId);
+        $contentType = $content->getContentType();
         $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
         // Adding Field, FieldSettings and ContentInfo objects to
         // parameters to be passed to the template
@@ -192,11 +184,10 @@ class FieldRenderingExtension extends Twig_Extension
      */
     private function getFieldTypeIdentifier(Content $content, Field $field)
     {
-        $contentInfo = $content->getVersionInfo()->getContentInfo();
-        $key = $contentInfo->contentTypeId . '  ' . $field->fieldDefIdentifier;
+        $contentType = $content->getContentType();
+        $key = $contentType->id . '  ' . $field->fieldDefIdentifier;
 
         if (!isset($this->fieldTypeIdentifiers[$key])) {
-            $contentType = $this->contentTypeService->loadContentType($contentInfo->contentTypeId);
             $this->fieldTypeIdentifiers[$key] = $contentType
                 ->getFieldDefinition($field->fieldDefIdentifier)
                 ->fieldTypeIdentifier;
