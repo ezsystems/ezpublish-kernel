@@ -80,7 +80,7 @@ class LocationService implements APILocationService, Sessionable
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
-     * @param ContentType|null $contentType
+     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
