@@ -876,11 +876,11 @@ class ContentService implements ContentServiceInterface
                 );
             }
 
-            if (!isset(Location::SORT_FIELD_MAP[$locationCreateStruct->sortField])) {
+            if (!array_key_exists($locationCreateStruct->sortField, Location::SORT_FIELD_MAP)) {
                 $locationCreateStruct->sortField = Location::SORT_FIELD_NAME;
             }
 
-            if (!isset(Location::SORT_ORDER_MAP[$locationCreateStruct->sortOrder])) {
+            if (!array_key_exists($locationCreateStruct->sortOrder, Location::SORT_ORDER_MAP)) {
                 $locationCreateStruct->sortOrder = Location::SORT_ORDER_ASC;
             }
 
