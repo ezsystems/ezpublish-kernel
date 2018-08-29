@@ -230,3 +230,9 @@ services:
         class: eZ\Publish\Core\MVC\Symfony\Translation\ValidationErrorFileVisitor
         tags:
             - { name: jms_translation.file_visitor, alias: ez_validation_error }
+
+    ezplatform.core.command.remove_versions:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\RemoveVersionsCommand
+        arguments:
+            - "@ezpublish.api.inner_repository"
+            - "@ezpublish.persistence.connection"
