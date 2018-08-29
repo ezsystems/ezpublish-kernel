@@ -11744,5 +11744,37 @@ Country�</literallayout></para></section>
         'created' => '1530009452',
         'data' => null
     ),
+  ),
+  'ezpreferences' => array(
+    0 => array(
+        'id' => 1,
+        'name' => 'setting_1',
+        'user_id' => 14,
+        'value' => 'value_1'
+    ),
+    1 => array(
+        'id' => 2,
+        'name' => 'setting_2',
+        'user_id' => 14,
+        'value' => 'value_2'
+    ),
+    2 => array(
+        'id' => 3,
+        'name' => 'setting_3',
+        'user_id' => 14,
+        'value' => 'value_3'
+    ),
+    3 => array(
+        'id' => 4,
+        'name' => 'setting_4',
+        'user_id' => 14,
+        'value' => 'value_4'
+    ),
+    4 => array(
+        'id' => 5,
+        'name' => 'setting_5',
+        'user_id' => 14,
+        'value' => 'value_5'
+    ),
   )
 );

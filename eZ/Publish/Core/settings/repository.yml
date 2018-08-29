@@ -67,3 +67,7 @@ services:
     ezpublish.api.service.notification:
         alias: eZ\Publish\Core\SignalSlot\NotificationService
         public: true
+
+    ezpublish.api.service.user_preference:
+        alias: eZ\Publish\Core\SignalSlot\UserPreferenceService
+        public: true

@@ -202,6 +202,13 @@ class Repository implements RepositoryInterface
     protected $notificationService;
 
     /**
+     * Instance of User Preference service.
+     *
+     * @var \eZ\Publish\API\Repository\UserPreferenceService
+     */
+    protected $userPreferenceService;
+
+    /**
      * Service settings, first level key is service name.
      *
      * @var array
@@ -684,6 +691,23 @@ class Repository implements RepositoryInterface
         }
 
         return $this->bookmarkService;
+    }
+
+    /**
+     * Get UserPreferenceService.
+     *
+     * @return \eZ\Publish\API\Repository\UserPreferenceService
+     */
+    public function getUserPreferenceService()
+    {
+        if ($this->userPreferenceService === null) {
+            $this->userPreferenceService = new UserPreferenceService(
+                $this,
+                $this->persistenceHandler->userPreferenceHandler()
+            );
+        }
+
+        return $this->userPreferenceService;
     }
 
     /**

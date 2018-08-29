@@ -502,6 +502,16 @@ class Repository implements APIRepository
     }
 
     /**
+     * Get UserPreferenceService.
+     *
+     * @return \eZ\Publish\API\Repository\UserPreferenceService
+     */
+    public function getUserPreferenceService()
+    {
+        throw new \RuntimeException('@todo: Implement');
+    }
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,

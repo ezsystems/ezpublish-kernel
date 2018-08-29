@@ -563,3 +563,13 @@ CREATE TABLE eznotification (
 
 CREATE INDEX eznotification_owner ON eznotification(owner_id);
 CREATE INDEX eznotification_owner_is_pending ON eznotification(owner_id, is_pending);
+
+CREATE TABLE ezpreferences (
+  id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  name text(100) DEFAULT NULL,
+  user_id integer NOT NULL DEFAULT 0,
+  value text(255) DEFAULT NULL
+);
+
+CREATE INDEX ezpreferences_name ON ezpreferences (name);
+CREATE INDEX ezpreferences_user_id_idx ON ezpreferences (user_id, name);
