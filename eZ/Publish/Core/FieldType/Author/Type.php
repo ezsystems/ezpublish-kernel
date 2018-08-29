@@ -23,21 +23,21 @@ use eZ\Publish\Core\FieldType\ValidationError;
 class Type extends FieldType
 {
     /**
+     * Flag which stands for setting Author FieldType empty by default.
+     * It is used in a Content Type edit view.
+     */
+    const DEFAULT_VALUE_EMPTY = 0;
+
+    /**
      * Flag which stands for prefilling Author FieldType with current user by default.
      * It is used in a Content Type edit view.
      */
     const DEFAULT_CURRENT_USER = 1;
 
-    /**
-     * Flag which stands for setting Author FieldType empty by default.
-     * It is used in a Content Type edit view.
-     */
-    const DEFAULT_EMPTY = -1;
-
     protected $settingsSchema = [
         'defaultAuthor' => [
             'type' => 'choice',
-            'default' => self::DEFAULT_CURRENT_USER,
+            'default' => self::DEFAULT_VALUE_EMPTY,
         ],
     ];
 
@@ -234,8 +234,8 @@ class Type extends FieldType
     private function validateDefaultAuthorSetting($name, $value)
     {
         $definedValues = [
+            self::DEFAULT_VALUE_EMPTY,
             self::DEFAULT_CURRENT_USER,
-            self::DEFAULT_EMPTY,
         ];
 
         if (!in_array($value, $definedValues, true)) {

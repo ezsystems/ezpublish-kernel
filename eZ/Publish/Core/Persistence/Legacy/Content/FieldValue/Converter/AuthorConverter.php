@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
-use eZ\Publish\Core\FieldType\Author\Type as AuthorType;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\FieldType\FieldSettings;
@@ -76,7 +75,7 @@ class AuthorConverter implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             [
-                'defaultAuthor' => $storageDef->dataInt1 ? $storageDef->dataInt1 : AuthorType::DEFAULT_CURRENT_USER,
+                'defaultAuthor' => $storageDef->dataInt1,
             ]
         );
 

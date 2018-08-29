@@ -162,7 +162,7 @@ EOT;
         $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'defaultAuthor' => AuthorType::DEFAULT_EMPTY,
+                'defaultAuthor' => AuthorType::DEFAULT_VALUE_EMPTY,
             )
         );
         $fieldDef = new SPIFieldDefinition(
@@ -173,7 +173,7 @@ EOT;
 
         $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
         self::assertSame(
-            AuthorType::DEFAULT_EMPTY,
+            AuthorType::DEFAULT_VALUE_EMPTY,
             $storageFieldDef->dataInt1
         );
     }

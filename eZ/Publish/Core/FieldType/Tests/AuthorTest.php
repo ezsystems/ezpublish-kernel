@@ -75,7 +75,7 @@ class AuthorTest extends FieldTypeTest
         return array(
             'defaultAuthor' => array(
                 'type' => 'choice',
-                'default' => AuthorType::DEFAULT_CURRENT_USER,
+                'default' => AuthorType::DEFAULT_VALUE_EMPTY,
             ),
         );
     }
@@ -356,7 +356,7 @@ class AuthorTest extends FieldTypeTest
             ),
             array(
                 array(
-                    'defaultAuthor' => AuthorType::DEFAULT_EMPTY,
+                    'defaultAuthor' => AuthorType::DEFAULT_VALUE_EMPTY,
                 ),
             ),
             array(

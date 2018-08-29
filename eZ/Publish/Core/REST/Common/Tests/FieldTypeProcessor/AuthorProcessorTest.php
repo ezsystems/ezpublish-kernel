@@ -14,8 +14,8 @@ use PHPUnit\Framework\TestCase;
 class AuthorProcessorTest extends TestCase
 {
     protected $constants = [
+        'DEFAULT_VALUE_EMPTY',
         'DEFAULT_CURRENT_USER',
-        'DEFAULT_EMPTY',
     ];
 
     public function fieldSettingsHashes()

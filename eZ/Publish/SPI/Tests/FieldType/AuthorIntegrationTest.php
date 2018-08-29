@@ -92,7 +92,7 @@ class AuthorIntegrationTest extends BaseIntegrationTest
                     array(
                         'fieldSettings' => new FieldType\FieldSettings(
                             array(
-                                'defaultAuthor' => 1,
+                                'defaultAuthor' => 0,
                             )
                         ),
                     )
