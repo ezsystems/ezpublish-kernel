@@ -709,7 +709,7 @@ services:
     ezpublish_rest.output.value_object_visitor.RestExecutedView:
         parent: ezpublish_rest.output.value_object_visitor.base
         class: "%ezpublish_rest.output.value_object_visitor.RestExecutedView.class%"
-        arguments: [ "@ezpublish.api.service.location", "@ezpublish.api.service.content", "@ezpublish.api.service.content_type" ]
+        arguments: [ "@ezpublish.api.service.location", "@ezpublish.api.service.content" ]
         tags:
             - { name: ezpublish_rest.output.value_object_visitor, type: eZ\Publish\Core\REST\Server\Values\RestExecutedView }
 
