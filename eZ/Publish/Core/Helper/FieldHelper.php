@@ -49,7 +49,7 @@ class FieldHelper
     public function isFieldEmpty(Content $content, $fieldDefIdentifier, $forcedLanguage = null)
     {
         $field = $this->translationHelper->getTranslatedField($content, $fieldDefIdentifier, $forcedLanguage);
-        $fieldDefinition = $this->getFieldDefinition($content->contentInfo, $fieldDefIdentifier);
+        $fieldDefinition = $content->getContentType()->getFieldDefinition($fieldDefIdentifier);
 
         return $this
             ->fieldTypeService
@@ -59,6 +59,8 @@ class FieldHelper
 
     /**
      * Returns FieldDefinition object based on $contentInfo and $fieldDefIdentifier.
+     *
+     * @deprecated If you have Content you can instead do: $content->getContentType()->getFieldDefinition($identifier)
      *
      * @param ContentInfo $contentInfo
      * @param string $fieldDefIdentifier
