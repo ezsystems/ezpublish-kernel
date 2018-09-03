@@ -304,12 +304,13 @@ abstract class Generator
      *
      * @param string $name
      * @param string $type
+     * @param string $vendor
      *
      * @return string
      */
-    protected function generateMediaType($name, $type)
+    protected function generateMediaType($name, $type, $vendor = 'vnd.ez.api')
     {
-        return "application/vnd.ez.api.{$name}+{$type}";
+        return "application/{$vendor}.{$name}+{$type}";
     }
 
     /**

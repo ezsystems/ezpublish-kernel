@@ -37,11 +37,20 @@ class Xml extends Generator
     protected $isEmpty = true;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator $hashGenerator
+     * Enables developer to modify REST response media type prefix.
+     *
+     * @var string
      */
-    public function __construct(Xml\FieldTypeHashGenerator $hashGenerator)
+    protected $vendor;
+
+    /**
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Xml\FieldTypeHashGenerator $hashGenerator
+     * @param string $vendor
+     */
+    public function __construct(Xml\FieldTypeHashGenerator $hashGenerator, $vendor = 'vnd.ez.api')
     {
         $this->hashGenerator = $hashGenerator;
+        $this->vendor = $vendor;
     }
 
     /**
@@ -236,7 +245,7 @@ class Xml extends Generator
      */
     public function getMediaType($name)
     {
-        return $this->generateMediaType($name, 'xml');
+        return $this->generateMediaType($name, 'xml', $this->vendor);
     }
 
     /**
