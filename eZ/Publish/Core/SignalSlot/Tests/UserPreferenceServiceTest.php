@@ -42,6 +42,12 @@ class UserPreferenceServiceTest extends ServiceTest
                     'value' => $setStruct->value,
                 ],
             ],
+            [
+                'getUserPreferenceCount',
+                [],
+                10,
+                0,
+            ],
         ];
     }
 

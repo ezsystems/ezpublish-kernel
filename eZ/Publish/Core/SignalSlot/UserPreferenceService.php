@@ -65,4 +65,12 @@ class UserPreferenceService implements UserPreferenceServiceInterface
     {
         return $this->service->loadUserPreferences($offset, $limit);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserPreferenceCount(): int
+    {
+        return $this->service->getUserPreferenceCount();
+    }
 }
