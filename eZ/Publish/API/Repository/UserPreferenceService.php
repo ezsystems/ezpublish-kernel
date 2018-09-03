@@ -51,4 +51,11 @@ interface UserPreferenceService
      * @return \eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceList
      */
     public function loadUserPreferences(int $offset = 0, int $limit = 25): UserPreferenceList;
+
+    /**
+     * Get count of total preferences for currently logged user.
+     *
+     * @return int
+     */
+    public function getUserPreferenceCount(): int;
 }

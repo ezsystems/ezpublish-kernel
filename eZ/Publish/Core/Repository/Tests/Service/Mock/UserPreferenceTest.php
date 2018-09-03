@@ -172,6 +172,24 @@ class UserPreferenceTest extends BaseServiceMockTest
     }
 
     /**
+     * @covers \eZ\Publish\Core\Repository\UserPreferenceService::getUserPreferenceCount()
+     */
+    public function testGetUserPreferenceCount()
+    {
+        $expectedTotalCount = 10;
+
+        $this->userSPIPreferenceHandler
+            ->expects($this->once())
+            ->method('countUserPreferences')
+            ->with(self::CURRENT_USER_ID)
+            ->willReturn($expectedTotalCount);
+
+        $APIUserPreference = $this->createAPIUserPreferenceService()->getUserPreferenceCount();
+
+        $this->assertEquals($expectedTotalCount, $APIUserPreference);
+    }
+
+    /**
      * @return \eZ\Publish\API\Repository\UserPreferenceService|\PHPUnit\Framework\MockObject\MockObject
      */
     private function createAPIUserPreferenceService(array $methods = null)
