@@ -125,4 +125,19 @@ class UserPreferenceServiceTest extends BaseTest
         $userPreferenceService->setUserPreference([$setStruct]);
         /* END: Use Case */
     }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\UserPreferenceService::getUserPreferenceCount()
+     */
+    public function testGetUserPreferenceCount()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userPreferenceService = $repository->getUserPreferenceService();
+        $userPreferenceCount = $userPreferenceService->getUserPreferenceCount();
+        /* END: Use Case */
+
+        $this->assertEquals(5, $userPreferenceCount);
+    }
 }
