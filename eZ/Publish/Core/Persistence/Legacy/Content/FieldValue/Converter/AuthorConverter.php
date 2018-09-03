@@ -76,7 +76,7 @@ class AuthorConverter implements Converter
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             [
-                'defaultAuthor' => $storageDef->dataInt1 ? $storageDef->dataInt1 : AuthorType::DEFAULT_VALUE_EMPTY,
+                'defaultAuthor' => $storageDef->dataInt1 ?? AuthorType::DEFAULT_VALUE_EMPTY,
             ]
         );
 
