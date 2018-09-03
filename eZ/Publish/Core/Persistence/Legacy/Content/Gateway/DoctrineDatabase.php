@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
@@ -849,8 +850,9 @@ class DoctrineDatabase extends Gateway
      */
     private function internalLoadContent(array $contentIds, int $version = null, array $translations = null): array
     {
-        $q = $this->connection->createQueryBuilder();
-        $q
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
             ->select(
                 'c.id AS ezcontentobject_id',
                 'c.contentclass_id AS ezcontentobject_contentclass_id',
@@ -889,39 +891,47 @@ class DoctrineDatabase extends Gateway
                 'c',
                 'ezcontentobject_version',
                 'v',
-                'c.id = v.contentobject_id AND v.version = ' . ($version ?: 'c.current_version')
+                $expr->andX(
+                    $expr->eq('c.id', 'v.contentobject_id'),
+                    $expr->eq('v.version', $version ?? 'c.current_version')
+                )
             )
             ->innerJoin(
                 'v',
                 'ezcontentobject_attribute',
                 'a',
-                'v.contentobject_id = a.contentobject_id AND v.version = a.version'
+                $expr->andX(
+                    $expr->eq('v.contentobject_id', 'a.contentobject_id'),
+                    $expr->eq('v.version', 'a.version')
+                )
             )
             ->leftJoin(
                 'c',
                 'ezcontentobject_tree',
                 't',
-                'c.id = t.contentobject_id AND t.node_id = t.main_node_id'
+                $expr->andX(
+                    $expr->eq('c.id', 't.contentobject_id'),
+                    $expr->eq('t.node_id', 't.main_node_id')
+                )
             );
 
-        $expr = $q->expr();
-        $q->where(
+        $queryBuilder->where(
             $expr->in(
                 'c.id',
-                $q->createNamedParameter($contentIds, Connection::PARAM_INT_ARRAY)
+                $queryBuilder->createNamedParameter($contentIds, Connection::PARAM_INT_ARRAY)
             )
         );
 
         if (!empty($translations)) {
-            $q->andWhere(
+            $queryBuilder->andWhere(
                 $expr->in(
                     'a.language_code',
-                    $q->createNamedParameter($translations, Connection::PARAM_STR_ARRAY)
+                    $queryBuilder->createNamedParameter($translations, Connection::PARAM_STR_ARRAY)
                 )
             );
         }
 
-        return $q->execute()->fetchAll();
+        return $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
