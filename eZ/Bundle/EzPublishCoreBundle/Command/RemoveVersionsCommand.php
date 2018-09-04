@@ -9,10 +9,12 @@ declare(strict_types=1);
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Doctrine\DBAL\Connection;
+use Exception;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use PDO;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -107,7 +109,10 @@ class RemoveVersionsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $contentIds = $this->getObjectsIds((int) $input->getOption('keep'), $input->getOption('status'));
+        $keep = (int) $input->getOption('keep');
+        $status = $input->getOption('status');
+
+        $contentIds = $this->getObjectsIds($keep, $status);
         $contentIdsCount = count($contentIds);
 
         if ($contentIdsCount === 0) {
@@ -127,7 +132,7 @@ class RemoveVersionsCommand extends Command
             try {
                 $contentInfo = $this->contentService->loadContentInfo($contentData['id']);
                 $versions = $this->contentService->loadVersions($contentInfo);
-                $versionsCount = \count($versions);
+                $versionsCount = count($versions);
 
                 $output->writeln(sprintf(
                     '<info>Content %d has %d version(s)</info>',
@@ -135,13 +140,13 @@ class RemoveVersionsCommand extends Command
                     $versionsCount
                 ), Output::VERBOSITY_VERBOSE);
 
-                $versions = array_slice(array_reverse($versions), (int) $input->getOption('keep'));
+                $versions = array_slice(array_reverse($versions), $keep);
 
                 foreach ($versions as $version) {
                     if (
-                        (!$version->isPublished() && $input->getOption('status') === self::VERSION_ALL) ||
-                        ($version->isDraft() && $input->getOption('status') === self::VERSION_DRAFT) ||
-                        ($version->isArchived() && $input->getOption('status') === self::VERSION_ARCHIVED)
+                        (!$version->isPublished() && $status === self::VERSION_ALL) ||
+                        ($version->isDraft() && $status === self::VERSION_DRAFT) ||
+                        ($version->isArchived() && $status === self::VERSION_ARCHIVED)
                     ) {
                         $this->contentService->deleteVersion($version);
                         ++$removedVersionsCounter;
@@ -152,7 +157,7 @@ class RemoveVersionsCommand extends Command
                         ), Output::VERBOSITY_VERBOSE);
                     }
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $output->writeln(sprintf(
                     '<error>%s</error>',
                     $e->getMessage()
@@ -176,7 +181,7 @@ class RemoveVersionsCommand extends Command
                 ->having('count(c.id) > :keep');
         $query->setParameter('keep', $keep);
 
-        if ($status === self::VERSION_DRAFT || $status === self::VERSION_ARCHIVED) {
+        if ($status !== self::VERSION_ALL) {
             $query->where('v.status = :status');
             $query->setParameter('status', $this->getVersionInfoStatus($status));
         }
@@ -186,7 +191,14 @@ class RemoveVersionsCommand extends Command
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    private function getVersionInfoStatus(string $status): ?int
+    /**
+     * @param string $status
+     *
+     * @return int
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
+    private function getVersionInfoStatus(string $status): int
     {
         if ($status === self::VERSION_ARCHIVED) {
             return VersionInfo::STATUS_ARCHIVED;
@@ -194,5 +206,13 @@ class RemoveVersionsCommand extends Command
         if ($status === self::VERSION_DRAFT) {
             return VersionInfo::STATUS_DRAFT;
         }
+
+        throw new InvalidArgumentException(
+            'status',
+                sprintf(
+                    "Status %s can't be mapped to VersionInfo status.",
+                    $status
+                )
+        );
     }
 }
