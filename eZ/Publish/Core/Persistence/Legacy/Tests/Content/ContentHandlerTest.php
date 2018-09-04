@@ -529,18 +529,13 @@ class ContentHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
         $fieldHandlerMock = $this->getFieldHandlerMock();
-
-        $idVersionTranslationPairs = [
-            ['id' => 2, 'version' => 2, 'languages' => ['eng-GB']],
-            ['id' => 3, 'version' => null, 'languages' => ['eng-GB', 'eng-US']],
-        ];
         $contentRows = [
             ['ezcontentobject_id' => 2, 'ezcontentobject_version_version' => 2],
             ['ezcontentobject_id' => 3, 'ezcontentobject_version_version' => 1],
         ];
         $gatewayMock->expects($this->once())
             ->method('loadContentList')
-            ->with($this->equalTo($idVersionTranslationPairs))
+            ->with([2, 3], ['eng-GB', 'eng-US'])
             ->willReturn($contentRows);
 
         $gatewayMock->expects($this->once())
@@ -561,12 +556,7 @@ class ContentHandlerTest extends TestCase
             ->method('loadExternalFieldData')
             ->with($this->isInstanceOf(Content::class));
 
-        $loadStructList = [
-          new Content\LoadStruct(['id' => 2, 'versionNo' => 2, 'languages' => ['eng-GB']]),
-          new Content\LoadStruct(['id' => 3, 'languages' => ['eng-GB', 'eng-US']]),
-        ];
-
-        $result = $handler->loadContentList($loadStructList);
+        $result = $handler->loadContentList([2, 3], ['eng-GB', 'eng-US']);
 
         $this->assertEquals(
             $expected,
