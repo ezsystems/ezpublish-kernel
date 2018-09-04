@@ -30,6 +30,6 @@ class CrowdinRequestLocaleSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $e->getRequest()->headers->set('accept-language', 'ach-UG');
+        $e->getRequest()->headers->set('accept-language', 'ach_UG');
     }
 }
