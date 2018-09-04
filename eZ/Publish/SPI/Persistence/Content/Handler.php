@@ -61,7 +61,7 @@ interface Handler
      *
      * @param int|string $id
      * @param int|string $version
-     * @param string[] $translations
+     * @param string[]|null $translations
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
@@ -73,14 +73,22 @@ interface Handler
      * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
      * to calling logic to determine if this should cause exception or not.
      *
-     * NOTE: Even if LoadStruct technically allows to load several versions of same content, this method does not allow
-     * this by design as content is returned as Map with key being content id.
+     * If items are missing but for other reasons then not being found, for instance exceptions during loading field
+     * data. Then the exception will be logged as warning or error depending on severity.
+     * The most common case of possible exceptions during loading of Content data is migration,
+     * where either custom Field Type configuration or implementation might not be aligned with new
+     * version of the system.
      *
-     * @param \eZ\Publish\SPI\Persistence\Content\LoadStruct[] $contentLoadStructs
+     * NOTE!!: If you want to take always available flag into account, append main language
+     * to the list of languages(unless caller is asking for all languages). In some edge cases you'll end up with a
+     * bit more data returned, but upside is that storage engine is able to handle far larger datasets.
      *
-     * @return \eZ\Publish\SPI\Persistence\Content[<int>]
+     * @param int[] $contentIds
+     * @param string[]|null $translations
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content[]
      */
-    public function loadContentList(array $contentLoadStructs): array;
+    public function loadContentList(array $contentIds, array $translations = null): iterable;
 
     /**
      * Returns the metadata object for a content identified by $contentId.

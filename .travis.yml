@@ -59,7 +59,7 @@ branches:
     - /^\d.\d+$/
 
 # setup requirements for running unit/integration/behat tests
-before_script:
+before_install:
   # Disable memory_limit for composer
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Install igbinary & lzf PHP extensions if necessary
@@ -73,6 +73,12 @@ before_script:
   # Detecting timezone issues by testing on random timezone
   - TEST_TIMEZONES=("America/New_York" "Asia/Calcutta" "UTC")
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
+
+install:
+  -  if [ "$TEST_CONFIG" != "" ] ; then travis_retry composer install --no-progress --no-interaction --prefer-dist ; fi
+  # Setup Solr / Elastic search if asked for
+  - if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
+  - if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh; fi
 
 # execute phpunit or behat as the script command
 script:

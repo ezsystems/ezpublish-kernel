@@ -185,24 +185,18 @@ class DomainMapper
         array $prioritizedLanguages = [],
         bool $useAlwaysAvailable = true
     ): \Generator {
-        // Create list of LoadStruct, take into account main language as fallback language if alwaysAvailable
-        // And skip setting versionNo to make sure we always get the current version when proxy is eventually loaded
-        $loadStructList = [];
+        $contentIds = [];
+        $translations = $prioritizedLanguages;
         foreach ($infoList as $info) {
-            if ($useAlwaysAvailable && $info->alwaysAvailable) {
-                $languages = $prioritizedLanguages;
-                $languages[] = $info->mainLanguageCode;
-                $loadStructList[] = new SPIContent\LoadStruct(['id' => $info->id, 'languages' => $languages]);
-            } else {
-                $loadStructList[] = new SPIContent\LoadStruct([
-                    'id' => $info->id,
-                    'languages' => $prioritizedLanguages,
-                ]);
+            $contentIds[] = $info->id;
+            // Unless we are told to load all languages, we add main language to translations so they are loaded too
+            // Might in some case load more languages then intended, but prioritised handling will pick right one
+            if (!empty($prioritizedLanguages) && $useAlwaysAvailable && $info->alwaysAvailable) {
+                $translations[] = $info->mainLanguageCode;
             }
         }
 
-        $list = $this->contentHandler->loadContentList($loadStructList);
-        unset($loadStructList);
+        $list = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
 
         while (!empty($list)) {
             $id = yield;
@@ -535,27 +529,20 @@ class DomainMapper
             return [];
         }
 
-        $loadStructList = [];
-        $prioritizedLanguages = $languageFilter['languages'] ?? [];
+        $contentIds = [];
+        $translations = $languageFilter['languages'] ?? [];
         $useAlwaysAvailable = $languageFilter['useAlwaysAvailable'] ?? true;
         foreach ($result->searchHits as $hit) {
-            if ($useAlwaysAvailable && $hit->valueObject->alwaysAvailable) {
-                $languages = $prioritizedLanguages;
-                $languages[] = $hit->valueObject->mainLanguageCode;
-                $loadStructList[] = new SPIContent\LoadStruct([
-                    'id' => $hit->valueObject->id,
-                    'languages' => $languages,
-                ]);
-            } else {
-                $loadStructList[] = new SPIContent\LoadStruct([
-                    'id' => $hit->valueObject->id,
-                    'languages' => $prioritizedLanguages,
-                ]);
+            $contentIds[] = $hit->valueObject->id;
+            // Unless we are told to load all languages, we add main language to translations so they are loaded too
+            // Might in some case load more languages then intended, but prioritised handling will pick right one
+            if (!empty($languageFilter['languages']) && $useAlwaysAvailable && $hit->valueObject->alwaysAvailable) {
+                $translations[] = $hit->valueObject->mainLanguageCode;
             }
         }
 
         $missingContentList = [];
-        $contentList = $this->contentHandler->loadContentList($loadStructList);
+        $contentList = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
         foreach ($result->searchHits as $key => $hit) {
             if (isset($contentList[$hit->valueObject->id])) {
                 $hit->valueObject = $this->buildContentDomainObject(

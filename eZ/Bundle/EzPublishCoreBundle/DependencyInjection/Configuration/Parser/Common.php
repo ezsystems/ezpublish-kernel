@@ -58,7 +58,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             ->end()
             ->scalarNode('cache_service_name')
                 ->example('cache.app')
-                ->defaultValue('cache.app')
                 ->info('The cache pool service name to use for a siteaccess / siteaccess-group, *must* be present.')
             ->end()
             ->scalarNode('var_dir')

@@ -60,6 +60,8 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @todo Add support for setting version number to null in order to reuse cache with loadContentList.
      */
     public function load($contentId, $versionNo, array $translations = null)
     {
@@ -78,32 +80,21 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         return $content;
     }
 
-    public function loadContentList(array $contentLoadStructs): array
+    public function loadContentList(array $contentIds, array $translations = null): array
     {
-        // Extract id's and make key suffix for each one (handling undefined versionNo and languages)
-        $contentIds = [];
+        // Extract suffix for each one
         $keySuffixes = [];
-        foreach ($contentLoadStructs as $struct) {
-            $contentIds[] = $struct->id;
-            $keySuffixes[$struct->id] = ($struct->versionNo ? "-{$struct->versionNo}-" : '-') .
-                (empty($struct->languages) ? self::ALL_TRANSLATIONS_KEY : implode('|', $struct->languages));
+        foreach ($contentIds as $contentId) {
+            $keySuffixes[$contentId] = '-' . (empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations));
         }
 
         return $this->getMultipleCacheItems(
             $contentIds,
             'ez-content-',
-            function (array $cacheMissIds) use ($contentLoadStructs) {
+            function (array $cacheMissIds) use ($translations) {
                 $this->logger->logCall(__CLASS__ . '::loadContentList', ['content' => $cacheMissIds]);
 
-                $filteredStructs = [];
-                /* @var $contentLoadStructs \eZ\Publish\SPI\Persistence\Content\LoadStruct[] */
-                foreach ($contentLoadStructs as $struct) {
-                    if (in_array($struct->id, $cacheMissIds)) {
-                        $filteredStructs[] = $struct;
-                    }
-                }
-
-                return $this->persistenceHandler->contentHandler()->loadContentList($filteredStructs);
+                return $this->persistenceHandler->contentHandler()->loadContentList($cacheMissIds, $translations);
             },
             function (Content $content) {
                 return $this->getCacheTagsForContent($content);

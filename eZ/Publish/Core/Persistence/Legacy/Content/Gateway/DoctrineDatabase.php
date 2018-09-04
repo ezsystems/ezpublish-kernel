@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
@@ -821,50 +822,37 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data for a content object.
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param mixed $contentId
-     * @param mixed $version
-     * @param string[]|null $translations
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function load($contentId, $version, array $translations = null)
     {
-        $results = $this->internalLoadContent([
-            ['id' => $contentId, 'version' => $version, 'languages' => $translations],
-        ]);
+        $results = $this->internalLoadContent([$contentId], $version, $translations);
 
         return $results;
     }
 
     /**
-     * Loads current version for a list of content objects.
-     *
-     * @param array[] $IdVersionTranslationPairs Hashes with 'id', optionally 'version', & optionally 'languages'
-     *                If version is not set current version will be loaded, if languages is not set ALL will be loaded.
-     *
-     * @return array[]
+     * {@inheritdoc}
      */
-    public function loadContentList(array $IdVersionTranslationPairs): array
+    public function loadContentList(array $contentIds, array $translations = null): array
     {
-        return $this->internalLoadContent($IdVersionTranslationPairs);
+        return $this->internalLoadContent($contentIds, null, $translations);
     }
 
     /**
      * @see load(), loadContentList()
      *
-     * @param array[] $IdVersionTranslationPairs Hashes with 'id', optionally 'version', & optionally 'languages'
-     *                If version is not set current version will be loaded, if languages is not set ALL will be loaded.
+     * @param array $contentIds
+     * @param int $version
+     * @param string[]|null $translations
      *
      * @return array
      */
-    private function internalLoadContent(array $IdVersionTranslationPairs): array
+    private function internalLoadContent(array $contentIds, int $version = null, array $translations = null): array
     {
-        $q = $this->connection->createQueryBuilder();
-        $q
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
             ->select(
                 'c.id AS ezcontentobject_id',
                 'c.contentclass_id AS ezcontentobject_contentclass_id',
@@ -903,46 +891,47 @@ class DoctrineDatabase extends Gateway
                 'c',
                 'ezcontentobject_version',
                 'v',
-                'c.id = v.contentobject_id'
+                $expr->andX(
+                    $expr->eq('c.id', 'v.contentobject_id'),
+                    $expr->eq('v.version', $version ?? 'c.current_version')
+                )
             )
             ->innerJoin(
                 'v',
                 'ezcontentobject_attribute',
                 'a',
-                'v.contentobject_id = a.contentobject_id AND v.version = a.version'
+                $expr->andX(
+                    $expr->eq('v.contentobject_id', 'a.contentobject_id'),
+                    $expr->eq('v.version', 'a.version')
+                )
             )
             ->leftJoin(
                 'c',
                 'ezcontentobject_tree',
                 't',
-                'c.id = t.contentobject_id AND t.node_id = t.main_node_id'
+                $expr->andX(
+                    $expr->eq('c.id', 't.contentobject_id'),
+                    $expr->eq('t.node_id', 't.main_node_id')
+                )
             );
 
-        $where = [];
-        $expr = $q->expr();
-        foreach ($IdVersionTranslationPairs as $IdVersionTranslation) {
-            $clauses = [
-                $expr->eq('c.id', $q->createNamedParameter($IdVersionTranslation['id'], PDO::PARAM_INT)),
-                empty($IdVersionTranslation['version']) ?
-                    $expr->eq('v.version', 'c.current_version') :
-                    $expr->eq('v.version', $q->createNamedParameter($IdVersionTranslation['version'], PDO::PARAM_INT)),
-            ];
-
-            if (!empty($IdVersionTranslation['languages'])) {
-                $clauses[] = $expr->in(
-                    'a.language_code',
-                    $q->createNamedParameter($IdVersionTranslation['languages'], Connection::PARAM_STR_ARRAY)
-                );
-            }
-
-            $where[] = $expr->andX(...$clauses);
-        }
-
-        $q->where(
-            $expr->orX(...$where)
+        $queryBuilder->where(
+            $expr->in(
+                'c.id',
+                $queryBuilder->createNamedParameter($contentIds, Connection::PARAM_INT_ARRAY)
+            )
         );
 
-        return $q->execute()->fetchAll();
+        if (!empty($translations)) {
+            $queryBuilder->andWhere(
+                $expr->in(
+                    'a.language_code',
+                    $queryBuilder->createNamedParameter($translations, Connection::PARAM_STR_ARRAY)
+                )
+            );
+        }
+
+        return $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
