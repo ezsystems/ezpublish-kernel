@@ -11,7 +11,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\SPI\Variation\VariationHandler;
-use Psr\Cache\CacheItemPoolInterface;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Routing\RequestContext;
 
 /**
@@ -25,7 +25,7 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
     private $aliasGenerator;
 
     /**
-     * @var \Psr\Cache\CacheItemPoolInterface
+     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
      */
     private $cache;
 
@@ -41,10 +41,10 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
 
     /**
      * @param \eZ\Publish\SPI\Variation\VariationHandler $aliasGenerator
-     * @param \Psr\Cache\CacheItemPoolInterface $cache
+     * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \Symfony\Component\Routing\RequestContext $requestContext
      */
-    public function __construct(VariationHandler $aliasGenerator, CacheItemPoolInterface $cache, RequestContext $requestContext)
+    public function __construct(VariationHandler $aliasGenerator, TagAwareAdapterInterface $cache, RequestContext $requestContext)
     {
         $this->aliasGenerator = $aliasGenerator;
         $this->cache = $cache;
@@ -68,6 +68,7 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
         if (!$item->isHit()) {
             $image = $this->aliasGenerator->getVariation($field, $versionInfo, $variationName, $parameters);
             $item->set($image);
+            $item->tag($this->getTagsForVariation($field, $versionInfo, $variationName));
             $this->cache->save($item);
         }
 
@@ -102,5 +103,20 @@ class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
             $field->id,
             $variationName
         );
+    }
+
+    private function getTagsForVariation(Field $field, VersionInfo $versionInfo, string $variationName): array
+    {
+        $contentId = $versionInfo->getContentInfo()->id;
+
+        return [
+            'image-variation',
+            'image-variation-name-' . $variationName,
+            'image-variation-siteaccess-' . ($this->siteAccess ? $this->siteAccess->name : 'default'),
+            'image-variation-content-' . $contentId,
+            'image-variation-field-' . $field->id,
+            'content-' . $contentId,
+            'content-' . $contentId . '-version-' . $versionInfo->versionNo,
+        ];
     }
 }
