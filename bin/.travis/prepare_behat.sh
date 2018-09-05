@@ -11,7 +11,7 @@ EZPLATFORM_BRANCH=`php -r 'echo json_decode(file_get_contents("./composer.json")
 
 cd "$HOME/build"
 
-git clone --depth 1 --single-branch --branch "$EZPLATFORM_BRANCH" https://github.com/ezsystems/ezplatform.git
+git clone --depth 1 --single-branch --branch "$EZPLATFORM_BRANCH" https://github.com/mnocon/ezplatform.git
 cd ezplatform
 
 #if [ "$REST_TEST_CONFIG" != "" ] ; then
