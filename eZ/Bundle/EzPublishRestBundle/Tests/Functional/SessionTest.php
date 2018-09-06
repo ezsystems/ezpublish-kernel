@@ -5,7 +5,6 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
-use Buzz\Browser;
 use DOMDocument;
 use DOMXPath;
 use Psr\Http\Message\RequestInterface;
@@ -96,7 +95,7 @@ class SessionTest extends TestCase
     public function testLoginWithExistingFrontendSession()
     {
         $baseURI = $this->getBaseURI();
-        $browser = new Browser();
+        $browser = $this->createBrowser();
 
         $response = $browser->get("{$baseURI}/login");
         self::assertHttpResponseCodeEquals($response, 200);

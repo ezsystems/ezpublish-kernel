@@ -8,12 +8,16 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Tests\Functional;
 
+use Buzz\Browser;
+use Buzz\Client\BuzzClientInterface;
 use Buzz\Client\Curl;
+use Nyholm\Psr7\Factory\Psr17Factory as HttpFactory;
 use Nyholm\Psr7\Request as HttpRequest;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use PHPUnit\Framework\ExpectationFailedException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use RuntimeException;
 
 class TestCase extends BaseTestCase
 {
@@ -80,17 +84,34 @@ class TestCase extends BaseTestCase
         $this->httpAuth = getenv('EZP_TEST_REST_AUTH') ?: 'admin:publish';
         list($this->loginUsername, $this->loginPassword) = explode(':', $this->httpAuth);
 
-        $this->httpClient = new Curl([
-            'verify' => false,
-            'timeout' => 90,
-            'allow_redirects' => false,
-        ]);
+        $this->httpClient = new Curl(
+            [
+                'verify' => false,
+                'timeout' => 90,
+                'allow_redirects' => false,
+            ],
+            new HttpFactory()
+        );
 
         if ($this->autoLogin) {
             $session = $this->login();
             $this->headers['Cookie'] = sprintf('%s=%s', $session->name, $session->identifier);
             $this->headers['X-CSRF-Token'] = $session->csrfToken;
         }
+    }
+
+    /**
+     * Instantiate Browser object.
+     *
+     * @return \Buzz\Client\BuzzClientInterface
+     */
+    public function createBrowser(): BuzzClientInterface
+    {
+        if ($this->httpClient === null) {
+            throw new RuntimeException('Unable to create browser - test is not initialized');
+        }
+
+        return new Browser($this->httpClient, new HttpFactory());
     }
 
     /**
