@@ -84,6 +84,7 @@ trait ContentTypeGroup
         $this->assertHeaderHasObject('content-type', 'ContentTypeGroup');
         $this->assertResponseObject('eZ\\Publish\\Core\\REST\\Client\\Values\\ContentType\\ContentTypeGroup');
         $this->assertObjectFieldHasValue('identifier', $identifier);
+        throw new \Exception('Fail test on purpose');
     }
 
     /**
@@ -107,5 +108,7 @@ trait ContentTypeGroup
             $groups,
             "Expected to find all groups but couldn't find: " . print_r($groups, true)
         );
+
+        throw new \Exception('Fail test on purpose');
     }
 }
