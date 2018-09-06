@@ -93,6 +93,7 @@ class LocationService implements APILocationService, Sessionable
             $properties['sortField'] = $contentType->defaultSortField;
             $properties['sortOrder'] = $contentType->defaultSortOrder;
         }
+
         return new LocationCreateStruct($properties);
     }
 
