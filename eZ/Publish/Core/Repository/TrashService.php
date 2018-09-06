@@ -88,10 +88,6 @@ class TrashService implements TrashServiceInterface
      */
     public function loadTrashItem($trashItemId)
     {
-        if ($this->repository->hasAccess('content', 'restore') !== true) {
-            throw new UnauthorizedException('content', 'restore');
-        }
-
         $spiTrashItem = $this->persistenceHandler->trashHandler()->loadTrashItem($trashItemId);
         $trash = $this->buildDomainTrashItemObject(
             $spiTrashItem,
@@ -99,6 +95,12 @@ class TrashService implements TrashServiceInterface
         );
         if (!$this->repository->canUser('content', 'read', $trash->getContentInfo())) {
             throw new UnauthorizedException('content', 'read');
+        }
+
+        // TODO: Need to check (integration tests + self + QA) how Role limitation will behave with this (as there is no location)
+        // we could pass trash as target (same goes for content/read above), but again would need to check how it will behave.
+        if (!$this->repository->canUser('content', 'restore', $trash->getContentInfo())) {
+            throw new UnauthorizedException('content', 'restore');
         }
 
         return $trash;
@@ -175,7 +177,12 @@ class TrashService implements TrashServiceInterface
             throw new InvalidArgumentValue('parentLocationId', $newParentLocation->id, 'Location');
         }
 
-        if ($this->repository->hasAccess('content', 'restore') !== true) {
+        if (!$this->repository->canUser(
+            'content',
+            'restore',
+            $trashItem->getContentInfo(),
+            $newParentLocation ? [$newParentLocation] : null
+        )) {
             throw new UnauthorizedException('content', 'restore');
         }
 
@@ -220,6 +227,9 @@ class TrashService implements TrashServiceInterface
      */
     public function emptyTrash()
     {
+        // Will throw if you have Role assignment limitation where you have content/cleantrash permission.
+        // This is by design and means you can only delete one and one trash item, or you'll need to change how
+        // permissions is assigned to be on separate role with no Role assignment limitation.
         if ($this->repository->hasAccess('content', 'cleantrash') !== true) {
             throw new UnauthorizedException('content', 'cleantrash');
         }
@@ -246,7 +256,7 @@ class TrashService implements TrashServiceInterface
      */
     public function deleteTrashItem(APITrashItem $trashItem)
     {
-        if ($this->repository->hasAccess('content', 'cleantrash') !== true) {
+        if (!$this->repository->canUser('content', 'cleantrash', $trashItem->getContentInfo())) {
             throw new UnauthorizedException('content', 'cleantrash');
         }
 

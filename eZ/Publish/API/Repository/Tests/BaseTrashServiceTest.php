@@ -35,7 +35,7 @@ abstract class BaseTrashServiceTest extends BaseTest
             $mediaRemoteId
         );
 
-        // Trash the "Community" page location
+        // Trash the "Media" page location
         $trashItem = $trashService->trash($mediaLocation);
         /* END: Inline */
 
