@@ -206,6 +206,8 @@ class RestContext extends Context implements MinkAwareContext
             );
         }
         $this->restDriver->send();
+
+        throw new \Exception('Fail test on purpose');
     }
 
     /**
