@@ -285,10 +285,25 @@ class URLAliasService implements URLAliasServiceInterface
             }
         }
 
-        if ($spiUrlAlias->alwaysAvailable || $showAllTranslations) {
-            $lastLevelData = end($spiUrlAlias->pathData);
-            reset($lastLevelData['translations']);
+        $lastLevelData = end($spiUrlAlias->pathData);
+        reset($lastLevelData['translations']);
 
+        // keep BC for showAllTranslations service setting
+        if ($showAllTranslations) {
+            return key($lastLevelData['translations']);
+        } elseif ($spiUrlAlias->alwaysAvailable) {
+            // use forced languageCode if it exists in the available translations
+            if (!empty($languageCode) && isset($lastLevelData['translations'][$languageCode])) {
+                return $languageCode;
+            }
+            // use language code of URL alias first found in available translations
+            foreach ($spiUrlAlias->languageCodes as $_languageCode) {
+                if (isset($lastLevelData['translations'][$_languageCode])) {
+                    return $_languageCode;
+                }
+            }
+
+            // fallback to use language code of first available translation
             return key($lastLevelData['translations']);
         }
 
