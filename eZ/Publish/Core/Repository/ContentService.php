@@ -1452,7 +1452,7 @@ class ContentService implements ContentServiceInterface
             throw new BadStateException('$versionInfo', 'Only versions in draft status can be published.');
         }
 
-        $currentTime = time();
+        $currentTime = $this->getUnixTimestamp();
         if ($publicationDate === null && $versionInfo->versionNo === 1) {
             $publicationDate = $currentTime;
         }
@@ -1490,6 +1490,14 @@ class ContentService implements ContentServiceInterface
         }
 
         return $content;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getUnixTimestamp()
+    {
+        return time();
     }
 
     /**
