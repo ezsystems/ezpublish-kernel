@@ -8,8 +8,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\FieldType\Author\Type as AuthorType;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -61,7 +63,7 @@ class AuthorConverter implements Converter
      */
     public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
     {
-        // Nothing to store
+        $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings['defaultAuthor'];
     }
 
     /**
@@ -72,7 +74,13 @@ class AuthorConverter implements Converter
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
-        $fieldDef->defaultValue->data = array();
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            [
+                'defaultAuthor' => $storageDef->dataInt1 ?? AuthorType::DEFAULT_VALUE_EMPTY,
+            ]
+        );
+
+        $fieldDef->defaultValue->data = [];
     }
 
     /**
@@ -123,7 +131,7 @@ class AuthorConverter implements Converter
      *
      * @param string $xmlString XML String stored in storage engine
      *
-     * @return \eZ\Publish\Core\FieldType\Author\Value
+     * @return \eZ\Publish\Core\FieldType\Author\Value[]
      */
     private function restoreValueFromXmlString($xmlString)
     {

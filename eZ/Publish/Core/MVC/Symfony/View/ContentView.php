@@ -76,7 +76,7 @@ class ContentView extends BaseView implements View, ContentValueView, LocationVa
     }
 
     /**
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location|null
      */
     public function getLocation()
     {

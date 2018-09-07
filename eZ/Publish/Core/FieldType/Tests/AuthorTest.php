@@ -72,7 +72,12 @@ class AuthorTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return array(
+            'defaultAuthor' => array(
+                'type' => 'choice',
+                'default' => AuthorType::DEFAULT_VALUE_EMPTY,
+            ),
+        );
     }
 
     /**
@@ -321,6 +326,88 @@ class AuthorTest extends FieldTypeTest
         );
     }
 
+    /**
+     * Provide data sets with field settings which are considered valid by the
+     * {@link validateFieldSettings()} method.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          array(),
+     *      ),
+     *      array(
+     *          array( 'rows' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideValidFieldSettings()
+    {
+        return array(
+            array(
+                array(),
+            ),
+            array(
+                array(
+                    'defaultAuthor' => AuthorType::DEFAULT_VALUE_EMPTY,
+                ),
+            ),
+            array(
+                array(
+                    'defaultAuthor' => AuthorType::DEFAULT_CURRENT_USER,
+                ),
+            ),
+        );
+    }
+
+    /**
+     * Provide data sets with field settings which are considered invalid by the
+     * {@link validateFieldSettings()} method. The method must return a
+     * non-empty array of validation error when receiving such field settings.
+     *
+     * Returns an array of data provider sets with a single argument: A valid
+     * set of field settings.
+     * For example:
+     *
+     * <code>
+     *  return array(
+     *      array(
+     *          true,
+     *      ),
+     *      array(
+     *          array( 'nonExistentKey' => 2 )
+     *      ),
+     *      // ...
+     *  );
+     * </code>
+     *
+     * @return array
+     */
+    public function provideInValidFieldSettings()
+    {
+        return array(
+            array(
+                array(
+                    // non-existent setting
+                    'useSeconds' => 23,
+                ),
+            ),
+            array(
+                array(
+                    //defaultAuthor must be constant
+                    'defaultAuthor' => 42,
+                ),
+            ),
+        );
+    }
+
     protected function tearDown()
     {
         unset($this->authors);
@@ -336,18 +423,6 @@ class AuthorTest extends FieldTypeTest
         self::assertEmpty(
             $ft->getValidatorConfigurationSchema(),
             'The validator configuration schema does not match what is expected.'
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\FieldType\FieldType::getSettingsSchema
-     */
-    public function testSettingsSchema()
-    {
-        $ft = $this->createFieldTypeUnderTest();
-        self::assertEmpty(
-            $ft->getSettingsSchema(),
-            'The settings schema does not match what is expected.'
         );
     }
 

@@ -145,10 +145,14 @@ class Repository implements RepositoryInterface
     protected $notificationService;
 
     /**
-     * Constructor.
+     * Instance of UserPreference service.
      *
-     * Construct repository object from aggregated repository and signal
-     * dispatcher
+     * @var \eZ\Publish\API\Repository\UserPreferenceService
+     */
+    protected $userPreferenceService;
+
+    /**
+     * Construct repository object from aggregated repository and signal dispatcher.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\Core\SignalSlot\SignalDispatcher $signalDispatcher
@@ -168,6 +172,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\SignalSlot\URLService $urlService
      * @param \eZ\Publish\Core\SignalSlot\BookmarkService $bookmarkService
      * @param \eZ\Publish\API\Repository\NotificationService $notificationService
+     * @param \eZ\Publish\Core\SignalSlot\UserPreferenceService $userPreferenceService
      */
     public function __construct(
         RepositoryInterface $repository,
@@ -187,7 +192,8 @@ class Repository implements RepositoryInterface
         LanguageService $languageService,
         URLService $urlService,
         BookmarkService $bookmarkService,
-        NotificationService $notificationService
+        NotificationService $notificationService,
+        UserPreferenceService $userPreferenceService
     ) {
         $this->signalDispatcher = $signalDispatcher;
         $this->repository = $repository;
@@ -207,6 +213,7 @@ class Repository implements RepositoryInterface
         $this->urlService = $urlService;
         $this->bookmarkService = $bookmarkService;
         $this->notificationService = $notificationService;
+        $this->userPreferenceService = $userPreferenceService;
     }
 
     /**
@@ -448,6 +455,16 @@ class Repository implements RepositoryInterface
     public function getNotificationService()
     {
         return $this->notificationService;
+    }
+
+    /**
+     * Get UserPreferenceService.
+     *
+     * @return \eZ\Publish\API\Repository\UserPreferenceService
+     */
+    public function getUserPreferenceService()
+    {
+        return $this->userPreferenceService;
     }
 
     /**

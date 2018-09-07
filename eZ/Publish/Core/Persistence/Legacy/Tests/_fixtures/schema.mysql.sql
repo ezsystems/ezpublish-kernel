@@ -642,3 +642,14 @@ CREATE TABLE `eznotification` (
   KEY `eznotification_owner` (`owner_id`),
   KEY `eznotification_owner_is_pending` (`owner_id`, `is_pending`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezpreferences`;
+CREATE TABLE `ezpreferences` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `value` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ezpreferences_name` (`name`),
+  KEY `ezpreferences_user_id_idx` (`user_id`,`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;

@@ -12,6 +12,7 @@ use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
+use eZ\Publish\Core\FieldType\ValidationError;
 
 /**
  * Author field type.
@@ -21,6 +22,25 @@ use eZ\Publish\SPI\FieldType\Value as SPIValue;
  */
 class Type extends FieldType
 {
+    /**
+     * Flag which stands for setting Author FieldType empty by default.
+     * It is used in a Content Type edit view.
+     */
+    const DEFAULT_VALUE_EMPTY = 0;
+
+    /**
+     * Flag which stands for prefilling Author FieldType with current user by default.
+     * It is used in a Content Type edit view.
+     */
+    const DEFAULT_CURRENT_USER = 1;
+
+    protected $settingsSchema = [
+        'defaultAuthor' => [
+            'type' => 'choice',
+            'default' => self::DEFAULT_VALUE_EMPTY,
+        ],
+    ];
+
     /**
      * Returns the field type identifier for this field type.
      *
@@ -147,5 +167,88 @@ class Type extends FieldType
     public function isSearchable()
     {
         return true;
+    }
+
+    /**
+     * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
+     *
+     * @param array $fieldSettings
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validateFieldSettings($fieldSettings)
+    {
+        $validationErrors = [];
+
+        foreach ($fieldSettings as $name => $value) {
+            $settingNameError = $this->validateSettingName($name);
+
+            if ($settingNameError instanceof ValidationError) {
+                $validationErrors[] = $settingNameError;
+            }
+
+            switch ($name) {
+                case 'defaultAuthor':
+                    $settingValueError = $this->validateDefaultAuthorSetting($name, $value);
+                    if ($settingValueError instanceof ValidationError) {
+                        $validationErrors[] = $settingValueError;
+                    }
+                    break;
+            }
+        }
+
+        return $validationErrors;
+    }
+
+    /**
+     * Validates the fieldSetting name.
+     *
+     * @param string $name
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError|null
+     */
+    private function validateSettingName($name)
+    {
+        if (!isset($this->settingsSchema[$name])) {
+            return new ValidationError(
+                "Setting '%setting%' is unknown",
+                null,
+                [
+                    '%setting%' => $name,
+                ],
+                "[$name]"
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * Validates if the defaultAuthor setting has one of the defined values.
+     *
+     * @param string $name
+     * @param string $value
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError|null
+     */
+    private function validateDefaultAuthorSetting($name, $value)
+    {
+        $definedValues = [
+            self::DEFAULT_VALUE_EMPTY,
+            self::DEFAULT_CURRENT_USER,
+        ];
+
+        if (!in_array($value, $definedValues, true)) {
+            return new ValidationError(
+                "Setting '%setting%' has unknown default value",
+                null,
+                [
+                    '%setting%' => $name,
+                ],
+                "[$name]"
+            );
+        }
+
+        return null;
     }
 }

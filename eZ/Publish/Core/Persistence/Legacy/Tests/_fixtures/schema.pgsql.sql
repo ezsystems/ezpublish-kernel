@@ -492,6 +492,14 @@ CREATE TABLE eznotification (
     data text
 );
 
+DROP TABLE IF EXISTS ezpreferences;
+CREATE TABLE ezpreferences (
+    id SERIAL,
+    name character varying(100) DEFAULT NULL,
+    user_id integer DEFAULT 0 NOT NULL,
+    value text DEFAULT NULL
+);
+
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
 
 CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
@@ -682,6 +690,10 @@ CREATE INDEX eznotification_owner_id ON eznotification USING btree (owner_id);
 
 CREATE INDEX eznotification_owner_id_is_pending ON eznotification USING btree (owner_id, is_pending);
 
+CREATE INDEX ezpreferences_name ON ezpreferences USING btree (name);
+
+CREATE INDEX ezpreferences_user_id_idx ON ezpreferences USING btree (user_id,name);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -813,6 +825,9 @@ ALTER TABLE ONLY ezcontentbrowsebookmark
 
 ALTER TABLE ONLY eznotification
   ADD CONSTRAINT eznotification_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezpreferences
+  ADD CONSTRAINT ezpreferences_pkey PRIMARY KEY (id);
 
 ALTER TABLE ezcontentbrowsebookmark
 ADD CONSTRAINT ezcontentbrowsebookmark_location_fk

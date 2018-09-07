@@ -8,9 +8,14 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
+use eZ\Publish\Core\FieldType\Author\Type as AuthorType;
+use eZ\Publish\Core\FieldType\FieldSettings;
+use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as SPIFieldDefinition;
 use PHPUnit\Framework\TestCase;
 use DOMDocument;
 
@@ -121,5 +126,55 @@ EOT;
             }
         }
         self::assertEmpty($aAuthors, 'All authors have not been converted as expected from storage');
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter::toStorageFieldDefinition
+     */
+    public function testToStorageFieldDefinitionDefaultCurrentUser()
+    {
+        $storageFieldDef = new StorageFieldDefinition();
+        $fieldTypeConstraints = new FieldTypeConstraints();
+        $fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                'defaultAuthor' => AuthorType::DEFAULT_CURRENT_USER,
+            )
+        );
+        $fieldDef = new SPIFieldDefinition(
+            array(
+                'fieldTypeConstraints' => $fieldTypeConstraints,
+            )
+        );
+
+        $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
+        self::assertSame(
+            AuthorType::DEFAULT_CURRENT_USER,
+            $storageFieldDef->dataInt1
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter::toStorageFieldDefinition
+     */
+    public function testToStorageFieldDefinitionDefaultEmpty()
+    {
+        $storageFieldDef = new StorageFieldDefinition();
+        $fieldTypeConstraints = new FieldTypeConstraints();
+        $fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                'defaultAuthor' => AuthorType::DEFAULT_VALUE_EMPTY,
+            )
+        );
+        $fieldDef = new SPIFieldDefinition(
+            array(
+                'fieldTypeConstraints' => $fieldTypeConstraints,
+            )
+        );
+
+        $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
+        self::assertSame(
+            AuthorType::DEFAULT_VALUE_EMPTY,
+            $storageFieldDef->dataInt1
+        );
     }
 }
