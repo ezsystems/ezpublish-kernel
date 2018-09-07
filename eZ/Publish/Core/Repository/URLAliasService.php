@@ -260,23 +260,27 @@ class URLAliasService implements URLAliasServiceInterface
     /**
      * Determines alias language code.
      *
-     * Method will return false if language code can't be matched against alias language codes or language settings.
+     * If SPI URL Alias translations are not present in the prioritized languages list, but the URL Alias
+     * is always available, the language code will be chosen based on SPI URL Alias language mask,
+     * unless $showAllTranslations is set to true (see argument description for more info).
+     *
+     * Method will return null if language code can't be matched against alias language codes or language settings.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\URLAlias $spiUrlAlias
-     * @param string|null $languageCode
-     * @param bool $showAllTranslations
+     * @param string|null $languageCode forced language code for always available translations (but only if translation exists)
+     * @param bool $showAllTranslations if true, force fallback language to be chosen as first available from the list of translations
      * @param string[] $prioritizedLanguageList
      *
-     * @return string|bool
+     * @return string|null
      */
     protected function selectAliasLanguageCode(
         SPIURLAlias $spiUrlAlias,
         ?string $languageCode,
         bool $showAllTranslations,
         array $prioritizedLanguageList
-    ) {
+    ): ?string {
         if (isset($languageCode) && !in_array($languageCode, $spiUrlAlias->languageCodes)) {
-            return false;
+            return null;
         }
 
         foreach ($prioritizedLanguageList as $prioritizedLanguageCode) {
@@ -285,6 +289,7 @@ class URLAliasService implements URLAliasServiceInterface
             }
         }
 
+        // look for fallback language code
         $lastLevelData = end($spiUrlAlias->pathData);
         reset($lastLevelData['translations']);
 
@@ -347,7 +352,7 @@ class URLAliasService implements URLAliasServiceInterface
                 );
             }
 
-            if ($prioritizedLanguageCode === false) {
+            if ($prioritizedLanguageCode === null) {
                 return false;
             }
 
@@ -416,7 +421,7 @@ class URLAliasService implements URLAliasServiceInterface
                 $matchedLanguageCode = $this->matchLanguageCode($spiUrlAlias->pathData[$level], $pathElement);
             }
 
-            if ($matchedLanguageCode === false) {
+            if ($matchedLanguageCode === null) {
                 return array(false, false);
             }
 
