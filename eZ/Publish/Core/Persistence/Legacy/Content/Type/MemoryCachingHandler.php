@@ -169,6 +169,20 @@ class MemoryCachingHandler implements BaseContentTypeHandler
         return $this->innerHandler->loadContentTypes($groupId, $status);
     }
 
+    public function loadContentTypeList(array $contentTypeIds): array
+    {
+        $contentTypes = [];
+        foreach ($contentTypeIds as $contentTypeId) {
+            if (isset($this->contentTypes[$contentTypeId])) {
+                $contentTypes[$contentTypeId] = $this->contentTypes[$contentTypeId];
+            } else {
+                $contentTypes[$contentTypeId] = $this->contentTypes[$contentTypeId] = $this->innerHandler->load($contentTypeId);
+            }
+        }
+
+        return $contentTypes;
+    }
+
     /**
      * @param int $contentTypeId
      * @param int $status

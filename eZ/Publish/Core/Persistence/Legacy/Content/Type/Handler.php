@@ -187,6 +187,14 @@ class Handler implements BaseContentTypeHandler
         );
     }
 
+    public function loadContentTypeList(array $contentTypeIds): array
+    {
+        return $this->mapper->extractTypesFromRows(
+            $this->contentTypeGateway->loadTypesDataList($contentTypeIds),
+            true
+        );
+    }
+
     /**
      * Loads a content type by id and status.
      *

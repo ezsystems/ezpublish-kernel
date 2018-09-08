@@ -82,6 +82,18 @@ interface Handler
     public function loadContentTypes($groupId, $status = Type::STATUS_DEFINED);
 
     /**
+     * Return list of unique Content Types, with type id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param mixed $contentTypeIds
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type[]
+     */
+    public function loadContentTypeList(array $contentTypeIds): array;
+
+    /**
      * Loads a content type by id and status.
      *
      * Note: This method is responsible of having the Field Definitions of the loaded ContentType sorted by placement.

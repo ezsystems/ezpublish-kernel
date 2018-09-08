@@ -64,7 +64,8 @@ abstract class AbstractHandler
      * @param callable $missingLoader Function for loading missing objects, gets array with missing id's as argument,
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $loadedTagger Function for tagging loaded object, gets object as argument, return array of tags.
-     * @param array $keySuffixes Optional, key is id as provided in $ids, and value is a key suffix e.g. "-eng-Gb"
+     * @param string|array $keySuffix Optional, if array key is id as provided in $ids, and value (when string or array)
+     *                                is a key suffix e.g. "-eng-Gb"
      *
      * @return array
      */
@@ -73,7 +74,7 @@ abstract class AbstractHandler
         string $keyPrefix,
         callable $missingLoader,
         callable $loadedTagger,
-        array $keySuffixes = []
+        $keySuffix = ''
     ): array {
         if (empty($ids)) {
             return [];
@@ -82,7 +83,7 @@ abstract class AbstractHandler
         // Generate unique cache keys
         $cacheKeys = [];
         foreach (array_unique($ids) as $id) {
-            $cacheKeys[] = $keyPrefix . $id . ($keySuffixes[$id] ?? '');
+            $cacheKeys[] = $keyPrefix . $id . (is_array($keySuffix) ? $keySuffix[$id] ?? '' : ($keySuffix ?: ''));
         }
 
         // Load cache items by cache keys (will contain hits and misses)
@@ -91,7 +92,7 @@ abstract class AbstractHandler
         $keyPrefixLength = strlen($keyPrefix);
         foreach ($this->cache->getItems($cacheKeys) as $key => $cacheItem) {
             $id = substr($key, $keyPrefixLength);
-            if (!empty($keySuffixes)) {
+            if (!empty($keySuffix)) {
                 $id = explode('-', $id, 2)[0];
             }
 

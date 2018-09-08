@@ -350,6 +350,15 @@ class ExceptionConversion extends Gateway
         }
     }
 
+    public function loadTypesDataList(array $typeIds): array
+    {
+        try {
+            return $this->innerGateway->loadTypesDataList($typeIds);
+        } catch (PDOException | DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
     /**
      * Loads an array with data about $typeId in $status.
      *

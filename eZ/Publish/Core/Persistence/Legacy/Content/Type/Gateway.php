@@ -186,6 +186,15 @@ abstract class Gateway
     abstract public function updateType($typeId, $status, UpdateStruct $updateStruct);
 
     /**
+     * Loads an array with data about several Types in defined status..
+     *
+     * @param array $typeIds
+     *
+     * @return array Data rows.
+     */
+    abstract public function loadTypesDataList(array $typeIds): array;
+
+    /**
      * Loads an array with data about $typeId in $status.
      *
      * @param mixed $typeId

@@ -884,6 +884,32 @@ class DoctrineDatabase extends Gateway
         $this->insertTypeNameData($typeId, $status, $updateStruct->name);
     }
 
+    public function loadTypesDataList(array $typeIds): array
+    {
+        // @todo change getLoadTypeQuery() to use doctrine query, use it partly here for array binding
+        $doctrineQueryBuilder = $this->connection->createQueryBuilder();
+
+        $q = $this->getLoadTypeQuery();
+        $q->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn('id', 'ezcontentclass'),
+                    $doctrineQueryBuilder->createNamedParameter($typeIds, Connection::PARAM_INT_ARRAY)
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn('version', 'ezcontentclass'),
+                    $q->bindValue(Type::STATUS_DEFINED, null, \PDO::PARAM_INT)
+                )
+            )
+        );
+        $q->orderBy($this->dbHandler->quoteColumn('id', 'ezcontentclass'));
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     /**
      * Loads an array with data about $typeId in $status.
      *

@@ -161,6 +161,23 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         return $types;
     }
 
+    public function loadContentTypeList(array $contentTypeIds): array
+    {
+        return $this->getMultipleCacheItems(
+            $contentTypeIds,
+            'ez-content-type-',
+            function (array $cacheMissIds) {
+                $this->logger->logCall(__CLASS__ . '::loadContentTypeList', ['type' => $cacheMissIds]);
+
+                return $this->persistenceHandler->contentTypeHandler()->loadContentTypeList($cacheMissIds);
+            },
+            function (Type $type) {
+                return ['type-' . $type->id];
+            },
+            '-' . Type::STATUS_DEFINED
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
