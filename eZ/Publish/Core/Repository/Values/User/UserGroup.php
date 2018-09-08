@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * This class represents a user group.
@@ -32,6 +33,11 @@ class UserGroup extends APIUserGroup
     public function getVersionInfo()
     {
         return $this->content->getVersionInfo();
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->content->getContentType();
     }
 
     /**
