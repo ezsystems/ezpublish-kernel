@@ -52,26 +52,22 @@ class FieldDefinitionUpdateTest extends BaseTest
             'position not created correctly'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->isTranslatable,
             'isTranslatable not created correctly'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->isRequired,
             'isRequired not created correctly'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->isInfoCollector,
             'isInfoCollector not created correctly'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->isSearchable,
             'isSearchable not created correctly'
         );

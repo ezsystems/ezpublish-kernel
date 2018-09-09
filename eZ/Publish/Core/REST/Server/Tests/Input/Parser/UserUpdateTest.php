@@ -91,8 +91,7 @@ class UserUpdateTest extends BaseTest
             'password not created correctly'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->userUpdateStruct->enabled,
             'enabled not created correctly'
         );

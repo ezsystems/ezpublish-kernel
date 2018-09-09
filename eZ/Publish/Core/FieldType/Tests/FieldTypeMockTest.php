@@ -201,8 +201,7 @@ class FieldTypeMockTest extends TestCase
 
         $validatorConfiguration = null;
         $stub->applyDefaultValidatorConfiguration($validatorConfiguration);
-        $this->assertSame(
-            null,
+        $this->assertNull(
             $validatorConfiguration
         );
     }

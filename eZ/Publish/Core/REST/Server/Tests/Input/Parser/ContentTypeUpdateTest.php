@@ -60,8 +60,7 @@ class ContentTypeUpdateTest extends BaseTest
             'nameSchema not created correctly'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->isContainer,
             'isContainer not created correctly'
         );
@@ -78,8 +77,7 @@ class ContentTypeUpdateTest extends BaseTest
             'defaultSortOrder not created correctly'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->defaultAlwaysAvailable,
             'defaultAlwaysAvailable not created correctly'
         );
