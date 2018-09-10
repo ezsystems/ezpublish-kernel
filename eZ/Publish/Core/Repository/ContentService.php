@@ -1111,6 +1111,7 @@ class ContentService implements ContentServiceInterface
         $versionInfoList = array();
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
+            // @todo: Change this to filter returned drafts by permissions instead of throwing
             if (!$this->repository->canUser('content', 'versionread', $versionInfo)) {
                 throw new UnauthorizedException('content', 'versionread', array('contentId' => $versionInfo->contentInfo->id));
             }

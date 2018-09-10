@@ -116,7 +116,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentTypeGroup(ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct)
     {
-        if ($this->repository->hasAccess('class', 'create') !== true) {
+        if (!$this->repository->canUser('class', 'create', $contentTypeGroupCreateStruct)) {
             throw new UnauthorizedException('ContentType', 'create');
         }
 
@@ -235,7 +235,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateContentTypeGroup(APIContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct)
     {
-        if ($this->repository->hasAccess('class', 'update') !== true) {
+        if (!$this->repository->canUser('class', 'update', $contentTypeGroup)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -298,7 +298,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentTypeGroup(APIContentTypeGroup $contentTypeGroup)
     {
-        if ($this->repository->hasAccess('class', 'delete') !== true) {
+        if (!$this->repository->canUser('class', 'delete', $contentTypeGroup)) {
             throw new UnauthorizedException('ContentType', 'delete');
         }
 
@@ -655,7 +655,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentType(APIContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups)
     {
-        if ($this->repository->hasAccess('class', 'create') !== true) {
+        if (!$this->repository->canUser('class', 'create', $contentTypeCreateStruct, $contentTypeGroups)) {
             throw new UnauthorizedException('ContentType', 'create');
         }
 
@@ -1022,7 +1022,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function createContentTypeDraft(APIContentType $contentType)
     {
-        if ($this->repository->hasAccess('class', 'create') !== true) {
+        if (!$this->repository->canUser('class', 'create', $contentType)) {
             throw new UnauthorizedException('ContentType', 'create');
         }
 
@@ -1075,7 +1075,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateContentTypeDraft(APIContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct)
     {
-        if ($this->repository->hasAccess('class', 'update') !== true) {
+        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1149,7 +1149,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function deleteContentType(APIContentType $contentType)
     {
-        if ($this->repository->hasAccess('class', 'delete') !== true) {
+        if (!$this->repository->canUser('class', 'delete', $contentType)) {
             throw new UnauthorizedException('ContentType', 'delete');
         }
 
@@ -1189,7 +1189,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function copyContentType(APIContentType $contentType, User $creator = null)
     {
-        if ($this->repository->hasAccess('class', 'create') !== true) {
+        if (!$this->repository->canUser('class', 'create', $contentType)) {
             throw new UnauthorizedException('ContentType', 'create');
         }
 
@@ -1224,7 +1224,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function assignContentTypeGroup(APIContentType $contentType, APIContentTypeGroup $contentTypeGroup)
     {
-        if ($this->repository->hasAccess('class', 'update') !== true) {
+        if (!$this->repository->canUser('class', 'update', $contentType)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1266,7 +1266,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function unassignContentTypeGroup(APIContentType $contentType, APIContentTypeGroup $contentTypeGroup)
     {
-        if ($this->repository->hasAccess('class', 'update') !== true) {
+        if (!$this->repository->canUser('class', 'update', $contentType, [$contentTypeGroup])) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1322,7 +1322,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function addFieldDefinition(APIContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct)
     {
-        if ($this->repository->hasAccess('class', 'update') !== true) {
+        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1395,7 +1395,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function removeFieldDefinition(APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition)
     {
-        if ($this->repository->hasAccess('class', 'update') !== true) {
+        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1439,7 +1439,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function updateFieldDefinition(APIContentTypeDraft $contentTypeDraft, APIFieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct)
     {
-        if ($this->repository->hasAccess('class', 'update') !== true) {
+        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
@@ -1494,7 +1494,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function publishContentTypeDraft(APIContentTypeDraft $contentTypeDraft)
     {
-        if ($this->repository->hasAccess('class', 'update') !== true) {
+        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
             throw new UnauthorizedException('ContentType', 'update');
         }
 
