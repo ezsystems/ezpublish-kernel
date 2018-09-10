@@ -81,7 +81,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct)
     {
-        if ($this->repository->hasAccess('state', 'administrate') !== true) {
+        if (!$this->repository->canUser('state', 'administrate', $objectStateGroupCreateStruct)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -181,7 +181,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectStateGroup(APIObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct)
     {
-        if ($this->repository->hasAccess('state', 'administrate') !== true) {
+        if (!$this->repository->canUser('state', 'administrate', $objectStateGroup)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -233,7 +233,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectStateGroup(APIObjectStateGroup $objectStateGroup)
     {
-        if ($this->repository->hasAccess('state', 'administrate') !== true) {
+        if (!$this->repository->canUser('state', 'administrate', $objectStateGroup)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -265,7 +265,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function createObjectState(APIObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct)
     {
-        if ($this->repository->hasAccess('state', 'administrate') !== true) {
+        if (!$this->repository->canUser('state', 'administrate', $objectStateCreateStruct, [$objectStateGroup])) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -333,7 +333,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function updateObjectState(APIObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct)
     {
-        if ($this->repository->hasAccess('state', 'administrate') !== true) {
+        if (!$this->repository->canUser('state', 'administrate', $objectState)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -394,7 +394,7 @@ class ObjectStateService implements ObjectStateServiceInterface
             throw new InvalidArgumentValue('priority', $priority);
         }
 
-        if ($this->repository->hasAccess('state', 'administrate') !== true) {
+        if (!$this->repository->canUser('state', 'administrate', $objectState)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 
@@ -423,7 +423,7 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function deleteObjectState(APIObjectState $objectState)
     {
-        if ($this->repository->hasAccess('state', 'administrate') !== true) {
+        if (!$this->repository->canUser('state', 'administrate', $objectState)) {
             throw new UnauthorizedException('state', 'administrate');
         }
 

@@ -52,8 +52,7 @@ class LocationCreateTest extends BaseTest
             'LocationCreateStruct priority property not created correctly.'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->hidden,
             'LocationCreateStruct hidden property not created correctly.'
         );

@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\URLAliasService;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -331,8 +332,13 @@ class TrashServiceTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
-        $trashItem = new TrashItem(['id' => 12364, 'parentLocationId' => 12363]);
-        $trashService->recover($trashItem);
+        $trashService->recover(
+            $this->getTrashItemDouble(
+                12364,
+                12345,
+                12363
+            )
+        );
     }
 
     /**
@@ -788,8 +794,11 @@ class TrashServiceTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
-        $trashItem = new TrashItem(['id' => 123456]);
-        $trashService->deleteTrashItem($trashItem);
+        $trashService->deleteTrashItem($this->getTrashItemDouble(
+            12364,
+            12345,
+            12363
+        ));
     }
 
     /**
@@ -873,5 +882,17 @@ class TrashServiceTest extends BaseTrashServiceTest
         } catch (\eZ\Publish\API\Repository\Exceptions\NotFoundException $e) {
             $this->assertTrue(true);
         }
+    }
+
+    /**
+     * Get Test Double for TrashItem for exception testing and similar.
+     */
+    private function getTrashItemDouble(int $trashId, int $contentId = 44, int $parentLocationId = 2): TrashItem
+    {
+        return new TrashItem([
+            'id' => $trashId,
+            'parentLocationId' => $parentLocationId,
+            'contentInfo' => new ContentInfo(['id' => $contentId]),
+        ]);
     }
 }

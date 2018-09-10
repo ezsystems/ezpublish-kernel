@@ -98,8 +98,7 @@ class RendererTest extends TestCase
             ->method('error')
             ->with("Could not render template tag '{$name}': no template configured");
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $renderer->renderTag($name, $parameters, $isInline)
         );
     }
@@ -133,8 +132,7 @@ class RendererTest extends TestCase
             ->method('error')
             ->with("Could not render template tag '{$name}': template '{$templateName}' does not exists");
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $renderer->renderTag($name, $parameters, $isInline)
         );
     }
@@ -408,8 +406,7 @@ class RendererTest extends TestCase
             ->method('error')
             ->with('Could not render embedded resource: no template configured');
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $renderer->renderContentEmbed($contentId, $viewType, $parameters, $isInline)
         );
     }
@@ -458,8 +455,7 @@ class RendererTest extends TestCase
             ->method('error')
             ->with("Could not render embedded resource: template '{$templateName}' does not exists");
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $renderer->renderContentEmbed($contentId, $viewType, $parameters, $isInline)
         );
     }
@@ -550,8 +546,7 @@ class RendererTest extends TestCase
             ->method('error')
             ->with("Could not render embedded resource: Content #{$contentId} is trashed.");
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $renderer->renderContentEmbed($contentId, $viewType, $parameters, $isInline)
         );
     }
@@ -958,8 +953,7 @@ class RendererTest extends TestCase
             ->method('error')
             ->with('Could not render embedded resource: no template configured');
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $renderer->renderLocationEmbed($locationId, $viewType, $parameters, $isInline)
         );
     }
@@ -1008,8 +1002,7 @@ class RendererTest extends TestCase
             ->method('error')
             ->with("Could not render embedded resource: template '{$templateName}' does not exists");
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $renderer->renderLocationEmbed($locationId, $viewType, $parameters, $isInline)
         );
     }
@@ -1098,8 +1091,7 @@ class RendererTest extends TestCase
             ->method('error')
             ->with("Could not render embedded resource: Location #{$locationId} is not visible");
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $renderer->renderLocationEmbed($locationId, $viewType, $parameters, $isInline)
         );
     }
