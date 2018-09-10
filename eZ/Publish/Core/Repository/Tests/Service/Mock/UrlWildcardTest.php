@@ -6,7 +6,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\Tests\Service\Integration;
+namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
@@ -296,20 +296,25 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     public function testRemoveThrowsUnauthorizedException()
     {
+        $wildcard = new URLWildcard(['id' => 'McBoom']);
+
         $mockedService = $this->getPartlyMockedURLWildcardService();
         $repositoryMock = $this->getRepositoryMock();
         $repositoryMock->expects(
             $this->once()
         )->method(
-            'hasAccess'
+            'canUser'
         )->with(
             $this->equalTo('content'),
-            $this->equalTo('urltranslator')
+            $this->equalTo('urltranslator'),
+            $this->equalTo($wildcard)
         )->will(
             $this->returnValue(false)
         );
 
-        $mockedService->remove(new URLWildcard());
+        $repositoryMock->expects($this->never())->method('beginTransaction');
+
+        $mockedService->remove($wildcard);
     }
 
     /**
@@ -320,6 +325,8 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     public function testRemove()
     {
+        $wildcard = new URLWildcard(['id' => 'McBomb']);
+
         $mockedService = $this->getPartlyMockedURLWildcardService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
@@ -328,10 +335,11 @@ class UrlWildcardTest extends BaseServiceMockTest
         $repositoryMock->expects(
             $this->once()
         )->method(
-            'hasAccess'
+            'canUser'
         )->with(
             $this->equalTo('content'),
-            $this->equalTo('urltranslator')
+            $this->equalTo('urltranslator'),
+            $this->equalTo($wildcard)
         )->will(
             $this->returnValue(true)
         );
@@ -347,7 +355,7 @@ class UrlWildcardTest extends BaseServiceMockTest
             $this->equalTo('McBomb')
         );
 
-        $mockedService->remove(new URLWildcard(array('id' => 'McBomb')));
+        $mockedService->remove($wildcard);
     }
 
     /**
@@ -359,6 +367,8 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     public function testRemoveWithRollback()
     {
+        $wildcard = new URLWildcard(['id' => 'McBoo']);
+
         $mockedService = $this->getPartlyMockedURLWildcardService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
@@ -367,10 +377,11 @@ class UrlWildcardTest extends BaseServiceMockTest
         $repositoryMock->expects(
             $this->once()
         )->method(
-            'hasAccess'
+            'canUser'
         )->with(
             $this->equalTo('content'),
-            $this->equalTo('urltranslator')
+            $this->equalTo('urltranslator'),
+            $this->equalTo($wildcard)
         )->will(
             $this->returnValue(true)
         );
@@ -388,7 +399,7 @@ class UrlWildcardTest extends BaseServiceMockTest
             $this->throwException(new \Exception())
         );
 
-        $mockedService->remove(new URLWildcard(array('id' => 'McBoo')));
+        $mockedService->remove($wildcard);
     }
 
     /**

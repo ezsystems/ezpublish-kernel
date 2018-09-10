@@ -139,7 +139,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function remove(URLWildcard $urlWildcard)
     {
-        if ($this->repository->hasAccess('content', 'urltranslator') !== true) {
+        if (!$this->repository->canUser('content', 'urltranslator', $urlWildcard)) {
             throw new UnauthorizedException('content', 'urltranslator');
         }
 

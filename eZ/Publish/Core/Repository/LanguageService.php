@@ -83,7 +83,7 @@ class LanguageService implements LanguageServiceInterface
             throw new InvalidArgumentValue('enabled', $languageCreateStruct->enabled, 'LanguageCreateStruct');
         }
 
-        if ($this->repository->hasAccess('content', 'translations') !== true) {
+        if (!$this->repository->canUser('content', 'translations', $languageCreateStruct)) {
             throw new UnauthorizedException('content', 'translations');
         }
 
@@ -133,7 +133,7 @@ class LanguageService implements LanguageServiceInterface
             throw new InvalidArgumentValue('newName', $newName);
         }
 
-        if ($this->repository->hasAccess('content', 'translations') !== true) {
+        if (!$this->repository->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
         }
 
@@ -171,7 +171,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function enableLanguage(Language $language)
     {
-        if ($this->repository->hasAccess('content', 'translations') !== true) {
+        if (!$this->repository->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
         }
 
@@ -209,7 +209,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function disableLanguage(Language $language)
     {
-        if ($this->repository->hasAccess('content', 'translations') !== true) {
+        if (!$this->repository->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
         }
 
@@ -303,7 +303,7 @@ class LanguageService implements LanguageServiceInterface
      */
     public function deleteLanguage(Language $language)
     {
-        if ($this->repository->hasAccess('content', 'translations') !== true) {
+        if (!$this->repository->canUser('content', 'translations', $language)) {
             throw new UnauthorizedException('content', 'translations');
         }
 

@@ -34,6 +34,11 @@ class SectionService implements SectionServiceInterface
     protected $repository;
 
     /**
+     * @var \eZ\Publish\API\Repository\PermissionResolver
+     */
+    protected $permissionResolver;
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     protected $sectionHandler;
@@ -53,6 +58,7 @@ class SectionService implements SectionServiceInterface
     public function __construct(RepositoryInterface $repository, Handler $sectionHandler, array $settings = array())
     {
         $this->repository = $repository;
+        $this->permissionResolver = $repository->getPermissionResolver();
         $this->sectionHandler = $sectionHandler;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
@@ -80,7 +86,7 @@ class SectionService implements SectionServiceInterface
             throw new InvalidArgumentValue('identifier', $sectionCreateStruct->identifier, 'SectionCreateStruct');
         }
 
-        if ($this->repository->hasAccess('section', 'edit') !== true) {
+        if (!$this->permissionResolver->canUser('section', 'edit', $sectionCreateStruct)) {
             throw new UnauthorizedException('section', 'edit');
         }
 
@@ -129,7 +135,7 @@ class SectionService implements SectionServiceInterface
             throw new InvalidArgumentValue('identifier', $section->identifier, 'Section');
         }
 
-        if ($this->repository->canUser('section', 'edit', $section) !== true) {
+        if (!$this->permissionResolver->canUser('section', 'edit', $section)) {
             throw new UnauthorizedException('section', 'edit');
         }
 
@@ -176,13 +182,15 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSection($sectionId)
     {
-        if ($this->repository->hasAccess('section', 'view') !== true) {
+        $section = $this->buildDomainSectionObject(
+            $this->sectionHandler->load($sectionId)
+        );
+
+        if (!$this->permissionResolver->canUser('section', 'view', $section)) {
             throw new UnauthorizedException('section', 'view');
         }
 
-        $spiSection = $this->sectionHandler->load($sectionId);
-
-        return $this->buildDomainSectionObject($spiSection);
+        return $section;
     }
 
     /**
@@ -194,15 +202,14 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSections()
     {
-        if ($this->repository->hasAccess('section', 'view') !== true) {
-            throw new UnauthorizedException('section', 'view');
-        }
+        $sections = [];
+        foreach ($this->sectionHandler->loadAll() as $spiSection) {
+            $sections[] = $section = $this->buildDomainSectionObject($spiSection);
 
-        $spiSections = $this->sectionHandler->loadAll();
-
-        $sections = array();
-        foreach ($spiSections as $spiSection) {
-            $sections[] = $this->buildDomainSectionObject($spiSection);
+            // @todo change API to just filter instead of throwing here
+            if (!$this->permissionResolver->canUser('section', 'view', $section)) {
+                throw new UnauthorizedException('section', 'view');
+            }
         }
 
         return $sections;
@@ -224,13 +231,15 @@ class SectionService implements SectionServiceInterface
             throw new InvalidArgumentValue('sectionIdentifier', $sectionIdentifier);
         }
 
-        if ($this->repository->hasAccess('section', 'view') !== true) {
+        $section = $this->buildDomainSectionObject(
+            $this->sectionHandler->loadByIdentifier($sectionIdentifier)
+        );
+
+        if (!$this->permissionResolver->canUser('section', 'view', $section)) {
             throw new UnauthorizedException('section', 'view');
         }
 
-        $spiSection = $this->sectionHandler->loadByIdentifier($sectionIdentifier);
-
-        return $this->buildDomainSectionObject($spiSection);
+        return $section;
     }
 
     /**
@@ -279,7 +288,7 @@ class SectionService implements SectionServiceInterface
         $loadedContentInfo = $this->repository->getContentService()->loadContentInfo($contentInfo->id);
         $loadedSection = $this->loadSection($section->id);
 
-        if ($this->repository->canUser('section', 'assign', $loadedContentInfo, $loadedSection) !== true) {
+        if (!$this->permissionResolver->canUser('section', 'assign', $loadedContentInfo, [$loadedSection])) {
             throw new UnauthorizedException(
                 'section',
                 'assign',
@@ -318,7 +327,7 @@ class SectionService implements SectionServiceInterface
     {
         $loadedSection = $this->loadSection($section->id);
 
-        if ($this->repository->canUser('section', 'edit', $loadedSection) !== true) {
+        if (!$this->permissionResolver->canUser('section', 'edit', $loadedSection)) {
             throw new UnauthorizedException('section', 'edit', array('sectionId' => $loadedSection->id));
         }
 
