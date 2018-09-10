@@ -187,9 +187,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $this->assertEquals('Ice-Flower-Media.jpg', $field->value->externalData['fileName']);
         $this->assertEquals(filesize($path), $field->value->externalData['fileSize']);
         $this->assertEquals('image/jpeg', $field->value->externalData['mimeType']);
-        $this->assertEquals(true, $field->value->externalData['hasController']);
-        $this->assertEquals(true, $field->value->externalData['autoplay']);
-        $this->assertEquals(true, $field->value->externalData['loop']);
+        $this->assertTrue($field->value->externalData['hasController']);
+        $this->assertTrue($field->value->externalData['autoplay']);
+        $this->assertTrue($field->value->externalData['loop']);
         $this->assertEquals(23, $field->value->externalData['width']);
         $this->assertEquals(42, $field->value->externalData['height']);
 
@@ -254,9 +254,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         $this->assertEquals('Blueish-Blue-Media.jpg', $field->value->externalData['fileName']);
         $this->assertEquals(filesize($path), $field->value->externalData['fileSize']);
         $this->assertEquals('image/png', $field->value->externalData['mimeType']);
-        $this->assertEquals(false, $field->value->externalData['hasController']);
-        $this->assertEquals(false, $field->value->externalData['autoplay']);
-        $this->assertEquals(false, $field->value->externalData['loop']);
+        $this->assertFalse($field->value->externalData['hasController']);
+        $this->assertFalse($field->value->externalData['autoplay']);
+        $this->assertFalse($field->value->externalData['loop']);
         $this->assertEquals(0, $field->value->externalData['width']);
         $this->assertEquals(0, $field->value->externalData['height']);
 

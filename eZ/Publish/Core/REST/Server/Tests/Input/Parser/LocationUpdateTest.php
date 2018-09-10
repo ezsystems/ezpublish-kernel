@@ -56,8 +56,7 @@ class LocationUpdateTest extends BaseTest
             'LocationUpdateStruct remoteId property not created correctly.'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->hidden,
             'hidden property not created correctly.'
         );

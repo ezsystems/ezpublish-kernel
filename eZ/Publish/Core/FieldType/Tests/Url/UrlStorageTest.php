@@ -97,7 +97,7 @@ class UrlStorageTest extends TestCase
         $result = $storage->storeFieldData($versionInfo, $field, $this->getContext());
 
         $this->assertFalse($result);
-        $this->assertEquals(null, $field->value->data['urlId']);
+        $this->assertNull($field->value->data['urlId']);
     }
 
     public function testGetFieldData()
@@ -163,7 +163,7 @@ class UrlStorageTest extends TestCase
         $storage = $this->getPartlyMockedStorage($gateway);
         $storage->getFieldData($versionInfo, $field, $this->getContext());
 
-        $this->assertEquals(null, $field->value->externalData);
+        $this->assertNull($field->value->externalData);
     }
 
     public function testDeleteFieldData()

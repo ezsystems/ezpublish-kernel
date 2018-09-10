@@ -1049,8 +1049,7 @@ class SearchServiceTest extends BaseTest
         $searchHit = $searchService->findContent($query);
 
         if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
-            $this->assertEquals(
-                null,
+            $this->assertNull(
                 $searchHit->totalCount
             );
         } else {
@@ -1097,8 +1096,7 @@ class SearchServiceTest extends BaseTest
         $searchHit = $searchService->findLocations($query);
 
         if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
-            $this->assertEquals(
-                null,
+            $this->assertNull(
                 $searchHit->totalCount
             );
         } else {

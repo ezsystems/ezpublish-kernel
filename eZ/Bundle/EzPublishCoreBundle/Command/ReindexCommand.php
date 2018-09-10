@@ -46,6 +46,11 @@ class ReindexCommand extends ContainerAwareCommand
     private $logger;
 
     /**
+     * @var string
+     */
+    private $siteaccess;
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -143,6 +148,7 @@ EOT
     {
         $commit = !$input->getOption('no-commit');
         $iterationCount = $input->getOption('iteration-count');
+        $this->siteaccess = $input->getOption('siteaccess');
         if (!is_numeric($iterationCount) || (int) $iterationCount < 1) {
             throw new RuntimeException("'--iteration-count' option should be > 0, got '{$iterationCount}'");
         }
@@ -371,6 +377,7 @@ EOT
     {
         $process = new ProcessBuilder([
             file_exists('bin/console') ? 'bin/console' : 'app/console',
+            $this->siteaccess ? '--siteaccess=' . $this->siteaccess : null,
             'ezplatform:reindex',
             '--content-ids=' . implode(',', $contentIds),
         ]);
