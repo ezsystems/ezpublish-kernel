@@ -590,7 +590,7 @@ EOT;
     {
         return $ezRichTextNode
                 ->arrayNode('custom_styles')
-                // workaround: take into account Custom Tag names when merging configs
+                // workaround: take into account Custom Styles names when merging configs
                 ->useAttributeAsKey('style')
                 ->arrayPrototype()
                     ->children()

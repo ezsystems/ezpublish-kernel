@@ -39,7 +39,7 @@ class Style extends Render implements Converter
     }
 
     /**
-     * Injects rendered payloads into template tag elements.
+     * Injects rendered payloads into Custom Style elements.
      *
      * @param \DOMDocument $document
      *
@@ -100,7 +100,7 @@ class Style extends Render implements Converter
         );
 
         if (isset($content)) {
-            // If current tag is wrapped inside another template tag we can't use CDATA section
+            // If current tag is wrapped inside another Custom Style tag we can't use CDATA section
             // for its content as these can't be nested.
             // CDATA section will be used only for content of root wrapping tag, content of tags
             // inside it will be added as XML fragments.
@@ -143,6 +143,7 @@ class Style extends Render implements Converter
      */
     protected function getNodeDepth(DomNode $node)
     {
+        // initial depth for top level elements (to avoid "ifs")
         $depth = -2;
 
         while ($node) {

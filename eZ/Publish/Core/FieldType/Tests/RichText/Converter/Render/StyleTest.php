@@ -14,8 +14,21 @@ use eZ\Publish\Core\FieldType\RichText\Converter\Render\Style;
 use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test cases for RichText Custom Styles Renderer.
+ */
 class StyleTest extends TestCase
 {
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $rendererMock;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $converterMock;
+
     public function setUp()
     {
         $this->rendererMock = $this->getRendererMock();
@@ -123,16 +136,6 @@ class StyleTest extends TestCase
     {
         return new Style($this->rendererMock, $this->converterMock);
     }
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $rendererMock;
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $converterMock;
 
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject

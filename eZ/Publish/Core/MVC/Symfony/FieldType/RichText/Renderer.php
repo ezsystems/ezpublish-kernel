@@ -116,6 +116,9 @@ class Renderer implements RendererInterface
         $this->customStylesConfiguration = $customStylesConfiguration;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderStyle($name, array $parameters, $isInline)
     {
         $templateName = $this->getStyleTemplateName($name, $isInline);
@@ -139,6 +142,9 @@ class Renderer implements RendererInterface
         return $this->render($templateName, $parameters);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderTag($name, array $parameters, $isInline)
     {
         $templateName = $this->getTagTemplateName($name, $isInline);
@@ -162,6 +168,9 @@ class Renderer implements RendererInterface
         return $this->render($templateName, $parameters);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderContentEmbed($contentId, $viewType, array $parameters, $isInline)
     {
         $isDenied = false;
@@ -226,6 +235,9 @@ class Renderer implements RendererInterface
         return $this->render($templateName, $parameters);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function renderLocationEmbed($locationId, $viewType, array $parameters, $isInline)
     {
         $isDenied = false;
@@ -300,7 +312,7 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * Returns configured template name for the given template tag identifier.
+     * Returns configured template name for the given Custom Style identifier.
      *
      * @param string $identifier
      * @param bool $isInline
@@ -309,7 +321,7 @@ class Renderer implements RendererInterface
      */
     protected function getStyleTemplateName($identifier, $isInline)
     {
-        if (isset($this->customStylesConfiguration[$identifier]) && !empty($this->customStylesConfiguration[$identifier]['template'])) {
+        if (!empty($this->customStylesConfiguration[$identifier]['template'])) {
             return $this->customStylesConfiguration[$identifier]['template'];
         }
 
