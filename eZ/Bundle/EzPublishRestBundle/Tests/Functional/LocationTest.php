@@ -100,6 +100,7 @@ XML;
         $request = $this->createHttpRequest('COPY', $locationHref);
         $request->addHeader('Destination: /api/ezp/v2/content/locations/1/43');
         $response = $this->sendHttpRequest($request);
+        $this->addCreatedElement($response->getHeader('Location'));
 
         self::assertHttpResponseCodeEquals($response, 201);
         self::assertHttpResponseHasHeader($response, 'Location');
