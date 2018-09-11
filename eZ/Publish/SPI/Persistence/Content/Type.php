@@ -11,7 +11,7 @@ namespace eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
- * @todo What about sort_field and sort_order?
+ * SPI Persistence Content\Type value object.
  */
 class Type extends ValueObject
 {
@@ -173,14 +173,17 @@ class Type extends ValueObject
     public $groupIds = array();
 
     /**
-     * Content fields in this type.
+     * Definitions for Content fields in this type.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition[]
      */
     public $fieldDefinitions = array();
 
     /**
-     * @todo: Document.
+     * Defines if content objects should have always available enabled or not by default.
+     *
+     * Always available (when enabled) means main language is always available, and works as a editorial fallback
+     * language on load operations when translation filter is provided but no match is found.
      *
      * @var bool
      */
