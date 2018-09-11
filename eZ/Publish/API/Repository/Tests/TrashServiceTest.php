@@ -887,7 +887,7 @@ class TrashServiceTest extends BaseTrashServiceTest
     /**
      * Get Test Double for TrashItem for exception testing and similar.
      */
-    private function getTrashItemDouble(int $trashId, int $contentId = 44, int $parentLocationId = 2): TrashItem
+    private function getTrashItemDouble($trashId, $contentId = 44, $parentLocationId = 2)
     {
         return new TrashItem([
             'id' => $trashId,
