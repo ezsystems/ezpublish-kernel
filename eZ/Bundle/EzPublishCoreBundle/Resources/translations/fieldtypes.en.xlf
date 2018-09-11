@@ -56,6 +56,11 @@
         <target>Image</target>
         <note>key: ezimage.name</note>
       </trans-unit>
+      <trans-unit id="3afdca17c734ecb3a077bcc4ba7f75a7544e845d" resname="ezimageasset.name">
+        <source>Image Asset</source>
+        <target>Image Asset</target>
+        <note>key: ezimageasset.name</note>
+      </trans-unit>
       <trans-unit id="3b0f44cd332c71e78209a1a4b235bc6a1e6d374b" resname="ezinteger.name">
         <source>Integer</source>
         <target>Integer</target>

@@ -430,6 +430,24 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block ezimageasset_field %}
+    {% spaceless %}
+        {% if not ez_is_field_empty(content, field) and parameters.available %}
+            {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
+            <div {{ block('field_attributes') }}>
+                {{ render(controller('ez_content:viewAction', {
+                    contentId: field.value.destinationContentId,
+                    viewType: 'asset_image',
+                    noLayout: true,
+                    params: {
+                        parameters: parameters|default({'alias': 'original'})
+                    }
+                }))}}
+            </div>
+        {% endif %}
+    {% endspaceless %}
+{% endblock %}
+
 {% block ezobjectrelation_field %}
 {% spaceless %}
 {% if not ez_is_field_empty( content, field ) and parameters.available %}

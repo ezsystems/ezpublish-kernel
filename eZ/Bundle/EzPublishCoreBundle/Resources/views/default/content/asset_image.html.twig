@@ -1,0 +1,7 @@
+{% set image_field_identifier = ez_image_asset_content_field_identifier() %}
+
+{% if image_field_identifier is not null %}
+    {{ ez_render_field(content, image_field_identifier, {
+        parameters: parameters
+    }) }}
+{% endif %}

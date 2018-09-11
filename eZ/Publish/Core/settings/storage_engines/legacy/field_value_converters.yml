@@ -256,3 +256,10 @@ services:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezrecommendation}
+
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageAssetConverter:
+        tags:
+            - {name: ezpublish.storageEngine.legacy.converter, alias: ezimageasset}
+
+    ezpublish.fieldType.ezimageasset.converter:
+        alias: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageAssetConverter

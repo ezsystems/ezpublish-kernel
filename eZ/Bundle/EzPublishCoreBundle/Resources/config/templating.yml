@@ -190,6 +190,7 @@ services:
         class: "%ezpublish.twig.extension.image.class%"
         arguments:
             - '@ezpublish.fieldType.ezimage.variation_service'
+            - '@eZ\Publish\Core\FieldType\ImageAsset\AssetMapper'
         tags:
             - { name: twig.extension }
 
