@@ -895,8 +895,14 @@ class TrashServiceTest extends BaseTrashServiceTest
 
     /**
      * Get Test Double for TrashItem for exception testing and similar.
+     *
+     * @param int $trashId
+     * @param int $contentId
+     * @param int $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
-    private function getTrashItemDouble(int $trashId, int $contentId = 44, int $parentLocationId = 2): TrashItem
+    private function getTrashItemDouble(int $trashId, int $contentId = 44, int $parentLocationId = 2): APITrashItem
     {
         return new TrashItem([
             'id' => $trashId,
