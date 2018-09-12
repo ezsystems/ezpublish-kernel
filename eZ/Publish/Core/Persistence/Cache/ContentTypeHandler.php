@@ -174,7 +174,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
             function (Type $type) {
                 return ['type-' . $type->id];
             },
-            '-' . Type::STATUS_DEFINED
+            array_fill_keys($contentTypeIds, '-' . Type::STATUS_DEFINED)
         );
     }
 
