@@ -191,9 +191,11 @@ class DomainMapper
         bool $useAlwaysAvailable = true
     ): \Generator {
         $contentIds = [];
+        $contentTypeIds = [];
         $translations = $prioritizedLanguages;
         foreach ($infoList as $info) {
             $contentIds[] = $info->id;
+            $contentTypeIds[] = $info->contentTypeId;
             // Unless we are told to load all languages, we add main language to translations so they are loaded too
             // Might in some case load more languages then intended, but prioritised handling will pick right one
             if (!empty($prioritizedLanguages) && $useAlwaysAvailable && $info->alwaysAvailable) {
@@ -203,23 +205,23 @@ class DomainMapper
 
         unset($infoList);
 
-        $list = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
-        while (!empty($list)) {
+        $contentList = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
+        $contentTypeList = $this->contentTypeHandler->loadContentTypeList(array_unique($contentTypeIds));
+        while (!empty($contentList)) {
             $id = yield;
             /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $info */
-            $info = $list[$id]->versionInfo->contentInfo;
+            $info = $contentList[$id]->versionInfo->contentInfo;
             yield $this->buildContentDomainObject(
-                $list[$id],
-                //@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                $contentList[$id],
                 $this->contentTypeDomainMapper->buildContentTypeDomainObject(
-                    $this->contentTypeHandler->load($info->contentTypeId),
+                    $contentTypeList[$info->contentTypeId],
                     $prioritizedLanguages
                 ),
                 $prioritizedLanguages,
                 $info->alwaysAvailable ? $info->mainLanguageCode : null
             );
 
-            unset($list[$id]);
+            unset($contentList[$id]);
         }
     }
 
@@ -540,26 +542,30 @@ class DomainMapper
         }
 
         $contentIds = [];
+        $contentTypeIds = [];
         $translations = $languageFilter['languages'] ?? [];
         $useAlwaysAvailable = $languageFilter['useAlwaysAvailable'] ?? true;
         foreach ($result->searchHits as $hit) {
-            $contentIds[] = $hit->valueObject->id;
+            /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $info */
+            $info = $hit->valueObject;
+            $contentIds[] = $info->id;
+            $contentTypeIds[] = $info->contentTypeId;
             // Unless we are told to load all languages, we add main language to translations so they are loaded too
             // Might in some case load more languages then intended, but prioritised handling will pick right one
-            if (!empty($languageFilter['languages']) && $useAlwaysAvailable && $hit->valueObject->alwaysAvailable) {
-                $translations[] = $hit->valueObject->mainLanguageCode;
+            if (!empty($languageFilter['languages']) && $useAlwaysAvailable && $info->alwaysAvailable) {
+                $translations[] = $info->mainLanguageCode;
             }
         }
 
         $missingContentList = [];
         $contentList = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
+        $contentTypeList = $this->contentTypeHandler->loadContentTypeList(array_unique($contentTypeIds));
         foreach ($result->searchHits as $key => $hit) {
             if (isset($contentList[$hit->valueObject->id])) {
                 $hit->valueObject = $this->buildContentDomainObject(
                     $contentList[$hit->valueObject->id],
-                    //@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
                     $this->contentTypeDomainMapper->buildContentTypeDomainObject(
-                        $this->contentTypeHandler->load($hit->valueObject->contentTypeId),
+                        $contentTypeList[$hit->valueObject->contentTypeId],
                         $languageFilter['languages'] ?? []
                     ),
                     $languageFilter['languages'] ?? [],
