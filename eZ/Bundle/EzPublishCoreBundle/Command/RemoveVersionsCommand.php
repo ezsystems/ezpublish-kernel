@@ -83,12 +83,12 @@ class RemoveVersionsCommand extends Command
                 'status',
                 's',
                 InputOption::VALUE_OPTIONAL,
-                sprintf(
-                    "Select which version types should be removed: '%s', '%s', '%s'.",
-                    self::VERSION_DRAFT,
-                    self::VERSION_ARCHIVED,
-                    self::VERSION_ALL
-                ),
+                    sprintf(
+                        "Select which version types should be removed: '%s', '%s', '%s'.",
+                        self::VERSION_DRAFT,
+                        self::VERSION_ARCHIVED,
+                        self::VERSION_ALL
+                    ),
                 self::VERSION_ALL
             )
             ->addOption(
@@ -96,7 +96,7 @@ class RemoveVersionsCommand extends Command
                 'k',
                 InputOption::VALUE_OPTIONAL,
                 "Sets number of the most recent versions (both drafts and archived) which won't be removed.",
-            self::DEFAULT_KEEP
+                self::DEFAULT_KEEP
             )
             ->addOption(
                 'user',
@@ -109,7 +109,13 @@ class RemoveVersionsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): void
     {
-        $keep = (int) $input->getOption('keep');
+        if (($keep = (int) $input->getOption('keep')) < 0) {
+            throw new InvalidArgumentException(
+                'status',
+                'Keep value can not be negative.'
+            );
+        }
+
         $status = $input->getOption('status');
 
         $contentIds = $this->getObjectsIds($keep, $status);
@@ -171,6 +177,14 @@ class RemoveVersionsCommand extends Command
         ));
     }
 
+    /**
+     * @param int $keep
+     * @param string $status
+     *
+     * @return array
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
     protected function getObjectsIds(int $keep, string $status): array
     {
         $query = $this->connection->createQueryBuilder()
@@ -209,10 +223,10 @@ class RemoveVersionsCommand extends Command
 
         throw new InvalidArgumentException(
             'status',
-                sprintf(
-                    "Status %s can't be mapped to VersionInfo status.",
-                    $status
-                )
+            sprintf(
+                "Status %s can't be mapped to VersionInfo status.",
+                $status
+            )
         );
     }
 }
