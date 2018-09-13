@@ -505,6 +505,12 @@
 
   <xsl:template match="docbook:eztemplate | docbook:eztemplateinline"/>
 
+  <xsl:template match="docbook:ezstyle[ezpayload] | docbook:ezstyleinline[ezpayload]">
+    <xsl:value-of select="ezpayload/text()" disable-output-escaping="yes"/>
+  </xsl:template>
+
+  <xsl:template match="docbook:ezstyle | docbook:ezstyleinline"/>
+
   <xsl:template name="extractStyleValue">
     <xsl:param name="style"/>
     <xsl:param name="property"/>

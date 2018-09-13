@@ -479,9 +479,10 @@ EOT;
      */
     private function addRichTextSection(ArrayNodeDefinition $rootNode)
     {
-        $this->addCustomTagsSection(
-            $rootNode->children()->arrayNode('ezrichtext')->children()
-        )->end()->end()->end();
+        $ezRichTextNode = $rootNode->children()->arrayNode('ezrichtext')->children();
+        $this->addCustomTagsSection($ezRichTextNode);
+        $this->addCustomStylesSection($ezRichTextNode);
+        $ezRichTextNode->end()->end()->end();
     }
 
     /**
@@ -564,6 +565,40 @@ EOT;
                                     ->end()
                                 ->end()
                             ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+    }
+
+    /**
+     * Define RichText Custom Styles Semantic Configuration.
+     *
+     * The configuration is available at:
+     * <code>
+     * ezpublish:
+     *     ezrichtext:
+     *         custom_styles:
+     * </code>
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\NodeBuilder $ezRichTextNode
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
+    private function addCustomStylesSection(NodeBuilder $ezRichTextNode)
+    {
+        return $ezRichTextNode
+                ->arrayNode('custom_styles')
+                // workaround: take into account Custom Styles names when merging configs
+                ->useAttributeAsKey('style')
+                ->arrayPrototype()
+                    ->children()
+                        ->scalarNode('template')
+                            ->defaultNull()
+                        ->end()
+                        ->scalarNode('inline')
+                            ->defaultFalse()
                         ->end()
                     ->end()
                 ->end()

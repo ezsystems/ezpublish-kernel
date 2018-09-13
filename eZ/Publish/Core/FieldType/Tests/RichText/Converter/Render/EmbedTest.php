@@ -479,6 +479,7 @@ class EmbedTest extends TestCase
             $this->loggerMock->expects($this->never())->method('error');
         }
 
+        $this->rendererMock->expects($this->never())->method('renderStyle');
         $this->rendererMock->expects($this->never())->method('renderTag');
 
         if (!empty($renderParams)) {

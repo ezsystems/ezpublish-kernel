@@ -273,6 +273,7 @@ class TemplateTest extends TestCase
     {
         $this->rendererMock->expects($this->never())->method('renderContentEmbed');
         $this->rendererMock->expects($this->never())->method('renderLocationEmbed');
+        $this->rendererMock->expects($this->never())->method('renderStyle');
 
         if (!empty($renderParams)) {
             foreach ($renderParams as $index => $params) {
