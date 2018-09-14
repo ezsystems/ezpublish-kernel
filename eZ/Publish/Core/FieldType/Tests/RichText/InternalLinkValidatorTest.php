@@ -10,15 +10,12 @@ namespace eZ\Publish\Core\FieldType\Tests\RichText;
 
 use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\FieldType\RichText\InternalLinkValidator;
 use PHPUnit\Framework\TestCase;
 
 class InternalLinkValidatorTest extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     /** @var \eZ\Publish\SPI\Persistence\Content\Handler|\PHPUnit_Framework_MockObject_MockObject */
     private $contentHandler;
 
