@@ -9,13 +9,14 @@ declare(strict_types=1);
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
 use Exception;
+use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use PDO;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,7 +26,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class RemoveVersionsCommand extends Command
 {
     const DEFAULT_REPOSITORY_USER = 'admin';
-    const DEFAULT_KEEP = 2;
 
     const VERSION_DRAFT = 'draft';
     const VERSION_ARCHIVED = 'archived';
@@ -47,6 +47,11 @@ class RemoveVersionsCommand extends Command
     private $permissionResolver;
 
     /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
+     */
+    private $repositoryConfigurationProvider;
+
+    /**
      * @var \Doctrine\DBAL\Driver\Connection
      */
     private $connection;
@@ -55,11 +60,13 @@ class RemoveVersionsCommand extends Command
         UserService $userService,
         ContentService $contentService,
         PermissionResolver $permissionResolver,
+        RepositoryConfigurationProvider $repositoryConfigurationProvider,
         Connection $connection
     ) {
         $this->userService = $userService;
         $this->contentService = $contentService;
         $this->permissionResolver = $permissionResolver;
+        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->connection = $connection;
 
         parent::__construct();
@@ -76,6 +83,8 @@ class RemoveVersionsCommand extends Command
 
     protected function configure(): void
     {
+        $config = $this->repositoryConfigurationProvider->getRepositoryConfig();
+
         $this
             ->setName('ezplatform:remove-versions')
             ->setDescription('Remove unwanted content versions. It keeps published version untouched. By default, it keeps also the last archived/draft version.')
@@ -96,7 +105,7 @@ class RemoveVersionsCommand extends Command
                 'k',
                 InputOption::VALUE_OPTIONAL,
                 "Sets number of the most recent versions (both drafts and archived) which won't be removed.",
-                self::DEFAULT_KEEP
+                $config['options']['default_version_archive_limit']
             )
             ->addOption(
                 'user',
@@ -148,16 +157,20 @@ class RemoveVersionsCommand extends Command
 
                 $versions = array_slice(array_reverse($versions), $keep);
 
+                $removeAll = $status === self::VERSION_ALL;
+                $removeDrafts = $status === self::VERSION_DRAFT;
+                $removeArchived = $status === self::VERSION_ARCHIVED;
+
                 foreach ($versions as $version) {
                     if (
-                        (!$version->isPublished() && $status === self::VERSION_ALL) ||
-                        ($version->isDraft() && $status === self::VERSION_DRAFT) ||
-                        ($version->isArchived() && $status === self::VERSION_ARCHIVED)
+                        ($removeAll && !$version->isPublished()) ||
+                        ($removeDrafts && $version->isDraft()) ||
+                        ($removeArchived && $version->isArchived())
                     ) {
                         $this->contentService->deleteVersion($version);
                         ++$removedVersionsCounter;
                         $output->writeln(sprintf(
-                            "Content's (%s) version (%s) has been deleted.",
+                            "Content's (%d) version (%d) has been deleted.",
                             $contentInfo->id,
                             $version->id
                         ), Output::VERBOSITY_VERBOSE);
@@ -190,7 +203,7 @@ class RemoveVersionsCommand extends Command
         $query = $this->connection->createQueryBuilder()
                 ->select('c.id, v.status')
                 ->from('ezcontentobject', 'c')
-                ->leftJoin('c', 'ezcontentobject_version', 'v', 'v.contentobject_id = c.id')
+                ->join('c', 'ezcontentobject_version', 'v', 'v.contentobject_id = c.id')
                 ->groupBy('c.id', 'v.status')
                 ->having('count(c.id) > :keep');
         $query->setParameter('keep', $keep);
@@ -202,7 +215,7 @@ class RemoveVersionsCommand extends Command
 
         $stmt = $query->execute();
 
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**
