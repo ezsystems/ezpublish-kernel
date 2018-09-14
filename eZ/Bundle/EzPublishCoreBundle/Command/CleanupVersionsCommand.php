@@ -23,7 +23,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RemoveVersionsCommand extends Command
+class CleanupVersionsCommand extends Command
 {
     const DEFAULT_REPOSITORY_USER = 'admin';
 
@@ -86,7 +86,7 @@ class RemoveVersionsCommand extends Command
         $config = $this->repositoryConfigurationProvider->getRepositoryConfig();
 
         $this
-            ->setName('ezplatform:remove-versions')
+            ->setName('ezplatform:content:cleanup-versions')
             ->setDescription('Remove unwanted content versions. It keeps published version untouched. By default, it keeps also the last archived/draft version.')
             ->addOption(
                 'status',
@@ -143,15 +143,15 @@ class RemoveVersionsCommand extends Command
 
         $removedVersionsCounter = 0;
 
-        foreach ($contentIds as $contentData) {
+        foreach ($contentIds as $contentId) {
             try {
-                $contentInfo = $this->contentService->loadContentInfo($contentData['id']);
+                $contentInfo = $this->contentService->loadContentInfo((int) $contentId);
                 $versions = $this->contentService->loadVersions($contentInfo);
                 $versionsCount = count($versions);
 
                 $output->writeln(sprintf(
                     '<info>Content %d has %d version(s)</info>',
-                    $contentData['id'],
+                    (int) $contentId,
                     $versionsCount
                 ), Output::VERBOSITY_VERBOSE);
 
@@ -201,7 +201,7 @@ class RemoveVersionsCommand extends Command
     protected function getObjectsIds(int $keep, string $status): array
     {
         $query = $this->connection->createQueryBuilder()
-                ->select('c.id, v.status')
+                ->select('c.id')
                 ->from('ezcontentobject', 'c')
                 ->join('c', 'ezcontentobject_version', 'v', 'v.contentobject_id = c.id')
                 ->groupBy('c.id', 'v.status')
@@ -215,7 +215,7 @@ class RemoveVersionsCommand extends Command
 
         $stmt = $query->execute();
 
-        return $stmt->fetchAll(FetchMode::ASSOCIATIVE);
+        return $stmt->fetchAll(FetchMode::COLUMN);
     }
 
     /**
