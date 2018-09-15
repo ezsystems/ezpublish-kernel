@@ -301,6 +301,33 @@ class ContentTypeHandlerTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadContentTypeList
+     */
+    public function testLoadContentTypeList(): void
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects($this->once())
+            ->method('loadTypesDataList')
+            ->with($this->equalTo([23, 24]))
+            ->willReturn([]);
+
+        $mapperMock = $this->getMapperMock();
+        $mapperMock->expects($this->once())
+            ->method('extractTypesFromRows')
+            ->with($this->equalTo([]))
+            ->willReturn([23 => new Type()]);
+
+        $handler = $this->getHandler();
+        $types = $handler->loadContentTypeList([23, 24]);
+
+        $this->assertEquals(
+            [23 => new Type()],
+            $types,
+            'Types not loaded correctly'
+        );
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      */
