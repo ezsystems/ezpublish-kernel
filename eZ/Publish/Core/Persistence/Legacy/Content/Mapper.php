@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -41,15 +42,33 @@ class Mapper
     protected $languageHandler;
 
     /**
+     * @var \eZ\Publish\API\Repository\PermissionResolver
+     */
+    protected $permissionResolver;
+
+    /**
      * Creates a new mapper.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
      */
-    public function __construct(Registry $converterRegistry, LanguageHandler $languageHandler)
-    {
+    public function __construct(
+        Registry $converterRegistry,
+        LanguageHandler $languageHandler,
+        PermissionResolver $permissionResolver = null
+    ) {
         $this->converterRegistry = $converterRegistry;
         $this->languageHandler = $languageHandler;
+        $this->permissionResolver = $permissionResolver;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
+     */
+    public function setPermissionResolver(\eZ\Publish\API\Repository\PermissionResolver $permissionResolver): void
+    {
+        $this->permissionResolver = $permissionResolver;
     }
 
     /**
@@ -438,7 +457,10 @@ class Mapper
      *
      * @param \eZ\Publish\SPI\Persistence\Content $content
      *
+     * @param bool $retainCurrentOwner
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function createCreateStructFromContent(Content $content)
     {
@@ -446,7 +468,10 @@ class Mapper
         $struct->name = $content->versionInfo->names;
         $struct->typeId = $content->versionInfo->contentInfo->contentTypeId;
         $struct->sectionId = $content->versionInfo->contentInfo->sectionId;
-        $struct->ownerId = $content->versionInfo->contentInfo->ownerId;
+        $struct->ownerId =
+            $this->permissionResolver
+                ? $this->permissionResolver->getCurrentUserReference()->getUserId()
+                : $content->versionInfo->contentInfo->ownerId;
         $struct->locations = array();
         $struct->alwaysAvailable = $content->versionInfo->contentInfo->alwaysAvailable;
         $struct->remoteId = md5(uniqid(get_class($this), true));

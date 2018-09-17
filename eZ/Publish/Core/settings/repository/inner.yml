@@ -1,0 +1,3 @@
+services:
+    eZ\Publish\API\Repository\PermissionResolver:
+        factory: 'ezpublish.api.repository:getPermissionResolver'
