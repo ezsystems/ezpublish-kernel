@@ -1,3 +1,6 @@
+imports:
+    - { resource: commands.yml }
+
 parameters:
     ezpublish.siteaccess.class: eZ\Publish\Core\MVC\Symfony\SiteAccess
     ezpublish.siteaccess.default.name: default

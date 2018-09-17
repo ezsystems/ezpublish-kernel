@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -430,6 +431,57 @@ class ContentService implements ContentServiceInterface
         }
 
         return $content;
+    }
+
+    /**
+     * Bulk-load Content items by the list of ContentInfo Value Objects.
+     *
+     * Note: it does not throw exceptions on load, just ignores erroneous Content item.
+     * Moreover, since the method works on pre-loaded ContentInfo list, it is assumed that user is
+     * allowed to access every Content on the list.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo[] $contentInfoList
+     * @param string[] $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                            returned value object. If not given all languages are returned.
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true,
+     *                                 unless all languages have been asked for.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[] list of Content items with Content Ids as keys
+     */
+    public function loadContentListByContentInfo(
+        array $contentInfoList,
+        array $languages = [],
+        $useAlwaysAvailable = true
+    ) {
+        $loadAllLanguages = $languages === Language::ALL;
+        $contentIds = [];
+        $translations = $languages;
+        foreach ($contentInfoList as $contentInfo) {
+            $contentIds[] = $contentInfo->id;
+            // Unless we are told to load all languages, we add main language to translations so they are loaded too
+            // Might in some case load more languages then intended, but prioritised handling will pick right one
+            if (!$loadAllLanguages && $useAlwaysAvailable && $contentInfo->alwaysAvailable) {
+                $translations[] = $contentInfo->mainLanguageCode;
+            }
+        }
+        $translations = array_unique($translations);
+
+        $spiContentList = $this->persistenceHandler->contentHandler()->loadContentList(
+            $contentIds,
+            $translations
+        );
+        $contentList = [];
+        foreach ($spiContentList as $contentId => $spiContent) {
+            $contentInfo = $spiContent->versionInfo->contentInfo;
+            $contentList[$contentId] = $this->domainMapper->buildContentDomainObject(
+                $spiContent,
+                null,
+                $languages,
+                $contentInfo->alwaysAvailable ? $contentInfo->mainLanguageCode : null
+            );
+        }
+
+        return $contentList;
     }
 
     /**

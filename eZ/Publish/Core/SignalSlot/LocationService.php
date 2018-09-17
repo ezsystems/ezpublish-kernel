@@ -376,4 +376,29 @@ class LocationService implements LocationServiceInterface
     {
         return $this->service->newLocationUpdateStruct();
     }
+
+    /**
+     * Get the total number of all existing Locations. Can be combined with loadAllLocations.
+     *
+     * @see loadAllLocations
+     *
+     * @return int Total number of Locations
+     */
+    public function getAllLocationsCount()
+    {
+        return $this->service->getAllLocationsCount();
+    }
+
+    /**
+     * Bulk-load all existing Locations, constrained by $limit and $offset to paginate results.
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     */
+    public function loadAllLocations($offset = 0, $limit = 25)
+    {
+        return $this->service->loadAllLocations($offset, $limit);
+    }
 }

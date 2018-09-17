@@ -141,8 +141,12 @@ class DomainMapper
      *
      * @return array
      */
-    public function buildDomainFields(array $spiFields, $contentType, array $languages = null, $alwaysAvailableLanguage = null)
-    {
+    public function buildDomainFields(
+        array $spiFields,
+        $contentType,
+        array $languages = null,
+        $alwaysAvailableLanguage = null
+    ) {
         if (!$contentType instanceof SPIType && !$contentType instanceof ContentType) {
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
         }
@@ -153,7 +157,7 @@ class DomainMapper
         }
 
         $fieldInFilterLanguagesMap = array();
-        if ($languages !== null && $alwaysAvailableLanguage !== null) {
+        if (!empty($languages) && $alwaysAvailableLanguage !== null) {
             foreach ($spiFields as $spiField) {
                 if (in_array($spiField->languageCode, $languages)) {
                     $fieldInFilterLanguagesMap[$spiField->fieldDefinitionId] = true;
@@ -168,7 +172,7 @@ class DomainMapper
                 continue;
             }
 
-            if ($languages !== null && !in_array($spiField->languageCode, $languages)) {
+            if (!empty($languages) && !in_array($spiField->languageCode, $languages)) {
                 // If filtering is enabled we ignore fields in other languages then $fieldLanguages, if:
                 if ($alwaysAvailableLanguage === null) {
                     // Ignore field if we don't have $alwaysAvailableLanguageCode fallback
@@ -338,10 +342,13 @@ class DomainMapper
      * Builds domain location object from provided persistence location.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location $spiLocation
+     * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo $spiContentInfo pre-loaded Content Info
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException In case if the given Content does not belong to the given Location
      */
-    public function buildLocationDomainObject(SPILocation $spiLocation)
+    public function buildLocationDomainObject(SPILocation $spiLocation, SPIContentInfo $spiContentInfo = null)
     {
         // TODO: this is hardcoded workaround for missing ContentInfo on root location
         if ($spiLocation->id == 1) {
@@ -363,6 +370,19 @@ class DomainMapper
                     'mainLanguageCode' => 'eng-GB',
                 )
             );
+        } elseif (null !== $spiContentInfo) {
+            if ($spiLocation->contentId !== $spiContentInfo->id) {
+                throw new InvalidArgumentException(
+                    '$spiContentInfo',
+                    sprintf(
+                        'Content Id %d does not belong to the Location %d',
+                        $spiContentInfo->id,
+                        $spiLocation->id
+                    )
+                );
+            }
+
+            $contentInfo = $this->buildContentInfoDomainObject($spiContentInfo);
         } else {
             $contentInfo = $this->buildContentInfoDomainObject(
                 $this->contentHandler->loadContentInfo($spiLocation->contentId)

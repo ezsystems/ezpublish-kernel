@@ -387,7 +387,9 @@ class Mapper
         $field->type = $row['ezcontentobject_attribute_data_type_string'];
         $field->value = $this->extractFieldValueFromRow($row, $field->type);
         $field->languageCode = $row['ezcontentobject_attribute_language_code'];
-        $field->versionNo = (int)$row['ezcontentobject_attribute_version'];
+        $field->versionNo = isset($row['ezcontentobject_version_version']) ?
+            (int)$row['ezcontentobject_version_version'] :
+            (int)$row['ezcontentobject_attribute_version'];
 
         return $field;
     }

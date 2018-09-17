@@ -277,6 +277,20 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $contentIds, array $translations = null)
+    {
+        try {
+            return $this->innerGateway->loadContentList($contentIds, $translations);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Loads data for a content object identified by its remote ID.
      *
      * Returns an array with the relevant data.
@@ -334,6 +348,17 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadContentInfo($contentId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    public function loadContentInfoList(array $contentIds)
+    {
+        try {
+            return $this->innerGateway->loadContentInfoList($contentIds);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
