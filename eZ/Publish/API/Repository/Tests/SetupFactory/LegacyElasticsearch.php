@@ -69,6 +69,9 @@ class LegacyElasticsearch extends Legacy
                 self::$ioRootDir . '/' . $containerBuilder->getParameter('storage_dir')
             );
 
+            // load overrides just before creating test Container
+            $loader->load('tests/override.yml');
+
             self::$serviceContainer = new ServiceContainer(
                 $containerBuilder,
                 $installDir,

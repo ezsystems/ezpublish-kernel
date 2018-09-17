@@ -538,19 +538,29 @@ class ContentHandlerTest extends TestCase
             ->with([2, 3], ['eng-GB', 'eng-US'])
             ->willReturn($contentRows);
 
+        $nameDataRows = [
+            ['ezcontentobject_name_contentobject_id' => 2, 'ezcontentobject_name_content_version' => 2],
+            ['ezcontentobject_name_contentobject_id' => 3, 'ezcontentobject_name_content_version' => 1],
+        ];
+
         $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
             ->with($this->equalTo([['id' => 2, 'version' => 2], ['id' => 3, 'version' => 1]]))
-            ->willReturn([22]);
+            ->willReturn($nameDataRows);
 
         $expected = [
             2 => $this->getContentFixtureForDraft(2, 2),
             3 => $this->getContentFixtureForDraft(3, 1),
         ];
-        $mapperMock->expects($this->once())
+        $mapperMock->expects($this->at(0))
             ->method('extractContentFromRows')
-            ->with($this->equalTo($contentRows), $this->equalTo([22]))
-            ->willReturn($expected);
+            ->with($this->equalTo([$contentRows[0]]), $this->equalTo([$nameDataRows[0]]))
+            ->willReturn([$expected[2]]);
+
+        $mapperMock->expects($this->at(1))
+            ->method('extractContentFromRows')
+            ->with($this->equalTo([$contentRows[1]]), $this->equalTo([$nameDataRows[1]]))
+            ->willReturn([$expected[3]]);
 
         $fieldHandlerMock->expects($this->exactly(2))
             ->method('loadExternalFieldData')

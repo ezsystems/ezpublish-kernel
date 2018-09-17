@@ -318,6 +318,8 @@ class ExceptionConversion extends Gateway
     /**
      * Loads all data for the path identified by given $id.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     *
      * @param mixed $id
      *
      * @return array
@@ -423,6 +425,48 @@ class ExceptionConversion extends Gateway
     {
         try {
             $this->innerGateway->archiveUrlAliasesForDeletedTranslations($locationId, $parentId, $languageIds);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteUrlAliasesWithoutLocation()
+    {
+        try {
+            return $this->innerGateway->deleteUrlAliasesWithoutLocation();
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteUrlAliasesWithoutParent()
+    {
+        try {
+            return $this->innerGateway->deleteUrlAliasesWithoutParent();
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function deleteUrlAliasesWithBrokenLink()
+    {
+        try {
+            return $this->innerGateway->deleteUrlAliasesWithBrokenLink();
         } catch (DBALException $e) {
             throw new \RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

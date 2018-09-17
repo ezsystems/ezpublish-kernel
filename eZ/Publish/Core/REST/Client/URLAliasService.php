@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\URLAliasService as APIURLAliasService;
@@ -208,5 +207,25 @@ class URLAliasService implements APIURLAliasService, Sessionable
     public function load($id)
     {
         throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Refresh all system URL aliases for the given Location (and historize outdated if needed).
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     *
+     * @throws \Exception
+     */
+    public function refreshSystemUrlAliasesForLocation(Location $location): void
+    {
+        throw new \Exception('@todo: Implement');
+    }
+
+    /**
+     * Delete global, system or custom URL alias pointing to non-existent Locations.
+     */
+    public function deleteCorruptedUrlAliases(): int
+    {
+        throw new \Exception('@todo: Implement');
     }
 }

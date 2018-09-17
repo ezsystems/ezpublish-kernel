@@ -212,4 +212,23 @@ interface LocationService
      * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
      */
     public function newLocationUpdateStruct();
+
+    /**
+     * Get the total number of all existing Locations. Can be combined with loadAllLocations.
+     *
+     * @see loadAllLocations
+     *
+     * @return int Total number of Locations
+     */
+    public function getAllLocationsCount(): int;
+
+    /**
+     * Bulk-load all existing Locations, constrained by $limit and $offset to paginate results.
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     */
+    public function loadAllLocations(int $offset = 0, int $limit = 25): array;
 }

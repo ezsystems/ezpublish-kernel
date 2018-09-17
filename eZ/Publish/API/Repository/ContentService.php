@@ -151,6 +151,23 @@ interface ContentService
     public function loadContentByRemoteId($remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true);
 
     /**
+     * Bulk-load Content items by the list of ContentInfo Value Objects.
+     *
+     * Note: it does not throw exceptions on load, just ignores erroneous Content item.
+     * Moreover, since the method works on pre-loaded ContentInfo list, it is assumed that user is
+     * allowed to access every Content on the list.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo[] $contentInfoList
+     * @param string[] $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                            returned value object. If not given all languages are returned.
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true,
+     *                                 unless all languages have been asked for.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[] list of Content items with Content Ids as keys
+     */
+    public function loadContentListByContentInfo(array $contentInfoList, array $languages = [], $useAlwaysAvailable = true);
+
+    /**
      * Creates a new content draft assigned to the authenticated user.
      *
      * If a different userId is given in $contentCreateStruct it is assigned to the given user

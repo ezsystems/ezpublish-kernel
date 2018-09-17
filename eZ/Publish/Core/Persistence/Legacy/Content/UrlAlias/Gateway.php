@@ -143,6 +143,8 @@ abstract class Gateway
     /**
      * Loads path data identified by given $id.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     *
      * @param mixed $id
      *
      * @return array
@@ -244,4 +246,25 @@ abstract class Gateway
      * @param int[] $languageIds Language IDs of removed Translations
      */
     abstract public function archiveUrlAliasesForDeletedTranslations($locationId, $parentId, array $languageIds);
+
+    /**
+     * Delete URL aliases pointing to non-existent Locations.
+     *
+     * @return int Number of affected rows.
+     */
+    abstract public function deleteUrlAliasesWithoutLocation();
+
+    /**
+     * Delete URL aliases pointing to non-existent parent nodes.
+     *
+     * @return int Number of affected rows.
+     */
+    abstract public function deleteUrlAliasesWithoutParent();
+
+    /**
+     * Delete URL aliases which do not link to any existing URL alias node.
+     *
+     * Note: Typically link column value is used to determine original alias for an archived entries.
+     */
+    abstract public function deleteUrlAliasesWithBrokenLink();
 }

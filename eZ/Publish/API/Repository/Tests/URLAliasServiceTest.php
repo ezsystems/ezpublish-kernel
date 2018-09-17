@@ -8,8 +8,16 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use Doctrine\DBAL\Connection;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Tests\Common\SlugConverter as TestSlugConverter;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use Exception;
+use PDO;
+use RuntimeException;
 
 /**
  * Test case for operations in the URLAliasService using in memory storage.
@@ -1028,5 +1036,465 @@ DOCBOOK
         $aliases = $urlAliasService->listLocationAliases($articleLocation, false);
 
         $this->assertEquals('/My-Folder-Modified/My-Article', $aliases[0]->path);
+    }
+
+    /**
+     * Test lookup on multilingual nested Locations returns proper UrlAlias Value.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLookupOnMultilingualNestedLocations()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $locationService = $this->getRepository()->getLocationService();
+
+        $topFolderNames = [
+            'eng-GB' => 'My folder Name',
+            'ger-DE' => 'Ger folder Name',
+            'eng-US' => 'My folder Name',
+        ];
+        $nestedFolderNames = [
+            'eng-GB' => 'nested Folder name',
+            'ger-DE' => 'Ger Nested folder Name',
+            'eng-US' => 'nested Folder name',
+        ];
+        $topFolderLocation = $locationService->loadLocation(
+            $this->createFolder($topFolderNames, 2)->contentInfo->mainLocationId
+        );
+        $nestedFolderLocation = $locationService->loadLocation(
+            $this->createFolder(
+                $nestedFolderNames,
+                $topFolderLocation->id
+            )->contentInfo->mainLocationId
+        );
+        $urlAlias = $urlAliasService->lookup('/My-Folder-Name/Nested-Folder-Name');
+        self::assertPropertiesCorrect(
+            [
+                'destination' => $nestedFolderLocation->id,
+                'path' => '/My-folder-Name/nested-Folder-name',
+                'languageCodes' => ['eng-US', 'eng-GB'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            ],
+            $urlAlias
+        );
+        $urlAlias = $urlAliasService->lookup('/Ger-Folder-Name/Ger-Nested-Folder-Name');
+        self::assertPropertiesCorrect(
+            [
+                'destination' => $nestedFolderLocation->id,
+                'path' => '/Ger-folder-Name/Ger-Nested-folder-Name',
+                'languageCodes' => ['ger-DE'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            ],
+            $urlAlias
+        );
+
+        return [$topFolderLocation, $nestedFolderLocation];
+    }
+
+    /**
+     * Test refreshSystemUrlAliasesForLocation historizes and changes current URL alias after
+     * changing SlugConverter configuration.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \ErrorException
+     */
+    public function testRefreshSystemUrlAliasesForLocationWithChangedSlugConverterConfiguration()
+    {
+        list($topFolderLocation, $nestedFolderLocation) = $this->testLookupOnMultilingualNestedLocations();
+
+        $urlAliasService = $this->getRepository(false)->getURLAliasService();
+
+        $this->changeSlugConverterConfiguration('transformation', 'urlalias_compat');
+        $this->changeSlugConverterConfiguration('wordSeparatorName', 'underscore');
+
+        try {
+            $urlAliasService->refreshSystemUrlAliasesForLocation($topFolderLocation);
+            $urlAliasService->refreshSystemUrlAliasesForLocation($nestedFolderLocation);
+
+            $urlAlias = $urlAliasService->lookup('/My-Folder-Name/Nested-Folder-Name');
+            $this->assertUrlAliasPropertiesCorrect(
+                $nestedFolderLocation,
+                '/My-folder-Name/nested-Folder-name',
+                ['eng-US', 'eng-GB'],
+                true,
+                $urlAlias
+            );
+
+            $urlAlias = $urlAliasService->lookup('/my_folder_name/nested_folder_name');
+            $this->assertUrlAliasPropertiesCorrect(
+                $nestedFolderLocation,
+                '/my_folder_name/nested_folder_name',
+                ['eng-US', 'eng-GB'],
+                false,
+                $urlAlias
+            );
+
+            $urlAlias = $urlAliasService->lookup('/Ger-Folder-Name/Ger-Nested-Folder-Name');
+            $this->assertUrlAliasPropertiesCorrect(
+                $nestedFolderLocation,
+                '/Ger-folder-Name/Ger-Nested-folder-Name',
+                ['ger-DE'],
+                true,
+                $urlAlias
+            );
+
+            $urlAlias = $urlAliasService->lookup('/ger_folder_name/ger_nested_folder_name');
+            $this->assertUrlAliasPropertiesCorrect(
+                $nestedFolderLocation,
+                '/ger_folder_name/ger_nested_folder_name',
+                ['ger-DE'],
+                false,
+                $urlAlias
+            );
+        } finally {
+            // restore configuration
+            $this->changeSlugConverterConfiguration('transformation', 'urlalias');
+            $this->changeSlugConverterConfiguration('wordSeparatorName', 'dash');
+        }
+    }
+
+    /**
+     * Test that URL aliases are refreshed after changing URL alias schema Field name of a Content Type.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRefreshSystemUrlAliasesForContentsWithUpdatedContentTypes()
+    {
+        list($topFolderLocation, $nestedFolderLocation) = $this->testLookupOnMultilingualNestedLocations();
+        /** @var \eZ\Publish\API\Repository\Values\Content\Location $topFolderLocation */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Location $nestedFolderLocation */
+
+        // Default URL Alias schema is <short_name|name> which messes up this test, so:
+        $this->changeContentTypeUrlAliasSchema('folder', '<name>');
+
+        $urlAliasService = $this->getRepository(false)->getURLAliasService();
+
+        $this->updateContentField(
+            $topFolderLocation->getContentInfo(),
+            'short_name',
+            ['eng-GB' => 'EN Short Name', 'ger-DE' => 'DE Short Name']
+        );
+        $this->updateContentField(
+            $nestedFolderLocation->getContentInfo(),
+            'short_name',
+            ['eng-GB' => 'EN Nested Short Name', 'ger-DE' => 'DE Nested Short Name']
+        );
+
+        $this->changeContentTypeUrlAliasSchema('folder', '<short_name>');
+
+        // sanity test, done after updating CT, because it does not update existing entries by design
+        $this->assertUrlIsCurrent('/My-folder-Name', $topFolderLocation->id);
+        $this->assertUrlIsCurrent('/Ger-folder-Name', $topFolderLocation->id);
+        $this->assertUrlIsCurrent('/My-folder-Name/nested-Folder-name', $nestedFolderLocation->id);
+        $this->assertUrlIsCurrent('/Ger-folder-Name/Ger-Nested-folder-Name', $nestedFolderLocation->id);
+
+        // Call API being tested
+        $urlAliasService->refreshSystemUrlAliasesForLocation($topFolderLocation);
+        $urlAliasService->refreshSystemUrlAliasesForLocation($nestedFolderLocation);
+
+        // check archived aliases
+        $this->assertUrlIsHistory('/My-folder-Name', $topFolderLocation->id);
+        $this->assertUrlIsHistory('/Ger-folder-Name', $topFolderLocation->id);
+        $this->assertUrlIsHistory('/My-folder-Name/nested-Folder-name', $nestedFolderLocation->id);
+        $this->assertUrlIsHistory('/Ger-folder-Name/Ger-Nested-folder-Name', $nestedFolderLocation->id);
+
+        // check new current aliases
+        $this->assertUrlIsCurrent('/EN-Short-Name', $topFolderLocation->id);
+        $this->assertUrlIsCurrent('/DE-Short-Name', $topFolderLocation->id);
+        $this->assertUrlIsCurrent('/EN-Short-Name/EN-Nested-Short-Name', $nestedFolderLocation->id);
+        $this->assertUrlIsCurrent('/DE-Short-Name/DE-Nested-Short-Name', $nestedFolderLocation->id);
+    }
+
+    /**
+     * Lookup given URL and check if it is archived and points to the given Location Id.
+     *
+     * @param string $lookupUrl
+     * @param int $expectedDestination Expected Location ID
+     */
+    protected function assertUrlIsHistory($lookupUrl, $expectedDestination)
+    {
+        $this->assertLookupHistory(true, $expectedDestination, $lookupUrl);
+    }
+
+    /**
+     * Lookup given URL and check if it is current (not archived) and points to the given Location Id.
+     *
+     * @param string $lookupUrl
+     * @param int $expectedDestination Expected Location ID
+     */
+    protected function assertUrlIsCurrent($lookupUrl, $expectedDestination)
+    {
+        $this->assertLookupHistory(false, $expectedDestination, $lookupUrl);
+    }
+
+    /**
+     * Lookup and URLAlias VO history and destination properties.
+     *
+     * @see assertUrlIsHistory
+     * @see assertUrlIsCurrent
+     *
+     * @param bool $expectedIsHistory
+     * @param int $expectedDestination Expected Location ID
+     * @param string $lookupUrl
+     */
+    protected function assertLookupHistory($expectedIsHistory, $expectedDestination, $lookupUrl)
+    {
+        $urlAliasService = $this->getRepository(false)->getURLAliasService();
+
+        try {
+            $urlAlias = $urlAliasService->lookup($lookupUrl);
+            self::assertPropertiesCorrect(
+                [
+                    'destination' => $expectedDestination,
+                    'path' => $lookupUrl,
+                    'isHistory' => $expectedIsHistory,
+                ],
+                $urlAlias
+            );
+        } catch (InvalidArgumentException $e) {
+            self::fail("Failed to lookup {$lookupUrl}: $e");
+        } catch (NotFoundException $e) {
+            self::fail("Failed to lookup {$lookupUrl}: $e");
+        }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param $fieldDefinitionIdentifier
+     * @param array $fieldValues
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function updateContentField(ContentInfo $contentInfo, $fieldDefinitionIdentifier, array $fieldValues)
+    {
+        $contentService = $this->getRepository(false)->getContentService();
+
+        $contentUpdateStruct = $contentService->newContentUpdateStruct();
+        foreach ($fieldValues as $languageCode => $fieldValue) {
+            $contentUpdateStruct->setField($fieldDefinitionIdentifier, $fieldValue, $languageCode);
+        }
+        $contentDraft = $contentService->updateContent(
+            $contentService->createContentDraft($contentInfo)->versionInfo,
+            $contentUpdateStruct
+        );
+
+        return $contentService->publishVersion($contentDraft->versionInfo);
+    }
+
+    /**
+     * Test deleting corrupted URL aliases.
+     *
+     * Note: this test will not be needed once we introduce Improved Storage with Foreign keys support.
+     *
+     * Note: test depends on already broken URL aliases: eznode:59, eznode:59, eznode:60.
+     *
+     * @throws \ErrorException
+     */
+    public function testDeleteCorruptedUrlAliases()
+    {
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+        $connection = $this->getRawDatabaseConnection();
+
+        $query = $connection->createQueryBuilder()->select('*')->from('ezurlalias_ml');
+        $originalRows = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+
+        $expectedCount = count($originalRows);
+        $expectedCount += $this->insertBrokenUrlAliasTableFixtures($connection);
+
+        // sanity check
+        $updatedRows = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        self::assertCount($expectedCount, $updatedRows, 'Found unexpected number of new rows');
+
+        // BEGIN API use case
+        $urlAliasService->deleteCorruptedUrlAliases();
+        // END API use case
+
+        $updatedRows = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        self::assertCount(
+            // API should also remove already broken pre-existing URL aliases to Locations 50 and 2x 59
+            count($originalRows) - 3,
+            $updatedRows,
+            'Number of rows after cleanup is not the same as the original number of rows'
+        );
+    }
+
+    /**
+     * Mutate 'ezpublish.persistence.slug_converter' Service configuration.
+     *
+     * @param string $key
+     * @param string $value
+     *
+     * @throws \ErrorException
+     * @throws \Exception
+     */
+    protected function changeSlugConverterConfiguration($key, $value)
+    {
+        $testSlugConverter = $this
+            ->getSetupFactory()
+            ->getServiceContainer()
+            ->getInnerContainer()
+            ->get('ezpublish.persistence.slug_converter');
+
+        if (!$testSlugConverter instanceof TestSlugConverter) {
+            throw new RuntimeException(
+                sprintf(
+                    '%s: expected instance of %s, got %s',
+                    __METHOD__,
+                    TestSlugConverter::class,
+                    get_class($testSlugConverter)
+                )
+            );
+        }
+
+        $testSlugConverter->setConfigurationValue($key, $value);
+    }
+
+    /**
+     * Update Content Type URL alias schema pattern.
+     *
+     * @param string $contentTypeIdentifier
+     * @param string $newUrlAliasSchema
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function changeContentTypeUrlAliasSchema($contentTypeIdentifier, $newUrlAliasSchema)
+    {
+        $contentTypeService = $this->getRepository(false)->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier($contentTypeIdentifier);
+
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+        $contentTypeUpdateStruct = $contentTypeService->newContentTypeUpdateStruct();
+        $contentTypeUpdateStruct->urlAliasSchema = $newUrlAliasSchema;
+
+        $contentTypeService->updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+    }
+
+    private function assertUrlAliasPropertiesCorrect(
+        Location $expectedDestinationLocation,
+        $expectedPath,
+        array $expectedLanguageCodes,
+        $expectedIsHistory,
+        URLAlias $actualUrlAliasValue
+    ) {
+        self::assertPropertiesCorrect(
+            [
+                'destination' => $expectedDestinationLocation->id,
+                'path' => $expectedPath,
+                // @todo uncomment after fixing EZP-27124
+                //'languageCodes' => $expectedLanguageCodes,
+                'isHistory' => $expectedIsHistory,
+                'isCustom' => false,
+                'forward' => false,
+            ],
+            $actualUrlAliasValue
+        );
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Connection
+     *
+     * @throws \ErrorException
+     */
+    private function getRawDatabaseConnection()
+    {
+        $connection = $this
+            ->getSetupFactory()
+            ->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.connection');
+
+        if (!$connection instanceof Connection) {
+            throw new \RuntimeException(
+                sprintf('Expected %s got something else', Connection::class)
+            );
+        }
+
+        return $connection;
+    }
+
+    /**
+     * Insert intentionally broken rows into ezurlalias_ml table to test cleanup API.
+     *
+     * @see \eZ\Publish\API\Repository\URLAliasService::deleteCorruptedUrlAliases
+     * @see testDeleteCorruptedUrlAliases
+     *
+     * @param \Doctrine\DBAL\Connection $connection
+     *
+     * @return int Number of new rows
+     */
+    private function insertBrokenUrlAliasTableFixtures(Connection $connection)
+    {
+        $rows = [
+            // link to non-existent location
+            [
+                'action' => 'eznode:9999',
+                'action_type' => 'eznode',
+                'alias_redirects' => 0,
+                'id' => 9997,
+                'is_alias' => 0,
+                'is_original' => 1,
+                'lang_mask' => 3,
+                'link' => 9997,
+                'parent' => 0,
+                'text' => 'my-location',
+                'text_md5' => '19d12b1b9994619cd8e90f00a6f5834e',
+            ],
+            // link to non-existent target URL alias (`link` column)
+            [
+                'action' => 'nop:',
+                'action_type' => 'nop',
+                'alias_redirects' => 0,
+                'id' => 9998,
+                'is_alias' => 1,
+                'is_original' => 1,
+                'lang_mask' => 2,
+                'link' => 9995,
+                'parent' => 0,
+                'text' => 'my-alias1',
+                'text_md5' => 'a29dd95ccf4c1bc7ebbd61086863b632',
+            ],
+            // link to non-existent parent URL alias
+            [
+                'action' => 'nop:',
+                'action_type' => 'nop',
+                'alias_redirects' => 0,
+                'id' => 9999,
+                'is_alias' => 0,
+                'is_original' => 1,
+                'lang_mask' => 3,
+                'link' => 9999,
+                'parent' => 9995,
+                'text' => 'my-alias2',
+                'text_md5' => 'e5dea18481e4f86857865d9fc94e4ce9',
+            ],
+        ];
+
+        $query = $connection->createQueryBuilder()->insert('ezurlalias_ml');
+
+        foreach ($rows as $row) {
+            foreach ($row as $columnName => $value) {
+                $row[$columnName] = $query->createNamedParameter($value);
+            }
+            $query->values($row);
+            $query->execute();
+        }
+
+        return count($rows);
     }
 }

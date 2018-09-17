@@ -296,4 +296,31 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         return $tags;
     }
+
+    /**
+     * Get the total number of all existing Locations. Can be combined with loadAllLocations.
+     *
+     * @return int
+     */
+    public function countAllLocations()
+    {
+        $this->logger->logCall(__METHOD__);
+
+        return $this->persistenceHandler->locationHandler()->countAllLocations();
+    }
+
+    /**
+     * Bulk-load all existing Locations, constrained by $limit and $offset to paginate results.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadAllLocations($offset, $limit)
+    {
+        $this->logger->logCall(__METHOD__, array('offset' => $offset, 'limit' => $limit));
+
+        return $this->persistenceHandler->locationHandler()->loadAllLocations($offset, $limit);
+    }
 }
