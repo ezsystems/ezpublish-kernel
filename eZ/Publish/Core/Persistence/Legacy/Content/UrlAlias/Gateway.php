@@ -143,6 +143,8 @@ abstract class Gateway
     /**
      * Loads path data identified by given $id.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     *
      * @param mixed $id
      *
      * @return array

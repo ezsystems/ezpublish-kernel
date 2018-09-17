@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
@@ -865,9 +866,9 @@ class DoctrineDatabase extends Gateway
     /**
      * Loads all data for the path identified by given $id.
      *
-     * @throws \RuntimeException
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
-     * @param mixed $id
+     * @param int $id
      *
      * @return array
      */
@@ -897,15 +898,21 @@ class DoctrineDatabase extends Gateway
             $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
             if (empty($rows)) {
                 // Normally this should never happen
-                // @todo remove throw when tested
                 $pathDataArray = [];
-
                 foreach ($pathData as $path) {
+                    if (!isset($path[0]['text'])) {
+                        continue;
+                    }
+
                     $pathDataArray[] = $path[0]['text'];
                 }
 
                 $path = implode('/', $pathDataArray);
-                throw new \RuntimeException("Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__);
+                throw new BadStateException(
+                    'id',
+                    "Unable to load path data, the path ...'{$path}' is broken, alias id '{$id}' not found. " .
+                    'To fix all broken paths run the ezplatform:urls:regenerate-aliases command'
+                );
             }
 
             $id = $rows[0]['parent'];

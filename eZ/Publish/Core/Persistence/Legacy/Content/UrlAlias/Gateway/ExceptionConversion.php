@@ -317,6 +317,8 @@ class ExceptionConversion extends Gateway
     /**
      * Loads all data for the path identified by given $id.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     *
      * @param mixed $id
      *
      * @return array
