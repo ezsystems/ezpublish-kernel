@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\ContentService as APIContentService;
@@ -218,9 +217,9 @@ class ContentService implements APIContentService, Sessionable
      */
     protected function isErrorResponse(Message $response)
     {
-        return (
+        return
             strpos($response->headers['Content-Type'], 'application/vnd.ez.api.ErrorMessage') === 0
-        );
+        ;
     }
 
     /**
@@ -744,6 +743,24 @@ class ContentService implements APIContentService, Sessionable
      * @since 5.0
      */
     public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Bulk-load Content items by the list of ContentInfo Value Objects.
+     *
+     * Note: it does not throw exceptions on load, just ignores erroneous Content item.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo[] $contentInfoList
+     * @param string[] $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                            returned value object. If not given all languages are returned.
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true,
+     *                                 unless all languages have been asked for.
+     *
+     * @throws \Exception Not implemented
+     */
+    public function loadContentListByContentInfo(array $contentInfoList, array $languages = [], $useAlwaysAvailable = true)
     {
         throw new \Exception('@todo: Implement.');
     }

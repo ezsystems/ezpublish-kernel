@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
+use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
@@ -30,6 +31,8 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Exception;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Location service, used for complex subtree operations.
@@ -69,6 +72,11 @@ class LocationService implements LocationServiceInterface
     protected $permissionCriterionResolver;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
@@ -77,6 +85,7 @@ class LocationService implements LocationServiceInterface
      * @param \eZ\Publish\Core\Repository\Helper\NameSchemaService $nameSchemaService
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
      * @param array $settings
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
         RepositoryInterface $repository,
@@ -84,7 +93,8 @@ class LocationService implements LocationServiceInterface
         Helper\DomainMapper $domainMapper,
         Helper\NameSchemaService $nameSchemaService,
         PermissionCriterionResolver $permissionCriterionResolver,
-        array $settings = array()
+        array $settings = array(),
+        LoggerInterface $logger = null
     ) {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
@@ -95,6 +105,7 @@ class LocationService implements LocationServiceInterface
             //'defaultSetting' => array(),
         );
         $this->permissionCriterionResolver = $permissionCriterionResolver;
+        $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
     /**
@@ -731,5 +742,75 @@ class LocationService implements LocationServiceInterface
     public function newLocationUpdateStruct()
     {
         return new LocationUpdateStruct();
+    }
+
+    /**
+     * Get the total number of all existing Locations. Can be combined with loadAllLocations.
+     *
+     * @see loadAllLocations
+     *
+     * @return int Total number of Locations
+     */
+    public function getAllLocationsCount()
+    {
+        return $this->persistenceHandler->locationHandler()->countAllLocations();
+    }
+
+    /**
+     * Bulk-load all existing Locations, constrained by $limit and $offset to paginate results.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function loadAllLocations($offset = 0, $limit = 25)
+    {
+        $spiLocations = $this->persistenceHandler->locationHandler()->loadAllLocations(
+            $offset,
+            $limit
+        );
+        $contentIds = array_unique(
+            array_map(
+                function (SPILocation $spiLocation) {
+                    return $spiLocation->contentId;
+                },
+                $spiLocations
+            )
+        );
+
+        $permissionResolver = $this->repository->getPermissionResolver();
+        $spiContentInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList(
+            $contentIds
+        );
+        $locations = [];
+        foreach ($spiLocations as $spiLocation) {
+            if (!isset($spiContentInfoList[$spiLocation->contentId])) {
+                $this->logger->warning(
+                    sprintf(
+                        'Location %d has missing Content %d',
+                        $spiLocation->id,
+                        $spiLocation->contentId
+                    )
+                );
+                continue;
+            }
+
+            $location = $this->domainMapper->buildLocationDomainObject(
+                $spiLocation,
+                $spiContentInfoList[$spiLocation->contentId]
+            );
+
+            $contentInfo = $location->getContentInfo();
+            if (!$permissionResolver->canUser('content', 'read', $contentInfo, [$location])) {
+                continue;
+            }
+            $locations[] = $location;
+        }
+
+        return $locations;
     }
 }

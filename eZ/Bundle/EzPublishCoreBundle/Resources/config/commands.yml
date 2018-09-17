@@ -1,0 +1,10 @@
+services:
+    ezpublish.console.command.regenerate_url_aliases:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\RegenerateUrlAliasesCommand
+        arguments:
+            # intentionally passing inner repository to avoid sending Signals due to performance issues
+            - '@ezpublish.api.inner_repository'
+            - '@ezpublish.http_cache.purger'
+            - '@?logger'
+        tags:
+            - { name: console.command }

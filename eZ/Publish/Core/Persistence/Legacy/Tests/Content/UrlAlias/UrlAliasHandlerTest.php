@@ -5348,6 +5348,13 @@ class UrlAliasHandlerTest extends TestCase
                     '',
                     false
                 ),
+                $this->getMock(
+                    'eZ\\Publish\\SPI\\Persistence\\TransactionHandler',
+                    [],
+                    [],
+                    '',
+                    false
+                ),
             )
         );
 
@@ -5361,8 +5368,9 @@ class UrlAliasHandlerTest extends TestCase
     {
         $languageHandler = $this->getLanguageHandler();
         $languageMaskGenerator = $this->getLanguageMaskGenerator();
+        $databaseHandler = $this->getDatabaseHandler();
         $gateway = new DoctrineDatabase(
-            $this->getDatabaseHandler(),
+            $databaseHandler,
             $languageMaskGenerator
         );
         $mapper = new Mapper($languageMaskGenerator);
@@ -5382,7 +5390,8 @@ class UrlAliasHandlerTest extends TestCase
             $languageHandler,
             $slugConverter,
             $contentGateway,
-            $languageMaskGenerator
+            $languageMaskGenerator,
+            $this->createMock('eZ\\Publish\\SPI\\Persistence\\TransactionHandler')
         );
     }
 

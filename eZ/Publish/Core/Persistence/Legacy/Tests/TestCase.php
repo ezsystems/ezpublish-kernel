@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
+use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use PHPUnit\Framework\TestCase as BaseTestCase;
@@ -20,6 +21,8 @@ use Exception;
  */
 abstract class TestCase extends BaseTestCase
 {
+    use PHPUnit5CompatTrait;
+
     /**
      * DSN used for the DB backend.
      *

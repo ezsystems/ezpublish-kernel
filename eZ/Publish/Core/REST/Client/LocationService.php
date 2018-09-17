@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\LocationService as APILocationService;
@@ -353,6 +352,24 @@ class LocationService implements APILocationService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      */
     public function moveSubtree(Location $location, Location $newParentLocation)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    public function getAllLocationsCount()
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]|void
+     *
+     * @throws \Exception
+     */
+    public function loadAllLocations($offset = 0, $limit = 25)
     {
         throw new \Exception('@todo: Implement.');
     }

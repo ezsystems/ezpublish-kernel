@@ -68,6 +68,29 @@ interface Handler
     public function load($id, $version, array $translations = null);
 
     /**
+     * Return list of unique Content, with content id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * If items are missing but for other reasons than not being found, for instance exceptions during loading field
+     * data. Then the exception will be logged as warning or error depending on severity.
+     * The most common case of possible exceptions during loading of Content data is migration,
+     * where either custom Field Type configuration or implementation might not be aligned with new
+     * version of the system.
+     *
+     * NOTE: If you want to take always available flag into account, append main language
+     * to the list of languages. In some edge cases you'll end up with a bit more data returned, but
+     * this makes sure execution time in storage engine is able to handle up to 10k items when you need that.
+     *
+     * @param int[] $contentIds
+     * @param string[]|null $translations
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content[]
+     */
+    public function loadContentList(array $contentIds, array $translations = null);
+
+    /**
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId
@@ -75,6 +98,18 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function loadContentInfo($contentId);
+
+    /**
+     * Return list of unique Content Info, with content id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param array $contentIds
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
+     */
+    public function loadContentInfoList(array $contentIds);
 
     /**
      * Returns the metadata object for a content identified by $remoteId.

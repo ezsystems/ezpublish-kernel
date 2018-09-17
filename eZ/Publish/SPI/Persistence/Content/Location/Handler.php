@@ -191,4 +191,21 @@ interface Handler
      * @param mixed $locationId
      */
     public function changeMainLocation($contentId, $locationId);
+
+    /**
+     * Get the total number of all existing Locations. Can be combined with loadAllLocations.
+     *
+     * @return int
+     */
+    public function countAllLocations();
+
+    /**
+     * Bulk-load all existing Locations, constrained by $limit and $offset to paginate results.
+     *
+     * @param int $offset
+     * @param int $limit
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadAllLocations($offset, $limit);
 }

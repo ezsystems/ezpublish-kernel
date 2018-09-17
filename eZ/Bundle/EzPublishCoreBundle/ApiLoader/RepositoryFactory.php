@@ -19,6 +19,8 @@ use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
 use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -62,18 +64,25 @@ class RepositoryFactory implements ContainerAwareInterface
      */
     private $policyMap;
 
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
     public function __construct(
         ConfigResolverInterface $configResolver,
         FieldTypeCollectionFactory $fieldTypeCollectionFactory,
         FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory,
         $repositoryClass,
-        array $policyMap
+        array $policyMap,
+        LoggerInterface $logger = null
     ) {
         $this->configResolver = $configResolver;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
         $this->fieldTypeNameableCollectionFactory = $fieldTypeNameableCollectionFactory;
         $this->repositoryClass = $repositoryClass;
         $this->policyMap = $policyMap;
+        $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
     /**
@@ -112,7 +121,8 @@ class RepositoryFactory implements ContainerAwareInterface
                 'languages' => $this->configResolver->getParameter('languages'),
                 'content' => ['default_version_archive_limit' => $config['options']['default_version_archive_limit']],
             ),
-            new UserReference($this->configResolver->getParameter('anonymous_user_id'))
+            new UserReference($this->configResolver->getParameter('anonymous_user_id')),
+            $this->logger
         );
 
         return $repository;

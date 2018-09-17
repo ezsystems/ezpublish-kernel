@@ -333,4 +333,23 @@ abstract class Gateway
      *        eznode_assignment table
      */
     abstract public function changeMainLocation($contentId, $locationId, $versionNo, $parentLocationId);
+
+    /**
+     * Get the total number of all Locations, except the Root node.
+     *
+     * @see loadAllLocationsData
+     *
+     * @return int
+     */
+    abstract public function countAllLocations();
+
+    /**
+     * Load data of every Location, except the Root node.
+     *
+     * @param int $offset Paginator offset
+     * @param int $limit Paginator limit
+     *
+     * @return array
+     */
+    abstract public function loadAllLocationsData($offset, $limit);
 }

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
+use Exception;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
@@ -20,6 +21,8 @@ use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * The Content Handler stores Content and ContentType objects.
@@ -83,6 +86,11 @@ class Handler implements BaseContentHandler
     protected $treeHandler;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
@@ -93,6 +101,7 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler $treeHandler
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
         Gateway $contentGateway,
@@ -102,7 +111,8 @@ class Handler implements BaseContentHandler
         SlugConverter $slugConverter,
         UrlAliasGateway $urlAliasGateway,
         ContentTypeHandler $contentTypeHandler,
-        TreeHandler $treeHandler
+        TreeHandler $treeHandler,
+        LoggerInterface $logger = null
     ) {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
@@ -112,6 +122,7 @@ class Handler implements BaseContentHandler
         $this->urlAliasGateway = $urlAliasGateway;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->treeHandler = $treeHandler;
+        $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
     /**
@@ -328,6 +339,82 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $contentIds, array $translations = null)
+    {
+        $rawList = $this->contentGateway->loadContentList($contentIds, $translations);
+        if (empty($rawList)) {
+            return [];
+        }
+
+        $idVersionPairs = [];
+        foreach ($rawList as $row) {
+            // As there is only one version per id, set id as key to avoid duplicates
+            $idVersionPairs[$row['ezcontentobject_id']] = [
+                'id' => $row['ezcontentobject_id'],
+                'version' => $row['ezcontentobject_version_version'],
+            ];
+        }
+
+        // group name data per Content Id
+        $nameData = $this->contentGateway->loadVersionedNameData(array_values($idVersionPairs));
+        $contentItemNameData = [];
+        foreach ($nameData as $nameDataRow) {
+            $contentId = $nameDataRow['ezcontentobject_name_contentobject_id'];
+            $contentItemNameData[$contentId][] = $nameDataRow;
+        }
+
+        // group rows per Content Id be able to ignore Content items with erroneous data
+        $contentItemsRows = [];
+        foreach ($rawList as $row) {
+            $contentId = $row['ezcontentobject_id'];
+            $contentItemsRows[$contentId][] = $row;
+        }
+        unset($rawList, $idVersionPairs);
+
+        // try to extract Content from each Content data
+        $contentItems = [];
+        foreach ($contentItemsRows as $contentId => $contentItemsRow) {
+            try {
+                $contentList = $this->mapper->extractContentFromRows(
+                    $contentItemsRow,
+                    $contentItemNameData[$contentId]
+                );
+                $contentItems[$contentId] = $contentList[0];
+            } catch (Exception $e) {
+                $this->logger->warning(
+                    sprintf(
+                        '%s: Content %d not loaded: %s',
+                        __METHOD__,
+                        $contentId,
+                        $e->getMessage()
+                    )
+                );
+            }
+        }
+
+        // try to load External Storage data for each Content, ignore Content items for which it failed
+        foreach ($contentItems as $contentId => $content) {
+            try {
+                $this->fieldHandler->loadExternalFieldData($content);
+            } catch (Exception $e) {
+                unset($contentItems[$contentId]);
+                $this->logger->warning(
+                    sprintf(
+                        '%s: Content %d not loaded: %s',
+                        __METHOD__,
+                        $contentId,
+                        $e->getMessage()
+                    )
+                );
+            }
+        }
+
+        return $contentItems;
+    }
+
+    /**
      * Returns the metadata object for a content identified by $contentId.
      *
      * @param int|string $contentId
@@ -337,6 +424,20 @@ class Handler implements BaseContentHandler
     public function loadContentInfo($contentId)
     {
         return $this->treeHandler->loadContentInfo($contentId);
+    }
+
+    public function loadContentInfoList(array $contentIds)
+    {
+        $list = $this->mapper->extractContentInfoFromRows(
+            $this->contentGateway->loadContentInfoList($contentIds)
+        );
+
+        $listByContentId = [];
+        foreach ($list as $item) {
+            $listByContentId[$item->id] = $item;
+        }
+
+        return $listByContentId;
     }
 
     /**

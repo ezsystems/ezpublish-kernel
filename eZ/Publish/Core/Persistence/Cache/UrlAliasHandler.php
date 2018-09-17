@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterf
 use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 
 /**
- * @see eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
  */
 class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterface
 {
@@ -353,5 +353,44 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $this->clearLocation($location2Id);
 
         return $return;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes)
+    {
+        $this->logger->logCall(
+            __METHOD__,
+            [
+                'locationId' => $locationId,
+                'parentLocationId' => $parentLocationId,
+                'languageCodes' => implode(',', $languageCodes),
+            ]
+        );
+
+        $this->persistenceHandler->urlAliasHandler()->archiveUrlAliasesForDeletedTranslations(
+            $locationId,
+            $parentLocationId,
+            $languageCodes
+        );
+
+        $this->clearLocation($locationId);
+    }
+
+    /**
+     * Delete corrupted URL aliases (global, custom and system).
+     *
+     * @return int Number of deleted URL aliases
+     */
+    public function deleteCorruptedUrlAliases()
+    {
+        $this->logger->logCall(__METHOD__);
+
+        $deletedCount = $this->persistenceHandler->urlAliasHandler()->deleteCorruptedUrlAliases();
+
+        $this->cache->clear('urlAlias');
+
+        return $deletedCount;
     }
 }
