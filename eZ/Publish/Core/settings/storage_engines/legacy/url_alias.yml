@@ -35,4 +35,5 @@ services:
             - "@ezpublish.persistence.slug_converter"
             - "@ezpublish.persistence.legacy.content.gateway"
             - "@ezpublish.persistence.legacy.language.mask_generator"
+            - "@ezpublish.spi.persistence.legacy.transactionhandler"
         lazy: true

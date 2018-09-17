@@ -177,4 +177,11 @@ interface Handler
      * @param array $languageCodes Language codes of currently published Content Object Translations
      */
     public function archiveUrlAliasesForDeletedTranslations($locationId, $parentLocationId, array $languageCodes);
+
+    /**
+     * Delete corrupted URL aliases (global, custom and system).
+     *
+     * @return int Number of deleted URL aliases
+     */
+    public function deleteCorruptedUrlAliases();
 }

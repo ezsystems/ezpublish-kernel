@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\SignalSlot\Signal\LocationService\UpdateLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateUrlAliasSignal;
 use eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateGlobalUrlAliasSignal;
 use eZ\Publish\Core\SignalSlot\Signal\URLAliasService\RemoveAliasesSignal;
@@ -234,5 +235,35 @@ class URLAliasService implements URLAliasServiceInterface
     public function load($id)
     {
         return $this->service->load($id);
+    }
+
+    /**
+     * Refresh all system URL aliases for the given Location (and historize outdated if needed).
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     */
+    public function refreshSystemUrlAliasesForLocation(Location $location): void
+    {
+        $this->service->refreshSystemUrlAliasesForLocation($location);
+
+        $this->signalDispatcher->emit(
+            new UpdateLocationSignal(
+                [
+                    'contentId' => $location->contentId,
+                    'locationId' => $location->id,
+                    'parentLocationId' => $location->parentLocationId,
+                ]
+            )
+        );
+    }
+
+    /**
+     * Delete global, system or custom URL alias pointing to non-existent Locations.
+     *
+     * @return int Number of deleted URL aliases
+     */
+    public function deleteCorruptedUrlAliases(): int
+    {
+        return $this->service->deleteCorruptedUrlAliases();
     }
 }

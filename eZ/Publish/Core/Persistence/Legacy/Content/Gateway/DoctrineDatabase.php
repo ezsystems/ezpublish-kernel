@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
@@ -972,7 +973,7 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query->where('c.id = :id')
-              ->setParameter('id', $contentId, \PDO::PARAM_INT);
+              ->setParameter('id', $contentId, ParameterType::INTEGER);
 
         $results = $this->internalLoadContentInfo($query);
         if (empty($results)) {
@@ -1006,7 +1007,7 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query->where('c.remote_id = :id')
-              ->setParameter('id', $remoteId, \PDO::PARAM_STR);
+              ->setParameter('id', $remoteId, ParameterType::STRING);
 
         $results = $this->internalLoadContentInfo($query);
         if (empty($results)) {
@@ -1031,7 +1032,7 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query->where('t.main_node_id = :id')
-              ->setParameter('id', $locationId, \PDO::PARAM_INT);
+              ->setParameter('id', $locationId, ParameterType::INTEGER);
 
         $results = $this->internalLoadContentInfo($query);
         if (empty($results)) {

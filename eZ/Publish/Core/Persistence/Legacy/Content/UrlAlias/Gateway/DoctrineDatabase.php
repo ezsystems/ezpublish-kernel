@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
@@ -72,6 +74,11 @@ class DoctrineDatabase extends Gateway
     protected $table;
 
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
      * Creates a new DoctrineDatabase UrlAlias Gateway.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
@@ -84,6 +91,7 @@ class DoctrineDatabase extends Gateway
         $this->dbHandler = $dbHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
         $this->table = static::TABLE;
+        $this->connection = $dbHandler->getConnection();
     }
 
     public function setTable($name)
@@ -860,9 +868,9 @@ class DoctrineDatabase extends Gateway
     /**
      * Loads all data for the path identified by given $id.
      *
-     * @throws \RuntimeException
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
-     * @param mixed $id
+     * @param int $id
      *
      * @return array
      */
@@ -892,15 +900,21 @@ class DoctrineDatabase extends Gateway
             $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
             if (empty($rows)) {
                 // Normally this should never happen
-                // @todo remove throw when tested
                 $pathDataArray = [];
-
                 foreach ($pathData as $path) {
+                    if (!isset($path[0]['text'])) {
+                        continue;
+                    }
+
                     $pathDataArray[] = $path[0]['text'];
                 }
 
                 $path = implode('/', $pathDataArray);
-                throw new \RuntimeException("Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__);
+                throw new BadStateException(
+                    'id',
+                    "Unable to load path data, the path ...'{$path}' is broken, alias id '{$id}' not found. " .
+                    'To fix all broken paths run the ezplatform:urls:regenerate-aliases command'
+                );
             }
 
             $id = $rows[0]['parent'];
@@ -1265,5 +1279,141 @@ class DoctrineDatabase extends Gateway
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
         return $rows ?: [];
+    }
+
+    /**
+     * Delete URL aliases pointing to non-existent Locations.
+     *
+     * @return int Number of affected rows.
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function deleteUrlAliasesWithoutLocation()
+    {
+        $dbPlatform = $this->connection->getDatabasePlatform();
+
+        $subquery = $this->connection->createQueryBuilder();
+        $subquery
+            ->select('node_id')
+            ->from('ezcontentobject_tree', 't')
+            ->where(
+                $subquery->expr()->eq(
+                    't.node_id',
+                    sprintf(
+                        'CAST(%s as %s)',
+                        $dbPlatform->getSubstringExpression($this->table . '.action', 8),
+                        $this->getIntegerType($dbPlatform)
+                    )
+                )
+            )
+        ;
+
+        $deleteQuery = $this->connection->createQueryBuilder();
+        $deleteQuery
+            ->delete($this->table)
+            ->where(
+                $deleteQuery->expr()->eq(
+                    'action_type',
+                    $deleteQuery->createPositionalParameter('eznode')
+                )
+            )
+            ->andWhere(
+                sprintf('NOT EXISTS (%s)', $subquery->getSQL())
+            )
+        ;
+
+        return $deleteQuery->execute();
+    }
+
+    /**
+     * Delete URL aliases pointing to non-existent parent nodes.
+     *
+     * @return int Number of affected rows.
+     */
+    public function deleteUrlAliasesWithoutParent()
+    {
+        $existingAliasesQuery = $this->getAllUrlAliasesQuery();
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->table)
+            ->where(
+                $query->expr()->neq(
+                    'parent',
+                    $query->createPositionalParameter(0, \PDO::PARAM_INT)
+                )
+            )
+            ->andWhere(
+                $query->expr()->notIn(
+                    'parent',
+                    $existingAliasesQuery
+                )
+            )
+        ;
+
+        return $query->execute();
+    }
+
+    /**
+     * Delete URL aliases which do not link to any existing URL alias node.
+     *
+     * Note: Typically link column value is used to determine original alias for an archived entries.
+     */
+    public function deleteUrlAliasesWithBrokenLink()
+    {
+        $existingAliasesQuery = $this->getAllUrlAliasesQuery();
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->table)
+            ->where(
+                $query->expr()->neq('id', 'link')
+            )
+            ->andWhere(
+                $query->expr()->notIn(
+                    'link',
+                    $existingAliasesQuery
+                )
+            )
+        ;
+
+        return $query->execute();
+    }
+
+    /**
+     * Get subquery for IDs of all URL aliases.
+     *
+     * @return string Query
+     */
+    private function getAllUrlAliasesQuery()
+    {
+        $existingAliasesQueryBuilder = $this->connection->createQueryBuilder();
+        $innerQueryBuilder = $this->connection->createQueryBuilder();
+
+        return $existingAliasesQueryBuilder
+            ->select('tmp.id')
+            ->from(
+                // nest subquery to avoid same-table update error
+                '(' . $innerQueryBuilder->select('id')->from($this->table)->getSQL() . ')',
+                'tmp'
+            )
+            ->getSQL();
+    }
+
+    /**
+     * Get DBMS-specific integer type.
+     *
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $databasePlatform
+     *
+     * @return string
+     */
+    private function getIntegerType(AbstractPlatform $databasePlatform)
+    {
+        switch ($databasePlatform->getName()) {
+            case 'mysql':
+                return 'signed';
+            default:
+                return 'integer';
+        }
     }
 }

@@ -188,6 +188,11 @@ class ContentService implements ContentServiceInterface
         return $this->service->deleteTranslationFromDraft($versionInfo, $languageCode);
     }
 
+    public function loadContentListByContentInfo(array $contentInfoList, array $languages = [], $useAlwaysAvailable = true)
+    {
+        return $this->service->loadContentListByContentInfo($contentInfoList, $languages, $useAlwaysAvailable);
+    }
+
     public function newContentCreateStruct(ContentType $contentType, $mainLanguageCode)
     {
         return $this->service->newContentCreateStruct($contentType, $mainLanguageCode);

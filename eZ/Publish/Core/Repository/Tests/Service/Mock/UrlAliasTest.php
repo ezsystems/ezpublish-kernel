@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\Core\Repository\Helper\NameSchemaService;
 use eZ\Publish\Core\Repository\LanguageService;
 use eZ\Publish\Core\Repository\LocationService;
 use eZ\Publish\Core\Repository\URLAliasService;
@@ -49,6 +50,7 @@ class UrlAliasTest extends BaseServiceMockTest
         $service = new UrlALiasService(
             $repositoryMock,
             $urlAliasHandler,
+            $this->getNameSchemaServiceMock(),
             $settings
         );
 
@@ -3702,6 +3704,7 @@ class UrlAliasTest extends BaseServiceMockTest
                 array(
                     $this->getRepositoryMock(),
                     $this->getPersistenceMock()->urlAliasHandler(),
+                    $this->getNameSchemaServiceMock(),
                 )
             )
             ->getMock();
@@ -3797,5 +3800,13 @@ class UrlAliasTest extends BaseServiceMockTest
             ->method('getPermissionResolver')
             ->willReturn($permissionResolverMock);
         $mockedService->removeAliases($aliasList);
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject|\eZ\Publish\Core\Repository\Helper\NameSchemaService
+     */
+    protected function getNameSchemaServiceMock()
+    {
+        return $this->createMock(NameSchemaService::class);
     }
 }
