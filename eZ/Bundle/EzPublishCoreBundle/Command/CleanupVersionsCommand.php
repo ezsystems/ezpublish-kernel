@@ -4,19 +4,15 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-declare(strict_types=1);
-
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\FetchMode;
 use Exception;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\PermissionResolver;
-use eZ\Publish\API\Repository\UserService;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use PDO;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -30,6 +26,11 @@ class CleanupVersionsCommand extends Command
     const VERSION_DRAFT = 'draft';
     const VERSION_ARCHIVED = 'archived';
     const VERSION_ALL = 'all';
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
 
     /**
      * @var \eZ\Publish\API\Repository\UserService
@@ -57,31 +58,31 @@ class CleanupVersionsCommand extends Command
     private $connection;
 
     public function __construct(
-        UserService $userService,
-        ContentService $contentService,
-        PermissionResolver $permissionResolver,
+        Repository $repository,
         RepositoryConfigurationProvider $repositoryConfigurationProvider,
         Connection $connection
     ) {
-        $this->userService = $userService;
-        $this->contentService = $contentService;
-        $this->permissionResolver = $permissionResolver;
+        $this->repository = $repository;
         $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
         $this->connection = $connection;
 
         parent::__construct();
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output): void
+    protected function initialize(InputInterface $input, OutputInterface $output)
     {
         parent::initialize($input, $output);
+
+        $this->userService = $this->repository->getUserService();
+        $this->contentService = $this->repository->getContentService();
+        $this->permissionResolver = $this->repository->getPermissionResolver();
 
         $this->permissionResolver->setCurrentUserReference(
             $this->userService->loadUserByLogin($input->getOption('user'))
         );
     }
 
-    protected function configure(): void
+    protected function configure()
     {
         $config = $this->repositoryConfigurationProvider->getRepositoryConfig();
 
@@ -90,7 +91,7 @@ class CleanupVersionsCommand extends Command
             ->setDescription('Remove unwanted content versions. It keeps published version untouched. By default, it keeps also the last archived/draft version.')
             ->addOption(
                 'status',
-                's',
+                't',
                 InputOption::VALUE_OPTIONAL,
                     sprintf(
                         "Select which version types should be removed: '%s', '%s', '%s'.",
@@ -116,7 +117,7 @@ class CleanupVersionsCommand extends Command
             );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (($keep = (int) $input->getOption('keep')) < 0) {
             throw new InvalidArgumentException(
@@ -161,11 +162,12 @@ class CleanupVersionsCommand extends Command
                 $removeDrafts = $status === self::VERSION_DRAFT;
                 $removeArchived = $status === self::VERSION_ARCHIVED;
 
+                /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $version */
                 foreach ($versions as $version) {
                     if (
-                        ($removeAll && !$version->isPublished()) ||
-                        ($removeDrafts && $version->isDraft()) ||
-                        ($removeArchived && $version->isArchived())
+                        ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
+                        ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
+                        ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
                     ) {
                         $this->contentService->deleteVersion($version);
                         ++$removedVersionsCounter;
@@ -198,7 +200,7 @@ class CleanupVersionsCommand extends Command
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    protected function getObjectsIds(int $keep, string $status): array
+    protected function getObjectsIds($keep, $status)
     {
         $query = $this->connection->createQueryBuilder()
                 ->select('c.id')
@@ -215,7 +217,7 @@ class CleanupVersionsCommand extends Command
 
         $stmt = $query->execute();
 
-        return $stmt->fetchAll(FetchMode::COLUMN);
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -225,7 +227,7 @@ class CleanupVersionsCommand extends Command
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    private function getVersionInfoStatus(string $status): int
+    private function getVersionInfoStatus($status)
     {
         if ($status === self::VERSION_ARCHIVED) {
             return VersionInfo::STATUS_ARCHIVED;

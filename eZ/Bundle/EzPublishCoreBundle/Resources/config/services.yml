@@ -231,8 +231,11 @@ services:
         tags:
             - { name: jms_translation.file_visitor, alias: ez_validation_error }
 
-    ezplatform.core.command.remove_versions:
-        class: eZ\Bundle\EzPublishCoreBundle\Command\RemoveVersionsCommand
+    ezplatform.core.command.cleanup_versions:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\CleanupVersionsCommand
         arguments:
-            - "@ezpublish.api.inner_repository"
+            - "@ezpublish.signalslot.repository"
+            - "@ezpublish.api.repository_configuration_provider"
             - "@ezpublish.persistence.connection"
+        tags:
+            - { name: console.command }
