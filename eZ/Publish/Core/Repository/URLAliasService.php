@@ -733,6 +733,7 @@ class URLAliasService implements URLAliasServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \Exception any unexpected exception that might come from custom Field Type implementation
      */
     public function refreshSystemUrlAliasesForLocation(Location $location, Content $content = null)
     {
@@ -778,6 +779,9 @@ class URLAliasService implements URLAliasServiceInterface
             );
             $this->repository->commit();
         } catch (APINotFoundException $e) {
+            $this->repository->rollback();
+            throw $e;
+        } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
         }
