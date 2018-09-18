@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
@@ -21,58 +20,15 @@ use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\CriterionHandler as L
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler as CommonCriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway\SortClauseHandler as LocationSortClauseHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler as CommonSortClauseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Gateway as ContentGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as ContentTypeUpdateHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 
 /**
  * Location Search test case for ContentSearchHandler.
  */
-class HandlerLocationTest extends LanguageAwareTestCase
+class HandlerLocationTest extends AbstractTestCase
 {
-    protected static $setUp = false;
-
-    /**
-     * Only set up once for these read only tests on a large fixture.
-     *
-     * Skipping the reset-up, since setting up for these tests takes quite some
-     * time, which is not required to spent, since we are only reading from the
-     * database anyways.
-     */
-    public function setUp()
-    {
-        if (!self::$setUp) {
-            parent::setUp();
-            $this->insertDatabaseFixture(__DIR__ . '/../_fixtures/full_dump.php');
-            self::$setUp = $this->handler;
-        } else {
-            $this->handler = self::$setUp;
-        }
-    }
-
-    /**
-     * Assert that the elements are.
-     */
-    protected function assertSearchResults($expectedIds, $searchResult)
-    {
-        $ids = array_map(
-            function ($hit) {
-                return $hit->valueObject->id;
-            },
-            $searchResult->searchHits
-        );
-
-        sort($ids);
-
-        $this->assertEquals($expectedIds, $ids);
-    }
-
     /**
      * Returns the location search handler to test.
      *
@@ -205,47 +161,6 @@ class HandlerLocationTest extends LanguageAwareTestCase
             $this->getLanguageHandler(),
             $this->getFullTextMapper($this->getContentTypeHandler())
         );
-    }
-
-    protected $contentTypeHandler;
-
-    protected function getContentTypeHandler()
-    {
-        if (!isset($this->contentTypeHandler)) {
-            $this->contentTypeHandler = new ContentTypeHandler(
-                new ContentTypeGateway(
-                    $this->getDatabaseHandler(),
-                    $this->getDatabaseConnection(),
-                    $this->getLanguageMaskGenerator()
-                ),
-                new ContentTypeMapper($this->getConverterRegistry()),
-                $this->createMock(ContentTypeUpdateHandler::class)
-            );
-        }
-
-        return $this->contentTypeHandler;
-    }
-
-    protected $fieldRegistry;
-
-    protected function getConverterRegistry()
-    {
-        if (!isset($this->fieldRegistry)) {
-            $this->fieldRegistry = new ConverterRegistry(
-                array(
-                    'ezdatetime' => new Converter\DateAndTimeConverter(),
-                    'ezinteger' => new Converter\IntegerConverter(),
-                    'ezstring' => new Converter\TextLineConverter(),
-                    'ezprice' => new Converter\IntegerConverter(),
-                    'ezurl' => new Converter\UrlConverter(),
-                    'ezrichtext' => new Converter\RichTextConverter(),
-                    'ezboolean' => new Converter\CheckboxConverter(),
-                    'ezkeyword' => new Converter\KeywordConverter(),
-                )
-            );
-        }
-
-        return $this->fieldRegistry;
     }
 
     /**
