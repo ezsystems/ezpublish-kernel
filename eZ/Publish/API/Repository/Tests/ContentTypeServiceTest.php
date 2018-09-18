@@ -1132,7 +1132,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     /**
      * Test for the createContentTypeGroup() method called with no groups.
      *
-     * @depends \eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
+     * @depends testCreateContentType
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @expectedExceptionMessage Argument '$contentTypeGroups' is invalid: Argument must contain at least one ContentTypeGroup
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
@@ -2348,8 +2348,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $contentTypeDraft = $this->createContentTypeDraft();
 
+        // Make sure to 1. check draft is not part of lists, and 2. warm cache to make sure it invalidates
+        $contentTypes = $contentTypeService->loadContentTypeList([1, $contentTypeDraft->id]);
+        self::assertArrayNotHasKey($contentTypeDraft->id, $contentTypes);
+        self::assertCount(1, $contentTypes);
+
         $contentTypeGroups = $contentTypeDraft->getContentTypeGroups();
-        // load Content Types for Groups of the new Content Type Draft to populate cache before publishing
         foreach ($contentTypeGroups as $contentTypeGroup) {
             $contentTypes = $contentTypeService->loadContentTypes($contentTypeGroup);
             // check if not published Content Type does not exist on published Content Types list
@@ -2366,7 +2370,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 
-        // load Content Types for the Groups of the new Content Type
+        // After publishing it should be part of lists
+        $contentTypes = $contentTypeService->loadContentTypeList([1, $contentTypeDraft->id]);
+        self::assertArrayHasKey($contentTypeDraft->id, $contentTypes);
+        self::assertCount(2, $contentTypes);
+
         foreach ($contentTypeGroups as $contentTypeGroup) {
             $contentTypes = $contentTypeService->loadContentTypes($contentTypeGroup);
             // check if published Content is available in published Content Types list
@@ -2798,6 +2806,30 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         // Throws an exception, since no type with this remote ID exists
         $contentTypeService->loadContentTypeByRemoteId('not-exists');
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadContentTypeList() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeList()
+     * @depends testLoadContentType
+     */
+    public function testLoadContentTypeList()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $types = $contentTypeService->loadContentTypeList([3, 4]);
+
+        $this->assertInternalType('iterable', $types);
+
+        $this->assertEquals(
+            [
+                3 => $contentTypeService->loadContentType(3),
+                4 => $contentTypeService->loadContentType(4),
+            ],
+            $types
+        );
     }
 
     /**

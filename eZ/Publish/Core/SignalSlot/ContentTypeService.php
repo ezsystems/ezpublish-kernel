@@ -238,6 +238,14 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable
+    {
+        return $this->service->loadContentTypeList($contentTypeIds, $prioritizedLanguages);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
     {
         return $this->service->loadContentTypes($contentTypeGroup, $prioritizedLanguages);

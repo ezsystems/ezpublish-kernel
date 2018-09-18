@@ -453,27 +453,34 @@ class ContentService implements ContentServiceInterface
     ) {
         $loadAllLanguages = $languages === Language::ALL;
         $contentIds = [];
+        $contentTypeIds = [];
         $translations = $languages;
         foreach ($contentInfoList as $contentInfo) {
             $contentIds[] = $contentInfo->id;
+            $contentTypeIds[] = $contentInfo->contentTypeId;
             // Unless we are told to load all languages, we add main language to translations so they are loaded too
             // Might in some case load more languages then intended, but prioritised handling will pick right one
             if (!$loadAllLanguages && $useAlwaysAvailable && $contentInfo->alwaysAvailable) {
                 $translations[] = $contentInfo->mainLanguageCode;
             }
         }
-        $translations = array_unique($translations);
 
+
+        $contentList = [];
+        $translations = array_unique($translations);
         $spiContentList = $this->persistenceHandler->contentHandler()->loadContentList(
             $contentIds,
             $translations
         );
-        $contentList = [];
+        $contentTypeList = $this->repository->getContentTypeService()->loadContentTypeList(
+            array_unique($contentTypeIds),
+            $languages
+        );
         foreach ($spiContentList as $contentId => $spiContent) {
             $contentInfo = $spiContent->versionInfo->contentInfo;
             $contentList[$contentId] = $this->domainMapper->buildContentDomainObject(
                 $spiContent,
-                null,
+                $contentTypeList[$contentInfo->contentTypeId],
                 $languages,
                 $contentInfo->alwaysAvailable ? $contentInfo->mainLanguageCode : null
             );

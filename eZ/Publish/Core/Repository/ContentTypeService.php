@@ -916,6 +916,25 @@ class ContentTypeService implements ContentTypeServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable
+    {
+        $spiContentTypes = $this->contentTypeHandler->loadContentTypeList($contentTypeIds);
+        $contentTypes = array();
+
+        // @todo We could bulk load content type group proxies involved in the future & pass those relevant per type to mapper
+        foreach ($spiContentTypes as $spiContentType) {
+            $contentTypes[$spiContentType->id] = $this->contentTypeDomainMapper->buildContentTypeDomainObject(
+                $spiContentType,
+                $prioritizedLanguages
+            );
+        }
+
+        return $contentTypes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadContentTypes(APIContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
     {
         $spiContentTypes = $this->contentTypeHandler->loadContentTypes(
