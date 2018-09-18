@@ -93,12 +93,12 @@ class CleanupVersionsCommand extends Command
                 'status',
                 't',
                 InputOption::VALUE_OPTIONAL,
-                    sprintf(
-                        "Select which version types should be removed: '%s', '%s', '%s'.",
-                        self::VERSION_DRAFT,
-                        self::VERSION_ARCHIVED,
-                        self::VERSION_ALL
-                    ),
+                sprintf(
+                    "Select which version types should be removed: '%s', '%s', '%s'.",
+                    self::VERSION_DRAFT,
+                    self::VERSION_ARCHIVED,
+                    self::VERSION_ALL
+                ),
                 self::VERSION_ALL
             )
             ->addOption(
@@ -156,7 +156,7 @@ class CleanupVersionsCommand extends Command
                     $versionsCount
                 ), Output::VERBOSITY_VERBOSE);
 
-                $versions = array_slice(array_reverse($versions), $keep);
+                $versions = array_slice($versions, 0, -$keep);
 
                 $removeAll = $status === self::VERSION_ALL;
                 $removeDrafts = $status === self::VERSION_DRAFT;
