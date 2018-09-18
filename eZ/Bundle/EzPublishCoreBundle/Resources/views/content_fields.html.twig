@@ -424,7 +424,7 @@
     {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
     {% set width = parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : '') %}
     {% set height = parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : '') %}
-    <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}"{% if parameters.class is defined and parameters.class is not empty %} class="{{ parameters.class }}"{% endif %} />
+    <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{% if parameters.alternativeText is defined and parameters.alternativeText is not empty %}{{ parameters.alternativeText }}{% else %}{{ field.value.alternativeText }}{% endif %}"{% if parameters.class is defined and parameters.class is not empty %} class="{{ parameters.class }}"{% endif %} />
 </figure>
 {% endif %}
 {% endspaceless %}
@@ -440,7 +440,7 @@
                     viewType: 'asset_image',
                     noLayout: true,
                     params: {
-                        parameters: parameters|default({'alias': 'original'})
+                        parameters: parameters|default({'alias': 'original'})|merge({ alternativeText: field.value.alternativeText })
                     }
                 }))}}
             </div>
