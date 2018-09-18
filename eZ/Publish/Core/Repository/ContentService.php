@@ -465,7 +465,6 @@ class ContentService implements ContentServiceInterface
             }
         }
 
-
         $contentList = [];
         $translations = array_unique($translations);
         $spiContentList = $this->persistenceHandler->contentHandler()->loadContentList(

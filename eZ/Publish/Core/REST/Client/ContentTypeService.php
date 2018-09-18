@@ -590,6 +590,14 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     /**
      * {@inheritdoc}
      */
+    public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable
+    {
+        throw new \RuntimeException('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
     {
         $response = $this->client->request(
