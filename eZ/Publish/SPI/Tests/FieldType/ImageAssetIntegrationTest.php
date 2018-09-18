@@ -87,7 +87,7 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
             [
                 'data' => [
                     'destinationContentId' => 1,
-                    'alternativeText' => null
+                    'alternativeText' => null,
                 ],
                 'externalData' => null,
                 'sortKey' => null,
@@ -95,7 +95,7 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
             [
                 'data' => [
                     'destinationContentId' => 1,
-                    'alternativeText' => 'The alternative text'
+                    'alternativeText' => 'The alternative text',
                 ],
                 'externalData' => null,
                 'sortKey' => null,
@@ -112,7 +112,7 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
             [
                 'data' => [
                     'destinationContentId' => 2,
-                    'alternativeText' => null
+                    'alternativeText' => null,
                 ],
                 'externalData' => null,
                 'sortKey' => null,
@@ -120,7 +120,7 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
             [
                 'data' => [
                     'destinationContentId' => 2,
-                    'alternativeText' => 'The alternative text'
+                    'alternativeText' => 'The alternative text',
                 ],
                 'externalData' => null,
                 'sortKey' => null,

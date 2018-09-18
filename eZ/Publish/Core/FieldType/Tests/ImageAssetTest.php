@@ -147,7 +147,7 @@ class ImageAssetTest extends FieldTypeTest
                 new ImageAsset\Value(),
                 [
                     'destinationContentId' => null,
-                    'alternativeText' => null
+                    'alternativeText' => null,
                 ],
             ],
             [
@@ -183,14 +183,14 @@ class ImageAssetTest extends FieldTypeTest
             [
                 [
                     'destinationContentId' => $destinationContentId,
-                    'alternativeText' => null
+                    'alternativeText' => null,
                 ],
                 new ImageAsset\Value($destinationContentId),
             ],
             [
                 [
                     'destinationContentId' => $destinationContentId,
-                    'alternativeText' => $alternativeText
+                    'alternativeText' => $alternativeText,
                 ],
                 new ImageAsset\Value($destinationContentId, $alternativeText),
             ],

@@ -34,7 +34,7 @@ class Value extends BaseValue
     {
         parent::__construct([
             'destinationContentId' => $destinationContentId,
-            'alternativeText' => $alternativeText
+            'alternativeText' => $alternativeText,
         ]);
     }
 

@@ -219,7 +219,7 @@ class Type extends FieldType
     {
         return [
             'destinationContentId' => $value->destinationContentId,
-            'alternativeText' => $value->alternativeText
+            'alternativeText' => $value->alternativeText,
         ];
     }
 
