@@ -80,7 +80,6 @@ class AbstractTestCase extends LanguageAwareTestCase
     protected function getContentTypeHandler()
     {
         if (!isset($this->contentTypeHandler)) {
-            // @todo InMemory handler
             $this->contentTypeHandler = new ContentTypeHandler(
                 new ContentTypeGateway(
                     $this->getDatabaseHandler(),
