@@ -106,7 +106,7 @@ class DomainMapper
      * Builds a Content domain object from value object returned from persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
-     * @param ContentType $contentType
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param array $prioritizedLanguages Prioritized language codes to filter fields on
      * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
      *

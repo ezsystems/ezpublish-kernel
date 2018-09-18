@@ -87,7 +87,7 @@ interface Handler
      * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
      * to calling logic to determine if this should cause exception or not.
      *
-     * @param mixed $contentTypeIds
+     * @param mixed[] $contentTypeIds
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type[]
      */
