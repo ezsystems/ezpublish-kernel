@@ -122,13 +122,19 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function loadGroups(array $groupIds)
     {
-        $groups = [];
+        $groups = $missingIds = [];
         foreach ($groupIds as $groupId) {
             if (isset($this->groups[$groupId])) {
                 $groups[$groupId] = $this->groups[$groupId];
             } else {
-                $groups[$groupId] = $this->groups[$groupId] = $this->innerHandler->loadGroup($groupId);
+                $missingIds[] = $groupId;
             }
+        }
+
+        if (!empty($missingIds)) {
+            $missing = $this->innerHandler->loadGroups($missingIds);
+            $groups += $missing;
+            $this->groups += $missing;
         }
 
         return $groups;
@@ -171,12 +177,22 @@ class MemoryCachingHandler implements BaseContentTypeHandler
 
     public function loadContentTypeList(array $contentTypeIds): array
     {
-        $contentTypes = [];
+        $contentTypes = $missingIds = [];
         foreach ($contentTypeIds as $contentTypeId) {
-            if (isset($this->contentTypes[$contentTypeId])) {
-                $contentTypes[$contentTypeId] = $this->contentTypes[$contentTypeId];
+            if (isset($this->contentTypes['id'][$contentTypeId])) {
+                $contentTypes[$contentTypeId] = $this->contentTypes['id'][$contentTypeId];
             } else {
-                $contentTypes[$contentTypeId] = $this->contentTypes[$contentTypeId] = $this->innerHandler->load($contentTypeId);
+                $missingIds[] = $contentTypeId;
+            }
+        }
+
+        if (!empty($missingIds)) {
+            $missing = $this->innerHandler->loadContentTypeList($missingIds);
+            $contentTypes += $missing;
+            if (empty($this->contentTypes['id'])) {
+                $this->contentTypes['id'] = $missing;
+            } else {
+                $this->contentTypes['id'] += $missing;
             }
         }
 
