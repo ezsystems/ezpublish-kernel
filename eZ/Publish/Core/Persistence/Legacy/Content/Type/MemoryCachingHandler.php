@@ -31,14 +31,14 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      *
      * @var array
      */
-    protected $groups;
+    protected $groups = [];
 
     /**
      * Local in-memory cache for content types in one single request.
      *
      * @var array
      */
-    protected $contentTypes;
+    protected $contentTypes = [];
 
     /**
      * Local in-memory cache for field definitions in one single request.
