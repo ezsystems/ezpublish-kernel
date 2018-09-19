@@ -129,7 +129,7 @@ class ImageAssetTest extends FieldTypeTest
                     'id' => $destinationContentId,
                 ]),
                 new ImageAsset\Value($destinationContentId),
-            ]
+            ],
         ];
     }
 
