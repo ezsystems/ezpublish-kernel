@@ -107,7 +107,7 @@ class SiteAccessMatchListener implements EventSubscriberInterface
             new SimplifiedRequest(
                 array(
                     'scheme' => $request->getScheme(),
-                    'host' => $request->getHost(),
+                    'host' => $this->getHost($request),
                     'port' => $request->getPort(),
                     'pathinfo' => $request->getPathInfo(),
                     'queryParams' => $request->query->all(),
@@ -116,5 +116,23 @@ class SiteAccessMatchListener implements EventSubscriberInterface
                 )
             )
         );
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    private function getHost(Request $request)
+    {
+        if ($request->server->has('HTTP_X_ORIGINAL_ROUTE')) {
+            $originalRoute = rtrim($request->server->get('HTTP_X_ORIGINAL_ROUTE'), '/');
+            $originalHost = parse_url($originalRoute, PHP_URL_HOST);
+            if ($originalHost) {
+                return $originalHost;
+            }
+        }
+
+        return $request->getHost();
     }
 }
