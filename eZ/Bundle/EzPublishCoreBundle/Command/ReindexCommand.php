@@ -375,12 +375,12 @@ EOT
      */
     private function getPhpProcess(array $contentIds, $commit)
     {
-        $process = new ProcessBuilder([
+        $process = new ProcessBuilder(array_filter([
             file_exists('bin/console') ? 'bin/console' : 'app/console',
             $this->siteaccess ? '--siteaccess=' . $this->siteaccess : null,
             'ezplatform:reindex',
             '--content-ids=' . implode(',', $contentIds),
-        ]);
+        ]));
         $process->setTimeout(null);
         $process->setPrefix($this->getPhpPath());
 
