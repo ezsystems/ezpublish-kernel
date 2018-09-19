@@ -114,7 +114,6 @@ class ImageAssetTest extends FieldTypeTest
     public function provideValidInputForAcceptValue(): array
     {
         $destinationContentId = 7;
-        $alternativeText = 'The alternative text for image';
 
         return [
             [
@@ -130,7 +129,7 @@ class ImageAssetTest extends FieldTypeTest
                     'id' => $destinationContentId,
                 ]),
                 new ImageAsset\Value($destinationContentId),
-            ],
+            ]
         ];
     }
 
