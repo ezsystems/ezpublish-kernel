@@ -30,9 +30,11 @@ class StashPass implements CompilerPassInterface
 
         $config = $container->getExtensionConfig('stash');
         $config = reset($config);
-        foreach ($config['caches'] as $name => $configuration) {
-            if (in_array('Redis', $configuration['drivers'], true)) {
-                $this->configureRedis($container, $igbinary, $lzf);
+        if (isset($config['caches'])) {
+            foreach ($config['caches'] as $name => $configuration) {
+                if (in_array('Redis', $configuration['drivers'], true)) {
+                    $this->configureRedis($container, $igbinary, $lzf);
+                }
             }
         }
 
