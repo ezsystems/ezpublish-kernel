@@ -139,18 +139,28 @@ class ImageAssetTest extends FieldTypeTest
     public function provideInputForToHash(): array
     {
         $destinationContentId = 7;
+        $alternativeText = 'The alternative text for image';
 
         return [
             [
                 new ImageAsset\Value(),
                 [
                     'destinationContentId' => null,
+                    'alternativeText' => null,
                 ],
             ],
             [
                 new ImageAsset\Value($destinationContentId),
                 [
                     'destinationContentId' => $destinationContentId,
+                    'alternativeText' => null,
+                ],
+            ],
+            [
+                new ImageAsset\Value($destinationContentId, $alternativeText),
+                [
+                    'destinationContentId' => $destinationContentId,
+                    'alternativeText' => $alternativeText,
                 ],
             ],
         ];
@@ -162,6 +172,7 @@ class ImageAssetTest extends FieldTypeTest
     public function provideInputForFromHash(): array
     {
         $destinationContentId = 7;
+        $alternativeText = 'The alternative text for image';
 
         return [
             [
@@ -171,8 +182,16 @@ class ImageAssetTest extends FieldTypeTest
             [
                 [
                     'destinationContentId' => $destinationContentId,
+                    'alternativeText' => null,
                 ],
                 new ImageAsset\Value($destinationContentId),
+            ],
+            [
+                [
+                    'destinationContentId' => $destinationContentId,
+                    'alternativeText' => $alternativeText,
+                ],
+                new ImageAsset\Value($destinationContentId, $alternativeText),
             ],
         ];
     }

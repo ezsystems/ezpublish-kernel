@@ -20,12 +20,21 @@ class Value extends BaseValue
     public $destinationContentId;
 
     /**
-     * @param mixed|null $destinationContentId
+     * The alternative image text (for example "Picture of an apple.").
+     *
+     * @var string|null
      */
-    public function __construct($destinationContentId = null)
+    public $alternativeText;
+
+    /**
+     * @param mixed|null $destinationContentId
+     * @param string|null $alternativeText
+     */
+    public function __construct($destinationContentId = null, ?string $alternativeText = null)
     {
         parent::__construct([
             'destinationContentId' => $destinationContentId,
+            'alternativeText' => $alternativeText,
         ]);
     }
 
