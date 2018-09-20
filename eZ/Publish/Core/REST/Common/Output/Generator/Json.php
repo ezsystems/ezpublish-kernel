@@ -301,7 +301,7 @@ class Json extends Generator
      */
     public function getMediaType($name)
     {
-        return $this->generateMediaType($name, 'json', $this->vendor);
+        return $this->generateMediaTypeWithVendor($name, 'json', $this->vendor);
     }
 
     /**

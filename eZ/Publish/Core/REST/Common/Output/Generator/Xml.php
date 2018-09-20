@@ -245,7 +245,7 @@ class Xml extends Generator
      */
     public function getMediaType($name)
     {
-        return $this->generateMediaType($name, 'xml', $this->vendor);
+        return $this->generateMediaTypeWithVendor($name, 'xml', $this->vendor);
     }
 
     /**
