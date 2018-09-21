@@ -44,6 +44,8 @@ trait Exception
         $this->assertResponseObject('eZ\\Publish\\Core\\REST\\Common\\Exceptions\\ForbiddenException');
         $this->assertResponseErrorStatusCode(403);
         $this->assertResponseErrorDescription("/^$message\$/");
+
+        throw new \Exception('Fail test on purpose');
     }
 
     /**
