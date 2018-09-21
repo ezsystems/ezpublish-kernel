@@ -11,6 +11,7 @@ services:
 
 # Mysql isn't installed on trusty (only client is), so we need to specifically install it
 addons:
+  postgresql: "9.6"
   apt:
     packages:
     - mysql-server-5.6
