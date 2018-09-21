@@ -16,6 +16,7 @@ use eZ\Publish\Core\Base\Container\Compiler;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Config\Resource\FileResource;
 
+
 if (!isset($installDir)) {
     throw new \RuntimeException('$installDir not provided to ' . __FILE__);
 }

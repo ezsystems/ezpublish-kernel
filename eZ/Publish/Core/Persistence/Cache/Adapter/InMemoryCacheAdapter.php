@@ -58,7 +58,7 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
     /**
      * @var TagAwareAdapterInterface
      */
-    private $inner;
+    private $pool;
 
     /**
      * @var int
@@ -70,9 +70,9 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
      */
     private $ttl;
 
-    public function __construct(TagAwareAdapterInterface $inner, int $limit = self::LIMIT, int $ttl = self::TTL)
+    public function __construct(TagAwareAdapterInterface $pool, int $limit = self::LIMIT, int $ttl = self::TTL)
     {
-        $this->inner = $inner;
+        $this->pool = $pool;
         $this->limit = $limit;
         $this->ttl = $ttl;
     }
@@ -83,8 +83,10 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
             return $items[$key];
         }
 
-        $item = $this->inner->getItem($key);
-        $this->saveInMemoryCacheItems([$key => $item]);
+        $item = $this->pool->getItem($key);
+        if ($item->isHit()) {
+            $this->saveCacheHitsInMemory([$key => $item]);
+        }
 
         return $item;
     }
@@ -92,14 +94,23 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
     public function getItems(array $keys = [])
     {
         $missingKeys = [];
-        $items = $this->getValidInMemoryCacheItems($keys, $missingKeys);
-
-        if (!empty($missingKeys)) {
-            $items += $newItems = $this->inner->getItems($missingKeys);
-            $this->saveInMemoryCacheItems($newItems);
+        foreach ($this->getValidInMemoryCacheItems($keys, $missingKeys) as $key => $item) {
+            yield $key => $item;
         }
 
-        return $items;
+        if (!empty($missingKeys)) {
+            $hits = [];
+            $items = $this->pool->getItems($missingKeys);
+            foreach ($items as $key => $item) {
+                yield $key => $item;
+
+                if ($item->isHit()) {
+                    $hits[$key] = $item;
+                }
+            }
+
+            $this->saveCacheHitsInMemory($hits);
+        }
     }
 
     public function hasItem($key)
@@ -109,7 +120,7 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
             return true;
         }
 
-        return $this->inner->hasItem($key);
+        return $this->pool->hasItem($key);
     }
 
     public function clear()
@@ -117,7 +128,7 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
         $this->cacheItems = [];
         $this->cacheItemsTS = [];
 
-        return $this->inner->clear();
+        return $this->pool->clear();
     }
 
     public function deleteItem($key)
@@ -126,7 +137,7 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
             unset($this->cacheItems[$key], $this->cacheItemsTS[$key]);
         }
 
-        return $this->inner->deleteItem($key);
+        return $this->pool->deleteItem($key);
     }
 
     public function deleteItems(array $keys)
@@ -137,28 +148,28 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
             }
         }
 
-        return $this->inner->deleteItems($keys);
+        return $this->pool->deleteItems($keys);
     }
 
     public function save(CacheItemInterface $item)
     {
-        $this->saveInMemoryCacheItems([$item->getKey() => $item]);
+        $this->saveCacheHitsInMemory([$item->getKey() => $item]);
 
-        return $this->inner->save($item);
+        return $this->pool->save($item);
     }
 
     public function saveDeferred(CacheItemInterface $item)
     {
         // Symfony commits the deferred items as soon as getItem(s) is called on it later or on destruct.
         // So seems we can safely save in-memory, also we don't at the time of writing use saveDeferred().
-        $this->saveInMemoryCacheItems([$item->getKey() => $item]);
+        $this->saveCacheHitsInMemory([$item->getKey() => $item]);
 
-        return $this->inner->saveDeferred($item);
+        return $this->pool->saveDeferred($item);
     }
 
     public function commit()
     {
-        return $this->inner->commit();
+        return $this->pool->commit();
     }
 
     public function invalidateTags(array $tags)
@@ -170,14 +181,15 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
             }
         }
 
-        return $this->inner->invalidateTags($tags);
+        return $this->pool->invalidateTags($tags);
     }
 
     /**
-     * @param \Psr\Cache\CacheItemInterface[] $items Cache items with cache key as array key.
+     * @param \Psr\Cache\CacheItemInterface[] $items Save Cache hits in-memory with cache key as array key.
      */
-    private function saveInMemoryCacheItems(array $items): void
+    private function saveCacheHitsInMemory(array $items): void
     {
+        // Skip if empty
         if (empty($items)) {
             return;
         }
@@ -185,13 +197,6 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
         // If items accounts for more then 20% of our limit, assume it's bulk content load and skip saving in-memory
         if (\count($items) >= $this->limit / 5) {
             return;
-        }
-
-        // Filter out cache misses as they will immediately be re-generated
-        foreach ($items as $key => $item) {
-            if (!$item->isHit()) {
-                unset($items[$key]);
-            }
         }
 
         // Will we stay clear of the limit? If so return early
@@ -205,7 +210,7 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
         // # Vacuuming cache in bulk so we don't end up doing this all the time
         // 1. Discriminate against content cache, remove up to 1/3 of max limit starting from oldest items
         $removeCount = 0;
-        $removeTarget = floor($this->limit / 3);
+        $removeTarget = \floor($this->limit / 3);
         foreach ($this->cacheItems as $key => $item) {
             $cache = $item->get();
             foreach (self::CONTENT_CLASSES as $className) {
@@ -222,10 +227,10 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
             }
         }
 
-        // 2. Does cache still exceed the 80% of limit? if so remove everything above 66%
+        // 2. Does cache still exceed the 66% of limit? if so remove everything above 66%
         // NOTE: This on purpose keeps the oldest cache around, getValidInMemoryCacheItems() handles ttl checks on that
         if (\count($this->cacheItems) >= $this->limit / 1.5) {
-            $this->cacheItems = \array_slice($this->cacheItems, 0, floor($this->limit / 1.5));
+            $this->cacheItems = \array_slice($this->cacheItems, 0, \floor($this->limit / 1.5));
         }
 
         $this->cacheItems += $items;
@@ -240,7 +245,7 @@ final class InMemoryCacheAdapter implements TagAwareAdapterInterface
      */
     public function getValidInMemoryCacheItems(array $keys = [], array &$missingKeys = []): array
     {
-        // 1. Validate TTL and remove items that have exceeded it
+        // 1. Validate TTL and remove items that have exceeded it (on purpose not prefixed for global scope, see tests)
         $expiredTime = time() - $this->ttl;
         foreach ($this->cacheItemsTS as $key => $ts) {
             if ($ts <= $expiredTime) {

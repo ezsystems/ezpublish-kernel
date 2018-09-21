@@ -1,7 +1,4 @@
 parameters:
-    ezpublish.cache_pool.class: Symfony\Component\Cache\Adapter\TagAwareAdapter
-    ezpublish.cache_pool.driver.class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-
     ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
     ezpublish.spi.persistence.cache.abstractHandler.class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
     ezpublish.spi.persistence.cache.sectionHandler.class: eZ\Publish\Core\Persistence\Cache\SectionHandler
@@ -25,14 +22,19 @@ parameters:
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: "%kernel.debug%"
 
 services:
+    # Setup cache pool, with InMemoryCacheAdapter as decorator
     ezpublish.cache_pool:
-        class: "%ezpublish.cache_pool.class%"
+        class: eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryCacheAdapter
+        arguments: ["@ezpublish.cache_pool_inner"]
+
+    ezpublish.cache_pool_inner:
+        class: Symfony\Component\Cache\Adapter\TagAwareAdapter
         arguments: ["@ezpublish.cache_pool.driver"]
 
     # Note for tests: Default changed to in-memory Array cache in tests/common.yml by default, and opt in for redis
     # testing is defined in containerBuilder.php
     ezpublish.cache_pool.driver:
-        class: "%ezpublish.cache_pool.driver.class%"
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
         arguments: ["", 120]
 
     ezpublish.spi.persistence.cache.persistenceLogger:

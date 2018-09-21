@@ -1,9 +1,5 @@
 services:
     # This overrides default cache pool in eZ/Publish/Core/settings/storage_engines/cache.yml
-    ezpublish.cache_pool:
-      class: eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryCacheAdapter
-      arguments: ["@ezpublish.cache_pool_inner"]
-
     ezpublish.cache_pool_inner:
         class: Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
         lazy: true
