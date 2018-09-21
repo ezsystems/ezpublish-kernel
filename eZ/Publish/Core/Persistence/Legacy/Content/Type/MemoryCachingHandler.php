@@ -29,14 +29,14 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     /**
      * Local in-memory cache for groups in one single request.
      *
-     * @var array
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
     protected $groups = [];
 
     /**
      * Local in-memory cache for content types in one single request.
      *
-     * @var array
+     * @var \eZ\Publish\SPI\Persistence\Content\Type[][]
      */
     protected $contentTypes = [];
 
@@ -67,7 +67,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct $createStruct
      *
-     * @return Group
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function createGroup(GroupCreateStruct $createStruct)
     {
@@ -104,7 +104,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     /**
      * @param mixed $groupId
      *
-     * @return Group
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If type group with $groupId is not found
      */
@@ -157,7 +157,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     }
 
     /**
-     * @return Group[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
     public function loadAllGroups()
     {
@@ -179,20 +179,16 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     {
         $contentTypes = $missingIds = [];
         foreach ($contentTypeIds as $contentTypeId) {
-            if (isset($this->contentTypes['id'][$contentTypeId])) {
-                $contentTypes[$contentTypeId] = $this->contentTypes['id'][$contentTypeId];
+            if (isset($this->contentTypes[$contentTypeId][Type::STATUS_DEFINED])) {
+                $contentTypes[$contentTypeId] = $this->contentTypes[$contentTypeId][Type::STATUS_DEFINED];
             } else {
                 $missingIds[] = $contentTypeId;
             }
         }
 
         if (!empty($missingIds)) {
-            $missing = $this->innerHandler->loadContentTypeList($missingIds);
-            $contentTypes += $missing;
-            if (empty($this->contentTypes['id'])) {
-                $this->contentTypes['id'] = $missing;
-            } else {
-                $this->contentTypes['id'] += $missing;
+            foreach ($this->innerHandler->loadContentTypeList($missingIds) as $id => $contentType) {
+                $this->contentTypes[$id][Type::STATUS_DEFINED] = $contentTypes[$id] = $contentType;
             }
         }
 
@@ -207,11 +203,11 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function load($contentTypeId, $status = Type::STATUS_DEFINED)
     {
-        if (isset($this->contentTypes['id'][$contentTypeId][$status])) {
-            return $this->contentTypes['id'][$contentTypeId][$status];
+        if (isset($this->contentTypes[$contentTypeId][$status])) {
+            return $this->contentTypes[$contentTypeId][$status];
         }
 
-        return $this->contentTypes['id'][$contentTypeId][$status] =
+        return $this->contentTypes[$contentTypeId][$status] =
             $this->innerHandler->load($contentTypeId, $status);
     }
 
@@ -226,12 +222,21 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function loadByIdentifier($identifier)
     {
-        if (isset($this->contentTypes['identifier'][$identifier])) {
-            return $this->contentTypes['identifier'][$identifier];
+        foreach ($this->contentTypes as $item) {
+            if (!isset($item[Type::STATUS_DEFINED])) {
+                continue;
+            }
+
+            $contentType = $item[Type::STATUS_DEFINED];
+            if ($contentType->identifier === $identifier) {
+                return $contentType;
+            }
         }
 
-        return $this->contentTypes['identifier'][$identifier] =
-            $this->innerHandler->loadByIdentifier($identifier);
+        $contentType = $this->innerHandler->loadByIdentifier($identifier);
+        $this->contentTypes[$contentType->id][$contentType->status] = $contentType;
+
+        return $contentType;
     }
 
     /**
@@ -245,12 +250,21 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function loadByRemoteId($remoteId)
     {
-        if (isset($this->contentTypes['remoteId'][$remoteId])) {
-            return $this->contentTypes['remoteId'][$remoteId];
+        foreach ($this->contentTypes as $item) {
+            if (!isset($item[Type::STATUS_DEFINED])) {
+                continue;
+            }
+
+            $contentType = $item[Type::STATUS_DEFINED];
+            if ($contentType->remoteId === $remoteId) {
+                return $contentType;
+            }
         }
 
-        return $this->contentTypes['remoteId'][$remoteId] =
-            $this->innerHandler->loadByRemoteId($remoteId);
+        $contentType = $this->innerHandler->loadByRemoteId($remoteId);
+        $this->contentTypes[$contentType->id][$contentType->status] = $contentType;
+
+        return $contentType;
     }
 
     /**
