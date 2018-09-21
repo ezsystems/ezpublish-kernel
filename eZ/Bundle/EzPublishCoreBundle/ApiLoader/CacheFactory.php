@@ -17,7 +17,9 @@ use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 /**
  * Class CacheFactory.
  *
- * Service "ezpublish.cache_pool", selects a Symfony cache service based on siteaccess[-group] setting "cache_service_name"
+ * Private service "ezpublish.cache_pool_inner", selects a Symfony cache service based on siteaccess[-group] setting "cache_service_name".
+ *
+ * Will either as alias or decorated returned as part of public "ezpublish.cache_pool".
  */
 class CacheFactory implements ContainerAwareInterface
 {

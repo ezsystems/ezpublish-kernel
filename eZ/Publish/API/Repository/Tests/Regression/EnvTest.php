@@ -10,6 +10,7 @@ namespace eZ\Publish\API\Repository\Tests\Regression;
 
 use eZ\Publish\API\Repository\Tests\BaseTest;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -25,6 +26,7 @@ class EnvTest extends BaseTest
     {
         $pool = $this->getSetupFactory()->getServiceContainer()->get('ezpublish.cache_pool');
 
+        $this->assertInstanceOf(TagAwareAdapterInterface::class, $pool);
         $this->assertInstanceOf(TagAwareAdapter::class, $pool);
 
         $reflectionPool = new \ReflectionProperty($pool, 'pool');

@@ -1,20 +1,21 @@
-parameters:
-    ezpublish.cache_pool.factory.class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory
-
 services:
-    # Parameter %ezpublish.cache_pool.class% and cache decorator service are defined
-    # in Core configuration, see eZ/Publish/Core/settings/storage_engines/cache.yml for details
+    # This overrides default cache pool in eZ/Publish/Core/settings/storage_engines/cache.yml
     ezpublish.cache_pool:
-        class: "%ezpublish.cache_pool.class%"
+      class: eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryCacheAdapter
+      arguments: ["@ezpublish.cache_pool_inner"]
+
+    ezpublish.cache_pool_inner:
+        class: Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
         lazy: true
         factory: ["@ezpublish.cache_pool.factory", getCachePool]
         arguments: ["@ezpublish.config.resolver"]
 
     ezpublish.cache_pool.factory:
-        class: "%ezpublish.cache_pool.factory.class%"
+        class: eZ\Bundle\EzPublishCoreBundle\ApiLoader\CacheFactory
         calls:
             - [setContainer, ["@service_container"]]
 
+    # Cache warmer to rest config resolver on cache clear/warmup
     ezpublish.cache_warmer.config_resolver_cleanup:
         class: eZ\Bundle\EzPublishCoreBundle\Cache\Warmer\ConfigResolverCleanup
         calls:
