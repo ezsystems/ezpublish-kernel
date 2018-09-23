@@ -573,7 +573,7 @@ class DoctrineDatabase extends Gateway
         $q
             ->where('g.group_id = :gid')
             ->andWhere('c.version = :version')
-            ->addOrderBy('c.id')
+            ->addOrderBy('c.identifier')
             ->setParameter('gid', $groupId, ParameterType::INTEGER)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
