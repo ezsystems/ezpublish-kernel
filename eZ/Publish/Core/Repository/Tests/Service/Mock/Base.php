@@ -6,7 +6,6 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use PHPUnit\Framework\TestCase;
@@ -21,8 +20,6 @@ use eZ\Publish\Core\Repository\Values\User\User;
  */
 abstract class Base extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -203,12 +200,7 @@ abstract class Base extends TestCase
 
     protected function getRelationProcessorMock()
     {
-        return $this->getMock(RelationProcessor::class,
-            array(),
-            array(),
-            '',
-            false
-        );
+        return $this->createMock(RelationProcessor::class);
     }
 
     /**

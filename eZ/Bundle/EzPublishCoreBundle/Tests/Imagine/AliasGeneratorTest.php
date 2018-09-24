@@ -12,7 +12,6 @@ use eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\Variation\ImagineAwareAliasGenerator;
 use eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 use eZ\Publish\Core\FieldType\TextLine\Value as TextLineValue;
 use eZ\Publish\SPI\FieldType\Value as FieldTypeValue;
@@ -33,8 +32,6 @@ use Psr\Log\LoggerInterface;
 
 class AliasGeneratorTest extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Binary\Loader\LoaderInterface
      */

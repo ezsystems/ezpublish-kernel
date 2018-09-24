@@ -303,7 +303,7 @@ class ContentHandlerTest extends HandlerTest
     public function testLoadVersionInfoCacheIsMiss()
     {
         $this->loggerMock->expects($this->once())->method('logCall');
-        $cacheItemMock = $this->getMock(ItemInterface::class);
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')
@@ -320,7 +320,7 @@ class ContentHandlerTest extends HandlerTest
             ->method('isMiss')
             ->will($this->returnValue(true));
 
-        $innerHandlerMock = $this->getMock(Handler::class);
+        $innerHandlerMock = $this->createMock(Handler::class);
         $this->persistenceHandlerMock
             ->expects($this->once())
             ->method('contentHandler')
@@ -357,7 +357,7 @@ class ContentHandlerTest extends HandlerTest
     public function testLoadVersionInfoHasCache()
     {
         $this->loggerMock->expects($this->never())->method($this->anything());
-        $cacheItemMock = $this->getMock(ItemInterface::class);
+        $cacheItemMock = $this->createMock(ItemInterface::class);
         $this->cacheMock
             ->expects($this->once())
             ->method('getItem')

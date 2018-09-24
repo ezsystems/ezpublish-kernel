@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Security;
 
-use eZ\Publish\Core\Base\Tests\PHPUnit5CompatTrait;
 use eZ\Publish\Core\REST\Server\Security\CsrfTokenManager;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,8 +17,6 @@ use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class CsrfTokenManagerTest extends TestCase
 {
-    use PHPUnit5CompatTrait;
-
     const CSRF_TOKEN_INTENTION = 'csrf';
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface */

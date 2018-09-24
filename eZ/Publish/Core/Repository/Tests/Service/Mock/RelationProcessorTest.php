@@ -266,7 +266,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     public function testAppendFieldRelationsLogsMissingLocations()
     {
         $fieldValueMock = $this->getMockForAbstractClass(Value::class);
-        $fieldTypeMock = $this->getMock(FieldType::class);
+        $fieldTypeMock = $this->createMock(FieldType::class);
 
         $locationId = 123465;
         $fieldDefinitionId = 42;
@@ -290,9 +290,9 @@ class RelationProcessorTest extends BaseServiceMockTest
             ->expects($this->any())
             ->method('load')
             ->with($locationId)
-            ->willThrowException($this->getMock(NotFoundException::class));
+            ->willThrowException($this->createMock(NotFoundException::class));
 
-        $logger = $this->getMock(LoggerInterface::class);
+        $logger = $this->createMock(LoggerInterface::class);
         $logger
             ->expects($this->once())
             ->method('error')
