@@ -307,6 +307,10 @@ class Handler implements UrlAliasHandlerInterface
      * If $languageCode is null the $alias is created in the system's default
      * language. $alwaysAvailable makes the alias available in all languages.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     *
      * @param mixed $locationId
      * @param string $path
      * @param bool $forwarding
@@ -335,6 +339,8 @@ class Handler implements UrlAliasHandlerInterface
      * language. $alwaysAvailable makes the alias available in all languages.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException if the path already exists for the given language
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the path is broken
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @param string $resource
      * @param string $path
@@ -536,9 +542,7 @@ class Handler implements UrlAliasHandlerInterface
      * Looks up a url alias for the given url.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \RuntimeException
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
      * @param string $url
