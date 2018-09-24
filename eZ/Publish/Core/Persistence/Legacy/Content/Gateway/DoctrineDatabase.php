@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
-use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase\QueryBuilder;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -956,25 +955,30 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Get query builder to load Content Info data.
+     *
      * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList(), loadContentInfoByLocationId()
      *
-     * @param \Doctrine\DBAL\Query\QueryBuilder $query
-     *
-     * @return array
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function internalLoadContentInfo(DoctrineQueryBuilder $query)
+    private function createLoadContentInfoQueryBuilder()
     {
-        $query
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
             ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
             ->from('ezcontentobject', 'c')
             ->leftJoin(
                 'c',
                 'ezcontentobject_tree',
                 't',
-                'c.id = t.contentobject_id AND t.node_id = t.main_node_id'
+                $expr->andX(
+                    $expr->eq('c.id', 't.contentobject_id'),
+                    $expr->eq('t.node_id', 't.main_node_id')
+                )
             );
 
-        return $query->execute()->fetchAll();
+        return $queryBuilder;
     }
 
     /**
@@ -991,11 +995,12 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfo($contentId)
     {
-        $query = $this->connection->createQueryBuilder();
-        $query->where('c.id = :id')
-              ->setParameter('id', $contentId, PDO::PARAM_INT);
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder
+            ->where('c.id = :id')
+            ->setParameter('id', $contentId, PDO::PARAM_INT);
 
-        $results = $this->internalLoadContentInfo($query);
+        $results = $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
         if (empty($results)) {
             throw new NotFound('content', "id: $contentId");
         }
@@ -1005,11 +1010,12 @@ class DoctrineDatabase extends Gateway
 
     public function loadContentInfoList(array $contentIds)
     {
-        $query = $this->connection->createQueryBuilder();
-        $query->where('c.id IN (:ids)')
-              ->setParameter('ids', $contentIds, Connection::PARAM_INT_ARRAY);
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder
+            ->where('c.id IN (:ids)')
+            ->setParameter('ids', $contentIds, Connection::PARAM_INT_ARRAY);
 
-        return $this->internalLoadContentInfo($query);
+        return $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -1025,11 +1031,12 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
-        $query = $this->connection->createQueryBuilder();
-        $query->where('c.remote_id = :id')
-              ->setParameter('id', $remoteId, PDO::PARAM_STR);
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder
+            ->where('c.remote_id = :id')
+            ->setParameter('id', $remoteId, PDO::PARAM_STR);
 
-        $results = $this->internalLoadContentInfo($query);
+        $results = $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
         if (empty($results)) {
             throw new NotFound('content', "remote_id: $remoteId");
         }
@@ -1050,11 +1057,12 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByLocationId($locationId)
     {
-        $query = $this->connection->createQueryBuilder();
-        $query->where('t.main_node_id = :id')
-              ->setParameter('id', $locationId, PDO::PARAM_INT);
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder
+            ->where('t.main_node_id = :id')
+            ->setParameter('id', $locationId, PDO::PARAM_INT);
 
-        $results = $this->internalLoadContentInfo($query);
+        $results = $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
         if (empty($results)) {
             throw new NotFound('content', "main_node_id: $locationId");
         }
