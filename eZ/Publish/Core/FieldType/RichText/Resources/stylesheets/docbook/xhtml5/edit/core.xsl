@@ -628,31 +628,28 @@
   </xsl:template>
 
   <!-- Custom style tag code -->
-  <xsl:template match="docbook:ezstyle">
+  <xsl:template match="docbook:eztemplate[@ezcustom:eztemplatetype='style']">
     <xsl:element name="div" namespace="{$outputNamespace}">
-      <xsl:if test="@name">
-        <xsl:attribute name="data-ezstyle">
-          <xsl:value-of select="@name"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:if test="@ezxhtml:align">
-        <xsl:attribute name="data-ezalign">
-          <xsl:value-of select="@ezxhtml:align"/>
-        </xsl:attribute>
-      </xsl:if>
+      <xsl:attribute name="data-ezelement">ezstyle</xsl:attribute>
+      <xsl:call-template name="addCommonTemplateAttributes"/>
       <xsl:apply-templates/>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="docbook:ezstyleinline">
+  <xsl:template match="docbook:eztemplateinline[@ezcustom:eztemplatetype='style']">
     <xsl:element name="span" namespace="{$outputNamespace}">
-      <xsl:if test="@name">
-        <xsl:attribute name="data-ezstyle">
-          <xsl:value-of select="@name"/>
-        </xsl:attribute>
-      </xsl:if>
+      <xsl:attribute name="data-ezelement">ezstyleinline</xsl:attribute>
+      <xsl:call-template name="addCommonTemplateAttributes"/>
       <xsl:apply-templates/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="docbook:eztemplate[@ezcustom:eztemplatetype='style']/docbook:ezcontent">
+    <xsl:apply-templates select="node()|@*"/>
+  </xsl:template>
+
+  <xsl:template match="docbook:eztemplateinline[@ezcustom:eztemplatetype='style']/docbook:ezcontent">
+    <xsl:apply-templates select="node()|@*"/>
   </xsl:template>
 
   <xsl:template name="extractStyleValue">

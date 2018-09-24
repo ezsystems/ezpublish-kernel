@@ -622,26 +622,32 @@
     <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( $style, $property ), ';' ), ':' ), ';' ), ' ', '' )"/>
   </xsl:template>
 
-  <xsl:template match="ezxhtml5:div[@data-ezstyle]">
-    <xsl:element name="ezstyle" namespace="http://docbook.org/ns/docbook">
+  <xsl:template match="ezxhtml5:div[@data-ezelement='ezstyle']">
+    <xsl:element name="eztemplate" namespace="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
       <xsl:attribute name="name">
-        <xsl:value-of select="@data-ezstyle"/>
+        <xsl:value-of select="@data-ezname"/>
       </xsl:attribute>
+      <xsl:attribute name="ezcustom:eztemplatetype">style</xsl:attribute>
       <xsl:if test="@data-ezalign">
         <xsl:attribute name="ezxhtml:align">
           <xsl:value-of select="@data-ezalign"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
+        <xsl:apply-templates/>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="ezxhtml5:span[@data-ezstyle]">
-    <xsl:element name="ezstyleinline" namespace="http://docbook.org/ns/docbook">
+  <xsl:template match="ezxhtml5:span[@data-ezelement='ezstyleinline']">
+    <xsl:element name="eztemplateinline" namespace="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
       <xsl:attribute name="name">
-        <xsl:value-of select="@data-ezstyle"/>
+        <xsl:value-of select="@data-ezname"/>
       </xsl:attribute>
-      <xsl:apply-templates/>
+      <xsl:attribute name="ezcustom:eztemplatetype">style</xsl:attribute>
+      <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
+        <xsl:apply-templates/>
+      </xsl:element>
     </xsl:element>
   </xsl:template>
 

@@ -119,7 +119,7 @@ class Renderer implements RendererInterface
     /**
      * {@inheritdoc}
      */
-    public function renderStyle($name, array $parameters, $isInline)
+    protected function renderStyle($name, array $parameters, $isInline)
     {
         $templateName = $this->getStyleTemplateName($name, $isInline);
 
@@ -145,7 +145,7 @@ class Renderer implements RendererInterface
     /**
      * {@inheritdoc}
      */
-    public function renderTag($name, array $parameters, $isInline)
+    protected function renderTag($name, array $parameters, $isInline)
     {
         $templateName = $this->getTagTemplateName($name, $isInline);
 
@@ -293,6 +293,23 @@ class Renderer implements RendererInterface
         }
 
         return $this->render($templateName, $parameters);
+    }
+
+    /**
+     * Renders template tag.
+     *
+     * @param string $name
+     * @param string $type
+     * @param array $parameters
+     * @param bool $isInline
+     *
+     * @return string
+     */
+    public function renderTemplate($name, $type, array $parameters, $isInline)
+    {
+        $renderFunction = 'render' . strtoupper($type);
+
+        return call_user_func(array($this, $renderFunction), $name, $parameters, $isInline);
     }
 
     /**

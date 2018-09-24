@@ -14,26 +14,16 @@ namespace eZ\Publish\Core\FieldType\RichText;
 interface RendererInterface
 {
     /**
-     * Renders template style.
+     * Renders template.
      *
      * @param string $name
+     * @param string $type
      * @param array $parameters
      * @param bool $isInline
      *
      * @return string
      */
-    public function renderStyle($name, array $parameters, $isInline);
-
-    /**
-     * Renders template tag.
-     *
-     * @param string $name
-     * @param array $parameters
-     * @param bool $isInline
-     *
-     * @return string
-     */
-    public function renderTag($name, array $parameters, $isInline);
+    public function renderTemplate($name, $type, array $parameters, $isInline);
 
     /**
      * Renders Content embed.
