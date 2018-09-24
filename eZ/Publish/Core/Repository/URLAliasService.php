@@ -391,22 +391,27 @@ class URLAliasService implements URLAliasServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\URLAlias $spiUrlAlias
      * @param string $path
      * @param string $languageCode
+     * @param bool|null $showAllTranslations
      *
      * @return array
      */
-    protected function matchPath(SPIURLAlias $spiUrlAlias, $path, $languageCode)
+    protected function matchPath(SPIURLAlias $spiUrlAlias, $path, $languageCode, bool $showAllTranslations = null)
     {
         $matchedPathElements = array();
         $matchedPathLanguageCodes = array();
         $pathElements = explode('/', $path);
         $pathLevels = count($spiUrlAlias->pathData);
 
+        if ($showAllTranslations === null) {
+            $showAllTranslations = $this->settings['showAllTranslations'];
+        }
+
         foreach ($pathElements as $level => $pathElement) {
             if ($level === $pathLevels - 1) {
                 $matchedLanguageCode = $this->selectAliasLanguageCode(
                     $spiUrlAlias,
                     $languageCode,
-                    $this->settings['showAllTranslations'],
+                    $showAllTranslations,
                     $this->settings['prioritizedLanguageList']
                 );
             } else {
@@ -636,21 +641,21 @@ class URLAliasService implements URLAliasServiceInterface
     /**
      * looks up the URLAlias for the given url.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path exceeded maximum depth level
-     *
      * @param string $url
      * @param string $languageCode
+     * @param bool|null $showAllTranslations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
-    public function lookup($url, $languageCode = null)
+    public function lookup($url, $languageCode = null, bool $showAllTranslations = null)
     {
         $url = $this->cleanUrl($url);
 
         $spiUrlAlias = $this->urlAliasHandler->lookup($url);
 
-        list($path, $languageCodes) = $this->matchPath($spiUrlAlias, $url, $languageCode);
+        list($path, $languageCodes) = $this->matchPath($spiUrlAlias, $url, $languageCode, $showAllTranslations);
         if ($path === false || !$this->isPathLoadable($spiUrlAlias->pathData, $languageCodes)) {
             throw new NotFoundException('URLAlias', $url);
         }

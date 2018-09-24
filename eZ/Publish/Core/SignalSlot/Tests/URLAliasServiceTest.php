@@ -126,7 +126,7 @@ class URLAliasServiceTest extends ServiceTest
             ),
             array(
                 'lookup',
-                array($path, $languageCode),
+                array($path, $languageCode, null),
                 $locationUrlAlias,
                 0,
             ),

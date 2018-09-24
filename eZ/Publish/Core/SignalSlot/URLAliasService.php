@@ -185,14 +185,15 @@ class URLAliasService implements URLAliasServiceInterface
      *
      * @param string $url
      * @param string $languageCode
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
+     * @param bool|null $showAllTranslations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
      */
-    public function lookup($url, $languageCode = null)
+    public function lookup($url, $languageCode = null, bool $showAllTranslations = null)
     {
-        return $this->service->lookup($url, $languageCode);
+        return $this->service->lookup($url, $languageCode, $showAllTranslations);
     }
 
     /**
