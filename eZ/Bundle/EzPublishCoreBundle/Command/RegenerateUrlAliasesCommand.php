@@ -33,6 +33,7 @@ class RegenerateUrlAliasesCommand extends Command
 - Take installation offline, during the script execution the database should not be modified.
 - Run this command without memory limit, i.e. processing of 300k Locations can take up to 1 GB of RAM.
 - Run this command in production environment using <info>--env=prod</info>
+- Manually clear HTTP cache after running this command.
 EOT;
 
     /**
@@ -148,6 +149,7 @@ EOT
         $progressBar->finish();
         $output->writeln('');
         $output->writeln('<info>Done.</info>');
+        $output->writeln('<comment>Make sure to clear HTTP cache afterwards.</comment>');
     }
 
     /**
