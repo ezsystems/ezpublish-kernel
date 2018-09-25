@@ -22,6 +22,7 @@ use eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * LocationService class.
@@ -329,12 +330,13 @@ class LocationService implements LocationServiceInterface
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
+     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
     {
-        return $this->service->newLocationCreateStruct($parentLocationId);
+        return $this->service->newLocationCreateStruct($parentLocationId, $contentType);
     }
 
     /**
