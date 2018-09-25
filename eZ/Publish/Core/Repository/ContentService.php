@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -848,6 +849,14 @@ class ContentService implements ContentServiceInterface
                     '$locationCreateStructs',
                     "Multiple LocationCreateStructs with the same parent Location '{$locationCreateStruct->parentLocationId}' are given"
                 );
+            }
+
+            if (!array_key_exists($locationCreateStruct->sortField, Location::SORT_FIELD_MAP)) {
+                $locationCreateStruct->sortField = Location::SORT_FIELD_NAME;
+            }
+
+            if (!array_key_exists($locationCreateStruct->sortOrder, Location::SORT_ORDER_MAP)) {
+                $locationCreateStruct->sortOrder = Location::SORT_ORDER_ASC;
             }
 
             $parentLocationIdSet[$locationCreateStruct->parentLocationId] = true;

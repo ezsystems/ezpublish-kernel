@@ -35,6 +35,7 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * Location service, used for complex subtree operations.
@@ -750,16 +751,21 @@ class LocationService implements LocationServiceInterface
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
+     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
     {
-        return new LocationCreateStruct(
-            array(
-                'parentLocationId' => $parentLocationId,
-            )
-        );
+        $properties = [
+            'parentLocationId' => $parentLocationId,
+        ];
+        if ($contentType) {
+            $properties['sortField'] = $contentType->defaultSortField;
+            $properties['sortOrder'] = $contentType->defaultSortOrder;
+        }
+
+        return new LocationCreateStruct($properties);
     }
 
     /**
