@@ -789,8 +789,12 @@ class Content extends RestController
     protected function doCreateContent(Request $request, RestContentCreateStruct $contentCreate)
     {
         try {
+            $contentCreateStruct = $contentCreate->contentCreateStruct;
+            $contentCreate->locationCreateStruct->sortField = $contentCreateStruct->contentType->defaultSortField;
+            $contentCreate->locationCreateStruct->sortOrder = $contentCreateStruct->contentType->defaultSortOrder;
+
             $content = $this->repository->getContentService()->createContent(
-                $contentCreate->contentCreateStruct,
+                $contentCreateStruct,
                 array($contentCreate->locationCreateStruct)
             );
         } catch (ContentValidationException $e) {
