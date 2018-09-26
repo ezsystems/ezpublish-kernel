@@ -73,9 +73,13 @@ class URLAliasService implements URLAliasServiceInterface
         return $this->service->removeAliases($aliasList);
     }
 
-    public function lookup($url, $languageCode = null)
-    {
-        return $this->service->lookup($url, $languageCode);
+    public function lookup(
+        $url,
+        $languageCode = null,
+        bool $showAllTranslations = null,
+        array $prioritizedLanguageList = null
+    ) {
+        return $this->service->lookup($url, $languageCode, $showAllTranslations, $prioritizedLanguageList);
     }
 
     public function reverseLookup(
