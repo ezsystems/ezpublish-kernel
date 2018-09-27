@@ -19,8 +19,6 @@ services:
         arguments:
             - "@ezpublish.persistence.legacy.field_value_converter.registry"
             - "@ezpublish.spi.persistence.legacy.language.handler"
-        calls:
-            - [setPermissionResolver, ['@eZ\Publish\API\Repository\PermissionResolver']]
 
     ezpublish.persistence.legacy.content.gateway.inner:
         class: "%ezpublish.persistence.legacy.content.gateway.class%"

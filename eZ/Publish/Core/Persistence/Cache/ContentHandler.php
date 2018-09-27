@@ -48,11 +48,11 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::copy
      */
-    public function copy($contentId, $versionNo = null)
+    public function copy($contentId, $versionNo = null, $newOwnerId = null)
     {
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
 
-        return $this->persistenceHandler->contentHandler()->copy($contentId, $versionNo);
+        return $this->persistenceHandler->contentHandler()->copy($contentId, $versionNo, $newOwnerId);
     }
 
     /**
