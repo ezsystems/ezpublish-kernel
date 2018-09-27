@@ -249,13 +249,21 @@
     <xs:attributeGroup ref="globalAttributeGroup"/>
   </xs:complexType>
 
+  <xs:complexType name="prePhrasingContentElement">
+    <xs:complexContent>
+      <xs:extension base="phrasingContentElement">
+        <xs:attribute name="data-language" type="string"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:element name="hr">
     <xs:complexType>
       <xs:attributeGroup ref="globalAttributeGroup"/>
     </xs:complexType>
   </xs:element>
 
-  <xs:element name="pre" type="phrasingContentElement"/>
+  <xs:element name="pre" type="prePhrasingContentElement"/>
 
   <xs:element name="blockquote">
     <xs:complexType>

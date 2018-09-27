@@ -12,3 +12,8 @@ Removed elements
 * <link>
 * <meta>
 * <body>
+
+Added attributes
+================
+
+* @data-language added for element <pre>
