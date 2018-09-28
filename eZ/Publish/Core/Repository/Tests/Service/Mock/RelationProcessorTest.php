@@ -59,6 +59,10 @@ class RelationProcessorTest extends BaseServiceMockTest
                 array(Relation::EMBED => array(100 => 0)),
             ),
             array(
+                array(Relation::ASSET => array(100)),
+                array(Relation::ASSET => array(42 => array(100 => 0))),
+            ),
+            array(
                 array(
                     Relation::FIELD => array(100),
                     Relation::LINK => array('contentIds' => array(100)),
@@ -126,6 +130,44 @@ class RelationProcessorTest extends BaseServiceMockTest
                 ),
                 array(
                     Relation::FIELD => array(42 => array(100 => 0)),
+                    Relation::LINK => array(100 => 0, 200 => true),
+                    Relation::EMBED => array(100 => 0, 201 => true),
+                ),
+            ),
+            array(
+                array(
+                    Relation::ASSET => array(100),
+                    Relation::LINK => array(
+                        'locationIds' => array(100),
+                        'contentIds' => array(100),
+                    ),
+                    Relation::EMBED => array(
+                        'locationIds' => array(101),
+                        'contentIds' => array(100),
+                    ),
+                ),
+                array(
+                    Relation::ASSET => array(42 => array(100 => 0)),
+                    Relation::LINK => array(100 => 0, 200 => true),
+                    Relation::EMBED => array(100 => 0, 201 => true),
+                ),
+            ),
+            array(
+                array(
+                    Relation::FIELD => array(100),
+                    Relation::ASSET => array(100),
+                    Relation::LINK => array(
+                        'locationIds' => array(100),
+                        'contentIds' => array(100),
+                    ),
+                    Relation::EMBED => array(
+                        'locationIds' => array(101),
+                        'contentIds' => array(100),
+                    ),
+                ),
+                array(
+                    Relation::FIELD => array(42 => array(100 => 0)),
+                    Relation::ASSET => array(42 => array(100 => 0)),
                     Relation::LINK => array(100 => 0, 200 => true),
                     Relation::EMBED => array(100 => 0, 201 => true),
                 ),
@@ -221,6 +263,7 @@ class RelationProcessorTest extends BaseServiceMockTest
                 $this->returnValue(
                     array(
                         Relation::FIELD => array(100),
+                        Relation::ASSET => array(100),
                         Relation::LINK => array(
                             'locationIds' => array(100),
                             'contentIds' => array(100),
@@ -257,6 +300,7 @@ class RelationProcessorTest extends BaseServiceMockTest
 
         $this->assertEquals(
             array(
+                Relation::ASSET => array(42 => array(100 => 0)),
                 Relation::FIELD => array(42 => array(100 => 0)),
                 Relation::LINK => array(100 => 0, 200 => true),
                 Relation::EMBED => array(100 => 0, 200 => true),
@@ -328,10 +372,15 @@ class RelationProcessorTest extends BaseServiceMockTest
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
         $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
 
-        $contentTypeMock->expects($this->once())
+        $contentTypeMock->expects($this->at(0))
             ->method('getFieldDefinition')
             ->with($this->equalTo('identifier42'))
             ->will($this->returnValue(new FieldDefinition(array('id' => 42))));
+
+        $contentTypeMock->expects($this->at(1))
+            ->method('getFieldDefinition')
+            ->with($this->equalTo('identifier43'))
+            ->will($this->returnValue(new FieldDefinition(array('id' => 43))));
 
         $contentHandlerMock->expects($this->never())->method('addRelation');
         $contentHandlerMock->expects($this->never())->method('removeRelation');
@@ -366,11 +415,13 @@ class RelationProcessorTest extends BaseServiceMockTest
                 null,
                 17
             ),
+            $this->getStubbedRelation(9, Relation::ASSET, 43, 18),
         );
         $inputRelations = array(
             Relation::EMBED => array_flip(array(11, 14, 16, 17)),
             Relation::LINK => array_flip(array(12, 15, 16, 17)),
             Relation::FIELD => array(42 => array_flip(array(13))),
+            Relation::ASSET => array(43 => array_flip(array(18))),
         );
 
         $relationProcessor->processFieldRelations(
@@ -421,6 +472,7 @@ class RelationProcessorTest extends BaseServiceMockTest
             Relation::EMBED => array_flip(array(11, 14, 16, 17)),
             Relation::LINK => array_flip(array(12, 15, 16, 17)),
             Relation::FIELD => array(42 => array_flip(array(13))),
+            Relation::ASSET => array(44 => array_flip(array(18))),
         );
 
         $contentTypeMock->expects($this->never())->method('getFieldDefinition');
@@ -464,6 +516,20 @@ class RelationProcessorTest extends BaseServiceMockTest
                         'sourceFieldDefinitionId' => 42,
                         'destinationContentId' => 13,
                         'type' => Relation::FIELD,
+                    )
+                )
+            );
+
+        $contentHandlerMock->expects($this->at(3))
+            ->method('addRelation')
+            ->with(
+                new CreateStruct(
+                    array(
+                        'sourceContentId' => 24,
+                        'sourceContentVersionNo' => 2,
+                        'sourceFieldDefinitionId' => 44,
+                        'destinationContentId' => 18,
+                        'type' => Relation::ASSET,
                     )
                 )
             );
@@ -518,6 +584,7 @@ class RelationProcessorTest extends BaseServiceMockTest
                 null,
                 17
             ),
+            $this->getStubbedRelation(9, Relation::FIELD, 44, 18),
         );
         $inputRelations = array(
             Relation::EMBED => array_flip(array(11, 14, 17)),
@@ -526,10 +593,15 @@ class RelationProcessorTest extends BaseServiceMockTest
 
         $contentHandlerMock->expects($this->never())->method('addRelation');
 
-        $contentTypeMock->expects($this->once())
+        $contentTypeMock->expects($this->at(0))
             ->method('getFieldDefinition')
             ->with($this->equalTo('identifier42'))
             ->will($this->returnValue(new FieldDefinition(array('id' => 42))));
+
+        $contentTypeMock->expects($this->at(1))
+            ->method('getFieldDefinition')
+            ->with($this->equalTo('identifier44'))
+            ->will($this->returnValue(new FieldDefinition(array('id' => 44))));
 
         $contentHandlerMock->expects($this->at(0))
             ->method('removeRelation')
@@ -552,6 +624,13 @@ class RelationProcessorTest extends BaseServiceMockTest
                 $this->equalTo(Relation::FIELD)
             );
 
+        $contentHandlerMock->expects($this->at(3))
+            ->method('removeRelation')
+            ->with(
+                $this->equalTo(9),
+                $this->equalTo(Relation::FIELD)
+            );
+
         $relationProcessor->processFieldRelations(
             $inputRelations,
             24,
@@ -570,6 +649,7 @@ class RelationProcessorTest extends BaseServiceMockTest
     {
         $existingRelations = [
             $this->getStubbedRelation(2, Relation::FIELD, 43, 17),
+            $this->getStubbedRelation(2, Relation::ASSET, 44, 18),
         ];
 
         $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
@@ -577,6 +657,12 @@ class RelationProcessorTest extends BaseServiceMockTest
             ->expects($this->at(0))
             ->method('getFieldDefinition')
             ->with($this->equalTo('identifier43'))
+            ->will($this->returnValue(null));
+
+        $contentTypeMock
+            ->expects($this->at(1))
+            ->method('getFieldDefinition')
+            ->with($this->equalTo('identifier44'))
             ->will($this->returnValue(null));
 
         $relationProcessor = $this->getPartlyMockedRelationProcessor();

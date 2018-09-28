@@ -252,7 +252,7 @@ class Type extends FieldType
     {
         $relations = [];
         if ($fieldValue->destinationContentId !== null) {
-            $relations[Relation::FIELD] = [$fieldValue->destinationContentId];
+            $relations[Relation::ASSET] = [$fieldValue->destinationContentId];
         }
 
         return $relations;
