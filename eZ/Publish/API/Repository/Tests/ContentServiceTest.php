@@ -2854,12 +2854,13 @@ XML
 
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
+        $userService = $repository->getUserService();
 
         $newOwner = $this->createUser('new_owner', 'foo', 'bar');
         /* BEGIN: Use Case */
         /** @var \eZ\Publish\API\Repository\Values\Content\Content $contentVersion2 */
         $contentVersion2 = $this->createContentDraftVersion1(
-            56,
+            $parentLocationId,
             'forum',
             'name',
             $newOwner
@@ -2886,7 +2887,7 @@ XML
             $contentVersion2->contentInfo->ownerId
         );
         $this->assertEquals(
-            14,
+            $userService->loadUserByLogin('admin')->getUserId(),
             $contentCopied->contentInfo->ownerId
         );
     }

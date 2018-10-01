@@ -124,7 +124,11 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function copySubtree($sourceId, $destinationParentId, $newOwnerId = null)
     {
-        $this->logger->logCall(__METHOD__, array('source' => $sourceId, 'destination' => $destinationParentId));
+        $this->logger->logCall(__METHOD__, array(
+            'source' => $sourceId,
+            'destination' => $destinationParentId,
+            'newOwner' => $newOwnerId,
+        ));
 
         return $this->persistenceHandler->locationHandler()->copySubtree($sourceId, $destinationParentId, $newOwnerId);
     }
