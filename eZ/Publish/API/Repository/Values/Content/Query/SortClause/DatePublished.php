@@ -21,7 +21,7 @@ class DatePublished extends SortClause
      *
      * @param string $sortDirection
      */
-    public function __construct($sortDirection = Query::SORT_ASC)
+    public function __construct($sortDirection = Query::SORT_DESC)
     {
         parent::__construct('date_published', $sortDirection);
     }
