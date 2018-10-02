@@ -278,15 +278,15 @@ class TemplateTest extends TestCase
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
-  <eztemplate name="template9" ezcustom:eztemplatetype="tag"/>
-  <eztemplateinline name="template10" ezcustom:eztemplatetype="tag"/>
+  <eztemplate name="template9" type="tag"/>
+  <eztemplateinline name="template10" type="tag"/>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
-  <eztemplate name="template9" ezcustom:eztemplatetype="tag">
+  <eztemplate name="template9" type="tag">
     <ezpayload><![CDATA[template9]]></ezpayload>
   </eztemplate>
-  <eztemplateinline name="template10" ezcustom:eztemplatetype="tag">
+  <eztemplateinline name="template10" type="tag">
     <ezpayload><![CDATA[template10]]></ezpayload>
   </eztemplateinline>
 </section>',
@@ -312,11 +312,11 @@ class TemplateTest extends TestCase
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
-  <eztemplate name="style1" ezcustom:eztemplatetype="style"><ezcontent>style 1 content</ezcontent></eztemplate>
+  <eztemplate name="style1" type="style"><ezcontent>style 1 content</ezcontent></eztemplate>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
-  <eztemplate name="style1" ezcustom:eztemplatetype="style"><ezcontent>style 1 content</ezcontent><ezpayload><![CDATA[style1]]></ezpayload></eztemplate>
+  <eztemplate name="style1" type="style"><ezcontent>style 1 content</ezcontent><ezpayload><![CDATA[style1]]></ezpayload></eztemplate>
 </section>',
                 array(
                     array(
@@ -334,13 +334,13 @@ class TemplateTest extends TestCase
             array(
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
-  <eztemplate name="style2" ezcustom:eztemplatetype="style"><ezcontent>style 2 content</ezcontent></eztemplate>
-  <eztemplateinline name="style3" ezcustom:eztemplatetype="style"><ezcontent>style 3 content</ezcontent></eztemplateinline>
+  <eztemplate name="style2" type="style"><ezcontent>style 2 content</ezcontent></eztemplate>
+  <eztemplateinline name="style3" type="style"><ezcontent>style 3 content</ezcontent></eztemplateinline>
 </section>',
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
-  <eztemplate name="style2" ezcustom:eztemplatetype="style"><ezcontent>style 2 content</ezcontent><ezpayload><![CDATA[style2]]></ezpayload></eztemplate>
-  <eztemplateinline name="style3" ezcustom:eztemplatetype="style"><ezcontent>style 3 content</ezcontent><ezpayload><![CDATA[style3]]></ezpayload></eztemplateinline>
+  <eztemplate name="style2" type="style"><ezcontent>style 2 content</ezcontent><ezpayload><![CDATA[style2]]></ezpayload></eztemplate>
+  <eztemplateinline name="style3" type="style"><ezcontent>style 3 content</ezcontent><ezpayload><![CDATA[style3]]></ezpayload></eztemplateinline>
 </section>',
                 array(
                     array(

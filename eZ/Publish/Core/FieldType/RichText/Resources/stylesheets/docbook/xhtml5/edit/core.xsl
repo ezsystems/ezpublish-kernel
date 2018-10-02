@@ -628,7 +628,7 @@
   </xsl:template>
 
   <!-- Custom style tag code -->
-  <xsl:template match="docbook:eztemplate[@ezcustom:eztemplatetype='style']">
+  <xsl:template match="docbook:eztemplate[@type='style']">
     <xsl:element name="div" namespace="{$outputNamespace}">
       <xsl:attribute name="data-ezelement">ezstyle</xsl:attribute>
       <xsl:call-template name="addCommonTemplateAttributes"/>
@@ -636,7 +636,7 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="docbook:eztemplateinline[@ezcustom:eztemplatetype='style']">
+  <xsl:template match="docbook:eztemplateinline[@type='style']">
     <xsl:element name="span" namespace="{$outputNamespace}">
       <xsl:attribute name="data-ezelement">ezstyleinline</xsl:attribute>
       <xsl:call-template name="addCommonTemplateAttributes"/>
@@ -644,11 +644,11 @@
     </xsl:element>
   </xsl:template>
 
-  <xsl:template match="docbook:eztemplate[@ezcustom:eztemplatetype='style']/docbook:ezcontent">
+  <xsl:template match="docbook:eztemplate[@type='style']/docbook:ezcontent">
     <xsl:apply-templates select="node()|@*"/>
   </xsl:template>
 
-  <xsl:template match="docbook:eztemplateinline[@ezcustom:eztemplatetype='style']/docbook:ezcontent">
+  <xsl:template match="docbook:eztemplateinline[@type='style']/docbook:ezcontent">
     <xsl:apply-templates select="node()|@*"/>
   </xsl:template>
 

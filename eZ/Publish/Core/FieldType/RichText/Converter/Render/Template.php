@@ -97,7 +97,7 @@ class Template extends Render implements Converter
     {
         $content = null;
         $templateName = $template->getAttribute('name');
-        $templateType = $template->hasAttribute('ezcustom:eztemplatetype') ? $template->getAttribute('ezcustom:eztemplatetype') : 'tag';
+        $templateType = $template->hasAttribute('type') ? $template->getAttribute('type') : 'tag';
         $parameters = array(
             'name' => $templateName,
             'params' => $this->extractConfiguration($template),

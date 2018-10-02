@@ -597,7 +597,7 @@
         </data>
       </attribute>
       <optional>
-        <ref name="ez.custom.eztemplatetype"/>
+        <ref name="ez.template.type"/>
       </optional>
       <optional>
         <ref name="ez.xhtml.class.attribute"/>
@@ -611,6 +611,17 @@
         <ref name="ez.xhtml.align"/>
       </optional>
       <ref name="ez.template.attributes.inline"/>
+    </define>
+    <define name="ez.template.type">
+      <a:documentation>
+        Template type attribute.
+      </a:documentation>
+      <attribute name="type">
+        <choice>
+          <value>tag</value>
+          <value>style</value>
+        </choice>
+      </attribute>
     </define>
   </div>
 
@@ -753,18 +764,6 @@
         <value>left</value>
         <value>center</value>
         <value>right</value>
-      </choice>
-    </attribute>
-  </define>
-
-  <define name="ez.custom.eztemplatetype">
-    <a:documentation>
-        ezcustom:eztemplatetype attribute.
-    </a:documentation>
-    <attribute name="ezcustom:eztemplatetype">
-      <choice>
-        <value>tag</value>
-        <value>style</value>
       </choice>
     </attribute>
   </define>

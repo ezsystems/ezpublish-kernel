@@ -627,7 +627,7 @@
       <xsl:attribute name="name">
         <xsl:value-of select="@data-ezname"/>
       </xsl:attribute>
-      <xsl:attribute name="ezcustom:eztemplatetype">style</xsl:attribute>
+      <xsl:attribute name="type">style</xsl:attribute>
       <xsl:if test="@data-ezalign">
         <xsl:attribute name="ezxhtml:align">
           <xsl:value-of select="@data-ezalign"/>
@@ -644,7 +644,7 @@
       <xsl:attribute name="name">
         <xsl:value-of select="@data-ezname"/>
       </xsl:attribute>
-      <xsl:attribute name="ezcustom:eztemplatetype">style</xsl:attribute>
+      <xsl:attribute name="type">style</xsl:attribute>
       <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
         <xsl:apply-templates/>
       </xsl:element>
