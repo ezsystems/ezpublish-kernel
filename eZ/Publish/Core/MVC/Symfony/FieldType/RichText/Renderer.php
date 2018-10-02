@@ -145,7 +145,7 @@ class Renderer implements RendererInterface
     /**
      * {@inheritdoc}
      */
-    protected function renderTag($name, array $parameters, $isInline)
+    public function renderTag($name, array $parameters, $isInline)
     {
         $templateName = $this->getTagTemplateName($name, $isInline);
 

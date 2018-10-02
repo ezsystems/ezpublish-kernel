@@ -14,6 +14,19 @@ namespace eZ\Publish\Core\FieldType\RichText;
 interface RendererInterface
 {
     /**
+     * Renders template tag.
+     *
+     * @deprecated since 7.3. Use renderTemplate instead
+     *
+     * @param string $name
+     * @param array $parameters
+     * @param bool $isInline
+     *
+     * @return string
+     */
+    public function renderTag($name, array $parameters, $isInline);
+
+    /**
      * Renders template.
      *
      * @param string $name
