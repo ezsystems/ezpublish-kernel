@@ -104,9 +104,16 @@ class Template extends Render implements Converter
         );
 
         if ($template->getElementsByTagName('ezcontent')->length > 0) {
-            $parameters['content'] = $this->saveNodeXML(
-                $template->getElementsByTagName('ezcontent')->item(0)
-            );
+            $contentNode = $template->getElementsByTagName('ezcontent')->item(0);
+            switch ($templateType) {
+                case 'style':
+                    $parameters['content'] = $this->getCustomStyleContent($contentNode);
+                    break;
+                case 'tag':
+                default:
+                    $parameters['content'] = $this->getCustomTagContent($contentNode);
+                    break;
+            }
         }
 
         if ($template->hasAttribute('ezxhtml:align')) {
@@ -184,6 +191,18 @@ class Template extends Render implements Converter
      */
     protected function saveNodeXML(DOMNode $node)
     {
+        return $this->getCustomTagContent($node);
+    }
+
+    /**
+     * Returns XML fragment string for given converted $node.
+     *
+     * @param \DOMNode $node
+     *
+     * @return string
+     */
+    protected function getCustomStyleContent(DOMNode $node)
+    {
         $innerDoc = new DOMDocument();
 
         /** @var \DOMNode $child */
@@ -200,5 +219,24 @@ class Template extends Render implements Converter
         $convertedInnerDoc = $this->richTextConverter->convert($innerDoc);
 
         return trim($convertedInnerDoc->saveHTML());
+    }
+
+    /**
+     * Returns XML fragment string for given $node.
+     *
+     * @param \DOMNode $node
+     *
+     * @return string
+     */
+    protected function getCustomTagContent(DOMNode $node)
+    {
+        $xmlString = '';
+
+        /** @var \DOMNode $child */
+        foreach ($node->childNodes as $child) {
+            $xmlString .= $node->ownerDocument->saveXML($child);
+        }
+
+        return $xmlString;
     }
 }

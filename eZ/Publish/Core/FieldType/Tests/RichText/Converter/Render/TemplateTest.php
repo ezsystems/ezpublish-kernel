@@ -225,7 +225,7 @@ class TemplateTest extends TestCase
                         'is_inline' => false,
                         'params' => array(
                             'name' => 'template7',
-                            'content' => 'content7<eztemplate xmlns="http://docbook.org/ns/docbook" name="template8"><ezcontent>content8</ezcontent></eztemplate>',
+                            'content' => 'content7<eztemplate name="template8"><ezcontent>content8</ezcontent></eztemplate>',
                             'params' => array(),
                         ),
                     ),
@@ -268,7 +268,7 @@ class TemplateTest extends TestCase
                         'is_inline' => false,
                         'params' => array(
                             'name' => 'custom_tag',
-                            'content' => '<para xmlns="http://docbook.org/ns/docbook">Param: value</para>',
+                            'content' => '<para>Param: value</para>',
                             'params' => array('param' => 'value'),
                             'align' => 'right',
                         ),
