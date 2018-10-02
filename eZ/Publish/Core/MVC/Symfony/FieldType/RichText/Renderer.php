@@ -121,25 +121,7 @@ class Renderer implements RendererInterface
      */
     protected function renderStyle($name, array $parameters, $isInline)
     {
-        $templateName = $this->getStyleTemplateName($name, $isInline);
-
-        if ($templateName === null) {
-            $this->logger->error(
-                "Could not render template style '{$name}': no template configured"
-            );
-
-            return null;
-        }
-
-        if (!$this->templateEngine->exists($templateName)) {
-            $this->logger->error(
-                "Could not render template style '{$name}': template '{$templateName}' does not exists"
-            );
-
-            return null;
-        }
-
-        return $this->render($templateName, $parameters);
+        return $this->renderTemplate($name, 'style', $parameters, $isInline);
     }
 
     /**
@@ -147,25 +129,7 @@ class Renderer implements RendererInterface
      */
     public function renderTag($name, array $parameters, $isInline)
     {
-        $templateName = $this->getTagTemplateName($name, $isInline);
-
-        if ($templateName === null) {
-            $this->logger->error(
-                "Could not render template tag '{$name}': no template configured"
-            );
-
-            return null;
-        }
-
-        if (!$this->templateEngine->exists($templateName)) {
-            $this->logger->error(
-                "Could not render template tag '{$name}': template '{$templateName}' does not exists"
-            );
-
-            return null;
-        }
-
-        return $this->render($templateName, $parameters);
+        return $this->renderTemplate($name, 'tag', $parameters, $isInline);
     }
 
     /**
@@ -307,9 +271,32 @@ class Renderer implements RendererInterface
      */
     public function renderTemplate($name, $type, array $parameters, $isInline)
     {
-        $renderFunction = 'render' . strtoupper($type);
+        switch ($type) {
+            case 'style':
+                $templateName = $this->getStyleTemplateName($name, $isInline);
+                break;
+            case 'tag':
+            default:
+                $templateName = $this->getTagTemplateName($name, $isInline);
+        }
 
-        return call_user_func(array($this, $renderFunction), $name, $parameters, $isInline);
+        if ($templateName === null) {
+            $this->logger->error(
+                "Could not render template {$type} '{$name}': no template configured"
+            );
+
+            return null;
+        }
+
+        if (!$this->templateEngine->exists($templateName)) {
+            $this->logger->error(
+                "Could not render template {$type} '{$name}': template '{$templateName}' does not exist"
+            );
+
+            return null;
+        }
+
+        return $this->render($templateName, $parameters);
     }
 
     /**

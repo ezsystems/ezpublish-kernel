@@ -130,7 +130,7 @@ class RendererTest extends TestCase
         $this->loggerMock
             ->expects($this->once())
             ->method('error')
-            ->with("Could not render template tag '{$name}': template '{$templateName}' does not exists");
+            ->with("Could not render template tag '{$name}': template '{$templateName}' does not exist");
 
         $this->assertNull(
             $renderer->renderTemplate($name, 'tag', $parameters, $isInline)
