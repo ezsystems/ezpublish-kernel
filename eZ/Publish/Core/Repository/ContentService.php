@@ -1584,7 +1584,7 @@ class ContentService implements ContentServiceInterface
      * Removes the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is in
-     *         published state or is the last version of the Content
+     *         published state or is a last version of Content in non draft state
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -1612,7 +1612,7 @@ class ContentService implements ContentServiceInterface
             2
         );
 
-        if (count($versionList) === 1) {
+        if (count($versionList) === 1 && !$versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
                 'Version is the last version of the Content and can not be removed'

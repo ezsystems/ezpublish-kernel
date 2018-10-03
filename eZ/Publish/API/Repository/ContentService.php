@@ -308,7 +308,7 @@ interface ContentService
      * Removes the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is in
-     *         published state or is a last version of the Content
+     *         published state or is a last version of Content in non draft state
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
