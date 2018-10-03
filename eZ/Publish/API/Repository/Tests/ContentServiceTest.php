@@ -3086,12 +3086,12 @@ XML
      * Test for the deleteVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
-    public function testDeleteVersionThrowsBadStateExceptionOnLastVersion()
+    public function testDeleteVersionWorksIfOnlyVersionIsDraft()
     {
         $repository = $this->getRepository();
 
@@ -3100,9 +3100,11 @@ XML
         /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
-        // This call will fail with a "BadStateException", because the Content
-        // version is the last version of the Content.
         $contentService->deleteVersion($draft->getVersionInfo());
+
+        // This call will fail with a "NotFound", because we allow to delete content if remaining version is draft.
+        // Can normally only happen if there where always only a draft to begin with, simplifies UI edit API usage.
+        $contentService->loadContent($draft->id);
         /* END: Use Case */
     }
 
