@@ -269,7 +269,7 @@
         {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
         {{ fos_httpcache_tag('relation-' ~ contentId) }}
         <li>
-            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
+            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
         </li>
         {% endfor %}
     </ul>
@@ -334,7 +334,7 @@
     {% if parameters.showInfo is defined and not parameters.showInfo %}
         {% set showInfo = false %}
     {% endif %}
-    
+
     {% set draggable = defaultDraggable %}
     {% if parameters.draggable is defined and not parameters.draggable %}
         {% set draggable = 'false' %}
@@ -435,7 +435,7 @@
 {% if not ez_is_field_empty( content, field ) and parameters.available %}
     {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
     <div {{ block( 'field_attributes' ) }}>
-        {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
+        {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'layout': false} ) ) }}
     </div>
 {% endif %}
 {% endspaceless %}
