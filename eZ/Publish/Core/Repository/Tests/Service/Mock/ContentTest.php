@@ -5406,7 +5406,11 @@ class ContentTest extends BaseServiceMockTest
     public function testCopyContent()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
+        $contentService = $this->getPartlyMockedContentService(array(
+            'internalLoadContentInfo',
+            'internalLoadContent',
+            'getUnixTimestamp',
+        ));
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
@@ -5484,7 +5488,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($versionInfoMock));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfoMock */
-        $content = $this->mockPublishVersion(123456);
+        $content = $this->mockPublishVersion(123456, 126666);
         $locationServiceMock->expects($this->once())
             ->method('createLocation')
             ->with(
@@ -5498,6 +5502,10 @@ class ContentTest extends BaseServiceMockTest
                 $content->id
             )
             ->will($this->returnValue($content));
+
+        $contentService->expects($this->once())
+            ->method('getUnixTimestamp')
+            ->will($this->returnValue(126666));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
         $contentService->copyContent($contentInfoMock, $locationCreateStruct, null);
@@ -5513,7 +5521,11 @@ class ContentTest extends BaseServiceMockTest
     public function testCopyContentWithVersionInfo()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
+        $contentService = $this->getPartlyMockedContentService(array(
+            'internalLoadContentInfo',
+            'internalLoadContent',
+            'getUnixTimestamp',
+        ));
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
@@ -5589,7 +5601,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($versionInfoMock));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfoMock */
-        $content = $this->mockPublishVersion(123456);
+        $content = $this->mockPublishVersion(123456, 126666);
         $locationServiceMock->expects($this->once())
             ->method('createLocation')
             ->with(
@@ -5603,6 +5615,10 @@ class ContentTest extends BaseServiceMockTest
                 $content->id
             )
             ->will($this->returnValue($content));
+
+        $contentService->expects($this->once())
+            ->method('getUnixTimestamp')
+            ->will($this->returnValue(126666));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
         $contentService->copyContent($contentInfoMock, $locationCreateStruct, $versionInfoMock);
@@ -5729,10 +5745,11 @@ class ContentTest extends BaseServiceMockTest
 
     /**
      * @param int|null $publicationDate
+     * @param int|null $modificationDate
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function mockPublishVersion($publicationDate = null)
+    protected function mockPublishVersion($publicationDate = null, $modificationDate = null)
     {
         $domainMapperMock = $this->getDomainMapperMock();
         $contentMock = $this->createMock(APIContent::class);
@@ -5786,10 +5803,7 @@ class ContentTest extends BaseServiceMockTest
 
         // Account for 1 second of test execution time
         $metadataUpdateStruct->publicationDate = $publicationDate;
-        $metadataUpdateStruct->modificationDate = $currentTime;
-        $metadataUpdateStruct2 = clone $metadataUpdateStruct;
-        ++$metadataUpdateStruct2->publicationDate;
-        ++$metadataUpdateStruct2->modificationDate;
+        $metadataUpdateStruct->modificationDate = $modificationDate ?? $currentTime;
 
         $spiContent = new SPIContent();
         $contentHandlerMock->expects($this->once())
@@ -5797,7 +5811,7 @@ class ContentTest extends BaseServiceMockTest
             ->with(
                 42,
                 123,
-                $this->logicalOr($metadataUpdateStruct, $metadataUpdateStruct2)
+                $metadataUpdateStruct
             )
             ->will($this->returnValue($spiContent));
 
