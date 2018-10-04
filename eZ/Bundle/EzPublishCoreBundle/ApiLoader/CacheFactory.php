@@ -10,6 +10,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -25,12 +26,20 @@ class CacheFactory implements ContainerAwareInterface
     /**
      * @param ConfigResolverInterface $configResolver
      *
-     * @return \Symfony\Component\Cache\Adapter\TagAwareAdapter
+     * @return \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
      */
     public function getCachePool(ConfigResolverInterface $configResolver)
     {
+        /** @var \Symfony\Component\Cache\Adapter\AdapterInterface $cacheService */
+        $cacheService = $this->container->get($configResolver->getParameter('cache_service_name'));
+
+        // If cache service is already implementing TagAwareAdapterInterface, return as-is
+        if ($cacheService instanceof TagAwareAdapterInterface) {
+            return $cacheService;
+        }
+
         return new TagAwareAdapter(
-            $this->container->get($configResolver->getParameter('cache_service_name'))
+            $cacheService
         );
     }
 }
