@@ -130,7 +130,7 @@ Note:
 
 
 For full install instructions, including setting up full web server & directory permissions, see:
-https://doc.ezplatform.com/en/latest/getting_started/install_using_composer/
+https://doc.ezplatform.com/en/latest/getting_started/install_ez_platform/
 
 EOT
         );
