@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5">
+  <pre>Literal with CNAME end sequence here : ]]&gt; and some more text here</pre>
+  <pre>ordinary literal</pre>
+  <pre>more
+            complicated
+             literal
+              tag</pre>
+  <p>the php one:</p>
+  <pre class="red">function foobar()
+{
+    thisIsSomePHPCode('string with special characters &amp; &lt; &gt; &#xe2;');
+    return 0;
+}</pre>
+  <p>the php one with language attribute:</p>
+  <pre class="red" data-language="php">function foobar()
+{
+    thisIsSomePHPCode();
+    return 0;
+}</pre>
+</section>
