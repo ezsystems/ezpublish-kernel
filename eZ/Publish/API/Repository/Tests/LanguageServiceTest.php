@@ -549,26 +549,6 @@ class LanguageServiceTest extends BaseTest
     }
 
     /**
-     * Helper method that creates a new language test fixture in the
-     * API implementation under test.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Language
-     */
-    private function createLanguage()
-    {
-        $repository = $this->getRepository();
-
-        $languageService = $repository->getContentLanguageService();
-        $languageCreate = $languageService->newLanguageCreateStruct();
-
-        $languageCreate->enabled = false;
-        $languageCreate->name = 'English';
-        $languageCreate->languageCode = 'eng-US';
-
-        return $languageService->createLanguage($languageCreate);
-    }
-
-    /**
      * Test for the createLanguage() method.
      *
      * @covers \eZ\Publish\API\Repository\LanguageService::createLanguage

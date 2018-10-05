@@ -391,11 +391,18 @@ class URLAliasService implements URLAliasServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\URLAlias $spiUrlAlias
      * @param string $path
      * @param string $languageCode
+     * @param bool|null $showAllTranslations
+     * @param array|null $prioritizedLanguageList
      *
      * @return array
      */
-    protected function matchPath(SPIURLAlias $spiUrlAlias, $path, $languageCode)
-    {
+    protected function matchPath(
+        SPIURLAlias $spiUrlAlias,
+        string $path,
+        ?string $languageCode,
+        bool $showAllTranslations = null,
+        array $prioritizedLanguageList = null
+    ) {
         $matchedPathElements = array();
         $matchedPathLanguageCodes = array();
         $pathElements = explode('/', $path);
@@ -406,8 +413,8 @@ class URLAliasService implements URLAliasServiceInterface
                 $matchedLanguageCode = $this->selectAliasLanguageCode(
                     $spiUrlAlias,
                     $languageCode,
-                    $this->settings['showAllTranslations'],
-                    $this->settings['prioritizedLanguageList']
+                    $showAllTranslations,
+                    $prioritizedLanguageList
                 );
             } else {
                 $matchedLanguageCode = $this->matchLanguageCode($spiUrlAlias->pathData[$level], $pathElement);
@@ -517,11 +524,18 @@ class URLAliasService implements URLAliasServiceInterface
      * @param array $pathData
      * @param array $languageCodes
      *
+     * @param bool $showAllTranslations
+     * @param array $prioritizedLanguageList
+     *
      * @return bool
      */
-    protected function isPathLoadable(array $pathData, array $languageCodes)
-    {
-        if ($this->settings['showAllTranslations']) {
+    protected function isPathLoadable(
+        array $pathData,
+        array $languageCodes,
+        bool $showAllTranslations,
+        array $prioritizedLanguageList
+    ) {
+        if ($showAllTranslations) {
             return true;
         }
 
@@ -530,7 +544,7 @@ class URLAliasService implements URLAliasServiceInterface
                 continue;
             }
 
-            if (in_array($languageCodes[$level], $this->settings['prioritizedLanguageList'])) {
+            if (in_array($languageCodes[$level], $prioritizedLanguageList)) {
                 continue;
             }
 
@@ -636,22 +650,50 @@ class URLAliasService implements URLAliasServiceInterface
     /**
      * looks up the URLAlias for the given url.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the path exceeded maximum depth level
-     *
      * @param string $url
      * @param string $languageCode
+     * @param bool|null $showAllTranslations
+     *
+     * @param array|null $prioritizedLanguageList
      *
      * @return \eZ\Publish\API\Repository\Values\Content\URLAlias
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the path does not exist or is not valid for the given language
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
-    public function lookup($url, $languageCode = null)
-    {
+    public function lookup(
+        $url,
+        $languageCode = null,
+        bool $showAllTranslations = null,
+        array $prioritizedLanguageList = null
+    ) {
         $url = $this->cleanUrl($url);
 
         $spiUrlAlias = $this->urlAliasHandler->lookup($url);
 
-        list($path, $languageCodes) = $this->matchPath($spiUrlAlias, $url, $languageCode);
-        if ($path === false || !$this->isPathLoadable($spiUrlAlias->pathData, $languageCodes)) {
+        if ($showAllTranslations === null) {
+            $showAllTranslations = $this->settings['showAllTranslations'];
+        }
+
+        if ($prioritizedLanguageList === null) {
+            $prioritizedLanguageList = $this->settings['prioritizedLanguageList'];
+        }
+
+        list($path, $languageCodes) = $this->matchPath(
+            $spiUrlAlias,
+            $url,
+            $languageCode,
+            $showAllTranslations,
+            $prioritizedLanguageList
+        );
+        if ($path === false || !$this->isPathLoadable(
+                $spiUrlAlias->pathData,
+                $languageCodes,
+                $showAllTranslations,
+                $prioritizedLanguageList
+            )
+        ) {
             throw new NotFoundException('URLAlias', $url);
         }
 

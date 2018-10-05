@@ -1098,6 +1098,53 @@ DOCBOOK
     }
 
     /**
+     * Test lookup on multilingual nested Locations returns proper UrlAlias Value.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLookupWithAllLanguages()
+    {
+        $urlAliasService = $this->getRepository()->getURLAliasService();
+        $locationService = $this->getRepository()->getLocationService();
+
+        $this->createLanguage('Polish', 'pol-PL');
+
+        $folderNames = [
+            'eng-GB' => 'folder name',
+            'pol-PL' => 'pol folder name',
+        ];
+
+        // set alwaysAvailable to false in order to _try_
+        // (it fails without forcing allAvailableLanguages in lookup)
+        // to retrieve translated content instead of original.
+        $topFolderLocation = $locationService->loadLocation(
+            $this->createFolder(
+                $folderNames,
+                2,
+                false
+            )->contentInfo->mainLocationId
+        );
+
+        $urlAlias = $urlAliasService->lookup('/pol-folder-name', 'pol-PL', true, ['pol-PL']);
+        self::assertPropertiesCorrect(
+            [
+                'destination' => $topFolderLocation->id,
+                'path' => '/pol-folder-name',
+                'languageCodes' => ['pol-PL'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            ],
+            $urlAlias
+        );
+
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $urlAliasService->lookup('/pol-folder-name');
+    }
+
+    /**
      * Test refreshSystemUrlAliasesForLocation historizes and changes current URL alias after
      * changing SlugConverter configuration.
      *
