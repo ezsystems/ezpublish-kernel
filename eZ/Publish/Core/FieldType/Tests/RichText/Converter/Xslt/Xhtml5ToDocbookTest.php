@@ -8,6 +8,10 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Xslt;
 
+use eZ\Publish\Core\FieldType\RichText\Converter\Aggregate;
+use eZ\Publish\Core\FieldType\RichText\Converter\ProgramListing;
+use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
+
 /**
  * Tests conversion from xhtml5 edit format to docbook.
  */
@@ -91,5 +95,25 @@ class Xhtml5ToDocbookTest extends BaseTest
             __DIR__ . '/_fixtures/docbook/custom_schemas/youtube.rng',
             __DIR__ . '/../../../../RichText/Resources/schemas/docbook/docbook.iso.sch.xsl',
         );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\FieldType\RichText\Converter\Xslt
+     */
+    protected function getConverter()
+    {
+        if ($this->converter === null) {
+            $this->converter = new Aggregate(
+                array(
+                    new ProgramListing(),
+                    new Xslt(
+                        $this->getConversionTransformationStylesheet(),
+                        $this->getCustomConversionTransformationStylesheets()
+                    ),
+                )
+            );
+        }
+
+        return $this->converter;
     }
 }

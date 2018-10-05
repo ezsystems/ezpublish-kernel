@@ -341,7 +341,6 @@
     <define name="db.productionset"><notAllowed/></define>
     <define name="db.productname"><notAllowed/></define>
     <define name="db.productnumber"><notAllowed/></define>
-    <define name="db.programlisting"><notAllowed/></define>
     <define name="db.programlistingco"><notAllowed/></define>
     <define name="db.prompt"><notAllowed/></define>
     <define name="db.property"><notAllowed/></define>
@@ -683,6 +682,7 @@
     <define name="db.emphasis.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
     <!--define name="db.html.table.attributes" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define-->
     <define name="db.link.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <define name="db.programlisting.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
     <define name="ez.xhtml.class.attribute">
       <optional>
         <attribute name="ezxhtml:class"><text/></attribute>

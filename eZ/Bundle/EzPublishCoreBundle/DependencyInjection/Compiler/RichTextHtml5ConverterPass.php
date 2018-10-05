@@ -11,6 +11,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Compiler pass for the RichText Aggregate converter tags.
@@ -21,13 +22,25 @@ class RichTextHtml5ConverterPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('ezpublish.fieldType.ezrichtext.converter.output.xhtml5')) {
-            return;
+        if ($container->hasDefinition('ezpublish.fieldType.ezrichtext.converter.output.xhtml5')) {
+            $html5OutputConverterDefinition = $container->getDefinition('ezpublish.fieldType.ezrichtext.converter.output.xhtml5');
+            $taggedOutputServiceIds = $container->findTaggedServiceIds('ezpublish.ezrichtext.converter.output.xhtml5');
+            $this->setConverterDefinitions($taggedOutputServiceIds, $html5OutputConverterDefinition);
         }
 
-        $html5ConverterDefinition = $container->getDefinition('ezpublish.fieldType.ezrichtext.converter.output.xhtml5');
-        $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.ezrichtext.converter.output.xhtml5');
+        if ($container->hasDefinition('ezpublish.fieldType.ezrichtext.converter.input.xhtml5')) {
+            $html5InputConverterDefinition = $container->getDefinition('ezpublish.fieldType.ezrichtext.converter.input.xhtml5');
+            $taggedInputServiceIds = $container->findTaggedServiceIds('ezpublish.ezrichtext.converter.input.xhtml5');
+            $this->setConverterDefinitions($taggedInputServiceIds, $html5InputConverterDefinition);
+        }
+    }
 
+    /**
+     * @param array $taggedServiceIds
+     * @param Definition $converterDefinition
+     */
+    protected function setConverterDefinitions(array $taggedServiceIds, Definition $converterDefinition)
+    {
         $convertersByPriority = array();
         foreach ($taggedServiceIds as $id => $tags) {
             foreach ($tags as $tag) {
@@ -37,7 +50,7 @@ class RichTextHtml5ConverterPass implements CompilerPassInterface
         }
 
         if (count($convertersByPriority) > 0) {
-            $html5ConverterDefinition->setArguments(
+            $converterDefinition->setArguments(
                 array($this->sortConverters($convertersByPriority))
             );
         }

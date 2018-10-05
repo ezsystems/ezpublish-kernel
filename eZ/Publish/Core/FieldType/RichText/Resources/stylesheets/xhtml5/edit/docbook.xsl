@@ -88,6 +88,24 @@
     </para>
   </xsl:template>
 
+  <xsl:template match="ezxhtml5:pre">
+    <xsl:element name="programlisting">
+      <xsl:if test="@class">
+        <xsl:attribute name="ezxhtml:class">
+          <xsl:value-of select="@class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@data-language">
+        <xsl:attribute name="language">
+          <xsl:value-of select="@data-language"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:text disable-output-escaping="yes">&lt;![CDATA[</xsl:text>
+      <xsl:value-of disable-output-escaping="yes" select="./text()"/>
+      <xsl:text disable-output-escaping="yes">]]&gt;</xsl:text>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="ezxhtml5:blockquote">
     <blockquote>
       <xsl:apply-templates/>
