@@ -13,7 +13,7 @@ use DOMDocument;
 use DOMXPath;
 
 /**
- * Class ProgramListing
+ * Class ProgramListing.
  *
  * Processes <code>programlisting</code> DocBook tag.
  */
