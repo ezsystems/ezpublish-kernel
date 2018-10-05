@@ -526,7 +526,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ($contentCreateStruct->alwaysAvailable === null) {
-            $contentCreateStruct->alwaysAvailable = false;
+            $contentCreateStruct->alwaysAvailable = $contentCreateStruct->contentType->defaultAlwaysAvailable ?: false;
         }
 
         $contentCreateStruct->contentType = $this->repository->getContentTypeService()->loadContentType(
