@@ -68,7 +68,7 @@ class RendererTest extends TestCase
 
         $this->assertEquals(
             $result,
-            $renderer->renderTag($name, $parameters, $isInline)
+            $renderer->renderTemplate($name, 'tag', $parameters, $isInline)
         );
     }
 
@@ -99,7 +99,7 @@ class RendererTest extends TestCase
             ->with("Could not render template tag '{$name}': no template configured");
 
         $this->assertNull(
-            $renderer->renderTag($name, $parameters, $isInline)
+            $renderer->renderTemplate($name, 'tag', $parameters, $isInline)
         );
     }
 
@@ -130,10 +130,10 @@ class RendererTest extends TestCase
         $this->loggerMock
             ->expects($this->once())
             ->method('error')
-            ->with("Could not render template tag '{$name}': template '{$templateName}' does not exists");
+            ->with("Could not render template tag '{$name}': template '{$templateName}' does not exist");
 
         $this->assertNull(
-            $renderer->renderTag($name, $parameters, $isInline)
+            $renderer->renderTemplate($name, 'tag', $parameters, $isInline)
         );
     }
 
@@ -306,7 +306,7 @@ class RendererTest extends TestCase
 
         $this->assertEquals(
             $renderResult,
-            $renderer->renderTag($tagName, $parameters, $isInline)
+            $renderer->renderTemplate($tagName, 'tag', $parameters, $isInline)
         );
     }
 

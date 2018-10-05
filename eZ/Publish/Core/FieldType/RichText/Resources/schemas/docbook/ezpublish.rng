@@ -574,6 +574,7 @@
         <zeroOrMore>
           <choice>
             <text/>
+            <ref name="db.all.inlines"/>
             <ref name="db.recursive.blocks.or.sections"/>
           </choice>
         </zeroOrMore>
@@ -596,6 +597,9 @@
         </data>
       </attribute>
       <optional>
+        <ref name="ez.template.type"/>
+      </optional>
+      <optional>
         <ref name="ez.xhtml.class.attribute"/>
       </optional>
     </define>
@@ -608,60 +612,16 @@
       </optional>
       <ref name="ez.template.attributes.inline"/>
     </define>
-  </div>
-
-  <div>
-    <a:documentation>
-      eZ Publish custom styles
-    </a:documentation>
-    <define name="ez.style">
-      <element name="ezstyle">
-        <ref name="ez.style.contentmodel"/>
-      </element>
-    </define>
-    <define name="ez.styleinline">
-      <element name="ezstyleinline">
-        <ref name="ez.style.contentmodel.inline"/>
-      </element>
-    </define>
-    <define name="ez.style.contentmodel">
-      <ref name="ez.style.attlist"/>
-      <zeroOrMore>
+    <define name="ez.template.type">
+      <a:documentation>
+        Template type attribute.
+      </a:documentation>
+      <attribute name="type">
         <choice>
-          <ref name="db.all.inlines"/>
-          <ref name="db.recursive.blocks.or.sections"/>
+          <value>tag</value>
+          <value>style</value>
         </choice>
-      </zeroOrMore>
-    </define>
-    <define name="ez.style.contentmodel.inline">
-      <ref name="ez.style.attlist.inline"/>
-      <zeroOrMore>
-        <choice>
-          <ref name="db.all.inlines"/>
-        </choice>
-      </zeroOrMore>
-    </define>
-    <define name="ez.style.attlist.inline">
-      <ref name="ez.style.attributes.inline"/>
-    </define>
-    <define name="ez.style.attributes.inline">
-      <attribute name="name">
-        <data type="string">
-          <param name="pattern">[A-Za-z][A-Za-z0-9_\-]*</param>
-        </data>
       </attribute>
-      <optional>
-        <ref name="ez.xhtml.class.attribute"/>
-      </optional>
-    </define>
-    <define name="ez.style.attlist">
-      <ref name="ez.style.attributes"/>
-    </define>
-    <define name="ez.style.attributes">
-      <optional>
-        <ref name="ez.xhtml.align"/>
-      </optional>
-      <ref name="ez.style.attributes.inline"/>
     </define>
   </div>
 
@@ -832,7 +792,6 @@
       <choice>
         <ref name="ez.embedinline"/>
         <ref name="ez.templateinline"/>
-        <ref name="ez.styleinline"/>
         <ref name="ez.extension.inlines"/>
       </choice>
     </zeroOrMore>
@@ -852,7 +811,6 @@
         <ref name="db.title"/>
         <ref name="ez.embed"/>
         <ref name="ez.template"/>
-        <ref name="ez.style"/>
         <ref name="ez.extension.blocks"/>
       </choice>
     </zeroOrMore>

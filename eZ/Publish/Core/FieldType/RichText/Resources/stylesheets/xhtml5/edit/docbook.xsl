@@ -596,6 +596,11 @@
           <xsl:value-of select="@data-ezname"/>
         </xsl:attribute>
       </xsl:if>
+      <xsl:if test="@data-eztype">
+        <xsl:attribute name="type">
+          <xsl:value-of select="@data-eztype"/>
+        </xsl:attribute>
+      </xsl:if>
       <xsl:if test="@class">
         <xsl:attribute name="ezxhtml:class">
           <xsl:value-of select="@class"/>
@@ -606,10 +611,22 @@
           <xsl:value-of select="@data-ezalign"/>
         </xsl:attribute>
       </xsl:if>
-      <xsl:apply-templates/>
+      <xsl:choose>
+        <!-- Nest content of Style tag in ezcontent -->
+        <xsl:when test="@data-eztype='style'">
+          <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
+            <xsl:apply-templates/>
+          </xsl:element>
+        </xsl:when>
+        <!-- For other types of tags behave as usual (ezcontent should be defined explicitly) -->
+        <xsl:otherwise>
+          <xsl:apply-templates/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:element>
   </xsl:template>
 
+  <!-- handle explicitly defined eztemplate > ezcontent tag -->
   <xsl:template match="ezxhtml5:div[@data-ezelement='eztemplate']/ezxhtml5:div[@data-ezelement='ezcontent'] | ezxhtml5:span[@data-ezelement='eztemplateinline']/ezxhtml5:span[@data-ezelement='ezcontent']">
     <xsl:element name="ezcontent" namespace="http://docbook.org/ns/docbook">
       <xsl:apply-templates/>
@@ -620,29 +637,6 @@
     <xsl:param name="style"/>
     <xsl:param name="property"/>
     <xsl:value-of select="translate( substring-before( substring-after( concat( substring-after( $style, $property ), ';' ), ':' ), ';' ), ' ', '' )"/>
-  </xsl:template>
-
-  <xsl:template match="ezxhtml5:div[@data-ezstyle]">
-    <xsl:element name="ezstyle" namespace="http://docbook.org/ns/docbook">
-      <xsl:attribute name="name">
-        <xsl:value-of select="@data-ezstyle"/>
-      </xsl:attribute>
-      <xsl:if test="@data-ezalign">
-        <xsl:attribute name="ezxhtml:align">
-          <xsl:value-of select="@data-ezalign"/>
-        </xsl:attribute>
-      </xsl:if>
-      <xsl:apply-templates/>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="ezxhtml5:span[@data-ezstyle]">
-    <xsl:element name="ezstyleinline" namespace="http://docbook.org/ns/docbook">
-      <xsl:attribute name="name">
-        <xsl:value-of select="@data-ezstyle"/>
-      </xsl:attribute>
-      <xsl:apply-templates/>
-    </xsl:element>
   </xsl:template>
 
 </xsl:stylesheet>

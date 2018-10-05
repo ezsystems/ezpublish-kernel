@@ -21,7 +21,6 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.link.class: eZ\Publish\Core\FieldType\RichText\Converter\Link
     ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed
     ezpublish.fieldType.ezrichtext.converter.template.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Template
-    ezpublish.fieldType.ezrichtext.converter.style.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Style
     ezpublish.fieldType.ezrichtext.embed_renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\EmbedRenderer
     ezpublish.fieldType.ezrichtext.renderer.class: eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer
     ezpublish.fieldType.ezrichtext.tag.namespace: fieldtypes.ezrichtext.tags
@@ -160,18 +159,12 @@ services:
             - "%ezplatform.ezrichtext.custom_tags%"
             - "%ezplatform.ezrichtext.custom_styles%"
 
-    ezpublish.fieldType.ezrichtext.converter.style:
-        class: "%ezpublish.fieldType.ezrichtext.converter.style.class%"
-        arguments:
-            - "@ezpublish.fieldType.ezrichtext.renderer"
-            - "@ezpublish.fieldType.ezrichtext.converter.output.xhtml5"
-        tags:
-            - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 10}
-
     ezpublish.fieldType.ezrichtext.converter.template:
         class: "%ezpublish.fieldType.ezrichtext.converter.template.class%"
         arguments:
             - "@ezpublish.fieldType.ezrichtext.renderer"
+            - "@ezpublish.fieldType.ezrichtext.converter.output.xhtml5"
+            - "@?logger"
         tags:
             - {name: ezpublish.ezrichtext.converter.output.xhtml5, priority: 10}
 
