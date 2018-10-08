@@ -478,11 +478,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         // Add a language
-        $languageService = $repository->getContentLanguageService();
-        $languageStruct = $languageService->newLanguageCreateStruct();
-        $languageStruct->name = 'Norsk';
-        $languageStruct->languageCode = 'nor-NO';
-        $languageService->createLanguage($languageStruct);
+        $this->createLanguage('nor-NO', 'Norsk');
 
         $locationService = $repository->getLocationService();
         $contentService = $repository->getContentService();
@@ -511,6 +507,36 @@ class LocationServiceTest extends BaseTest
 
         $this->assertEquals($content->getVersionInfo()->getName(), 'Brukere');
         $this->assertEquals($content->getVersionInfo()->getName('eng-US'), 'Users');
+    }
+
+    /**
+     * Test that accessing lazy-loaded Content without a translation in the specific
+     * not available language throws NotFoundException.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testLoadLocationThrowsNotFoundExceptionForNotAvailableContent()
+    {
+        $repository = $this->getRepository();
+
+        $locationService = $repository->getLocationService();
+
+        $this->createLanguage('pol-PL', 'Polski');
+
+        // Note: relying on existing database fixtures to make test case more readable
+        $location = $locationService->loadLocation(60, ['pol-PL']);
+        self::assertEquals(60, $location->id);
+
+        $this->expectException(NotFoundException::class);
+
+        $this->assertInstanceOf(
+            Content::class,
+            $content = $location->getContent()
+        );
+        $this->assertEquals(58, $content->contentInfo->id);
+        $this->assertEquals($content->getVersionInfo()->getName(), 'Contact Us');
     }
 
     /**
