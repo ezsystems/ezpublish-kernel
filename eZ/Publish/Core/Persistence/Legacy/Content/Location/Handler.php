@@ -211,10 +211,12 @@ class Handler implements BaseLocationHandler
      *
      * @param mixed $sourceId
      * @param mixed $destinationParentId
+     * @param int|null $newOwnerId
      *
      * @return Location the newly created Location.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function copySubtree($sourceId, $destinationParentId)
+    public function copySubtree($sourceId, $destinationParentId, $newOwnerId = null)
     {
         $children = $this->locationGateway->getSubtreeContent($sourceId);
         $destinationParentData = $this->locationGateway->getBasicNodeData($destinationParentId);
@@ -242,7 +244,8 @@ class Handler implements BaseLocationHandler
             if (!isset($contentMap[$child['contentobject_id']])) {
                 $content = $this->contentHandler->copy(
                     $child['contentobject_id'],
-                    $child['contentobject_version']
+                    $child['contentobject_version'],
+                    $newOwnerId
                 );
 
                 $this->setContentStates($content, $defaultObjectStates);
