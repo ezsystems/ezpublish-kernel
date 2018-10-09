@@ -1696,7 +1696,8 @@ class ContentService implements ContentServiceInterface
         try {
             $spiContent = $this->persistenceHandler->contentHandler()->copy(
                 $contentInfo->id,
-                $versionInfo ? $versionInfo->versionNo : null
+                $versionInfo ? $versionInfo->versionNo : null,
+                $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId()
             );
 
             foreach ($defaultObjectStates as $objectStateGroupId => $objectState) {

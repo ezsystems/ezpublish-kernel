@@ -167,7 +167,8 @@ class LocationService implements LocationServiceInterface
         try {
             $newLocation = $this->persistenceHandler->locationHandler()->copySubtree(
                 $loadedSubtree->id,
-                $loadedTargetLocation->id
+                $loadedTargetLocation->id,
+                $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId()
             );
 
             $content = $this->repository->getContentService()->loadContent($newLocation->contentId);

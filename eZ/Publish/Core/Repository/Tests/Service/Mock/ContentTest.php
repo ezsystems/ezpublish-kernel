@@ -5398,6 +5398,20 @@ class ContentTest extends BaseServiceMockTest
         $contentInfoMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
         $locationCreateStruct = new LocationCreateStruct();
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
+        $user = $this->getStubbedUser(14);
+
+        $permissionResolverMock = $this
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $permissionResolverMock
+            ->method('getCurrentUserReference')
+            ->willReturn($user);
+
+        $repositoryMock
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
 
         $repositoryMock->expects($this->exactly(3))
             ->method('getLocationService')
@@ -5505,6 +5519,20 @@ class ContentTest extends BaseServiceMockTest
         $contentInfoMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo');
         $locationCreateStruct = new LocationCreateStruct();
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
+        $user = $this->getStubbedUser(14);
+
+        $permissionResolverMock = $this
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $permissionResolverMock
+            ->method('getCurrentUserReference')
+            ->willReturn($user);
+
+        $repositoryMock
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
 
         $repositoryMock->expects($this->exactly(3))
             ->method('getLocationService')
@@ -5613,6 +5641,20 @@ class ContentTest extends BaseServiceMockTest
         $locationCreateStruct = new LocationCreateStruct();
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $locationServiceMock = $this->getLocationServiceMock();
+        $user = $this->getStubbedUser(14);
+
+        $permissionResolverMock = $this
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $permissionResolverMock
+            ->method('getCurrentUserReference')
+            ->willReturn($user);
+
+        $repositoryMock
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
 
         $repositoryMock->expects($this->once())
             ->method('getLocationService')

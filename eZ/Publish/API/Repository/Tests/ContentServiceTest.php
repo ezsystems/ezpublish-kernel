@@ -3255,6 +3255,60 @@ XML
     }
 
     /**
+     * Test for the copyContent() method with ezsettings.default.content.retain_owner_on_copy set to false
+     * See settings/test/integration_legacy.yml for service override.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::copyContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @group field-type
+     */
+    public function testCopyContentWithNewOwner()
+    {
+        $parentLocationId = $this->generateId('location', 56);
+
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $userService = $repository->getUserService();
+
+        $newOwner = $this->createUser('new_owner', 'foo', 'bar');
+        /* BEGIN: Use Case */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $contentVersion2 */
+        $contentVersion2 = $this->createContentDraftVersion1(
+            $parentLocationId,
+            'forum',
+            'name',
+            $newOwner
+        );
+
+        // Configure new target location
+        $targetLocationCreate = $locationService->newLocationCreateStruct($parentLocationId);
+
+        $targetLocationCreate->priority = 42;
+        $targetLocationCreate->hidden = true;
+        $targetLocationCreate->remoteId = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Copy content with all versions and drafts
+        $contentCopied = $contentService->copyContent(
+            $contentVersion2->contentInfo,
+            $targetLocationCreate
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $newOwner->id,
+            $contentVersion2->contentInfo->ownerId
+        );
+        $this->assertEquals(
+            $userService->loadUserByLogin('admin')->getUserId(),
+            $contentCopied->contentInfo->ownerId
+        );
+    }
+
+    /**
      * Test for the copyContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo)
