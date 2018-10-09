@@ -683,10 +683,11 @@ class Handler implements BaseContentHandler
      *
      * @param mixed $contentId
      * @param mixed|null $versionNo Copy all versions if left null
+     * @param int|null $newOwnerId
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function copy($contentId, $versionNo = null)
+    public function copy($contentId, $versionNo = null, $newOwnerId = null)
     {
         $currentVersionNo = isset($versionNo) ?
             $versionNo :
@@ -696,6 +697,9 @@ class Handler implements BaseContentHandler
         $createStruct = $this->mapper->createCreateStructFromContent(
             $this->load($contentId, $currentVersionNo)
         );
+        if ($newOwnerId) {
+            $createStruct->ownerId = $newOwnerId;
+        }
         $content = $this->internalCreate($createStruct, $currentVersionNo);
 
         // If version was not passed also copy other versions
