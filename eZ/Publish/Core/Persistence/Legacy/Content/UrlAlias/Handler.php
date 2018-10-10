@@ -1033,16 +1033,12 @@ class Handler implements UrlAliasHandlerInterface
     {
         $parentId = $this->getRealAliasId($parentLocationId);
 
+        $data = $this->gateway->loadLocationEntries($locationId);
         // filter removed Translations
-        $urlAliases = $this->listURLAliasesForLocation($locationId);
-        $removedLanguages = [];
-        foreach ($urlAliases as $urlAlias) {
-            foreach ($urlAlias->languageCodes as $languageCode) {
-                if (!in_array($languageCode, $languageCodes)) {
-                    $removedLanguages[] = $languageCode;
-                }
-            }
-        }
+        $removedLanguages = array_diff(
+            $this->mapper->extractLanguageCodesFromData($data),
+            $languageCodes
+        );
 
         if (empty($removedLanguages)) {
             return;

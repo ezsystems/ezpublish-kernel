@@ -76,6 +76,26 @@ class Mapper
     }
 
     /**
+     * Extracts language codes from database $rows.
+     *
+     * @param array $rows
+     *
+     * @return array
+     */
+    public function extractLanguageCodesFromData(array $rows)
+    {
+        $languageCodes = [];
+        foreach ($rows as $row) {
+            $languageCodes = array_merge(
+                $languageCodes,
+                $this->languageMaskGenerator->extractLanguageCodesFromMask($row['lang_mask'])
+            );
+        }
+
+        return array_unique($languageCodes);
+    }
+
+    /**
      * @throws \RuntimeException
      *
      * @param string $action
