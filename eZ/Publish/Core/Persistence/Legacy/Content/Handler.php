@@ -739,6 +739,8 @@ class Handler implements BaseContentHandler
                 $versionContent->versionInfo->contentInfo->id = $content->versionInfo->contentInfo->id;
                 $versionContent->versionInfo->modificationDate = $createStruct->modified;
                 $versionContent->versionInfo->creationDate = $createStruct->modified;
+                $versionContent->versionInfo->creatorId = $createStruct->ownerId;
+
                 $versionContent->versionInfo->id = $this->contentGateway->insertVersion(
                     $versionContent->versionInfo,
                     $versionContent->fields
