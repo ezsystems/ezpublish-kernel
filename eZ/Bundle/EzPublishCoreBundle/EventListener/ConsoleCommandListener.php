@@ -44,13 +44,19 @@ class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAwar
     private $siteAccess;
 
     /**
+     * @var bool
+     */
+    private $debug;
+
+    /**
      * ConsoleCommandListener constructor.
      */
-    public function __construct($defaultSiteAccessName, array $siteAccessList, EventDispatcherInterface $eventDispatcher)
+    public function __construct($defaultSiteAccessName, array $siteAccessList, EventDispatcherInterface $eventDispatcher, $debug = false)
     {
         $this->defaultSiteAccessName = $defaultSiteAccessName;
         $this->siteAccessList = $siteAccessList;
         $this->eventDispatcher = $eventDispatcher;
+        $this->debug = $debug;
     }
 
     public static function getSubscribedEvents()
@@ -68,7 +74,7 @@ class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAwar
         $this->siteAccess->matchingType = 'cli';
 
         if (!in_array($this->siteAccess->name, $this->siteAccessList)) {
-            throw new InvalidSiteAccessException($this->siteAccess->name, $this->siteAccessList, $this->siteAccess->matchingType);
+            throw new InvalidSiteAccessException($this->siteAccess->name, $this->siteAccessList, $this->siteAccess->matchingType, $this->debug);
         }
 
         $this->eventDispatcher->dispatch(MVCEvents::CONFIG_SCOPE_CHANGE, new ScopeChangeEvent($this->siteAccess));
@@ -77,5 +83,10 @@ class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAwar
     public function setSiteAccess(SiteAccess $siteAccess = null)
     {
         $this->siteAccess = $siteAccess;
+    }
+
+    public function setDebug($debug = false)
+    {
+        $this->debug = $debug;
     }
 }
