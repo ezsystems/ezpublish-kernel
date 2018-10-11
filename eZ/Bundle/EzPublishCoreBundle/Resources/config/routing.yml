@@ -83,6 +83,7 @@ services:
             - "%ezpublish.siteaccess.match_config%"
             - "%ezpublish.siteaccess.list%"
             - "%ezpublish.siteaccess.class%"
+            - "%kernel.debug%"
 
     ezpublish.siteaccess_listener:
         class: "%ezpublish.siteaccess_listener.class%"
