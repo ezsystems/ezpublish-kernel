@@ -38,7 +38,12 @@ class RouterTest extends TestCase
         parent::tearDown();
     }
 
-    public function testConstruct()
+    public function testConstructDebug()
+    {
+        return $this->testConstruct(true);
+    }
+
+    public function testConstruct($debug = false)
     {
         return new Router(
             $this->matcherBuilder,
@@ -77,7 +82,9 @@ class RouterTest extends TestCase
                     ),
                 ),
             ),
-            array('first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'headerbased_sa', 'fr_eng', 'fr_us')
+            array('first_sa', 'second_sa', 'third_sa', 'fourth_sa', 'headerbased_sa', 'fr_eng', 'fr_us'),
+            null,
+            $debug
         );
     }
 
@@ -97,10 +104,23 @@ class RouterTest extends TestCase
     }
 
     /**
+     * @depends testConstructDebug
+     * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
+     * @expectedExceptionMessageRegExp /^Invalid siteaccess 'foobar_sa', matched by .+\. Valid siteaccesses are/
+     */
+    public function testMatchWithDevEnvFail(Router $router)
+    {
+        $saName = 'foobar_sa';
+        putenv("EZPUBLISH_SITEACCESS=$saName");
+        $router->match(new SimplifiedRequest());
+    }
+
+    /**
      * @depends testConstruct
      * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
+     * @expectedExceptionMessageRegExp /^Invalid siteaccess 'foobar_sa', matched by .+\.$/
      */
-    public function testMatchWithEnvFail(Router $router)
+    public function testMatchWithProdEnvFail(Router $router)
     {
         $saName = 'foobar_sa';
         putenv("EZPUBLISH_SITEACCESS=$saName");
