@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -126,6 +127,8 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
 
         if ($object instanceof ContentCreateStruct) {
             return $this->evaluateForContentCreateStruct($value, $targets);
+        } elseif ($object instanceof ContentUpdateStruct) {
+            $object = $object->contentDraft->getVersionInfo()->getContentInfo();
         } elseif ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
         } elseif ($object instanceof VersionInfo) {

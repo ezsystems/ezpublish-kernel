@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Limitation;
 
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -129,7 +130,9 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
             $object = $object->getVersionInfo()->getContentInfo();
         } elseif ($object instanceof VersionInfo) {
             $object = $object->getContentInfo();
-        } elseif (!$object instanceof ContentInfo && !$object instanceof ContentCreateStruct) {
+        } elseif ($object instanceof ContentUpdateStruct) {
+            $object = $object->contentDraft->getVersionInfo()->getContentInfo();
+        } elseif (!$object instanceof ContentInfo && !$object instanceof ContentCreateStruct && !$object instanceof ContentUpdateStruct) {
             throw new InvalidArgumentException(
                 '$object',
                 'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'

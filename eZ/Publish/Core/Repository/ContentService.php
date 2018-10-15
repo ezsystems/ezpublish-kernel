@@ -897,7 +897,7 @@ class ContentService implements ContentServiceInterface
         $propertyCount = 0;
         foreach ($contentMetadataUpdateStruct as $propertyName => $propertyValue) {
             if (isset($contentMetadataUpdateStruct->$propertyName)) {
-                $propertyCount += 1;
+                ++$propertyCount;
             }
         }
         if ($propertyCount === 0) {
@@ -1192,6 +1192,7 @@ class ContentService implements ContentServiceInterface
             null,
             $versionInfo->versionNo
         );
+
         if (!$content->versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
@@ -1199,7 +1200,11 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if (!$this->repository->canUser('content', 'edit', $content)) {
+        if ($this->isNewTranslation($versionInfo, $contentUpdateStruct)) {
+            if (!$this->repository->canUser('content', 'translate', $contentUpdateStruct)) {
+                throw new UnauthorizedException('content', 'translate', array('contentId' => $content->id));
+            }
+        } elseif (!$this->repository->canUser('content', 'edit', $content)) {
             throw new UnauthorizedException('content', 'edit', array('contentId' => $content->id));
         }
 
@@ -1356,6 +1361,19 @@ class ContentService implements ContentServiceInterface
             $spiContent,
             $contentType
         );
+    }
+
+    /**
+     * Checks if content is translated to a new language.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
+     *
+     * @return bool
+     */
+    private function isNewTranslation(APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct): bool
+    {
+        return $contentUpdateStruct->initialLanguageCode !== null && !in_array($contentUpdateStruct->initialLanguageCode, $versionInfo->languageCodes, true);
     }
 
     /**

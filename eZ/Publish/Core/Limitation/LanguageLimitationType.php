@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -117,10 +118,14 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
 
         if ($object instanceof Content) {
             $object = $object->getVersionInfo();
-        } elseif (!$object instanceof VersionInfo && !$object instanceof ContentInfo && !$object instanceof ContentCreateStruct) {
+        } elseif (!$object instanceof VersionInfo
+            && !$object instanceof ContentInfo
+            && !$object instanceof ContentCreateStruct
+            && !$object instanceof ContentUpdateStruct
+        ) {
             throw new InvalidArgumentException(
                 '$object',
-                'Must be of type: ContentCreateStruct, Content, VersionInfo or ContentInfo'
+                'Must be of type: ContentCreateStruct, ContentUpdateStruct, Content, VersionInfo or ContentInfo'
             );
         }
 
@@ -130,6 +135,10 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
 
         if ($object instanceof ContentInfo || $object instanceof ContentCreateStruct) {
             return in_array($object->mainLanguageCode, $value->limitationValues, true);
+        }
+
+        if ($object instanceof ContentUpdateStruct) {
+            return in_array($object->initialLanguageCode, $value->limitationValues, true);
         }
 
         /*

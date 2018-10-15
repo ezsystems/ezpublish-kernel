@@ -3047,6 +3047,7 @@ class ContentTest extends BaseServiceMockTest
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $existingFields
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions
      * @param bool $execute
+     * @param bool $isTranslation
      *
      * @return mixed
      */
@@ -3056,7 +3057,8 @@ class ContentTest extends BaseServiceMockTest
         array $spiFields,
         array $existingFields,
         array $fieldDefinitions,
-        $execute = true
+        $execute = true,
+        $isTranslation = false
     ) {
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent', 'loadRelations'));
@@ -3124,15 +3126,31 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $repositoryMock->expects($this->once())->method('beginTransaction');
+        $contentUpdateStruct = new ContentUpdateStruct(
+            array(
+                'fields' => $structFields,
+                'initialLanguageCode' => $initialLanguageCode,
+            )
+        );
 
-        $repositoryMock->expects($this->once())
-            ->method('canUser')
-            ->with(
-                $this->equalTo('content'),
-                $this->equalTo('edit'),
-                $this->equalTo($content)
-            )->will($this->returnValue(true));
+        if ($isTranslation) {
+            $repositoryMock->expects($this->once())
+                ->method('canUser')
+                ->with(
+                    $this->equalTo('content'),
+                    $this->equalTo('translate'),
+                    $this->equalTo($contentUpdateStruct)
+                )->will($this->returnValue(true));
+        } else {
+            $repositoryMock->expects($this->once())->method('beginTransaction');
+            $repositoryMock->expects($this->once())
+                ->method('canUser')
+                ->with(
+                    $this->equalTo('content'),
+                    $this->equalTo('edit'),
+                    $this->equalTo($content)
+                )->will($this->returnValue(true));
+        }
 
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
@@ -3227,13 +3245,6 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo($existingRelations)
             );
 
-        $contentUpdateStruct = new ContentUpdateStruct(
-            array(
-                'fields' => $structFields,
-                'initialLanguageCode' => $initialLanguageCode,
-            )
-        );
-
         if ($execute) {
             $spiContentUpdateStruct = new SPIContentUpdateStruct(
                 array(
@@ -3317,6 +3328,7 @@ class ContentTest extends BaseServiceMockTest
                     ),
                 ),
                 $spiFields,
+                false,
             ),
             // Without languages set
             array(
@@ -3331,12 +3343,14 @@ class ContentTest extends BaseServiceMockTest
                     ),
                 ),
                 $spiFields,
+                false,
             ),
-            // Adding new language without fields
+            // Adding new language without fields (translation occurs)
             array(
                 'eng-US',
                 array(),
                 array(),
+                true,
             ),
         );
     }
@@ -3351,7 +3365,7 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentNonRedundantFieldSet1
      */
-    public function testUpdateContentNonRedundantFieldSet1($initialLanguageCode, $structFields, $spiFields)
+    public function testUpdateContentNonRedundantFieldSet1($initialLanguageCode, $structFields, $spiFields, $isTranslation)
     {
         $existingFields = array(
             new Field(
@@ -3382,7 +3396,9 @@ class ContentTest extends BaseServiceMockTest
             $structFields,
             $spiFields,
             $existingFields,
-            $fieldDefinitions
+            $fieldDefinitions,
+            true,
+            $isTranslation
         );
     }
 
@@ -3449,6 +3465,7 @@ class ContentTest extends BaseServiceMockTest
                     ),
                 ),
                 $spiFields0,
+                false,
             ),
             // 1. Without languages set
             array(
@@ -3463,6 +3480,7 @@ class ContentTest extends BaseServiceMockTest
                     ),
                 ),
                 $spiFields0,
+                false,
             ),
             // 2. New language with language set
             array(
@@ -3477,8 +3495,9 @@ class ContentTest extends BaseServiceMockTest
                     ),
                 ),
                 $spiFields1,
+                false,
             ),
-            // 3. New language without language set
+            // 3. New language without language set (translation occurs)
             array(
                 'eng-US',
                 array(
@@ -3491,6 +3510,7 @@ class ContentTest extends BaseServiceMockTest
                     ),
                 ),
                 $spiFields1,
+                true,
             ),
             // 4. New language and existing language with language set
             array(
@@ -3512,8 +3532,9 @@ class ContentTest extends BaseServiceMockTest
                     ),
                 ),
                 $spiFields2,
+                false,
             ),
-            // 5. New language and existing language without language set
+            // 5. New language and existing language without language set (translation occurs)
             array(
                 'eng-US',
                 array(
@@ -3533,8 +3554,9 @@ class ContentTest extends BaseServiceMockTest
                     ),
                 ),
                 $spiFields2,
+                true,
             ),
-            // 6. Adding new language without fields
+            // 6. Adding new language without fields (translation occurs)
             array(
                 'eng-US',
                 array(),
@@ -3550,6 +3572,7 @@ class ContentTest extends BaseServiceMockTest
                         )
                     ),
                 ),
+                true,
             ),
         );
     }
@@ -3564,7 +3587,7 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentNonRedundantFieldSet2
      */
-    public function testUpdateContentNonRedundantFieldSet2($initialLanguageCode, $structFields, $spiFields)
+    public function testUpdateContentNonRedundantFieldSet2($initialLanguageCode, $structFields, $spiFields, $isTranslation = false)
     {
         $existingFields = array(
             new Field(
@@ -3595,7 +3618,9 @@ class ContentTest extends BaseServiceMockTest
             $structFields,
             $spiFields,
             $existingFields,
-            $fieldDefinitions
+            $fieldDefinitions,
+            true,
+            $isTranslation
         );
     }
 
@@ -3870,12 +3895,15 @@ class ContentTest extends BaseServiceMockTest
             ),
         );
 
+        // isTranslation parameter is set to true because $initialLanguageCode is provided always as 'eng-US'
         $this->assertForTestUpdateContentNonRedundantFieldSet(
             $initialLanguageCode,
             $structFields,
             $spiFields,
             $existingFields,
-            $fieldDefinitions
+            $fieldDefinitions,
+            true,
+            true
         );
     }
 
@@ -4175,12 +4203,15 @@ class ContentTest extends BaseServiceMockTest
             ),
         );
 
+        // isTranslation parameter is set to true because $initialLanguageCode is provided always as 'eng-US'
         $this->assertForTestUpdateContentNonRedundantFieldSet(
             $initialLanguageCode,
             $structFields,
             $spiFields,
             $existingFields,
-            $fieldDefinitions
+            $fieldDefinitions,
+            true,
+            true
         );
     }
 
@@ -4515,12 +4546,15 @@ class ContentTest extends BaseServiceMockTest
     {
         list($existingFields, $fieldDefinitions) = $this->fixturesForTestUpdateContentNonRedundantFieldSetComplex();
 
+        // isTranslation parameter is set to true because $initialLanguageCode is provided always as 'eng-US'
         $this->assertForTestUpdateContentNonRedundantFieldSet(
             $initialLanguageCode,
             $structFields,
             $spiFields,
             $existingFields,
-            $fieldDefinitions
+            $fieldDefinitions,
+            true,
+            true
         );
     }
 
@@ -4615,14 +4649,6 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $repositoryMock->expects($this->once())
-            ->method('canUser')
-            ->with(
-                $this->equalTo('content'),
-                $this->equalTo('edit'),
-                $this->equalTo($content)
-            )->will($this->returnValue(true));
-
         $contentUpdateStruct = new ContentUpdateStruct(
             array(
                 'fields' => $structFields,
@@ -4630,13 +4656,32 @@ class ContentTest extends BaseServiceMockTest
             )
         );
 
+        if ($initialLanguageCode === 'Klingon') {
+            $repositoryMock->expects($this->once())
+                ->method('canUser')
+                ->with(
+                    $this->equalTo('content'),
+                    $this->equalTo('translate'),
+                    $this->equalTo($contentUpdateStruct)
+                )->will($this->returnValue(true));
+        } else {
+            $repositoryMock->expects($this->once())
+                ->method('canUser')
+                ->with(
+                    $this->equalTo('content'),
+                    $this->equalTo('edit'),
+                    $this->equalTo($content)
+                )->will($this->returnValue(true));
+        }
+
         $mockedService->updateContent($content->versionInfo, $contentUpdateStruct);
     }
 
     protected function assertForUpdateContentContentValidationException(
         $initialLanguageCode,
         $structFields,
-        $fieldDefinitions = array()
+        $fieldDefinitions = array(),
+        $isTranslation = false
     ) {
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
@@ -4690,13 +4735,30 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $repositoryMock->expects($this->once())
-            ->method('canUser')
-            ->with(
-                $this->equalTo('content'),
-                $this->equalTo('edit'),
-                $this->equalTo($content)
-            )->will($this->returnValue(true));
+        $contentUpdateStruct = new ContentUpdateStruct(
+            array(
+                'fields' => $structFields,
+                'initialLanguageCode' => $initialLanguageCode,
+            )
+        );
+
+        if ($isTranslation) {
+            $repositoryMock->expects($this->once())
+                ->method('canUser')
+                ->with(
+                    $this->equalTo('content'),
+                    $this->equalTo('translate'),
+                    $this->equalTo($contentUpdateStruct)
+                )->will($this->returnValue(true));
+        } else {
+            $repositoryMock->expects($this->once())
+                ->method('canUser')
+                ->with(
+                    $this->equalTo('content'),
+                    $this->equalTo('edit'),
+                    $this->equalTo($content)
+                )->will($this->returnValue(true));
+        }
 
         $contentTypeServiceMock->expects($this->once())
             ->method('loadContentType')
@@ -4706,13 +4768,6 @@ class ContentTest extends BaseServiceMockTest
         $repositoryMock->expects($this->once())
             ->method('getContentTypeService')
             ->will($this->returnValue($contentTypeServiceMock));
-
-        $contentUpdateStruct = new ContentUpdateStruct(
-            array(
-                'fields' => $structFields,
-                'initialLanguageCode' => $initialLanguageCode,
-            )
-        );
 
         $mockedService->updateContent($content->versionInfo, $contentUpdateStruct);
     }
@@ -4800,7 +4855,8 @@ class ContentTest extends BaseServiceMockTest
         $this->assertForUpdateContentContentValidationException(
             $initialLanguageCode,
             $structFields,
-            $fieldDefinitions
+            $fieldDefinitions,
+            true
         );
     }
 
@@ -4866,12 +4922,19 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
+        $contentUpdateStruct = new ContentUpdateStruct(
+            array(
+                'fields' => $structFields,
+                'initialLanguageCode' => $initialLanguageCode,
+            )
+        );
+
         $repositoryMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
-                $this->equalTo('edit'),
-                $this->equalTo($content)
+                $this->equalTo('translate'),
+                $this->equalTo($contentUpdateStruct)
             )->will($this->returnValue(true));
 
         $contentTypeServiceMock->expects($this->once())
@@ -4914,13 +4977,6 @@ class ContentTest extends BaseServiceMockTest
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
             ->will($this->returnValue($fieldTypeMock));
-
-        $contentUpdateStruct = new ContentUpdateStruct(
-            array(
-                'fields' => $structFields,
-                'initialLanguageCode' => $initialLanguageCode,
-            )
-        );
 
         return array($content->versionInfo, $contentUpdateStruct);
     }
@@ -5068,12 +5124,19 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
+        $contentUpdateStruct = new ContentUpdateStruct(
+            array(
+                'fields' => $structFields,
+                'initialLanguageCode' => $initialLanguageCode,
+            )
+        );
+
         $repositoryMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
-                $this->equalTo('edit'),
-                $this->equalTo($content)
+                $this->equalTo('translate'),
+                $this->equalTo($contentUpdateStruct)
             )->will($this->returnValue(true));
 
         $contentTypeServiceMock->expects($this->once())
@@ -5123,13 +5186,6 @@ class ContentTest extends BaseServiceMockTest
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
             ->will($this->returnValue($fieldTypeMock));
-
-        $contentUpdateStruct = new ContentUpdateStruct(
-            array(
-                'fields' => $structFields,
-                'initialLanguageCode' => $initialLanguageCode,
-            )
-        );
 
         return array($content->versionInfo, $contentUpdateStruct, $allFieldErrors);
     }
@@ -5320,7 +5376,7 @@ class ContentTest extends BaseServiceMockTest
             ),
         );
 
-        // Setup a simple case that will pass
+        // Setup a simple case that will pass (initialLanguage is 'eng-US' so we have translation)
         list($versionInfo, $contentUpdateStruct) = $this->assertForTestUpdateContentNonRedundantFieldSet(
             'eng-US',
             array(),
@@ -5328,7 +5384,8 @@ class ContentTest extends BaseServiceMockTest
             $existingFields,
             $fieldDefinitions,
             // Do not execute test
-            false
+            false,
+            true
         );
 
         $repositoryMock = $this->getRepositoryMock();
