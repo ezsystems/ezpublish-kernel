@@ -569,7 +569,7 @@ abstract class BaseTest extends TestCase
 
         if (!$connection instanceof Connection) {
             throw new \RuntimeException(
-                sprintf('Expected %s got something else', Connection::class)
+                sprintf('Expected %s got %s', Connection::class, get_class($connection))
             );
         }
 
