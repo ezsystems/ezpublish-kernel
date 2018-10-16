@@ -84,15 +84,12 @@ class Mapper
      */
     public function extractLanguageCodesFromData(array $rows)
     {
-        $languageCodes = [];
+        $languageMask = 0;
         foreach ($rows as $row) {
-            $languageCodes = array_merge(
-                $languageCodes,
-                $this->languageMaskGenerator->extractLanguageCodesFromMask($row['lang_mask'])
-            );
+            $languageMask |= $row['lang_mask'];
         }
 
-        return array_unique($languageCodes);
+        return $this->languageMaskGenerator->extractLanguageCodesFromMask($languageMask);
     }
 
     /**
