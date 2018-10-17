@@ -22,7 +22,7 @@ use RuntimeException;
 /**
  * Test case for operations in the URLAliasService using in memory storage.
  *
- * @see eZ\Publish\API\Repository\URLAliasService
+ * @see \eZ\Publish\API\Repository\URLAliasService
  * @group url-alias
  */
 class URLAliasServiceTest extends BaseTest
@@ -1216,6 +1216,103 @@ DOCBOOK
     }
 
     /**
+     * Test restoring missing current URL which has existing history.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \Exception
+     */
+    public function testRefreshSystemUrlAliasesForMissingUrlWithHistory()
+    {
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        $folderNames = ['eng-GB' => 'My folder Name'];
+        $folder = $this->createFolder($folderNames, 2);
+        $folderLocation = $locationService->loadLocation($folder->contentInfo->mainLocationId);
+        $nestedFolder = $this->createFolder(['eng-GB' => 'Nested folder'], $folderLocation->id);
+        $nestedFolderLocation = $locationService->loadLocation($nestedFolder->contentInfo->mainLocationId);
+
+        $folder = $this->updateContentField(
+            $folder->contentInfo,
+            'name',
+            ['eng-GB' => 'Updated Name']
+        );
+        // create more historical entries
+        $this->updateContentField(
+            $folder->contentInfo,
+            'name',
+            ['eng-GB' => 'Updated Again Name']
+        );
+        // create historical entry for nested folder
+        $this->updateContentField(
+            $nestedFolder->contentInfo,
+            'name',
+            ['eng-GB' => 'Updated Nested folder']
+        );
+
+        // perform sanity check
+        $this->assertUrlIsHistory('/My-folder-Name', $folderLocation->id);
+        $this->assertUrlIsHistory('/Updated-Name', $folderLocation->id);
+        $this->assertUrlIsHistory('/My-folder-Name/Nested-folder', $nestedFolderLocation->id);
+        $this->assertUrlIsHistory('/Updated-Name/Nested-folder', $nestedFolderLocation->id);
+        $this->assertUrlIsHistory('/Updated-Again-Name/Nested-folder', $nestedFolderLocation->id);
+
+        $this->assertUrlIsCurrent('/Updated-Again-Name', $folderLocation->id);
+        $this->assertUrlIsCurrent('/Updated-Again-Name/Updated-Nested-folder', $nestedFolderLocation->id);
+
+        self::assertNotEmpty($urlAliasService->listLocationAliases($folderLocation, false));
+
+        // corrupt database by removing original entry, keeping its history
+        $this->performRawDatabaseOperation(
+            function (Connection $connection) use ($folderLocation) {
+                $queryBuilder = $connection->createQueryBuilder();
+                $expr = $queryBuilder->expr();
+                $queryBuilder
+                    ->delete('ezurlalias_ml')
+                    ->where(
+                        $expr->andX(
+                            $expr->eq(
+                                'action',
+                                $queryBuilder->createPositionalParameter(
+                                    "eznode:{$folderLocation->id}"
+                                )
+                            ),
+                            $expr->eq(
+                                'is_original',
+                                $queryBuilder->createPositionalParameter(1)
+                            )
+                        )
+                    );
+
+                return $queryBuilder->execute();
+            }
+        );
+
+        // perform sanity check
+        self::assertEmpty($urlAliasService->listLocationAliases($folderLocation, false));
+
+        // Begin the actual test
+        $urlAliasService->refreshSystemUrlAliasesForLocation($folderLocation);
+        $urlAliasService->refreshSystemUrlAliasesForLocation($nestedFolderLocation);
+
+        // make sure there is no corrupted data that could affect the test
+        $urlAliasService->deleteCorruptedUrlAliases();
+
+        // test if history was restored
+        $this->assertUrlIsHistory('/My-folder-Name', $folderLocation->id);
+        $this->assertUrlIsHistory('/Updated-Name', $folderLocation->id);
+        $this->assertUrlIsHistory('/My-folder-Name/Nested-folder', $nestedFolderLocation->id);
+        $this->assertUrlIsHistory('/Updated-Name/Nested-folder', $nestedFolderLocation->id);
+        $this->assertUrlIsHistory('/Updated-Again-Name/Nested-folder', $nestedFolderLocation->id);
+
+        $this->assertUrlIsCurrent('/Updated-Again-Name', $folderLocation->id);
+        $this->assertUrlIsCurrent('/Updated-Again-Name/Updated-Nested-folder', $nestedFolderLocation->id);
+    }
+
+    /**
      * Lookup given URL and check if it is archived and points to the given Location Id.
      *
      * @param string $lookupUrl
@@ -1406,26 +1503,6 @@ DOCBOOK
             ],
             $actualUrlAliasValue
         );
-    }
-
-    /**
-     * @return \Doctrine\DBAL\Connection
-     *
-     * @throws \ErrorException
-     */
-    private function getRawDatabaseConnection()
-    {
-        $connection = $this
-            ->getSetupFactory()
-            ->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.connection');
-
-        if (!$connection instanceof Connection) {
-            throw new \RuntimeException(
-                sprintf('Expected %s got something else', Connection::class)
-            );
-        }
-
-        return $connection;
     }
 
     /**
