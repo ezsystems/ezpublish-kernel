@@ -8,12 +8,12 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias;
 
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\SwappedLocationProperties;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\DTO\UrlAliasForSwappedLocation;
 use eZ\Publish\SPI\Persistence\Content\Language;
-use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as UrlAliasHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
@@ -1050,16 +1050,12 @@ class Handler implements UrlAliasHandlerInterface
     {
         $parentId = $this->getRealAliasId($parentLocationId);
 
+        $data = $this->gateway->loadLocationEntries($locationId);
         // filter removed Translations
-        $urlAliases = $this->listURLAliasesForLocation($locationId);
-        $removedLanguages = [];
-        foreach ($urlAliases as $urlAlias) {
-            foreach ($urlAlias->languageCodes as $languageCode) {
-                if (!in_array($languageCode, $languageCodes)) {
-                    $removedLanguages[] = $languageCode;
-                }
-            }
-        }
+        $removedLanguages = array_diff(
+            $this->mapper->extractLanguageCodesFromData($data),
+            $languageCodes
+        );
 
         if (empty($removedLanguages)) {
             return;
@@ -1097,6 +1093,24 @@ class Handler implements UrlAliasHandlerInterface
         } catch (\Exception $e) {
             $this->transactionHandler->rollback();
             throw $e;
+        }
+    }
+
+    /**
+     * Attempt repairing auto-generated URL aliases for the given Location (including history).
+     *
+     * Note: it is assumed that at this point original, working, URL Alias for Location is published.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     */
+    public function repairBrokenUrlAliasesForLocation(int $locationId)
+    {
+        try {
+            $this->gateway->repairBrokenUrlAliasesForLocation($locationId);
+        } catch (\RuntimeException $e) {
+            throw new BadStateException('locationId', $e->getMessage(), $e);
         }
     }
 }

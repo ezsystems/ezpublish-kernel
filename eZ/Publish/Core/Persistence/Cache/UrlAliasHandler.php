@@ -403,4 +403,28 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
 
         return $deletedCount;
     }
+
+    /**
+     * Attempt repairing auto-generated URL aliases for the given Location (including history).
+     *
+     * Note: it is assumed that at this point original, working, URL Alias for Location is published.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function repairBrokenUrlAliasesForLocation(int $locationId)
+    {
+        $this->logger->logCall(__METHOD__, ['locationId' => $locationId]);
+
+        $this->persistenceHandler->urlAliasHandler()->repairBrokenUrlAliasesForLocation($locationId);
+
+        $this->cache->invalidateTags(
+            [
+                'urlAlias-location-' . $locationId,
+                'urlAlias-location-path-' . $locationId,
+            ]
+        );
+    }
 }
