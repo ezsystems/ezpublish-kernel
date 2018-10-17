@@ -131,14 +131,6 @@ EOT
             return;
         }
 
-        $output->writeln('<info>Cleaning up corrupted URL aliases...</info>');
-        $corruptedAliasesCount = $this->repository->sudo(
-            function (Repository $repository) {
-                return $repository->getURLAliasService()->deleteCorruptedUrlAliases();
-            }
-        );
-        $output->writeln("<info>Done. Deleted {$corruptedAliasesCount} entries.</info>");
-
         $output->writeln('Regenerating System URL aliases...');
 
         $progressBar = $this->getProgressBar($locationsCount, $output);
@@ -160,6 +152,14 @@ EOT
         $output->writeln('Purging HTTP cache...');
         $this->cachePurger->purgeAll();
         $output->writeln('<info>Done.</info>');
+
+        $output->writeln('<info>Cleaning up corrupted URL aliases...</info>');
+        $corruptedAliasesCount = $this->repository->sudo(
+            function (Repository $repository) {
+                return $repository->getURLAliasService()->deleteCorruptedUrlAliases();
+            }
+        );
+        $output->writeln("<info>Done. Deleted {$corruptedAliasesCount} entries.</info>");
     }
 
     /**

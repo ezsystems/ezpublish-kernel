@@ -259,4 +259,12 @@ abstract class Gateway
      * Note: Typically link column value is used to determine original alias for an archived entries.
      */
     abstract public function deleteUrlAliasesWithBrokenLink();
+
+    /**
+     * Attempt repairing data corruption for broken archived URL aliases for Location,
+     * assuming there exists restored original (current) entry.
+     *
+     * @param int $locationId
+     */
+    abstract public function repairBrokenUrlAliasesForLocation($locationId);
 }

@@ -771,12 +771,15 @@ class URLAliasService implements URLAliasServiceInterface
                     $content->contentInfo->alwaysAvailable
                 );
             }
+            $this->urlAliasHandler->repairBrokenUrlAliasesForLocation($location->id);
+
             // handle URL aliases for missing Translations
             $this->urlAliasHandler->archiveUrlAliasesForDeletedTranslations(
                 $location->id,
                 $location->parentLocationId,
                 $content->getVersionInfo()->languageCodes
             );
+
             $this->repository->commit();
         } catch (APINotFoundException $e) {
             $this->repository->rollback();
