@@ -190,4 +190,15 @@ interface Handler
      * @return int Number of deleted URL aliases
      */
     public function deleteCorruptedUrlAliases();
+
+    /**
+     * Attempt repairing auto-generated URL aliases for the given Location (including history).
+     *
+     * Note: it is assumed that at this point original, working, URL Alias for Location is published.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     */
+    public function repairBrokenUrlAliasesForLocation(int $locationId);
 }
