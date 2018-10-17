@@ -473,4 +473,16 @@ class ExceptionConversion extends Gateway
             throw new \RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function repairBrokenUrlAliasesForLocation(int $locationId)
+    {
+        try {
+            return $this->innerGateway->repairBrokenUrlAliasesForLocation($locationId);
+        } catch (DBALException | PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
 }
