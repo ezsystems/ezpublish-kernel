@@ -78,7 +78,11 @@ class Legacy extends SetupFactory
     {
         self::$dsn = getenv('DATABASE');
         if (!self::$dsn) {
+            // use sqlite in-memory by default (does not need special handling for paratest as it's per process)
             self::$dsn = 'sqlite://:memory:';
+        } elseif (getenv('TEST_TOKEN') !== false) {
+            // Using paratest, assuming dsn ends with db name here...
+            self::$dsn .= '_' . getenv('TEST_TOKEN');
         }
 
         if ($repositoryReference = getenv('REPOSITORY_SERVICE_ID')) {
