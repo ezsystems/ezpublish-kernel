@@ -5835,40 +5835,19 @@ class ContentTest extends BaseServiceMockTest
      */
     protected function mockPublishVersion($publicationDate = null, $modificationDate = null)
     {
+        $versionInfoMock = $this->createMock(APIVersionInfo::class);
+        $contentInfoMock = $this->createMock(APIContentInfo::class);
         /* @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
-
-        $currentTime = time();
-        if ($publicationDate === null && $versionInfoMock->versionNo === 1) {
-            $publicationDate = $currentTime;
-        }
-
-        // Account for 1 second of test execution time
-        $metadataUpdateStruct->publicationDate = $publicationDate;
-        $metadataUpdateStruct->modificationDate = $currentTime;
-        $metadataUpdateStruct2 = clone $metadataUpdateStruct;
-        ++$metadataUpdateStruct2->publicationDate;
-        ++$metadataUpdateStruct2->modificationDate;
 
         $spiContent = new SPIContent([
             'versionInfo' => new VersionInfo([
                     'contentInfo' => new ContentInfo(['id' => 42, 'contentTypeId' => 123]),
             ]),
         ]);
-        $contentHandlerMock->expects($this->once())
-            ->method('publish')
-            ->with(
-                42,
-                123,
-                $this->logicalOr($metadataUpdateStruct, $metadataUpdateStruct2)
-            )
-            ->will($this->returnValue($spiContent));
 
         $contentMock = $this->mockBuildContentDomainObject($spiContent);
-        $versionInfoMock = $this->createMock(APIVersionInfo::class);
-        $contentInfoMock = $this->createMock(APIContentInfo::class);
-
         $contentMock->expects($this->any())
             ->method('__get')
             ->will(
@@ -5915,7 +5894,6 @@ class ContentTest extends BaseServiceMockTest
         $metadataUpdateStruct->publicationDate = $publicationDate;
         $metadataUpdateStruct->modificationDate = $modificationDate ?? $currentTime;
 
-        $spiContent = new SPIContent();
         $contentHandlerMock->expects($this->once())
             ->method('publish')
             ->with(
@@ -5924,11 +5902,6 @@ class ContentTest extends BaseServiceMockTest
                 $metadataUpdateStruct
             )
             ->will($this->returnValue($spiContent));
-
-        $domainMapperMock->expects($this->once())
-            ->method('buildContentDomainObject')
-            ->with($spiContent)
-            ->will($this->returnValue($contentMock));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\Content $contentMock */
         $this->mockPublishUrlAliasesForContent($contentMock);
