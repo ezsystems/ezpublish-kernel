@@ -7,7 +7,7 @@ sudo mount -t tmpfs -o size=1024m tmpfs /mnt/ramdisk
 sudo stop mysql
 sudo start mysql
 
-echo -e "[mysqld]\ndefault_authentication_plugin=mysql_native_password" > /tmp/mysql-auth.cnf
+echo -e "[mysqld]\ndefault_authentication_plugin=mysql_native_password\nskip-log-bin" > /tmp/mysql-auth.cnf
 
 docker pull mysql:8.0
 docker run -d -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=testdb -v /tmp/mysql-auth.cnf:/etc/mysql/conf.d/auth.cnf:ro -v /mnt/ramdisk:/var/lib/mysql -p 33306:3306 --name mysql80 mysql:8.0
