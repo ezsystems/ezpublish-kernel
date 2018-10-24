@@ -70,7 +70,7 @@ before_install:
   - if [ "$ENABLE_IGBINARY" = true ] ; then pecl install igbinary ; fi
   - if [ "$ENABLE_LZF" = true ] ; then printf "no\n" | pecl install lzf ; fi
   # Prepare system
-  - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
+  #- if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
   - if [ "$MYSQL_VERSION" == "8.0" ] ; then ./bin/.travis/install_mysql8.sh ; fi
   - if [ "$BEHAT_OPTS" != "" ] || [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
   # Execute Symfony command if specified
