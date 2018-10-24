@@ -1334,6 +1334,46 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateContentTypeDraftWithNewTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+        // sanity check
+        self::assertEquals(
+            ['eng-US', 'ger-DE'],
+            array_keys($contentType->getNames())
+        );
+
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+        $updateStruct = $contentTypeService->newContentTypeUpdateStruct();
+        $updateStruct->names = [
+            'eng-GB' => 'BrE blog post',
+        ];
+        $contentTypeService->updateContentTypeDraft($contentTypeDraft, $updateStruct);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        self::assertEquals(
+            [
+                'eng-US' => 'Blog post',
+                'ger-DE' => 'Blog-Eintrag',
+                'eng-GB' => 'BrE blog post',
+            ],
+            $contentTypeService->loadContentType($contentType->id)->getNames()
+        );
+    }
+
+    /**
      * Test for the updateContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
