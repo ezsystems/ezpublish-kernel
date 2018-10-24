@@ -52,16 +52,8 @@ matrix:
 #       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
     - name: Legacy Integration with mysql 8.0
       php: 7.1
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@127.0.0.1/testdb" COMMAND="mysql -uroot -V"
-      addons:
-        apt:
-          update: true
-          sources:
-          - sourceline: 'deb http://repo.mysql.com/apt/ubuntu/ trusty mysql-8.0'
-            key_url: 'http://pool.sks-keyservers.net/pks/lookup?op=get&search=0x8C718D3B5072E1F5'
-          packages:
-          - mysql-server
-          - mysql-client
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@0.0.0.0:33306/testdb" MYSQL_VERSION=8.0
+      services: docker
 
 # test only master, stable branches and pull requests
 branches:
@@ -79,6 +71,7 @@ before_install:
   - if [ "$ENABLE_LZF" = true ] ; then printf "no\n" | pecl install lzf ; fi
   # Prepare system
   - if [ "$TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_unittest.sh ; fi
+  - if [ "$MYSQL_VERSION" == "8.0" ] ; then ./bin/.travis/install_mysql8.sh ; fi
   - if [ "$BEHAT_OPTS" != "" ] || [ "$REST_TEST_CONFIG" != "" ] ; then ./bin/.travis/prepare_behat.sh ; fi
   # Execute Symfony command if specified
   - if [ "$SF_CMD" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "bin/console $SF_CMD" ; fi
