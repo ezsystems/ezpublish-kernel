@@ -26,7 +26,7 @@ use RuntimeException;
 class Type extends FieldType
 {
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
+     * @var \eZ\Publish\Core\FieldType\RichText\Validator
      */
     protected $internalFormatValidator;
 
