@@ -17,7 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 /**
  * Validator for RichText internal format links.
  */
-class InternalLinkValidator
+class InternalLinkValidator implements ValidatorInterface
 {
     /**
      * @var \eZ\Publish\SPI\Persistence\Content\Handler
@@ -44,9 +44,12 @@ class InternalLinkValidator
      * Extracts and validate internal links.
      *
      * @param \DOMDocument $xml
+     *
      * @return array
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    public function validateDocument(DOMDocument $xml)
+    public function validateDocument(DOMDocument $xml): array
     {
         $errors = [];
 

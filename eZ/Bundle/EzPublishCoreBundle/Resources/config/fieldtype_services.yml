@@ -227,6 +227,13 @@ services:
         class: "%ezpublish.fieldType.ezrichtext.validator.xml.class%"
         arguments: ["%ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5.resources%"]
 
+    ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5:
+        class: eZ\Publish\Core\FieldType\RichText\ValidatorAggregate
+        arguments:
+            - '@ezpublish.fieldType.ezrichtext.validator.docbook'
+            - '@ezpublish.fieldType.ezrichtext.validator.internal_link'
+            - '@eZ\Publish\Core\FieldType\RichText\CustomTagsValidator'
+
     ezpublish.fieldType.ezrichtext.validator.input.dispatcher:
         class: "%ezpublish.fieldType.ezrichtext.validator.dispatcher.class%"
         arguments:

@@ -17,7 +17,7 @@ use RuntimeException;
 /**
  * Validates XML document using ISO Schematron (as XSLT stylesheet), XSD and RELAX NG schemas.
  */
-class Validator extends XmlBase
+class Validator extends XmlBase implements ValidatorInterface
 {
     /**
      * Paths to the schema files.
@@ -45,7 +45,7 @@ class Validator extends XmlBase
      *
      * @return string[] An array of validation errors
      */
-    public function validate(DOMDocument $document)
+    public function validateDocument(DOMDocument $document): array
     {
         $this->startRecordingErrors();
         $additionalErrors = array();
@@ -63,6 +63,14 @@ class Validator extends XmlBase
         }
 
         return $errors;
+    }
+
+    /**
+     * @deprecated since 7.4 Use validateDocument instead
+     */
+    public function validate(DOMDocument $document)
+    {
+        return $this->validateDocument($document);
     }
 
     /**

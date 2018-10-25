@@ -415,6 +415,7 @@ services:
             - '@ezpublish.fieldType.ezrichtext.validator.internal_link'
             - '@eZ\Publish\Core\FieldType\RichText\CustomTagsValidator'
             - '@eZ\Publish\Core\FieldType\RichText\RelationProcessor'
+            - '@ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5'
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 

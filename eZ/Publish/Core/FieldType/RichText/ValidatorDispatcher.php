@@ -14,7 +14,7 @@ use DOMDocument;
 /**
  * Dispatcher for various validators depending on the XML document namespace.
  */
-class ValidatorDispatcher
+class ValidatorDispatcher implements ValidatorInterface
 {
     /**
      * Mapping of namespaces to validators.
@@ -45,6 +45,14 @@ class ValidatorDispatcher
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function validateDocument(DOMDocument $xmlDocument): array
+    {
+        return $this->dispatch($xmlDocument);
+    }
+
+    /**
      * Dispatches DOMDocument to the namespace mapped validator.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
@@ -67,7 +75,7 @@ class ValidatorDispatcher
                     return array();
                 }
 
-                return $validator->validate($document);
+                return $validator->validateDocument($document);
             }
         }
 

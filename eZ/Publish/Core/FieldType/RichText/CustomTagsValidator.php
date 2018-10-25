@@ -17,7 +17,7 @@ use DOMXPath;
  * The Validator checks if the given XML reflects proper Custom Tags configuration,
  * mostly existence of specific Custom Tag and its required attributes.
  */
-class CustomTagsValidator
+class CustomTagsValidator implements ValidatorInterface
 {
     /**
      * Custom Tags global configuration (ezpublish.ezrichtext.custom_tags Semantic Config).

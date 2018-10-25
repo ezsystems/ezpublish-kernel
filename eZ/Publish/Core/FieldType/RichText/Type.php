@@ -6,6 +6,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\FieldType\RichText;
 
 use eZ\Publish\Core\FieldType\FieldType;
@@ -27,6 +28,8 @@ class Type extends FieldType
 {
     /**
      * @var \eZ\Publish\Core\FieldType\RichText\Validator
+     *
+     * @deprecated since 7.4
      */
     protected $internalFormatValidator;
 
@@ -47,16 +50,27 @@ class Type extends FieldType
 
     /**
      * @var null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator
+     *
+     * @deprecated since 7.4
      */
     protected $internalLinkValidator;
 
     /**
      * @var null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator
+     *
+     * @deprecated since 7.4
      */
     private $customTagsValidator;
 
-    /** @var \eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface */
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
+     */
     private $relationProcessor;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorInterface
+     */
+    private $internalValidator;
 
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
@@ -66,6 +80,7 @@ class Type extends FieldType
      * @param null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator $internalLinkValidator
      * @param null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator $customTagsValidator
      * @param null|\eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
+     * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorInterface
      */
     public function __construct(
         Validator $internalFormatValidator,
@@ -74,7 +89,8 @@ class Type extends FieldType
         ValidatorDispatcher $inputValidatorDispatcher = null,
         InternalLinkValidator $internalLinkValidator = null,
         CustomTagsValidator $customTagsValidator = null,
-        RelationProcessorInterface $relationProcessor = null
+        RelationProcessorInterface $relationProcessor = null,
+        ValidatorInterface $internalValidator = null
     ) {
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
@@ -83,6 +99,7 @@ class Type extends FieldType
         $this->internalLinkValidator = $internalLinkValidator;
         $this->customTagsValidator = $customTagsValidator;
         $this->relationProcessor = $relationProcessor;
+        $this->internalValidator = $internalValidator;
     }
 
     /**
@@ -264,31 +281,9 @@ class Type extends FieldType
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $value)
     {
-        $validationErrors = array();
-
-        $errors = $this->internalFormatValidator->validate($value->xml);
-
-        if (!empty($errors)) {
-            $validationErrors[] = new ValidationError(
-                "Validation of XML content failed:\n" . implode("\n", $errors)
-            );
-        }
-
-        if ($this->internalLinkValidator !== null) {
-            $errors = $this->internalLinkValidator->validateDocument($value->xml);
-            foreach ($errors as $error) {
-                $validationErrors[] = new ValidationError($error);
-            }
-        }
-
-        if ($this->customTagsValidator !== null) {
-            $errors = $this->customTagsValidator->validateDocument($value->xml);
-            foreach ($errors as $error) {
-                $validationErrors[] = new ValidationError($error);
-            }
-        }
-
-        return $validationErrors;
+        return array_map(function ($error) {
+            return new ValidationError($error);
+        }, $this->internalValidator->validateDocument($value->xml));
     }
 
     /**
