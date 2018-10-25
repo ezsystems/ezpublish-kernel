@@ -315,6 +315,9 @@ services:
         public: false
         arguments: ['%ezplatform.ezrichtext.custom_tags%']
 
+    eZ\Publish\Core\FieldType\RichText\RelationProcessor:
+        public: false
+
     eZ\Publish\Core\FieldType\ImageAsset\NameableField:
         arguments:
             $handler: '@ezpublish.spi.persistence.cache.contentHandler'

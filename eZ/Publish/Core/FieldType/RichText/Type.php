@@ -55,6 +55,9 @@ class Type extends FieldType
      */
     private $customTagsValidator;
 
+    /** @var \eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface */
+    private $relationProcessor;
+
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
@@ -62,6 +65,7 @@ class Type extends FieldType
      * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
      * @param null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator $internalLinkValidator
      * @param null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator $customTagsValidator
+     * @param null|\eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
      */
     public function __construct(
         Validator $internalFormatValidator,
@@ -69,7 +73,8 @@ class Type extends FieldType
         Normalizer $inputNormalizer = null,
         ValidatorDispatcher $inputValidatorDispatcher = null,
         InternalLinkValidator $internalLinkValidator = null,
-        CustomTagsValidator $customTagsValidator = null
+        CustomTagsValidator $customTagsValidator = null,
+        RelationProcessorInterface $relationProcessor = null
     ) {
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
@@ -77,6 +82,7 @@ class Type extends FieldType
         $this->inputValidatorDispatcher = $inputValidatorDispatcher;
         $this->internalLinkValidator = $internalLinkValidator;
         $this->customTagsValidator = $customTagsValidator;
+        $this->relationProcessor = $relationProcessor;
     }
 
     /**
@@ -399,17 +405,14 @@ class Type extends FieldType
 
         /** @var \eZ\Publish\Core\FieldType\RichText\Value $value */
         if ($value->xml instanceof DOMDocument) {
-            $relations = array(
-                Relation::LINK => $this->getRelatedObjectIds($value, Relation::LINK),
-                Relation::EMBED => $this->getRelatedObjectIds($value, Relation::EMBED),
-            );
+            $relations = $this->relationProcessor->getRelations($value->xml);
         }
 
         return $relations;
     }
 
     /**
-     * {@inheritdoc}
+     * @deprecated since 7.4. This logic has been moved to \eZ\Publish\Core\FieldType\RichText\RelationProcessor
      */
     protected function getRelatedObjectIds(Value $fieldValue, $relationType)
     {
