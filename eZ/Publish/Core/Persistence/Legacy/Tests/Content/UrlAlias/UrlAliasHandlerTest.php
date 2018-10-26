@@ -1171,6 +1171,76 @@ class UrlAliasHandlerTest extends TestCase
     }
 
     /**
+     * Test for the publishUrlAliasForLocation() method.
+     *
+     * Japanese text is not transliterated, and would result in empty string if numbers were not added.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::publishUrlAliasForLocation
+     * @depends testPublishUrlAliasForLocation
+     * @group publish
+     */
+    public function testPublishUrlAliasCreatesNonEmptyAlias()
+    {
+        $handler = $this->getHandler();
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/publish_base.php');
+
+        $handler->publishUrlAliasForLocation(314, 2, 'ひらがな', 'eng-GB', true);
+        $handler->publishUrlAliasForLocation(315, 2, 'ひらがな', 'eng-GB', true);
+        self::assertEquals(5, $this->countRows());
+
+        $urlAlias1 = $handler->lookup('1');
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '0-' . md5('1'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => '314',
+                    'languageCodes' => array('eng-GB'),
+                    'pathData' => array(
+                        array(
+                            'always-available' => true,
+                            'translations' => array(
+                                'eng-GB' => '1',
+                                'cro-HR' => 'path314',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => true,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias1
+        );
+
+        $urlAlias2 = $handler->lookup('2');
+        self::assertEquals(
+            new UrlAlias(
+                array(
+                    'id' => '0-' . md5('2'),
+                    'type' => UrlAlias::LOCATION,
+                    'destination' => '315',
+                    'languageCodes' => array('eng-GB'),
+                    'pathData' => array(
+                        array(
+                            'always-available' => true,
+                            'translations' => array(
+                                'eng-GB' => '2',
+                            ),
+                        ),
+                    ),
+                    'alwaysAvailable' => true,
+                    'isHistory' => false,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
+            $urlAlias2
+        );
+    }
+
+    /**
      * @return array
      */
     public function providerForTestPublishUrlAliasForLocationComplex()

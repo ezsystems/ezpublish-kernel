@@ -187,7 +187,7 @@ class Handler implements UrlAliasHandlerInterface
         while (true) {
             $newText = '';
             if ($locationId != self::CONTENT_REPOSITORY_ROOT_LOCATION_ID) {
-                $newText = $name . ($uniqueCounter > 1 ? $uniqueCounter : '');
+                $newText = $name . ($name == '' || $uniqueCounter > 1 ? $uniqueCounter : '');
             }
             $newTextMD5 = $this->getHash($newText);
 
