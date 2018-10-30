@@ -117,6 +117,7 @@ class ScriptHandler extends DistributionBundleScriptHandler
             $installCommandText .= "<comment>    \$  ${installCommand}</comment>\n";
         }
 
+        $installCommandText = trim($installCommandText);
         $event->getIO()->write(<<<EOT
 
       ________      ____    ___             __       ___         
