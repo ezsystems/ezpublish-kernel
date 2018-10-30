@@ -104,7 +104,19 @@ class ScriptHandler extends DistributionBundleScriptHandler
      */
     public static function installWelcomeText(Event $event)
     {
+        $options = self::getOptions($event);
         $consoleDir = static::getConsoleDir($event, 'get console dir for welcome text');
+
+        $installName = $options['ez-install-name'] ?? 'eZ Platform';
+        $installUrl = $options['ez-install-url'] ?? 'https://doc.ezplatform.com/en/latest/getting_started/install_ez_platform/';
+
+        $installCommandText = '';
+        $installCommands = $options['ez-install-command'] ?? 'composer ezplatform-install';
+        // Allow usage of array structure from 'ez-install-command' in case several commands are needed
+        foreach ((array)$installCommands as $installCommand) {
+            $installCommandText .= "<comment>    \$  ${installCommand}</comment>\n";
+        }
+
         $event->getIO()->write(<<<EOT
 
       ________      ____    ___             __       ___         
@@ -116,21 +128,19 @@ class ScriptHandler extends DistributionBundleScriptHandler
  \/____/ \/_______/    \/_/   \/____/\/__/\/_/ \/__/ \/_/ \/___/  \/_/  \/_/\/_/\/_/
 
 
-<fg=cyan>Welcome to eZ Platform!</fg=cyan>
+<fg=cyan>Welcome to ${installName}!</fg=cyan>
 
-<options=bold>Quick test install:</>
+<options=bold>Quick dev/test install:</>
 <comment>    $  export SYMFONY_ENV="dev"</comment>
-<comment>    $  composer ezplatform-install</comment>
+${installCommandText}
 <comment>    $  php ${consoleDir}/console server:run</comment>
 
 Note:
-- "composer ezplatform-install" is an alias for command <comment>php ${consoleDir}/console ezplatform:install <type></comment> 
 - Instructions above assume the CLI user you execute these commands with is the same one that extracted/installed the software.
 - The last command will give you the url to the frontend of the installation, add "/admin" to reach backend.
 
-
-For full install instructions, including setting up full web server & directory permissions, see:
-https://doc.ezplatform.com/en/latest/getting_started/install_ez_platform/
+For full install instructions, both for production and better performing dev setup, see:
+${installUrl}
 
 EOT
         );
