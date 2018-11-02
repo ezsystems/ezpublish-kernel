@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\UserService as APIUserService;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
+use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
@@ -227,6 +228,19 @@ class UserService implements APIUserService, Sessionable
     }
 
     /**
+     * Loads a user with user hash key.
+     *
+     * @param string $hash
+     * @param array $prioritizedLanguages
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function loadUserByToken($hash, array $prioritizedLanguages = [])
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
      * This method deletes a user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -257,6 +271,30 @@ class UserService implements APIUserService, Sessionable
     {
         throw new \Exception('@todo: Implement.');
     }
+
+    /**
+     * Update the user token information specified by the user token struct.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct $userTokenUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Expires user token with user hash.
+     *
+     * @param string $hash
+     */
+    public function expireUserToken($hash)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
 
     /**
      * Assigns a new user group to the user.
