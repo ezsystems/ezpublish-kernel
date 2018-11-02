@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -259,6 +260,19 @@ class LocationService implements APILocationService, Sessionable
         );
 
         return $this->inputDispatcher->parse($response);
+    }
+
+    /**
+     * Load parent Locations for Content Draft.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] List of parent Locations
+     */
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null)
+    {
+        throw new \Exception('@todo: Implement.');
     }
 
     /**
