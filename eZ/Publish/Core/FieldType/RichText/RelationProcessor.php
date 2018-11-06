@@ -16,12 +16,12 @@ class RelationProcessor implements RelationProcessorInterface
 {
     private const EMBED_TAG_NAMES = [
         'ezembedinline',
-        'ezembed'
+        'ezembed',
     ];
 
     private const LINK_TAG_NAMES = [
         'link',
-        'ezlink'
+        'ezlink',
     ];
 
     /**

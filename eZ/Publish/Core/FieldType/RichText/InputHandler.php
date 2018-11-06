@@ -13,7 +13,9 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class InputHandler
 {
-    /** @var \eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory */
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory
+     */
     private $domDocumentFactory;
 
     /**
@@ -50,7 +52,12 @@ class InputHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @param string|null $inputValue
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @return \DOMDocument
      */
     public function fromString(?string $inputValue = null): DOMDocument
     {
@@ -66,7 +73,12 @@ class InputHandler
     }
 
     /**
-     * {@inheritdoc}
+     * @param \DOMDocument $inputValue
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @return \DOMDocument
      */
     public function fromDocument(DOMDocument $inputValue): DOMDocument
     {

@@ -13,7 +13,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidXmlException;
 
 final class DOMDocumentFactory
 {
-   /**
+    /**
      * Creates \DOMDocument from given $xmlString.
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidXmlException
