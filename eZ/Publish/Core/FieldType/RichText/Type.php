@@ -35,16 +35,22 @@ class Type extends FieldType
 
     /**
      * @var \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
+     *
+     * @deprecated since 7.4
      */
     protected $inputConverterDispatcher;
 
     /**
      * @var \eZ\Publish\Core\FieldType\RichText\Normalizer
+     *
+     * @deprecated since 7.4
      */
     protected $inputNormalizer;
 
     /**
      * @var null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
+     *
+     * @deprecated since 7.4
      */
     protected $inputValidatorDispatcher;
 
@@ -73,6 +79,11 @@ class Type extends FieldType
     private $internalValidator;
 
     /**
+     * @var \eZ\Publish\Core\FieldType\RichText\InputHandler
+     */
+    private $inputHandler;
+
+    /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
      * @param null|\eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
@@ -81,6 +92,7 @@ class Type extends FieldType
      * @param null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator $customTagsValidator
      * @param null|\eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
      * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorInterface
+     * @param null|\eZ\Publish\Core\FieldType\RichText\InputHandler $inputHandler
      */
     public function __construct(
         Validator $internalFormatValidator,
@@ -90,7 +102,8 @@ class Type extends FieldType
         InternalLinkValidator $internalLinkValidator = null,
         CustomTagsValidator $customTagsValidator = null,
         RelationProcessorInterface $relationProcessor = null,
-        ValidatorInterface $internalValidator = null
+        ValidatorInterface $internalValidator = null,
+        InputHandler $inputHandler = null
     ) {
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
@@ -100,6 +113,7 @@ class Type extends FieldType
         $this->customTagsValidator = $customTagsValidator;
         $this->relationProcessor = $relationProcessor;
         $this->internalValidator = $internalValidator;
+        $this->inputHandler = $inputHandler;
     }
 
     /**
@@ -179,31 +193,11 @@ class Type extends FieldType
     protected function createValueFromInput($inputValue)
     {
         if (is_string($inputValue)) {
-            if (empty($inputValue)) {
-                $inputValue = Value::EMPTY_VALUE;
-            }
-
-            if ($this->inputNormalizer !== null && $this->inputNormalizer->accept($inputValue)) {
-                $inputValue = $this->inputNormalizer->normalize($inputValue);
-            }
-
-            $inputValue = $this->loadXMLString($inputValue);
+            $inputValue = $this->inputHandler->fromString($inputValue);
         }
 
         if ($inputValue instanceof DOMDocument) {
-            if ($this->inputValidatorDispatcher !== null) {
-                $errors = $this->inputValidatorDispatcher->dispatch($inputValue);
-                if (!empty($errors)) {
-                    throw new InvalidArgumentException(
-                        '$inputValue',
-                        'Validation of XML content failed: ' . implode("\n", $errors)
-                    );
-                }
-            }
-
-            $inputValue = new Value(
-                $this->inputConverterDispatcher->dispatch($inputValue)
-            );
+            $inputValue = new Value($this->inputHandler->fromDocument($inputValue));
         }
 
         return $inputValue;
@@ -211,6 +205,8 @@ class Type extends FieldType
 
     /**
      * Creates \DOMDocument from given $xmlString.
+     *
+     * @deprecated since 7.4. Use \eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory::loadXMLString instead.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *

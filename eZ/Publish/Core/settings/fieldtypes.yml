@@ -416,8 +416,18 @@ services:
             - '@eZ\Publish\Core\FieldType\RichText\CustomTagsValidator'
             - '@eZ\Publish\Core\FieldType\RichText\RelationProcessor'
             - '@ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5'
+            - '@eZ\Publish\Core\FieldType\RichText\InputHandler'
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
+
+    eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory: ~
+
+    eZ\Publish\Core\FieldType\RichText\InputHandler:
+        arguments:
+            - '@eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory'
+            - '@ezpublish.fieldType.ezrichtext.converter.input.dispatcher'
+            - '@ezpublish.fieldType.ezrichtext.normalizer.input'
+            - '@ezpublish.fieldType.ezrichtext.validator.input.dispatcher'
 
     ezpublish.fieldType.ezpage:
         class: "%ezpublish.fieldType.ezpage.class%"
