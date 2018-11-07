@@ -26,46 +26,14 @@ use RuntimeException;
 class Type extends FieldType
 {
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Validator
-     *
-     * @deprecated since 7.4
+     * @var \eZ\Publish\Core\FieldType\RichText\InputHandler
      */
-    protected $internalFormatValidator;
+    private $inputHandler;
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
-     *
-     * @deprecated since 7.4
+     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorInterface
      */
-    protected $inputConverterDispatcher;
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Normalizer
-     *
-     * @deprecated since 7.4
-     */
-    protected $inputNormalizer;
-
-    /**
-     * @var null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
-     *
-     * @deprecated since 7.4
-     */
-    protected $inputValidatorDispatcher;
-
-    /**
-     * @var null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator
-     *
-     * @deprecated since 7.4
-     */
-    protected $internalLinkValidator;
-
-    /**
-     * @var null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator
-     *
-     * @deprecated since 7.4
-     */
-    private $customTagsValidator;
+    private $validator;
 
     /**
      * @var \eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
@@ -73,46 +41,18 @@ class Type extends FieldType
     private $relationProcessor;
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorInterface
-     */
-    private $internalValidator;
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\InputHandler
-     */
-    private $inputHandler;
-
-    /**
-     * @param \eZ\Publish\Core\FieldType\RichText\Validator $internalFormatValidator
-     * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverterDispatcher
-     * @param null|\eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
-     * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher $inputValidatorDispatcher
-     * @param null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator $internalLinkValidator
-     * @param null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator $customTagsValidator
-     * @param null|\eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
-     * @param null|\eZ\Publish\Core\FieldType\RichText\ValidatorInterface
-     * @param null|\eZ\Publish\Core\FieldType\RichText\InputHandler $inputHandler
+     * @param \eZ\Publish\Core\FieldType\RichText\InputHandler $inputHandler
+     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface
+     * @param \eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
      */
     public function __construct(
-        Validator $internalFormatValidator,
-        ConverterDispatcher $inputConverterDispatcher,
-        Normalizer $inputNormalizer = null,
-        ValidatorDispatcher $inputValidatorDispatcher = null,
-        InternalLinkValidator $internalLinkValidator = null,
-        CustomTagsValidator $customTagsValidator = null,
-        RelationProcessorInterface $relationProcessor = null,
-        ValidatorInterface $internalValidator = null,
-        InputHandler $inputHandler = null
+        InputHandler $inputHandler,
+        ValidatorInterface $internalValidator,
+        RelationProcessorInterface $relationProcessor
     ) {
-        $this->internalFormatValidator = $internalFormatValidator;
-        $this->inputConverterDispatcher = $inputConverterDispatcher;
-        $this->inputNormalizer = $inputNormalizer;
-        $this->inputValidatorDispatcher = $inputValidatorDispatcher;
-        $this->internalLinkValidator = $internalLinkValidator;
-        $this->customTagsValidator = $customTagsValidator;
-        $this->relationProcessor = $relationProcessor;
-        $this->internalValidator = $internalValidator;
         $this->inputHandler = $inputHandler;
+        $this->validator = $internalValidator;
+        $this->relationProcessor = $relationProcessor;
     }
 
     /**
@@ -278,7 +218,7 @@ class Type extends FieldType
     {
         return array_map(function ($error) {
             return new ValidationError($error);
-        }, $this->internalValidator->validateDocument($value->xml));
+        }, $this->validator->validateDocument($value->xml));
     }
 
     /**

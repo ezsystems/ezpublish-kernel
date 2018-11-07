@@ -408,15 +408,9 @@ services:
         class: "%ezpublish.fieldType.ezrichtext.class%"
         parent: ezpublish.fieldType
         arguments:
-            - "@ezpublish.fieldType.ezrichtext.validator.docbook"
-            - "@ezpublish.fieldType.ezrichtext.converter.input.dispatcher"
-            - "@ezpublish.fieldType.ezrichtext.normalizer.input"
-            - "@ezpublish.fieldType.ezrichtext.validator.input.dispatcher"
-            - '@ezpublish.fieldType.ezrichtext.validator.internal_link'
-            - '@eZ\Publish\Core\FieldType\RichText\CustomTagsValidator'
-            - '@eZ\Publish\Core\FieldType\RichText\RelationProcessor'
-            - '@ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5'
             - '@eZ\Publish\Core\FieldType\RichText\InputHandler'
+            - '@ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5'
+            - '@eZ\Publish\Core\FieldType\RichText\RelationProcessor'
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 

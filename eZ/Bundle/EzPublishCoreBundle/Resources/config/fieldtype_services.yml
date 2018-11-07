@@ -222,6 +222,8 @@ services:
     ezpublish.fieldType.ezrichtext.validator.docbook:
         class: "%ezpublish.fieldType.ezrichtext.validator.xml.class%"
         arguments: ["%ezpublish.fieldType.ezrichtext.validator.docbook.resources%"]
+        tags:
+            - { name: 'ezrichtext.validator.input.ezxhtml5' }
 
     ezpublish.fieldType.ezrichtext.validator.output.ezxhtml5:
         class: "%ezpublish.fieldType.ezrichtext.validator.xml.class%"
@@ -229,10 +231,7 @@ services:
 
     ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5:
         class: eZ\Publish\Core\FieldType\RichText\ValidatorAggregate
-        arguments:
-            - '@ezpublish.fieldType.ezrichtext.validator.docbook'
-            - '@ezpublish.fieldType.ezrichtext.validator.internal_link'
-            - '@eZ\Publish\Core\FieldType\RichText\CustomTagsValidator'
+        arguments: [!tagged ezrichtext.validator.input.ezxhtml5]
 
     ezpublish.fieldType.ezrichtext.validator.input.dispatcher:
         class: "%ezpublish.fieldType.ezrichtext.validator.dispatcher.class%"
@@ -247,6 +246,8 @@ services:
         arguments:
             - '@ezpublish.spi.persistence.cache.contentHandler'
             - '@ezpublish.spi.persistence.cache.locationHandler'
+        tags:
+            - { name: 'ezrichtext.validator.input.ezxhtml5' }
 
     # Image
     ezpublish.fieldType.ezimage.io_service:
@@ -321,6 +322,8 @@ services:
     eZ\Publish\Core\FieldType\RichText\CustomTagsValidator:
         public: false
         arguments: ['%ezplatform.ezrichtext.custom_tags%']
+        tags:
+            - { name: 'ezrichtext.validator.input.ezxhtml5' }
 
     eZ\Publish\Core\FieldType\RichText\RelationProcessor:
         public: false

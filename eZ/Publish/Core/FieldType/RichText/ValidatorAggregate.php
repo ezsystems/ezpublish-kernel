@@ -16,9 +16,9 @@ class ValidatorAggregate implements ValidatorInterface
     private $validators;
 
     /**
-     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface[] $validators
+     * @param iterable $validators
      */
-    public function __construct(ValidatorInterface ...$validators)
+    public function __construct(iterable $validators)
     {
         $this->validators = $validators;
     }
