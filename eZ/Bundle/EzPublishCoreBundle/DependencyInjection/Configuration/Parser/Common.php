@@ -71,7 +71,6 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
                 ->children()
                     ->scalarNode('google_maps')
                         ->info('Google Maps API Key, required as of Google Maps v3 to make sure maps show up correctly.')
-                        ->defaultNull()
                     ->end()
                 ->end()
             ->end()
