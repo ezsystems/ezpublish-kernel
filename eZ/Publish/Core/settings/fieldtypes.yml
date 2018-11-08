@@ -409,8 +409,6 @@ services:
         parent: ezpublish.fieldType
         arguments:
             - '@eZ\Publish\Core\FieldType\RichText\InputHandler'
-            - '@ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5'
-            - '@eZ\Publish\Core\FieldType\RichText\RelationProcessor'
         tags:
             - {name: ezpublish.fieldType, alias: ezrichtext}
 
@@ -422,6 +420,8 @@ services:
             - '@ezpublish.fieldType.ezrichtext.converter.input.dispatcher'
             - '@ezpublish.fieldType.ezrichtext.normalizer.input'
             - '@ezpublish.fieldType.ezrichtext.validator.input.dispatcher'
+            - '@ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5'
+            - '@eZ\Publish\Core\FieldType\RichText\RelationProcessor'
 
     ezpublish.fieldType.ezpage:
         class: "%ezpublish.fieldType.ezpage.class%"

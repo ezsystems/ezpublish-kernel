@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\FieldType\RichText;
 use DOMDocument;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
-class InputHandler
+class InputHandler implements InputHandlerInterface
 {
     /**
      * @var \eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory
@@ -31,33 +31,44 @@ class InputHandler
     /**
      * @var \eZ\Publish\Core\FieldType\RichText\ValidatorInterface
      */
-    private $validator;
+    private $schemaValidator;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorInterface
+     */
+    private $docbookValidator;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\RelationProcessor
+     */
+    private $relationProcessor;
 
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory $domDocumentFactory
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverter
      * @param \eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
-     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface $inputValidator
+     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface $schemaValidator
+     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface $internalValidator
+     * @param \eZ\Publish\Core\FieldType\RichText\RelationProcessor $relationProcessor
      */
     public function __construct(
         DOMDocumentFactory $domDocumentFactory,
         ConverterDispatcher $inputConverter,
         Normalizer $inputNormalizer,
-        ValidatorInterface $inputValidator
+        ValidatorInterface $schemaValidator,
+        ValidatorInterface $internalValidator,
+        RelationProcessor $relationProcessor
     ) {
         $this->domDocumentFactory = $domDocumentFactory;
         $this->converter = $inputConverter;
         $this->normalizer = $inputNormalizer;
-        $this->validator = $inputValidator;
+        $this->schemaValidator = $schemaValidator;
+        $this->docbookValidator = $internalValidator;
+        $this->relationProcessor = $relationProcessor;
     }
 
-    /**
-     * @param string|null $inputValue
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @return \DOMDocument
+     /**
+     * {@inheritdoc}
      */
     public function fromString(?string $inputValue = null): DOMDocument
     {
@@ -73,16 +84,11 @@ class InputHandler
     }
 
     /**
-     * @param \DOMDocument $inputValue
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     *
-     * @return \DOMDocument
+     * {@inheritdoc}
      */
     public function fromDocument(DOMDocument $inputValue): DOMDocument
     {
-        $errors = $this->validator->validateDocument($inputValue);
+        $errors = $this->schemaValidator->validateDocument($inputValue);
         if (!empty($errors)) {
             throw new InvalidArgumentException(
                 '$inputValue',
@@ -91,5 +97,21 @@ class InputHandler
         }
 
         return $this->converter->dispatch($inputValue);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRelations(DOMDocument $document): array
+    {
+        return $this->relationProcessor->getRelations($document);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validate(DOMDocument $document): array
+    {
+        return $this->docbookValidator->validateDocument($document);
     }
 }

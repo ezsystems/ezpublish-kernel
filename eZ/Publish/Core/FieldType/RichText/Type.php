@@ -31,28 +31,11 @@ class Type extends FieldType
     private $inputHandler;
 
     /**
-     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorInterface
-     */
-    private $validator;
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
-     */
-    private $relationProcessor;
-
-    /**
      * @param \eZ\Publish\Core\FieldType\RichText\InputHandler $inputHandler
-     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface
-     * @param \eZ\Publish\Core\FieldType\RichText\RelationProcessorInterface
      */
-    public function __construct(
-        InputHandler $inputHandler,
-        ValidatorInterface $internalValidator,
-        RelationProcessorInterface $relationProcessor
-    ) {
+    public function __construct(InputHandler $inputHandler)
+    {
         $this->inputHandler = $inputHandler;
-        $this->validator = $internalValidator;
-        $this->relationProcessor = $relationProcessor;
     }
 
     /**
@@ -218,7 +201,7 @@ class Type extends FieldType
     {
         return array_map(function ($error) {
             return new ValidationError($error);
-        }, $this->validator->validateDocument($value->xml));
+        }, $this->inputHandler->validate($value->xml));
     }
 
     /**
@@ -335,7 +318,7 @@ class Type extends FieldType
 
         /** @var \eZ\Publish\Core\FieldType\RichText\Value $value */
         if ($value->xml instanceof DOMDocument) {
-            $relations = $this->relationProcessor->getRelations($value->xml);
+            $relations = $this->inputHandler->getRelations($value->xml);
         }
 
         return $relations;
