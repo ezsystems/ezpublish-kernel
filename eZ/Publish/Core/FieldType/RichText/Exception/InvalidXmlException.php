@@ -30,7 +30,7 @@ class InvalidXmlException extends InvalidArgumentException
             $messages[] = trim($error->message);
         }
 
-        parent::__construct($argumentName, 'Invalid XML string: ' . implode("\n", $messages), $previous);
+        parent::__construct($argumentName, implode("\n", $messages), $previous);
 
         $this->errors = $errors;
     }

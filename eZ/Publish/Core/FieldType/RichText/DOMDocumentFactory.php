@@ -35,7 +35,7 @@ final class DOMDocumentFactory
         // - relax parser limits for document size/complexity
         $success = $document->loadXML($xmlString, LIBXML_NOENT | LIBXML_NONET | LIBXML_PARSEHUGE);
         if (!$success) {
-            throw new InvalidXmlException('xmlString', libxml_get_errors());
+            throw new InvalidXmlException('$xmlString', libxml_get_errors());
         }
 
         return $document;

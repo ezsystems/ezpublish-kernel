@@ -9,7 +9,10 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
+use eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory;
+use eZ\Publish\Core\FieldType\RichText\InputHandler;
 use eZ\Publish\Core\FieldType\RichText\Normalizer\Aggregate;
+use eZ\Publish\Core\FieldType\RichText\RelationProcessor;
 use eZ\Publish\Core\FieldType\RichText\Type as RichTextType;
 use eZ\Publish\Core\FieldType\RichText\Value;
 use eZ\Publish\Core\FieldType\Value as CoreValue;
@@ -35,17 +38,25 @@ class RichTextTest extends TestCase
      */
     protected function getFieldType()
     {
-        $fieldType = new RichTextType(
+        $inputHandler = new InputHandler(
+            new DOMDocumentFactory(),
+            new ConverterDispatcher(array(
+                'http://docbook.org/ns/docbook' => null,
+            )),
+            new Aggregate(),
+            new ValidatorDispatcher(array(
+                'http://docbook.org/ns/docbook' => null,
+            )),
             new Validator(
                 array(
                     $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
                     $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
                 )
             ),
-            new ConverterDispatcher(array('http://docbook.org/ns/docbook' => null)),
-            new Aggregate(),
-            new ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null))
+            new RelationProcessor()
         );
+
+        $fieldType = new RichTextType($inputHandler);
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -136,8 +147,8 @@ class RichTextTest extends TestCase
             array(
                 'This is not XML at all!',
                 new InvalidArgumentException(
-                    '$inputValue',
-                    "Could not create XML document: Start tag expected, '<' not found"
+                    '$xmlString',
+                    "Start tag expected, '<' not found"
                 ),
             ),
             array(
