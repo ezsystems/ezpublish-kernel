@@ -48,7 +48,7 @@ class InputHandler implements InputHandlerInterface
      * @param \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher $inputConverter
      * @param \eZ\Publish\Core\FieldType\RichText\Normalizer $inputNormalizer
      * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface $schemaValidator
-     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface $internalValidator
+     * @param \eZ\Publish\Core\FieldType\RichText\ValidatorInterface $dockbookValidator
      * @param \eZ\Publish\Core\FieldType\RichText\RelationProcessor $relationProcessor
      */
     public function __construct(
@@ -56,14 +56,14 @@ class InputHandler implements InputHandlerInterface
         ConverterDispatcher $inputConverter,
         Normalizer $inputNormalizer,
         ValidatorInterface $schemaValidator,
-        ValidatorInterface $internalValidator,
+        ValidatorInterface $dockbookValidator,
         RelationProcessor $relationProcessor
     ) {
         $this->domDocumentFactory = $domDocumentFactory;
         $this->converter = $inputConverter;
         $this->normalizer = $inputNormalizer;
         $this->schemaValidator = $schemaValidator;
-        $this->docbookValidator = $internalValidator;
+        $this->docbookValidator = $dockbookValidator;
         $this->relationProcessor = $relationProcessor;
     }
 
