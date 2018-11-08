@@ -15,11 +15,11 @@ use eZ\Publish\API\Repository\Values\Content\Relation;
 final class RelationProcessor
 {
     private const EMBED_TAG_NAMES = [
-        'ezembedinline', 'ezembed'
+        'ezembedinline', 'ezembed',
     ];
 
     private const LINK_TAG_NAMES = [
-        'link', 'ezlink'
+        'link', 'ezlink',
     ];
 
     /**
@@ -61,7 +61,7 @@ final class RelationProcessor
      *
      * @return array
      */
-    protected function getRelatedObjectIds(DOMDocument $xml, array $tagNames): array
+    private function getRelatedObjectIds(DOMDocument $xml, array $tagNames): array
     {
         $contentIds = [];
         $locationIds = [];

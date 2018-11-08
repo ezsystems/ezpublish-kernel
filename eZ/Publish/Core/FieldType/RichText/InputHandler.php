@@ -67,7 +67,7 @@ class InputHandler implements InputHandlerInterface
         $this->relationProcessor = $relationProcessor;
     }
 
-     /**
+    /**
      * {@inheritdoc}
      */
     public function fromString(?string $inputValue = null): DOMDocument
