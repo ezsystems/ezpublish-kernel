@@ -9,14 +9,14 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\FieldType\RichText;
 
 use DOMDocument;
-use eZ\Publish\Core\Base\Exceptions\InvalidXmlException;
+use eZ\Publish\Core\FieldType\RichText\Exception\InvalidXmlException;
 
 final class DOMDocumentFactory
 {
     /**
      * Creates \DOMDocument from given $xmlString.
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidXmlException
+     * @throws \eZ\Publish\Core\FieldType\RichText\Exception\InvalidXmlException
      *
      * @param string $xmlString
      *

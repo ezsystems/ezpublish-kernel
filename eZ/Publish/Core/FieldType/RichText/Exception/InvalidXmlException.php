@@ -6,8 +6,9 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Base\Exceptions;
+namespace eZ\Publish\Core\FieldType\RichText\Exception;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use Throwable;
 
 class InvalidXmlException extends InvalidArgumentException
