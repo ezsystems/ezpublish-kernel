@@ -1224,8 +1224,9 @@ DOCBOOK
      */
     public function testCreateNonLatinNonEmptyUniqueAliases()
     {
-        $urlAliasService = $this->getRepository()->getURLAliasService();
-        $locationService = $this->getRepository()->getLocationService();
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
 
         $folderNames = [
             'eng-GB' => 'ひらがな',
