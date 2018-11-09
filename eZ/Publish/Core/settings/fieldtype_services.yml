@@ -71,6 +71,12 @@ services:
     ezpublish.fieldType.ezrichtext.validator.docbook:
         class: "%ezpublish.fieldType.ezrichtext.validator.xml.class%"
         arguments: ["%ezpublish.fieldType.ezrichtext.validator.docbook.resources%"]
+        tags:
+            - { name: 'ezrichtext.validator.input.ezxhtml5' }
+
+    ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5:
+        class: eZ\Publish\Core\FieldType\RichText\ValidatorAggregate
+        arguments: [!tagged ezrichtext.validator.input.ezxhtml5]
 
     ezpublish.fieldType.ezrichtext.validator.input.dispatcher:
         class: "%ezpublish.fieldType.ezrichtext.validator.dispatcher.class%"
@@ -83,6 +89,8 @@ services:
         arguments:
             - '@ezpublish.spi.persistence.cache.contentHandler'
             - '@ezpublish.spi.persistence.cache.locationHandler'
+        tags:
+            - { name: 'ezrichtext.validator.input.ezxhtml5' }
 
     ezpublish.fieldType.ezrichtext.normalizer.input:
         class: "%ezpublish.fieldType.ezrichtext.normalizer.aggregate.class%"
@@ -120,6 +128,23 @@ services:
     eZ\Publish\Core\FieldType\RichText\CustomTagsValidator:
         public: false
         arguments: ['%ezplatform.ezrichtext.custom_tags%']
+        tags:
+            - { name: 'ezrichtext.validator.input.ezxhtml5' }
+
+    eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory:
+        public: false
+
+    eZ\Publish\Core\FieldType\RichText\RelationProcessor:
+        public: false
+
+    eZ\Publish\Core\FieldType\RichText\InputHandler:
+        arguments:
+            - '@eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory'
+            - '@ezpublish.fieldType.ezrichtext.converter.input.dispatcher'
+            - '@ezpublish.fieldType.ezrichtext.normalizer.input'
+            - '@ezpublish.fieldType.ezrichtext.validator.input.dispatcher'
+            - '@ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5'
+            - '@eZ\Publish\Core\FieldType\RichText\RelationProcessor'
 
     eZ\Publish\Core\FieldType\ImageAsset\NameableField:
         public: false

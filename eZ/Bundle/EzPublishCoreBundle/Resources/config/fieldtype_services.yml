@@ -325,8 +325,20 @@ services:
         tags:
             - { name: 'ezrichtext.validator.input.ezxhtml5' }
 
+    eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory:
+        public: false
+
     eZ\Publish\Core\FieldType\RichText\RelationProcessor:
         public: false
+
+    eZ\Publish\Core\FieldType\RichText\InputHandler:
+        arguments:
+        - '@eZ\Publish\Core\FieldType\RichText\DOMDocumentFactory'
+        - '@ezpublish.fieldType.ezrichtext.converter.input.dispatcher'
+        - '@ezpublish.fieldType.ezrichtext.normalizer.input'
+        - '@ezpublish.fieldType.ezrichtext.validator.input.dispatcher'
+        - '@ezpublish.fieldType.ezrichtext.validator.input.ezxhtml5'
+        - '@eZ\Publish\Core\FieldType\RichText\RelationProcessor'
 
     eZ\Publish\Core\FieldType\ImageAsset\NameableField:
         arguments:
