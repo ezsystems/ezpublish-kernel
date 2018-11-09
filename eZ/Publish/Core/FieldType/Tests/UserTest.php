@@ -47,7 +47,30 @@ class UserTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return array(
+            'PasswordValueValidator' => [
+                'requireAtLeastOneUpperCaseCharacter' => [
+                    'type' => 'int',
+                    'default' => null,
+                ],
+                'requireAtLeastOneLowerCaseCharacter' => [
+                    'type' => 'int',
+                    'default' => null,
+                ],
+                'requireAtLeastOneNumericCharacter' => [
+                    'type' => 'int',
+                    'default' => null,
+                ],
+                'requireAtLeastOneNonAlphanumericCharacter' => [
+                    'type' => 'int',
+                    'default' => null,
+                ],
+                'minLength' => [
+                    'type' => 'int',
+                    'default' => null,
+                ],
+            ],
+        );
     }
 
     /**

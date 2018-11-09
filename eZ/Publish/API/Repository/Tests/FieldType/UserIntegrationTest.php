@@ -69,7 +69,30 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return array(
+            'PasswordValueValidator' => array(
+                'requireAtLeastOneUpperCaseCharacter' => array(
+                    'type' => 'int',
+                    'default' => null,
+                ),
+                'requireAtLeastOneLowerCaseCharacter' => array(
+                    'type' => 'int',
+                    'default' => null,
+                ),
+                'requireAtLeastOneNumericCharacter' => array(
+                    'type' => 'int',
+                    'default' => null,
+                ),
+                'requireAtLeastOneNonAlphanumericCharacter' => array(
+                    'type' => 'int',
+                    'default' => null,
+                ),
+                'minLength' => array(
+                    'type' => 'int',
+                    'default' => null,
+                ),
+            ),
+        );
     }
 
     /**
@@ -79,7 +102,15 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return array(
+            'PasswordValueValidator' => array(
+                'requireAtLeastOneUpperCaseCharacter' => false,
+                'requireAtLeastOneLowerCaseCharacter' => false,
+                'requireAtLeastOneNumericCharacter' => false,
+                'requireAtLeastOneNonAlphanumericCharacter' => false,
+                'minLength' => null,
+            ),
+        );
     }
 
     /**

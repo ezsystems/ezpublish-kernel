@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -340,4 +341,16 @@ interface UserService
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
      */
     public function newUserGroupUpdateStruct();
+
+    /**
+     * Validates given password.
+     *
+     * @param string $password
+     * @param \eZ\Publish\API\Repository\Values\User\PasswordValidationContext|null $context
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validatePassword(string $password, PasswordValidationContext $context = null): array;
 }

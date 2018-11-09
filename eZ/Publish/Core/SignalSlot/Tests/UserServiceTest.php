@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\UserService as APIUserService;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
@@ -79,6 +80,7 @@ class UserServiceTest extends ServiceTest
             )
         );
         $userGroupUpdateStruct = new UserGroupUpdateStruct();
+        $passwordValidationContext = new PasswordValidationContext();
 
         return array(
             array(
@@ -288,6 +290,12 @@ class UserServiceTest extends ServiceTest
                 'newUserGroupUpdateStruct',
                 array(),
                 $userGroupUpdateStruct,
+                0,
+            ),
+            array(
+                'validatePassword',
+                array($password, $passwordValidationContext),
+                [],
                 0,
             ),
         );
