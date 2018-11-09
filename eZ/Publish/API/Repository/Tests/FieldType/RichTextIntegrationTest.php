@@ -685,11 +685,11 @@ EOT;
         $data = [
             [
                 __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/equation.xml',
-                "The attribute 'processor' of RichText Custom Tag 'equation' cannot be empty",
+                "Validation of XML content failed:\nThe attribute 'processor' of RichText Custom Tag 'equation' cannot be empty",
             ],
             [
                 __DIR__ . '/_fixtures/ezrichtext/custom_tags/invalid/video.xml',
-                "Unknown attribute 'unknown_attribute' of RichText Custom Tag 'video'",
+                "Validation of XML content failed:\nUnknown attribute 'unknown_attribute' of RichText Custom Tag 'video'",
             ],
         ];
 
@@ -824,7 +824,7 @@ EOT;
         $contentUpdateStruct->setField('data', new RichTextValue($document), 'eng-GB');
 
         $expectedValidationErrorMessage = sprintf(
-            'Invalid link "ezlocation://%s": target location cannot be found',
+            "Validation of XML content failed:\nInvalid link \"ezlocation://%s\": target location cannot be found",
             $deletedLocation->id
         );
         try {

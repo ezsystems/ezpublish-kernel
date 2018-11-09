@@ -54,17 +54,23 @@ class RichTextIntegrationTest extends BaseIntegrationTest
      */
     public function getCustomHandler()
     {
-        $fieldType = new FieldType\RichText\Type(
-            new FieldType\RichText\Validator(
-                array(
-                    $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
-                    $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
-                )
-            ),
+        $inputHandler = new FieldType\RichText\InputHandler(
+            new FieldType\RichText\DOMDocumentFactory(),
             new FieldType\RichText\ConverterDispatcher(array()),
             new FieldType\RichText\Normalizer\Aggregate(),
-            new FieldType\RichText\ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null))
+            new FieldType\RichText\ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null)),
+            new FieldType\RichText\ValidatorAggregate(array(
+                new FieldType\RichText\Validator(
+                    array(
+                        $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
+                        $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
+                    )
+                ),
+            )),
+            new FieldType\RichText\RelationProcessor()
         );
+
+        $fieldType = new FieldType\RichText\Type($inputHandler);
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         $urlGateway = new UrlGateway($this->getDatabaseHandler()->getConnection());
