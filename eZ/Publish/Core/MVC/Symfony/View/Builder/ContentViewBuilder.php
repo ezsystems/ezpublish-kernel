@@ -130,7 +130,7 @@ class ContentViewBuilder implements ViewBuilder
                 throw new InvalidArgumentException('Location', 'Provided location does not belong to selected content');
             }
 
-            if (isset($parameters['contentId']) && $location->contentId != $parameters['contentId']) {
+            if (isset($parameters['contentId']) && $location->contentId !== (int)$parameters['contentId']) {
                 throw new InvalidArgumentException(
                     'Location',
                     'Provided location does not belong to selected content as requested via contentId parameter'
