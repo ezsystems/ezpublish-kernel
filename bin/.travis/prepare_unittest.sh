@@ -22,7 +22,7 @@ if [ "$CUSTOM_CACHE_POOL" = "singleredis" ] ; then
 fi
 
 # Setup DB
-if [ "$DB" = "mysql" ] ; then
+if [ "$DB" = "mysql" ] || [ "$DB" = "mariadb" ] ; then
     # https://github.com/travis-ci/travis-ci/issues/3049
     # make sure we don't run out of entropy apparently (see link above)
     sudo apt-get -y install haveged
