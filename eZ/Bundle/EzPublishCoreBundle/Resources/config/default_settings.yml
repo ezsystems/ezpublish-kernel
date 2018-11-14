@@ -240,6 +240,8 @@ parameters:
         resize: "-resize {1}"
         optimize: "-strip"
 
+    ezsettings.default.image_host: ''
+
     ###
     # default ezpage settings
     ##
