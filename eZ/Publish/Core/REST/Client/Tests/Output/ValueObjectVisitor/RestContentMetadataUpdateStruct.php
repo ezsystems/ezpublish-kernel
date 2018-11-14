@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use eZ\Publish\Core\REST\Common\Values;
 
 class RestContentMetadataUpdateStruct extends ValueObjectVisitorBaseTest
 {
@@ -27,7 +27,7 @@ class RestContentMetadataUpdateStruct extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $sectionCreatestruct = new RestContentMetadataUpdateStruct(
+        $sectionCreatestruct = new Values\RestContentMetadataUpdateStruct(
             $this->getValidValues()
         );
 
