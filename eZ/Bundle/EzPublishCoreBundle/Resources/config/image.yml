@@ -87,7 +87,7 @@ services:
     ezpublish.image_alias.imagine.cache_resolver_decorator_factory:
         class: '%ezpublish.image_alias.imagine.decorated_cache_resolver_factory.class%'
         arguments:
-            - '@ezpublish.config.resolver.chain'
+            - '@ezpublish.config.resolver'
             - '@ezpublish.image_alias.imagine.cache_resolver_decorator.inner'
             - '%liip_imagine.cache_resolver.proxy.class%'
 
