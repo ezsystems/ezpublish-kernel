@@ -117,6 +117,12 @@ class ReindexCommand extends ContainerAwareCommand
                 InputOption::VALUE_OPTIONAL,
                 'Number of child processes to run in parallel for iterations, if set to "auto" it will set to number of CPU cores -1, set to "1" or "0" to disable',
                 1
+            )->addOption(
+                'user',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'User id to use. (default admin user is 14)',
+                1
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
@@ -146,6 +152,13 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $userId = (int)$input->getOption('user');
+        if ($userId) {
+            $repository = $this->getContainer()->get('ezpublish.api.repository');
+            $user = $repository->getUserService()->loadUser($userID);
+            $repository->setCurrentUser($user);
+        }
+        
         $commit = !$input->getOption('no-commit');
         $iterationCount = $input->getOption('iteration-count');
         $this->siteaccess = $input->getOption('siteaccess');
