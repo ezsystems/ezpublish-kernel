@@ -73,7 +73,7 @@ class DomainMapper
     protected $contentLanguageHandler;
 
     /**
-     * @var FieldTypeRegistry
+     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
      */
     protected $fieldTypeRegistry;
 
@@ -83,8 +83,9 @@ class DomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
-     * @param FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
         ContentHandler $contentHandler,

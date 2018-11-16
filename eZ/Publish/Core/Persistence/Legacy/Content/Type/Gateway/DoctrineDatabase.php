@@ -870,7 +870,7 @@ class DoctrineDatabase extends Gateway
         $this->insertTypeNameData($typeId, $status, $updateStruct->name);
     }
 
-    public function loadTypesDataList(array $typeIds): array
+    public function loadTypesListData(array $typeIds): array
     {
         $q = $this->getLoadTypeQueryBuilder();
         $q

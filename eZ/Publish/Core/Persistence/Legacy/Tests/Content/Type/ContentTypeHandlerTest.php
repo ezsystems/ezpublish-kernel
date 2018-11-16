@@ -307,7 +307,7 @@ class ContentTypeHandlerTest extends TestCase
     {
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects($this->once())
-            ->method('loadTypesDataList')
+            ->method('loadTypesListData')
             ->with($this->equalTo([23, 24]))
             ->willReturn([]);
 
