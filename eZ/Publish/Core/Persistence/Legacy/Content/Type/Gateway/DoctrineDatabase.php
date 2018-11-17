@@ -494,7 +494,7 @@ class DoctrineDatabase extends Gateway
         $q
             ->select('created', 'creator_id', 'id', 'modified', 'modifier_id', 'name')
             ->from('ezcontentclassgroup')
-            ->where('id IN (:ids)')
+            ->where($q->expr()->in('id', ':ids'))
             ->setParameter('ids', $groupIds, Connection::PARAM_INT_ARRAY);
 
         return $q->execute()->fetchAll();
@@ -571,8 +571,8 @@ class DoctrineDatabase extends Gateway
     {
         $q = $this->getLoadTypeQueryBuilder();
         $q
-            ->where('g.group_id = :gid')
-            ->andWhere('c.version = :version')
+            ->where($q->expr()->eq('g.group_id', ':gid'))
+            ->andWhere($q->expr()->eq('c.version', ':version'))
             ->addOrderBy('c.identifier')
             ->setParameter('gid', $groupId, ParameterType::INTEGER)
             ->setParameter('version', $status, ParameterType::INTEGER);
@@ -873,8 +873,9 @@ class DoctrineDatabase extends Gateway
     public function loadTypesListData(array $typeIds): array
     {
         $q = $this->getLoadTypeQueryBuilder();
+
         $q
-            ->where('c.id IN (:ids)')
+            ->where($q->expr()->in('c.id', ':ids'))
             ->andWhere($q->expr()->eq('c.version', Type::STATUS_DEFINED))
             ->setParameter('ids', $typeIds, Connection::PARAM_INT_ARRAY);
 
@@ -893,8 +894,8 @@ class DoctrineDatabase extends Gateway
     {
         $q = $this->getLoadTypeQueryBuilder();
         $q
-            ->where('c.id = :id')
-            ->andWhere('c.version = :version')
+            ->where($q->expr()->eq('c.id', ':id'))
+            ->andWhere($q->expr()->eq('c.version', ':version'))
             ->setParameter('id', $typeId, ParameterType::INTEGER)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
@@ -914,8 +915,8 @@ class DoctrineDatabase extends Gateway
     {
         $q = $this->getLoadTypeQueryBuilder();
         $q
-            ->where('c.identifier = :identifier')
-            ->andWhere('c.version = :version')
+            ->where($q->expr()->eq('c.identifier', ':identifier'))
+            ->andWhere($q->expr()->eq('c.version', ':version'))
             ->setParameter('identifier', $identifier, ParameterType::STRING)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
@@ -935,8 +936,8 @@ class DoctrineDatabase extends Gateway
     {
         $q = $this->getLoadTypeQueryBuilder();
         $q
-            ->where('c.remote_id = :remote')
-            ->andWhere('c.version = :version')
+            ->where($q->expr()->eq('c.remote_id', ':remote'))
+            ->andWhere($q->expr()->eq('c.version', ':version'))
             ->setParameter('remote', $remoteId, ParameterType::STRING)
             ->setParameter('version', $status, ParameterType::INTEGER);
 
@@ -949,6 +950,7 @@ class DoctrineDatabase extends Gateway
     private function getLoadTypeQueryBuilder(): QueryBuilder
     {
         $q = $this->connection->createQueryBuilder();
+        $expr = $q->expr();
         $q
             ->select([
                 'c.id AS ezcontentclass_id',
@@ -1002,13 +1004,19 @@ class DoctrineDatabase extends Gateway
                 'c',
                 'ezcontentclass_attribute',
                 'a',
-                'c.id = a.contentclass_id AND c.version = a.version'
+                $expr->andX(
+                    $expr->eq('c.id', 'a.contentclass_id'),
+                    $expr->eq('c.version', 'a.version')
+                )
             )
             ->leftJoin(
                 'c',
                 'ezcontentclass_classgroup',
                 'g',
-                'c.id = g.contentclass_id AND c.version = g.contentclass_version'
+                $expr->andX(
+                    $expr->eq('c.id', 'g.contentclass_id'),
+                    $expr->eq('c.version', 'g.contentclass_version')
+                )
             )
             ->orderBy('a.placement');
 
