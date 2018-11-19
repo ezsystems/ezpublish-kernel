@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
@@ -498,6 +499,22 @@ class UserService implements UserServiceInterface
             $limit,
             $prioritizedLanguages
         );
+    }
+
+    /**
+     * Checks if Content is a user.
+     */
+    public function isUser(Content $content) : bool
+    {
+        return $this->service->isUser($content);
+    }
+
+    /**
+     * Checks if Content is a user group.
+     */
+    public function isUserGroup(Content $content) : bool
+    {
+        return $this->service->isUserGroup($content);
     }
 
     /**
