@@ -54,6 +54,10 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup', $userGroup);
+
+        // User group happens to also be a Content; isUserGroup() should be true and isUser() should be false
+        $this->assertTrue($userService->isUserGroup($userGroup), 'isUserGroup() => false on a user group');
+        $this->assertFalse($userService->isUser($userGroup), 'isUser() => true on a user group');
     }
 
     /**
@@ -1123,6 +1127,10 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals($user, $userReloaded);
+
+        // User happens to also be a Content; isUser() should be true and isUserGroup() should be false
+        $this->assertTrue($userService->isUser($user), 'isUser() => false on a user');
+        $this->assertFalse($userService->isUserGroup($user), 'isUserGroup() => true on a user group');
     }
 
     /**

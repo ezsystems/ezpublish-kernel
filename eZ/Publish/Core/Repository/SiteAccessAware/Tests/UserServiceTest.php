@@ -61,6 +61,9 @@ class UserServiceTest extends AbstractServiceTest
             ['newUserUpdateStruct', []],
             ['newUserGroupUpdateStruct', []],
 
+            ['isUser', [$userGroup]],
+            ['isUserGroup', [$userGroup]],
+
             ['validatePassword', ['H@xi0r!', $passwordValidationContext], []],
         ];
     }

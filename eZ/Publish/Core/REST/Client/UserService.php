@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\UserService as APIUserService;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -400,5 +401,21 @@ class UserService implements APIUserService, Sessionable
     public function validatePassword(string $password, PasswordValidationContext $context = null): array
     {
         throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Checks if Content is a user.
+     */
+    public function isUser(Content $content): bool
+    {
+        // TODO: Implement isUser() method.
+    }
+
+    /**
+     * Checks if Content is a user group.
+     */
+    public function isUserGroup(Content $content): bool
+    {
+        // TODO: Implement isUserGroup() method.
     }
 }

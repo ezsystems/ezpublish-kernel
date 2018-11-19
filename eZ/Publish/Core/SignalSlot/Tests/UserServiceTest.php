@@ -267,6 +267,18 @@ class UserServiceTest extends ServiceTest
                 0,
             ),
             array(
+                'isUser',
+                array($userGroup),
+                false,
+                0,
+            ),
+            array(
+                'isUserGroup',
+                array($userGroup),
+                true,
+                0,
+            ),
+            array(
                 'newUserCreateStruct',
                 array(
                     $login, $email, $password, $mainLanguageCode, $contentType,

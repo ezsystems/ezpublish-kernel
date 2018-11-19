@@ -1149,6 +1149,22 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * Checks if Content is a user.
+     */
+    public function isUser(APIContent $content) : bool
+    {
+        return $this->settings['userClassID'] == $content->getVersionInfo()->getContentInfo()->contentTypeId;
+    }
+
+    /**
+     * Checks if Content is a user group.
+     */
+    public function isUserGroup(APIContent $content) : bool
+    {
+        return $this->settings['userGroupClassID'] == $content->getVersionInfo()->getContentInfo()->contentTypeId;
+    }
+
+    /**
      * Instantiate a user create class.
      *
      * @param string $login the login of the new user
