@@ -23,6 +23,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     public function create(CreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->cache->deleteItem('ez-language-list');
 
         return $this->persistenceHandler->contentLanguageHandler()->create($struct);
     }
@@ -123,9 +124,24 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function loadAll()
     {
-        $this->logger->logCall(__METHOD__);
+        $cacheItem = $this->cache->getItem('ez-language-list');
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
-        return $this->persistenceHandler->contentLanguageHandler()->loadAll();
+        $this->logger->logCall(__METHOD__);
+        $languages = $this->persistenceHandler->contentLanguageHandler()->loadAll();
+
+        $cacheTags = [];
+        foreach ($languages as $language) {
+            $cacheTags[] = 'language-' . $language->id;
+        }
+
+        $cacheItem->set($languages);
+        $cacheItem->tag($cacheTags);
+        $this->cache->save($cacheItem);
+
+        return $languages;
     }
 
     /**
