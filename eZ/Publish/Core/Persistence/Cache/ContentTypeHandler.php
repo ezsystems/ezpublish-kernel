@@ -31,6 +31,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function createGroup(GroupCreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->cache->deleteItem('ez-content-type-group-list');
 
         return $this->persistenceHandler->contentTypeHandler()->createGroup($struct);
     }
@@ -125,9 +126,24 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function loadAllGroups()
     {
-        $this->logger->logCall(__METHOD__);
+        $cacheItem = $this->cache->getItem('ez-content-type-group-list');
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
-        return $this->persistenceHandler->contentTypeHandler()->loadAllGroups();
+        $this->logger->logCall(__METHOD__);
+        $groups = $this->persistenceHandler->contentTypeHandler()->loadAllGroups();
+
+        $cacheTags = [];
+        foreach ($groups as $group) {
+            $cacheTags[] = 'type-group-' . $group->id;
+        }
+
+        $cacheItem->set($groups);
+        $cacheItem->tag($cacheTags);
+        $this->cache->save($cacheItem);
+
+        return $groups;
     }
 
     /**
