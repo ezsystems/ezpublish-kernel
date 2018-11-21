@@ -37,20 +37,22 @@ abstract class Gateway
      *
      * @param mixed $nodeId
      * @param string[]|null $translations
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return array
      */
-    abstract public function getBasicNodeData($nodeId, array $translations = null);
+    abstract public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true);
 
     /**
      * Returns an array with node data for several locations.
      *
      * @param array $locationIds
      * @param string[]|null $translations
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return array
      */
-    abstract public function getNodeDataList(array $locationIds, array $translations = null) : iterable;
+    abstract public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable;
 
     /**
      * Returns an array with basic node data for the node with $remoteId.
@@ -59,10 +61,11 @@ abstract class Gateway
      *
      * @param mixed $remoteId
      * @param string[]|null $translations
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return array
      */
-    abstract public function getBasicNodeDataByRemoteId($remoteId, array $translations = null);
+    abstract public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true);
 
     /**
      * Loads data for all Locations for $contentId, optionally only in the

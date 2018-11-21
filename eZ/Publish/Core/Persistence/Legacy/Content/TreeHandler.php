@@ -153,15 +153,15 @@ class TreeHandler
      *
      * @param int $locationId
      * @param string[]|null $translations If set, NotFound is thrown if content is not in given translation.
-     *                                    Set 'always-available' => true to also include always available content.
+     * @param bool $useAlwaysAvailable Respect always available flag on content, where main language is valid translation fallback.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function loadLocation($locationId, array $translations = null)
+    public function loadLocation($locationId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $data = $this->locationGateway->getBasicNodeData($locationId, $translations);
+        $data = $this->locationGateway->getBasicNodeData($locationId, $translations, $useAlwaysAvailable);
 
         return $this->locationMapper->createLocationFromRow($data);
     }

@@ -42,10 +42,10 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function getBasicNodeData($nodeId, array $translations = null)
+    public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true)
     {
         try {
-            return $this->innerGateway->getBasicNodeData($nodeId, $translations);
+            return $this->innerGateway->getBasicNodeData($nodeId, $translations, $useAlwaysAvailable);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -56,10 +56,10 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function getNodeDataList(array $locationIds, array $translations = null): iterable
+    public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
     {
         try {
-            return $this->innerGateway->getNodeDataList($locationIds, $translations);
+            return $this->innerGateway->getNodeDataList($locationIds, $translations, $useAlwaysAvailable);
         } catch (DBALException | PDOException $e) {
             throw new RuntimeException('Database error', 0, $e);
         }
@@ -68,10 +68,10 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null)
+    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
         try {
-            return $this->innerGateway->getBasicNodeDataByRemoteId($remoteId, $translations);
+            return $this->innerGateway->getBasicNodeDataByRemoteId($remoteId, $translations, $useAlwaysAvailable);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

@@ -100,17 +100,17 @@ class Handler implements BaseLocationHandler
     /**
      * {@inheritdoc}
      */
-    public function load($locationId, array $translations = null)
+    public function load($locationId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        return $this->treeHandler->loadLocation($locationId, $translations);
+        return $this->treeHandler->loadLocation($locationId, $translations, $useAlwaysAvailable);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function loadList(array $locationIds, array $translations = null): iterable
+    public function loadList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
     {
-        $list = $this->locationGateway->getNodeDataList($locationIds, $translations);
+        $list = $this->locationGateway->getNodeDataList($locationIds, $translations, $useAlwaysAvailable);
 
         $locations = [];
         foreach ($list as $row) {
@@ -138,9 +138,9 @@ class Handler implements BaseLocationHandler
     /**
      * {@inheritdoc}
      */
-    public function loadByRemoteId($remoteId, array $translations = null)
+    public function loadByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $data = $this->locationGateway->getBasicNodeDataByRemoteId($remoteId, $translations);
+        $data = $this->locationGateway->getBasicNodeDataByRemoteId($remoteId, $translations, $useAlwaysAvailable);
 
         return $this->locationMapper->createLocationFromRow($data);
     }

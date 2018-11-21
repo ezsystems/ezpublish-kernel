@@ -20,13 +20,13 @@ interface Handler
      *
      * @param int $locationId
      * @param string[]|null $translations If set, NotFound is thrown if content is not in given translation.
-     *                                    Set 'always-available' => true to also include always available content.
+     * @param bool $useAlwaysAvailable Respect always available flag on content, where main language is valid translation fallback.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function load($locationId, array $translations = null);
+    public function load($locationId, array $translations = null, bool $useAlwaysAvailable = true);
 
     /**
      * Return list of unique Locations, with location id as key.
@@ -36,11 +36,11 @@ interface Handler
      *
      * @param int[] $locationIds
      * @param string[]|null $translations If set, only locations with content in given translations are returned.
-     *                                    Set 'always-available' => true to also include always available content.
+     * @param bool $useAlwaysAvailable Respect always available flag on content, where main language is valid translation fallback.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
-    public function loadList(array $locationIds, array $translations = null): iterable;
+    public function loadList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable;
 
     /**
      * Loads the subtree ids of the location identified by $locationId.
@@ -58,13 +58,13 @@ interface Handler
      *
      * @param string $remoteId
      * @param string[]|null $translations If set, NotFound is thrown if content is not in given translation.
-     *                                    Set 'always-available' => true to also include always available content.
+     * @param bool $useAlwaysAvailable Respect always available flag on content, where main language is valid translation fallback.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function loadByRemoteId($remoteId, array $translations = null);
+    public function loadByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true);
 
     /**
      * Loads all locations for $contentId, optionally limited to a sub tree

@@ -71,9 +71,9 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function getBasicNodeData($nodeId, array $translations = null)
+    public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $q = $this->createNodeQueryBuilder($translations);
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
         $q->where(
             $q->expr()->eq('t.node_id', $q->createNamedParameter($nodeId, PDO::PARAM_INT))
         );
@@ -88,9 +88,9 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function getNodeDataList(array $locationIds, array $translations = null) : iterable
+    public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
     {
-        $q = $this->createNodeQueryBuilder($translations);
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
         $q->where(
             $q->expr()->in(
                 't.node_id',
@@ -99,15 +99,14 @@ class DoctrineDatabase extends Gateway
         );
 
         return $q->execute()->fetchAll(FetchMode::ASSOCIATIVE);
-
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null)
+    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $q = $this->createNodeQueryBuilder($translations);
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
         $q->where(
             $q->expr()->eq('t.remote_id', $q->createNamedParameter($remoteId, PDO::PARAM_STR))
         );
@@ -1566,10 +1565,11 @@ class DoctrineDatabase extends Gateway
      * Create QueryBuilder for selecting node data.
      *
      * @param array|null $translations Filters on language mask of content if provided.
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return QueryBuilder
      */
-    private function createNodeQueryBuilder(array $translations = null) : QueryBuilder
+    private function createNodeQueryBuilder(array $translations = null, bool $useAlwaysAvailable = true): QueryBuilder
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
@@ -1578,7 +1578,7 @@ class DoctrineDatabase extends Gateway
 
         if (!empty($translations)) {
             $expr = $queryBuilder->expr();
-            $mask = $this->generateLanguageMask($translations);
+            $mask = $this->generateLanguageMask($translations, $useAlwaysAvailable);
 
             $queryBuilder->innerJoin(
                 't',
@@ -1599,7 +1599,7 @@ class DoctrineDatabase extends Gateway
     /**
      * Generates a language mask for $translations argument.
      */
-    private function generateLanguageMask(array $translations, bool $alwaysAvailable = true) : int
+    private function generateLanguageMask(array $translations, bool $useAlwaysAvailable = true): int
     {
         $languages = [];
         foreach ($translations as $translation) {
@@ -1610,7 +1610,7 @@ class DoctrineDatabase extends Gateway
             $languages[$translation] = true;
         }
 
-        if ($alwaysAvailable) {
+        if ($useAlwaysAvailable) {
             $languages['always-available'] = true;
         }
 
