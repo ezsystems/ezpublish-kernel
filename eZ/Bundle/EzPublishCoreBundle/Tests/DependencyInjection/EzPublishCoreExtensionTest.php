@@ -28,6 +28,13 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
      */
     private $extension;
 
+    /**
+     * Cached RichText default settings.
+     *
+     * @var array
+     */
+    private static $richTextDefaultSettings;
+
     protected function setUp()
     {
         $this->extension = new EzPublishCoreExtension();
@@ -133,6 +140,44 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups', array());
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups_by_siteaccess', array());
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.match_config', null);
+    }
+
+    public function testLoadWithoutRichTextPackage()
+    {
+        $this->load();
+
+        $expectedParameters = $this->loadRichTextDefaultSettings()['parameters'];
+        foreach ($expectedParameters as $parameterName => $parameterValue) {
+            $this->assertContainerBuilderHasParameter($parameterName, $parameterValue);
+        }
+
+        $this->assertContainerBuilderHasServiceDefinitionWithTag(
+            'ezpublish.fieldType.ezrichtext',
+            'ezpublish.fieldType',
+            ['alias' => 'ezrichtext']
+        );
+
+        $this->testRichTextConfiguration();
+    }
+
+    public function testLoadWithRichTextPackage()
+    {
+        // mock existence of RichText package
+        $this->container->setParameter('kernel.bundles', ['EzPlatformRichTextBundle' => null]);
+
+        $this->load();
+
+        $unexpectedParameters = $this->loadRichTextDefaultSettings()['parameters'];
+        foreach ($unexpectedParameters as $parameterName => $parameterValue) {
+            self::assertFalse(
+                $this->container->hasParameter($parameterName),
+                "Container has '{$parameterName}' parameter"
+            );
+        }
+
+        $this->assertContainerBuilderNotHasService('ezpublish.fieldType.ezrichtext');
+
+        $this->testRichTextConfiguration();
     }
 
     public function testImageMagickConfigurationBasic()
@@ -868,9 +913,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
      */
     public function testRichTextConfiguration()
     {
-        $config = Yaml::parse(
-            file_get_contents(__DIR__ . '/Fixtures/FieldType/RichText/ezrichtext.yml')
-        );
+        $config = Yaml::parseFile(__DIR__ . '/Fixtures/FieldType/RichText/ezrichtext.yml');
         $this->load($config);
 
         // Validate Custom Tags
@@ -956,5 +999,21 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $configuration,
             $parsedConfig
         );
+    }
+
+    /**
+     * Load & cache RichText default settings.
+     *
+     * @return array
+     */
+    private function loadRichTextDefaultSettings(): array
+    {
+        if (null === static::$richTextDefaultSettings) {
+            static::$richTextDefaultSettings = Yaml::parseFile(
+                __DIR__ . '/../../Resources/config/ezrichtext_default_settings.yml'
+            );
+        }
+
+        return static::$richTextDefaultSettings;
     }
 }

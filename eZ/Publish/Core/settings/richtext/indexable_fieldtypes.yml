@@ -1,0 +1,9 @@
+# deprecated: richtext in ezpublish-kernel is deprecated, and will be remove in the next major version
+parameters:
+    ezpublish.fieldType.indexable.ezrichtext.class: eZ\Publish\Core\FieldType\RichText\SearchField
+
+services:
+    ezpublish.fieldType.indexable.ezrichtext:
+        class: "%ezpublish.fieldType.indexable.ezrichtext.class%"
+        tags:
+            - {name: ezpublish.fieldType.indexable, alias: ezrichtext}

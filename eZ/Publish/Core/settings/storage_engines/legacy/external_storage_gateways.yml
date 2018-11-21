@@ -6,7 +6,6 @@ parameters:
     ezpublish.fieldType.ezimage.storage_gateway.class: eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezkeyword.storage_gateway.class: eZ\Publish\Core\FieldType\Keyword\KeywordStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\DoctrineStorage
-    ezpublish.fieldType.ezrichtext.storage_gateway.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezurl.storage_gateway.class: eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezpage.storage_gateway.class: eZ\Publish\Core\FieldType\Page\PageStorage\Gateway\DoctrineStorage
@@ -31,12 +30,6 @@ services:
     ezpublish.fieldType.ezmedia.storage_gateway:
         class: "%ezpublish.fieldType.ezmedia.storage_gateway.class%"
         arguments: ["@ezpublish.api.storage_engine.legacy.connection"]
-
-    ezpublish.fieldType.ezrichtext.storage_gateway:
-        class: "%ezpublish.fieldType.ezrichtext.storage_gateway.class%"
-        arguments:
-            - "@ezpublish.fieldType.ezurl.storage_gateway"
-            - "@ezpublish.api.storage_engine.legacy.connection"
 
     ezpublish.fieldType.ezurl.storage_gateway:
         class: "%ezpublish.fieldType.ezurl.storage_gateway.class%"

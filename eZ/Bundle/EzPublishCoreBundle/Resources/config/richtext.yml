@@ -1,0 +1,3 @@
+imports:
+    - {resource: richtext/fieldtype_services.yml}
+    - {resource: richtext/templating.yml}

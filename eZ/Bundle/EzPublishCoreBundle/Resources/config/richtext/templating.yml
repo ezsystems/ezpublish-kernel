@@ -1,0 +1,11 @@
+parameters:
+    ezpublish.twig.extension.rich_text.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RichTextExtension
+
+services:
+    ezpublish.twig.extension.rich_text:
+        class: "%ezpublish.twig.extension.rich_text.class%"
+        arguments:
+            - "@ezpublish.fieldType.ezrichtext.converter.output.xhtml5"
+            - "@ezpublish.fieldType.ezrichtext.converter.edit.xhtml5"
+        tags:
+            - { name: twig.extension }
