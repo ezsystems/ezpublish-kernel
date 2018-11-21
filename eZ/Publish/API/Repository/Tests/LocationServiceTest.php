@@ -491,7 +491,7 @@ class LocationServiceTest extends BaseTest
         $draft = $contentService->updateContent($draft->getVersionInfo(), $struct);
         $contentService->publishVersion($draft->getVersionInfo());
 
-        // Load with prioritc language (fallback will be the old one)
+        // Load with priority language (fallback will be the old one)
         $location = $locationService->loadLocation(5, ['nor-NO']);
 
         $this->assertInstanceOf(
@@ -525,18 +525,10 @@ class LocationServiceTest extends BaseTest
 
         $this->createLanguage('pol-PL', 'Polski');
 
-        // Note: relying on existing database fixtures to make test case more readable
-        $location = $locationService->loadLocation(60, ['pol-PL']);
-        self::assertEquals(60, $location->id);
-
         $this->expectException(NotFoundException::class);
 
-        $this->assertInstanceOf(
-            Content::class,
-            $content = $location->getContent()
-        );
-        $this->assertEquals(58, $content->contentInfo->id);
-        $this->assertEquals($content->getVersionInfo()->getName(), 'Contact Us');
+        // Note: relying on existing database fixtures to make test case more readable
+        $locationService->loadLocation(60, ['pol-PL']);
     }
 
     /**

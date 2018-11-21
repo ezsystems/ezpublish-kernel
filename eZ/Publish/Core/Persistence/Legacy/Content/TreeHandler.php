@@ -80,6 +80,8 @@ class TreeHandler
      *
      * @param int|string $contentId
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
     public function loadContentInfo($contentId)
@@ -150,12 +152,16 @@ class TreeHandler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
+     * @param string[]|null $translations If set, NotFound is thrown if content is not in given translation.
+     *                                    Set 'always-available' => true to also include always available content.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function loadLocation($locationId)
+    public function loadLocation($locationId, array $translations = null)
     {
-        $data = $this->locationGateway->getBasicNodeData($locationId);
+        $data = $this->locationGateway->getBasicNodeData($locationId, $translations);
 
         return $this->locationMapper->createLocationFromRow($data);
     }
@@ -170,6 +176,8 @@ class TreeHandler
      * new main Location.
      *
      * @param mixed $locationId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return bool
      */
@@ -209,6 +217,8 @@ class TreeHandler
      *
      * @param mixed $locationId
      * @param mixed $sectionId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function setSectionForSubtree($locationId, $sectionId)
     {
@@ -224,6 +234,8 @@ class TreeHandler
      *
      * @param mixed $contentId
      * @param mixed $locationId
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function changeMainLocation($contentId, $locationId)
     {

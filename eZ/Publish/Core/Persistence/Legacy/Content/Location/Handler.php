@@ -98,15 +98,29 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Loads the data for the location identified by $locationId.
-     *
-     * @param int $locationId
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     * {@inheritdoc}
      */
-    public function load($locationId)
+    public function load($locationId, array $translations = null)
     {
-        return $this->treeHandler->loadLocation($locationId);
+        return $this->treeHandler->loadLocation($locationId, $translations);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadList(array $locationIds, array $translations = null): iterable
+    {
+        $list = $this->locationGateway->getNodeDataList($locationIds, $translations);
+
+        $locations = [];
+        foreach ($list as $row) {
+            $id = (int)$row['node_id'];
+            if (!isset($locations[$id])) {
+                $locations[$id] = $this->locationMapper->createLocationFromRow($row);
+            }
+        }
+
+        return $locations;
     }
 
     /**
@@ -122,17 +136,11 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Loads the data for the location identified by $remoteId.
-     *
-     * @param string $remoteId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     * {@inheritdoc}
      */
-    public function loadByRemoteId($remoteId)
+    public function loadByRemoteId($remoteId, array $translations = null)
     {
-        $data = $this->locationGateway->getBasicNodeDataByRemoteId($remoteId);
+        $data = $this->locationGateway->getBasicNodeDataByRemoteId($remoteId, $translations);
 
         return $this->locationMapper->createLocationFromRow($data);
     }

@@ -729,7 +729,7 @@ abstract class BaseTest extends TestCase
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function createLanguage(string $languageCode, string $name): Language
+    protected function createLanguage(string $languageCode, string $name, bool $enabled = true): Language
     {
         $repository = $this->getRepository(false);
 
@@ -737,6 +737,7 @@ abstract class BaseTest extends TestCase
         $languageStruct = $languageService->newLanguageCreateStruct();
         $languageStruct->name = $name;
         $languageStruct->languageCode = $languageCode;
+        $languageStruct->enabled = $enabled;
 
         return $languageService->createLanguage($languageStruct);
     }

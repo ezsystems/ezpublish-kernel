@@ -18,24 +18,47 @@ use eZ\Publish\SPI\Persistence\Content\Location;
  */
 class LocationHandler extends AbstractHandler implements LocationHandlerInterface
 {
+    private const ALL_TRANSLATIONS_KEY = '0';
+
     /**
      * {@inheritdoc}
      */
-    public function load($locationId)
+    public function load($locationId, array $translations = null)
     {
-        $cacheItem = $this->cache->getItem("ez-location-${locationId}");
+        $translationsKey = $this->getCacheTranslationKey($translations);
+        $cacheItem = $this->cache->getItem("ez-location-${locationId}-${translationsKey}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
-        $location = $this->persistenceHandler->locationHandler()->load($locationId);
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'translations' => $translations]);
+        $location = $this->persistenceHandler->locationHandler()->load($locationId, $translations);
 
         $cacheItem->set($location);
         $cacheItem->tag($this->getCacheTags($location));
         $this->cache->save($cacheItem);
 
         return $location;
+    }
+
+    public function loadList(array $locationIds, array $translations = null): iterable
+    {
+        return $this->getMultipleCacheItems(
+            $locationIds,
+            'ez-location-',
+            function (array $cacheMissIds) use ($translations) {
+                $this->logger->logCall(__CLASS__ . '::loadList', [
+                    'location' => $cacheMissIds,
+                    'translations' => $translations
+                ]);
+
+                return $this->persistenceHandler->locationHandler()->loadList($cacheMissIds, $translations);
+            },
+            function (Location $location) {
+                return $this->getCacheTags($location);
+            },
+            array_fill_keys($locationIds, '-' . $this->getCacheTranslationKey($translations))
+        );
     }
 
     /**
@@ -120,15 +143,16 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     /**
      * {@inheritdoc}
      */
-    public function loadByRemoteId($remoteId)
+    public function loadByRemoteId($remoteId, array $translations = null)
     {
-        $cacheItem = $this->cache->getItem("ez-location-${remoteId}-by-remoteid");
+        $translationsKey = $this->getCacheTranslationKey($translations);
+        $cacheItem = $this->cache->getItem("ez-location-${remoteId}-${translationsKey}-by-remoteid");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('location' => $remoteId));
-        $location = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
+        $this->logger->logCall(__METHOD__, ['location' => $remoteId, 'translations' => $translations]);
+        $location = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $translations);
 
         $cacheItem->set($location);
         $cacheItem->tag($this->getCacheTags($location));
@@ -299,6 +323,19 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         }
 
         return $tags;
+    }
+
+    private function getCacheTranslationKey(array $translations = null): string
+    {
+        if (empty($translations)) {
+            return self::ALL_TRANSLATIONS_KEY;
+        }
+
+        // Sort array as we don't care about order in location handler usage & want to optimize for cache hits.
+        // Maintain index as we support "always-available" key.
+        asort($translations);
+
+        return implode('|', $translations);
     }
 
     /**

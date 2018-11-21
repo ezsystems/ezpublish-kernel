@@ -33,27 +33,36 @@ abstract class Gateway
     /**
      * Returns an array with basic node data.
      *
-     * We might want to cache this, since this method is used by about every
-     * method in the location handler.
-     *
-     * @todo optimize
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @param mixed $nodeId
+     * @param string[]|null $translations
      *
      * @return array
      */
-    abstract public function getBasicNodeData($nodeId);
+    abstract public function getBasicNodeData($nodeId, array $translations = null);
+
+    /**
+     * Returns an array with node data for several locations.
+     *
+     * @param array $locationIds
+     * @param string[]|null $translations
+     *
+     * @return array
+     */
+    abstract public function getNodeDataList(array $locationIds, array $translations = null) : iterable;
 
     /**
      * Returns an array with basic node data for the node with $remoteId.
      *
-     * @todo optimize
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @param mixed $remoteId
+     * @param string[]|null $translations
      *
      * @return array
      */
-    abstract public function getBasicNodeDataByRemoteId($remoteId);
+    abstract public function getBasicNodeDataByRemoteId($remoteId, array $translations = null);
 
     /**
      * Loads data for all Locations for $contentId, optionally only in the

@@ -40,21 +40,12 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Returns an array with basic node data.
-     *
-     * We might want to cache this, since this method is used by about every
-     * method in the location handler.
-     *
-     * @todo optimize
-     *
-     * @param mixed $nodeId
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBasicNodeData($nodeId)
+    public function getBasicNodeData($nodeId, array $translations = null)
     {
         try {
-            return $this->innerGateway->getBasicNodeData($nodeId);
+            return $this->innerGateway->getBasicNodeData($nodeId, $translations);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -63,18 +54,24 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Returns an array with basic node data for the node with $remoteId.
-     *
-     * @todo optimize
-     *
-     * @param mixed $remoteId
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBasicNodeDataByRemoteId($remoteId)
+    public function getNodeDataList(array $locationIds, array $translations = null): iterable
     {
         try {
-            return $this->innerGateway->getBasicNodeDataByRemoteId($remoteId);
+            return $this->innerGateway->getNodeDataList($locationIds, $translations);
+        } catch (DBALException | PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null)
+    {
+        try {
+            return $this->innerGateway->getBasicNodeDataByRemoteId($remoteId, $translations);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

@@ -19,12 +19,28 @@ interface Handler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
+     * @param string[]|null $translations If set, NotFound is thrown if content is not in given translation.
+     *                                    Set 'always-available' => true to also include always available content.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function load($locationId);
+    public function load($locationId, array $translations = null);
+
+    /**
+     * Return list of unique Locations, with location id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param int[] $locationIds
+     * @param string[]|null $translations If set, only locations with content in given translations are returned.
+     *                                    Set 'always-available' => true to also include always available content.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     */
+    public function loadList(array $locationIds, array $translations = null): iterable;
 
     /**
      * Loads the subtree ids of the location identified by $locationId.
@@ -41,12 +57,14 @@ interface Handler
      * Loads the data for the location identified by $remoteId.
      *
      * @param string $remoteId
+     * @param string[]|null $translations If set, NotFound is thrown if content is not in given translation.
+     *                                    Set 'always-available' => true to also include always available content.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function loadByRemoteId($remoteId);
+    public function loadByRemoteId($remoteId, array $translations = null);
 
     /**
      * Loads all locations for $contentId, optionally limited to a sub tree
