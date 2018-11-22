@@ -192,15 +192,15 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Generates a language mask for $version.
+     * Generates a language mask for $fields.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param string $initialLanguageCode
-     * @param bool $alwaysAvailable
+     * @param bool $isAlwaysAvailable
      *
      * @return int
      */
-    protected function generateLanguageMask(array $fields, $initialLanguageCode, $alwaysAvailable)
+    protected function generateLanguageMask(array $fields, string $initialLanguageCode, bool $isAlwaysAvailable): int
     {
         $languages = array($initialLanguageCode => true);
         foreach ($fields as $field) {
@@ -211,11 +211,7 @@ class DoctrineDatabase extends Gateway
             $languages[$field->languageCode] = true;
         }
 
-        if ($alwaysAvailable) {
-            $languages['always-available'] = true;
-        }
-
-        return $this->languageMaskGenerator->generateLanguageMask($languages);
+        return $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(array_keys($languages), $isAlwaysAvailable);
     }
 
     /**
@@ -333,17 +329,10 @@ class DoctrineDatabase extends Gateway
             );
         }
         if ($prePublishVersionInfo !== null) {
-            $languages = [];
-            foreach ($prePublishVersionInfo->languageCodes as $languageCodes) {
-                if (!isset($languages[$languageCodes])) {
-                    $languages[$languageCodes] = true;
-                }
-            }
-
-            $languages['always-available'] = isset($struct->alwaysAvailable) ? $struct->alwaysAvailable :
-                $prePublishVersionInfo->contentInfo->alwaysAvailable;
-
-            $mask = $this->languageMaskGenerator->generateLanguageMask($languages);
+            $mask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                $prePublishVersionInfo->languageCodes,
+                $struct->alwaysAvailable ?? $prePublishVersionInfo->contentInfo->alwaysAvailable
+            );
 
             $q->set(
                 $this->dbHandler->quoteColumn('language_mask'),
