@@ -153,7 +153,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         }
 
         $this->logger->logCall(
-            __CLASS__ . '::loadList',
+            __METHOD__,
             ['location' => $remoteId, 'translations' => $translations, 'always-available' => $useAlwaysAvailable]
         );
         $location = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $translations, $useAlwaysAvailable);
