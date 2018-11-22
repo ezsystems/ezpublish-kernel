@@ -1567,7 +1567,7 @@ class DoctrineDatabase extends Gateway
      * @param array|null $translations Filters on language mask of content if provided.
      * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
-     * @return QueryBuilder
+     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
     private function createNodeQueryBuilder(array $translations = null, bool $useAlwaysAvailable = true): QueryBuilder
     {
