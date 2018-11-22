@@ -723,6 +723,7 @@ abstract class BaseTest extends TestCase
      *
      * @param string $languageCode
      * @param string $name
+     * @param bool $enabled
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
      *

@@ -60,6 +60,7 @@ class DoctrineDatabase extends Gateway
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(DatabaseHandler $handler, MaskGenerator $languageMaskGenerator)
     {
@@ -1571,6 +1572,7 @@ class DoctrineDatabase extends Gateway
      */
     private function createNodeQueryBuilder(array $translations = null, bool $useAlwaysAvailable = true): QueryBuilder
     {
+        $dbPlatform = $this->connection->getDatabasePlatform();
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
             ->select('t.*')
@@ -1588,7 +1590,10 @@ class DoctrineDatabase extends Gateway
                     $expr->eq('t.contentobject_id', 'c.id'),
                     // Won't work on Oracle, consider contribute bitwise features to query builder, and
                     // contribute support for it handling DBM differences. Or detect Oracle here and do bitand()
-                    "c.language_mask  & $mask > 0"
+                    $expr->gt(
+                        $dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
+                        0
+                    )
                 )
             );
         }

@@ -38,7 +38,7 @@ interface Handler
      * @param string[]|null $translations If set, only locations with content in given translations are returned.
      * @param bool $useAlwaysAvailable Respect always available flag on content, where main language is valid translation fallback.
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]|iterable
      */
     public function loadList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable;
 

@@ -338,7 +338,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     /**
      * Return relevant content and location tags so cache can be purged reliably.
      *
-     * @param Location $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
      * @param array $tags Optional, can be used to specify additional tags.
      *
      * @return array
