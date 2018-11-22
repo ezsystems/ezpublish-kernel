@@ -50,7 +50,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertContentObject
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMaskFromLanguageMap
      *
      * @todo Fix not available fields
      */
@@ -183,7 +183,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertVersion
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMaskFromLanguageMap
      */
     public function testInsertVersion()
     {

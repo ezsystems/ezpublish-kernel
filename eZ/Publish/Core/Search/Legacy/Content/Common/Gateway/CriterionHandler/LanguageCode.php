@@ -67,15 +67,14 @@ class LanguageCode extends CriterionHandler
         Criterion $criterion,
         array $languageSettings
     ) {
-        $languages = array_flip($criterion->value);
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode */
-        $languages['always-available'] = $criterion->matchAlwaysAvailable;
-
         return $query->expr->gt(
             $query->expr->bitAnd(
                 $this->dbHandler->quoteColumn('language_mask', 'ezcontentobject'),
-                // @todo: Use a cached version of mask generator when implemented
-                $this->maskGenerator->generateLanguageMask($languages)
+                $this->maskGenerator->generateLanguageMaskFromLanguageCodes(
+                    $criterion->value,
+                    $criterion->matchAlwaysAvailable
+                )
             ),
             0
         );

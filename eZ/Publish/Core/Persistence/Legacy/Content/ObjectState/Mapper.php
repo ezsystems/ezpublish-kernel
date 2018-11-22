@@ -46,24 +46,24 @@ class Mapper
     {
         $objectState = new ObjectState();
 
+        $languageIds = [ $data[0]['ezcobj_state_default_language_id'] ];
+        foreach ($data as $stateTranslation) {
+            $languageIds[] = $stateTranslation['ezcobj_state_language_language_id'] & ~1;
+        }
+        $languages = $this->languageHandler->loadList($languageIds);
+
         $objectState->id = (int)$data[0]['ezcobj_state_id'];
         $objectState->groupId = (int)$data[0]['ezcobj_state_group_id'];
         $objectState->identifier = $data[0]['ezcobj_state_identifier'];
         $objectState->priority = (int)$data[0]['ezcobj_state_priority'];
-        $objectState->defaultLanguage = $this->languageHandler->load(
-            $data[0]['ezcobj_state_default_language_id']
-        )->languageCode;
+        $objectState->defaultLanguage = $languages[(int)$data[0]['ezcobj_state_default_language_id']]->languageCode;
 
         $objectState->languageCodes = array();
         $objectState->name = array();
         $objectState->description = array();
 
         foreach ($data as $stateTranslation) {
-            // @todo Bulk load languages (default + translations)
-            $languageCode = $this->languageHandler->load(
-                $stateTranslation['ezcobj_state_language_language_id'] & ~1
-            )->languageCode;
-
+            $languageCode = $languages[$stateTranslation['ezcobj_state_language_language_id'] & ~1]->languageCode;
             $objectState->languageCodes[] = $languageCode;
             $objectState->name[$languageCode] = $stateTranslation['ezcobj_state_language_name'];
             $objectState->description[$languageCode] = $stateTranslation['ezcobj_state_language_description'];
@@ -101,22 +101,24 @@ class Mapper
     {
         $objectStateGroup = new Group();
 
+        $languageIds = [ $data[0]['ezcobj_state_group_default_language_id'] ];
+        foreach ($data as $stateTranslation) {
+            $languageIds[] = $stateTranslation['ezcobj_state_group_language_real_language_id'];
+        }
+        $languages = $this->languageHandler->loadList($languageIds);
+
         $objectStateGroup->id = (int)$data[0]['ezcobj_state_group_id'];
         $objectStateGroup->identifier = $data[0]['ezcobj_state_group_identifier'];
-        $objectStateGroup->defaultLanguage = $this->languageHandler->load(
-            $data[0]['ezcobj_state_group_default_language_id']
-        )->languageCode;
+        $objectStateGroup->defaultLanguage = $languages[
+            (int)$data[0]['ezcobj_state_group_default_language_id']
+        ]->languageCode;
 
         $objectStateGroup->languageCodes = array();
         $objectStateGroup->name = array();
         $objectStateGroup->description = array();
 
         foreach ($data as $groupTranslation) {
-            // @todo Bulk load languages (default + translations)
-            $languageCode = $this->languageHandler->load(
-                $groupTranslation['ezcobj_state_group_language_real_language_id']
-            )->languageCode;
-
+            $languageCode = $languages[(int)$data[0]['ezcobj_state_group_language_real_language_id']]->languageCode;
             $objectStateGroup->languageCodes[] = $languageCode;
             $objectStateGroup->name[$languageCode] = $groupTranslation['ezcobj_state_group_language_name'];
             $objectStateGroup->description[$languageCode] = $groupTranslation['ezcobj_state_group_language_description'];
