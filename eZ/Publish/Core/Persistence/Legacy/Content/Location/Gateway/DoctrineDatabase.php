@@ -1580,7 +1580,10 @@ class DoctrineDatabase extends Gateway
 
         if (!empty($translations)) {
             $expr = $queryBuilder->expr();
-            $mask = $this->generateLanguageMask($translations, $useAlwaysAvailable);
+            $mask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                $translations,
+                $useAlwaysAvailable
+            );
 
             $queryBuilder->innerJoin(
                 't',
@@ -1601,24 +1604,5 @@ class DoctrineDatabase extends Gateway
         return $queryBuilder;
     }
 
-    /**
-     * Generates a language mask for $translations argument.
-     */
-    private function generateLanguageMask(array $translations, bool $useAlwaysAvailable = true): int
-    {
-        $languages = [];
-        foreach ($translations as $translation) {
-            if (isset($languages[$translation])) {
-                continue;
-            }
 
-            $languages[$translation] = true;
-        }
-
-        if ($useAlwaysAvailable) {
-            $languages['always-available'] = true;
-        }
-
-        return $this->languageMaskGenerator->generateLanguageMask($languages);
-    }
 }

@@ -173,7 +173,7 @@ class DoctrineDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn('language_mask'),
             $q->bindValue(
-                $this->generateLanguageMask(
+                $this->generateLanguageMaskFromFields(
                     $struct->fields,
                     $initialLanguageCode,
                     $struct->alwaysAvailable
@@ -199,7 +199,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return int
      */
-    protected function generateLanguageMask(array $fields, $initialLanguageCode, $alwaysAvailable)
+    protected function generateLanguageMaskFromFields(array $fields, $initialLanguageCode, $alwaysAvailable): int
     {
         $languages = array($initialLanguageCode => true);
         foreach ($fields as $field) {
@@ -214,7 +214,7 @@ class DoctrineDatabase extends Gateway
             $languages['always-available'] = true;
         }
 
-        return $this->languageMaskGenerator->generateLanguageMask($languages);
+        return $this->languageMaskGenerator->generateLanguageMaskFromLanguageMap($languages);
     }
 
     /**
@@ -266,7 +266,7 @@ class DoctrineDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn('language_mask'),
             $q->bindValue(
-                $this->generateLanguageMask(
+                $this->generateLanguageMaskFromFields(
                     $fields,
                     $versionInfo->initialLanguageCode,
                     $versionInfo->contentInfo->alwaysAvailable
@@ -332,17 +332,10 @@ class DoctrineDatabase extends Gateway
             );
         }
         if ($prePublishVersionInfo !== null) {
-            $languages = [];
-            foreach ($prePublishVersionInfo->languageCodes as $languageCodes) {
-                if (!isset($languages[$languageCodes])) {
-                    $languages[$languageCodes] = true;
-                }
-            }
-
-            $languages['always-available'] = isset($struct->alwaysAvailable) ? $struct->alwaysAvailable :
-                $prePublishVersionInfo->contentInfo->alwaysAvailable;
-
-            $mask = $this->languageMaskGenerator->generateLanguageMask($languages);
+            $mask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                $prePublishVersionInfo->languageCodes,
+                $struct->alwaysAvailable ?? $prePublishVersionInfo->contentInfo->alwaysAvailable
+            );
 
             $q->set(
                 $this->dbHandler->quoteColumn('language_mask'),
@@ -389,7 +382,7 @@ class DoctrineDatabase extends Gateway
             $q->expr->bitOr(
                 $this->dbHandler->quoteColumn('language_mask'),
                 $q->bindValue(
-                    $this->generateLanguageMask(
+                    $this->generateLanguageMaskFromFields(
                         $struct->fields,
                         $this->languageHandler->load($struct->initialLanguageId)->languageCode,
                         false
