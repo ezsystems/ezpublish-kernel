@@ -41,6 +41,9 @@ use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
 use Exception;
+use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationValues as APITranslationValues;
+use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
 
 /**
  * This class provides service methods for managing content.
@@ -897,7 +900,7 @@ class ContentService implements ContentServiceInterface
         $propertyCount = 0;
         foreach ($contentMetadataUpdateStruct as $propertyName => $propertyValue) {
             if (isset($contentMetadataUpdateStruct->$propertyName)) {
-                $propertyCount += 1;
+                ++$propertyCount;
             }
         }
         if ($propertyCount === 0) {
@@ -1166,6 +1169,261 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Translate a version.
+     *
+     * Updates the destination version given in $translationInfo with the provided translated fields in $translationValues.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
+     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     * @throws \eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     *
+     * @since 7.4
+     */
+    public function translateVersion(TranslationInfo $translationInfo, APITranslationValues $translationValues, User $user = null)
+    {
+        /** @var $sourceVersionInfo \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+        $sourceVersionInfo = $translationInfo->sourceVersionInfo;
+
+        // $destinationVersionInfo must be a draft
+        if ($sourceVersionInfo === null) {
+            throw new InvalidArgumentException(
+                '$sourceVersionInfo',
+                'SourceVersionInfo must be provided.'
+            );
+        }
+
+        /** @var $destinationVersionInfo \eZ\Publish\API\Repository\Values\Content\VersionInfo */
+        $destinationVersionInfo = $translationInfo->destinationVersionInfo;
+
+        $sourceContentInfo = $translationInfo->sourceVersionInfo->contentInfo;
+
+        // Extract to separate method?
+        if (($destinationVersionInfo !== null) && $sourceVersionInfo->getContentInfo()->id !== $destinationVersionInfo->getContentInfo()->id) {
+            throw new InvalidArgumentException(
+                '$destinationVersionInfo',
+                'DestinationVersionInfo does not belong to the same content as given SourceVersionInfo'
+            );
+        }
+
+        // $destinationVersionInfo must be a draft
+        if ($destinationVersionInfo !== null && $destinationVersionInfo->status !== VersionInfo::STATUS_DRAFT) {
+            throw new BadStateException(
+                '$destinationVersionInfo',
+                'DestinationVersion is not a draft and can not be updated'
+            );
+        }
+
+        switch ($sourceVersionInfo->status) {
+            case VersionInfo::STATUS_PUBLISHED:
+            case VersionInfo::STATUS_ARCHIVED:
+                break;
+
+            default:
+                // @todo: throw an exception here, to be defined
+                throw new BadStateException(
+                    '$sourceVersionInfo',
+                    'Translation can not be created from a draft version'
+                );
+        }
+
+        $versionNo = $sourceVersionInfo->versionNo;
+
+        if ($user === null) {
+            $user = $this->repository->getCurrentUserReference();
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
+                $sourceContentInfo->id,
+                $versionNo,
+                $user->getUserId()
+            );
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+        /** @var $draft \eZ\Publish\API\Repository\Values\Content\Content */
+        $draft = $this->domainMapper->buildContentDomainObject($spiContent);
+
+        $contentUpdateStruct = clone $translationValues;
+
+        if (!$draft->versionInfo->isDraft()) {
+            throw new BadStateException(
+                '$versionInfo',
+                'Version is not a draft and can not be updated'
+            );
+        }
+
+        $mainLanguageCode = $draft->contentInfo->mainLanguageCode;
+        if ($contentUpdateStruct->initialLanguageCode === null) {
+            $contentUpdateStruct->initialLanguageCode = $translationInfo->destinationLanguageCode;
+        }
+
+        $allLanguageCodes = array_merge($draft->versionInfo->languageCodes, [$translationInfo->destinationLanguageCode]);
+        // check if all languages are present in the system
+        $contentLanguageHandler = $this->persistenceHandler->contentLanguageHandler();
+        foreach ($allLanguageCodes as $languageCode) {
+            $contentLanguageHandler->loadByLanguageCode($languageCode);
+        }
+        // check if all languages are present in the system - END
+
+        $updatedLanguageCodes = $this->getUpdatedLanguageCodes($contentUpdateStruct);
+        $contentType = $this->repository->getContentTypeService()->loadContentType(
+            $sourceContentInfo->contentTypeId
+        );
+        $fields = $this->mapFieldsForUpdate(
+            $contentUpdateStruct,
+            $contentType,
+            $mainLanguageCode
+        );
+
+        $fieldValues = array();
+        $spiFields = array();
+        $allFieldErrors = array();
+        $inputRelations = array();
+        $locationIdToContentIdMapping = array();
+
+        foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
+            /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
+            $fieldType = $this->fieldTypeRegistry->getFieldType(
+                $fieldDefinition->fieldTypeIdentifier
+            );
+
+            foreach ($allLanguageCodes as $languageCode) {
+                $isCopied = $isEmpty = $isRetained = false;
+                $isLanguageNew = !in_array($languageCode, $draft->versionInfo->languageCodes);
+                $isLanguageUpdated = in_array($languageCode, $updatedLanguageCodes);
+                $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $mainLanguageCode;
+                $isFieldUpdated = isset($fields[$fieldDefinition->identifier][$valueLanguageCode]);
+                $isProcessed = isset($fieldValues[$fieldDefinition->identifier][$valueLanguageCode]);
+
+                if (!$isFieldUpdated && !$isLanguageNew) {
+                    $isRetained = true;
+                    $fieldValue = $draft->getField($fieldDefinition->identifier, $valueLanguageCode)->value;
+                } elseif (!$isFieldUpdated && $isLanguageNew && !$fieldDefinition->isTranslatable) {
+                    $isCopied = true;
+                    $fieldValue = $draft->getField($fieldDefinition->identifier, $valueLanguageCode)->value;
+                } elseif ($isFieldUpdated) {
+                    $fieldValue = $fields[$fieldDefinition->identifier][$valueLanguageCode]->value;
+                } else {
+                    $fieldValue = $fieldDefinition->defaultValue;
+                }
+
+                $fieldValue = $fieldType->acceptValue($fieldValue);
+
+                if ($fieldType->isEmptyValue($fieldValue)) {
+                    $isEmpty = true;
+                    if ($isLanguageUpdated && $fieldDefinition->isRequired) {
+                        $allFieldErrors[$fieldDefinition->id][$languageCode] = new ValidationError(
+                            "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
+                            null,
+                            ['%identifier%' => $fieldDefinition->identifier, '%languageCode%' => $languageCode],
+                            'empty'
+                        );
+                    }
+                } elseif ($isLanguageUpdated) {
+                    $fieldErrors = $fieldType->validate(
+                        $fieldDefinition,
+                        $fieldValue
+                    );
+                    if (!empty($fieldErrors)) {
+                        $allFieldErrors[$fieldDefinition->id][$languageCode] = $fieldErrors;
+                    }
+                }
+
+                if (!empty($allFieldErrors)) {
+                    continue;
+                }
+
+                $this->relationProcessor->appendFieldRelations(
+                    $inputRelations,
+                    $locationIdToContentIdMapping,
+                    $fieldType,
+                    $fieldValue,
+                    $fieldDefinition->id
+                );
+                $fieldValues[$fieldDefinition->identifier][$languageCode] = $fieldValue;
+
+                if ($isRetained || $isCopied || ($isLanguageNew && $isEmpty) || $isProcessed) {
+                    continue;
+                }
+
+                $spiFields[] = new SPIField(
+                    array(
+                        'id' => $isLanguageNew ?
+                            null :
+                            $draft->getField($fieldDefinition->identifier, $languageCode)->id,
+                        'fieldDefinitionId' => $fieldDefinition->id,
+                        'type' => $fieldDefinition->fieldTypeIdentifier,
+                        'value' => $fieldType->toPersistenceValue($fieldValue),
+                        'languageCode' => $languageCode,
+                        'versionNo' => $draft->versionInfo->versionNo,
+                    )
+                );
+            }
+        }
+
+        if (!empty($allFieldErrors)) {
+            throw new ContentFieldValidationException($allFieldErrors);
+        }
+
+        $spiContentUpdateStruct = new SPIContentUpdateStruct(
+            array(
+                'name' => $this->nameSchemaService->resolveNameSchema(
+                    $draft,
+                    $fieldValues,
+                    $allLanguageCodes,
+                    $contentType
+                ),
+                'creatorId' => $contentUpdateStruct->creatorId ?: $this->repository->getCurrentUserReference()->getUserId(),
+                'fields' => $spiFields,
+                'modificationDate' => time(),
+                'initialLanguageId' => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
+                    $translationInfo->destinationLanguageCode
+                )->id,
+            )
+        );
+        $existingRelations = $this->loadRelations($draft->versionInfo);
+
+        $this->repository->beginTransaction();
+        try {
+            $spiContent = $this->persistenceHandler->contentHandler()->updateContent(
+                $draft->versionInfo->getContentInfo()->id,
+                $draft->versionInfo->versionNo,
+                $spiContentUpdateStruct
+            );
+            $this->relationProcessor->processFieldRelations(
+                $inputRelations,
+                $spiContent->versionInfo->contentInfo->id,
+                $spiContent->versionInfo->versionNo,
+                $contentType,
+                $existingRelations
+            );
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->domainMapper->buildContentDomainObject(
+            $spiContent,
+            $contentType
+        );
+    }
+
+    /**
      * Updates the fields of a draft.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
@@ -1184,6 +1442,8 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContent(APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct)
     {
+//        throw new \InvalidArgumentException('asd miko');
+
         $contentUpdateStruct = clone $contentUpdateStruct;
 
         /** @var $content \eZ\Publish\Core\Repository\Values\Content\Content */
@@ -1375,7 +1635,6 @@ class ContentService implements ContentServiceInterface
             if ($field->languageCode === null || isset($languageCodes[$field->languageCode])) {
                 continue;
             }
-
             $languageCodes[$field->languageCode] = true;
         }
 
@@ -2134,5 +2393,25 @@ class ContentService implements ContentServiceInterface
     public function newContentUpdateStruct()
     {
         return new ContentUpdateStruct();
+    }
+
+    /**
+     * Instantiates a new TranslationInfo object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     */
+    public function newTranslationInfo()
+    {
+        return new TranslationInfo();
+    }
+
+    /**
+     * Instantiates a Translation object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
+     */
+    public function newTranslationValues()
+    {
+        return new TranslationValues();
     }
 }

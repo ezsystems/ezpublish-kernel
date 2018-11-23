@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -206,5 +208,29 @@ class ContentService implements ContentServiceInterface
     public function newContentUpdateStruct()
     {
         return $this->service->newContentUpdateStruct();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $modifier = null)
+    {
+        return $this->service->translateVersion($translationInfo, $translationValues, $modifier);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function newTranslationInfo()
+    {
+        return $this->service->newTranslationInfo();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function newTranslationValues()
+    {
+        return $this->service->newTranslationValues();
     }
 }

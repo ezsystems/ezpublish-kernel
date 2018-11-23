@@ -15,6 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -1708,6 +1709,44 @@ XML
         $contentUpdate->setField('description', $description);
 
         $contentService->updateContent($contentDraft->getVersionInfo(), $contentUpdate);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the translateVersion() method.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::translateVersion()
+     */
+    public function testTranslateVersion()
+    {
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        // Create content
+        $contentService = $repository->getContentService();
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'An awesome folder', 'eng-US');
+
+        $contentDraft = $contentService->createContent($contentCreate);
+        $content = $contentService->publishVersion($contentDraft->versionInfo);
+
+        // Create eng-GB translation
+        $translationValues = $contentService->newTranslationValues();
+        $translationValues->setField('name', 'An awesome folder (GB)', 'eng-GB');
+        $translationInfo = new TranslationInfo([
+            'sourceLanguageCode' => 'eng-US',
+            'destinationLanguageCode' => 'eng-GB',
+            'sourceVersionInfo' => $content->versionInfo,
+        ]);
+
+        $translated = $contentService->translateVersion($translationInfo, $translationValues);
+        $translatedVersionNumber = $translated->versionInfo->versionNo;
+        $content = $contentService->loadContent($content->id, ['eng-GB'], $translatedVersionNumber);
+        $nameField = $content->getField('name', 'eng-GB');
+
+        $this->assertEquals('An awesome folder (GB)', $nameField->value);
         /* END: Use Case */
     }
 

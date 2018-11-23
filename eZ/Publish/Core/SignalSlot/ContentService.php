@@ -32,7 +32,6 @@ use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\AddRelationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteRelationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\AddTranslationInfoSignal;
 
 /**
  * ContentService class.
@@ -353,9 +352,7 @@ class ContentService implements ContentServiceInterface
     /**
      * Translate a version.
      *
-     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
-     *
-     * @example Examples/translation_5x.php
+     * Updates the destination version given in $translationInfo with the provided translated fields in $translationValues.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
@@ -368,17 +365,18 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
      *
-     * @since 5.0
+     * @since 7.4
      */
     public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null)
     {
         $returnValue = $this->service->translateVersion($translationInfo, $translationValues, $user);
+        $versionInfo = $translationInfo->sourceVersionInfo;
         $this->signalDispatcher->emit(
             new TranslateVersionSignal(
                 array(
-                    'contentId' => $translationInfo->srcVersionInfo->contentInfo->id,
-                    'versionNo' => $translationInfo->srcVersionInfo->versionNo,
-                    'userId' => ($user !== null ? $user->id : null),
+                    'contentId' => $versionInfo->contentInfo->id,
+                    'versionNo' => $versionInfo->versionNo,
+                    'userId' => $user->id ?? null,
                 )
             )
         );
@@ -595,46 +593,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Adds translation information to the content object.
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     *
-     * @since 5.0
-     */
-    public function addTranslationInfo(TranslationInfo $translationInfo)
-    {
-        $returnValue = $this->service->addTranslationInfo($translationInfo);
-        $this->signalDispatcher->emit(
-            new AddTranslationInfoSignal(array())
-        );
-
-        return $returnValue;
-    }
-
-    /**
-     * lists the translations done on this content object.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter
-     *
-     * @todo TBD - filter by source version, destination version and languages
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
-     *
-     * @since 5.0
-     */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
-    {
-        return $this->service->loadTranslationInfos($contentInfo, $filter);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function removeTranslation(ContentInfo $contentInfo, $languageCode)
@@ -757,5 +715,25 @@ class ContentService implements ContentServiceInterface
     public function newContentUpdateStruct()
     {
         return $this->service->newContentUpdateStruct();
+    }
+
+    /**
+     * Instantiates a new TranslationInfo object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     */
+    public function newTranslationInfo()
+    {
+        return $this->service->newTranslationInfo();
+    }
+
+    /**
+     * Instantiates a Translation object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
+     */
+    public function newTranslationValues()
+    {
+        return $this->service->newTranslationValues();
     }
 }
