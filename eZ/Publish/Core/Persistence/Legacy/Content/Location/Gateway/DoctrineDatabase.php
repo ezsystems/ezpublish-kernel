@@ -1572,13 +1572,13 @@ class DoctrineDatabase extends Gateway
      */
     private function createNodeQueryBuilder(array $translations = null, bool $useAlwaysAvailable = true): QueryBuilder
     {
-        $dbPlatform = $this->connection->getDatabasePlatform();
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
             ->select('t.*')
             ->from('ezcontentobject_tree', 't');
 
         if (!empty($translations)) {
+            $dbPlatform = $this->connection->getDatabasePlatform();
             $expr = $queryBuilder->expr();
             $mask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
                 $translations,
@@ -1603,6 +1603,4 @@ class DoctrineDatabase extends Gateway
 
         return $queryBuilder;
     }
-
-
 }

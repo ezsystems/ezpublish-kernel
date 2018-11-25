@@ -63,13 +63,11 @@ class MaskGenerator
         }
 
         foreach ($languageMap as $languageCode => $value) {
-            try {
-                $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
-            } catch (NotFoundException $e) {
-                if (\is_int($languageCode)) {
-                    throw new RuntimeException("Keys expected as language codes, got: $languageCode", 0, $e);
-                }
+            if (\is_int($languageCode)) {
+                throw new RuntimeException("Keys expected as language codes, got: $languageCode", 0, $e);
             }
+
+            $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
         }
 
         return $mask;
@@ -89,9 +87,7 @@ class MaskGenerator
         $mask |= $useAlwaysAvailable ? 1 : 0;
 
         foreach ($languageCodes as $languageCode) {
-            try {
-                $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
-            } catch (NotFoundException $e) {}
+            $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
         }
 
         return $mask;
