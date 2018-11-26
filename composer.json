@@ -20,7 +20,7 @@
         "symfony/symfony": "~2.8.46 | ^3.4.17",
         "symfony-cmf/routing": "~1.4",
         "qafoo/rmf": "1.0.*",
-        "kriswallsmith/buzz": "~0.17.0",
+        "kriswallsmith/buzz": "~0.16",
         "tedivm/stash-bundle": "~0.6.2",
         "sensio/distribution-bundle": "^3.0.35 | ^4.0.39 | ^5.0.22",
         "nelmio/cors-bundle": "^1.5.0",
