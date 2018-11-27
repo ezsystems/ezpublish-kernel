@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
@@ -32,13 +33,20 @@ class Mapper
     protected $converterRegistry;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    private $maskGenerator;
+
+    /**
      * Creates a new content type mapper.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
      */
-    public function __construct(ConverterRegistry $converterRegistry)
+    public function __construct(ConverterRegistry $converterRegistry, MaskGenerator $maskGenerator)
     {
         $this->converterRegistry = $converterRegistry;
+        $this->maskGenerator = $maskGenerator;
     }
 
     /**
@@ -166,6 +174,7 @@ class Mapper
         $type->defaultAlwaysAvailable = ($row['ezcontentclass_always_available'] == 1);
         $type->sortField = (int)$row['ezcontentclass_sort_field'];
         $type->sortOrder = (int)$row['ezcontentclass_sort_order'];
+        $type->languageCodes = $this->maskGenerator->extractLanguageCodesFromMask((int)$row['ezcontentclass_language_mask']);
 
         $type->groupIds = array();
         $type->fieldDefinitions = array();
@@ -285,6 +294,7 @@ class Mapper
         $type->defaultAlwaysAvailable = $createStruct->defaultAlwaysAvailable;
         $type->sortField = $createStruct->sortField;
         $type->sortOrder = $createStruct->sortOrder;
+        $type->languageCodes = array_keys($createStruct->name);
 
         return $type;
     }
@@ -318,6 +328,7 @@ class Mapper
         $createStruct->defaultAlwaysAvailable = $type->defaultAlwaysAvailable;
         $createStruct->sortField = $type->sortField;
         $createStruct->sortOrder = $type->sortOrder;
+        $createStruct->languageCodes = array_keys($type->name);
 
         return $createStruct;
     }
@@ -346,6 +357,7 @@ class Mapper
         $updateStruct->defaultAlwaysAvailable = $type->defaultAlwaysAvailable;
         $updateStruct->sortField = $type->sortField;
         $updateStruct->sortOrder = $type->sortOrder;
+        $updateStruct->languageCodes = array_keys($type->name);
 
         return $updateStruct;
     }

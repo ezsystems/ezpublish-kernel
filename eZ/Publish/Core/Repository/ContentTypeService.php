@@ -1055,6 +1055,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
+        //Merge new translations into existing before update
+        $contentTypeUpdateStruct->names = array_merge($contentTypeDraft->getNames(), $contentTypeUpdateStruct->names ?? []);
+        $contentTypeUpdateStruct->descriptions = array_merge($contentTypeDraft->getDescriptions(), $contentTypeUpdateStruct->descriptions ?? []);
+
         $this->repository->beginTransaction();
         try {
             $this->contentTypeHandler->update(

@@ -116,4 +116,11 @@ class UpdateStruct extends ValueObject
      * @var bool
      */
     public $defaultAlwaysAvailable;
+
+    /**
+     * Array of language codes used in type (based on used translation of name property)
+     *
+     * @var string[]
+     */
+    public $languageCodes;
 }

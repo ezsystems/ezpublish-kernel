@@ -113,6 +113,7 @@ class ContentTypeDomainMapper
                 'defaultSortField' => $spiContentType->sortField,
                 'defaultSortOrder' => $spiContentType->sortOrder,
                 'prioritizedLanguages' => $prioritizedLanguages,
+                'languageCodes' => $spiContentType->languageCodes
             )
         );
     }
@@ -174,6 +175,10 @@ class ContentTypeDomainMapper
         $updateStruct->initialLanguageId = $this->contentLanguageHandler->loadByLanguageCode(
             $contentTypeUpdateStruct->mainLanguageCode !== null ? $contentTypeUpdateStruct->mainLanguageCode : $contentTypeDraft->mainLanguageCode
         )->id;
+
+        $updateStruct->languageCodes = $contentTypeUpdateStruct->languageCodes !== null ?
+            $contentTypeUpdateStruct->languageCodes :
+            is_array($contentTypeUpdateStruct->names) ? array_keys($contentTypeUpdateStruct->names): array_keys($contentTypeDraft->names);
 
         return $updateStruct;
     }

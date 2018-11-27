@@ -154,6 +154,13 @@ class CreateStruct extends ValueObject
     public $defaultAlwaysAvailable = false;
 
     /**
+     * Array of language codes used in type (based on used translation of name property)
+     *
+     * @var string[]
+     */
+    public $languageCodes = [];
+
+    /**
      * Performs a deep cloning.
      */
     public function __clone()
