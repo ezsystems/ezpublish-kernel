@@ -25,6 +25,8 @@ use PDO;
 
 class ReindexCommand extends ContainerAwareCommand
 {
+    const DEFAULT_REPOSITORY_USER = 'admin';
+
     /**
      * @var \eZ\Publish\Core\Search\Common\Indexer|\eZ\Publish\Core\Search\Common\IncrementalIndexer
      */
@@ -51,6 +53,21 @@ class ReindexCommand extends ContainerAwareCommand
     private $siteaccess;
 
     /**
+     * @var \eZ\Publish\API\Repository\PermissionResolver
+     */
+    private $permissionResolver;
+
+    /**
+     * @var \eZ\Publish\API\Repository\UserService
+     */
+    private $userService;
+
+    /**
+     * @var string
+     */
+    private $userLogin;
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -70,6 +87,9 @@ class ReindexCommand extends ContainerAwareCommand
                 )
             );
         }
+        $repository = $this->getContainer()->get('ezpublish.api.repository');
+        $this->userService = $repository->getUserService();
+        $this->permissionResolver = $repository->getPermissionResolver();
     }
 
     /**
@@ -121,8 +141,8 @@ class ReindexCommand extends ContainerAwareCommand
                 'user',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'User id to use. (default admin user is 14)',
-                1
+                'eZ Platform username (with Role containing at least Content policies: read, versionread)',
+                self::DEFAULT_REPOSITORY_USER
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
@@ -152,13 +172,11 @@ EOT
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $userId = (int)$input->getOption('user');
-        if ($userId) {
-            $repository = $this->getContainer()->get('ezpublish.api.repository');
-            $user = $repository->getUserService()->loadUser($userID);
-            $repository->setCurrentUser($user);
-        }
-        
+        $this->userLogin = $input->getOption('user');
+        $this->permissionResolver->setCurrentUserReference(
+            $this->userService->loadUserByLogin($this->userLogin)
+        );
+
         $commit = !$input->getOption('no-commit');
         $iterationCount = $input->getOption('iteration-count');
         $this->siteaccess = $input->getOption('siteaccess');
@@ -393,6 +411,7 @@ EOT
             $this->siteaccess ? '--siteaccess=' . $this->siteaccess : null,
             'ezplatform:reindex',
             '--content-ids=' . implode(',', $contentIds),
+            '--user=' . $this->userLogin,
         ]));
         $process->setTimeout(null);
         $process->setPrefix($this->getPhpPath());
