@@ -108,6 +108,16 @@ class CachingHandler implements BaseLanguageHandler
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadList(array $ids): iterable
+    {
+        $this->initializeCache();
+
+        return $this->languageCache->getListById($ids);
+    }
+
+    /**
      * Get language by Language Code (eg: eng-GB).
      *
      * @param string $languageCode
@@ -121,6 +131,16 @@ class CachingHandler implements BaseLanguageHandler
         $this->initializeCache();
 
         return $this->languageCache->getByLocale($languageCode);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadListByLanguageCodes(array $languageCodes): iterable
+    {
+        $this->initializeCache();
+
+        return $this->languageCache->getListByLocale($languageCodes);
     }
 
     /**
