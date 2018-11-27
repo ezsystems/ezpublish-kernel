@@ -190,7 +190,7 @@ class Type extends ValueObject
     public $defaultAlwaysAvailable = false;
 
     /**
-     * Translations language codes
+     * Translations language codes.
      *
      * @var array
      */

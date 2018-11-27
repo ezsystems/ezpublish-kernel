@@ -105,9 +105,4 @@ class ContentTypeUpdateStruct extends ValueObject
      * @var array an array of string
      */
     public $descriptions;
-
-    /**
-     * @var string[]
-     */
-    public $languageCodes = [];
 }

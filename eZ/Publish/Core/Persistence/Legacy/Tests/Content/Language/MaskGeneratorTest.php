@@ -36,6 +36,29 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     }
 
     /**
+     * @param array $languages
+     * @param int $expectedMask
+     *
+     * @covers       \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::generateLanguageMaskFromLanguageCodes
+     * @dataProvider getLanguageMaskData
+     */
+    public function testGenerateLanguageMaskFromLanguagesCodes(array $languages, $expectedMask)
+    {
+        $generator = $this->getMaskGenerator();
+
+        $isAlwaysAvailable = array_filter($languages, function ($key) {
+            return $key === 'always-available';
+        }, ARRAY_FILTER_USE_KEY);
+
+        $languageCodes = array_diff($languages, $isAlwaysAvailable);
+
+        $this->assertSame(
+            $expectedMask,
+            $generator->generateLanguageMaskFromLanguageCodes(array_keys($languageCodes), count($isAlwaysAvailable) > 0)
+        );
+    }
+
+    /**
      * Returns test data for {@link testGenerateLanguageMask()}.
      *
      * @return array

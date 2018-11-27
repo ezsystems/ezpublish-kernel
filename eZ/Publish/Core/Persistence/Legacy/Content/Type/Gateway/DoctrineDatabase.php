@@ -16,7 +16,6 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -366,7 +365,7 @@ class DoctrineDatabase extends Gateway
      * Set common columns for insert/update of a Type.
      *
      * @param \eZ\Publish\Core\Persistence\Database\InsertQuery|\eZ\Publish\Core\Persistence\Database\UpdateQuery $q
-     * @param \eZ\Publish\SPI\Persistence\ValueObject|\eZ\Publish\SPI\Persistence\Content\Type|\eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $type
+     * @param \eZ\Publish\SPI\Persistence\ValueObject|\eZ\Publish\SPI\Persistence\Content\Type $type
      */
     protected function setCommonTypeColumns(Query $q, ValueObject $type)
     {
@@ -400,7 +399,7 @@ class DoctrineDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn('language_mask'),
             $q->bindValue(
-                $this->languageMaskGenerator->generateLanguageMask(array_flip($type->languageCodes)),
+                $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes($type->languageCodes, array_key_exists('always-available', $type->name)),
                 null,
                 \PDO::PARAM_INT
             )
@@ -845,12 +844,12 @@ class DoctrineDatabase extends Gateway
      * @param int $status
      * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
      */
-    public function updateType($typeId, $status, UpdateStruct $updateStruct)
+    public function updateType($typeId, $status, Type $type)
     {
         $q = $this->dbHandler->createUpdateQuery();
         $q->update($this->dbHandler->quoteTable('ezcontentclass'));
 
-        $this->setCommonTypeColumns($q, $updateStruct);
+        $this->setCommonTypeColumns($q, $type);
 
         $q->where(
             $q->expr->lAnd(
@@ -868,7 +867,7 @@ class DoctrineDatabase extends Gateway
         $q->prepare()->execute();
 
         $this->deleteTypeNameData($typeId, $status);
-        $this->insertTypeNameData($typeId, $status, $updateStruct->name);
+        $this->insertTypeNameData($typeId, $status, $type->name);
     }
 
     public function loadTypesListData(array $typeIds): array

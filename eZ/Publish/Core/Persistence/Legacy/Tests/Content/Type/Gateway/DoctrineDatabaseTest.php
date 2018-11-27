@@ -586,6 +586,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $type->initialLanguageId = 2;
         $type->sortField = Location::SORT_FIELD_CLASS_NAME;
         $type->sortOrder = Location::SORT_ORDER_ASC;
+        $type->languageCodes = [
+            'eng-US',
+            'eng-GB',
+        ];
 
         return $type;
     }
@@ -905,9 +909,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $updateStruct = $this->getTypeUpdateFixture();
+        $type = $this->getUpdateTypeFixture();
 
-        $gateway->updateType(1, 0, $updateStruct);
+        $gateway->updateType(1, 0, $type);
 
         $this->assertQueryResult(
             array(
@@ -938,9 +942,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $updateStruct = $this->getTypeUpdateFixture();
+        $type = $this->getUpdateTypeFixture();
 
-        $gateway->updateType(1, 0, $updateStruct);
+        $gateway->updateType(1, 0, $type);
 
         $this->assertQueryResult(
             array(
@@ -1024,6 +1028,39 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $struct->defaultAlwaysAvailable = true;
 
         return $struct;
+    }
+
+    /**
+     * Returns a eZ\Publish\SPI\Persistence\Content\Type fixture for update operation.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    protected function getUpdateTypeFixture(): Type
+    {
+        $type = new Type();
+
+        $type->name = array(
+            'always-available' => 'eng-US',
+            'eng-US' => 'New Folder',
+            'eng-GB' => 'New Folder for you',
+        );
+        $type->description = array(
+            0 => '',
+            'always-available' => false,
+        );
+        $type->identifier = 'new_folder';
+        $type->modified = 1311621548;
+        $type->modifierId = 42;
+        $type->remoteId = 'foobar';
+        $type->urlAliasSchema = 'some scheke';
+        $type->nameSchema = '<short_name>';
+        $type->isContainer = false;
+        $type->initialLanguageId = 23;
+        $type->sortField = 3;
+        $type->sortOrder = Location::SORT_ORDER_DESC;
+        $type->defaultAlwaysAvailable = true;
+
+        return $type;
     }
 
     /**

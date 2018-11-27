@@ -328,7 +328,6 @@ class Mapper
         $createStruct->defaultAlwaysAvailable = $type->defaultAlwaysAvailable;
         $createStruct->sortField = $type->sortField;
         $createStruct->sortOrder = $type->sortOrder;
-        $createStruct->languageCodes = array_keys($type->name);
 
         return $createStruct;
     }
@@ -357,7 +356,6 @@ class Mapper
         $updateStruct->defaultAlwaysAvailable = $type->defaultAlwaysAvailable;
         $updateStruct->sortField = $type->sortField;
         $updateStruct->sortOrder = $type->sortOrder;
-        $updateStruct->languageCodes = array_keys($type->name);
 
         return $updateStruct;
     }
@@ -413,5 +411,32 @@ class Mapper
         return $serialized
             ? unserialize($serialized)
             : $default;
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    public function createTypeFromUpdateStruct(UpdateStruct $updateStruct): Type
+    {
+        $type = new Type();
+
+        $type->name = $updateStruct->name;
+        $type->description = $updateStruct->description;
+        $type->identifier = $updateStruct->identifier;
+        $type->modified = $updateStruct->modified;
+        $type->modifierId = $updateStruct->modifierId;
+        $type->remoteId = $updateStruct->remoteId;
+        $type->urlAliasSchema = $updateStruct->urlAliasSchema;
+        $type->nameSchema = $updateStruct->nameSchema;
+        $type->isContainer = $updateStruct->isContainer;
+        $type->initialLanguageId = $updateStruct->initialLanguageId;
+        $type->defaultAlwaysAvailable = $updateStruct->defaultAlwaysAvailable;
+        $type->sortField = $updateStruct->sortField;
+        $type->sortOrder = $updateStruct->sortOrder;
+        $type->languageCodes = array_keys($updateStruct->name);
+
+        return $type;
     }
 }

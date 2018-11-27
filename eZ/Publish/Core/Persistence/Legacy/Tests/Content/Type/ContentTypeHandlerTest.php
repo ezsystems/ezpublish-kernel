@@ -586,7 +586,7 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(23),
                 $this->equalTo(1),
                 $this->isInstanceOf(
-                    UpdateStruct::class
+                    Type::class
                 )
             );
 
@@ -1235,6 +1235,9 @@ class ContentTypeHandlerTest extends TestCase
         $struct->groupIds = array(
             42,
         );
+        $struct->name = [
+            'eng-GB' => 'test name',
+        ];
 
         $fieldDefName = new FieldDefinition(array('position' => 1));
         $fieldDefShortDescription = new FieldDefinition(array('position' => 2));

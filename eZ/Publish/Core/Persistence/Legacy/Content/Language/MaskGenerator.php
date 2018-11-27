@@ -188,4 +188,22 @@ class MaskGenerator
         // Return false if power of 2
         return (bool)($languageMask & ($languageMask - 1));
     }
+
+    /**
+     * @param array $languageCodes
+     * @param bool $isAlwaysAvailable
+     *
+     * @return int
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function generateLanguageMaskFromLanguageCodes(array $languageCodes, bool $isAlwaysAvailable = false): int
+    {
+        $mask = $isAlwaysAvailable ? 1 : 0;
+
+        foreach ($languageCodes as $languageCode) {
+            $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
+        }
+
+        return $mask;
+    }
 }

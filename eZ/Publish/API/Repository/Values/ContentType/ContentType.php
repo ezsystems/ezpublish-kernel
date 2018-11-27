@@ -165,7 +165,7 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
     protected $defaultSortOrder;
 
     /**
-     * List of language codes used by translations
+     * List of language codes used by translations.
      *
      * @var string[]
      */

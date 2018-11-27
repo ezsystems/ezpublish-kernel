@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -20,6 +21,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 
 /**
  * Test case for Mapper.
@@ -33,7 +35,7 @@ class MapperTest extends TestCase
     {
         $createStruct = $this->getGroupCreateStructFixture();
 
-        $mapper = new Mapper($this->getConverterRegistryMock());
+        $mapper = new Mapper($this->getConverterRegistryMock(), $this->getMaskGeneratorMock());
 
         $group = $mapper->createGroupFromCreateStruct($createStruct);
 
@@ -87,8 +89,27 @@ class MapperTest extends TestCase
     {
         $struct = $this->getContentTypeCreateStructFixture();
 
-        $mapper = new Mapper($this->getConverterRegistryMock());
+        $mapper = new Mapper($this->getConverterRegistryMock(), $this->getMaskGeneratorMock());
         $type = $mapper->createTypeFromCreateStruct($struct);
+
+        foreach ($struct as $propName => $propVal) {
+            $this->assertEquals(
+                $struct->$propName,
+                $type->$propName,
+                "Property \${$propName} not equal"
+            );
+        }
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createTypeFromUpdateStruct
+     */
+    public function testTypeFromUpdateStruct()
+    {
+        $struct = $this->getContentTypeUpdateStructFixture();
+
+        $mapper = new Mapper($this->getConverterRegistryMock(), $this->getMaskGeneratorMock());
+        $type = $mapper->createTypeFromUpdateStruct($struct);
 
         foreach ($struct as $propName => $propVal) {
             $this->assertEquals(
@@ -144,13 +165,41 @@ class MapperTest extends TestCase
     }
 
     /**
+     * Returns a CreateStruct fixture.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct
+     */
+    protected function getContentTypeUpdateStructFixture(): UpdateStruct
+    {
+        // Taken from example DB
+        $struct = new UpdateStruct();
+        $struct->name = [
+            'eng-US' => 'Folder',
+        ];
+        $struct->description = [];
+        $struct->identifier = 'folder';
+        $struct->modified = 1082454875;
+        $struct->modifierId = 14;
+        $struct->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
+        $struct->urlAliasSchema = '';
+        $struct->nameSchema = '<short_name|name>';
+        $struct->isContainer = true;
+        $struct->initialLanguageId = 2;
+        $struct->sortField = Location::SORT_FIELD_MODIFIED_SUBNODE;
+        $struct->sortOrder = Location::SORT_ORDER_ASC;
+        $struct->defaultAlwaysAvailable = true;
+
+        return $struct;
+    }
+
+    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createCreateStructFromType
      */
     public function testCreateStructFromType()
     {
         $type = $this->getContentTypeFixture();
 
-        $mapper = new Mapper($this->getConverterRegistryMock());
+        $mapper = new Mapper($this->getConverterRegistryMock(), $this->getMaskGeneratorMock());
         $struct = $mapper->createCreateStructFromType($type);
 
         // Iterate through struct, since it has fewer props
@@ -216,7 +265,7 @@ class MapperTest extends TestCase
     {
         $rows = $this->getLoadGroupFixture();
 
-        $mapper = new Mapper($this->getConverterRegistryMock());
+        $mapper = new Mapper($this->getConverterRegistryMock(), $this->getMaskGeneratorMock());
         $groups = $mapper->extractGroupsFromRows($rows);
 
         $groupFixture = new Group();
@@ -340,7 +389,7 @@ class MapperTest extends TestCase
 
         $converterRegistry = new ConverterRegistry(['some_type' => $converterMock]);
 
-        $mapper = new Mapper($converterRegistry);
+        $mapper = new Mapper($converterRegistry, $this->getMaskGeneratorMock());
 
         $fieldDef = new FieldDefinition();
         $fieldDef->fieldType = 'some_type';
@@ -370,7 +419,7 @@ class MapperTest extends TestCase
 
         $converterRegistry = new ConverterRegistry(['some_type' => $converterMock]);
 
-        $mapper = new Mapper($converterRegistry);
+        $mapper = new Mapper($converterRegistry, $this->getMaskGeneratorMock());
 
         $storageFieldDef = new StorageFieldDefinition();
 
@@ -389,7 +438,7 @@ class MapperTest extends TestCase
     {
         $mapper = $this->getMockBuilder(Mapper::class)
             ->setMethods(array('toFieldDefinition'))
-            ->setConstructorArgs(array($this->getConverterRegistryMock()))
+            ->setConstructorArgs(array($this->getConverterRegistryMock(), $this->getMaskGeneratorMock()))
             ->getMock();
 
         // Dedicatedly tested test
@@ -438,5 +487,10 @@ class MapperTest extends TestCase
     protected function getLoadGroupFixture()
     {
         return require __DIR__ . '/_fixtures/map_load_group.php';
+    }
+
+    protected function getMaskGeneratorMock()
+    {
+        return $this->createMock(MaskGenerator::class);
     }
 }
