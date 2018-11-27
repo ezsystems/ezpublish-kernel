@@ -327,6 +327,7 @@ class Mapper
             $nameData[$versionId][$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
         }
 
+        // @todo Bulk load languages (might need to use MaskGenerator to extract id's per item first and then load for all versions)
         $versionInfoList = array();
         foreach ($rows as $row) {
             $versionId = $row['ezcontentobject_id'] . '_' . $row['ezcontentobject_version_version'];
@@ -360,6 +361,7 @@ class Mapper
         $result = [];
 
         // Decomposition of $languageMask into its binary components.
+        // @todo Use MaskGenerator which is more optimized?
         while ($exp <= $languageMask) {
             if ($languageMask & $exp) {
                 $result[] = $this->languageHandler->load($exp)->languageCode;

@@ -48,13 +48,9 @@ class MaskGenerator
             unset($languages['always-available']);
         }
 
-        foreach ($languages as $language => $value) {
-            if (is_int($language)) {
-                throw new RuntimeException(
-                    "Expected flipped array with language codes as keys, got int key: $language"
-                );
-            }
-            $mask |= $this->languageHandler->loadByLanguageCode($language)->id;
+        $languageList = $this->languageHandler->loadListByLanguageCodes(array_keys($languages));
+        foreach ($languageList as $language) {
+            $mask |= $language->id;
         }
 
         return $mask;
@@ -165,10 +161,12 @@ class MaskGenerator
      */
     public function extractLanguageCodesFromMask($languageMask)
     {
-        $languageCodes = array();
-
-        foreach ($this->extractLanguageIdsFromMask($languageMask) as $languageId) {
-            $languageCodes[] = $this->languageHandler->load($languageId)->languageCode;
+        $languageCodes = [];
+        $languageList = $this->languageHandler->loadList(
+            $this->extractLanguageIdsFromMask($languageMask)
+        );
+        foreach ($languageList as $language) {
+            $languageCodes[] = $language->languageCode;
         }
 
         return $languageCodes;

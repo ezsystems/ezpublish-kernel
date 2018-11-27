@@ -193,9 +193,13 @@ class Handler implements SearchHandlerInterface
 
     protected function extractMatchedLanguage($languageMask, $mainLanguageId, $languageSettings)
     {
-        foreach ($languageSettings['languages'] as $languageCode) {
-            if ($languageMask & $this->languageHandler->loadByLanguageCode($languageCode)->id) {
-                return $languageCode;
+        $languageList = !empty($languageSettings['languages']) ?
+            $this->languageHandler->loadListByLanguageCodes($languageSettings['languages']) :
+            [];
+
+        foreach ($languageList as $language) {
+            if ($languageMask & $language->id) {
+                return $language->languageCode;
             }
         }
 

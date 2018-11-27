@@ -59,6 +59,7 @@ class Mapper
         $objectState->description = array();
 
         foreach ($data as $stateTranslation) {
+            // @todo Bulk load languages (default + translations)
             $languageCode = $this->languageHandler->load(
                 $stateTranslation['ezcobj_state_language_language_id'] & ~1
             )->languageCode;
@@ -111,6 +112,7 @@ class Mapper
         $objectStateGroup->description = array();
 
         foreach ($data as $groupTranslation) {
+            // @todo Bulk load languages (default + translations)
             $languageCode = $this->languageHandler->load(
                 $groupTranslation['ezcobj_state_group_language_real_language_id']
             )->languageCode;
