@@ -63,9 +63,28 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
     /**
      * {@inheritdoc}
      */
+    public function loadList(array $ids): iterable
+    {
+        return $this->getMultipleCacheItems(
+            $ids,
+            'ez-language-',
+            function (array $cacheMissIds) {
+                $this->logger->logCall(__CLASS__ . '::loadList', ['languages' => $cacheMissIds]);
+
+                return $this->persistenceHandler->contentLanguageHandler()->loadList($cacheMissIds);
+            },
+            function (Language $language) {
+                return ['language-' . $language->id];
+            }
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadByLanguageCode($languageCode)
     {
-        $cacheItem = $this->cache->getItem('ez-language-' . $languageCode . '-by-code');
+        $cacheItem = $this->cache->getItem('ez-language-code-' . $languageCode);
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
@@ -78,6 +97,25 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
         $this->cache->save($cacheItem);
 
         return $language;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadListByLanguageCodes(array $languageCodes): iterable
+    {
+        return $this->getMultipleCacheItems(
+            $languageCodes,
+            'ez-language-code-',
+            function (array $cacheMissIds) {
+                $this->logger->logCall(__CLASS__ . '::loadListByLanguageCodes', ['languages' => $cacheMissIds]);
+
+                return $this->persistenceHandler->contentLanguageHandler()->loadListByLanguageCodes($cacheMissIds);
+            },
+            function (Language $language) {
+                return ['language-' . $language->id];
+            }
+        );
     }
 
     /**
