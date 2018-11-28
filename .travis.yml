@@ -31,9 +31,9 @@ matrix:
   include:
 # 5.6
     - php: 5.6
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0@dev"
     - php: 5.6
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb" SYMFONY_VERSION="~2.7.0"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb" SYMFONY_VERSION="~2.8.0"
     - php: 5.6
       env: BEHAT_OPTS="--profile=core --tags=~@broken" RUN_INSTALL=1 SYMFONY_ENV=behat SYMFONY_DEBUG=1
 # 7.0
@@ -48,9 +48,9 @@ matrix:
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb" CUSTOM_CACHE_POOL="singleredis" REDIS_ENABLE_LZF="true" REDIS_ENABLE_IGBINARY="true"
 # 7.2
     - php: 7.2
-      env: TEST_CONFIG="phpunit.xml"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0"
     - php: 7.2
-      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0"
+      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0@dev"
 
 
 # test only master, stable branches and pull requests
