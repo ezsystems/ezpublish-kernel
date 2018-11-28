@@ -326,10 +326,10 @@ class ContentTypeDomainMapper
                 'fieldType' => $fieldDefinition->fieldTypeIdentifier,
                 'name' => $fieldDefinitionUpdateStruct->names === null ?
                     $fieldDefinition->getNames() :
-                    $fieldDefinitionUpdateStruct->names,
+                    array_merge($fieldDefinition->getNames(), $fieldDefinitionUpdateStruct->names),
                 'description' => $fieldDefinitionUpdateStruct->descriptions === null ?
                     $fieldDefinition->getDescriptions() :
-                    $fieldDefinitionUpdateStruct->descriptions,
+                    array_merge($fieldDefinition->getDescriptions(), $fieldDefinitionUpdateStruct->descriptions),
                 'identifier' => $fieldDefinitionUpdateStruct->identifier === null ?
                     $fieldDefinition->identifier :
                     $fieldDefinitionUpdateStruct->identifier,

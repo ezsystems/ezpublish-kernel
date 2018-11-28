@@ -2184,6 +2184,70 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition
+     */
+    public function testUpdateFieldDefinitionWithNewTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        /* BEGIN: Use Case */
+        $contentTypeDraft = $this->createContentTypeDraft();
+
+        $bodyField = $contentTypeDraft->getFieldDefinition('body');
+
+        self::assertEquals(
+            ['eng-US', 'ger-DE'],
+            array_keys($bodyField->getNames())
+        );
+
+        $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $bodyUpdateStruct->identifier = 'blog-body';
+        $bodyUpdateStruct->names = [
+            'eng-GB' => 'New blog post body',
+        ];
+        $bodyUpdateStruct->descriptions = [
+            'eng-GB' => null,
+        ];
+        $bodyUpdateStruct->fieldGroup = 'updated-blog-content';
+        $bodyUpdateStruct->position = 3;
+        $bodyUpdateStruct->isTranslatable = false;
+        $bodyUpdateStruct->isRequired = false;
+        $bodyUpdateStruct->isInfoCollector = true;
+        $bodyUpdateStruct->validatorConfiguration = [];
+        $bodyUpdateStruct->fieldSettings = [
+            'textRows' => 60,
+        ];
+        $bodyUpdateStruct->isSearchable = false;
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $bodyField,
+            $bodyUpdateStruct
+        );
+        /* END: Use Case */
+
+        $contentType = $contentTypeService->loadContentTypeDraft($contentTypeDraft->id);
+
+        self::assertEquals(
+            [
+                'eng-GB' => 'New blog post body',
+                'eng-US' => 'Body',
+                'ger-DE' => 'Textkörper',
+            ],
+            $contentType->getFieldDefinition('blog-body')->getNames()
+        );
+        self::assertEquals(
+            [
+                'eng-GB' => null,
+                'eng-US' => 'Body of the blog post',
+                'ger-DE' => 'Textkörper des Blog-Eintrages',
+            ],
+            $contentType->getFieldDefinition('blog-body')->getDescriptions()
+        );
+    }
+
+    /**
      * Test for the updateFieldDefinition() method.
      *
      * @param array $data
