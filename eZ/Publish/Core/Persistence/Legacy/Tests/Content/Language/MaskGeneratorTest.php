@@ -22,21 +22,21 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      * @param array $languages
      * @param int $expectedMask
      *
-     * @covers       \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::generateLanguageMaskFromLanguageMap
+     * @covers       \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::generateLanguageMask
      * @dataProvider getLanguageMaskData
      */
-    public function testGenerateLanguageMaskFromLanguageMap(array $languages, $expectedMask)
+    public function testGenerateLanguageMask(array $languages, $expectedMask)
     {
         $generator = $this->getMaskGenerator();
 
         $this->assertSame(
             $expectedMask,
-            $generator->generateLanguageMaskFromLanguageMap($languages)
+            $generator->generateLanguageMask($languages)
         );
     }
 
     /**
-     * Returns test data for {@link testGenerateLanguageMaskFromLanguageMap()}.
+     * Returns test data for {@link testGenerateLanguageMask()}.
      *
      * @return array
      */

@@ -397,7 +397,7 @@ class DoctrineDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn('language_mask'),
             $q->bindValue(
-                $this->languageMaskGenerator->generateLanguageMaskFromLanguageMap($type->name),
+                $this->languageMaskGenerator->generateLanguageMask($type->name),
                 null,
                 \PDO::PARAM_INT
             )
