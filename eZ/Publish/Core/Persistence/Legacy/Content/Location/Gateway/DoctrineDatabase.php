@@ -89,22 +89,6 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
-    {
-        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
-        $q->where(
-            $q->expr()->in(
-                't.node_id',
-                $q->createNamedParameter($locationIds, Connection::PARAM_INT_ARRAY)
-            )
-        );
-
-        return $q->execute()->fetchAll(FetchMode::ASSOCIATIVE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
         $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);

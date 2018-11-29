@@ -56,18 +56,6 @@ class ExceptionConversion extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
-    {
-        try {
-            return $this->innerGateway->getNodeDataList($locationIds, $translations, $useAlwaysAvailable);
-        } catch (DBALException | PDOException $e) {
-            throw new RuntimeException('Database error', 0, $e);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
         try {
