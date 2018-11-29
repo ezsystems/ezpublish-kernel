@@ -23,7 +23,6 @@ use eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use phpDocumentor\Reflection\Types\Iterable_;
 
 /**
  * LocationService class.
@@ -95,14 +94,6 @@ class LocationService implements LocationServiceInterface
     public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         return $this->service->loadLocation($locationId, $prioritizedLanguages, $useAlwaysAvailable);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadLocationList(array $locationIds, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null): iterable
-    {
-        return $this->service->loadLocationList($locationIds, $prioritizedLanguages, $useAlwaysAvailable);
     }
 
     /**
