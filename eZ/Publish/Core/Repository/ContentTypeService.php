@@ -1277,6 +1277,11 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "Another FieldDefinition with identifier '{$fieldDefinitionCreateStruct->identifier}' exists in the ContentType"
             );
         }
+        //Fill default translations with default value for mainLanguageCode with fallback if no exist
+        $fieldDefinitionCreateStruct->names = array_fill_keys(
+            $contentTypeDraft->languageCodes,
+            $fieldDefinitionCreateStruct->names[$contentTypeDraft->mainLanguageCode] ?? reset($fieldDefinitionCreateStruct->names)
+        );
 
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->fieldTypeRegistry->getFieldType(
