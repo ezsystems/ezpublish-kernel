@@ -225,7 +225,7 @@ class UserTest extends FieldTypeTest
                         'email' => 'sindelfingen@example.com',
                         'passwordHash' => '1234567890abcdef',
                         'passwordHashType' => 'md5',
-                        'password' => null,
+                        'password' => 'e@mc;3*>',
                         'enabled' => true,
                         'maxLogin' => 1000,
                     )
