@@ -45,10 +45,10 @@ matrix:
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
 # 7.1
     - php: 7.1
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb" CUSTOM_CACHE_POOL="singleredis" REDIS_ENABLE_LZF="true" REDIS_ENABLE_IGBINARY="true"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb" CUSTOM_CACHE_POOL="singleredis" REDIS_ENABLE_LZF="true" REDIS_ENABLE_IGBINARY="true" SYMFONY_VERSION="~3.4.0@dev"
 # 7.2
     - php: 7.2
-      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~2.8.0"
+      env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~3.4.0@dev"
     - php: 7.2
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.0@dev"
 
