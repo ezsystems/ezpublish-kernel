@@ -427,8 +427,17 @@
         height: parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : ''),
         width: parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : ''),
     } %}
-
-    <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs if attrvalue %}{{ attrname }}="{{ attrvalue }} " {% endfor %}/>
+    {% if parameters.ezlink|default({}) is not empty %}
+        <a
+            href="{{ parameters.ezlink.href }}"
+            {% if parameters.ezlink.title is defined %} title="{{ parameters.ezlink.title|e('html_attr') }}"{% endif %}
+            {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
+        >
+    {% endif %}
+            <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs if attrvalue %}{{ attrname }}="{{ attrvalue }} " {% endfor %}/>
+    {% if parameters.ezlink|default({}) is not empty %}
+        </a>
+    {% endif %}
 </figure>
 {% endif %}
 {% endspaceless %}
