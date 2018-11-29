@@ -303,6 +303,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'email' => null,
                     'passwordHash' => null,
                     'passwordHashType' => null,
+                    'password' => null,
                     'enabled' => null,
                     'maxLogin' => null,
                 ),
