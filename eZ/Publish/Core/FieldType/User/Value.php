@@ -58,6 +58,13 @@ class Value extends BaseValue
     public $passwordHashType;
 
     /**
+     * Password.
+     *
+     * @var mixed
+     */
+    public $password;
+
+    /**
      * Is enabled.
      *
      * @var bool
