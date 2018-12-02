@@ -61,11 +61,15 @@ class LocationServiceTest extends AbstractServiceTest
         $contentInfo = new ContentInfo();
         $versionInfo = new VersionInfo();
 
-        // string $method, array $arguments, bool $return, int $languageArgumentIndex, ?callable $callback, ?int $alwaysAvailableArgumentIndex
+        // string $method, array $arguments, mixed|null $return, int $languageArgumentIndex, ?callable $callback, ?int $alwaysAvailableArgumentIndex
         return [
             ['loadLocation', [55], true, 1],
             ['loadLocation', [55, self::LANG_ARG], true, 1],
             ['loadLocation', [55, self::LANG_ARG, true], true, 1, null, 2],
+
+            ['loadLocationList', [[55]], ['return'], 1],
+            ['loadLocationList', [[55], self::LANG_ARG], ['return'], 1],
+            ['loadLocationList', [[55], self::LANG_ARG, true], ['return'], 1, null, 2],
 
             ['loadLocationByRemoteId', ['ergemiotregf'], true, 1],
             ['loadLocationByRemoteId', ['ergemiotregf', self::LANG_ARG], true, 1],

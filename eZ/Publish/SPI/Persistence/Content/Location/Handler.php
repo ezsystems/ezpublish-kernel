@@ -29,6 +29,20 @@ interface Handler
     public function load($locationId, array $translations = null, bool $useAlwaysAvailable = true);
 
     /**
+     * Return list of unique Locations, with location id as key.
+     *
+     * Missing items (NotFound) will be missing from the array and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param int[] $locationIds
+     * @param string[]|null $translations If set, only locations with content in given translations are returned.
+     * @param bool $useAlwaysAvailable Respect always available flag on content, where main language is valid translation fallback.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]|iterable
+     */
+    public function loadList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable;
+
+    /**
      * Loads the subtree ids of the location identified by $locationId.
      *
      * @param int $locationId
