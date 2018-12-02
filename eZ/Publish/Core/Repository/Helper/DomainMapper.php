@@ -151,9 +151,9 @@ class DomainMapper
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
         }
 
-        $fieldIdentifierMap = array();
-        foreach ($contentType->fieldDefinitions as $fieldDefinitions) {
-            $fieldIdentifierMap[$fieldDefinitions->id] = $fieldDefinitions->identifier;
+        $fieldDefinitionsMap = [];
+        foreach ($contentType->fieldDefinitions as $fieldDefinition) {
+            $fieldDefinitionsMap[$fieldDefinition->id] = $fieldDefinition;
         }
 
         $fieldInFilterLanguagesMap = array();
@@ -168,9 +168,11 @@ class DomainMapper
         $fields = array();
         foreach ($spiFields as $spiField) {
             // We ignore fields in content not part of the content type
-            if (!isset($fieldIdentifierMap[$spiField->fieldDefinitionId])) {
+            if (!isset($fieldDefinitionsMap[$spiField->fieldDefinitionId])) {
                 continue;
             }
+
+            $fieldDefinition = $fieldDefinitionsMap[$spiField->fieldDefinitionId];
 
             if (!empty($languages) && !in_array($spiField->languageCode, $languages)) {
                 // If filtering is enabled we ignore fields in other languages then $fieldLanguages, if:
@@ -186,19 +188,23 @@ class DomainMapper
                 }
             }
 
-            $fields[] = new Field(
+            $fields[$fieldDefinition->position][] = new Field(
                 array(
                     'id' => $spiField->id,
                     'value' => $this->fieldTypeRegistry->getFieldType($spiField->type)
                         ->fromPersistenceValue($spiField->value),
                     'languageCode' => $spiField->languageCode,
-                    'fieldDefIdentifier' => $fieldIdentifierMap[$spiField->fieldDefinitionId],
+                    'fieldDefIdentifier' => $fieldDefinition->identifier,
                     'fieldTypeIdentifier' => $spiField->type,
                 )
             );
         }
 
-        return $fields;
+        // Sort fields by content type field definition priority
+        ksort($fields, SORT_NUMERIC);
+
+        // Flatten array
+        return array_merge(...$fields);
     }
 
     /**
