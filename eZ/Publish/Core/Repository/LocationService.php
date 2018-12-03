@@ -205,7 +205,7 @@ class LocationService implements LocationServiceInterface
     public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
-        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: []);
+        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
             throw new UnauthorizedException('content', 'read');
         }
@@ -223,7 +223,7 @@ class LocationService implements LocationServiceInterface
         }
 
         $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
-        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: []);
+        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
             throw new UnauthorizedException('content', 'read');
         }
