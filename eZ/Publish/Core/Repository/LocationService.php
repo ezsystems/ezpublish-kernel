@@ -135,7 +135,7 @@ class LocationService implements LocationServiceInterface
 
         // check create permission on target
         if (!$this->repository->canUser('content', 'create', $loadedSubtree->getContentInfo(), $loadedTargetLocation)) {
-            throw new UnauthorizedException('content', 'create');
+            throw new UnauthorizedException('content', 'create', ['locationId' => $loadedTargetLocation->id]);
         }
 
         /** Check read access to whole source subtree
@@ -213,7 +213,7 @@ class LocationService implements LocationServiceInterface
         $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId);
         $location = $this->domainMapper->buildLocationDomainObject($spiLocation);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
-            throw new UnauthorizedException('content', 'read');
+            throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
         }
 
         return $location;
@@ -239,7 +239,7 @@ class LocationService implements LocationServiceInterface
         $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
         $location = $this->domainMapper->buildLocationDomainObject($spiLocation);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
-            throw new UnauthorizedException('content', 'read');
+            throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
         }
 
         return $location;
@@ -396,11 +396,11 @@ class LocationService implements LocationServiceInterface
         $parentLocation = $this->loadLocation($locationCreateStruct->parentLocationId);
 
         if (!$this->repository->canUser('content', 'manage_locations', $content->contentInfo)) {
-            throw new UnauthorizedException('content', 'manage_locations');
+            throw new UnauthorizedException('content', 'manage_locations', ['contentId' => $contentInfo->id]);
         }
 
         if (!$this->repository->canUser('content', 'create', $content->contentInfo, $parentLocation)) {
-            throw new UnauthorizedException('content', 'create');
+            throw new UnauthorizedException('content', 'create', ['locationId' => $parentLocation->id]);
         }
 
         // Check if the parent is a sub location of one of the existing content locations (this also solves the
@@ -500,7 +500,7 @@ class LocationService implements LocationServiceInterface
         }
 
         if (!$this->repository->canUser('content', 'edit', $loadedLocation->getContentInfo(), $loadedLocation)) {
-            throw new UnauthorizedException('content', 'edit');
+            throw new UnauthorizedException('content', 'edit', ['locationId' => $loadedLocation->id]);
         }
 
         $updateStruct = new UpdateStruct();
@@ -535,10 +535,10 @@ class LocationService implements LocationServiceInterface
         $loadedLocation2 = $this->loadLocation($location2->id);
 
         if (!$this->repository->canUser('content', 'edit', $loadedLocation1->getContentInfo(), $loadedLocation1)) {
-            throw new UnauthorizedException('content', 'edit');
+            throw new UnauthorizedException('content', 'edit', ['locationId' => $loadedLocation1->id]);
         }
         if (!$this->repository->canUser('content', 'edit', $loadedLocation2->getContentInfo(), $loadedLocation2)) {
-            throw new UnauthorizedException('content', 'edit');
+            throw new UnauthorizedException('content', 'edit', ['locationId' => $loadedLocation2->id]);
         }
 
         $this->repository->beginTransaction();
@@ -569,7 +569,7 @@ class LocationService implements LocationServiceInterface
     public function hideLocation(APILocation $location)
     {
         if (!$this->repository->canUser('content', 'hide', $location->getContentInfo(), $location)) {
-            throw new UnauthorizedException('content', 'hide');
+            throw new UnauthorizedException('content', 'hide', ['locationId' => $location->id]);
         }
 
         $this->repository->beginTransaction();
@@ -599,7 +599,7 @@ class LocationService implements LocationServiceInterface
     public function unhideLocation(APILocation $location)
     {
         if (!$this->repository->canUser('content', 'hide', $location->getContentInfo(), $location)) {
-            throw new UnauthorizedException('content', 'hide');
+            throw new UnauthorizedException('content', 'hide', ['locationId' => $location->id]);
         }
 
         $this->repository->beginTransaction();
@@ -634,7 +634,7 @@ class LocationService implements LocationServiceInterface
 
         // check create permission on target location
         if (!$this->repository->canUser('content', 'create', $location->getContentInfo(), $newParentLocation)) {
-            throw new UnauthorizedException('content', 'create');
+            throw new UnauthorizedException('content', 'create', ['locationId' => $newParentLocation->id]);
         }
 
         /** Check read access to whole source subtree
@@ -710,10 +710,10 @@ class LocationService implements LocationServiceInterface
         $location = $this->loadLocation($location->id);
 
         if (!$this->repository->canUser('content', 'manage_locations', $location->getContentInfo())) {
-            throw new UnauthorizedException('content', 'manage_locations');
+            throw new UnauthorizedException('content', 'manage_locations', ['locationId' => $location->id]);
         }
         if (!$this->repository->canUser('content', 'remove', $location->getContentInfo(), $location)) {
-            throw new UnauthorizedException('content', 'remove');
+            throw new UnauthorizedException('content', 'remove', ['locationId' => $location->id]);
         }
 
         /** Check remove access to descendants
