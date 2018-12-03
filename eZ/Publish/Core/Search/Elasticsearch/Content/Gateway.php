@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 /**
  * The Gateway provides the implementation to retrieve the desired
  * documents from Elasticsearch index storage.
+ *
+ * @deprecated
  */
 abstract class Gateway
 {

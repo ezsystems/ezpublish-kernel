@@ -24,6 +24,7 @@ class TransactionHandler implements TransactionHandlerInterface
 {
     /**
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
 

@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder;
 
 /**
  * Visits the facet builder tree into a hash representation of Elasticsearch aggregations.
+ *
+ * @deprecated
  */
 abstract class FacetBuilderVisitor
 {

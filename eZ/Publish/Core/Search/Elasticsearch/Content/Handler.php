@@ -17,6 +17,11 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
+/**
+ * ElasticSearch Handler
+ *
+ * @deprecated
+ */
 class Handler implements SearchHandlerInterface
 {
     /**
