@@ -14,6 +14,8 @@ use RuntimeException;
 
 /**
  * Dispatches Criterion objects to a visitor depending on the query context.
+ *
+ * @deprecated
  */
 class CriterionVisitorDispatcher
 {

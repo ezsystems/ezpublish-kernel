@@ -16,6 +16,8 @@ use eZ\Publish\SPI\Persistence\Content\Location;
  * document in Elasticsearch index storage.
  *
  * Note that custom implementations might need to be accompanied by custom mappings.
+ *
+ * @deprecated
  */
 interface MapperInterface
 {
