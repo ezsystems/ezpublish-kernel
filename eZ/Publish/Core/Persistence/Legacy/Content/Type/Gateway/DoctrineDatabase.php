@@ -88,6 +88,7 @@ class DoctrineDatabase extends Gateway
      * DoctrineDatabase handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
 
