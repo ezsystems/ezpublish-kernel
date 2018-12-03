@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 
 /**
  * Visits the sort clause into a hash representation of Elasticsearch sort.
+ *
+ * @deprecated
  */
 abstract class SortClauseVisitor
 {

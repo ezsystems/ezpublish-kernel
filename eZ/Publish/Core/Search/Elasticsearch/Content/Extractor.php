@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 /**
  * Abstract implementation of Search Extractor, which extracts search result
  * from the data returned by Elasticsearch index.
+ *
+ * @deprecated
  */
 abstract class Extractor
 {
