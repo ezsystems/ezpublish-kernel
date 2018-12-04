@@ -1571,8 +1571,6 @@ class DoctrineDatabase extends Gateway
                 'c',
                 $expr->andX(
                     $expr->eq('t.contentobject_id', 'c.id'),
-                    // Won't work on Oracle, consider contribute bitwise features to query builder, and
-                    // contribute support for it handling DBM differences. Or detect Oracle here and do bitand()
                     $expr->gt(
                         $dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
                         0

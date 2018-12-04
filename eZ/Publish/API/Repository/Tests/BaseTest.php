@@ -725,9 +725,6 @@ abstract class BaseTest extends TestCase
      * @param bool $enabled
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Language
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     protected function createLanguage(string $languageCode, string $name, bool $enabled = true): Language
     {

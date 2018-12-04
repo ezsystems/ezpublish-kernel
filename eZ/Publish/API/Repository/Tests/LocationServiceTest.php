@@ -512,12 +512,8 @@ class LocationServiceTest extends BaseTest
     /**
      * Test that accessing lazy-loaded Content without a translation in the specific
      * not available language throws NotFoundException.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testLoadLocationThrowsNotFoundExceptionForNotAvailableContent()
+    public function testLoadLocationThrowsNotFoundExceptionForNotAvailableContent(): void
     {
         $repository = $this->getRepository();
 
