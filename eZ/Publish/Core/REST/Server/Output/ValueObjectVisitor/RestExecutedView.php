@@ -14,7 +14,6 @@ use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\REST\Server\Values\RestContent as RestContentValue;
 
@@ -38,25 +37,15 @@ class RestExecutedView extends ValueObjectVisitor
     protected $contentService;
 
     /**
-     * ContentType service.
-     *
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
-    protected $contentTypeService;
-
-    /**
      * @param \eZ\Publish\API\Repository\LocationService $locationService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
-     * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      */
     public function __construct(
         LocationService $locationService,
-        ContentService $contentService,
-        ContentTypeService $contentTypeService
+        ContentService $contentService
     ) {
         $this->locationService = $locationService;
         $this->contentService = $contentService;
-        $this->contentTypeService = $contentTypeService;
     }
 
     /**
@@ -124,13 +113,13 @@ class RestExecutedView extends ValueObjectVisitor
 
             // @todo Refactor
             if ($searchHit->valueObject instanceof ApiValues\Content) {
-                /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo */
+                /** @var \eZ\Publish\API\Repository\Values\Content\Content $searchHit->valueObject */
                 $contentInfo = $searchHit->valueObject->contentInfo;
                 $valueObject = new RestContentValue(
                     $contentInfo,
                     $this->locationService->loadLocation($contentInfo->mainLocationId),
                     $searchHit->valueObject,
-                    $this->contentTypeService->loadContentType($contentInfo->contentTypeId),
+                    $searchHit->valueObject->getContentType(),
                     $this->contentService->loadRelations($searchHit->valueObject->getVersionInfo())
                 );
             } elseif ($searchHit->valueObject instanceof ApiValues\Location) {

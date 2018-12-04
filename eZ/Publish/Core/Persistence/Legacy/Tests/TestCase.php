@@ -12,6 +12,7 @@ use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 use InvalidArgumentException;
+use ReflectionObject;
 use PDOException;
 use Exception;
 
@@ -37,6 +38,7 @@ abstract class TestCase extends BaseTestCase
     /**
      * Database handler -- to not be constructed twice for one test.
      *
+     * @internal
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
      */
     protected $handler;
@@ -44,16 +46,10 @@ abstract class TestCase extends BaseTestCase
     /**
      * Doctrine Database connection -- to not be constructed twice for one test.
      *
+     * @internal
      * @var \Doctrine\DBAL\Connection
      */
     protected $connection;
-
-    /**
-     * Property which holds the state if this is the initial test run, so that
-     * we should set up the database, or if this is any of the following test
-     * runs, where it is sufficient to reset the database.
-     */
-    protected static $initial = true;
 
     /**
      * Get data source name.
@@ -86,7 +82,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return \eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler
      */
-    public function getDatabaseHandler()
+    final public function getDatabaseHandler()
     {
         if (!$this->handler) {
             $this->handler = ConnectionHandler::createFromConnection($this->getDatabaseConnection());
@@ -101,7 +97,7 @@ abstract class TestCase extends BaseTestCase
      *
      * @return \Doctrine\DBAL\Connection
      */
-    public function getDatabaseConnection()
+    final public function getDatabaseConnection()
     {
         if (!$this->connection) {
             $this->connection = ConnectionHandler::createConnectionFromDSN($this->getDsn());
@@ -132,14 +128,12 @@ abstract class TestCase extends BaseTestCase
         }
 
         $this->resetSequences();
-
-        // Set "global" static var, that we are behind the initial run
-        self::$initial = false;
     }
 
     protected function tearDown()
     {
         unset($this->handler);
+        unset($this->connection);
     }
 
     /**

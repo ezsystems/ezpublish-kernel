@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Repository as APIRepository;
 use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\FieldTypeService;
+use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
 use eZ\Publish\Core\Repository\Helper\FieldTypeRegistry;
 use eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Handler;
@@ -48,6 +49,11 @@ abstract class Base extends TestCase
      * @see getPersistenceMockHandler()
      */
     private $spiMockHandlers = array();
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
+     */
+    private $contentTypeDomainMapperMock;
 
     /**
      * Get Real repository with mocked dependencies.
@@ -130,6 +136,18 @@ abstract class Base extends TestCase
         }
 
         return $this->repositoryMock;
+    }
+
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
+     */
+    protected function getContentTypeDomainMapperMock()
+    {
+        if (!isset($this->contentTypeDomainMapperMock)) {
+            $this->contentTypeDomainMapperMock = $this->createMock(ContentTypeDomainMapper::class);
+        }
+
+        return $this->contentTypeDomainMapperMock;
     }
 
     /**

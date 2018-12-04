@@ -267,6 +267,35 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the createContent() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends testCreateContent
+     */
+    public function testCreateContentSetsExpectedContentType($content)
+    {
+        $contentType = $content->getContentType();
+
+        $this->assertEquals(
+            [
+                $contentType->id,
+                // Won't match as it's set to true in createContentDraftVersion1()
+                //$contentType->defaultAlwaysAvailable,
+                //$contentType->defaultSortField,
+                //$contentType->defaultSortOrder,
+            ],
+            [
+                $content->contentInfo->contentTypeId,
+                //$content->contentInfo->alwaysAvailable,
+                //$location->sortField,
+                //$location->sortOrder,
+            ]
+        );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
@@ -1006,6 +1035,35 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertTrue($content->getVersionInfo()->isPublished());
         $this->assertFalse($content->getVersionInfo()->isDraft());
         $this->assertFalse($content->getVersionInfo()->isArchived());
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends testPublishVersion
+     */
+    public function testPublishVersionSetsExpectedContentType($content)
+    {
+        $contentType = $content->getContentType();
+
+        $this->assertEquals(
+            [
+                $contentType->id,
+                // won't be a match as it's set to true in createContentDraftVersion1()
+                //$contentType->defaultAlwaysAvailable,
+                //$contentType->defaultSortField,
+                //$contentType->defaultSortOrder,
+            ],
+            [
+                $content->contentInfo->contentTypeId,
+                //$content->contentInfo->alwaysAvailable,
+                //$location->sortField,
+                //$location->sortOrder,
+            ]
+        );
     }
 
     /**

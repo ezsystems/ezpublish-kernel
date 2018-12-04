@@ -12,7 +12,6 @@ use eZ\Publish\Core\Repository\Helper\NameSchemaService;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
-use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\Content\Field;
@@ -393,19 +392,5 @@ class NameSchemaTest extends BaseServiceMockTest
                 ]
             )
             ->getMock();
-    }
-
-    protected $contentTypeDomainMapperMock;
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
-     */
-    protected function getContentTypeDomainMapperMock()
-    {
-        if (!isset($this->contentTypeDomainMapperMock)) {
-            $this->contentTypeDomainMapperMock = $this->createMock(ContentTypeDomainMapper::class);
-        }
-
-        return $this->contentTypeDomainMapperMock;
     }
 }

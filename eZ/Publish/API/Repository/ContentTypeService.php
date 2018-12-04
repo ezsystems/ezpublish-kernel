@@ -162,6 +162,20 @@ interface ContentTypeService
     public function loadContentTypeDraft($contentTypeId);
 
     /**
+     * Bulk-load Content Type objects by ids.
+     *
+     * Note: it does not throw exceptions on load, just ignores erroneous items.
+     *
+     * @since 7.3
+     *
+     * @param mixed[] $contentTypeIds
+     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType[]|iterable
+     */
+    public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable;
+
+    /**
      * Get Content Type objects which belong to the given content type group.
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
