@@ -2,8 +2,14 @@
 
 {% if image_field_identifier is not null %}
     {{ ez_render_field(
-       content,
-       image_field_identifier,
-       { parameters: { alias: objectParameters.size|default('original') } }
+        content,
+        image_field_identifier,
+        {
+            parameters:
+            {
+                alias: objectParameters.size|default('original'),
+                ezlink: linkParameters|default({})
+            }
+        }
     ) }}
 {% endif %}
