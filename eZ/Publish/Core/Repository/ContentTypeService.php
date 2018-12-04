@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
@@ -1609,5 +1610,68 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function isContentTypeUsed(APIContentType $contentType)
     {
         return $this->contentTypeHandler->getContentCount($contentType->id) > 0;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param array $languageCodes
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     */
+    public function removeContentTypeTranslations(APIContentTypeDraft $contentTypeDraft, array $languageCodes): APIContentTypeDraft
+    {
+        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+            throw new UnauthorizedException('ContentType', 'update');
+        }
+
+        $spiUpdateStruct = $this->contentTypeDomainMapper->buildSPIContentTypeUpdateStruct(
+            $contentTypeDraft,
+            new ContentTypeUpdateStruct(),
+            $this->repository->getCurrentUserReference()
+        );
+
+        $languageCodes = array_flip($languageCodes);
+
+        $spiUpdateStruct->name = array_diff_key($spiUpdateStruct->name, $languageCodes);
+        $spiUpdateStruct->description = array_diff_key($spiUpdateStruct->description, $languageCodes);
+
+        $spiFieldDefinitions = [];
+        foreach ($contentTypeDraft->fieldDefinitions as $fieldDefinition) {
+            $spiFieldDefinitionUpdateStruct = $this->contentTypeDomainMapper->buildSPIFieldDefinitionUpdate(
+                new FieldDefinitionUpdateStruct(),
+                $fieldDefinition
+            );
+            $spiFieldDefinitionUpdateStruct->name = array_diff_key($spiFieldDefinitionUpdateStruct->name, $languageCodes);
+            $spiFieldDefinitionUpdateStruct->description = array_diff_key($spiFieldDefinitionUpdateStruct->description, $languageCodes);
+            $spiFieldDefinitions[] = $spiFieldDefinitionUpdateStruct;
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $this->contentTypeHandler->update(
+                $contentTypeDraft->id,
+                $contentTypeDraft->status,
+                $spiUpdateStruct
+            );
+
+            array_walk($spiFieldDefinitions, function (FieldDefinition $spiFieldDefinitionUpdateStruct) use ($contentTypeDraft) {
+                $this->contentTypeHandler->updateFieldDefinition(
+                    $contentTypeDraft->id,
+                    SPIContentType::STATUS_DRAFT,
+                    $spiFieldDefinitionUpdateStruct
+                );
+            });
+
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $contentTypeDraft;
     }
 }

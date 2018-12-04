@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeGroupSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\RemoveContentTypeDraftTranslationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UpdateContentTypeGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\DeleteContentTypeGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeSignal;
@@ -589,5 +590,26 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function isContentTypeUsed(ContentType $contentType)
     {
         return $this->service->isContentTypeUsed($contentType);
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param array $languageCodes
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     */
+    public function removeContentTypeTranslations(ContentTypeDraft $contentTypeDraft, array $languageCodes): ContentTypeDraft
+    {
+        $contentTypeDraft = $this->service->removeContentTypeTranslations($contentTypeDraft, $languageCodes);
+        $this->signalDispatcher->emit(
+            new RemoveContentTypeDraftTranslationSignal(
+                [
+                    'contentTypeDraftId' => $contentTypeDraft->id,
+                    'languageCodes' => $languageCodes,
+                ]
+            )
+        );
+
+        return $contentTypeDraft;
     }
 }

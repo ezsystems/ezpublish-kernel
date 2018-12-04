@@ -853,4 +853,17 @@ class ContentTypeService implements APIContentTypeService, Sessionable
     {
         throw new \Exception('@todo: Implement.');
     }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param array $languageCodes
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     */
+    public function removeContentTypeTranslations(
+        ContentTypeDraft $contentTypeDraft,
+        array $languageCodes
+    ): ContentTypeDraft {
+        throw new \Exception('@todo: Implement.');
+    }
 }

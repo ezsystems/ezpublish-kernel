@@ -4131,4 +4131,43 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertTrue($isFolderUsed);
         $this->assertFalse($isEventUsed);
     }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::removeContentTypeTranslations
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRemoveContentTypeTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        self::assertEquals(
+            [
+                'eng-US' => 'Blog post',
+                'ger-DE' => 'Blog-Eintrag',
+            ],
+            $contentType->getNames()
+        );
+
+        $contentTypeService->removeContentTypeTranslations(
+            $contentTypeService->createContentTypeDraft($contentType),
+            ['ger-DE']
+        );
+
+        self::assertEquals(
+            [
+                'eng-US' => 'Blog post',
+            ],
+            $contentTypeService->loadContentTypeDraft($contentType->id)->getNames()
+        );
+    }
 }
