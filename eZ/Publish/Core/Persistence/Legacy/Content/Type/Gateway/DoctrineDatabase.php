@@ -970,6 +970,7 @@ class DoctrineDatabase extends Gateway
                 'c.always_available AS ezcontentclass_always_available',
                 'c.sort_field AS ezcontentclass_sort_field',
                 'c.sort_order AS ezcontentclass_sort_order',
+                'c.language_mask AS ezcontentclass_language_mask',
 
                 'a.id AS ezcontentclass_attribute_id',
                 'a.serialized_name_list AS ezcontentclass_attribute_serialized_name_list',
