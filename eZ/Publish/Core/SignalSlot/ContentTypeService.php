@@ -594,18 +594,18 @@ class ContentTypeService implements ContentTypeServiceInterface
 
     /**
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param array $languageCodes
+     * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function removeContentTypeTranslations(ContentTypeDraft $contentTypeDraft, array $languageCodes): ContentTypeDraft
+    public function removeContentTypeTranslation(ContentTypeDraft $contentTypeDraft, string $languageCode): ContentTypeDraft
     {
-        $contentTypeDraft = $this->service->removeContentTypeTranslations($contentTypeDraft, $languageCodes);
+        $contentTypeDraft = $this->service->removeContentTypeTranslation($contentTypeDraft, $languageCode);
         $this->signalDispatcher->emit(
             new RemoveContentTypeDraftTranslationSignal(
                 [
                     'contentTypeDraftId' => $contentTypeDraft->id,
-                    'languageCodes' => $languageCodes,
+                    'languageCode' => $languageCode,
                 ]
             )
         );

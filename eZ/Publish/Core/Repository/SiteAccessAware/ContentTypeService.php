@@ -213,8 +213,8 @@ class ContentTypeService implements ContentTypeServiceInterface
         return $this->service->isContentTypeUsed($contentType);
     }
 
-    public function removeContentTypeTranslations(ContentTypeDraft $contentTypeDraft, array $languageCodes): ContentTypeDraft
+    public function removeContentTypeTranslation(ContentTypeDraft $contentTypeDraft, string $languageCode): ContentTypeDraft
     {
-        return $this->service->removeContentTypeTranslations($contentTypeDraft, $languageCodes);
+        return $this->service->removeContentTypeTranslation($contentTypeDraft, $languageCode);
     }
 }

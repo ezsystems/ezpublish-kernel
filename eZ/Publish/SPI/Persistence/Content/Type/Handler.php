@@ -322,4 +322,12 @@ interface Handler
      * @return array
      */
     public function getSearchableFieldMap();
+
+    /**
+     * @param mixed $contentTypeId
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    public function removeContentTypeTranslation($contentTypeId, string $languageCode): Type;
 }

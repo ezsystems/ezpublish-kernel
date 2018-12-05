@@ -23,9 +23,9 @@ class RemoveContentTypeDraftTranslationSignal extends Signal
     public $contentTypeDraftId;
 
     /**
-     * Language Code List of the removed translations.
+     * Language Code of the removed translation.
      *
-     * @var string[]
+     * @var string
      */
-    public $languageCodes;
+    public $languageCode;
 }

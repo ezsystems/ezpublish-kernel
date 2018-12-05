@@ -383,9 +383,9 @@ interface ContentTypeService
 
     /**
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param array $languageCodes
+     * @param string $languageCode
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function removeContentTypeTranslations(ContentTypeDraft $contentTypeDraft, array $languageCodes): ContentTypeDraft;
+    public function removeContentTypeTranslation(ContentTypeDraft $contentTypeDraft, string $languageCode): ContentTypeDraft;
 }
