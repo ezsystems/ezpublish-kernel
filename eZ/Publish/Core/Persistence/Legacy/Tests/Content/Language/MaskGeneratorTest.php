@@ -46,9 +46,13 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     {
         $generator = $this->getMaskGenerator();
 
-        $isAlwaysAvailable = array_filter($languages, function ($key) {
-            return $key === 'always-available';
-        }, ARRAY_FILTER_USE_KEY);
+        $isAlwaysAvailable = array_filter(
+            $languages,
+            function ($key) {
+                return $key === 'always-available';
+            },
+            ARRAY_FILTER_USE_KEY
+        );
 
         $languageCodes = array_diff($languages, $isAlwaysAvailable);
 

@@ -1278,11 +1278,14 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
         //Fill default translations with default value for mainLanguageCode with fallback if no exist
-        $fallbackName = is_array($fieldDefinitionCreateStruct->names) ? reset($fieldDefinitionCreateStruct->names) : null;
-        $fieldDefinitionCreateStruct->names = array_fill_keys(
-            $contentTypeDraft->languageCodes,
-            $fieldDefinitionCreateStruct->names[$contentTypeDraft->mainLanguageCode] ?? $fallbackName
-        );
+        if (is_array($fieldDefinitionCreateStruct->names)) {
+            foreach ($contentTypeDraft->languageCodes as $languageCode) {
+                if (!array_key_exists($languageCode, $fieldDefinitionCreateStruct->names)) {
+                    $fieldDefinitionCreateStruct->names[$languageCode] = $fieldDefinitionCreateStruct->names[$contentTypeDraft->mainLanguageCode] ?? reset($fieldDefinitionCreateStruct->names);
+                }
+            }
+        }
+
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->fieldTypeRegistry->getFieldType(
             $fieldDefinitionCreateStruct->fieldTypeIdentifier

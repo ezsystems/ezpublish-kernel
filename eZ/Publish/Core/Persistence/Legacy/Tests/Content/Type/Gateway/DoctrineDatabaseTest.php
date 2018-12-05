@@ -14,7 +14,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -998,39 +997,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct fixture.
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct
-     */
-    protected function getTypeUpdateFixture()
-    {
-        $struct = new UpdateStruct();
-
-        $struct->name = array(
-            'always-available' => 'eng-US',
-            'eng-US' => 'New Folder',
-            'eng-GB' => 'New Folder for you',
-        );
-        $struct->description = array(
-            0 => '',
-            'always-available' => false,
-        );
-        $struct->identifier = 'new_folder';
-        $struct->modified = 1311621548;
-        $struct->modifierId = 42;
-        $struct->remoteId = 'foobar';
-        $struct->urlAliasSchema = 'some scheke';
-        $struct->nameSchema = '<short_name>';
-        $struct->isContainer = false;
-        $struct->initialLanguageId = 23;
-        $struct->sortField = 3;
-        $struct->sortOrder = Location::SORT_ORDER_DESC;
-        $struct->defaultAlwaysAvailable = true;
-
-        return $struct;
-    }
-
-    /**
      * Returns a eZ\Publish\SPI\Persistence\Content\Type fixture for update operation.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
@@ -1039,15 +1005,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     {
         $type = new Type();
 
-        $type->name = array(
+        $type->name = [
             'always-available' => 'eng-US',
             'eng-US' => 'New Folder',
             'eng-GB' => 'New Folder for you',
-        );
-        $type->description = array(
+        ];
+        $type->description = [
             0 => '',
             'always-available' => false,
-        );
+        ];
         $type->identifier = 'new_folder';
         $type->modified = 1311621548;
         $type->modifierId = 42;

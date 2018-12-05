@@ -111,13 +111,10 @@ class MapperTest extends TestCase
         $mapper = new Mapper($this->getConverterRegistryMock(), $this->getMaskGeneratorMock());
         $type = $mapper->createTypeFromUpdateStruct($struct);
 
-        foreach ($struct as $propName => $propVal) {
-            $this->assertEquals(
-                $struct->$propName,
-                $type->$propName,
-                "Property \${$propName} not equal"
-            );
-        }
+        $this->assertStructsEqual(
+            $struct,
+            $type
+        );
     }
 
     /**
@@ -180,7 +177,7 @@ class MapperTest extends TestCase
         $struct->identifier = 'folder';
         $struct->modified = 1082454875;
         $struct->modifierId = 14;
-        $struct->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
+        $struct->remoteId = md5(microtime() . uniqid());
         $struct->urlAliasSchema = '';
         $struct->nameSchema = '<short_name|name>';
         $struct->isContainer = true;
