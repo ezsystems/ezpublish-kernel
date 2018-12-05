@@ -15,6 +15,7 @@ use InvalidArgumentException;
 use ReflectionObject;
 use PDOException;
 use Exception;
+use ReflectionProperty;
 
 /**
  * Base test case for database related tests.
