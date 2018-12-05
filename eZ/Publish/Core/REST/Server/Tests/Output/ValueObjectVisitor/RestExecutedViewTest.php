@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
+use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
@@ -151,6 +152,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
             'index' => 'alexandria',
             'valueObject' => new ApiValues\Content([
                 'versionInfo' => new Content\VersionInfo(['contentInfo' => new ContentInfo()]),
+                'contentType' => new ContentType(),
             ]),
         ]);
     }

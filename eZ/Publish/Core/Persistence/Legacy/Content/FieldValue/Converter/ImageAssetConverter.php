@@ -27,6 +27,9 @@ class ImageAssetConverter implements Converter
         $storageFieldValue->dataInt = !empty($value->data['destinationContentId'])
             ? $value->data['destinationContentId']
             : null;
+        $storageFieldValue->dataText = !empty($value->data['alternativeText'])
+            ? $value->data['alternativeText']
+            : null;
         $storageFieldValue->sortKeyInt = (int)$value->sortKey;
     }
 
@@ -40,6 +43,7 @@ class ImageAssetConverter implements Converter
     {
         $fieldValue->data = [
             'destinationContentId' => $value->dataInt ?: null,
+            'alternativeText' => $value->dataText ?: null,
         ];
         $fieldValue->sortKey = (int)$value->sortKeyInt;
     }

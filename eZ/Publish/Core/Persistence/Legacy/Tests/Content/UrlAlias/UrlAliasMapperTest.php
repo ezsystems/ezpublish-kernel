@@ -97,6 +97,23 @@ class UrlAliasMapperTest extends LanguageAwareTestCase
             'is_alias' => '0',
             'alias_redirects' => '1',
         ),
+        4 => array(
+            'action' => 'nop:',
+            'parent' => '3',
+            'text_md5' => '1d8d2fd0a99802b89eb356a86e029d25',
+            'raw_path_data' => array(
+                0 => array(
+                    array(
+                        'lang_mask' => 8,
+                        'text' => 'drei',
+                    ),
+                ),
+            ),
+            'lang_mask' => 8,
+            'is_original' => '0',
+            'is_alias' => '0',
+            'alias_redirects' => '1',
+        ),
     );
 
     protected function getExpectation()
@@ -190,6 +207,26 @@ class UrlAliasMapperTest extends LanguageAwareTestCase
                     'forward' => false,
                 )
             ),
+            4 => new UrlAlias(
+                array(
+                    'id' => '3-1d8d2fd0a99802b89eb356a86e029d25',
+                    'type' => UrlAlias::VIRTUAL,
+                    'destination' => null,
+                    'pathData' => array(
+                        array(
+                            'always-available' => false,
+                            'translations' => array(
+                                'ger-DE' => 'drei',
+                            ),
+                        ),
+                    ),
+                    'languageCodes' => array('ger-DE'),
+                    'alwaysAvailable' => false,
+                    'isHistory' => true,
+                    'isCustom' => false,
+                    'forward' => false,
+                )
+            ),
         );
     }
 
@@ -230,6 +267,21 @@ class UrlAliasMapperTest extends LanguageAwareTestCase
         self::assertEquals(
             $this->getExpectation(),
             $mapper->extractUrlAliasListFromData($this->fixture)
+        );
+    }
+
+    /**
+     * Test for the extractLanguageCodesFromData method.
+     *
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Mapper::extractLanguageCodesFromData
+     */
+    public function testExtractLanguageCodesFromData()
+    {
+        $mapper = $this->getMapper();
+
+        self::assertEquals(
+            ['eng-US', 'eng-GB', 'ger-DE'],
+            $mapper->extractLanguageCodesFromData($this->fixture)
         );
     }
 

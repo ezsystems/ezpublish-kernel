@@ -37,7 +37,7 @@ class ContentTypeHandlerTest extends AbstractCacheHandlerTest
      */
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
         return [
             ['createGroup', [new SPITypeGroupCreateStruct()]],
             ['updateGroup', [new SPITypeGroupUpdateStruct(['id' => 3])], ['type-group-3']],
@@ -76,12 +76,13 @@ class ContentTypeHandlerTest extends AbstractCacheHandlerTest
         $group = new SPITypeGroup(['id' => 3]);
         $type = new SPIType(['id' => 5]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, mixed? $data, bool? $multi, array? $additionalCalls
         return [
             ['loadGroup', [3], 'ez-content-type-group-3', $group],
             ['loadGroups', [[3]], 'ez-content-type-group-3', [3 => $group], true],
             ['loadGroupByIdentifier', ['content'], 'ez-content-type-group-content-by-identifier', $group],
             ['loadContentTypes', [3, 0], 'ez-content-type-list-by-group-3', [$type]],
+            ['loadContentTypeList', [[5]], 'ez-content-type-5-0', [5 => $type], true],
             ['load', [5, 0], 'ez-content-type-5-0', $type],
             ['loadByIdentifier', ['article'], 'ez-content-type-article-by-identifier', $type],
             ['loadByRemoteId', ['f34tg45gf'], 'ez-content-type-f34tg45gf-by-remote', $type],

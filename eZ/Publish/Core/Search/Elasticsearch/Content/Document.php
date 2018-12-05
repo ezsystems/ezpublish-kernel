@@ -12,6 +12,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * Describes a document to be indexed in Elasticsearch index storage.
+ *
+ * @deprecated
  */
 class Document extends ValueObject
 {

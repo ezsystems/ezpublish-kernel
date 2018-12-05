@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * this class represents a content object in a specific version.
@@ -97,4 +98,11 @@ abstract class Content extends ValueObject
      * @return \eZ\Publish\API\Repository\Values\Content\Field|null A {@link Field} or null if nothing is found
      */
     abstract public function getField($fieldDefIdentifier, $languageCode = null);
+
+    /**
+     * Returns the ContentType for this content.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    abstract public function getContentType(): ContentType;
 }

@@ -34,23 +34,4 @@ trait PHPUnit5CompatTrait
             $proxyTarget
         );
     }
-
-    /**
-     * Returns a test double for the specified class.
-     *
-     * @internal Forward compatibility with PHPUnit 5/6, so unit tests written on 6.7 & backported to 5.4 can use this.
-     *
-     * @param string $originalClassName
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function createMock($originalClassName)
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            //->disallowMockingUnknownTypes() Not defined in PHPunit 4.8
-            ->getMock();
-    }
 }

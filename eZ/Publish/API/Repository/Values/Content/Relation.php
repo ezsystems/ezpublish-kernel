@@ -51,6 +51,13 @@ abstract class Relation extends ValueObject
     const FIELD = 8;
 
     /**
+     * the relation type ASSET is set for a relation to asset in an attribute value.
+     *
+     * @var int
+     */
+    const ASSET = 16;
+
+    /**
      * Id of the relation.
      *
      * @var mixed
@@ -83,7 +90,7 @@ abstract class Relation extends ValueObject
     /**
      * The relation type bitmask.
      *
-     * @see Relation::COMMON, Relation::EMBED, Relation::LINK, Relation::FIELD
+     * @see Relation::COMMON, Relation::EMBED, Relation::LINK, Relation::FIELD, Relation::ASSET
      *
      * @var int
      */

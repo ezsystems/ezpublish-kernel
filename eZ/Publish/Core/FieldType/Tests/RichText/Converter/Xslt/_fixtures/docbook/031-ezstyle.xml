@@ -4,13 +4,13 @@
          xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml"
          xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom"
          version="5.0-variant ezpublish-1.0">
-    <ezstyle name="highlighted_block" ezxhtml:align="left">
-        Highlighted block with "left" align.
-    </ezstyle>
-    <ezstyle name="highlighted_block" ezxhtml:align="right">
-        Highlighted block with "right" align.
-    </ezstyle>
-    <ezstyle name="highlighted_block" ezxhtml:align="center">
-        Highlighted block with "center" align.
-    </ezstyle>
+    <eztemplate name="highlighted_block" type="style" ezxhtml:align="left">
+        <ezcontent>Highlighted block with "left" align.</ezcontent>
+    </eztemplate>
+    <eztemplate name="highlighted_block" type="style" ezxhtml:align="right">
+        <ezcontent>Highlighted block with "right" align.</ezcontent>
+    </eztemplate>
+    <eztemplate name="highlighted_block" type="style" ezxhtml:align="center">
+        <ezcontent>Highlighted block with "center" align.</ezcontent>
+    </eztemplate>
 </section>

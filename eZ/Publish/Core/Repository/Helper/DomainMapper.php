@@ -63,12 +63,17 @@ class DomainMapper
     protected $contentTypeHandler;
 
     /**
+     * @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
+     */
+    protected $contentTypeDomainMapper;
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $contentLanguageHandler;
 
     /**
-     * @var FieldTypeRegistry
+     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
      */
     protected $fieldTypeRegistry;
 
@@ -78,19 +83,22 @@ class DomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
+     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $contentLanguageHandler
-     * @param FieldTypeRegistry $fieldTypeRegistry
+     * @param \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry $fieldTypeRegistry
      */
     public function __construct(
         ContentHandler $contentHandler,
         LocationHandler $locationHandler,
         TypeHandler $contentTypeHandler,
+        ContentTypeDomainMapper $contentTypeDomainMapper,
         LanguageHandler $contentLanguageHandler,
         FieldTypeRegistry $fieldTypeRegistry
     ) {
         $this->contentHandler = $contentHandler;
         $this->locationHandler = $locationHandler;
         $this->contentTypeHandler = $contentTypeHandler;
+        $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->contentLanguageHandler = $contentLanguageHandler;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
     }
@@ -99,7 +107,7 @@ class DomainMapper
      * Builds a Content domain object from value object returned from persistence.
      *
      * @param \eZ\Publish\SPI\Persistence\Content $spiContent
-     * @param ContentType|SPIType $contentType
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param array $prioritizedLanguages Prioritized language codes to filter fields on
      * @param string|null $fieldAlwaysAvailableLanguage Language code fallback if a given field is not found in $prioritizedLanguages
      *
@@ -107,16 +115,10 @@ class DomainMapper
      */
     public function buildContentDomainObject(
         SPIContent $spiContent,
-        $contentType = null,
+        ContentType $contentType,
         array $prioritizedLanguages = [],
         string $fieldAlwaysAvailableLanguage = null
     ) {
-        if ($contentType === null) {
-            $contentType = $this->contentTypeHandler->load(
-                $spiContent->versionInfo->contentInfo->contentTypeId
-            );
-        }
-
         $prioritizedFieldLanguageCode = null;
         if (!empty($prioritizedLanguages)) {
             $availableFieldLanguageMap = array_fill_keys($spiContent->versionInfo->languageCodes, true);
@@ -132,6 +134,7 @@ class DomainMapper
             array(
                 'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $prioritizedLanguages, $fieldAlwaysAvailableLanguage),
                 'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $prioritizedLanguages),
+                'contentType' => $contentType,
                 'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
             )
         );
@@ -174,6 +177,9 @@ class DomainMapper
     }
 
     /**
+     * @todo Maybe change signature to generatorForContentList($contentIds, $prioritizedLanguages, $translations)
+     * @todo to avoid keeping referance to $infoList all the way until the generator is called.
+     *
      * @param \eZ\Publish\SPI\Persistence\Content\ContentInfo[] $infoList
      * @param string[] $prioritizedLanguages
      * @param bool $useAlwaysAvailable
@@ -186,9 +192,11 @@ class DomainMapper
         bool $useAlwaysAvailable = true
     ): \Generator {
         $contentIds = [];
+        $contentTypeIds = [];
         $translations = $prioritizedLanguages;
         foreach ($infoList as $info) {
             $contentIds[] = $info->id;
+            $contentTypeIds[] = $info->contentTypeId;
             // Unless we are told to load all languages, we add main language to translations so they are loaded too
             // Might in some case load more languages then intended, but prioritised handling will pick right one
             if (!empty($prioritizedLanguages) && $useAlwaysAvailable && $info->alwaysAvailable) {
@@ -196,20 +204,25 @@ class DomainMapper
             }
         }
 
-        $list = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
+        unset($infoList);
 
-        while (!empty($list)) {
+        $contentList = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
+        $contentTypeList = $this->contentTypeHandler->loadContentTypeList(array_unique($contentTypeIds));
+        while (!empty($contentList)) {
             $id = yield;
-            $info = $list[$id]->versionInfo->contentInfo;
+            /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $info */
+            $info = $contentList[$id]->versionInfo->contentInfo;
             yield $this->buildContentDomainObject(
-                $list[$id],
-                null,
-                //@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                $contentList[$id],
+                $this->contentTypeDomainMapper->buildContentTypeDomainObject(
+                    $contentTypeList[$info->contentTypeId],
+                    $prioritizedLanguages
+                ),
                 $prioritizedLanguages,
                 $info->alwaysAvailable ? $info->mainLanguageCode : null
             );
 
-            unset($list[$id]);
+            unset($contentList[$id]);
         }
     }
 
@@ -236,9 +249,9 @@ class DomainMapper
             throw new InvalidArgumentType('$contentType', 'SPI ContentType | API ContentType');
         }
 
-        $fieldIdentifierMap = array();
-        foreach ($contentType->fieldDefinitions as $fieldDefinitions) {
-            $fieldIdentifierMap[$fieldDefinitions->id] = $fieldDefinitions->identifier;
+        $fieldDefinitionsMap = [];
+        foreach ($contentType->fieldDefinitions as $fieldDefinition) {
+            $fieldDefinitionsMap[$fieldDefinition->id] = $fieldDefinition;
         }
 
         $fieldInFilterLanguagesMap = array();
@@ -253,9 +266,11 @@ class DomainMapper
         $fields = array();
         foreach ($spiFields as $spiField) {
             // We ignore fields in content not part of the content type
-            if (!isset($fieldIdentifierMap[$spiField->fieldDefinitionId])) {
+            if (!isset($fieldDefinitionsMap[$spiField->fieldDefinitionId])) {
                 continue;
             }
+
+            $fieldDefinition = $fieldDefinitionsMap[$spiField->fieldDefinitionId];
 
             if (!empty($prioritizedLanguages) && !in_array($spiField->languageCode, $prioritizedLanguages)) {
                 // If filtering is enabled we ignore fields in other languages then $prioritizedLanguages, if:
@@ -271,19 +286,23 @@ class DomainMapper
                 }
             }
 
-            $fields[] = new Field(
+            $fields[$fieldDefinition->position][] = new Field(
                 array(
                     'id' => $spiField->id,
                     'value' => $this->fieldTypeRegistry->getFieldType($spiField->type)
                         ->fromPersistenceValue($spiField->value),
                     'languageCode' => $spiField->languageCode,
-                    'fieldDefIdentifier' => $fieldIdentifierMap[$spiField->fieldDefinitionId],
+                    'fieldDefIdentifier' => $fieldDefinition->identifier,
                     'fieldTypeIdentifier' => $spiField->type,
                 )
             );
         }
 
-        return $fields;
+        // Sort fields by content type field definition priority
+        ksort($fields, SORT_NUMERIC);
+
+        // Flatten array
+        return array_merge(...$fields);
     }
 
     /**
@@ -530,24 +549,32 @@ class DomainMapper
         }
 
         $contentIds = [];
+        $contentTypeIds = [];
         $translations = $languageFilter['languages'] ?? [];
         $useAlwaysAvailable = $languageFilter['useAlwaysAvailable'] ?? true;
         foreach ($result->searchHits as $hit) {
-            $contentIds[] = $hit->valueObject->id;
+            /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo $info */
+            $info = $hit->valueObject;
+            $contentIds[] = $info->id;
+            $contentTypeIds[] = $info->contentTypeId;
             // Unless we are told to load all languages, we add main language to translations so they are loaded too
             // Might in some case load more languages then intended, but prioritised handling will pick right one
-            if (!empty($languageFilter['languages']) && $useAlwaysAvailable && $hit->valueObject->alwaysAvailable) {
-                $translations[] = $hit->valueObject->mainLanguageCode;
+            if (!empty($languageFilter['languages']) && $useAlwaysAvailable && $info->alwaysAvailable) {
+                $translations[] = $info->mainLanguageCode;
             }
         }
 
         $missingContentList = [];
         $contentList = $this->contentHandler->loadContentList($contentIds, array_unique($translations));
+        $contentTypeList = $this->contentTypeHandler->loadContentTypeList(array_unique($contentTypeIds));
         foreach ($result->searchHits as $key => $hit) {
             if (isset($contentList[$hit->valueObject->id])) {
                 $hit->valueObject = $this->buildContentDomainObject(
                     $contentList[$hit->valueObject->id],
-                    null,//@todo bulk load content type, AND(~/OR~) add in-memory cache for it which will also benefit all cases
+                    $this->contentTypeDomainMapper->buildContentTypeDomainObject(
+                        $contentTypeList[$hit->valueObject->contentTypeId],
+                        $languageFilter['languages'] ?? []
+                    ),
                     $languageFilter['languages'] ?? [],
                     $useAlwaysAvailable ? $hit->valueObject->mainLanguageCode : null
                 );

@@ -9,13 +9,15 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Database\Query;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use RuntimeException;
 
 /**
@@ -56,6 +58,7 @@ class DoctrineDatabase extends Gateway
      * Doctrine database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
 
@@ -1381,6 +1384,93 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
+     * Attempt repairing data corruption for broken archived URL aliases for Location,
+     * assuming there exists restored original (current) entry.
+     *
+     * @param int $locationId
+     */
+    public function repairBrokenUrlAliasesForLocation(int $locationId)
+    {
+        $urlAliasesData = $this->getUrlAliasesForLocation($locationId);
+
+        $originalUrlAliases = $this->filterOriginalAliases($urlAliasesData);
+
+        if (count($originalUrlAliases) === count($urlAliasesData)) {
+            // no archived aliases - nothing to fix
+            return;
+        }
+
+        $updateQueryBuilder = $this->connection->createQueryBuilder();
+        $expr = $updateQueryBuilder->expr();
+        $updateQueryBuilder
+            ->update('ezurlalias_ml')
+            ->set('link', ':linkId')
+            ->set('parent', ':parentId')
+            ->where(
+                $expr->eq('action', ':action')
+            )
+            ->andWhere(
+                $expr->eq(
+                    'is_original',
+                    $updateQueryBuilder->createNamedParameter(0, ParameterType::INTEGER)
+                )
+            )
+            ->andWhere(
+                $expr->eq('parent', ':oldParentId')
+            )
+            ->andWhere(
+                $expr->eq('text_md5', ':textMD5')
+            )
+            ->setParameter(':action', "eznode:{$locationId}");
+
+        foreach ($urlAliasesData as $urlAliasData) {
+            if ($urlAliasData['is_original'] === 1 || !isset($originalUrlAliases[$urlAliasData['lang_mask']])) {
+                // ignore non-archived entries and deleted Translations
+                continue;
+            }
+
+            $originalUrlAlias = $originalUrlAliases[$urlAliasData['lang_mask']];
+
+            if ($urlAliasData['link'] === $originalUrlAlias['link']) {
+                // ignore correct entries to avoid unnecessary updates
+                continue;
+            }
+
+            $updateQueryBuilder
+                ->setParameter(':linkId', $originalUrlAlias['link'], ParameterType::INTEGER)
+                ->setParameter(':parentId', $originalUrlAlias['parent'], ParameterType::INTEGER)
+                ->setParameter(':oldParentId', $urlAliasData['parent'], ParameterType::INTEGER)
+                ->setParameter(':textMD5', $urlAliasData['text_md5']);
+
+            $updateQueryBuilder->execute();
+        }
+    }
+
+    /**
+     * Filter from the given result set original (current) only URL aliases and index them by language_mask.
+     *
+     * Note: each language_mask can have one URL Alias.
+     *
+     * @param array $urlAliasesData
+     *
+     * @return array
+     */
+    private function filterOriginalAliases(array $urlAliasesData): array
+    {
+        $originalUrlAliases = array_filter(
+            $urlAliasesData,
+            function ($urlAliasData) {
+                return (int)$urlAliasData['is_original'] === 1;
+            }
+        );
+        // return language_mask-indexed array
+        return array_combine(
+            array_column($originalUrlAliases, 'lang_mask'),
+            $originalUrlAliases
+        );
+    }
+
+    /**
      * Get subquery for IDs of all URL aliases.
      *
      * @return string Query
@@ -1415,5 +1505,28 @@ class DoctrineDatabase extends Gateway
             default:
                 return 'integer';
         }
+    }
+
+    /**
+     * Get all URL aliases for the given Location (including archived ones).
+     *
+     * @param int $locationId
+     *
+     * @return array
+     */
+    protected function getUrlAliasesForLocation(int $locationId): array
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder
+            ->select('id', 'is_original', 'lang_mask', 'link', 'parent', 'text_md5')
+            ->from($this->table)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'action',
+                    $queryBuilder->createPositionalParameter("eznode:{$locationId}")
+                )
+            );
+
+        return $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 }

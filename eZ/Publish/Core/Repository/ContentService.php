@@ -390,7 +390,9 @@ class ContentService implements ContentServiceInterface
 
         return $this->domainMapper->buildContentDomainObject(
             $spiContent,
-            null,
+            $this->repository->getContentTypeService()->loadContentType(
+                $spiContent->versionInfo->contentInfo->contentTypeId
+            ),
             $languages ?? [],
             $alwaysAvailableLanguageCode
         );
@@ -451,27 +453,33 @@ class ContentService implements ContentServiceInterface
     ) {
         $loadAllLanguages = $languages === Language::ALL;
         $contentIds = [];
+        $contentTypeIds = [];
         $translations = $languages;
         foreach ($contentInfoList as $contentInfo) {
             $contentIds[] = $contentInfo->id;
+            $contentTypeIds[] = $contentInfo->contentTypeId;
             // Unless we are told to load all languages, we add main language to translations so they are loaded too
             // Might in some case load more languages then intended, but prioritised handling will pick right one
             if (!$loadAllLanguages && $useAlwaysAvailable && $contentInfo->alwaysAvailable) {
                 $translations[] = $contentInfo->mainLanguageCode;
             }
         }
-        $translations = array_unique($translations);
 
+        $contentList = [];
+        $translations = array_unique($translations);
         $spiContentList = $this->persistenceHandler->contentHandler()->loadContentList(
             $contentIds,
             $translations
         );
-        $contentList = [];
+        $contentTypeList = $this->repository->getContentTypeService()->loadContentTypeList(
+            array_unique($contentTypeIds),
+            $languages
+        );
         foreach ($spiContentList as $contentId => $spiContent) {
             $contentInfo = $spiContent->versionInfo->contentInfo;
             $contentList[$contentId] = $this->domainMapper->buildContentDomainObject(
                 $spiContent,
-                null,
+                $contentTypeList[$contentInfo->contentTypeId],
                 $languages,
                 $contentInfo->alwaysAvailable ? $contentInfo->mainLanguageCode : null
             );
@@ -522,7 +530,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ($contentCreateStruct->alwaysAvailable === null) {
-            $contentCreateStruct->alwaysAvailable = false;
+            $contentCreateStruct->alwaysAvailable = $contentCreateStruct->contentType->defaultAlwaysAvailable ?: false;
         }
 
         $contentCreateStruct->contentType = $this->repository->getContentTypeService()->loadContentType(
@@ -702,7 +710,10 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->domainMapper->buildContentDomainObject($spiContent);
+        return $this->domainMapper->buildContentDomainObject(
+            $spiContent,
+            $contentCreateStruct->contentType
+        );
     }
 
     /**
@@ -848,6 +859,14 @@ class ContentService implements ContentServiceInterface
                     '$locationCreateStructs',
                     "Multiple LocationCreateStructs with the same parent Location '{$locationCreateStruct->parentLocationId}' are given"
                 );
+            }
+
+            if (!array_key_exists($locationCreateStruct->sortField, Location::SORT_FIELD_MAP)) {
+                $locationCreateStruct->sortField = Location::SORT_FIELD_NAME;
+            }
+
+            if (!array_key_exists($locationCreateStruct->sortOrder, Location::SORT_ORDER_MAP)) {
+                $locationCreateStruct->sortOrder = Location::SORT_ORDER_ASC;
             }
 
             $parentLocationIdSet[$locationCreateStruct->parentLocationId] = true;
@@ -1117,7 +1136,12 @@ class ContentService implements ContentServiceInterface
             throw $e;
         }
 
-        return $this->domainMapper->buildContentDomainObject($spiContent);
+        return $this->domainMapper->buildContentDomainObject(
+            $spiContent,
+            $this->repository->getContentTypeService()->loadContentType(
+                $spiContent->versionInfo->contentInfo->contentTypeId
+            )
+        );
     }
 
     /**
@@ -1505,7 +1529,7 @@ class ContentService implements ContentServiceInterface
             throw new BadStateException('$versionInfo', 'Only versions in draft status can be published.');
         }
 
-        $currentTime = time();
+        $currentTime = $this->getUnixTimestamp();
         if ($publicationDate === null && $versionInfo->versionNo === 1) {
             $publicationDate = $currentTime;
         }
@@ -1521,7 +1545,12 @@ class ContentService implements ContentServiceInterface
             $metadataUpdateStruct
         );
 
-        $content = $this->domainMapper->buildContentDomainObject($spiContent);
+        $content = $this->domainMapper->buildContentDomainObject(
+            $spiContent,
+            $this->repository->getContentTypeService()->loadContentType(
+                $spiContent->versionInfo->contentInfo->contentTypeId
+            )
+        );
 
         $this->publishUrlAliasesForContent($content);
 
@@ -1546,10 +1575,18 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * @return int
+     */
+    protected function getUnixTimestamp()
+    {
+        return time();
+    }
+
+    /**
      * Removes the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is in
-     *         published state or is the last version of the Content
+     *         published state or is a last version of Content in non draft state
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -1577,7 +1614,7 @@ class ContentService implements ContentServiceInterface
             2
         );
 
-        if (count($versionList) === 1) {
+        if (count($versionList) === 1 && !$versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
                 'Version is the last version of the Content and can not be removed'
@@ -1661,7 +1698,8 @@ class ContentService implements ContentServiceInterface
         try {
             $spiContent = $this->persistenceHandler->contentHandler()->copy(
                 $contentInfo->id,
-                $versionInfo ? $versionInfo->versionNo : null
+                $versionInfo ? $versionInfo->versionNo : null,
+                $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId()
             );
 
             $objectStateHandler = $this->persistenceHandler->objectStateHandler();
@@ -2066,7 +2104,12 @@ class ContentService implements ContentServiceInterface
             );
             $this->repository->commit();
 
-            return $this->domainMapper->buildContentDomainObject($spiContent);
+            return $this->domainMapper->buildContentDomainObject(
+                $spiContent,
+                $this->repository->getContentTypeService()->loadContentType(
+                    $spiContent->versionInfo->contentInfo->contentTypeId
+                )
+            );
         } catch (APINotFoundException $e) {
             // avoid wrapping expected NotFoundException in BadStateException handled below
             $this->repository->rollback();

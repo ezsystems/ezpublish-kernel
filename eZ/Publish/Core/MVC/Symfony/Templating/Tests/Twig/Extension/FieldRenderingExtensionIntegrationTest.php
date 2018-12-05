@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
 use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\Helper\TranslationHelper;
@@ -69,7 +68,6 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
         return array(
             new FieldRenderingExtension(
                 $fieldBlockRenderer,
-                $this->getContentTypeServiceMock(),
                 $this->createMock(ParameterProviderRegistryInterface::class),
                 new TranslationHelper(
                     $configResolver,
@@ -129,6 +127,12 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
         $content = new Content(
             array(
                 'internalFields' => $fields,
+                'contentType' => new ContentType([
+                    'id' => $contentTypeIdentifier,
+                    'identifier' => $contentTypeIdentifier,
+                    'mainLanguageCode' => 'fre-FR',
+                    'fieldDefinitions' => $this->fieldDefinitions[$contentTypeIdentifier],
+                ]),
                 'versionInfo' => new VersionInfo(
                     array(
                         'versionNo' => 64,
@@ -171,32 +175,6 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
                             array('fre-FR', 'eng-US'),
                         ),
                     )
-                )
-            );
-
-        return $mock;
-    }
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getContentTypeServiceMock()
-    {
-        $mock = $this->createMock(ContentTypeService::class);
-
-        $mock->expects($this->any())
-            ->method('loadContentType')
-            ->will(
-                $this->returnCallback(
-                    function ($contentTypeId) {
-                        return new ContentType(
-                            array(
-                                'identifier' => $contentTypeId,
-                                'mainLanguageCode' => 'fre-FR',
-                                'fieldDefinitions' => $this->fieldDefinitions[$contentTypeId],
-                            )
-                        );
-                    }
                 )
             );
 

@@ -78,11 +78,10 @@ class FieldHelperTest extends TestCase
             ->with($fieldDefIdentifier)
             ->will($this->returnValue($fieldDefinition));
 
-        $this->contentTypeServiceMock
-            ->expects($this->once())
-            ->method('loadContentType')
-            ->with($contentTypeId)
-            ->will($this->returnValue($contentType));
+        $content
+            ->expects($this->any())
+            ->method('getContentType')
+            ->willReturn($contentType);
 
         $this->translationHelper
             ->expects($this->once())
@@ -125,11 +124,10 @@ class FieldHelperTest extends TestCase
             ->with($fieldDefIdentifier)
             ->will($this->returnValue($fieldDefinition));
 
-        $this->contentTypeServiceMock
-            ->expects($this->once())
-            ->method('loadContentType')
-            ->with($contentTypeId)
-            ->will($this->returnValue($contentType));
+        $content
+            ->expects($this->any())
+            ->method('getContentType')
+            ->willReturn($contentType);
 
         $this->translationHelper
             ->expects($this->once())

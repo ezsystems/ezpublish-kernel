@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\User\User as APIUser;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * This class represents a user value.
@@ -32,6 +33,11 @@ class User extends APIUser
     public function getVersionInfo()
     {
         return $this->content->getVersionInfo();
+    }
+
+    public function getContentType(): ContentType
+    {
+        return $this->content->getContentType();
     }
 
     /**

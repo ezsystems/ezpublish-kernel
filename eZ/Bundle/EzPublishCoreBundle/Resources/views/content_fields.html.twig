@@ -269,7 +269,7 @@
         {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
         {{ fos_httpcache_tag('relation-' ~ contentId) }}
         <li>
-            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
+            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
         </li>
         {% endfor %}
     </ul>
@@ -334,7 +334,7 @@
     {% if parameters.showInfo is defined and not parameters.showInfo %}
         {% set showInfo = false %}
     {% endif %}
-    
+
     {% set draggable = defaultDraggable %}
     {% if parameters.draggable is defined and not parameters.draggable %}
         {% set draggable = 'false' %}
@@ -422,9 +422,22 @@
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
     {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
-    {% set width = parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : '') %}
-    {% set height = parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : '') %}
-    <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}"{% if parameters.class is defined and parameters.class is not empty %} class="{{ parameters.class }}"{% endif %} />
+    {% set attrs = {
+        class: parameters.class|default(''),
+        height: parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : ''),
+        width: parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : ''),
+    } %}
+    {% if parameters.ezlink|default({}) is not empty %}
+        <a
+            href="{{ parameters.ezlink.href }}"
+            {% if parameters.ezlink.title is defined %} title="{{ parameters.ezlink.title|e('html_attr') }}"{% endif %}
+            {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
+        >
+    {% endif %}
+            <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs if attrvalue %}{{ attrname }}="{{ attrvalue }} " {% endfor %}/>
+    {% if parameters.ezlink|default({}) is not empty %}
+        </a>
+    {% endif %}
 </figure>
 {% endif %}
 {% endspaceless %}
@@ -440,7 +453,7 @@
                     viewType: 'asset_image',
                     noLayout: true,
                     params: {
-                        parameters: parameters|default({'alias': 'original'})
+                        parameters: parameters|default({'alias': 'original'})|merge({'alternativeText': field.value.alternativeText })
                     }
                 }))}}
             </div>
@@ -453,7 +466,7 @@
 {% if not ez_is_field_empty( content, field ) and parameters.available %}
     {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
     <div {{ block( 'field_attributes' ) }}>
-        {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
+        {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'layout': false} ) ) }}
     </div>
 {% endif %}
 {% endspaceless %}

@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
@@ -88,6 +90,7 @@ class DoctrineDatabase extends Gateway
      * DoctrineDatabase handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
 
@@ -492,7 +495,7 @@ class DoctrineDatabase extends Gateway
         $q
             ->select('created', 'creator_id', 'id', 'modified', 'modifier_id', 'name')
             ->from('ezcontentclassgroup')
-            ->where('id IN (:ids)')
+            ->where($q->expr()->in('id', ':ids'))
             ->setParameter('ids', $groupIds, Connection::PARAM_INT_ARRAY);
 
         return $q->execute()->fetchAll();
@@ -567,31 +570,15 @@ class DoctrineDatabase extends Gateway
      */
     public function loadTypesDataForGroup($groupId, $status)
     {
-        $q = $this->getLoadTypeQuery();
-        $q->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn(
-                        'group_id',
-                        'ezcontentclass_classgroup'
-                    ),
-                    $q->bindValue($groupId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn(
-                        'version',
-                        'ezcontentclass'
-                    ),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
-                )
-            )
-        );
-        $q->orderBy($this->dbHandler->quoteColumn('identifier', 'ezcontentclass'));
+        $q = $this->getLoadTypeQueryBuilder();
+        $q
+            ->where($q->expr()->eq('g.group_id', ':gid'))
+            ->andWhere($q->expr()->eq('c.version', ':version'))
+            ->addOrderBy('c.identifier')
+            ->setParameter('gid', $groupId, ParameterType::INTEGER)
+            ->setParameter('version', $status, ParameterType::INTEGER);
 
-        $stmt = $q->prepare();
-        $stmt->execute();
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $q->execute()->fetchAll();
     }
 
     /**
@@ -884,6 +871,18 @@ class DoctrineDatabase extends Gateway
         $this->insertTypeNameData($typeId, $status, $updateStruct->name);
     }
 
+    public function loadTypesListData(array $typeIds): array
+    {
+        $q = $this->getLoadTypeQueryBuilder();
+
+        $q
+            ->where($q->expr()->in('c.id', ':ids'))
+            ->andWhere($q->expr()->eq('c.version', Type::STATUS_DEFINED))
+            ->setParameter('ids', $typeIds, Connection::PARAM_INT_ARRAY);
+
+        return $q->execute()->fetchAll();
+    }
+
     /**
      * Loads an array with data about $typeId in $status.
      *
@@ -894,23 +893,14 @@ class DoctrineDatabase extends Gateway
      */
     public function loadTypeData($typeId, $status)
     {
-        $q = $this->getLoadTypeQuery();
-        $q->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('id', 'ezcontentclass'),
-                    $q->bindValue($typeId, null, \PDO::PARAM_INT)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentclass'),
-                    $q->bindValue($status, null, \PDO::PARAM_INT)
-                )
-            )
-        );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q = $this->getLoadTypeQueryBuilder();
+        $q
+            ->where($q->expr()->eq('c.id', ':id'))
+            ->andWhere($q->expr()->eq('c.version', ':version'))
+            ->setParameter('id', $typeId, ParameterType::INTEGER)
+            ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $q->execute()->fetchAll();
     }
 
     /**
@@ -924,23 +914,14 @@ class DoctrineDatabase extends Gateway
      */
     public function loadTypeDataByIdentifier($identifier, $status)
     {
-        $q = $this->getLoadTypeQuery();
-        $q->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('identifier', 'ezcontentclass'),
-                    $q->bindValue($identifier)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentclass'),
-                    $q->bindValue($status)
-                )
-            )
-        );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q = $this->getLoadTypeQueryBuilder();
+        $q
+            ->where($q->expr()->eq('c.identifier', ':identifier'))
+            ->andWhere($q->expr()->eq('c.version', ':version'))
+            ->setParameter('identifier', $identifier, ParameterType::STRING)
+            ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $q->execute()->fetchAll();
     }
 
     /**
@@ -954,94 +935,91 @@ class DoctrineDatabase extends Gateway
      */
     public function loadTypeDataByRemoteId($remoteId, $status)
     {
-        $q = $this->getLoadTypeQuery();
-        $q->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('remote_id', 'ezcontentclass'),
-                    $q->bindValue($remoteId)
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentclass'),
-                    $q->bindValue($status)
-                )
-            )
-        );
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q = $this->getLoadTypeQueryBuilder();
+        $q
+            ->where($q->expr()->eq('c.remote_id', ':remote'))
+            ->andWhere($q->expr()->eq('c.version', ':version'))
+            ->setParameter('remote', $remoteId, ParameterType::STRING)
+            ->setParameter('version', $status, ParameterType::INTEGER);
 
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $q->execute()->fetchAll();
     }
 
     /**
      * Returns a basic query to retrieve Type data.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    protected function getLoadTypeQuery()
+    private function getLoadTypeQueryBuilder(): QueryBuilder
     {
-        $q = $this->dbHandler->createSelectQuery();
+        $q = $this->connection->createQueryBuilder();
+        $expr = $q->expr();
+        $q
+            ->select([
+                'c.id AS ezcontentclass_id',
+                'c.version AS ezcontentclass_version',
+                'c.serialized_name_list AS ezcontentclass_serialized_name_list',
+                'c.serialized_description_list AS ezcontentclass_serialized_description_list',
+                'c.identifier AS ezcontentclass_identifier',
+                'c.created AS ezcontentclass_created',
+                'c.modified AS ezcontentclass_modified',
+                'c.modifier_id AS ezcontentclass_modifier_id',
+                'c.creator_id AS ezcontentclass_creator_id',
+                'c.remote_id AS ezcontentclass_remote_id',
+                'c.url_alias_name AS ezcontentclass_url_alias_name',
+                'c.contentobject_name AS ezcontentclass_contentobject_name',
+                'c.is_container AS ezcontentclass_is_container',
+                'c.initial_language_id AS ezcontentclass_initial_language_id',
+                'c.always_available AS ezcontentclass_always_available',
+                'c.sort_field AS ezcontentclass_sort_field',
+                'c.sort_order AS ezcontentclass_sort_order',
 
-        $this->selectColumns($q, 'ezcontentclass');
-        $this->selectColumns($q, 'ezcontentclass_attribute');
-        $q->select(
-            $this->dbHandler->aliasedColumn(
-                $q,
-                'group_id',
-                'ezcontentclass_classgroup'
-            )
-        );
-        $q->from(
-            $this->dbHandler->quoteTable('ezcontentclass')
-        )->leftJoin(
-            $this->dbHandler->quoteTable('ezcontentclass_attribute'),
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn(
-                        'id',
-                        'ezcontentclass'
-                    ),
-                    $this->dbHandler->quoteColumn(
-                        'contentclass_id',
-                        'ezcontentclass_attribute'
-                    )
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn(
-                        'version',
-                        'ezcontentclass'
-                    ),
-                    $this->dbHandler->quoteColumn(
-                        'version',
-                        'ezcontentclass_attribute'
-                    )
+                'a.id AS ezcontentclass_attribute_id',
+                'a.serialized_name_list AS ezcontentclass_attribute_serialized_name_list',
+                'a.serialized_description_list AS ezcontentclass_attribute_serialized_description_list',
+                'a.identifier AS ezcontentclass_attribute_identifier',
+                'a.category AS ezcontentclass_attribute_category',
+                'a.data_type_string AS ezcontentclass_attribute_data_type_string',
+                'a.can_translate AS ezcontentclass_attribute_can_translate',
+                'a.is_required AS ezcontentclass_attribute_is_required',
+                'a.is_information_collector AS ezcontentclass_attribute_is_information_collector',
+                'a.is_searchable AS ezcontentclass_attribute_is_searchable',
+                'a.placement AS ezcontentclass_attribute_placement',
+                'a.data_float1 AS ezcontentclass_attribute_data_float1',
+                'a.data_float2 AS ezcontentclass_attribute_data_float2',
+                'a.data_float3 AS ezcontentclass_attribute_data_float3',
+                'a.data_float4 AS ezcontentclass_attribute_data_float4',
+                'a.data_int1 AS ezcontentclass_attribute_data_int1',
+                'a.data_int2 AS ezcontentclass_attribute_data_int2',
+                'a.data_int3 AS ezcontentclass_attribute_data_int3',
+                'a.data_int4 AS ezcontentclass_attribute_data_int4',
+                'a.data_text1 AS ezcontentclass_attribute_data_text1',
+                'a.data_text2 AS ezcontentclass_attribute_data_text2',
+                'a.data_text3 AS ezcontentclass_attribute_data_text3',
+                'a.data_text4 AS ezcontentclass_attribute_data_text4',
+                'a.data_text5 AS ezcontentclass_attribute_data_text5',
+                'a.serialized_data_text AS ezcontentclass_attribute_serialized_data_text',
+
+                'g.group_id AS ezcontentclass_classgroup_group_id',
+            ])
+            ->from('ezcontentclass', 'c')
+            ->leftJoin(
+                'c',
+                'ezcontentclass_attribute',
+                'a',
+                $expr->andX(
+                    $expr->eq('c.id', 'a.contentclass_id'),
+                    $expr->eq('c.version', 'a.version')
                 )
             )
-        )->leftJoin(
-            $this->dbHandler->quoteTable('ezcontentclass_classgroup'),
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn(
-                        'id',
-                        'ezcontentclass'
-                    ),
-                    $this->dbHandler->quoteColumn(
-                        'contentclass_id',
-                        'ezcontentclass_classgroup'
-                    )
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn(
-                        'version',
-                        'ezcontentclass'
-                    ),
-                    $this->dbHandler->quoteColumn(
-                        'contentclass_version',
-                        'ezcontentclass_classgroup'
-                    )
+            ->leftJoin(
+                'c',
+                'ezcontentclass_classgroup',
+                'g',
+                $expr->andX(
+                    $expr->eq('c.id', 'g.contentclass_id'),
+                    $expr->eq('c.version', 'g.contentclass_version')
                 )
             )
-        )->orderBy($this->dbHandler->quoteColumn('placement', 'ezcontentclass_attribute'));
+            ->orderBy('a.placement');
 
         return $q;
     }

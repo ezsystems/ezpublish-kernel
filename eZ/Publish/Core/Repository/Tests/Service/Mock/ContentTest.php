@@ -547,18 +547,18 @@ class ContentTest extends BaseServiceMockTest
                 ->will($this->returnValue($spiContentInfo));
         }
 
-        $spiContent = new SPIContent();
+        $spiContent = new SPIContent([
+            'versionInfo' => new VersionInfo([
+                    'contentInfo' => new ContentInfo(['id' => 42, 'contentTypeId' => 123]),
+            ]),
+        ]);
         $contentHandler
             ->expects($this->once())
             ->method('load')
             ->with($realId, $realVersionNo, $languages)
-            ->will($this->returnValue($spiContent));
-        $content = $this->createMock(APIContent::class);
-        $this->getDomainMapperMock()
-            ->expects($this->once())
-            ->method('buildContentDomainObject')
-            ->with($spiContent)
-            ->will($this->returnValue($content));
+            ->willReturn($spiContent);
+
+        $content = $this->mockBuildContentDomainObject($spiContent, $languages);
 
         $this->assertSame(
             $content,
@@ -1355,7 +1355,7 @@ class ContentTest extends BaseServiceMockTest
                 ->method('buildContentDomainObject')
                 ->with(
                     $this->isInstanceOf(SPIContent::class),
-                    $this->equalTo(null)
+                    $this->equalTo($contentType)
                 );
 
             $mockedService->createContent($contentCreateStruct, array());
@@ -2518,7 +2518,7 @@ class ContentTest extends BaseServiceMockTest
             ->method('buildContentDomainObject')
             ->with(
                 $this->isInstanceOf(SPIContent::class),
-                $this->equalTo(null)
+                $this->isInstanceOf(APIContentType::class)
             );
 
         $repositoryMock->expects($this->once())->method('commit');
@@ -2753,7 +2753,7 @@ class ContentTest extends BaseServiceMockTest
             ->method('buildContentDomainObject')
             ->with(
                 $this->isInstanceOf(SPIContent::class),
-                $this->equalTo(null)
+                $this->isInstanceOf(APIContentType::class)
             );
 
         $repositoryMock->expects($this->once())->method('commit');
@@ -5406,11 +5406,29 @@ class ContentTest extends BaseServiceMockTest
     public function testCopyContent()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
+        $contentService = $this->getPartlyMockedContentService(array(
+            'internalLoadContentInfo',
+            'internalLoadContent',
+            'getUnixTimestamp',
+        ));
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
+        $user = $this->getStubbedUser(14);
+
+        $permissionResolverMock = $this
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $permissionResolverMock
+            ->method('getCurrentUserReference')
+            ->willReturn($user);
+
+        $repositoryMock
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
 
         $repositoryMock->expects($this->exactly(3))
             ->method('getLocationService')
@@ -5484,7 +5502,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($versionInfoMock));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfoMock */
-        $content = $this->mockPublishVersion(123456);
+        $content = $this->mockPublishVersion(123456, 126666);
         $locationServiceMock->expects($this->once())
             ->method('createLocation')
             ->with(
@@ -5498,6 +5516,10 @@ class ContentTest extends BaseServiceMockTest
                 $content->id
             )
             ->will($this->returnValue($content));
+
+        $contentService->expects($this->once())
+            ->method('getUnixTimestamp')
+            ->will($this->returnValue(126666));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
         $contentService->copyContent($contentInfoMock, $locationCreateStruct, null);
@@ -5513,11 +5535,29 @@ class ContentTest extends BaseServiceMockTest
     public function testCopyContentWithVersionInfo()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo', 'internalLoadContent'));
+        $contentService = $this->getPartlyMockedContentService(array(
+            'internalLoadContentInfo',
+            'internalLoadContent',
+            'getUnixTimestamp',
+        ));
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
+        $user = $this->getStubbedUser(14);
+
+        $permissionResolverMock = $this
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $permissionResolverMock
+            ->method('getCurrentUserReference')
+            ->willReturn($user);
+
+        $repositoryMock
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
 
         $repositoryMock->expects($this->exactly(3))
             ->method('getLocationService')
@@ -5589,7 +5629,7 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($versionInfoMock));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfoMock */
-        $content = $this->mockPublishVersion(123456);
+        $content = $this->mockPublishVersion(123456, 126666);
         $locationServiceMock->expects($this->once())
             ->method('createLocation')
             ->with(
@@ -5603,6 +5643,10 @@ class ContentTest extends BaseServiceMockTest
                 $content->id
             )
             ->will($this->returnValue($content));
+
+        $contentService->expects($this->once())
+            ->method('getUnixTimestamp')
+            ->will($this->returnValue(126666));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
         $contentService->copyContent($contentInfoMock, $locationCreateStruct, $versionInfoMock);
@@ -5626,6 +5670,20 @@ class ContentTest extends BaseServiceMockTest
         $locationCreateStruct = new LocationCreateStruct();
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $locationServiceMock = $this->getLocationServiceMock();
+        $user = $this->getStubbedUser(14);
+
+        $permissionResolverMock = $this
+            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $permissionResolverMock
+            ->method('getCurrentUserReference')
+            ->willReturn($user);
+
+        $repositoryMock
+            ->method('getPermissionResolver')
+            ->willReturn($permissionResolverMock);
 
         $repositoryMock->expects($this->once())
             ->method('getLocationService')
@@ -5665,6 +5723,48 @@ class ContentTest extends BaseServiceMockTest
 
         /* @var \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfoMock */
         $contentService->copyContent($contentInfoMock, $locationCreateStruct, null);
+    }
+
+    /**
+     * Reusable method for setting exceptions on buildContentDomainObject usage.
+     *
+     * Plain usage as in when content type is loaded directly.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content $spiContent
+     * @param array $translations
+     * @param bool $useAlwaysAvailable
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Values\Content\Content
+     */
+    private function mockBuildContentDomainObject(SPIContent $spiContent, array $translations = null, bool $useAlwaysAvailable = null)
+    {
+        $contentTypeId = $spiContent->versionInfo->contentInfo->contentTypeId;
+        $contentTypeServiceMock = $this->getContentTypeServiceMock();
+        $repositoryMock = $this->getRepositoryMock();
+
+        $contentType = new ContentType([
+            'id' => $contentTypeId,
+            'fieldDefinitions' => [],
+        ]);
+
+        $repositoryMock->expects($this->once())
+            ->method('getContentTypeService')
+            ->willReturn($contentTypeServiceMock);
+
+        $contentTypeServiceMock->expects($this->once())
+            ->method('loadContentType')
+            ->with($this->equalTo($contentTypeId))
+            ->willReturn($contentType);
+
+        $content = $this->createMock(APIContent::class);
+
+        $this->getDomainMapperMock()
+            ->expects($this->once())
+            ->method('buildContentDomainObject')
+            ->with($spiContent, $contentType, $translations ?? [], $useAlwaysAvailable)
+            ->willReturn($content);
+
+        return $content;
     }
 
     protected function mockGetDefaultObjectStates()
@@ -5729,19 +5829,25 @@ class ContentTest extends BaseServiceMockTest
 
     /**
      * @param int|null $publicationDate
+     * @param int|null $modificationDate
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function mockPublishVersion($publicationDate = null)
+    protected function mockPublishVersion($publicationDate = null, $modificationDate = null)
     {
-        $domainMapperMock = $this->getDomainMapperMock();
-        $contentMock = $this->createMock(APIContent::class);
-        /* @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $versionInfoMock = $this->createMock(APIVersionInfo::class);
         $contentInfoMock = $this->createMock(APIContentInfo::class);
+        /* @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
         $metadataUpdateStruct = new SPIMetadataUpdateStruct();
 
+        $spiContent = new SPIContent([
+            'versionInfo' => new VersionInfo([
+                    'contentInfo' => new ContentInfo(['id' => 42, 'contentTypeId' => 123]),
+            ]),
+        ]);
+
+        $contentMock = $this->mockBuildContentDomainObject($spiContent);
         $contentMock->expects($this->any())
             ->method('__get')
             ->will(
@@ -5786,25 +5892,16 @@ class ContentTest extends BaseServiceMockTest
 
         // Account for 1 second of test execution time
         $metadataUpdateStruct->publicationDate = $publicationDate;
-        $metadataUpdateStruct->modificationDate = $currentTime;
-        $metadataUpdateStruct2 = clone $metadataUpdateStruct;
-        ++$metadataUpdateStruct2->publicationDate;
-        ++$metadataUpdateStruct2->modificationDate;
+        $metadataUpdateStruct->modificationDate = $modificationDate ?? $currentTime;
 
-        $spiContent = new SPIContent();
         $contentHandlerMock->expects($this->once())
             ->method('publish')
             ->with(
                 42,
                 123,
-                $this->logicalOr($metadataUpdateStruct, $metadataUpdateStruct2)
+                $metadataUpdateStruct
             )
             ->will($this->returnValue($spiContent));
-
-        $domainMapperMock->expects($this->once())
-            ->method('buildContentDomainObject')
-            ->with($spiContent)
-            ->will($this->returnValue($contentMock));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\Content $contentMock */
         $this->mockPublishUrlAliasesForContent($contentMock);

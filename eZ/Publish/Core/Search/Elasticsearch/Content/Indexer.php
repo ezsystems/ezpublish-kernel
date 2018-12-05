@@ -16,6 +16,11 @@ use RuntimeException;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * ElasticSearch Indexer
+ *
+ * @deprecated
+ */
 class Indexer extends SearchIndexer
 {
     /**

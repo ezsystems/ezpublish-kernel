@@ -51,11 +51,15 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function copy($contentId, $versionNo = null)
+    public function copy($contentId, $versionNo = null, $newOwnerId = null)
     {
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo));
+        $this->logger->logCall(__METHOD__, array(
+            'content' => $contentId,
+            'version' => $versionNo,
+            'newOwner' => $newOwnerId,
+        ));
 
-        return $this->persistenceHandler->contentHandler()->copy($contentId, $versionNo);
+        return $this->persistenceHandler->contentHandler()->copy($contentId, $versionNo, $newOwnerId);
     }
 
     /**
@@ -237,7 +241,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         // Load reverse field relations first
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
             $contentId,
-            APIRelation::FIELD
+            APIRelation::FIELD | APIRelation::ASSET
         );
 
         $return = $this->persistenceHandler->contentHandler()->deleteContent($contentId);

@@ -57,6 +57,7 @@ class Relation extends ValueObject
      *      \eZ\Publish\API\Repository\Values\Content\Relation::EMBED,
      *      \eZ\Publish\API\Repository\Values\Content\Relation::LINK,
      *      \eZ\Publish\API\Repository\Values\Content\Relation::FIELD
+     *      \eZ\Publish\API\Repository\Values\Content\Relation::ASSET
      *
      * @var int
      */

@@ -13,10 +13,12 @@ use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * Location service, used for complex subtree operations.
@@ -79,16 +81,21 @@ class LocationService implements APILocationService, Sessionable
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
     {
-        return new LocationCreateStruct(
-            array(
-                'parentLocationId' => $parentLocationId,
-            )
-        );
+        $properties = [
+            'parentLocationId' => $parentLocationId,
+        ];
+        if ($contentType) {
+            $properties['sortField'] = $contentType->defaultSortField;
+            $properties['sortOrder'] = $contentType->defaultSortOrder;
+        }
+
+        return new LocationCreateStruct($properties);
     }
 
     /**
@@ -126,10 +133,11 @@ class LocationService implements APILocationService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param mixed $locationId
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocation($locationId)
+    public function loadLocation($locationId, array $prioritizedLanguages = null)
     {
         $response = $this->client->request(
             'GET',
@@ -149,10 +157,11 @@ class LocationService implements APILocationService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param string $remoteId
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocationByRemoteId($remoteId)
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
     {
         $response = $this->client->request(
             'GET',
@@ -211,10 +220,11 @@ class LocationService implements APILocationService, Sessionable
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
-    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null)
+    public function loadLocations(ContentInfo $contentInfo, Location $rootLocation = null, array $prioritizedLanguages = null)
     {
         $values = $this->requestParser->parse('object', $contentInfo->id);
         $response = $this->client->request(
@@ -234,10 +244,11 @@ class LocationService implements APILocationService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationList
      */
-    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25)
+    public function loadLocationChildren(Location $location, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
     {
         $values = $this->requestParser->parse('location', $location->id);
         $response = $this->client->request(
@@ -249,6 +260,19 @@ class LocationService implements APILocationService, Sessionable
         );
 
         return $this->inputDispatcher->parse($response);
+    }
+
+    /**
+     * Load parent Locations for Content Draft.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] List of parent Locations
+     */
+    public function loadParentLocationsForDraftContent(VersionInfo $versionInfo, array $prioritizedLanguages = null)
+    {
+        throw new \Exception('@todo: Implement.');
     }
 
     /**

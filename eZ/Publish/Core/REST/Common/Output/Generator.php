@@ -302,6 +302,8 @@ abstract class Generator
     /**
      * Generates a media type from $name and $type.
      *
+     * @deprecated 6.13.5 please start to use generateMediaTypeWithVendor()
+     *
      * @param string $name
      * @param string $type
      *
@@ -310,6 +312,20 @@ abstract class Generator
     protected function generateMediaType($name, $type)
     {
         return "application/vnd.ez.api.{$name}+{$type}";
+    }
+
+    /**
+     * Generates a media type from $name, $type and $vendor.
+     *
+     * @param string $name
+     * @param string $type
+     * @param string $vendor
+     *
+     * @return string
+     */
+    protected function generateMediaTypeWithVendor($name, $type, $vendor = 'vnd.ez.api')
+    {
+        return "application/{$vendor}.{$name}+{$type}";
     }
 
     /**

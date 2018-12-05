@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Repository\Values\Content;
 
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * this class represents a content object in a specific version.
@@ -32,6 +33,11 @@ class Content extends APIContent
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */
     protected $versionInfo;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    protected $contentType;
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
@@ -65,6 +71,14 @@ class Content extends APIContent
     public function getVersionInfo()
     {
         return $this->versionInfo;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getContentType(): ContentType
+    {
+        return $this->contentType;
     }
 
     /**

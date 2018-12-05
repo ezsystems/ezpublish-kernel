@@ -97,10 +97,11 @@ class Mapper
      * Extracts types and related data from the given $rows.
      *
      * @param array $rows
+     * @param bool $keepTypeIdAsKey
      *
      * @return array(Type)
      */
-    public function extractTypesFromRows(array $rows)
+    public function extractTypesFromRows(array $rows, bool $keepTypeIdAsKey = false)
     {
         $types = array();
         $fields = array();
@@ -120,6 +121,10 @@ class Mapper
             if (!in_array($groupId, $types[$typeId]->groupIds)) {
                 $types[$typeId]->groupIds[] = $groupId;
             }
+        }
+
+        if ($keepTypeIdAsKey) {
+            return $types;
         }
 
         // Re-index $types to avoid people relying on ID keys

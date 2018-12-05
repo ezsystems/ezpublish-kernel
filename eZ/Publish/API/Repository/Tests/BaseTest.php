@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -607,6 +608,60 @@ abstract class BaseTest extends TestCase
             $repository->rollback();
             throw $ex;
         }
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Connection
+     *
+     * @throws \ErrorException
+     */
+    protected function getRawDatabaseConnection()
+    {
+        $connection = $this
+            ->getSetupFactory()
+            ->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.connection');
+
+        if (!$connection instanceof Connection) {
+            throw new \RuntimeException(
+                sprintf('Expected %s got %s', Connection::class, get_class($connection))
+            );
+        }
+
+        return $connection;
+    }
+
+    /**
+     * Executes the given callback passing raw Database Connection (\Doctrine\DBAL\Connection).
+     * Returns the result returned by the given callback.
+     *
+     * **Note**: The method clears the entire persistence cache pool.
+     *
+     * @throws \Exception
+     *
+     * @param callable $callback
+     *
+     * @return mixed the return result of the given callback
+     */
+    public function performRawDatabaseOperation(callable $callback)
+    {
+        $repository = $this->getRepository(false);
+        $repository->beginTransaction();
+        try {
+            $callback(
+                $this->getRawDatabaseConnection()
+            );
+            $repository->commit();
+        } catch (Exception $e) {
+            $repository->rollback();
+            throw $e;
+        }
+
+        /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cachePool */
+        $cachePool = $this
+            ->getSetupFactory()
+            ->getServiceContainer()->get('ezpublish.cache_pool');
+
+        $cachePool->clear();
     }
 
     /**

@@ -8,54 +8,28 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase as ContentTypeGateway;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as ContentTypeHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as ContentTypeMapper;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
-use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as ContentTypeUpdateHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
 
 /**
  * Content Search test case for ContentSearchHandler.
  */
-class HandlerContentSortTest extends LanguageAwareTestCase
+class HandlerContentSortTest extends AbstractTestCase
 {
-    protected static $setUp = false;
-
     /**
      * Field registry mock.
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
      */
     protected $fieldRegistry;
-
-    /**
-     * Only set up once for these read only tests on a large fixture.
-     *
-     * Skipping the reset-up, since setting up for these tests takes quite some
-     * time, which is not required to spent, since we are only reading from the
-     * database anyways.
-     */
-    public function setUp()
-    {
-        if (!self::$setUp) {
-            parent::setUp();
-            $this->insertDatabaseFixture(__DIR__ . '/../_fixtures/full_dump.php');
-            self::$setUp = $this->handler;
-        } else {
-            $this->handler = self::$setUp;
-        }
-    }
 
     /**
      * Returns the content search handler to test.
@@ -114,42 +88,6 @@ class HandlerContentSortTest extends LanguageAwareTestCase
             $this->getLanguageHandler(),
             $this->getFullTextMapper($this->getContentTypeHandler())
         );
-    }
-
-    protected $contentTypeHandler;
-
-    protected function getContentTypeHandler()
-    {
-        if (!isset($this->contentTypeHandler)) {
-            $this->contentTypeHandler = new ContentTypeHandler(
-                new ContentTypeGateway(
-                    $this->getDatabaseHandler(),
-                    $this->getDatabaseConnection(),
-                    $this->getLanguageMaskGenerator()
-                ),
-                new ContentTypeMapper(
-                    new ConverterRegistry(
-                        array(
-                            'ezdatetime' => new Converter\DateAndTimeConverter(),
-                            'ezinteger' => new Converter\IntegerConverter(),
-                            'ezstring' => new Converter\TextLineConverter(),
-                            'ezprice' => new Converter\IntegerConverter(),
-                            'ezurl' => new Converter\UrlConverter(),
-                            'ezrichtext' => new Converter\RichTextConverter(),
-                            'ezboolean' => new Converter\CheckboxConverter(),
-                            'ezkeyword' => new Converter\KeywordConverter(),
-                            'ezauthor' => new Converter\AuthorConverter(),
-                            'ezimage' => new Converter\NullConverter(),
-                            'ezsrrating' => new Converter\NullConverter(),
-                            'ezmultioption' => new Converter\NullConverter(),
-                        )
-                    )
-                ),
-                $this->createMock(ContentTypeUpdateHandler::class)
-            );
-        }
-
-        return $this->contentTypeHandler;
     }
 
     /**

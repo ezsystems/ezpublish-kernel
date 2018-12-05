@@ -512,6 +512,16 @@ class Repository implements APIRepository
     }
 
     /**
+     * Get NotificationService
+     *
+     * @return \eZ\Publish\API\Repository\NotificationService
+     */
+    public function getNotificationService()
+    {
+        throw new \RuntimeException('@todo: Implement');
+    }
+
+    /**
      * Begin transaction.
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,

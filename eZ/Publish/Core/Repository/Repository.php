@@ -952,6 +952,7 @@ class Repository implements RepositoryInterface
             $this->persistenceHandler->contentHandler(),
             $this->persistenceHandler->locationHandler(),
             $this->persistenceHandler->contentTypeHandler(),
+            $this->getContentTypeDomainMapper(),
             $this->persistenceHandler->contentLanguageHandler(),
             $this->getFieldTypeRegistry()
         );

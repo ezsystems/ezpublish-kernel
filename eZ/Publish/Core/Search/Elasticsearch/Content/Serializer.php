@@ -15,6 +15,8 @@ use eZ\Publish\Core\Search\Common\FieldValueMapper;
 /**
  * Serializer serializes a Document to a string that can be passed
  * over Elasticsearch REST API.
+ *
+ * @deprecated
  */
 class Serializer
 {

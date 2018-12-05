@@ -9,15 +9,27 @@
 namespace eZ\Publish\Core\FieldType\Tests\RichText\Converter\Render;
 
 use PHPUnit\Framework\TestCase;
+use eZ\Publish\Core\FieldType\RichText\Converter;
 use eZ\Publish\Core\FieldType\RichText\Converter\Render\Template;
 use eZ\Publish\Core\FieldType\RichText\RendererInterface;
 use DOMDocument;
 
 class TemplateTest extends TestCase
 {
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $rendererMock;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $converterMock;
+
     public function setUp()
     {
         $this->rendererMock = $this->getRendererMock();
+        $this->converterMock = $this->getConverterMock();
         parent::setUp();
     }
 
@@ -209,20 +221,20 @@ class TemplateTest extends TestCase
 </section>',
                 array(
                     array(
+                        'name' => 'template7',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'template7',
+                            'content' => 'content7<eztemplate name="template8"><ezcontent>content8</ezcontent></eztemplate>',
+                            'params' => array(),
+                        ),
+                    ),
+                    array(
                         'name' => 'template8',
                         'is_inline' => false,
                         'params' => array(
                             'name' => 'template8',
                             'content' => 'content8',
-                            'params' => array(),
-                        ),
-                    ),
-                    array(
-                        'name' => 'template7',
-                        'is_inline' => false,
-                        'params' => array(
-                            'name' => 'template7',
-                            'content' => 'content7template8',
                             'params' => array(),
                         ),
                     ),
@@ -263,6 +275,96 @@ class TemplateTest extends TestCase
                     ),
                 ),
             ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
+  <eztemplate name="template9" type="tag"/>
+  <eztemplateinline name="template10" type="tag"/>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
+  <eztemplate name="template9" type="tag">
+    <ezpayload><![CDATA[template9]]></ezpayload>
+  </eztemplate>
+  <eztemplateinline name="template10" type="tag">
+    <ezpayload><![CDATA[template10]]></ezpayload>
+  </eztemplateinline>
+</section>',
+                array(
+                    array(
+                        'name' => 'template9',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'template9',
+                            'params' => array(),
+                        ),
+                    ),
+                    array(
+                        'name' => 'template10',
+                        'is_inline' => true,
+                        'params' => array(
+                            'name' => 'template10',
+                            'params' => array(),
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
+  <eztemplate name="style1" type="style"><ezcontent>style 1 content</ezcontent></eztemplate>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
+  <eztemplate name="style1" type="style"><ezcontent>style 1 content</ezcontent><ezpayload><![CDATA[style1]]></ezpayload></eztemplate>
+</section>',
+                array(
+                    array(
+                        'name' => 'style1',
+                        'type' => 'style',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'style1',
+                            'content' => 'style 1 content',
+                            'params' => array(),
+                        ),
+                    ),
+                ),
+            ),
+            array(
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
+  <eztemplate name="style2" type="style"><ezcontent>style 2 content</ezcontent></eztemplate>
+  <eztemplateinline name="style3" type="style"><ezcontent>style 3 content</ezcontent></eztemplateinline>
+</section>',
+                '<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom">
+  <eztemplate name="style2" type="style"><ezcontent>style 2 content</ezcontent><ezpayload><![CDATA[style2]]></ezpayload></eztemplate>
+  <eztemplateinline name="style3" type="style"><ezcontent>style 3 content</ezcontent><ezpayload><![CDATA[style3]]></ezpayload></eztemplateinline>
+</section>',
+                array(
+                    array(
+                        'name' => 'style2',
+                        'type' => 'style',
+                        'is_inline' => false,
+                        'params' => array(
+                            'name' => 'style2',
+                            'content' => 'style 2 content',
+                            'params' => array(),
+                        ),
+                    ),
+                    array(
+                        'name' => 'style3',
+                        'type' => 'style',
+                        'is_inline' => true,
+                        'params' => array(
+                            'name' => 'style3',
+                            'content' => 'style 3 content',
+                            'params' => array(),
+                        ),
+                    ),
+                ),
+            ),
         );
     }
 
@@ -273,22 +375,33 @@ class TemplateTest extends TestCase
     {
         $this->rendererMock->expects($this->never())->method('renderContentEmbed');
         $this->rendererMock->expects($this->never())->method('renderLocationEmbed');
-        $this->rendererMock->expects($this->never())->method('renderStyle');
 
         if (!empty($renderParams)) {
+            $convertIndex = 0;
             foreach ($renderParams as $index => $params) {
+                if (!empty($params['type']) && $params['type'] === 'style') {
+                    // mock simple converter
+                    $contentDoc = new DOMDocument();
+                    $contentDoc->appendChild($contentDoc->createTextNode($params['params']['content']));
+                    $this->converterMock
+                        ->expects($this->at($convertIndex++))
+                        ->method('convert')
+                        ->with($contentDoc)
+                        ->will($this->returnValue($contentDoc));
+                }
                 $this->rendererMock
                     ->expects($this->at($index))
-                    ->method('renderTag')
+                    ->method('renderTemplate')
                     ->with(
                         $params['name'],
+                        isset($params['type']) ? $params['type'] : 'tag',
                         $params['params'],
                         $params['is_inline']
                     )
                     ->will($this->returnValue($params['name']));
             }
         } else {
-            $this->rendererMock->expects($this->never())->method('renderTag');
+            $this->rendererMock->expects($this->never())->method('renderTemplate');
         }
 
         $document = new DOMDocument();
@@ -308,13 +421,8 @@ class TemplateTest extends TestCase
 
     protected function getConverter()
     {
-        return new Template($this->rendererMock);
+        return new Template($this->rendererMock, $this->converterMock);
     }
-
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    protected $rendererMock;
 
     /**
      * @return \PHPUnit\Framework\MockObject\MockObject
@@ -322,5 +430,13 @@ class TemplateTest extends TestCase
     protected function getRendererMock()
     {
         return $this->createMock(RendererInterface::class);
+    }
+
+    /**
+     * @return \PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getConverterMock()
+    {
+        return $this->createMock(Converter::class);
     }
 }

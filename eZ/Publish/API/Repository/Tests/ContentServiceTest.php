@@ -267,6 +267,35 @@ class ContentServiceTest extends BaseContentServiceTest
     /**
      * Test for the createContent() method.
      *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::createContent()
+     * @depends testCreateContent
+     */
+    public function testCreateContentSetsExpectedContentType($content)
+    {
+        $contentType = $content->getContentType();
+
+        $this->assertEquals(
+            [
+                $contentType->id,
+                // Won't match as it's set to true in createContentDraftVersion1()
+                //$contentType->defaultAlwaysAvailable,
+                //$contentType->defaultSortField,
+                //$contentType->defaultSortOrder,
+            ],
+            [
+                $content->contentInfo->contentTypeId,
+                //$content->contentInfo->alwaysAvailable,
+                //$location->sortField,
+                //$location->sortOrder,
+            ]
+        );
+    }
+
+    /**
+     * Test for the createContent() method.
+     *
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
@@ -1006,6 +1035,35 @@ class ContentServiceTest extends BaseContentServiceTest
         $this->assertTrue($content->getVersionInfo()->isPublished());
         $this->assertFalse($content->getVersionInfo()->isDraft());
         $this->assertFalse($content->getVersionInfo()->isArchived());
+    }
+
+    /**
+     * Test for the publishVersion() method.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
+     * @depends testPublishVersion
+     */
+    public function testPublishVersionSetsExpectedContentType($content)
+    {
+        $contentType = $content->getContentType();
+
+        $this->assertEquals(
+            [
+                $contentType->id,
+                // won't be a match as it's set to true in createContentDraftVersion1()
+                //$contentType->defaultAlwaysAvailable,
+                //$contentType->defaultSortField,
+                //$contentType->defaultSortOrder,
+            ],
+            [
+                $content->contentInfo->contentTypeId,
+                //$content->contentInfo->alwaysAvailable,
+                //$location->sortField,
+                //$location->sortOrder,
+            ]
+        );
     }
 
     /**
@@ -3086,12 +3144,12 @@ XML
      * Test for the deleteVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
-    public function testDeleteVersionThrowsBadStateExceptionOnLastVersion()
+    public function testDeleteVersionWorksIfOnlyVersionIsDraft()
     {
         $repository = $this->getRepository();
 
@@ -3100,9 +3158,11 @@ XML
         /* BEGIN: Use Case */
         $draft = $this->createContentDraftVersion1();
 
-        // This call will fail with a "BadStateException", because the Content
-        // version is the last version of the Content.
         $contentService->deleteVersion($draft->getVersionInfo());
+
+        // This call will fail with a "NotFound", because we allow to delete content if remaining version is draft.
+        // Can normally only happen if there where always only a draft to begin with, simplifies UI edit API usage.
+        $contentService->loadContent($draft->id);
         /* END: Use Case */
     }
 
@@ -3253,6 +3313,60 @@ XML
         $this->assertNotNull(
             $contentCopied->contentInfo->mainLocationId,
             'Expected main location to be set given we provided a LocationCreateStruct'
+        );
+    }
+
+    /**
+     * Test for the copyContent() method with ezsettings.default.content.retain_owner_on_copy set to false
+     * See settings/test/integration_legacy.yml for service override.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::copyContent()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
+     * @group field-type
+     */
+    public function testCopyContentWithNewOwner()
+    {
+        $parentLocationId = $this->generateId('location', 56);
+
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $userService = $repository->getUserService();
+
+        $newOwner = $this->createUser('new_owner', 'foo', 'bar');
+        /* BEGIN: Use Case */
+        /** @var \eZ\Publish\API\Repository\Values\Content\Content $contentVersion2 */
+        $contentVersion2 = $this->createContentDraftVersion1(
+            $parentLocationId,
+            'forum',
+            'name',
+            $newOwner
+        );
+
+        // Configure new target location
+        $targetLocationCreate = $locationService->newLocationCreateStruct($parentLocationId);
+
+        $targetLocationCreate->priority = 42;
+        $targetLocationCreate->hidden = true;
+        $targetLocationCreate->remoteId = '01234abcdef5678901234abcdef56789';
+        $targetLocationCreate->sortField = Location::SORT_FIELD_NODE_ID;
+        $targetLocationCreate->sortOrder = Location::SORT_ORDER_DESC;
+
+        // Copy content with all versions and drafts
+        $contentCopied = $contentService->copyContent(
+            $contentVersion2->contentInfo,
+            $targetLocationCreate
+        );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $newOwner->id,
+            $contentVersion2->contentInfo->ownerId
+        );
+        $this->assertEquals(
+            $userService->loadUserByLogin('admin')->getUserId(),
+            $contentCopied->contentInfo->ownerId
         );
     }
 

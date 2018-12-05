@@ -169,6 +169,14 @@ class Type extends FieldType
                 $value->destinationContentId
             );
         }
+
+        if ($value->alternativeText !== null && !is_string($value->alternativeText)) {
+            throw new InvalidArgumentType(
+                '$value->alternativeText',
+                'string|null',
+                $value->alternativeText
+            );
+        }
     }
 
     /**
@@ -194,7 +202,7 @@ class Type extends FieldType
     public function fromHash($hash): Value
     {
         if ($hash) {
-            return new Value($hash['destinationContentId']);
+            return new Value($hash['destinationContentId'], $hash['alternativeText']);
         }
 
         return new Value();
@@ -211,6 +219,7 @@ class Type extends FieldType
     {
         return [
             'destinationContentId' => $value->destinationContentId,
+            'alternativeText' => $value->alternativeText,
         ];
     }
 
@@ -243,7 +252,7 @@ class Type extends FieldType
     {
         $relations = [];
         if ($fieldValue->destinationContentId !== null) {
-            $relations[Relation::FIELD] = [$fieldValue->destinationContentId];
+            $relations[Relation::ASSET] = [$fieldValue->destinationContentId];
         }
 
         return $relations;

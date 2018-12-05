@@ -100,7 +100,7 @@ class ContentHandlerTest extends AbstractCacheHandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('loadReverseRelations')
-            ->with(2, APIRelation::FIELD)
+            ->with(2, APIRelation::FIELD | APIRelation::ASSET)
             ->will(
                 $this->returnValue(
                     array(

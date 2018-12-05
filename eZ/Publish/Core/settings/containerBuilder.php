@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 use eZ\Publish\Core\Base\Container\Compiler;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Config\Resource\FileResource;
 
 if (!isset($installDir)) {
@@ -46,6 +47,7 @@ $loader->load('settings.yml');
 $loader->load('utils.yml');
 $loader->load('tests/common.yml');
 $loader->load('policies.yml');
+$loader->load('richtext.yml');
 
 // Cache settings (takes same env variables as ezplatform does, only supports "singleredis" setup)
 if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
@@ -62,7 +64,7 @@ if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
         ->addMethodCall('connect', [(getenv('CACHE_HOST') ?: '127.0.0.1'), 6379, 2.5]);
 
     $containerBuilder
-        ->register('ezpublish.cache_pool.driver', 'Symfony\Component\Cache\Adapter\RedisAdapter')
+        ->register('ezpublish.cache_pool.driver', RedisAdapter::class)
         ->setArguments([new Reference('ezpublish.cache_pool.driver.redis'), '', 120]);
 }
 

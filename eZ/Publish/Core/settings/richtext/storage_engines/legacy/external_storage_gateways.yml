@@ -1,0 +1,10 @@
+parameters:
+    ezpublish.fieldType.ezrichtext.storage_gateway.class: eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage
+
+services:
+    ezpublish.fieldType.ezrichtext.storage_gateway:
+        class: "%ezpublish.fieldType.ezrichtext.storage_gateway.class%"
+        arguments:
+            - "@ezpublish.fieldType.ezurl.storage_gateway"
+            - "@ezpublish.api.storage_engine.legacy.connection"
+

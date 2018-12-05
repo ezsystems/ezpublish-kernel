@@ -37,11 +37,20 @@ class Json extends Generator
     protected $isEmpty = true;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator $fieldTypeHashGenerator
+     * Enables developer to modify REST response media type prefix.
+     *
+     * @var string
      */
-    public function __construct(Json\FieldTypeHashGenerator $fieldTypeHashGenerator)
+    protected $vendor;
+
+    /**
+     * @param \eZ\Publish\Core\REST\Common\Output\Generator\Json\FieldTypeHashGenerator $fieldTypeHashGenerator
+     * @param string $vendor
+     */
+    public function __construct(Json\FieldTypeHashGenerator $fieldTypeHashGenerator, $vendor = 'vnd.ez.api')
     {
         $this->fieldTypeHashGenerator = $fieldTypeHashGenerator;
+        $this->vendor = $vendor;
     }
 
     /**
@@ -292,7 +301,7 @@ class Json extends Generator
      */
     public function getMediaType($name)
     {
-        return $this->generateMediaType($name, 'json');
+        return $this->generateMediaTypeWithVendor($name, 'json', $this->vendor);
     }
 
     /**

@@ -288,10 +288,9 @@ class ContentExtension extends Twig_Extension
     public function getFirstFilledImageFieldIdentifier(Content $content)
     {
         foreach ($content->getFieldsByLanguage() as $field) {
-            $fieldTypeIdentifier = $this->fieldHelper->getFieldDefinition(
-                $content->contentInfo,
-                $field->fieldDefIdentifier
-            )->fieldTypeIdentifier;
+            $fieldTypeIdentifier = $content->getContentType()
+                ->getFieldDefinition($field->fieldDefIdentifier)
+                ->fieldTypeIdentifier;
 
             if ($fieldTypeIdentifier !== 'ezimage') {
                 continue;
