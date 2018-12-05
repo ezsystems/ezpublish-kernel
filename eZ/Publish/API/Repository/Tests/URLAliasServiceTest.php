@@ -1216,6 +1216,56 @@ DOCBOOK
     }
 
     /**
+     * Test that created non-latin aliases are non-empty and unique.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testCreateNonLatinNonEmptyUniqueAliases()
+    {
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        $folderNames = [
+            'eng-GB' => 'ひらがな',
+        ];
+
+        $folderLocation1 = $locationService->loadLocation(
+            $this->createFolder($folderNames, 2)->contentInfo->mainLocationId
+        );
+        $urlAlias1 = $urlAliasService->lookup('/1');
+        self::assertPropertiesCorrect(
+            [
+                'destination' => $folderLocation1->id,
+                'path' => '/1',
+                'languageCodes' => ['eng-GB'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            ],
+            $urlAlias1
+        );
+
+        $folderLocation2 = $locationService->loadLocation(
+            $this->createFolder($folderNames, 2)->contentInfo->mainLocationId
+        );
+        $urlAlias2 = $urlAliasService->lookup('/2');
+        self::assertPropertiesCorrect(
+            [
+                'destination' => $folderLocation2->id,
+                'path' => '/2',
+                'languageCodes' => ['eng-GB'],
+                'isHistory' => false,
+                'isCustom' => false,
+                'forward' => false,
+            ],
+            $urlAlias2
+        );
+    }
+
+    /**
      * Test restoring missing current URL which has existing history.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
