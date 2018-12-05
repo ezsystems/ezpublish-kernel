@@ -770,7 +770,7 @@ CREATE TABLE `ezcontentobject_tree` (
   KEY `ezcontentobject_tree_path_ident` (`path_identification_string`(50)),
   KEY `modified_subnode` (`modified_subnode`),
   KEY `ezcontentobject_tree_contentobject_id_path_string` (`path_string`, `contentobject_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
