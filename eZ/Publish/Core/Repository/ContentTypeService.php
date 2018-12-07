@@ -1618,9 +1618,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function removeContentTypeTranslation(APIContentTypeDraft $contentTypeDraft, string $languageCode): APIContentTypeDraft
     {
@@ -1628,45 +1627,12 @@ class ContentTypeService implements ContentTypeServiceInterface
             throw new UnauthorizedException('ContentType', 'update');
         }
 
-//        $spiUpdateStruct = $this->contentTypeDomainMapper->buildSPIContentTypeUpdateStruct(
-//            $contentTypeDraft,
-//            new ContentTypeUpdateStruct(),
-//            $this->repository->getCurrentUserReference()
-//        );
-
-//        unset($spiUpdateStruct->name[$languageCode]);
-//        unset($spiUpdateStruct->description[$languageCode]);
-//
-//        $spiFieldDefinitions = [];
-//        foreach ($contentTypeDraft->fieldDefinitions as $fieldDefinition) {
-//            $spiFieldDefinitionUpdateStruct = $this->contentTypeDomainMapper->buildSPIFieldDefinitionUpdate(
-//                new FieldDefinitionUpdateStruct(),
-//                $fieldDefinition
-//            );
-//            unset($spiFieldDefinitionUpdateStruct->name[$languageCode]);
-//            unset($spiFieldDefinitionUpdateStruct->description[$languageCode]);
-//            $spiFieldDefinitions[] = $spiFieldDefinitionUpdateStruct;
-//        }
-
         $this->repository->beginTransaction();
         try {
             $contentType = $this->contentTypeHandler->removeContentTypeTranslation(
                 $contentTypeDraft->id,
                 $languageCode
             );
-//            $this->contentTypeHandler->update(
-//                $contentTypeDraft->id,
-//                $contentTypeDraft->status,
-//                $spiUpdateStruct
-//            );
-//
-//            array_walk($spiFieldDefinitions, function (FieldDefinition $spiFieldDefinitionUpdateStruct) use ($contentTypeDraft) {
-//                $this->contentTypeHandler->updateFieldDefinition(
-//                    $contentTypeDraft->id,
-//                    SPIContentType::STATUS_DRAFT,
-//                    $spiFieldDefinitionUpdateStruct
-//                );
-//            });
 
             $this->repository->commit();
         } catch (Exception $e) {
