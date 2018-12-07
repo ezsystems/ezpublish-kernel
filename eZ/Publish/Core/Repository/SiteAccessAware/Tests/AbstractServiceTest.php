@@ -92,11 +92,7 @@ abstract class AbstractServiceTest extends TestCase
 
         $actualReturn = $this->service->$method(...$arguments);
 
-        if ($return) {
-            $this->assertTrue($actualReturn);
-        } else {
-            $this->assertEquals($return, $actualReturn);
-        }
+        $this->assertEquals($return, $actualReturn);
     }
 
     /**

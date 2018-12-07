@@ -65,6 +65,7 @@ class ContentTypeHandlerTest extends AbstractCacheHandlerTest
             ['removeFieldDefinition', [5, 1, 7], null, 'ez-content-type-5-1'],
             ['updateFieldDefinition', [5, 0, new SPITypeFieldDefinition()], ['type-5', 'type-map', 'content-fields-type-5']],
             ['updateFieldDefinition', [5, 1, new SPITypeFieldDefinition()], [], 'ez-content-type-5-1'],
+            ['removeContentTypeTranslation', [5, 'eng-GB'], ['type-5', 'type-map', 'content-fields-type-5'], null, new SPIType()],
         ];
     }
 
