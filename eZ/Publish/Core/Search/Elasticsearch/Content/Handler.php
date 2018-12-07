@@ -18,7 +18,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 /**
- * ElasticSearch Handler
+ * ElasticSearch Handler.
  *
  * @deprecated
  */
