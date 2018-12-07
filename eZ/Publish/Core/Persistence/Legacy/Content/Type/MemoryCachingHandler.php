@@ -526,12 +526,12 @@ class MemoryCachingHandler implements BaseContentTypeHandler
     }
 
     /**
-     * @param mixed $contentTypeId
+     * @param int $contentTypeId
      * @param string $languageCode
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    public function removeContentTypeTranslation($contentTypeId, string $languageCode): Type
+    public function removeContentTypeTranslation(int $contentTypeId, string $languageCode): Type
     {
         $this->clearCache();
 

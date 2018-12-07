@@ -18,7 +18,7 @@ class RemoveContentTypeDraftTranslationSignal extends Signal
     /**
      * ContentTypeDraftId.
      *
-     * @var mixed
+     * @var int
      */
     public $contentTypeDraftId;
 
