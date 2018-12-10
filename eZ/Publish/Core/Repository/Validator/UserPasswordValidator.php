@@ -6,7 +6,7 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\Repository\Validator;
 
 use eZ\Publish\Core\FieldType\ValidationError;
 

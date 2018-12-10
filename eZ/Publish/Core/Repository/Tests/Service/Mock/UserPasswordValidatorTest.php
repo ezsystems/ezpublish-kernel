@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\Repository\Helper\UserPasswordValidator;
+use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
 use eZ\Publish\Core\Search\Tests\TestCase;
 
 class UserPasswordValidatorTest extends TestCase
 {
     /**
-     * @covers \eZ\Publish\Core\Repository\Helper\UserPasswordValidator::validate
+     * @covers \eZ\Publish\Core\Repository\Validator\UserPasswordValidator::validate
      *
      * @dataProvider dateProviderForValidate
      */
