@@ -295,7 +295,7 @@ class UserServiceTest extends ServiceTest
             array(
                 'validatePassword',
                 array($password, $passwordValidationContext),
-                [],
+                array(),
                 0,
             ),
         );
