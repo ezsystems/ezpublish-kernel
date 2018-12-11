@@ -30,7 +30,7 @@ class LocationHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
         return [
             ['copySubtree', [12, 45]],
             ['move', [12, 45], ['location-path-12']],
@@ -51,14 +51,16 @@ class LocationHandlerTest extends AbstractCacheHandlerTest
     {
         $location = new Location(['id' => 12]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, mixed? $data, bool? $multi = false
         return [
-            ['load', [12], 'ez-location-12', $location],
+            ['load', [12], 'ez-location-12-1', $location],
+            ['load', [12, ['eng-GB', 'bra-PG'], false], 'ez-location-12-bra-PG|eng-GB|0', $location],
             ['loadSubtreeIds', [12], 'ez-location-subtree-12', [33, 44]],
             ['loadLocationsByContent', [4, 12], 'ez-content-locations-4-root-12', [$location]],
             ['loadLocationsByContent', [4], 'ez-content-locations-4', [$location]],
             ['loadParentLocationsForDraftContent', [4], 'ez-content-locations-4-parentForDraft', [$location]],
-            ['loadByRemoteId', ['34fe5y4'], 'ez-location-34fe5y4-by-remoteid', $location],
+            ['loadByRemoteId', ['34fe5y4'], 'ez-location-remoteid-34fe5y4-1', $location],
+            ['loadByRemoteId', ['34fe5y4', ['eng-GB', 'arg-ES']], 'ez-location-remoteid-34fe5y4-arg-ES|eng-GB|1', $location],
         ];
     }
 }

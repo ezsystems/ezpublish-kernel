@@ -5400,7 +5400,8 @@ class UrlAliasHandlerTest extends TestCase
     {
         if (!isset($this->locationGateway)) {
             $this->locationGateway = new DoctrineDatabaseLocation(
-                $this->getDatabaseHandler()
+                $this->getDatabaseHandler(),
+                $this->getLanguageMaskGenerator()
             );
         }
 

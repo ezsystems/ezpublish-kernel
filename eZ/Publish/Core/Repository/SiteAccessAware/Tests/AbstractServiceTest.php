@@ -146,7 +146,7 @@ abstract class AbstractServiceTest extends TestCase
      * @param bool $return
      * @param int $languageArgumentIndex From 0 and up, so the array index on $arguments.
      */
-    final public function testForLanguagesLookup($method, array $arguments, $return, $languageArgumentIndex, callable $callback = null)
+    final public function testForLanguagesLookup($method, array $arguments, $return, $languageArgumentIndex, callable $callback = null, int $alwaysAvailableArgumentIndex = null)
     {
         $languages = ['eng-GB', 'eng-US'];
 
@@ -159,6 +159,16 @@ abstract class AbstractServiceTest extends TestCase
             ->method('getPrioritizedLanguages')
             ->with([])
             ->willReturn($languages);
+
+        if ($alwaysAvailableArgumentIndex) {
+            $arguments[$alwaysAvailableArgumentIndex] = null;
+            $expectedArguments[$alwaysAvailableArgumentIndex] = true;
+            $this->languageResolverMock
+                ->expects($this->once())
+                ->method('getUseAlwaysAvailable')
+                ->with(null)
+                ->willReturn(true);
+        }
 
         $this->innerApiServiceMock
             ->expects($this->once())
@@ -203,7 +213,7 @@ abstract class AbstractServiceTest extends TestCase
      * @param bool $return
      * @param int $languageArgumentIndex From 0 and up, so the array index on $arguments.
      */
-    final public function testForLanguagesPassTrough($method, array $arguments, $return, $languageArgumentIndex, callable $callback = null)
+    final public function testForLanguagesPassTrough($method, array $arguments, $return, $languageArgumentIndex, callable $callback = null, int $alwaysAvailableArgumentIndex = null)
     {
         $languages = ['eng-GB', 'eng-US'];
         $arguments = $this->setLanguagesPassTroughArguments($arguments, $languageArgumentIndex, $languages);
@@ -213,6 +223,14 @@ abstract class AbstractServiceTest extends TestCase
             ->method('getPrioritizedLanguages')
             ->with($languages)
             ->willReturn($languages);
+
+        if ($alwaysAvailableArgumentIndex) {
+            $this->languageResolverMock
+                ->expects($this->once())
+                ->method('getUseAlwaysAvailable')
+                ->with($arguments[$alwaysAvailableArgumentIndex])
+                ->willReturn($arguments[$alwaysAvailableArgumentIndex]);
+        }
 
         $this->innerApiServiceMock
             ->expects($this->once())

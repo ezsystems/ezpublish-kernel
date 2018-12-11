@@ -19,12 +19,14 @@ interface Handler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
+     * @param string[]|null $translations If set, NotFound is thrown if content is not in given translation.
+     * @param bool $useAlwaysAvailable Respect always available flag on content, where main language is valid translation fallback.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function load($locationId);
+    public function load($locationId, array $translations = null, bool $useAlwaysAvailable = true);
 
     /**
      * Loads the subtree ids of the location identified by $locationId.
@@ -41,12 +43,14 @@ interface Handler
      * Loads the data for the location identified by $remoteId.
      *
      * @param string $remoteId
+     * @param string[]|null $translations If set, NotFound is thrown if content is not in given translation.
+     * @param bool $useAlwaysAvailable Respect always available flag on content, where main language is valid translation fallback.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
-    public function loadByRemoteId($remoteId);
+    public function loadByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true);
 
     /**
      * Loads all locations for $contentId, optionally limited to a sub tree

@@ -478,11 +478,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         // Add a language
-        $languageService = $repository->getContentLanguageService();
-        $languageStruct = $languageService->newLanguageCreateStruct();
-        $languageStruct->name = 'Norsk';
-        $languageStruct->languageCode = 'nor-NO';
-        $languageService->createLanguage($languageStruct);
+        $this->createLanguage('nor-NO', 'Norsk');
 
         $locationService = $repository->getLocationService();
         $contentService = $repository->getContentService();
@@ -495,7 +491,7 @@ class LocationServiceTest extends BaseTest
         $draft = $contentService->updateContent($draft->getVersionInfo(), $struct);
         $contentService->publishVersion($draft->getVersionInfo());
 
-        // Load with prioritc language (fallback will be the old one)
+        // Load with priority language (fallback will be the old one)
         $location = $locationService->loadLocation(5, ['nor-NO']);
 
         $this->assertInstanceOf(
@@ -511,6 +507,24 @@ class LocationServiceTest extends BaseTest
 
         $this->assertEquals($content->getVersionInfo()->getName(), 'Brukere');
         $this->assertEquals($content->getVersionInfo()->getName('eng-US'), 'Users');
+    }
+
+    /**
+     * Test that accessing lazy-loaded Content without a translation in the specific
+     * not available language throws NotFoundException.
+     */
+    public function testLoadLocationThrowsNotFoundExceptionForNotAvailableContent(): void
+    {
+        $repository = $this->getRepository();
+
+        $locationService = $repository->getLocationService();
+
+        $this->createLanguage('pol-PL', 'Polski');
+
+        $this->expectException(NotFoundException::class);
+
+        // Note: relying on existing database fixtures to make test case more readable
+        $locationService->loadLocation(60, ['pol-PL']);
     }
 
     /**

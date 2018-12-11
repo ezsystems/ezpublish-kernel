@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
+use RuntimeException;
 
 /**
  * Language MaskGenerator.
@@ -48,6 +49,11 @@ class MaskGenerator
         }
 
         foreach ($languages as $language => $value) {
+            if (is_int($language)) {
+                throw new RuntimeException(
+                    "Expected flipped array with language codes as keys, got int key: $language"
+                );
+            }
             $mask |= $this->languageHandler->loadByLanguageCode($language)->id;
         }
 

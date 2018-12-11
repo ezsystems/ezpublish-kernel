@@ -48,19 +48,21 @@ class LocationService implements LocationServiceInterface
         return $this->service->copySubtree($subtree, $targetParentLocation);
     }
 
-    public function loadLocation($locationId, array $prioritizedLanguages = null)
+    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         return $this->service->loadLocation(
             $locationId,
-            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages),
+            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable)
         );
     }
 
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         return $this->service->loadLocationByRemoteId(
             $remoteId,
-            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages),
+            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable)
         );
     }
 
