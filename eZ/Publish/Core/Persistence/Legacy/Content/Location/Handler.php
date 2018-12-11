@@ -98,15 +98,11 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Loads the data for the location identified by $locationId.
-     *
-     * @param int $locationId
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     * {@inheritdoc}
      */
-    public function load($locationId)
+    public function load($locationId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        return $this->treeHandler->loadLocation($locationId);
+        return $this->treeHandler->loadLocation($locationId, $translations, $useAlwaysAvailable);
     }
 
     /**
@@ -122,17 +118,11 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Loads the data for the location identified by $remoteId.
-     *
-     * @param string $remoteId
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content\Location
+     * {@inheritdoc}
      */
-    public function loadByRemoteId($remoteId)
+    public function loadByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $data = $this->locationGateway->getBasicNodeDataByRemoteId($remoteId);
+        $data = $this->locationGateway->getBasicNodeDataByRemoteId($remoteId, $translations, $useAlwaysAvailable);
 
         return $this->locationMapper->createLocationFromRow($data);
     }

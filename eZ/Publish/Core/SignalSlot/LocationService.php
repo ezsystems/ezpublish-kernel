@@ -91,17 +91,17 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocation($locationId, array $prioritizedLanguages = null)
+    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
-        return $this->service->loadLocation($locationId, $prioritizedLanguages);
+        return $this->service->loadLocation($locationId, $prioritizedLanguages, $useAlwaysAvailable);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
-        return $this->service->loadLocationByRemoteId($remoteId, $prioritizedLanguages);
+        return $this->service->loadLocationByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable);
     }
 
     /**

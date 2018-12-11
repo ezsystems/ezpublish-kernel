@@ -202,10 +202,10 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocation($locationId, array $prioritizedLanguages = null)
+    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
-        $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId);
-        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: []);
+        $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
+        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
             throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
         }
@@ -216,14 +216,14 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         if (!is_string($remoteId)) {
             throw new InvalidArgumentValue('remoteId', $remoteId);
         }
 
-        $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
-        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: []);
+        $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
+        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
             throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
         }

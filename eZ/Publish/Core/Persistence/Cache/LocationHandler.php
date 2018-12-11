@@ -21,15 +21,19 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     /**
      * {@inheritdoc}
      */
-    public function load($locationId)
+    public function load($locationId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $cacheItem = $this->cache->getItem("ez-location-${locationId}");
+        $translationsKey = $this->getCacheTranslationKey($translations, $useAlwaysAvailable);
+        $cacheItem = $this->cache->getItem("ez-location-${locationId}-${translationsKey}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
-        $location = $this->persistenceHandler->locationHandler()->load($locationId);
+        $this->logger->logCall(
+            __METHOD__,
+            ['location' => $locationId, 'translations' => $translations, 'always-available' => $useAlwaysAvailable]
+        );
+        $location = $this->persistenceHandler->locationHandler()->load($locationId, $translations, $useAlwaysAvailable);
 
         $cacheItem->set($location);
         $cacheItem->tag($this->getCacheTags($location));
@@ -53,9 +57,9 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $cacheItem->set($locationIds);
         $cacheTags = ['location-' . $locationId, 'location-path-' . $locationId];
-        foreach ($locationIds as $locationId) {
-            $cacheTags[] = 'location-' . $locationId;
-            $cacheTags[] = 'location-path-' . $locationId;
+        foreach ($locationIds as $id) {
+            $cacheTags[] = 'location-' . $id;
+            $cacheTags[] = 'location-path-' . $id;
         }
         $cacheItem->tag($cacheTags);
         $this->cache->save($cacheItem);
@@ -120,15 +124,19 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     /**
      * {@inheritdoc}
      */
-    public function loadByRemoteId($remoteId)
+    public function loadByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $cacheItem = $this->cache->getItem("ez-location-${remoteId}-by-remoteid");
+        $translationsKey = $this->getCacheTranslationKey($translations, $useAlwaysAvailable);
+        $cacheItem = $this->cache->getItem("ez-location-remoteid-${remoteId}-${translationsKey}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('location' => $remoteId));
-        $location = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
+        $this->logger->logCall(
+            __METHOD__,
+            ['location' => $remoteId, 'translations' => $translations, 'always-available' => $useAlwaysAvailable]
+        );
+        $location = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $translations, $useAlwaysAvailable);
 
         $cacheItem->set($location);
         $cacheItem->tag($this->getCacheTags($location));
@@ -281,27 +289,6 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
-     * Return relevant content and location tags so cache can be purged reliably.
-     *
-     * @param Location $location
-     * @param array $tags Optional, can be used to specify additional tags.
-     *
-     * @return array
-     */
-    private function getCacheTags(Location $location, $tags = [])
-    {
-        $tags[] = 'content-' . $location->contentId;
-        $tags[] = 'location-' . $location->id;
-        $tags[] = 'location-data-' . $location->id;
-        foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
-            $tags[] = 'location-path-' . $pathId;
-            $tags[] = 'location-path-data-' . $pathId;
-        }
-
-        return $tags;
-    }
-
-    /**
      * Get the total number of all existing Locations. Can be combined with loadAllLocations.
      *
      * @return int
@@ -326,5 +313,38 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $this->logger->logCall(__METHOD__, array('offset' => $offset, 'limit' => $limit));
 
         return $this->persistenceHandler->locationHandler()->loadAllLocations($offset, $limit);
+    }
+
+    /**
+     * Return relevant content and location tags so cache can be purged reliably.
+     *
+     * @param \eZ\Publish\SPI\Persistence\Content\Location $location
+     * @param array $tags Optional, can be used to specify additional tags.
+     *
+     * @return array
+     */
+    private function getCacheTags(Location $location, $tags = [])
+    {
+        $tags[] = 'content-' . $location->contentId;
+        $tags[] = 'location-' . $location->id;
+        $tags[] = 'location-data-' . $location->id;
+        foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
+            $tags[] = 'location-path-' . $pathId;
+            $tags[] = 'location-path-data-' . $pathId;
+        }
+
+        return $tags;
+    }
+
+    private function getCacheTranslationKey(array $translations = null, bool $useAlwaysAvailable = true): string
+    {
+        if (empty($translations)) {
+            return (int)$useAlwaysAvailable;
+        }
+
+        // Sort array as we don't care about order in location handler usage & want to optimize for cache hits.
+        sort($translations);
+
+        return implode('|', $translations) . '|' . (int)$useAlwaysAvailable;
     }
 }

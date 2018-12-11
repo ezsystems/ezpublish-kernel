@@ -8,6 +8,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -46,44 +49,36 @@ class DoctrineDatabase extends Gateway
     protected $connection;
 
     /**
+     * Language mask generator.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
+
+    /**
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
-    public function __construct(DatabaseHandler $handler)
+    public function __construct(DatabaseHandler $handler, MaskGenerator $languageMaskGenerator)
     {
         $this->handler = $handler;
         $this->connection = $handler->getConnection();
+        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**
-     * Returns an array with basic node data.
-     *
-     * We might want to cache this, since this method is used by about every
-     * method in the location handler.
-     *
-     * @todo optimize
-     *
-     * @param mixed $nodeId
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBasicNodeData($nodeId)
+    public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $query = $this->handler->createSelectQuery();
-        $query
-            ->select('*')
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('node_id'),
-                    $query->bindValue($nodeId)
-                )
-            );
-        $statement = $query->prepare();
-        $statement->execute();
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $q->where(
+            $q->expr()->eq('t.node_id', $q->createNamedParameter($nodeId, PDO::PARAM_INT))
+        );
 
-        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        if ($row = $q->execute()->fetch(FetchMode::ASSOCIATIVE)) {
             return $row;
         }
 
@@ -91,30 +86,16 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Returns an array with basic node data.
-     *
-     * @todo optimize
-     *
-     * @param mixed $remoteId
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBasicNodeDataByRemoteId($remoteId)
+    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $query = $this->handler->createSelectQuery();
-        $query
-            ->select('*')
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('remote_id'),
-                    $query->bindValue($remoteId)
-                )
-            );
-        $statement = $query->prepare();
-        $statement->execute();
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $q->where(
+            $q->expr()->eq('t.remote_id', $q->createNamedParameter($remoteId, PDO::PARAM_STR))
+        );
 
-        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        if ($row = $q->execute()->fetch(FetchMode::ASSOCIATIVE)) {
             return $row;
         }
 
@@ -1547,6 +1528,8 @@ class DoctrineDatabase extends Gateway
     /**
      * Get Query Builder for fetching data of all Locations except the Root node.
      *
+     * @todo Align with createNodeQueryBuilder, removing the need for both(?)
+     *
      * @param array $columns list of columns to fetch
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
@@ -1561,5 +1544,65 @@ class DoctrineDatabase extends Gateway
         ;
 
         return $query;
+    }
+
+    /**
+     * Create QueryBuilder for selecting node data.
+     *
+     * @param array|null $translations Filters on language mask of content if provided.
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function createNodeQueryBuilder(array $translations = null, bool $useAlwaysAvailable = true): QueryBuilder
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder
+            ->select('t.*')
+            ->from('ezcontentobject_tree', 't');
+
+        if (!empty($translations)) {
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $expr = $queryBuilder->expr();
+            $mask = $this->generateLanguageMaskFromLanguageCodes($translations, $useAlwaysAvailable);
+
+            $queryBuilder->innerJoin(
+                't',
+                'ezcontentobject',
+                'c',
+                $expr->andX(
+                    $expr->eq('t.contentobject_id', 'c.id'),
+                    $expr->gt(
+                        $dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
+                        0
+                    )
+                )
+            );
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
+     * Generates a language mask for $translations argument.
+     *
+     * @todo Move logic to languageMaskGenerator in master.
+     */
+    private function generateLanguageMaskFromLanguageCodes(array $translations, bool $useAlwaysAvailable = true): int
+    {
+        $languages = [];
+        foreach ($translations as $translation) {
+            if (isset($languages[$translation])) {
+                continue;
+            }
+
+            $languages[$translation] = true;
+        }
+
+        if ($useAlwaysAvailable) {
+            $languages['always-available'] = true;
+        }
+
+        return $this->languageMaskGenerator->generateLanguageMask($languages);
     }
 }
