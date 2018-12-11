@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Query;
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase.
  */
-class DoctrineDatabaseTrashTest extends TestCase
+class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 {
     protected function getLocationGateway()
     {
@@ -24,14 +24,7 @@ class DoctrineDatabaseTrashTest extends TestCase
 
         return new DoctrineDatabase(
             $dbHandler,
-            $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\CriteriaConverter')
-                ->disableOriginalConstructor()
-                ->getMock(),
-            $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\SortClauseConverter')
-                ->disableOriginalConstructor()
-                ->getMock()
+            $this->getLanguageMaskGenerator()
         );
     }
 

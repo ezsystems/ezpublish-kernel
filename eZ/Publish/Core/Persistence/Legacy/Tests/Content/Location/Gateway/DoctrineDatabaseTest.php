@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase.
  */
-class DoctrineDatabaseTest extends TestCase
+class DoctrineDatabaseTest extends LanguageAwareTestCase
 {
     protected function getLocationGateway()
     {
@@ -25,14 +25,7 @@ class DoctrineDatabaseTest extends TestCase
 
         return new DoctrineDatabase(
             $dbHandler,
-            $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\CriteriaConverter')
-                ->disableOriginalConstructor()
-                ->getMock(),
-            $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\SortClauseConverter')
-                ->disableOriginalConstructor()
-                ->getMock()
+            $this->getLanguageMaskGenerator()
         );
     }
 

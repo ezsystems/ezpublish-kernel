@@ -11,7 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use Doctrine\DBAL\Connection;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -715,5 +715,27 @@ abstract class BaseTest extends TestCase
         );
 
         return $contentService->publishVersion($contentDraft->versionInfo);
+    }
+
+    /**
+     * Add new Language to the Repository.
+     *
+     * @param string $languageCode
+     * @param string $name
+     * @param bool $enabled
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Language
+     */
+    protected function createLanguage(string $languageCode, string $name, bool $enabled = true): Language
+    {
+        $repository = $this->getRepository(false);
+
+        $languageService = $repository->getContentLanguageService();
+        $languageStruct = $languageService->newLanguageCreateStruct();
+        $languageStruct->name = $name;
+        $languageStruct->languageCode = $languageCode;
+        $languageStruct->enabled = $enabled;
+
+        return $languageService->createLanguage($languageStruct);
     }
 }

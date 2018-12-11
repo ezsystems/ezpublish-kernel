@@ -44,11 +44,12 @@ interface LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param mixed $locationId
-     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     * @param string[]|null $prioritizedLanguages Filter on and use as prioritized language code on translated properties of returned object.
+     * @param bool|null $useAlwaysAvailable Respect always available flag on content when filtering on $prioritizedLanguages.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocation($locationId, array $prioritizedLanguages = null);
+    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null);
 
     /**
      * Loads a location object from its $remoteId.
@@ -57,11 +58,12 @@ interface LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param string $remoteId
-     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
+     * @param string[]|null $prioritizedLanguages Filter on and use as prioritized language code on translated properties of returned object.
+     * @param bool|null $useAlwaysAvailable Respect always available flag on content when filtering on $prioritizedLanguages.
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null);
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null);
 
     /**
      * Loads the locations for the given content object.
