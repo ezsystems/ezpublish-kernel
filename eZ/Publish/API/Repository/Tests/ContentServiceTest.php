@@ -15,10 +15,10 @@ use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
@@ -1713,6 +1713,36 @@ XML
     }
 
     /**
+     * Test for the newTranslationCreateStruct() method.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::newTranslationCreateStruct
+     */
+    public function testNewTranslationCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentService = $repository->getContentService();
+        $contentDraft = $this->createContentDraftVersion1();
+        $translationCreateStruct = $contentService->newTranslationCreateStruct($contentDraft->contentInfo);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            TranslationCreateStruct::class,
+            $translationCreateStruct
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'initialLanguageCode' => null,
+                'fields' => [],
+                'contentInfo' => $contentDraft->contentInfo,
+            ],
+            $translationCreateStruct
+        );
+    }
+
+    /**
      * Test for the translateVersion() method.
      *
      * @covers \eZ\Publish\API\Repository\ContentService::translateVersion()
@@ -1733,20 +1763,190 @@ XML
         $content = $contentService->publishVersion($contentDraft->versionInfo);
 
         // Create eng-GB translation
-        $translationValues = $contentService->newTranslationValues();
-        $translationValues->setField('name', 'An awesome folder (GB)', 'eng-GB');
-        $translationInfo = new TranslationInfo([
-            'sourceLanguageCode' => 'eng-US',
-            'destinationLanguageCode' => 'eng-GB',
-            'sourceVersionInfo' => $content->versionInfo,
-        ]);
+        $translationCreateStruct = $contentService->newTranslationCreateStruct($content->contentInfo);
+        $translationCreateStruct->setField('name', 'An awesome folder (GB)', 'eng-GB');
+        $translationCreateStruct->initialLanguageCode = 'eng-GB';
 
-        $translated = $contentService->translateVersion($translationInfo, $translationValues);
+        $translated = $contentService->translateVersion($content->versionInfo, $translationCreateStruct);
         $translatedVersionNumber = $translated->versionInfo->versionNo;
         $content = $contentService->loadContent($content->id, ['eng-GB'], $translatedVersionNumber);
         $nameField = $content->getField('name', 'eng-GB');
 
         $this->assertEquals('An awesome folder (GB)', $nameField->value);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the translateVersion() method.
+     *
+     * @covers \eZ\Publish\API\Repository\ContentService::translateVersion()
+     * /@/depends \eZ\Publish\API\Repository\Tests\ContentServiceTest::testTranslateVersion
+     */
+    public function testTranslateVersionValidatorIgnoresRequiredFieldsOfNotUpdatedLanguages()
+    {
+        $repository = $this->getRepository();
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        // Create multilingual content
+        $contentService = $repository->getContentService();
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'An awesome folder', 'eng-US');
+        $contentCreate->setField('name', 'Ein toller Ordner', 'ger-DE');
+
+        $contentDraft = $contentService->createContent($contentCreate);
+
+        $content = $contentService->publishVersion($contentDraft->versionInfo);
+
+        // 2. Update content type definition
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+
+        $fieldDefinition = $contentType->getFieldDefinition('description');
+        $fieldDefinitionUpdate = $contentTypeService->newFieldDefinitionUpdateStruct();
+        $fieldDefinitionUpdate->identifier = 'description';
+        $fieldDefinitionUpdate->isRequired = true;
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $fieldDefinition,
+            $fieldDefinitionUpdate
+        );
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        // 3. Update only eng-US translation
+        $description = new DOMDocument();
+        $description->loadXML(<<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
+    <para>Lorem ipsum dolor</para>
+</section>
+XML
+        );
+
+        $translationCreateStruct = $contentService->newTranslationCreateStruct($content->contentInfo);
+        $translationCreateStruct->initialLanguageCode = 'eng-GB';
+        $translationCreateStruct->setField('name', 'An awesome folder (GB)');
+        $translationCreateStruct->setField('description', $description);
+
+        $contentService->translateVersion($content->getVersionInfo(), $translationCreateStruct);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the translateversion() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::translateversion()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @depends \eZ\Publish\API\Repository\Tests\ContentServiceTest::testTranslateversion
+     */
+    public function testTranslateversionThrowsInvalidArgumentExceptionWhenFieldTypeDoesNotAccept()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $publishedContentInUS = $this->createContentVersion1();
+
+        // Now create an update struct and modify some fields
+        $translationCreateStruct = $contentService->newTranslationCreateStruct($publishedContentInUS->contentInfo);
+        // The name field does not accept a stdClass object as its input
+        $translationCreateStruct->setField('name', new \stdClass(), 'eng-US');
+
+        // Throws an InvalidArgumentException, since the value for field "name" is not accepted
+        $contentService->translateVersion(
+            $publishedContentInUS->getVersionInfo(),
+            $translationCreateStruct
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the translateVersion() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::updateContent()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @depends \eZ\Publish\API\Repository\Tests\ContentServiceTest::testTranslateVersion
+     */
+    public function testTranslateVersionWhenMandatoryFieldIsEmpty()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $publishedContent = $this->createContentVersion1();
+
+        // Now create an update struct and set a mandatory field to null
+        $translationCreateStruct = $contentService->newTranslationCreateStruct($publishedContent->contentInfo);
+        $translationCreateStruct->setField('name', null);
+        $translationCreateStruct->initialLanguageCode = 'eng-GB';
+
+        // This call will fail with a "ContentFieldValidationException", because the mandatory "name" field is empty.
+        $contentService->translateVersion($publishedContent->versionInfo, $translationCreateStruct);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the translateVersion() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::translateVersion()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends \eZ\Publish\API\Repository\Tests\ContentServiceTest::testTranslateVersion
+     */
+    public function testTranslateVersionThrowsBadStateException()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        /* BEGIN: Use Case */
+        $contentDraft = $this->createContentDraftVersion1();
+
+        // Now create an update struct and modify some fields
+        $translationCreateStruct = $contentService->newTranslationCreateStruct($contentDraft->contentInfo);
+
+        // This call will fail with a "BadStateException", because $contentDraft is not a published or archived content.
+        $contentService->translateVersion(
+            $contentDraft->getVersionInfo(),
+            $translationCreateStruct
+        );
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the translateVersion() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::translateVersion()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @depends \eZ\Publish\API\Repository\Tests\ContentServiceTest::testTranslateVersion
+     */
+    public function testTranslateVersionThrowsContentFieldValidationException()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'An awesome folder');
+
+        $draft = $contentService->createContent($contentCreate);
+
+        $content = $contentService->publishVersion($draft->versionInfo);
+
+        // Create eng-GB translation
+        $translationCreateStruct = $contentService->newTranslationCreateStruct($content->contentInfo);
+        $translationCreateStruct->setField('short_name', str_repeat('a', 200), 'eng-GB'); //name
+        $translationCreateStruct->initialLanguageCode = 'eng-GB';
+
+        // Throws ContentFieldValidationException because the string length
+        // validation of the field "short_name" fails
+        $contentService->translateVersion($content->getVersionInfo(), $translationCreateStruct);
         /* END: Use Case */
     }
 

@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -727,21 +727,17 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     * {@inheritdoc}
      */
-    public function newTranslationInfo()
+    public function translateVersion(VersionInfo $versionInfo, TranslationCreateStruct $translationCreateStruct, User $modifier = null)
     {
         throw new \Exception('@todo: Implement.');
     }
 
     /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
+     * {@inheritdoc}
      */
-    public function newTranslationValues()
+    public function newTranslationCreateStruct(ContentInfo $contentInfo)
     {
         throw new \Exception('@todo: Implement.');
     }

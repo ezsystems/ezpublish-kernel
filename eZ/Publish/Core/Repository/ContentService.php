@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\SPI\Persistence\Handler;
@@ -32,7 +33,6 @@ use eZ\Publish\Core\Base\Exceptions\ContentValidationException;
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct;
@@ -41,9 +41,8 @@ use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field as SPIField;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
 use Exception;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use eZ\Publish\API\Repository\Values\Content\TranslationValues as APITranslationValues;
-use eZ\Publish\Core\Repository\Values\Content\TranslationValues;
+use eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct as APITranslationCreateStruct;
+use eZ\Publish\Core\Repository\Values\Content\TranslationCreateStruct;
 
 /**
  * This class provides service methods for managing content.
@@ -1169,83 +1168,40 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Translate a version.
-     *
-     * Updates the destination version given in $translationInfo with the provided translated fields in $translationValues.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
-     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
-     * @throws \eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     *
-     * @since 7.4
+     * {@inheritdoc}
      */
-    public function translateVersion(TranslationInfo $translationInfo, APITranslationValues $translationValues, User $user = null)
+    public function translateVersion(APIVersionInfo $versionInfo, APITranslationCreateStruct $translationCreateStruct, User $user = null)
     {
-        /** @var $sourceVersionInfo \eZ\Publish\API\Repository\Values\Content\VersionInfo */
-        $sourceVersionInfo = $translationInfo->sourceVersionInfo;
+        //throw new \InvalidArgumentException('miko asd');
 
-        // $destinationVersionInfo must be a draft
-        if ($sourceVersionInfo === null) {
-            throw new InvalidArgumentException(
-                '$sourceVersionInfo',
-                'SourceVersionInfo must be provided.'
-            );
-        }
-
-        /** @var $destinationVersionInfo \eZ\Publish\API\Repository\Values\Content\VersionInfo */
-        $destinationVersionInfo = $translationInfo->destinationVersionInfo;
-
-        $sourceContentInfo = $translationInfo->sourceVersionInfo->contentInfo;
-
-        // Extract to separate method?
-        if (($destinationVersionInfo !== null) && $sourceVersionInfo->getContentInfo()->id !== $destinationVersionInfo->getContentInfo()->id) {
-            throw new InvalidArgumentException(
-                '$destinationVersionInfo',
-                'DestinationVersionInfo does not belong to the same content as given SourceVersionInfo'
-            );
-        }
-
-        // $destinationVersionInfo must be a draft
-        if ($destinationVersionInfo !== null && $destinationVersionInfo->status !== VersionInfo::STATUS_DRAFT) {
-            throw new BadStateException(
-                '$destinationVersionInfo',
-                'DestinationVersion is not a draft and can not be updated'
-            );
-        }
-
-        switch ($sourceVersionInfo->status) {
-            case VersionInfo::STATUS_PUBLISHED:
-            case VersionInfo::STATUS_ARCHIVED:
+        switch ($versionInfo->status) {
+            case APIVersionInfo::STATUS_PUBLISHED:
+            case APIVersionInfo::STATUS_ARCHIVED:
                 break;
 
             default:
                 // @todo: throw an exception here, to be defined
                 throw new BadStateException(
-                    '$sourceVersionInfo',
+                    '$versionInfo',
                     'Translation can not be created from a draft version'
                 );
         }
-
-        $versionNo = $sourceVersionInfo->versionNo;
 
         if ($user === null) {
             $user = $this->repository->getCurrentUserReference();
         }
 
+        if (!$this->repository->canUser('content', 'translate', $translationCreateStruct)) {
+            throw new UnauthorizedException('content', 'translate', array('contentId' => $versionInfo->contentInfo->id));
+        }
+
+        $versionNo = $versionInfo->versionNo;
+        $contentInfo = $versionInfo->contentInfo;
+
         $this->repository->beginTransaction();
         try {
             $spiContent = $this->persistenceHandler->contentHandler()->createDraftFromVersion(
-                $sourceContentInfo->id,
+                $contentInfo->id,
                 $versionNo,
                 $user->getUserId()
             );
@@ -1257,7 +1213,7 @@ class ContentService implements ContentServiceInterface
         /** @var $draft \eZ\Publish\API\Repository\Values\Content\Content */
         $draft = $this->domainMapper->buildContentDomainObject($spiContent);
 
-        $contentUpdateStruct = clone $translationValues;
+        $translationCreateStruct = clone $translationCreateStruct;
 
         if (!$draft->versionInfo->isDraft()) {
             throw new BadStateException(
@@ -1267,24 +1223,22 @@ class ContentService implements ContentServiceInterface
         }
 
         $mainLanguageCode = $draft->contentInfo->mainLanguageCode;
-        if ($contentUpdateStruct->initialLanguageCode === null) {
-            $contentUpdateStruct->initialLanguageCode = $translationInfo->destinationLanguageCode;
+        if ($translationCreateStruct->initialLanguageCode === null) {
+            $translationCreateStruct->initialLanguageCode = $versionInfo->initialLanguageCode;
         }
 
-        $allLanguageCodes = array_merge($draft->versionInfo->languageCodes, [$translationInfo->destinationLanguageCode]);
-        // check if all languages are present in the system
+        $allLanguageCodes = array_merge($draft->versionInfo->languageCodes, [$translationCreateStruct->initialLanguageCode]);
         $contentLanguageHandler = $this->persistenceHandler->contentLanguageHandler();
         foreach ($allLanguageCodes as $languageCode) {
             $contentLanguageHandler->loadByLanguageCode($languageCode);
         }
-        // check if all languages are present in the system - END
 
-        $updatedLanguageCodes = $this->getUpdatedLanguageCodes($contentUpdateStruct);
+        $updatedLanguageCodes = $this->getUpdatedLanguageCodes($translationCreateStruct);
         $contentType = $this->repository->getContentTypeService()->loadContentType(
-            $sourceContentInfo->contentTypeId
+            $contentInfo->contentTypeId
         );
         $fields = $this->mapFieldsForUpdate(
-            $contentUpdateStruct,
+            $translationCreateStruct,
             $contentType,
             $mainLanguageCode
         );
@@ -1387,11 +1341,11 @@ class ContentService implements ContentServiceInterface
                     $allLanguageCodes,
                     $contentType
                 ),
-                'creatorId' => $contentUpdateStruct->creatorId ?: $this->repository->getCurrentUserReference()->getUserId(),
+                'creatorId' => $translationCreateStruct->creatorId ?: $this->repository->getCurrentUserReference()->getUserId(),
                 'fields' => $spiFields,
                 'modificationDate' => time(),
                 'initialLanguageId' => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
-                    $translationInfo->destinationLanguageCode
+                    $translationCreateStruct->initialLanguageCode
                 )->id,
             )
         );
@@ -1442,8 +1396,6 @@ class ContentService implements ContentServiceInterface
      */
     public function updateContent(APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct)
     {
-//        throw new \InvalidArgumentException('asd miko');
-
         $contentUpdateStruct = clone $contentUpdateStruct;
 
         /** @var $content \eZ\Publish\Core\Repository\Values\Content\Content */
@@ -2396,22 +2348,10 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     * {@inheritdoc}
      */
-    public function newTranslationInfo()
+    public function newTranslationCreateStruct(ContentInfo $contentInfo)
     {
-        return new TranslationInfo();
-    }
-
-    /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues()
-    {
-        return new TranslationValues();
+        return new TranslationCreateStruct(['contentInfo' => $contentInfo]);
     }
 }

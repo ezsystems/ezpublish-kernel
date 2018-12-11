@@ -9,12 +9,11 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\TranslationValues;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -252,22 +251,24 @@ interface ContentService
     /**
      * Translate a version.
      *
-     * Updates the destination version given in $translationInfo with the provided translated fields in $translationValues.
+     * Updates the version given in $versionInfo with the provided translated fields in $translationCreateStruct.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct $translationCreateStruct
      * @param \eZ\Publish\API\Repository\Values\User\User $modifier Taken as modifier of the version, otherwise current-user is used
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     * @throws \eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException
+     *
      * @since 7.4
      */
-    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $modifier = null);
+    public function translateVersion(VersionInfo $versionInfo, TranslationCreateStruct $translationCreateStruct, User $modifier = null);
 
     /**
      * Updates the fields of a draft.
@@ -477,16 +478,11 @@ interface ContentService
     public function newContentUpdateStruct();
 
     /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public function newTranslationInfo();
-
-    /**
      * Instantiates a Translation object.
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct
      */
-    public function newTranslationValues();
+    public function newTranslationCreateStruct(ContentInfo $contentInfo);
 }

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * File containing the eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct class.
+ * File containing the eZ\Publish\Core\Repository\Values\Content\TranslationCreateStruct class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Values\Content\TranslationValues as APITranslationValues;
+use eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct as APITranslationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 
 /**
@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  *
  * @internal Meant for internal use by Repository, type hint against API instead.
  */
-class TranslationValues extends APITranslationValues
+class TranslationCreateStruct extends APITranslationCreateStruct
 {
     /**
      * Field collection.

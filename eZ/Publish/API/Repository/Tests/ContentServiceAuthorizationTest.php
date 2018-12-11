@@ -930,10 +930,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         $anonymousUserId = $this->generateId('user', 10);
         /* BEGIN: Use Case */
-        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
-        // demo installation
-        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish
-        // demo installation
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish demo installation
         $draftVersion2 = $this->createContentDraftVersion2();
 
         // Get VersionInfo instance
@@ -954,6 +951,38 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
 
         // This call will fail with a "UnauthorizedException"
         $contentService->updateContent($versionInfo, $contentUpdate);
+        /* END: Use Case */
+    }
+
+    /**
+     * Test for the translateVersion() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::translateVersion()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testTranslateVersionThrowsUnauthorizedException()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $anonymousUserId = $this->generateId('user', 10);
+        /* BEGIN: Use Case */
+        // $anonymousUserId is the ID of the "Anonymous User" in an eZ Publish demo installation
+        $cleanPublishedContent = $this->createContentVersion1();
+
+        // Get VersionInfo instance
+        $versionInfo = $cleanPublishedContent->getVersionInfo();
+
+        // Load the user service
+        $userService = $repository->getUserService();
+
+        // Set anonymous user
+        $repository->getPermissionResolver()->setCurrentUserReference($userService->loadUser($anonymousUserId));
+        // Create an update struct and modify some fields
+        $translationCreateStruct = $contentService->newTranslationCreateStruct($cleanPublishedContent->contentInfo);
+
+        // This call will fail with a "UnauthorizedException"
+        $contentService->translateVersion($versionInfo, $translationCreateStruct);
         /* END: Use Case */
     }
 

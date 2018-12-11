@@ -13,11 +13,10 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use eZ\Publish\API\Repository\Values\Content\TranslationValues;
+use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 
@@ -213,24 +212,16 @@ class ContentService implements ContentServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $modifier = null)
+    public function translateVersion(VersionInfo $versionInfo, TranslationCreateStruct $translationCreateStruct, User $modifier = null)
     {
-        return $this->service->translateVersion($translationInfo, $translationValues, $modifier);
+        return $this->service->translateVersion($versionInfo, $translationCreateStruct, $modifier);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function newTranslationInfo()
+    public function newTranslationCreateStruct(ContentInfo $contentInfo)
     {
-        return $this->service->newTranslationInfo();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function newTranslationValues()
-    {
-        return $this->service->newTranslationValues();
+        return $this->service->newTranslationCreateStruct($contentInfo);
     }
 }

@@ -15,8 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use eZ\Publish\API\Repository\Values\Content\TranslationValues;
+use eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
@@ -352,25 +351,24 @@ class ContentService implements ContentServiceInterface
     /**
      * Translate a version.
      *
-     * Updates the destination version given in $translationInfo with the provided translated fields in $translationValues.
+     * Updates the given VersionInfo with the provided translated fields in $translationCreateStruct.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct $translationCreateStruct
      * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
      *
      * @since 7.4
      */
-    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null)
+    public function translateVersion(VersionInfo $versionInfo, TranslationCreateStruct $translationCreateStruct, User $user = null)
     {
-        $returnValue = $this->service->translateVersion($translationInfo, $translationValues, $user);
-        $versionInfo = $translationInfo->sourceVersionInfo;
+        $returnValue = $this->service->translateVersion($versionInfo, $translationCreateStruct, $user);
         $this->signalDispatcher->emit(
             new TranslateVersionSignal(
                 array(
@@ -718,22 +716,10 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
+     * {@inheritdoc}
      */
-    public function newTranslationInfo()
+    public function newTranslationCreateStruct(ContentInfo $contentInfo)
     {
-        return $this->service->newTranslationInfo();
-    }
-
-    /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues()
-    {
-        return $this->service->newTranslationValues();
+        return $this->service->newTranslationCreateStruct($contentInfo);
     }
 }

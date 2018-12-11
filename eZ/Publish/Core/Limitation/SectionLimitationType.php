@@ -20,6 +20,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation as APISectionLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
+use eZ\Publish\Core\Repository\Values\Content\TranslationCreateStruct;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -129,6 +130,8 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
             return in_array($object->id, $value->limitationValues);
         } elseif ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
+        } elseif ($object instanceof TranslationCreateStruct) {
+            $object = $object->getContentInfo();
         } elseif ($object instanceof VersionInfo) {
             $object = $object->getContentInfo();
         } elseif (!$object instanceof ContentInfo && !$object instanceof ContentCreateStruct) {

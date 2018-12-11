@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Values\Content\TranslationCreateStruct;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -122,6 +123,8 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
             return $this->evaluateForContentCreateStruct($value, $targets);
         } elseif ($object instanceof Content) {
             $object = $object->getVersionInfo()->getContentInfo();
+        } elseif ($object instanceof TranslationCreateStruct) {
+            $object = $object->getContentInfo();
         } elseif ($object instanceof VersionInfo) {
             $object = $object->getContentInfo();
         } elseif (!$object instanceof ContentInfo) {
