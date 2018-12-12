@@ -415,6 +415,12 @@ class UrlAliasGeneratorTest extends TestCase
                 '/shared/some-content',
                 '/my/root-folder',
             ),
+            array(
+                new UrlAlias(array('path' => '/products/ez-publish')),
+                false,
+                '/products/ez-publish',
+                '/prod',
+            ),
         );
     }
 
