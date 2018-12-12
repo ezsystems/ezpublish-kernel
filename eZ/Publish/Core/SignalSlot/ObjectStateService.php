@@ -94,6 +94,22 @@ class ObjectStateService implements ObjectStateServiceInterface
     /**
      * {@inheritdoc}
      */
+    public function loadByIdentifier($identifier, $groupId, array $prioritizedLanguages = [])
+    {
+        return $this->service->loadByIdentifier($identifier, $groupId, $prioritizedLanguages);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadGroupByIdentifier($identifier, array $prioritizedLanguages = [])
+    {
+        return $this->service->loadGroupByIdentifier($identifier, $prioritizedLanguages);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = [])
     {
         return $this->service->loadObjectStateGroups($offset, $limit, $prioritizedLanguages);

@@ -376,6 +376,61 @@ class ObjectStateServiceTest extends BaseTest
     }
 
     /**
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::loadGroupByIdentifier
+     */
+    public function testLoadGroupByIdentifier()
+    {
+        $repository = $this->getRepository();
+        $objectStateGroupIdentifier = 'ez_lock';
+        /* BEGIN: Use Case */
+        // $objectStateGroupIdentifier contains the identifier of the standard object state
+        // group ez_lock.
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectStateGroup = $objectStateService->loadGroupByIdentifier(
+            $objectStateGroupIdentifier
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            ObjectStateGroup::class,
+            $loadedObjectStateGroup
+        );
+
+        $this->assertPropertiesCorrect(
+            [
+                'id' => 2,
+                'identifier' => 'ez_lock',
+                'mainLanguageCode' => 'eng-US',
+                'languageCodes' => ['eng-US'],
+                'names' => ['eng-US' => 'Lock'],
+                'descriptions' => ['eng-US' => ''],
+            ],
+            $loadedObjectStateGroup
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ObjectStateService::loadGroupByIdentifier
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadGroupByIdentifierThrowsNotFoundException()
+    {
+        $repository = $this->getRepository();
+        $nonExistentObjectStateGroupIdentifier = 'nonexistant';
+        /* BEGIN: Use Case */
+        // $nonExistentObjectStateGroupIdentifier contains an ID for an object state
+        // that does not exist
+        $objectStateService = $repository->getObjectStateService();
+
+        // Throws a not found exception
+        $loadedObjectStateGroup = $objectStateService->loadGroupByIdentifier(
+            $nonExistentObjectStateGroupIdentifier
+        );
+        /* END: Use Case */
+    }
+
+    /**
      * Test for the loadObjectStateGroups() method.
      *
      *
@@ -967,6 +1022,36 @@ class ObjectStateServiceTest extends BaseTest
 
         $loadedObjectState = $objectStateService->loadObjectState(
             $objectStateId
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectState',
+            $loadedObjectState
+        );
+
+        return $loadedObjectState;
+    }
+
+    /**
+     * Test for the loadObjectState() method.
+     *
+     *
+     * @see \eZ\Publish\API\Repository\ObjectStateService::loadByIdentifier()
+     * @depends testLoadObjectStateGroup
+     */
+    public function testLoadByIdentifier()
+    {
+        $repository = $this->getRepository();
+        $objectStateGroupId = $this->generateId('objectstategroup', 2);
+        $this->generateId('objectstate', 2);
+        $objectStateIdentifier = 'locked';
+        /* BEGIN: Use Case */
+        // $objectStateIdentifier contains the identifier of the "locked" state
+        $objectStateService = $repository->getObjectStateService();
+
+        $loadedObjectState = $objectStateService->loadByIdentifier(
+            $objectStateIdentifier, $objectStateGroupId
         );
         /* END: Use Case */
 

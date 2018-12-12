@@ -55,6 +55,20 @@ class ObjectStateService implements ObjectStateServiceInterface
         return $this->service->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
     }
 
+    public function loadByIdentifier($identifier, $groupId, array $prioritizedLanguages = [])
+    {
+        $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
+
+        return $this->service->loadByIdentifier($identifier, $groupId, $prioritizedLanguages);
+    }
+
+    public function loadGroupByIdentifier($identifier, array $prioritizedLanguages = [])
+    {
+        $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
+
+        return $this->service->loadGroupByIdentifier($identifier, $prioritizedLanguages);
+    }
+
     public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = null)
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
