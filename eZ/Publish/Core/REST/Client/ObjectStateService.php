@@ -249,6 +249,22 @@ class ObjectStateService implements APIObjectStateService, Sessionable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadByIdentifier($identifier, $groupId, array $prioritizedLanguages = [])
+    {
+        throw new \Exception('@todo Implement');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadGroupByIdentifier($identifier, array $prioritizedLanguages = [])
+    {
+        throw new \Exception('@todo Implement');
+    }
+
+    /**
      * Updates an object state.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update an object state
