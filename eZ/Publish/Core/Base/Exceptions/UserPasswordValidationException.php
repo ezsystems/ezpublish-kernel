@@ -14,7 +14,7 @@ use eZ\Publish\Core\FieldType\ValidationError;
 class UserPasswordValidationException extends InvalidArgumentException
 {
     /**
-     * Generates: "Argument '{$argumentName}' is invalid: Password doesn't match the fallowing rules: {X}, {Y}, {Z}".
+     * Generates: "Argument '{$argumentName}' is invalid: Password doesn't match the following rules: {X}, {Y}, {Z}".
      *
      * @param string $argumentName
      * @param array $errors
@@ -26,6 +26,6 @@ class UserPasswordValidationException extends InvalidArgumentException
             return (string) $error->getTranslatableMessage();
         }, $errors);
 
-        parent::__construct($argumentName, "Password doesn't match the fallowing rules: " . implode(', ', $rules), $previous);
+        parent::__construct($argumentName, "Password doesn't match the following rules: " . implode(', ', $rules), $previous);
     }
 }
