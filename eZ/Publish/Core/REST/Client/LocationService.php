@@ -127,17 +127,9 @@ class LocationService implements APILocationService, Sessionable
     }
 
     /**
-     * Loads a location object from its $locationId.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
-     *
-     * @param mixed $locationId
-     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * {@inheritdoc)
      */
-    public function loadLocation($locationId, array $prioritizedLanguages = null)
+    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         $response = $this->client->request(
             'GET',
@@ -151,17 +143,25 @@ class LocationService implements APILocationService, Sessionable
     }
 
     /**
-     * Loads a location object from its $remoteId.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
-     *
-     * @param string $remoteId
-     * @param string[]|null $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location
+     * {@inheritdoc)
      */
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
+    public function loadLocationList(array $locationIds, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null): iterable
+    {
+        // @todo Implement server part, ala: https://gist.github.com/andrerom/f2f328029ae7a9d78b363282b3ddf4a4
+
+        $response = $this->client->request(
+            'GET',
+            $this->requestParser->generate('locationsByIds', ['locations' => $locationIds]),
+            new Message(['Accept' => $this->outputVisitor->getMediaType('LocationList')])
+        );
+
+        return $this->inputDispatcher->parse($response);
+    }
+
+    /**
+     * {@inheritdoc)
+     */
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         $response = $this->client->request(
             'GET',
