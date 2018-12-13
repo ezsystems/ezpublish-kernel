@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\UserService as APIUserService;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
@@ -389,6 +390,14 @@ class UserService implements APIUserService, Sessionable
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
      */
     public function newUserGroupUpdateStruct()
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validatePassword(string $password, PasswordValidationContext $context = null): array
     {
         throw new \Exception('@todo: Implement.');
     }

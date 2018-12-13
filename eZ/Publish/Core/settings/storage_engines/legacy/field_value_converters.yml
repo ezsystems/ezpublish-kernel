@@ -23,7 +23,7 @@ parameters:
     ezpublish.fieldType.eztext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter
     ezpublish.fieldType.ezsrrating.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RatingConverter
     ezpublish.fieldType.ezurl.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlConverter
-    ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullConverter
+    ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UserConverter
     ezpublish.fieldType.ezpage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\PageConverter
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullConverter
 

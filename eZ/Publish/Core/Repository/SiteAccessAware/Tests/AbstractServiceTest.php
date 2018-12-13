@@ -95,7 +95,7 @@ abstract class AbstractServiceTest extends TestCase
         if ($return) {
             $this->assertTrue($actualReturn);
         } else {
-            $this->assertNull($actualReturn);
+            $this->assertEquals($return, $actualReturn);
         }
     }
 

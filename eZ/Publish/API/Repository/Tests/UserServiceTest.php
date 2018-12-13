@@ -13,10 +13,13 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\User\UserGroup;
@@ -1067,6 +1070,40 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test creating a user throwing UserPasswordValidationException when password doesn't follow specific rules.
+     *
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException
+     * @expectedExceptionMessage Argument 'password' is invalid: Password doesn't match the fallowing rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
+     */
+    public function testCreateUserWithWeakPasswordThrowsUserPasswordValidationException()
+    {
+        $userContentType = $this->createUserWithStrongPasswordContentType();
+
+        /* BEGIN: Use Case */
+        // This call will fail with a "UserPasswordValidationException" because the
+        // the password does not follow specified rules.
+        $this->createUserWithPassword('pass', $userContentType);
+        /* END: Use Case */
+    }
+
+    /**
+     * Opposite test case for testCreateUserWithWeakPasswordThrowsUserPasswordValidationException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::createUser
+     */
+    public function testCreateUserWithStrongPassword()
+    {
+        $userContentType = $this->createUserWithStrongPasswordContentType();
+
+        /* BEGIN: Use Case */
+        $user = $this->createUserWithPassword('H@xxi0r!', $userContentType);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(User::class, $user);
+    }
+
+    /**
      * Test for the loadUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadUser()
@@ -1809,6 +1846,52 @@ class UserServiceTest extends BaseTest
         $userService->updateUser($user, $userUpdate);
 
         /* END: Use Case */
+    }
+
+    /**
+     * Test updating a user throwing UserPasswordValidationException when password doesn't follow specified rules.
+     *
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException
+     * @expectedExceptionMessage Argument 'password' is invalid: Password doesn't match the fallowing rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character
+     * @covers \eZ\Publish\API\Repository\UserService::updateUser
+     */
+    public function testUpdateUserWithWeakPasswordThrowsUserPasswordValidationException()
+    {
+        $userService = $this->getRepository()->getUserService();
+
+        $user = $this->createUserWithPassword('H@xxxiR!_1', $this->createUserWithStrongPasswordContentType());
+
+        /* BEGIN: Use Case */
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+        $userUpdate->password = 'pass';
+
+        // This call will fail with a "UserPasswordValidationException" because the
+        // the password does not follow specified rules
+        $userService->updateUser($user, $userUpdate);
+        /* END: Use Case */
+    }
+
+    /**
+     * Opposite test case for testUpdateUserWithWeakPasswordThrowsUserPasswordValidationException.
+     *
+     * @covers \eZ\Publish\API\Repository\UserService::updateUser
+     */
+    public function testUpdateUserWithStrongPassword()
+    {
+        $userService = $this->getRepository()->getUserService();
+
+        $user = $this->createUserWithPassword('H@xxxiR!_1', $this->createUserWithStrongPasswordContentType());
+
+        /* BEGIN: Use Case */
+        // Create a new update struct instance
+        $userUpdate = $userService->newUserUpdateStruct();
+        $userUpdate->password = 'H@xxxiR!_2';
+
+        $user = $userService->updateUser($user, $userUpdate);
+        /* END: Use Case */
+
+        $this->assertInstanceOf(User::class, $user);
     }
 
     /**
@@ -2665,5 +2748,204 @@ class UserServiceTest extends BaseTest
 
         // should throw NotFoundException now
         $userService->loadUserByToken($userToken);
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\UserService::validatePassword()
+     */
+    public function testValidatePasswordWithDefaultContext()
+    {
+        $userService = $this->getRepository()->getUserService();
+
+        /* BEGIN: Use Case */
+        $errors = $userService->validatePassword('pass');
+        /* END: Use Case */
+
+        $this->assertEmpty($errors);
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\UserService::validatePassword()
+     * @dataProvider dataProviderForValidatePassword
+     */
+    public function testValidatePassword(string $password, array $expectedErrorr)
+    {
+        $userService = $this->getRepository()->getUserService();
+        $contentType = $this->createUserWithStrongPasswordContentType();
+
+        /* BEGIN: Use Case */
+        $context = new PasswordValidationContext(array(
+            'contentType' => $contentType,
+        ));
+
+        $actualErrors = $userService->validatePassword($password, $context);
+        /* END: Use Case */
+
+        $this->assertEquals($expectedErrorr, $actualErrors);
+    }
+
+    /**
+     * Data provider for testValidatePassword.
+     *
+     * @return array
+     */
+    public function dataProviderForValidatePassword(): array
+    {
+        return array(
+            array(
+                'pass',
+                array(
+                    new ValidationError('User password must be at least %length% characters long', null, array(
+                        '%length%' => 8,
+                    ), 'password'),
+                    new ValidationError('User password must include at least one upper case letter', null, array(), 'password'),
+                    new ValidationError('User password must include at least one number', null, array(), 'password'),
+                    new ValidationError('User password must include at least one special character', null, array(), 'password'),
+                ),
+            ),
+            array(
+                'H@xxxi0R!!!',
+                array(),
+            ),
+        );
+    }
+
+    /**
+     * Creates a user with given password.
+     *
+     * @param string $password
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     */
+    private function createUserWithPassword(string $password, ContentType $contentType): User
+    {
+        $userService = $this->getRepository()->getUserService();
+        // ID of the "Editors" user group in an eZ Publish demo installation
+        $editorsGroupId = 13;
+
+        // Instantiate a create struct with mandatory properties
+        $userCreate = $userService->newUserCreateStruct(
+            'johndoe',
+            'johndoe@example.com',
+            $password,
+            'eng-US',
+            $contentType
+        );
+        $userCreate->enabled = true;
+        $userCreate->setField('first_name', 'John');
+        $userCreate->setField('last_name', 'Doe');
+
+        return $userService->createUser($userCreate, array(
+            $userService->loadUserGroup($editorsGroupId),
+        ));
+    }
+
+    /**
+     * Creates the User Content Type with password constraints.
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
+     */
+    private function createUserWithStrongPasswordContentType(): ContentType
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct('user-with-strong-password');
+        $typeCreate->mainLanguageCode = 'eng-GB';
+        $typeCreate->remoteId = '384b94a1bd6bc06826410e284dd9684887bf56fc';
+        $typeCreate->urlAliasSchema = 'url|scheme';
+        $typeCreate->nameSchema = 'name|scheme';
+        $typeCreate->names = array(
+            'eng-GB' => 'User with strong password',
+        );
+        $typeCreate->descriptions = array(
+            'eng-GB' => '',
+        );
+        $typeCreate->creatorId = $this->generateId('user', $repository->getCurrentUser()->id);
+        $typeCreate->creationDate = $this->createDateTime();
+
+        $firstNameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('first_name', 'ezstring');
+        $firstNameFieldCreate->names = array(
+            'eng-GB' => 'First name',
+        );
+        $firstNameFieldCreate->descriptions = array(
+            'eng-GB' => '',
+        );
+        $firstNameFieldCreate->fieldGroup = 'default';
+        $firstNameFieldCreate->position = 1;
+        $firstNameFieldCreate->isTranslatable = false;
+        $firstNameFieldCreate->isRequired = true;
+        $firstNameFieldCreate->isInfoCollector = false;
+        $firstNameFieldCreate->validatorConfiguration = array(
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
+        );
+        $firstNameFieldCreate->fieldSettings = array();
+        $firstNameFieldCreate->isSearchable = true;
+        $firstNameFieldCreate->defaultValue = '';
+
+        $typeCreate->addFieldDefinition($firstNameFieldCreate);
+
+        $lastNameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('last_name', 'ezstring');
+        $lastNameFieldCreate->names = array(
+            'eng-GB' => 'Last name',
+        );
+        $lastNameFieldCreate->descriptions = array(
+            'eng-GB' => '',
+        );
+        $lastNameFieldCreate->fieldGroup = 'default';
+        $lastNameFieldCreate->position = 2;
+        $lastNameFieldCreate->isTranslatable = false;
+        $lastNameFieldCreate->isRequired = true;
+        $lastNameFieldCreate->isInfoCollector = false;
+        $lastNameFieldCreate->validatorConfiguration = array(
+            'StringLengthValidator' => array(
+                'minStringLength' => 0,
+                'maxStringLength' => 0,
+            ),
+        );
+        $lastNameFieldCreate->fieldSettings = array();
+        $lastNameFieldCreate->isSearchable = true;
+        $lastNameFieldCreate->defaultValue = '';
+
+        $typeCreate->addFieldDefinition($lastNameFieldCreate);
+
+        $accountFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('account', 'ezuser');
+        $accountFieldCreate->names = array(
+            'eng-GB' => 'User account',
+        );
+        $accountFieldCreate->descriptions = array(
+            'eng-GB' => '',
+        );
+        $accountFieldCreate->fieldGroup = 'default';
+        $accountFieldCreate->position = 3;
+        $accountFieldCreate->isTranslatable = false;
+        $accountFieldCreate->isRequired = true;
+        $accountFieldCreate->isInfoCollector = false;
+        $accountFieldCreate->validatorConfiguration = array(
+            'PasswordValueValidator' => array(
+                'requireAtLeastOneUpperCaseCharacter' => 1,
+                'requireAtLeastOneLowerCaseCharacter' => 1,
+                'requireAtLeastOneNumericCharacter' => 1,
+                'requireAtLeastOneNonAlphanumericCharacter' => 1,
+                'minLength' => 8,
+            ),
+        );
+        $accountFieldCreate->fieldSettings = array();
+        $accountFieldCreate->isSearchable = false;
+        $accountFieldCreate->defaultValue = null;
+
+        $typeCreate->addFieldDefinition($accountFieldCreate);
+
+        $contentTypeDraft = $contentTypeService->createContentType($typeCreate, array(
+            $contentTypeService->loadContentTypeGroupByIdentifier('Users'),
+        ));
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        return $contentTypeService->loadContentTypeByIdentifier('user-with-strong-password');
     }
 }
