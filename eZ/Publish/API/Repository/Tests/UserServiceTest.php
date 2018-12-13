@@ -1073,7 +1073,7 @@ class UserServiceTest extends BaseTest
      * Test creating a user throwing UserPasswordValidationException when password doesn't follow specific rules.
      *
      * @expectedException \eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException
-     * @expectedExceptionMessage Argument 'password' is invalid: Password doesn't match the fallowing rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character
+     * @expectedExceptionMessage Argument 'password' is invalid: Password doesn't match the following rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character
      * @covers \eZ\Publish\API\Repository\UserService::createUser
      */
     public function testCreateUserWithWeakPasswordThrowsUserPasswordValidationException()
@@ -1852,7 +1852,7 @@ class UserServiceTest extends BaseTest
      * Test updating a user throwing UserPasswordValidationException when password doesn't follow specified rules.
      *
      * @expectedException \eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException
-     * @expectedExceptionMessage Argument 'password' is invalid: Password doesn't match the fallowing rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character
+     * @expectedExceptionMessage Argument 'password' is invalid: Password doesn't match the following rules: User password must be at least 8 characters long, User password must include at least one upper case letter, User password must include at least one number, User password must include at least one special character
      * @covers \eZ\Publish\API\Repository\UserService::updateUser
      */
     public function testUpdateUserWithWeakPasswordThrowsUserPasswordValidationException()
