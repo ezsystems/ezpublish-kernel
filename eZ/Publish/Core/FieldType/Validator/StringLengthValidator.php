@@ -126,8 +126,8 @@ class StringLengthValidator extends Validator
             $this->constraints['minStringLength'] !== 0 &&
             mb_strlen($value->text) < $this->constraints['minStringLength']) {
             $this->errors[] = new ValidationError(
-                'The string can not be shorter than %size% character.',
-                'The string can not be shorter than %size% characters.',
+                'The string cannot be shorter than %size% character.',
+                'The string cannot be shorter than %size% characters.',
                 array(
                     '%size%' => $this->constraints['minStringLength'],
                 )
