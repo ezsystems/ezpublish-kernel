@@ -1,0 +1,5 @@
+{% if location is defined %}
+    <a href="{{ path(location) }}">{{ content.name }}</a>
+{% else %}
+    <a href="{{ path( "ez_urlalias", {"contentId": content.id} ) }}">{{ content.name }}</a>
+{% endif %}
