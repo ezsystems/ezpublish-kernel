@@ -17,6 +17,7 @@ parameters:
     ezplatform.default_view_templates.content.line: 'EzPublishCoreBundle:default:content/line.html.twig'
     ezplatform.default_view_templates.content.text_linked: 'EzPublishCoreBundle:default:content/text_linked.html.twig'
     ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
+    ezplatform.default_view_templates.content.embed_inline: 'EzPublishCoreBundle:default:content/embed_inline.html.twig'
     ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
     ezplatform.default_view_templates.content.asset_image: 'EzPublishCoreBundle:default:content/asset_image.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
@@ -53,6 +54,10 @@ parameters:
                     Identifier\ContentType: '%ezplatform.content_view.image_embed_content_types_identifiers%'
             default:
                 template: "%ezplatform.default_view_templates.content.embed%"
+                match: []
+        embed-inline:
+            default:
+                template: "%ezplatform.default_view_templates.content.embed_inline%"
                 match: []
         asset_image:
             default:
