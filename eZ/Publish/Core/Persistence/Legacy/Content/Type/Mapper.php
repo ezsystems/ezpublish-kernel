@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
@@ -32,13 +33,20 @@ class Mapper
     protected $converterRegistry;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    private $maskGenerator;
+
+    /**
      * Creates a new content type mapper.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
      */
-    public function __construct(ConverterRegistry $converterRegistry)
+    public function __construct(ConverterRegistry $converterRegistry, MaskGenerator $maskGenerator)
     {
         $this->converterRegistry = $converterRegistry;
+        $this->maskGenerator = $maskGenerator;
     }
 
     /**
@@ -166,6 +174,7 @@ class Mapper
         $type->defaultAlwaysAvailable = ($row['ezcontentclass_always_available'] == 1);
         $type->sortField = (int)$row['ezcontentclass_sort_field'];
         $type->sortOrder = (int)$row['ezcontentclass_sort_order'];
+        $type->languageCodes = $this->maskGenerator->extractLanguageCodesFromMask((int)$row['ezcontentclass_language_mask']);
 
         $type->groupIds = array();
         $type->fieldDefinitions = array();
@@ -285,6 +294,7 @@ class Mapper
         $type->defaultAlwaysAvailable = $createStruct->defaultAlwaysAvailable;
         $type->sortField = $createStruct->sortField;
         $type->sortOrder = $createStruct->sortOrder;
+        $type->languageCodes = array_keys($createStruct->name);
 
         return $type;
     }
@@ -401,5 +411,32 @@ class Mapper
         return $serialized
             ? unserialize($serialized)
             : $default;
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    public function createTypeFromUpdateStruct(UpdateStruct $updateStruct): Type
+    {
+        $type = new Type();
+
+        $type->name = $updateStruct->name;
+        $type->description = $updateStruct->description;
+        $type->identifier = $updateStruct->identifier;
+        $type->modified = $updateStruct->modified;
+        $type->modifierId = $updateStruct->modifierId;
+        $type->remoteId = $updateStruct->remoteId;
+        $type->urlAliasSchema = $updateStruct->urlAliasSchema;
+        $type->nameSchema = $updateStruct->nameSchema;
+        $type->isContainer = $updateStruct->isContainer;
+        $type->initialLanguageId = $updateStruct->initialLanguageId;
+        $type->defaultAlwaysAvailable = $updateStruct->defaultAlwaysAvailable;
+        $type->sortField = $updateStruct->sortField;
+        $type->sortOrder = $updateStruct->sortOrder;
+        $type->languageCodes = array_keys($updateStruct->name);
+
+        return $type;
     }
 }

@@ -14,7 +14,6 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -399,7 +398,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             count($rows)
         );
         $this->assertEquals(
-            43,
+            44,
             count($rows[0])
         );
 
@@ -432,7 +431,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             count($rows)
         );
         $this->assertEquals(
-            43,
+            44,
             count($rows[0])
         );
     }
@@ -456,7 +455,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             count($rows)
         );
         $this->assertEquals(
-            43,
+            44,
             count($rows[0])
         );
     }
@@ -586,6 +585,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $type->initialLanguageId = 2;
         $type->sortField = Location::SORT_FIELD_CLASS_NAME;
         $type->sortOrder = Location::SORT_ORDER_ASC;
+        $type->languageCodes = [
+            'eng-US',
+            'eng-GB',
+        ];
 
         return $type;
     }
@@ -905,9 +908,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $updateStruct = $this->getTypeUpdateFixture();
+        $type = $this->getUpdateTypeFixture();
 
-        $gateway->updateType(1, 0, $updateStruct);
+        $gateway->updateType(1, 0, $type);
 
         $this->assertQueryResult(
             array(
@@ -938,9 +941,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $gateway = $this->getGateway();
 
-        $updateStruct = $this->getTypeUpdateFixture();
+        $type = $this->getUpdateTypeFixture();
 
-        $gateway->updateType(1, 0, $updateStruct);
+        $gateway->updateType(1, 0, $type);
 
         $this->assertQueryResult(
             array(
@@ -994,36 +997,36 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct fixture.
+     * Returns a eZ\Publish\SPI\Persistence\Content\Type fixture for update operation.
      *
-     * @return \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
-    protected function getTypeUpdateFixture()
+    protected function getUpdateTypeFixture(): Type
     {
-        $struct = new UpdateStruct();
+        $type = new Type();
 
-        $struct->name = array(
+        $type->name = [
             'always-available' => 'eng-US',
             'eng-US' => 'New Folder',
             'eng-GB' => 'New Folder for you',
-        );
-        $struct->description = array(
+        ];
+        $type->description = [
             0 => '',
             'always-available' => false,
-        );
-        $struct->identifier = 'new_folder';
-        $struct->modified = 1311621548;
-        $struct->modifierId = 42;
-        $struct->remoteId = 'foobar';
-        $struct->urlAliasSchema = 'some scheke';
-        $struct->nameSchema = '<short_name>';
-        $struct->isContainer = false;
-        $struct->initialLanguageId = 23;
-        $struct->sortField = 3;
-        $struct->sortOrder = Location::SORT_ORDER_DESC;
-        $struct->defaultAlwaysAvailable = true;
+        ];
+        $type->identifier = 'new_folder';
+        $type->modified = 1311621548;
+        $type->modifierId = 42;
+        $type->remoteId = 'foobar';
+        $type->urlAliasSchema = 'some scheke';
+        $type->nameSchema = '<short_name>';
+        $type->isContainer = false;
+        $type->initialLanguageId = 23;
+        $type->sortField = 3;
+        $type->sortOrder = Location::SORT_ORDER_DESC;
+        $type->defaultAlwaysAvailable = true;
 
-        return $struct;
+        return $type;
     }
 
     /**

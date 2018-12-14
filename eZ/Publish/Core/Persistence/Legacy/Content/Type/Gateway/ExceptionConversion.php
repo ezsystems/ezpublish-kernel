@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -337,12 +336,12 @@ class ExceptionConversion extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      */
-    public function updateType($typeId, $status, UpdateStruct $updateStruct)
+    public function updateType($typeId, $status, Type $type)
     {
         try {
-            return $this->innerGateway->updateType($typeId, $status, $updateStruct);
+            return $this->innerGateway->updateType($typeId, $status, $type);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

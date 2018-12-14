@@ -188,4 +188,11 @@ class Type extends ValueObject
      * @var bool
      */
     public $defaultAlwaysAvailable = false;
+
+    /**
+     * Translations language codes.
+     *
+     * @var array
+     */
+    public $languageCodes = [];
 }

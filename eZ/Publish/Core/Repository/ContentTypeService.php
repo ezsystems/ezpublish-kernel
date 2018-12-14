@@ -1055,6 +1055,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
+        //Merge new translations into existing before update
+        $contentTypeUpdateStruct->names = array_merge($contentTypeDraft->getNames(), $contentTypeUpdateStruct->names ?? []);
+        $contentTypeUpdateStruct->descriptions = array_merge($contentTypeDraft->getDescriptions(), $contentTypeUpdateStruct->descriptions ?? []);
+
         $this->repository->beginTransaction();
         try {
             $this->contentTypeHandler->update(
@@ -1272,6 +1276,14 @@ class ContentTypeService implements ContentTypeServiceInterface
                 '$fieldDefinitionCreateStruct',
                 "Another FieldDefinition with identifier '{$fieldDefinitionCreateStruct->identifier}' exists in the ContentType"
             );
+        }
+        //Fill default translations with default value for mainLanguageCode with fallback if no exist
+        if (is_array($fieldDefinitionCreateStruct->names)) {
+            foreach ($contentTypeDraft->languageCodes as $languageCode) {
+                if (!array_key_exists($languageCode, $fieldDefinitionCreateStruct->names)) {
+                    $fieldDefinitionCreateStruct->names[$languageCode] = $fieldDefinitionCreateStruct->names[$contentTypeDraft->mainLanguageCode] ?? reset($fieldDefinitionCreateStruct->names);
+                }
+            }
         }
 
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
