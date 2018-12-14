@@ -25,6 +25,7 @@ env:
   global:
     # For functional tests
     - COMPOSE_FILE="doc/docker-compose/base-dev.yml:doc/docker-compose/selenium.yml"
+    - COMPOSER_FLAGS=""
 
 matrix:
   fast_finish: true
@@ -49,8 +50,12 @@ matrix:
 # 7.2
     - php: 7.2
       env: TEST_CONFIG="phpunit.xml"
-    - php: 7.2
-      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.46"
+# 7.3
+    # Temp: Need to use --ignore-platform-reqs due to: https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3697
+    - php: 7.3
+      env: TEST_CONFIG="phpunit.xml" COMPOSER_FLAGS="--ignore-platform-reqs"
+    - php: 7.3
+      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml" SYMFONY_VERSION="~2.8.46" COMPOSER_FLAGS="--ignore-platform-reqs"
 
 
 # test only master, stable branches and pull requests
@@ -75,7 +80,7 @@ before_install:
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
 
 install:
-  -  if [ "$TEST_CONFIG" != "" ] ; then travis_retry composer install --no-progress --no-interaction --prefer-dist ; fi
+  -  if [ "$TEST_CONFIG" != "" ] ; then travis_retry composer install --no-progress --no-interaction --prefer-dist $COMPOSER_FLAGS; fi
   # Setup Solr / Elastic search if asked for
   - if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
   - if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh; fi
