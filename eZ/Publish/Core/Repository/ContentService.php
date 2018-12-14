@@ -376,18 +376,10 @@ class ContentService implements ContentServiceInterface
                 $id = $spiContentInfo->id;
             }
 
-            // Get current version if $versionNo is not defined
-            if ($versionNo === null) {
-                if (!isset($spiContentInfo)) {
-                    $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($id);
-                }
-
-                $versionNo = $spiContentInfo->currentVersionNo;
-            }
-
             $loadLanguages = $languages;
             $alwaysAvailableLanguageCode = null;
             // Set main language on $languages filter if not empty (all) and $useAlwaysAvailable being true
+            // @todo Move use always available logic to SPI load methods, like done in location handler in 7.x
             if (!empty($loadLanguages) && $useAlwaysAvailable) {
                 if (!isset($spiContentInfo)) {
                     $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($id);

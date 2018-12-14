@@ -110,7 +110,7 @@ class SearchService implements SearchServiceInterface
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
         foreach ($result->searchHits as $key => $hit) {
             try {
-                // As we get ContentInfo from SPI, we need to load full content (avoids getting stale content data)
+                // As ContentInfo is from Search index, being async, we let Content Service figure out current version
                 $hit->valueObject = $contentService->internalLoadContent(
                     $hit->valueObject->id,
                     (!empty($languageFilter['languages']) ? $languageFilter['languages'] : null),

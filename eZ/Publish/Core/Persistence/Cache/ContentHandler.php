@@ -23,6 +23,7 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 {
     const ALL_TRANSLATIONS_KEY = '0';
+    const PUBLISHED_VERSION = 0;
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::create
@@ -62,10 +63,10 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\Handler::load
      */
-    public function load($contentId, $version, array $translations = null)
+    public function load($contentId, $version = null, array $translations = null)
     {
         $translationsKey = empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations);
-        $cache = $this->cache->getItem('content', $contentId, $version, $translationsKey);
+        $cache = $this->cache->getItem('content', $contentId, $version ?: self::PUBLISHED_VERSION, $translationsKey);
         $content = $cache->get();
         if ($cache->isMiss()) {
             $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $version, 'translations' => $translations));
@@ -152,6 +153,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $return = $this->persistenceHandler->contentHandler()->setStatus($contentId, $status, $version);
 
         $this->cache->clear('content', $contentId, $version);
+        $this->cache->clear('content', $contentId, self::PUBLISHED_VERSION);
         if ($status === VersionInfo::STATUS_PUBLISHED) {
             $this->cache->clear('content', 'info', $contentId);
             $this->cache->clear('content', 'info', 'remoteId');
@@ -172,6 +174,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $contentInfo = $this->persistenceHandler->contentHandler()->updateMetadata($contentId, $struct);
 
         $this->cache->clear('content', $contentId, $contentInfo->currentVersionNo);
+        $this->cache->clear('content', $contentId, self::PUBLISHED_VERSION);
         $this->cache->clear('content', 'info', $contentId);
 
         if ($struct->remoteId) {
@@ -192,6 +195,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'version' => $versionNo, 'struct' => $struct));
         $content = $this->persistenceHandler->contentHandler()->updateContent($contentId, $versionNo, $struct);
         $this->cache->clear('content', $contentId, $versionNo);
+        $this->cache->clear('content', $contentId, self::PUBLISHED_VERSION);
         $this->cache->clear('content', 'info', $contentId, 'versioninfo', $versionNo);
 
         return $content;
@@ -239,6 +243,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $return = $this->persistenceHandler->contentHandler()->deleteVersion($contentId, $versionNo);
 
         $this->cache->clear('content', $contentId, $versionNo);
+        $this->cache->clear('content', $contentId, self::PUBLISHED_VERSION);
         $this->cache->clear('content', 'info', $contentId);
         $this->cache->clear('content', 'info', 'remoteId');
         $this->cache->clear('location', 'subtree');
