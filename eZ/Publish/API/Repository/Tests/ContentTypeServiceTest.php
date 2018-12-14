@@ -4131,4 +4131,46 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $this->assertTrue($isFolderUsed);
         $this->assertFalse($isEventUsed);
     }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::removeContentTypeTranslation
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRemoveContentTypeTranslation()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentTypeDraft = $this->createContentTypeDraft();
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        $this->assertEquals(
+            [
+                'eng-US' => 'Blog post',
+                'ger-DE' => 'Blog-Eintrag',
+            ],
+            $contentType->getNames()
+        );
+
+        $contentTypeService->removeContentTypeTranslation(
+            $contentTypeService->createContentTypeDraft($contentType),
+            'ger-DE'
+        );
+
+        $loadedContentTypeDraft = $contentTypeService->loadContentTypeDraft($contentType->id);
+
+        $this->assertArrayNotHasKey('ger-DE', $loadedContentTypeDraft->getNames());
+        $this->assertArrayNotHasKey('ger-DE', $loadedContentTypeDraft->getDescriptions());
+
+        foreach ($loadedContentTypeDraft->fieldDefinitions as $fieldDefinition) {
+            $this->assertArrayNotHasKey('ger-DE', $fieldDefinition->getNames());
+            $this->assertArrayNotHasKey('ger-DE', $fieldDefinition->getDescriptions());
+        }
+    }
 }

@@ -1249,4 +1249,53 @@ class ContentTypeHandlerTest extends TestCase
 
         return $struct;
     }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::removeContentTypeTranslation
+     */
+    public function testRemoveContentTypeTranslation()
+    {
+        $mapperMock = $this->getMapperMock();
+        $mapperMock->expects($this->once())
+            ->method('createUpdateStructFromType')
+            ->with(
+                $this->isInstanceOf(
+                    Type::class
+                )
+            )
+            ->will(
+                $this->returnValue(new UpdateStruct())
+            );
+
+        $handlerMock = $this->getMockBuilder(Handler::class)
+            ->setMethods(['load', 'update'])
+            ->setConstructorArgs([$this->getGatewayMock(), $mapperMock, $this->getUpdateHandlerMock()])
+            ->getMock();
+
+        $handlerMock->expects($this->once())
+            ->method('load')
+            ->with(
+                $this->equalTo(23),
+                $this->equalTo(1)
+            )
+            ->will($this->returnValue(new Type(['id' => 23])));
+
+        $handlerMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $this->equalTo(23),
+                $this->equalTo(1),
+                $this->isInstanceOf(
+                    UpdateStruct::class
+                )
+            )
+            ->will($this->returnValue(new Type()));
+
+        $res = $handlerMock->removeContentTypeTranslation(23, 'eng-GB');
+
+        $this->assertInstanceOf(
+            Type::class,
+            $res
+        );
+    }
 }

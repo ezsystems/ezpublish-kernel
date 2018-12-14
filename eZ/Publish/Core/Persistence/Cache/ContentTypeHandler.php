@@ -469,4 +469,25 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
 
         return $fieldMap;
     }
+
+    /**
+     * @param int $contentTypeId
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function removeContentTypeTranslation(int $contentTypeId, string $languageCode): Type
+    {
+        $this->logger->logCall(__METHOD__, ['id' => $contentTypeId, 'languageCode' => $languageCode]);
+        $return = $this->persistenceHandler->contentTypeHandler()->removeContentTypeTranslation(
+            $contentTypeId,
+            $languageCode
+        );
+
+        $this->cache->invalidateTags(['type-' . $contentTypeId, 'type-map', 'content-fields-type-' . $contentTypeId]);
+
+        return $return;
+    }
 }

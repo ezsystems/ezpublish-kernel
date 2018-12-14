@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
@@ -1609,5 +1610,36 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function isContentTypeUsed(APIContentType $contentType)
     {
         return $this->contentTypeHandler->getContentCount($contentType->id) > 0;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function removeContentTypeTranslation(APIContentTypeDraft $contentTypeDraft, string $languageCode): APIContentTypeDraft
+    {
+        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+            throw new UnauthorizedException('ContentType', 'update');
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $contentType = $this->contentTypeHandler->removeContentTypeTranslation(
+                $contentTypeDraft->id,
+                $languageCode
+            );
+
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($contentType);
     }
 }

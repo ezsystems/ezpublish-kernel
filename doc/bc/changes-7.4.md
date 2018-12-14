@@ -11,3 +11,4 @@ Changes affecting version compatibility with former or future versions.
     
     Passing translations in all languages is no longer needed, all you have to do is pass language version 
     you wish to modify.
+* New method `\eZ\Publish\API\Repository\ContentTypeService::removeContentTypeTranslation` is introduced.

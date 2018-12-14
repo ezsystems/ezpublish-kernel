@@ -380,4 +380,12 @@ interface ContentTypeService
      * @return bool
      */
     public function isContentTypeUsed(ContentType $contentType);
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     */
+    public function removeContentTypeTranslation(ContentTypeDraft $contentTypeDraft, string $languageCode): ContentTypeDraft;
 }

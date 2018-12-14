@@ -620,4 +620,35 @@ class Handler implements BaseContentTypeHandler
 
         return $fieldMap;
     }
+
+    /**
+     * @param int $contentTypeId
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    public function removeContentTypeTranslation(int $contentTypeId, string $languageCode): Type
+    {
+        $type = $this->load($contentTypeId, Type::STATUS_DRAFT);
+
+        unset($type->name[$languageCode]);
+        unset($type->description[$languageCode]);
+
+        foreach ($type->fieldDefinitions as $fieldDefinition) {
+            unset($fieldDefinition->name[$languageCode]);
+            unset($fieldDefinition->description[$languageCode]);
+            $storageFieldDefinition = new StorageFieldDefinition();
+            $this->mapper->toStorageFieldDefinition($fieldDefinition, $storageFieldDefinition);
+            $this->contentTypeGateway->updateFieldDefinition(
+                $contentTypeId,
+                Type::STATUS_DRAFT,
+                $fieldDefinition,
+                $storageFieldDefinition
+            );
+        }
+
+        $updateStruct = $this->mapper->createUpdateStructFromType($type);
+
+        return $this->update($type->id, Type::STATUS_DRAFT, $updateStruct);
+    }
 }

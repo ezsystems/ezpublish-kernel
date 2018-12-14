@@ -524,4 +524,17 @@ class MemoryCachingHandler implements BaseContentTypeHandler
         $this->groups = $this->contentTypes = $this->fieldDefinitions = array();
         $this->searchableFieldMap = null;
     }
+
+    /**
+     * @param int $contentTypeId
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    public function removeContentTypeTranslation(int $contentTypeId, string $languageCode): Type
+    {
+        $this->clearCache();
+
+        return $this->innerHandler->removeContentTypeTranslation($contentTypeId, $languageCode);
+    }
 }
