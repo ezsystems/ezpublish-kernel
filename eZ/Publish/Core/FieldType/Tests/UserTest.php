@@ -65,6 +65,10 @@ class UserTest extends FieldTypeTest
                     'type' => 'int',
                     'default' => null,
                 ],
+                'isNotBlacklisted' => [
+                    'type' => 'int',
+                    'default' => null,
+                ],
                 'minLength' => [
                     'type' => 'int',
                     'default' => null,

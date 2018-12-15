@@ -46,6 +46,10 @@ class Type extends FieldType
                 'type' => 'int',
                 'default' => null,
             ],
+            'isNotBlacklisted' => [
+                'type' => 'int',
+                'default' => null,
+            ],
             'minLength' => [
                 'type' => 'int',
                 'default' => null,

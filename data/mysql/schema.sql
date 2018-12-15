@@ -2573,6 +2573,17 @@ CREATE TABLE `eznotification` (
   KEY `eznotification_owner_is_pending` (`owner_id`, `is_pending`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Table structure for table `ezpasswordblacklist`
+--
+DROP TABLE IF EXISTS `ezpasswordblacklist`;
+CREATE TABLE `ezpasswordblacklist` (
+   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+   `password` varchar(255) NOT NULL DEFAULT '',
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `ezpasswordblacklist_password` (`password`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

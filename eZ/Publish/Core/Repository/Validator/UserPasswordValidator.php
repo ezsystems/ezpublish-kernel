@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Repository\Validator;
 
 use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler as PasswordBlacklistHandler;
 
 /**
  * Internal service to user password validation against specified constraints.
@@ -23,15 +24,22 @@ class UserPasswordValidator
     private const AT_LEAST_ONE_NON_ALPHANUMERIC_CHARACTER_REGEX = '/[^\p{Ll}\p{Lu}\pL\pN]/u';
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler
+     */
+    private $passwordBlacklistHandler;
+
+    /**
      * @var array
      */
     private $constraints;
 
     /**
+     * @param \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler $passwordBlacklistHandler
      * @param array $constraints
      */
-    public function __construct(array $constraints)
+    public function __construct(PasswordBlacklistHandler $passwordBlacklistHandler, array $constraints)
     {
+        $this->passwordBlacklistHandler = $passwordBlacklistHandler;
         $this->constraints = $constraints;
     }
 
@@ -66,6 +74,10 @@ class UserPasswordValidator
 
         if (!$this->containsAtLeastOneNonAlphanumericCharacter($password)) {
             $errors[] = $this->createValidationError('User password must include at least one special character');
+        }
+
+        if (!$this->isNotBlacklisted($password)) {
+            $errors[] = $this->createValidationError('Given password is blacklisted');
         }
 
         return $errors;
@@ -146,6 +158,22 @@ class UserPasswordValidator
     {
         if ($this->constraints['requireAtLeastOneNonAlphanumericCharacter']) {
             return (bool)preg_match(self::AT_LEAST_ONE_NON_ALPHANUMERIC_CHARACTER_REGEX, $password);
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if given $password is not blacklisted (if rule is applicable).
+     *
+     * @param string $password
+     *
+     * @return bool
+     */
+    private function isNotBlacklisted(string $password): bool
+    {
+        if ($this->constraints['isNotBlacklisted']) {
+            return !$this->passwordBlacklistHandler->isBlacklisted($password);
         }
 
         return true;

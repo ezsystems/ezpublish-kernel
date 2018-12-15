@@ -11,9 +11,25 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
 use eZ\Publish\Core\Search\Tests\TestCase;
+use eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler as PasswordBlacklistHandlerInterface;
 
 class UserPasswordValidatorTest extends TestCase
 {
+    /**
+     * @var \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $passwordBlacklistHandler;
+
+    protected function setUp()
+    {
+        $this->passwordBlacklistHandler = $this->createMock(PasswordBlacklistHandlerInterface::class);
+        $this->passwordBlacklistHandler
+            ->method('isBlacklisted')
+            ->willReturnCallback(function ($password) {
+                return in_array($password, ['publish', 'asdf']);
+            });
+    }
+
     /**
      * @covers \eZ\Publish\Core\Repository\Validator\UserPasswordValidator::validate
      *
@@ -21,7 +37,7 @@ class UserPasswordValidatorTest extends TestCase
      */
     public function testValidate(array $constraints, string $password, array $expectedErrors)
     {
-        $validator = new UserPasswordValidator($constraints);
+        $validator = new UserPasswordValidator($this->passwordBlacklistHandler, $constraints);
 
         $this->assertEquals($expectedErrors, $validator->validate($password), '', 0.0, 10, true);
     }
@@ -36,6 +52,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 'pass',
                 [/* No errors */],
@@ -47,6 +64,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 '123',
                 [
@@ -62,6 +80,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 '123456!',
                 [/* No errors */],
@@ -73,6 +92,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 'PASS',
                 [
@@ -86,6 +106,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 'PaSS',
                 [/* No errors */],
@@ -97,6 +118,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => true,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 'pass',
                 [
@@ -110,6 +132,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => true,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 'pAss',
                 [/* No errors */],
@@ -121,6 +144,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => true,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 'pass',
                 [
@@ -134,6 +158,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => true,
                     'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => false,
                 ],
                 'pass1',
                 [/* No errors */],
@@ -145,6 +170,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => true,
+                    'isNotBlacklisted' => false,
                 ],
                 'pass',
                 [
@@ -158,8 +184,35 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => false,
                     'requireAtLeastOneNumericCharacter' => false,
                     'requireAtLeastOneNonAlphanumericCharacter' => true,
+                    'isNotBlacklisted' => false,
                 ],
                 'pass!',
+                [/* No errors */],
+            ],
+            [
+                [
+                    'minLength' => -1,
+                    'requireAtLeastOneLowerCaseCharacter' => false,
+                    'requireAtLeastOneUpperCaseCharacter' => false,
+                    'requireAtLeastOneNumericCharacter' => false,
+                    'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => true,
+                ],
+                'publish',
+                [
+                    new ValidationError('Given password is blacklisted', null, [], 'password'),
+                ],
+            ],
+            [
+                [
+                    'minLength' => -1,
+                    'requireAtLeastOneLowerCaseCharacter' => false,
+                    'requireAtLeastOneUpperCaseCharacter' => false,
+                    'requireAtLeastOneNumericCharacter' => false,
+                    'requireAtLeastOneNonAlphanumericCharacter' => false,
+                    'isNotBlacklisted' => true,
+                ],
+                'publish!',
                 [/* No errors */],
             ],
             [
@@ -169,6 +222,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => true,
                     'requireAtLeastOneNumericCharacter' => true,
                     'requireAtLeastOneNonAlphanumericCharacter' => true,
+                    'isNotBlacklisted' => true,
                 ],
                 'asdf',
                 [
@@ -178,6 +232,7 @@ class UserPasswordValidatorTest extends TestCase
                     new ValidationError('User password must include at least one upper case letter', null, [], 'password'),
                     new ValidationError('User password must include at least one number', null, [], 'password'),
                     new ValidationError('User password must include at least one special character', null, [], 'password'),
+                    new ValidationError('Given password is blacklisted', null, [], 'password'),
                 ],
             ],
             [
@@ -187,6 +242,7 @@ class UserPasswordValidatorTest extends TestCase
                     'requireAtLeastOneUpperCaseCharacter' => true,
                     'requireAtLeastOneNumericCharacter' => true,
                     'requireAtLeastOneNonAlphanumericCharacter' => true,
+                    'isNotBlacklisted' => true,
                 ],
                 'H@xxi0r!',
                 [/* No errors */],

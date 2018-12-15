@@ -84,6 +84,11 @@ interface Handler
     public function userPreferenceHandler();
 
     /**
+     * @return \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler
+     */
+    public function passwordBlacklistHandler();
+
+    /**
      * @return \eZ\Publish\SPI\Persistence\TransactionHandler
      */
     public function transactionHandler();

@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException;
@@ -28,6 +27,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct as SPIUserTokenUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler;
+use eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler as PasswordBlacklistHandler;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\SPI\Persistence\User as SPIUser;
@@ -63,6 +63,11 @@ class UserService implements UserServiceInterface
     protected $userHandler;
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler
+     */
+    private $passwordBlacklistHandler;
+
+    /**
      * @var array
      */
     protected $settings;
@@ -73,23 +78,24 @@ class UserService implements UserServiceInterface
     /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
-    public function setLogger(LoggerInterface $logger = null)
-    {
-        $this->logger = $logger;
-    }
-
     /**
      * Setups service with reference to repository object that created it & corresponding handler.
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
+     * @param \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler $passwordBlacklistHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $userHandler, array $settings = array())
+    public function __construct(
+        RepositoryInterface $repository,
+        Handler $userHandler,
+        PasswordBlacklistHandler $passwordBlacklistHandler,
+        array $settings = array())
     {
         $this->repository = $repository;
         $this->permissionResolver = $repository->getPermissionResolver();
         $this->userHandler = $userHandler;
+        $this->passwordBlacklistHandler = $passwordBlacklistHandler;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'defaultUserPlacement' => 12,
@@ -1287,7 +1293,7 @@ class UserService implements UserServiceInterface
             return [];
         }
 
-        return (new UserPasswordValidator($configuration['PasswordValueValidator']))->validate($password);
+        return (new UserPasswordValidator($this->passwordBlacklistHandler, $configuration['PasswordValueValidator']))->validate($password);
     }
 
     /**
@@ -1444,5 +1450,10 @@ class UserService implements UserServiceInterface
             !empty($userUpdateStruct->email) ||
             !empty($userUpdateStruct->enabled) ||
             !empty($userUpdateStruct->maxLogin);
+    }
+
+    public function setLogger(LoggerInterface $logger = null)
+    {
+        $this->logger = $logger;
     }
 }

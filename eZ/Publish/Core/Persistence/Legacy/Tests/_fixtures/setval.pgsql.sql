@@ -28,3 +28,4 @@ SELECT setval('ezuser_role_id_seq',max(id)) FROM ezuser_role;
 SELECT setval('ezcontentbrowsebookmark_id_seq',max(id)) FROM ezcontentbrowsebookmark;
 SELECT setval('eznotification_id_seq',max(id)) FROM eznotification;
 SELECT setval('ezpreferences_id_seq',max(id)) FROM ezpreferences;
+SELECT setval('ezpasswordblacklist_id_seq',max(id)) FROM ezpasswordblacklist;

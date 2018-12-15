@@ -11,6 +11,7 @@ parameters:
     ezpublish.spi.persistence.user_handler.class: eZ\Publish\SPI\Persistence\User\Handler
     ezpublish.spi.persistence.bookmark_handler.class: eZ\Publish\SPI\Persistence\Bookmark\Handler
     ezpublish.spi.persistence.user_preference_handler.class: eZ\Publish\SPI\Persistence\UserPreference\Handler
+    ezpublish.spi.persistence.password_blacklist_handler.class: eZ\Publish\SPI\Persistence\User\Handler
 
 services:
     ezpublish.spi.persistence.content_handler:
@@ -60,3 +61,7 @@ services:
     ezpublish.spi.persistence.user_preference_handler:
         class: "%ezpublish.spi.persistence.user_preference_handler.class%"
         factory: ["@ezpublish.api.persistence_handler", userPreferenceHandler]
+
+    ezpublish.spi.persistence.password_blacklist_handler:
+        class: "%ezpublish.spi.persistence.password_blacklist_handler.class%"
+        factory: ["@ezpublish.api.persistence_handler", passwordBlacklistHandler]

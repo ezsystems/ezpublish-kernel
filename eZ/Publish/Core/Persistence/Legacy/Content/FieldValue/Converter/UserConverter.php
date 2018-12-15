@@ -22,6 +22,7 @@ class UserConverter implements Converter
     private const REQUIRE_AT_LEAST_ONE_LOWER_CASE_CHAR = 2;
     private const REQUIRE_AT_LEAST_ONE_NUMERIC_CHAR = 4;
     private const REQUIRE_AT_LEAST_ONE_NON_ALPHANUMERIC_CHAR = 8;
+    private const PASSWORD_IS_NOT_BLACKLISTED = 16;
 
     /**
      * {@inheritdoc}
@@ -54,6 +55,7 @@ class UserConverter implements Converter
             'requireAtLeastOneLowerCaseCharacter' => self::REQUIRE_AT_LEAST_ONE_LOWER_CASE_CHAR,
             'requireAtLeastOneNumericCharacter' => self::REQUIRE_AT_LEAST_ONE_NUMERIC_CHAR,
             'requireAtLeastOneNonAlphanumericCharacter' => self::REQUIRE_AT_LEAST_ONE_NON_ALPHANUMERIC_CHAR,
+            'isNotBlacklisted' => self::PASSWORD_IS_NOT_BLACKLISTED,
         ];
 
         $storageDef->dataInt1 = 0;
@@ -81,6 +83,7 @@ class UserConverter implements Converter
             self::REQUIRE_AT_LEAST_ONE_LOWER_CASE_CHAR => 'requireAtLeastOneLowerCaseCharacter',
             self::REQUIRE_AT_LEAST_ONE_NUMERIC_CHAR => 'requireAtLeastOneNumericCharacter',
             self::REQUIRE_AT_LEAST_ONE_NON_ALPHANUMERIC_CHAR => 'requireAtLeastOneNonAlphanumericCharacter',
+            self::PASSWORD_IS_NOT_BLACKLISTED => 'isNotBlacklisted',
         ];
 
         foreach ($rules as $flag => $rule) {

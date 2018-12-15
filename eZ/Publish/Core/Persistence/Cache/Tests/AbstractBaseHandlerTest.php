@@ -23,6 +23,7 @@ use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 use eZ\Publish\Core\Persistence\Cache\BookmarkHandler as CacheBookmarkHandler;
 use eZ\Publish\Core\Persistence\Cache\NotificationHandler as CacheNotificationHandler;
 use eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler as CacheUserPreferenceHandler;
+use eZ\Publish\Core\Persistence\Cache\PasswordBlacklistHandler as CachePasswordBlacklistHandler;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
@@ -86,6 +87,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
             new CacheBookmarkHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheNotificationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheUserPreferenceHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CachePasswordBlacklistHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             $this->loggerMock
         );
 

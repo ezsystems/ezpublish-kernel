@@ -24,6 +24,7 @@ use eZ\Publish\Core\Persistence\Legacy\URL\Handler as UrlHandler;
 use eZ\Publish\SPI\Persistence\Bookmark\Handler as BookmarkHandler;
 use eZ\Publish\SPI\Persistence\Notification\Handler as NotificationHandler;
 use eZ\Publish\SPI\Persistence\UserPreference\Handler as UserPreferenceHandler;
+use eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler as PasswordBlacklistHandler;
 
 /**
  * The main handler for Legacy Storage Engine.
@@ -75,6 +76,9 @@ class Handler implements HandlerInterface
     /** @var \eZ\Publish\SPI\Persistence\UserPreference\Handler */
     protected $userPreferenceHandler;
 
+    /** @var \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler */
+    protected $passwordBlacklistHandler;
+
     /**
      * @param \eZ\Publish\SPI\Persistence\Content\Handler $contentHandler
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
@@ -91,6 +95,7 @@ class Handler implements HandlerInterface
      * @param \eZ\Publish\SPI\Persistence\Bookmark\Handler $bookmarkHandler
      * @param \eZ\Publish\SPI\Persistence\Notification\Handler $notificationHandler
      * @param \eZ\Publish\SPI\Persistence\UserPreference\Handler $userPreferenceHandler
+     * @param \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler $passwordBlacklistHandler
      */
     public function __construct(
         ContentHandler $contentHandler,
@@ -107,7 +112,8 @@ class Handler implements HandlerInterface
         UrlHandler $urlHandler,
         BookmarkHandler $bookmarkHandler,
         NotificationHandler $notificationHandler,
-        UserPreferenceHandler $userPreferenceHandler
+        UserPreferenceHandler $userPreferenceHandler,
+        PasswordBlacklistHandler $passwordBlacklistHandler
     ) {
         $this->contentHandler = $contentHandler;
         $this->contentTypeHandler = $contentTypeHandler;
@@ -124,6 +130,7 @@ class Handler implements HandlerInterface
         $this->bookmarkHandler = $bookmarkHandler;
         $this->notificationHandler = $notificationHandler;
         $this->userPreferenceHandler = $userPreferenceHandler;
+        $this->passwordBlacklistHandler = $passwordBlacklistHandler;
     }
 
     public function contentHandler()
@@ -200,6 +207,14 @@ class Handler implements HandlerInterface
     public function userPreferenceHandler(): UserPreferenceHandler
     {
         return $this->userPreferenceHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler
+     */
+    public function passwordBlacklistHandler(): PasswordBlacklistHandler
+    {
+        return $this->passwordBlacklistHandler;
     }
 
     /**

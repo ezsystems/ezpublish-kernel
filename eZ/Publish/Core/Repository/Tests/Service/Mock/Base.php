@@ -203,6 +203,10 @@ abstract class Base extends TestCase
             $this->persistenceMock->expects($this->any())
                 ->method('urlWildcardHandler')
                 ->will($this->returnValue($this->getPersistenceMockHandler('URL\\Handler')));
+
+            $this->persistenceMock->expects($this->any())
+                ->method('passwordBlacklistHandler')
+                ->will($this->returnValue($this->getPersistenceMockHandler('User\\PasswordBlacklist\\Handler')));
         }
 
         return $this->persistenceMock;

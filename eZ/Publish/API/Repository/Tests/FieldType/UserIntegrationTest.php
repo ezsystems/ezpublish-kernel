@@ -91,6 +91,10 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'type' => 'int',
                     'default' => null,
                 ),
+                'isNotBlacklisted' => array(
+                    'type' => 'int',
+                    'default' => null,
+                ),
             ),
         );
     }
@@ -108,6 +112,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                 'requireAtLeastOneLowerCaseCharacter' => false,
                 'requireAtLeastOneNumericCharacter' => false,
                 'requireAtLeastOneNonAlphanumericCharacter' => false,
+                'isNotBlacklisted' => false,
                 'minLength' => null,
             ),
         );

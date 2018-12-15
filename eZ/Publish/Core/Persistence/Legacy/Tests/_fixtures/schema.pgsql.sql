@@ -501,6 +501,11 @@ CREATE TABLE ezpreferences (
     value text DEFAULT NULL
 );
 
+CREATE TABLE IF NOT EXISTS ezpasswordblacklist (
+   id SERIAL,
+   password character varying(255) NOT NULL
+);
+
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
 
 CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
@@ -695,6 +700,8 @@ CREATE INDEX ezpreferences_name ON ezpreferences USING btree (name);
 
 CREATE INDEX ezpreferences_user_id_idx ON ezpreferences USING btree (user_id,name);
 
+CREATE INDEX ezpasswordblacklist_password ON ezpasswordblacklist USING btree (password);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -829,6 +836,9 @@ ALTER TABLE ONLY eznotification
 
 ALTER TABLE ONLY ezpreferences
   ADD CONSTRAINT ezpreferences_pkey PRIMARY KEY (id);
+
+ALTER TABLE ONLY ezpasswordblacklist
+  ADD CONSTRAINT ezpasswordblacklist_pkey PRIMARY KEY (id)
 
 ALTER TABLE ezcontentbrowsebookmark
 ADD CONSTRAINT ezcontentbrowsebookmark_location_fk

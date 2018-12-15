@@ -654,3 +654,11 @@ CREATE TABLE `ezpreferences` (
   KEY `ezpreferences_name` (`name`),
   KEY `ezpreferences_user_id_idx` (`user_id`,`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `ezpasswordblacklist`;
+CREATE TABLE `ezpasswordblacklist` (
+   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+   `password` varchar(255) NOT NULL DEFAULT '',
+   PRIMARY KEY (`id`),
+   UNIQUE KEY `ezpasswordblacklist_password` (`password`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

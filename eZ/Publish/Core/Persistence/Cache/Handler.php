@@ -23,6 +23,7 @@ use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 use eZ\Publish\Core\Persistence\Cache\BookmarkHandler as CacheBookmarkHandler;
 use eZ\Publish\Core\Persistence\Cache\NotificationHandler as CacheNotificationHandler;
 use eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler as CacheUserPreferenceHandler;
+use eZ\Publish\Core\Persistence\Cache\PasswordBlacklistHandler as CachePasswordBlacklistHandler;
 
 /**
  * Persistence Cache Handler class.
@@ -74,6 +75,9 @@ class Handler implements PersistenceHandlerInterface
     /** @var \eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler */
     protected $userPreferenceHandler;
 
+    /** @var \eZ\Publish\Core\Persistence\Cache\PasswordBlacklistHandler */
+    protected $passwordBlacklistHandler;
+
     /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
@@ -93,6 +97,7 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\BookmarkHandler $bookmarkHandler
      * @param \eZ\Publish\Core\Persistence\Cache\NotificationHandler $notificationHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler $userPreferenceHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\PasswordBlacklistHandler $passwordBlacklistHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
@@ -111,6 +116,7 @@ class Handler implements PersistenceHandlerInterface
         CacheBookmarkHandler $bookmarkHandler,
         CacheNotificationHandler $notificationHandler,
         CacheUserPreferenceHandler $userPreferenceHandler,
+        CachePasswordBlacklistHandler $passwordBlacklistHandler,
         PersistenceLogger $logger
     ) {
         $this->persistenceHandler = $persistenceHandler;
@@ -128,6 +134,7 @@ class Handler implements PersistenceHandlerInterface
         $this->bookmarkHandler = $bookmarkHandler;
         $this->notificationHandler = $notificationHandler;
         $this->userPreferenceHandler = $userPreferenceHandler;
+        $this->passwordBlacklistHandler = $passwordBlacklistHandler;
         $this->logger = $logger;
     }
 
@@ -253,6 +260,14 @@ class Handler implements PersistenceHandlerInterface
     public function userPreferenceHandler()
     {
         return $this->userPreferenceHandler;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\User\PasswordBlacklist\Handler
+     */
+    public function passwordBlacklistHandler()
+    {
+        return $this->passwordBlacklistHandler;
     }
 
     /**
