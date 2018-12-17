@@ -5,7 +5,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved
  * @license For full copyright and license information view LICENSE file distributed with this source code
  */
-
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use DateTime;
@@ -63,7 +62,7 @@ class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
     private $phpPath;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $dryRun;
 
@@ -164,18 +163,18 @@ EOT
         $from = $input->getOption('from');
         $to = $input->getOption('to');
 
-        if($from && !$this->validateDateTimeString($from, $output)) {
+        if ($from && !$this->validateDateTimeString($from, $output)) {
             return;
         }
-        if($to && !$this->validateDateTimeString($to, $output)) {
+        if ($to && !$this->validateDateTimeString($to, $output)) {
             return;
         }
 
-        if($from) {
+        if ($from) {
             $this->from = $this->dateStringToTimestamp($from);
         }
 
-        if($to) {
+        if ($to) {
             $this->to = $this->dateStringToTimestamp($to);
         }
 
@@ -240,17 +239,17 @@ EOT
                     [$this->getPhpPath(), $consoleScript, $this->getName(), $this->timezone]
                 );
 
-                if($from) {
+                if ($from) {
                     $processBuilder->add('--from=' . $from);
                 }
-                if($to) {
+                if ($to) {
                     $processBuilder->add('--to=' . $to);
                 }
                 $processBuilder->add('--mode=' . $this->mode);
                 $processBuilder->add('--offset=' . $offset);
                 $processBuilder->add('--iteration-count=' . $iterationCount);
                 $processBuilder->add('--env=' . $input->getOption('env'));
-                if($this->dryRun) {
+                if ($this->dryRun) {
                     $processBuilder->add('--dry-run');
                 }
                 $processBuilder->setEnv('INNER_CALL', 1);
@@ -324,12 +323,12 @@ EOT
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
-        if($this->from) {
+        if ($this->from) {
             $query
                 ->andWhere('v.modified >= :fromTimestamp')
                 ->setParameter('fromTimestamp', $this->from);
         }
-        if($this->to) {
+        if ($this->to) {
             $query
                 ->andWhere('v.modified <= :toTimestamp')
                 ->setParameter('toTimestamp', $this->to);
@@ -360,12 +359,12 @@ EOT
             ->andWhere('a.data_int > 0')
             ->andWhere('v.version = a.version');
 
-        if($this->from) {
+        if ($this->from) {
             $query
                 ->andWhere('v.modified >= :fromTimestamp')
                 ->setParameter('fromTimestamp', $this->from);
         }
-        if($this->to) {
+        if ($this->to) {
             $query
                 ->andWhere('v.modified <= :toTimestamp')
                 ->setParameter('toTimestamp', $this->to);
@@ -395,7 +394,7 @@ EOT
     /**
      * @param string $dateTimeString
      * @param OutputInterface $output
-     * @return boolean
+     * @return bool
      */
     protected function validateDateTimeString($dateTimeString, OutputInterface $output)
     {
@@ -404,9 +403,10 @@ EOT
         } catch (\Exception $exception) {
             $output->writeln(
                 [
-                    "The --from and --to options must be a valid Date string.",
+                    'The --from and --to options must be a valid Date string.',
                 ]
             );
+
             return false;
         }
 
@@ -429,7 +429,7 @@ EOT
                 ]
             );
         } else {
-            if (!in_array($timezone, timezone_identifiers_list())) {
+            if (!\in_array($timezone, timezone_identifiers_list())) {
                 $output->writeln(
                     [
                         sprintf('% is not correct Timezone.', $timezone),
@@ -503,19 +503,21 @@ EOT
                 'The php executable could not be found, it\'s needed for executing parable sub processes, so add it to your PATH environment variable and try again'
             );
         }
+
         return $this->phpPath;
     }
 
     /**
      * @return string
      */
-    private function getFields() {
+    private function getFields()
+    {
         $fields = [];
 
-        if($this->mode == 'date' || $this->mode == 'all') {
+        if ($this->mode == 'date' || $this->mode == 'all') {
             $fields[] = 'ezdate';
         }
-        if($this->mode == 'datetime' || $this->mode == 'all') {
+        if ($this->mode == 'datetime' || $this->mode == 'all') {
             $fields[] = 'ezdatetime';
         }
 
@@ -527,7 +529,8 @@ EOT
      * @throws \Exception
      * @return int
      */
-    private function dateStringToTimestamp($dateString) {
+    private function dateStringToTimestamp($dateString)
+    {
         $date = new \DateTime($dateString);
 
         return $date->getTimestamp();
