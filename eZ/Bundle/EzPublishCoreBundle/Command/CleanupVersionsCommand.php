@@ -25,6 +25,7 @@ class CleanupVersionsCommand extends Command
 
     const VERSION_DRAFT = 'draft';
     const VERSION_ARCHIVED = 'archived';
+    const VERSION_PUBLISHED = 'published';
     const VERSION_ALL = 'all';
 
     /**
@@ -156,27 +157,36 @@ class CleanupVersionsCommand extends Command
                     $versionsCount
                 ), Output::VERBOSITY_VERBOSE);
 
-                $versions = array_slice($versions, 0, -$keep);
-
                 $removeAll = $status === self::VERSION_ALL;
                 $removeDrafts = $status === self::VERSION_DRAFT;
                 $removeArchived = $status === self::VERSION_ARCHIVED;
 
+                $versions = array_slice(
+                    array_filter($versions, function ($version) use ($removeAll, $removeDrafts, $removeArchived) {
+                        if (
+                            ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
+                            ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
+                            ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
+                        ) {
+                            return $version;
+                        }
+                    }), 0, -$keep);
+
+                $output->writeln(sprintf(
+                    "Found %d content's (%d) version(s) to remove.",
+                    count($versions),
+                    (int) $contentId
+                ), Output::VERBOSITY_VERBOSE);
+
                 /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $version */
                 foreach ($versions as $version) {
-                    if (
-                        ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
-                        ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
-                        ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
-                    ) {
-                        $this->contentService->deleteVersion($version);
-                        ++$removedVersionsCounter;
-                        $output->writeln(sprintf(
-                            "Content's (%d) version (%d) has been deleted.",
-                            $contentInfo->id,
-                            $version->id
-                        ), Output::VERBOSITY_VERBOSE);
-                    }
+                    $this->contentService->deleteVersion($version);
+                    ++$removedVersionsCounter;
+                    $output->writeln(sprintf(
+                        "Content's (%d) version (%d) has been deleted.",
+                        $contentInfo->id,
+                        $version->id
+                    ), Output::VERBOSITY_VERBOSE);
                 }
             } catch (Exception $e) {
                 $output->writeln(sprintf(
@@ -213,6 +223,9 @@ class CleanupVersionsCommand extends Command
         if ($status !== self::VERSION_ALL) {
             $query->where('v.status = :status');
             $query->setParameter('status', $this->getVersionInfoStatus($status));
+        } else {
+            $query->andWhere('v.status != :status');
+            $query->setParameter('status', $this->getVersionInfoStatus(self::VERSION_PUBLISHED));
         }
 
         $stmt = $query->execute();
@@ -234,6 +247,9 @@ class CleanupVersionsCommand extends Command
         }
         if ($status === self::VERSION_DRAFT) {
             return VersionInfo::STATUS_DRAFT;
+        }
+        if ($status === self::VERSION_PUBLISHED) {
+            return VersionInfo::STATUS_PUBLISHED;
         }
 
         throw new InvalidArgumentException(
