@@ -60,7 +60,7 @@ interface Handler
      * all translations will be retrieved.
      *
      * @param int|string $id
-     * @param int|string|null $version
+     * @param int|null $version
      * @param string[] $translations
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
