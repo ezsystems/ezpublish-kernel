@@ -144,7 +144,7 @@ abstract class Gateway
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
-     * @param mixed|null $version Current version on null value.
+     * @param int|null $version Current version on null value.
      * @param string[] $translations
      *
      * @return array
