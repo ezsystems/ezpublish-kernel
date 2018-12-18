@@ -67,9 +67,9 @@ class LocationServiceTest extends AbstractServiceTest
             ['loadLocation', [55, self::LANG_ARG], true, 1],
             ['loadLocation', [55, self::LANG_ARG, true], true, 1, null, 2],
 
-            ['loadLocationList', [[55]], ['return'], 1],
-            ['loadLocationList', [[55], self::LANG_ARG], ['return'], 1],
-            ['loadLocationList', [[55], self::LANG_ARG, true], ['return'], 1, null, 2],
+            ['loadLocationList', [[55]], [55 => $location], 1],
+            ['loadLocationList', [[55], self::LANG_ARG], [55 => $location], 1],
+            ['loadLocationList', [[55], self::LANG_ARG, true], [55 => $location], 1, null, 2],
 
             ['loadLocationByRemoteId', ['ergemiotregf'], true, 1],
             ['loadLocationByRemoteId', ['ergemiotregf', self::LANG_ARG], true, 1],
