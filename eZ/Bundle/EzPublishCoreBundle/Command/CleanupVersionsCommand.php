@@ -170,9 +170,9 @@ class CleanupVersionsCommand extends Command
                 $versions = array_slice(
                     array_filter($versions, function ($version) use ($removeAll, $removeDrafts, $removeArchived) {
                         if (
-                            ($removeAll && $version->status !== self::VERSION_STATUS[self::VERSION_PUBLISHED]) ||
-                            ($removeDrafts && $version->status === self::VERSION_STATUS[self::VERSION_DRAFT]) ||
-                            ($removeArchived && $version->status === self::VERSION_STATUS[self::VERSION_ARCHIVED])
+                            ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
+                            ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
+                            ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
                         ) {
                             return $version;
                         }
