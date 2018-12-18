@@ -28,6 +28,12 @@ class CleanupVersionsCommand extends Command
     const VERSION_PUBLISHED = 'published';
     const VERSION_ALL = 'all';
 
+    const VERSION_STATUS = [
+        self::VERSION_DRAFT => VersionInfo::STATUS_DRAFT,
+        self::VERSION_ARCHIVED => VersionInfo::STATUS_ARCHIVED,
+        self::VERSION_PUBLISHED => VersionInfo::STATUS_PUBLISHED
+    ];
+
     /**
      * @var \eZ\Publish\API\Repository\Repository
      */
@@ -133,7 +139,7 @@ class CleanupVersionsCommand extends Command
         $contentIdsCount = count($contentIds);
 
         if ($contentIdsCount === 0) {
-            $output->writeln('<info>There is no Contents matching given criteria.</info>');
+            $output->writeln('<info>There is no Content matching given criteria.</info>');
 
             return;
         }
@@ -144,6 +150,10 @@ class CleanupVersionsCommand extends Command
         ));
 
         $removedVersionsCounter = 0;
+
+        $removeAll = $status === self::VERSION_ALL;
+        $removeDrafts = $status === self::VERSION_DRAFT;
+        $removeArchived = $status === self::VERSION_ARCHIVED;
 
         foreach ($contentIds as $contentId) {
             try {
@@ -157,16 +167,12 @@ class CleanupVersionsCommand extends Command
                     $versionsCount
                 ), Output::VERBOSITY_VERBOSE);
 
-                $removeAll = $status === self::VERSION_ALL;
-                $removeDrafts = $status === self::VERSION_DRAFT;
-                $removeArchived = $status === self::VERSION_ARCHIVED;
-
                 $versions = array_slice(
                     array_filter($versions, function ($version) use ($removeAll, $removeDrafts, $removeArchived) {
                         if (
-                            ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
-                            ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
-                            ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
+                            ($removeAll && $version->status !== self::VERSION_STATUS[self::VERSION_PUBLISHED]) ||
+                            ($removeDrafts && $version->status === self::VERSION_STATUS[self::VERSION_DRAFT]) ||
+                            ($removeArchived && $version->status === self::VERSION_STATUS[self::VERSION_ARCHIVED])
                         ) {
                             return $version;
                         }
@@ -222,10 +228,10 @@ class CleanupVersionsCommand extends Command
 
         if ($status !== self::VERSION_ALL) {
             $query->where('v.status = :status');
-            $query->setParameter('status', $this->getVersionInfoStatus($status));
+            $query->setParameter('status', $this->mapStatusToVersionInfoStatus($status));
         } else {
             $query->andWhere('v.status != :status');
-            $query->setParameter('status', $this->getVersionInfoStatus(self::VERSION_PUBLISHED));
+            $query->setParameter('status', $this->mapStatusToVersionInfoStatus(self::VERSION_PUBLISHED));
         }
 
         $stmt = $query->execute();
@@ -240,16 +246,10 @@ class CleanupVersionsCommand extends Command
      *
      * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
-    private function getVersionInfoStatus($status)
+    private function mapStatusToVersionInfoStatus($status)
     {
-        if ($status === self::VERSION_ARCHIVED) {
-            return VersionInfo::STATUS_ARCHIVED;
-        }
-        if ($status === self::VERSION_DRAFT) {
-            return VersionInfo::STATUS_DRAFT;
-        }
-        if ($status === self::VERSION_PUBLISHED) {
-            return VersionInfo::STATUS_PUBLISHED;
+        if (array_key_exists($status, self::VERSION_STATUS)) {
+            return self::VERSION_STATUS[$status];
         }
 
         throw new InvalidArgumentException(
