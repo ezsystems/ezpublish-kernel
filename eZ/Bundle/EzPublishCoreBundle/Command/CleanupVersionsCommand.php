@@ -31,7 +31,7 @@ class CleanupVersionsCommand extends Command
     const VERSION_STATUS = [
         self::VERSION_DRAFT => VersionInfo::STATUS_DRAFT,
         self::VERSION_ARCHIVED => VersionInfo::STATUS_ARCHIVED,
-        self::VERSION_PUBLISHED => VersionInfo::STATUS_PUBLISHED
+        self::VERSION_PUBLISHED => VersionInfo::STATUS_PUBLISHED,
     ];
 
     /**
