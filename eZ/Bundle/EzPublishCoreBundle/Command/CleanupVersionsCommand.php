@@ -167,16 +167,19 @@ class CleanupVersionsCommand extends Command
                     $versionsCount
                 ), Output::VERBOSITY_VERBOSE);
 
-                $versions = array_slice(
-                    array_filter($versions, function ($version) use ($removeAll, $removeDrafts, $removeArchived) {
-                        if (
-                            ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
-                            ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
-                            ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
-                        ) {
-                            return $version;
-                        }
-                    }), 0, -$keep);
+                $versions = array_filter($versions, function ($version) use ($removeAll, $removeDrafts, $removeArchived) {
+                    if (
+                        ($removeAll && $version->status !== VersionInfo::STATUS_PUBLISHED) ||
+                        ($removeDrafts && $version->status === VersionInfo::STATUS_DRAFT) ||
+                        ($removeArchived && $version->status === VersionInfo::STATUS_ARCHIVED)
+                    ) {
+                        return $version;
+                    }
+                });
+
+                if ($keep > 0) {
+                    $versions = array_slice($versions, 0, -$keep);
+                }
 
                 $output->writeln(sprintf(
                     "Found %d content's (%d) version(s) to remove.",
