@@ -237,3 +237,12 @@ services:
         class: eZ\Publish\Core\MVC\Symfony\Translation\ValidationErrorFileVisitor
         tags:
             - { name: jms_translation.file_visitor, alias: ez_validation_error }
+
+    ezplatform.core.command.cleanup_versions:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\CleanupVersionsCommand
+        arguments:
+            - "@ezpublish.signalslot.repository"
+            - "@ezpublish.api.repository_configuration_provider"
+            - "@ezpublish.persistence.connection"
+        tags:
+            - { name: console.command }
