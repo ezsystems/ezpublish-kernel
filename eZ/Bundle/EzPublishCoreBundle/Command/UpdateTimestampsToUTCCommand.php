@@ -11,7 +11,7 @@ use DateTime;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
 use RuntimeException;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -25,6 +25,9 @@ use PDO;
 class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
 {
     const DEFAULT_ITERATION_COUNT = 100;
+    const EZDATE_ONLY_MODE = 'date';
+    const EZDATETIME_ONLY_MODE = 'datetime';
+    const ALL_MODE = 'all';
 
     /**
      * @var int
@@ -74,7 +77,7 @@ class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
             ->addArgument(
                 'timezone',
                 InputArgument::OPTIONAL,
-                'Original timestamp TimeZone',
+                'Original timestamp\'s TimeZone',
                 null
             )
             ->addOption(
@@ -89,12 +92,6 @@ class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Select conversion scope: date, datetime, all',
                 'all'
-            )
-            ->addOption(
-                'only-datetime',
-                null,
-                InputOption::VALUE_NONE,
-                'Only ezdatetime fields will be converted'
             )
             ->addOption(
                 'from',
@@ -129,7 +126,9 @@ class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
 The command <info>%command.name%</info> updates field
 data_int in configured Legacy Storage database for a given field type.
 
-Fields will be checked and updated only if not already in UTC timezone.
+This is to be used either when migrating from eZ Publish to eZ Platform 
+(when using platform backend instead of legacy), or when upgrading legacy 
+to v2019.03 which has been adapted to use UTC.
 
 <warning>During the script execution the database should not be modified.
 
@@ -199,19 +198,15 @@ EOT
                     break;
             }
 
-            $output->writeln(
-                [
-                    $modeTxt,
-                    'Calculating number of Content Object Attributes to update...',
-                ]
-            );
-            $count = $this->countEzDateObjectAttributes();
-            $output->writeln(
-                [
-                    sprintf('Found total of Content Objects Atributes for update: %d', $count),
-                    '',
-                ]
-            );
+            $output->writeln([
+                $modeTxt,
+                'Calculating number of Field values to update...',
+            ]);
+            $count = $this->countTimestampBasedFields();
+            $output->writeln([
+                sprintf('Found total of Field values for update: %d', $count),
+                '',
+            ]);
 
             if ($count == 0) {
                 $output->writeln('Nothing to process, exiting.');
@@ -235,25 +230,31 @@ EOT
             $progressBar->start();
 
             for ($offset = 0; $offset < $count; $offset += $iterationCount) {
-                $processBuilder = new ProcessBuilder(
-                    [$this->getPhpPath(), $consoleScript, $this->getName(), $this->timezone]
-                );
+                $processScriptFragments = [
+                    $this->getPhpPath(),
+                    $consoleScript,
+                    $this->getName(),
+                    $this->timezone,
+                    '--mode=' . $this->mode,
+                    '--offset=' . $offset,
+                    '--iteration-count=' . $iterationCount,
+                ];
 
                 if ($from) {
-                    $processBuilder->add('--from=' . $from);
+                    $processScriptFragments[] = '--from=' . $from;
                 }
                 if ($to) {
-                    $processBuilder->add('--to=' . $to);
+                    $processScriptFragments[] = '--to=' . $to;
                 }
-                $processBuilder->add('--mode=' . $this->mode);
-                $processBuilder->add('--offset=' . $offset);
-                $processBuilder->add('--iteration-count=' . $iterationCount);
-                $processBuilder->add('--env=' . $input->getOption('env'));
                 if ($this->dryRun) {
-                    $processBuilder->add('--dry-run');
+                    $processScriptFragments[] = '--dry-run';
                 }
-                $processBuilder->setEnv('INNER_CALL', 1);
-                $process = $processBuilder->getProcess();
+
+                $process = new Process(
+                    implode(' ', $processScriptFragments)
+                );
+
+                $process->setEnv(['INNER_CALL' => 1]);
                 $process->run();
 
                 if (!$process->isSuccessful()) {
@@ -266,12 +267,10 @@ EOT
             }
 
             $progressBar->finish();
-            $output->writeln(
-                [
-                    '',
-                    sprintf('Done: %d', $this->done),
-                ]
-            );
+            $output->writeln([
+                '',
+                sprintf('Done: %d', $this->done),
+            ]);
         }
     }
 
@@ -281,18 +280,18 @@ EOT
      */
     protected function processTimestamps($offset, $limit)
     {
-        $ezDateObjectAttributes = $this->getEzDateObjectAttributes($offset, $limit);
+        $timestampBasedFields = $this->getTimestampBasedFields($offset, $limit);
 
         $dateTimeInUTC = new DateTime();
         $dateTimeInUTC->setTimezone(new DateTimeZone('UTC'));
 
-        foreach ($ezDateObjectAttributes as $ezDateObjectAttribute) {
-            $timestamp = $ezDateObjectAttribute['data_int'];
+        foreach ($timestampBasedFields as $timestampBasedField) {
+            $timestamp = $timestampBasedField['data_int'];
             $dateTimeInUTC->setTimestamp($timestamp);
             $newTimestamp = $this->convertToUtcTimestamp($timestamp);
 
             if (!$this->dryRun) {
-                $this->updateTimestampToUTC($ezDateObjectAttribute['id'], $newTimestamp);
+                $this->updateTimestampToUTC($timestampBasedField['id'], $newTimestamp);
             }
             ++$this->done;
         }
@@ -304,7 +303,7 @@ EOT
      *
      * @return array
      */
-    protected function getEzDateObjectAttributes($offset, $limit)
+    protected function getTimestampBasedFields($offset, $limit)
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -340,9 +339,11 @@ EOT
     }
 
     /**
+     * Counts affected timestamp based fields using captured "mode", "from" and "to" command options.
+     *
      * @return int
      */
-    protected function countEzDateObjectAttributes()
+    protected function countTimestampBasedFields()
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -401,11 +402,7 @@ EOT
         try {
             new \DateTime($dateTimeString);
         } catch (\Exception $exception) {
-            $output->writeln(
-                [
-                    'The --from and --to options must be a valid Date string.',
-                ]
-            );
+            $output->writeln('The --from and --to options must be a valid Date string.');
 
             return false;
         }
@@ -422,30 +419,24 @@ EOT
     {
         if (!$timezone) {
             $timezone = date_default_timezone_get();
-            $output->writeln(
-                [
-                    sprintf('No Timezone set, using server Timezone: %s', $timezone),
-                    '',
-                ]
-            );
+            $output->writeln([
+                sprintf('No Timezone set, using server Timezone: %s', $timezone),
+                '',
+            ]);
         } else {
             if (!\in_array($timezone, timezone_identifiers_list())) {
-                $output->writeln(
-                    [
-                        sprintf('% is not correct Timezone.', $timezone),
-                        '',
-                    ]
-                );
+                $output->writeln([
+                    sprintf('% is not correct Timezone.', $timezone),
+                    '',
+                ]);
 
                 return;
             }
 
-            $output->writeln(
-                [
-                    sprintf('Using timezone: %s', $timezone),
-                    '',
-                ]
-            );
+            $output->writeln([
+                sprintf('Using timezone: %s', $timezone),
+                '',
+            ]);
         }
 
         return $timezone;
@@ -508,7 +499,7 @@ EOT
     }
 
     /**
-     * @return string
+     * @return string[]
      */
     private function getFields()
     {
