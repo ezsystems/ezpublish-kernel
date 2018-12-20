@@ -255,17 +255,9 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Loads data for a content object.
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param mixed $contentId
-     * @param mixed $version
-     * @param string[] $translations
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function load($contentId, $version, array $translations = null)
+    public function load($contentId, $version = null, array $translations = null)
     {
         try {
             return $this->innerGateway->load($contentId, $version, $translations);

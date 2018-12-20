@@ -518,24 +518,14 @@ class ContentTest extends BaseServiceMockTest
         $contentService = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
-        $realVersionNo = $versionNo;
         $realId = $id;
 
         if ($isRemoteId) {
-            $realVersionNo = $versionNo ?: 7;
             $realId = 123;
-            $spiContentInfo = new SPIContentInfo(array('currentVersionNo' => $realVersionNo, 'id' => $realId));
+            $spiContentInfo = new SPIContentInfo(array('currentVersionNo' => $versionNo ?: 7, 'id' => $realId));
             $contentHandler
                 ->expects($this->once())
                 ->method('loadContentInfoByRemoteId')
-                ->with($id)
-                ->will($this->returnValue($spiContentInfo));
-        } elseif ($versionNo === null) {
-            $realVersionNo = 7;
-            $spiContentInfo = new SPIContentInfo(array('currentVersionNo' => $realVersionNo));
-            $contentHandler
-                ->expects($this->once())
-                ->method('loadContentInfo')
                 ->with($id)
                 ->will($this->returnValue($spiContentInfo));
         } elseif (!empty($languages) && $useAlwaysAvailable) {
@@ -551,7 +541,7 @@ class ContentTest extends BaseServiceMockTest
         $contentHandler
             ->expects($this->once())
             ->method('load')
-            ->with($realId, $realVersionNo, $languages)
+            ->with($realId, $versionNo, $languages)
             ->will($this->returnValue($spiContent));
         $content = $this->createMock(APIContent::class);
         $this->getDomainMapperMock()

@@ -826,11 +826,9 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function load($contentId, $version, array $translations = null)
+    public function load($contentId, $version = null, array $translations = null)
     {
-        $results = $this->internalLoadContent([$contentId], $version, $translations);
-
-        return $results;
+        return $this->internalLoadContent([$contentId], $version, $translations);
     }
 
     /**
@@ -845,7 +843,7 @@ class DoctrineDatabase extends Gateway
      * @see load(), loadContentList()
      *
      * @param array $contentIds
-     * @param int $version
+     * @param int|null $version
      * @param string[]|null $translations
      *
      * @return array
