@@ -228,6 +228,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfoById($contentId, $versionNo = null)
     {
+        // @todo SPI should also support null to avoid concurrency issues
         if ($versionNo === null) {
             $versionNo = $this->loadContentInfo($contentId)->currentVersionNo;
         }
@@ -273,15 +274,10 @@ class ContentService implements ContentServiceInterface
             $useAlwaysAvailable = false;
         }
 
-        // As we have content info we can avoid that current version is looked up using spi in loadContent() if not set
-        if ($versionNo === null) {
-            $versionNo = $contentInfo->currentVersionNo;
-        }
-
         return $this->loadContent(
             $contentInfo->id,
             $languages,
-            $versionNo,
+            $versionNo,// On purpose pass as-is and not use $contentInfo, to make sure to return actual current version on null
             $useAlwaysAvailable
         );
     }
@@ -352,18 +348,10 @@ class ContentService implements ContentServiceInterface
                 $isRemoteId = false;
             }
 
-            // Get current version if $versionNo is not defined
-            if ($versionNo === null) {
-                if (!isset($spiContentInfo)) {
-                    $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($id);
-                }
-
-                $versionNo = $spiContentInfo->currentVersionNo;
-            }
-
             $loadLanguages = $languages;
             $alwaysAvailableLanguageCode = null;
             // Set main language on $languages filter if not empty (all) and $useAlwaysAvailable being true
+            // @todo Move use always available logic to SPI load methods, like done in location handler in 7.x
             if (!empty($loadLanguages) && $useAlwaysAvailable) {
                 if (!isset($spiContentInfo)) {
                     $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($id);

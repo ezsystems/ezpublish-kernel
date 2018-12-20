@@ -144,12 +144,12 @@ abstract class Gateway
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
-     * @param mixed $version
+     * @param int|null $version Current version on null value.
      * @param string[] $translations
      *
      * @return array
      */
-    abstract public function load($contentId, $version, array $translations = null);
+    abstract public function load($contentId, $version = null, array $translations = null);
 
     /**
      * Loads current version for a list of content objects.

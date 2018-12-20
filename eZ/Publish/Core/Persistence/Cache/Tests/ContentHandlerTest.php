@@ -418,6 +418,12 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(1))
             ->method('clear')
+            ->with('content', 2, ContentHandler::PUBLISHED_VERSION)
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects($this->at(2))
+            ->method('clear')
             ->with('content', 'info', 2, 'versioninfo', 1)
             ->will($this->returnValue(null));
 
@@ -452,6 +458,12 @@ class ContentHandlerTest extends HandlerTest
 
         $this->cacheMock
             ->expects($this->at(1))
+            ->method('clear')
+            ->with('content', 2, ContentHandler::PUBLISHED_VERSION)
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects($this->at(2))
             ->method('clear')
             ->with('content', 'info', 2)
             ->will($this->returnValue(null));
@@ -488,11 +500,17 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(1))
             ->method('clear')
+            ->with('content', 2, ContentHandler::PUBLISHED_VERSION)
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects($this->at(2))
+            ->method('clear')
             ->with('content', 'info', 2)
             ->willReturn(null);
 
         $this->cacheMock
-            ->expects($this->at(2))
+            ->expects($this->at(3))
             ->method('clear')
             ->with('content', 'info', 'remoteId', 'o34')
             ->willReturn(null);
@@ -542,6 +560,12 @@ class ContentHandlerTest extends HandlerTest
 
         $this->cacheMock
             ->expects($this->at(1))
+            ->method('clear')
+            ->with('content', 2, ContentHandler::PUBLISHED_VERSION)
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects($this->at(2))
             ->method('clear')
             ->with('content', 'info', 2, 'versioninfo', 1)
             ->will($this->returnValue(null));
@@ -661,17 +685,23 @@ class ContentHandlerTest extends HandlerTest
         $this->cacheMock
             ->expects($this->at(1))
             ->method('clear')
-            ->with('content', 'info', 2)
+            ->with('content', 2, ContentHandler::PUBLISHED_VERSION)
             ->will($this->returnValue(null));
 
         $this->cacheMock
             ->expects($this->at(2))
             ->method('clear')
-            ->with('content', 'info', 'remoteId')
+            ->with('content', 'info', 2)
             ->will($this->returnValue(null));
 
         $this->cacheMock
             ->expects($this->at(3))
+            ->method('clear')
+            ->with('content', 'info', 'remoteId')
+            ->will($this->returnValue(null));
+
+        $this->cacheMock
+            ->expects($this->at(4))
             ->method('clear')
             ->with('location', 'subtree')
             ->will($this->returnValue(null));
