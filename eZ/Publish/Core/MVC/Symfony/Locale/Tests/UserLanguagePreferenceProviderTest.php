@@ -17,10 +17,14 @@ use Symfony\Component\Yaml\Yaml;
 
 class UserLanguagePreferenceProviderTest extends TestCase
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProvider */
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProvider
+     */
     private $userLanguagePreferenceProvider;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\RequestStack */
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\RequestStack
+     */
     private $requestStackMock;
 
     public function setUp()

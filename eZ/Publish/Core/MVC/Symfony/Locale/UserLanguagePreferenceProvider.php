@@ -16,10 +16,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class UserLanguagePreferenceProvider
 {
-    /** @var \Symfony\Component\HttpFoundation\RequestStack */
+    /**
+     * @var \Symfony\Component\HttpFoundation\RequestStack
+     */
     private $requestStack;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $languageCodesMap;
 
     public function __construct(RequestStack $requestStack, array $languageCodesMap)
