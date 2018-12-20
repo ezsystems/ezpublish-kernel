@@ -42,6 +42,26 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         return $location;
     }
 
+    public function loadList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
+    {
+        return $this->getMultipleCacheItems(
+            $locationIds,
+            'ez-location-',
+            function (array $cacheMissIds) use ($translations, $useAlwaysAvailable) {
+                $this->logger->logCall(
+                    __CLASS__ . '::loadList',
+                    ['location' => $cacheMissIds, 'translations' => $translations, 'always-available' => $useAlwaysAvailable]
+                );
+
+                return $this->persistenceHandler->locationHandler()->loadList($cacheMissIds, $translations, $useAlwaysAvailable);
+            },
+            function (Location $location) {
+                return $this->getCacheTags($location);
+            },
+            array_fill_keys($locationIds, '-' . $this->getCacheTranslationKey($translations, $useAlwaysAvailable))
+        );
+    }
+
     /**
      * {@inheritdoc}
      */

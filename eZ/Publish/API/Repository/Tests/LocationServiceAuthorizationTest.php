@@ -147,6 +147,27 @@ class LocationServiceAuthorizationTest extends BaseTest
     }
 
     /**
+     * Test for the loadLocationList() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     */
+    public function testLoadLocationListFiltersUnauthorizedLocations(): void
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        // Set current user to newly created user (with no rights)
+        $repository->getPermissionResolver()->setCurrentUserReference(
+            $this->createUserVersion1()
+        );
+
+        $locations = $locationService->loadLocationList([13]);
+
+        self::assertInternalType('iterable', $locations);
+        self::assertCount(0, $locations);
+    }
+
+    /**
      * Test for the loadLocationByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()

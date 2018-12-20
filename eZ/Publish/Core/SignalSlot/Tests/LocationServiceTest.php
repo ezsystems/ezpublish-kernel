@@ -92,6 +92,12 @@ class LocationServiceTest extends ServiceTest
                 0,
             ),
             array(
+                'loadLocationList',
+                array([$rootId], [], true),
+                [$root],
+                0,
+            ),
+            array(
                 'loadLocationByRemoteId',
                 array($rootRemoteId, [], true),
                 $root,

@@ -57,6 +57,15 @@ class LocationService implements LocationServiceInterface
         );
     }
 
+    public function loadLocationList(array $locationIds, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null): iterable
+    {
+        return $this->service->loadLocationList(
+            $locationIds,
+            $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages),
+            $this->languageResolver->getUseAlwaysAvailable($useAlwaysAvailable)
+        );
+    }
+
     public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         return $this->service->loadLocationByRemoteId(

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
@@ -83,6 +84,22 @@ class DoctrineDatabase extends Gateway
         }
 
         throw new NotFound('location', $nodeId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
+    {
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $q->where(
+            $q->expr()->in(
+                't.node_id',
+                $q->createNamedParameter($locationIds, Connection::PARAM_INT_ARRAY)
+            )
+        );
+
+        return $q->execute()->fetchAll(FetchMode::ASSOCIATIVE);
     }
 
     /**

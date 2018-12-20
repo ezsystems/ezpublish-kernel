@@ -106,6 +106,24 @@ class Handler implements BaseLocationHandler
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
+    {
+        $list = $this->locationGateway->getNodeDataList($locationIds, $translations, $useAlwaysAvailable);
+
+        $locations = [];
+        foreach ($list as $row) {
+            $id = (int)$row['node_id'];
+            if (!isset($locations[$id])) {
+                $locations[$id] = $this->locationMapper->createLocationFromRow($row);
+            }
+        }
+
+        return $locations;
+    }
+
+    /**
      * Loads the subtree ids of the location identified by $locationId.
      *
      * @param int $locationId

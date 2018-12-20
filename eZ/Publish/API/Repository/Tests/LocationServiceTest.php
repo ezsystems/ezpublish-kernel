@@ -549,6 +549,69 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadLocationList() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     */
+    public function testLoadLocationList(): void
+    {
+        $repository = $this->getRepository();
+
+        // 5 is the ID of an existing location, 442 is a non-existing id
+        $locationService = $repository->getLocationService();
+        $locations = $locationService->loadLocationList([5, 442]);
+
+        self::assertInternalType('iterable', $locations);
+        self::assertCount(1, $locations);
+        self::assertEquals([5], array_keys($locations));
+        self::assertInstanceOf(Location::class, $locations[5]);
+        self::assertEquals(5, $locations[5]->id);
+    }
+
+    /**
+     * Test for the loadLocationList() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     * @depends testLoadLocationList
+     */
+    public function testLoadLocationListPrioritizedLanguagesFallback(): void
+    {
+        $repository = $this->getRepository();
+
+        $this->createLanguage('pol-PL', 'Polski');
+
+        // 5 is the ID of an existing location, 442 is a non-existing id
+        $locationService = $repository->getLocationService();
+        $locations = $locationService->loadLocationList([5, 442], ['pol-PL'], false);
+
+        self::assertInternalType('iterable', $locations);
+        self::assertCount(0, $locations);
+    }
+
+    /**
+     * Test for the loadLocationList() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     * @depends testLoadLocationListPrioritizedLanguagesFallback
+     */
+    public function testLoadLocationListPrioritizedLanguagesFallbackAndAlwaysAvailable(): void
+    {
+        $repository = $this->getRepository();
+
+        $this->createLanguage('pol-PL', 'Polski');
+
+        // 5 is the ID of an existing location, 442 is a non-existing id
+        $locationService = $repository->getLocationService();
+        $locations = $locationService->loadLocationList([5, 442], ['pol-PL'], true);
+
+        self::assertInternalType('iterable', $locations);
+        self::assertCount(1, $locations);
+        self::assertEquals([5], array_keys($locations));
+        self::assertInstanceOf(Location::class, $locations[5]);
+        self::assertEquals(5, $locations[5]->id);
+    }
+
+    /**
      * Test for the loadLocationByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
