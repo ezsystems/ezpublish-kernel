@@ -818,35 +818,11 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data for a content object.
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param mixed $contentId
-     * @param mixed $version
-     * @param string[] $translations
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function load($contentId, $version, array $translations = null)
+    public function load($contentId, $version = null, array $translations = null)
     {
-        $query = $this->queryBuilder->createFindQuery($translations);
-        $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-                    $query->bindValue($contentId)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_version'),
-                    $query->bindValue($version)
-                )
-            )
-        );
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->internalLoadContent([$contentId], $version, $translations);
     }
 
     /**
@@ -861,7 +837,7 @@ class DoctrineDatabase extends Gateway
      * @see loadContentList()
      *
      * @param array $contentIds
-     * @param int $version
+     * @param int|null $version
      * @param string[]|null $translations
      *
      * @return array
