@@ -64,13 +64,12 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
     /**
      * {@inheritdoc}
-     *
-     * @todo Add support for setting version number to null in order to reuse cache with loadContentList.
      */
-    public function load($contentId, $versionNo, array $translations = null)
+    public function load($contentId, $versionNo = null, array $translations = null)
     {
+        $versionKey = $versionNo ? "-${versionNo}" : '';
         $translationsKey = empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations);
-        $cacheItem = $this->cache->getItem("ez-content-${contentId}-${versionNo}-${translationsKey}");
+        $cacheItem = $this->cache->getItem("ez-content-${contentId}${versionKey}-${translationsKey}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }

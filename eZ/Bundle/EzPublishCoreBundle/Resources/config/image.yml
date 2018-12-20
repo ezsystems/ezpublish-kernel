@@ -1,6 +1,8 @@
 parameters:
     ezpublish.image_alias.imagine.binary_loader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
+    ezpublish.image_alias.imagine.decorated_cache_resolver_factory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\ResolverFactory
     ezpublish.image_alias.imagine.cache_resolver.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
+    ezpublish.image_alias.imagine.cache_resolver_decorator.class: Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
     ezpublish.image_alias.imagine.cache.alias_generator_decorator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\AliasGeneratorDecorator
     ezpublish.image_alias.imagine.variation.imagine_alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Variation\ImagineAwareAliasGenerator
     ezpublish.image_alias.imagine.alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\AliasGenerator
@@ -80,6 +82,18 @@ services:
             - "@ezpublish.image_alias.variation_path_generator"
         tags:
             - { name: liip_imagine.cache.resolver, resolver: ezpublish }
+
+    ezpublish.image_alias.imagine.cache_resolver_decorator_factory:
+        class: '%ezpublish.image_alias.imagine.decorated_cache_resolver_factory.class%'
+        arguments:
+            - '@ezpublish.config.resolver'
+            - '@ezpublish.image_alias.imagine.cache_resolver_decorator.inner'
+            - '%ezpublish.image_alias.imagine.cache_resolver_decorator.class%'
+
+    ezpublish.image_alias.imagine.cache_resolver_decorator:
+        class: '%ezpublish.image_alias.imagine.cache_resolver_decorator.class%'
+        factory: 'ezpublish.image_alias.imagine.cache_resolver_decorator_factory:createCacheResolver'
+        decorates: ezpublish.image_alias.imagine.cache_resolver
 
     ezpublish.image_alias.imagine.cache.alias_generator_decorator:
         class: '%ezpublish.image_alias.imagine.cache.alias_generator_decorator.class%'

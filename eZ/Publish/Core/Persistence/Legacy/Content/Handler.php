@@ -303,23 +303,9 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Returns the raw data of a content object identified by $id, in a struct.
-     *
-     * A version to load must be specified. If you want to load the current
-     * version of a content object use SearchHandler::findSingle() with the
-     * ContentId criterion.
-     *
-     * Optionally a translation filter may be specified. If specified only the
-     * translations with the listed language codes will be retrieved. If not,
-     * all translations will be retrieved.
-     *
-     * @param int|string $id
-     * @param int|string $version
-     * @param string[] $translations
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content Content value object
+     * {@inheritdoc}
      */
-    public function load($id, $version, array $translations = null)
+    public function load($id, $version = null, array $translations = null)
     {
         $rows = $this->contentGateway->load($id, $version, $translations);
 
@@ -329,7 +315,10 @@ class Handler implements BaseContentHandler
 
         $contentObjects = $this->mapper->extractContentFromRows(
             $rows,
-            $this->contentGateway->loadVersionedNameData(array(array('id' => $id, 'version' => $version)))
+            $this->contentGateway->loadVersionedNameData([[
+                'id' => $id,
+                'version' => $rows[0]['ezcontentobject_version_version'],
+            ]])
         );
         $content = $contentObjects[0];
         unset($rows, $contentObjects);

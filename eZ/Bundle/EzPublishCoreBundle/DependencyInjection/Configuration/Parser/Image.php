@@ -115,12 +115,17 @@ class Image extends AbstractParser implements SuggestionCollectorAwareInterface
                         ->end()
                     ->end()
                 ->end()
+            ->end()
+            ->scalarNode('image_host')
+                ->info('Images host. All system images URLs are prefixed with given host if configured.')
+                ->example('https://ezplatform.com')
             ->end();
     }
 
     public function preMap(array $config, ContextualizerInterface $contextualizer)
     {
         $contextualizer->mapConfigArray('image_variations', $config);
+        $contextualizer->mapSetting('image_host', $config);
     }
 
     public function mapConfig(array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer)
