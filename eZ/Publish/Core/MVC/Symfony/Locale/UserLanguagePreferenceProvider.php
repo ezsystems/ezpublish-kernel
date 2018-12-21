@@ -11,10 +11,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Locale;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-/**
- * Provides list of user-preferred languages.
- */
-class UserLanguagePreferenceProvider
+class UserLanguagePreferenceProvider implements UserLanguagePreferenceProviderInterface
 {
     /**
      * @var \Symfony\Component\HttpFoundation\RequestStack
@@ -26,19 +23,16 @@ class UserLanguagePreferenceProvider
      */
     private $languageCodesMap;
 
+    /**
+     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+     * @param array $languageCodesMap
+     */
     public function __construct(RequestStack $requestStack, array $languageCodesMap)
     {
         $this->requestStack = $requestStack;
         $this->languageCodesMap = $languageCodesMap;
     }
 
-    /**
-     * Return a list of user's browser preferred locales directly from Accept-Language header.
-     *
-     * @param \Symfony\Component\HttpFoundation\Request request to retrieve information from, use current if null
-     *
-     * @return string[]
-     */
     public function getPreferredLocales(Request $request = null): array
     {
         $request = $request ?? $this->requestStack->getCurrentRequest();
@@ -50,17 +44,14 @@ class UserLanguagePreferenceProvider
                 $result[$language] = (float) $quality;
 
                 return $result;
-            }, []);
+            },
+            []
+        );
         arsort($preferredLocales);
 
         return array_keys($preferredLocales);
     }
 
-    /**
-     * List of eZ Language codes.
-     *
-     * @return string[]
-     */
     public function getPreferredLanguages(): array
     {
         $languageCodes = [];

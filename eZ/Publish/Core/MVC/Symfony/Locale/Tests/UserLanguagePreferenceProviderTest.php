@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml;
 class UserLanguagePreferenceProviderTest extends TestCase
 {
     /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProvider
+     * @var \eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProviderInterface
      */
     private $userLanguagePreferenceProvider;
 
