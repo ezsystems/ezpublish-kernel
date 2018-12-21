@@ -6,6 +6,7 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
 namespace eZ\Publish\Core\MVC\Symfony\Routing\Generator;
 
 use eZ\Publish\API\Repository\Repository;
@@ -63,8 +64,12 @@ class UrlAliasGenerator extends Generator
      */
     private $unsafeCharMap;
 
-    public function __construct(Repository $repository, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver, array $unsafeCharMap = array())
-    {
+    public function __construct(
+        Repository $repository,
+        RouterInterface $defaultRouter,
+        ConfigResolverInterface $configResolver,
+        array $unsafeCharMap = array()
+    ) {
         $this->repository = $repository;
         $this->defaultRouter = $defaultRouter;
         $this->configResolver = $configResolver;
@@ -108,25 +113,24 @@ class UrlAliasGenerator extends Generator
             $queryString = '?' . http_build_query($parameters, '', '&');
         }
 
-        if (!empty($urlAliases)) {
-            $path = $urlAliases[0]->path;
-            // Remove rootLocation's prefix if needed.
-            if ($rootLocationId !== null) {
-                $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId, $languages, $siteaccess);
-                // "/" cannot be considered as a path prefix since it's root, so we ignore it.
-                if ($pathPrefix !== '/' && mb_stripos($path, $pathPrefix) === 0) {
-                    $path = mb_substr($path, mb_strlen($pathPrefix));
-                } elseif ($pathPrefix !== '/' && !$this->isUriPrefixExcluded($path) && $this->logger !== null) {
-                    // Location path is outside configured content tree and doesn't have an excluded prefix.
-                    // This is most likely an error (from content edition or link generation logic).
-                    $this->logger->warning("Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$rootLocationId");
-                }
+        if (empty($urlAliases)) {
+            throw new \RuntimeException(sprintf('Malformed data - The Location should have at least one URL alias (locationid : %d)',
+                $location->id));
+        }
+
+        $path = $urlAliases[0]->path;
+
+        // Remove rootLocation's prefix if needed.
+        if ($rootLocationId !== null) {
+            $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId, $languages, $siteaccess);
+            // "/" cannot be considered as a path prefix since it's root, so we ignore it.
+            if ($pathPrefix !== '/' && mb_stripos($path, $pathPrefix) === 0) {
+                $path = mb_substr($path, mb_strlen($pathPrefix));
+            } elseif ($pathPrefix !== '/' && !$this->isUriPrefixExcluded($path) && $this->logger !== null) {
+                // Location path is outside configured content tree and doesn't have an excluded prefix.
+                // This is most likely an error (from content edition or link generation logic).
+                $this->logger->warning("Generating a link to a location outside root content tree: '$path' is outside tree starting to location #$rootLocationId");
             }
-        } else {
-            $path = $this->defaultRouter->generate(
-                self::INTERNAL_CONTENT_VIEW_ROUTE,
-                array('contentId' => $location->contentId, 'locationId' => $location->id)
-            );
         }
 
         $path = $path ?: '/';
