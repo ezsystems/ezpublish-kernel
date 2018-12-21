@@ -123,6 +123,7 @@ class UrlAliasGenerator extends Generator
                 }
             }
         } else {
+            $this->logger->error(sprintf('Malformed data - The Location should have at least one URL alias (locationid : %d)', $location->id));
             $path = $this->defaultRouter->generate(
                 self::INTERNAL_CONTENT_VIEW_ROUTE,
                 array('contentId' => $location->contentId, 'locationId' => $location->id)
