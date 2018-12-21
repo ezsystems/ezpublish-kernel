@@ -323,8 +323,8 @@ interface UserService
      * @since 7.4
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-      *
-      * @return bool
+     *
+     * @return bool
      */
     public function isUserGroup(Content $content): bool;
 
