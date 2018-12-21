@@ -15,12 +15,10 @@ use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\ContentInfoLocationLoader;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as AuthorizationAttribute;
 use eZ\Publish\Core\MVC\Symfony\View\EmbedView;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Builds ContentView objects.
@@ -30,8 +28,8 @@ class ContentViewBuilder implements ViewBuilder
     /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /** @var AuthorizationCheckerInterface */
-    private $authorizationChecker;
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
+    private $permissionResolver;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator */
     private $viewConfigurator;
@@ -52,16 +50,15 @@ class ContentViewBuilder implements ViewBuilder
 
     public function __construct(
         Repository $repository,
-        AuthorizationCheckerInterface $authorizationChecker,
         Configurator $viewConfigurator,
         ParametersInjector $viewParametersInjector,
         ContentInfoLocationLoader $locationLoader = null
     ) {
         $this->repository = $repository;
-        $this->authorizationChecker = $authorizationChecker;
         $this->viewConfigurator = $viewConfigurator;
         $this->viewParametersInjector = $viewParametersInjector;
         $this->locationLoader = $locationLoader;
+        $this->permissionResolver = $this->repository->getPermissionResolver();
     }
 
     public function matches($argument)
@@ -185,9 +182,7 @@ class ContentViewBuilder implements ViewBuilder
         // Check that Content is published, since sudo allows loading unpublished content.
         if (
             $content->getVersionInfo()->status !== VersionInfo::STATUS_PUBLISHED
-            && !$this->authorizationChecker->isGranted(
-                new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
-            )
+            && !$this->permissionResolver->canUser('content', 'versionread', $content)
         ) {
             throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentId]);
         }
@@ -227,17 +222,11 @@ class ContentViewBuilder implements ViewBuilder
      */
     private function canRead(Content $content, Location $location = null)
     {
-        $limitations = ['valueObject' => $content->contentInfo];
-        if (isset($location)) {
-            $limitations['targets'] = $location;
-        }
-
-        $readAttribute = new AuthorizationAttribute('content', 'read', $limitations);
-        $viewEmbedAttribute = new AuthorizationAttribute('content', 'view_embed', $limitations);
+        $targets = isset($location) ? [$location] : [];
 
         return
-            $this->authorizationChecker->isGranted($readAttribute) ||
-            $this->authorizationChecker->isGranted($viewEmbedAttribute);
+            $this->permissionResolver->canUser('content', 'read', $content->contentInfo, $targets) ||
+            $this->permissionResolver->canUser('content', 'read_embed', $content->contentInfo, $targets);
     }
 
     /**
