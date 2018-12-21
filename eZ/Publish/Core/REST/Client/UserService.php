@@ -408,7 +408,13 @@ class UserService implements APIUserService, Sessionable
      */
     public function isUser(Content $content): bool
     {
-        // TODO: Implement isUser() method.
+        foreach ($content->getFields() as $field) {
+            if ($field->fieldTypeIdentifier === 'ezuser') {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -416,6 +422,7 @@ class UserService implements APIUserService, Sessionable
      */
     public function isUserGroup(Content $content): bool
     {
-        // TODO: Implement isUserGroup() method.
+        // TODO: Need a way to identify user groups her. Config is an option, lookup another but not an ideal solution.
+        return false;
     }
 }
