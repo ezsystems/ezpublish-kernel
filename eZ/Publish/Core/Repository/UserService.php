@@ -1149,7 +1149,7 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Checks if Content is a user.
+     * {@inheritdoc}
      */
     public function isUser(APIContent $content): bool
     {
@@ -1170,7 +1170,7 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Checks if Content is a user group.
+     * {@inheritdoc}
      */
     public function isUserGroup(APIContent $content): bool
     {

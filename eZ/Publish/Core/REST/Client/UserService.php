@@ -347,6 +347,29 @@ class UserService implements APIUserService, Sessionable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isUser(Content $content): bool
+    {
+        foreach ($content->getFields() as $field) {
+            if ($field->fieldTypeIdentifier === 'ezuser') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUserGroup(Content $content): bool
+    {
+        // TODO: Need a way to identify user groups her. Config is an option, lookup another but not an ideal solution.
+        return false;
+    }
+
+    /**
      * Instantiate a user create class.
      *
      * @param string $login the login of the new user
@@ -401,28 +424,5 @@ class UserService implements APIUserService, Sessionable
     public function validatePassword(string $password, PasswordValidationContext $context = null): array
     {
         throw new \Exception('@todo: Implement.');
-    }
-
-    /**
-     * Checks if Content is a user.
-     */
-    public function isUser(Content $content): bool
-    {
-        foreach ($content->getFields() as $field) {
-            if ($field->fieldTypeIdentifier === 'ezuser') {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Checks if Content is a user group.
-     */
-    public function isUserGroup(Content $content): bool
-    {
-        // TODO: Need a way to identify user groups her. Config is an option, lookup another but not an ideal solution.
-        return false;
     }
 }

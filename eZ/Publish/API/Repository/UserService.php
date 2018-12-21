@@ -310,6 +310,10 @@ interface UserService
      * Checks if Content is a user.
      *
      *  @since 7.4
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return bool
      */
     public function isUser(Content $content): bool;
 
@@ -317,6 +321,10 @@ interface UserService
      * Checks if Content is a user group.
      *
      * @since 7.4
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+      *
+      * @return bool
      */
     public function isUserGroup(Content $content): bool;
 
