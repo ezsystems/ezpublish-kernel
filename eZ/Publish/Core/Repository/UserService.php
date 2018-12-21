@@ -1149,6 +1149,35 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isUser(APIContent $content): bool
+    {
+        // First check against config for fast check
+        if ($this->settings['userClassID'] == $content->getVersionInfo()->getContentInfo()->contentTypeId) {
+            return true;
+        }
+
+        // For users we ultimately need to look for ezuser type as content type id could be several for users.
+        // And config might be different from one SA to the next, which we don't care about here.
+        foreach ($content->getFields() as $field) {
+            if ($field->fieldTypeIdentifier === 'ezuser') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUserGroup(APIContent $content): bool
+    {
+        return $this->settings['userGroupClassID'] == $content->getVersionInfo()->getContentInfo()->contentTypeId;
+    }
+
+    /**
      * Instantiate a user create class.
      *
      * @param string $login the login of the new user

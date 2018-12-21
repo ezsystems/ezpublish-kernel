@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\UserService as APIUserService;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -343,6 +344,29 @@ class UserService implements APIUserService, Sessionable
         array $prioritizedLanguages = []
     ) {
         throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUser(Content $content): bool
+    {
+        foreach ($content->getFields() as $field) {
+            if ($field->fieldTypeIdentifier === 'ezuser') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUserGroup(Content $content): bool
+    {
+        // TODO: Need a way to identify user groups her. Config is an option, lookup another but not an ideal solution.
+        return false;
     }
 
     /**

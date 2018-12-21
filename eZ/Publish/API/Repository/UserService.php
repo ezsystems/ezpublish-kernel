@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -304,6 +305,28 @@ interface UserService
      * @return \eZ\Publish\API\Repository\Values\User\User[]
      */
     public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = []);
+
+    /**
+     * Checks if Content is a user.
+     *
+     *  @since 7.4
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return bool
+     */
+    public function isUser(Content $content): bool;
+
+    /**
+     * Checks if Content is a user group.
+     *
+     * @since 7.4
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return bool
+     */
+    public function isUserGroup(Content $content): bool;
 
     /**
      * Instantiate a user create class.
