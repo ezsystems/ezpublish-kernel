@@ -43,6 +43,8 @@ trait MultiLanguageDescriptionTrait
             }
         }
 
-        return $this->descriptions[$this->mainLanguageCode];
+        return isset($this->descriptions[$this->mainLanguageCode])
+            ? $this->descriptions[$this->mainLanguageCode]
+            : reset($this->descriptions);
     }
 }

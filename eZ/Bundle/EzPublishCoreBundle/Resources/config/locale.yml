@@ -44,6 +44,47 @@ parameters:
         tur-TR: tr_TR
         ukr-UA: uk_UA
 
+    ezpublish.locale.browser_map:
+        au: ['eng-AU']
+        be: ['fre-BE']
+        br: ['por-BR']
+        ca: ['eng-CA']
+        cn: ['chi-CN']
+        cz: ['cze-CZ']
+        de: ['ger-DE']
+        dk: ['dan-DK']
+        en: ['eng-GB', 'eng-US']
+        en-us: ['eng-US']
+        es: ['esl-ES']
+        fi: ['fin-FI']
+        fr: ['fre-FR']
+        gb: ['eng-GB']
+        gr: ['ell-GR']
+        hk: ['chi-HK']
+        hr: ['cro-HR']
+        hu: ['hun-HU']
+        id: ['ind-ID']
+        il: ['heb-IL']
+        in: ['hin-IN']
+        it: ['ita-IT']
+        jp: ['jpn-JP']
+        kr: ['kor-KR']
+        mx: ['esl-MX']
+        mz: ['por-MZ']
+        nl: ['dut-NL']
+        no: ['nor-NO']
+        nz: ['eng-NZ']
+        pl: ['pol-PL']
+        pt: ['por-PT']
+        rs: ['srp-RS']
+        ru: ['rus-RU']
+        sa: ['ara-SA']
+        se: ['swe-SE']
+        sk: ['slk-SK']
+        tr: ['tur-TR']
+        tw: ['chi-TW']
+        ua: ['ukr-UA']
+
     ezpublish.locale.converter.class: eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter
 
 services:
@@ -57,3 +98,8 @@ services:
         arguments: ["@request_stack", "%kernel.default_locale%", "@?router"]
         tags:
             - { name: kernel.event_subscriber }
+
+    eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProvider:
+        autowire: true
+        arguments:
+            $languageCodesMap: '%ezpublish.locale.browser_map%'
