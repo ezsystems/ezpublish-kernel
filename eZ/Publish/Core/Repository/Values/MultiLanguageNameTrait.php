@@ -43,6 +43,8 @@ trait MultiLanguageNameTrait
             }
         }
 
-        return $this->names[$this->mainLanguageCode];
+        return isset($this->names[$this->mainLanguageCode])
+            ? $this->names[$this->mainLanguageCode]
+            : reset($this->names);
     }
 }
