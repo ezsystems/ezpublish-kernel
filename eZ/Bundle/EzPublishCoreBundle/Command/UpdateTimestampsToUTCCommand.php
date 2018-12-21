@@ -25,9 +25,11 @@ use PDO;
 class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
 {
     const DEFAULT_ITERATION_COUNT = 100;
-    const EZDATE_ONLY_MODE = 'date';
-    const EZDATETIME_ONLY_MODE = 'datetime';
-    const ALL_MODE = 'all';
+    const MODES = [
+        'date' => ['ezdate'],
+        'datetime' => ['ezdatetime'],
+        'all' => ['ezdate', 'ezdatetime'],
+    ];
 
     /**
      * @var int
@@ -159,6 +161,14 @@ EOT
         $this->dryRun = $input->getOption('dry-run');
         $this->mode = $input->getOption('mode');
 
+        if (!isset(self::MODES[$this->mode])) {
+            $output->writeln(
+                sprintf('Selected mode is not supported, please use one of: %s', implode(', ', array_keys(self::MODES)))
+            );
+
+            return;
+        }
+
         $from = $input->getOption('from');
         $to = $input->getOption('to');
 
@@ -168,11 +178,9 @@ EOT
         if ($to && !$this->validateDateTimeString($to, $output)) {
             return;
         }
-
         if ($from) {
             $this->from = $this->dateStringToTimestamp($from);
         }
-
         if ($to) {
             $this->to = $this->dateStringToTimestamp($to);
         }
@@ -187,19 +195,8 @@ EOT
             $timezone = $input->getArgument('timezone');
             $this->timezone = $this->validateTimezone($timezone, $output);
 
-            $modeTxt = 'Converting timestamps for both ezdate and ezdatetime fields.';
-
-            switch ($this->mode) {
-                case 'date':
-                    $modeTxt = 'Converting timestamps for ezdate fields.';
-                    break;
-                case 'datetime':
-                    $modeTxt = 'Converting timestamps for ezdatetime fields.';
-                    break;
-            }
-
             $output->writeln([
-                $modeTxt,
+                sprintf('Converting timestamps for fields: %s', implode(', ', self::MODES[$this->mode])),
                 'Calculating number of Field values to update...',
             ]);
             $count = $this->countTimestampBasedFields();
@@ -313,7 +310,7 @@ EOT
             ->where(
                 $query->expr()->in(
                     'a.data_type_string',
-                    $query->createNamedParameter($this->getFields(), Connection::PARAM_STR_ARRAY)
+                    $query->createNamedParameter(self::MODES[$this->mode], Connection::PARAM_STR_ARRAY)
                 )
             )
             ->andWhere('a.data_int is not null')
@@ -353,7 +350,7 @@ EOT
             ->where(
                 $query->expr()->in(
                     'a.data_type_string',
-                    $query->createNamedParameter($this->getFields(), Connection::PARAM_STR_ARRAY)
+                    $query->createNamedParameter(self::MODES[$this->mode], Connection::PARAM_STR_ARRAY)
                 )
             )
             ->andWhere('a.data_int is not null')
@@ -496,23 +493,6 @@ EOT
         }
 
         return $this->phpPath;
-    }
-
-    /**
-     * @return string[]
-     */
-    private function getFields()
-    {
-        $fields = [];
-
-        if ($this->mode == 'date' || $this->mode == 'all') {
-            $fields[] = 'ezdate';
-        }
-        if ($this->mode == 'datetime' || $this->mode == 'all') {
-            $fields[] = 'ezdatetime';
-        }
-
-        return $fields;
     }
 
     /**
