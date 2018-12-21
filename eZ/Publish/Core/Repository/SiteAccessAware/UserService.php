@@ -171,12 +171,12 @@ class UserService implements UserServiceInterface
         return $this->service->expireUserToken($hash);
     }
 
-    public function isUser(Content $content) : bool
+    public function isUser(Content $content): bool
     {
         return $this->service->isUser($content);
     }
 
-    public function isUserGroup(Content $content) : bool
+    public function isUserGroup(Content $content): bool
     {
         return $this->service->isUserGroup($content);
     }

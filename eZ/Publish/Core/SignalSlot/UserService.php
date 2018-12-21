@@ -505,7 +505,7 @@ class UserService implements UserServiceInterface
     /**
      * Checks if Content is a user.
      */
-    public function isUser(Content $content) : bool
+    public function isUser(Content $content): bool
     {
         return $this->service->isUser($content);
     }
@@ -513,7 +513,7 @@ class UserService implements UserServiceInterface
     /**
      * Checks if Content is a user group.
      */
-    public function isUserGroup(Content $content) : bool
+    public function isUserGroup(Content $content): bool
     {
         return $this->service->isUserGroup($content);
     }

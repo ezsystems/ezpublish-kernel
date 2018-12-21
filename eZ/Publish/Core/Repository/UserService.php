@@ -1151,7 +1151,7 @@ class UserService implements UserServiceInterface
     /**
      * Checks if Content is a user.
      */
-    public function isUser(APIContent $content) : bool
+    public function isUser(APIContent $content): bool
     {
         // First check against config for fast check
         if ($this->settings['userClassID'] == $content->getVersionInfo()->getContentInfo()->contentTypeId) {
@@ -1172,7 +1172,7 @@ class UserService implements UserServiceInterface
     /**
      * Checks if Content is a user group.
      */
-    public function isUserGroup(APIContent $content) : bool
+    public function isUserGroup(APIContent $content): bool
     {
         return $this->settings['userGroupClassID'] == $content->getVersionInfo()->getContentInfo()->contentTypeId;
     }

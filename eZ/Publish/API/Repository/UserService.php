@@ -311,14 +311,14 @@ interface UserService
      *
      *  @since 7.4
      */
-    public function isUser(Content $content) : bool;
+    public function isUser(Content $content): bool;
 
     /**
      * Checks if Content is a user group.
      *
      * @since 7.4
      */
-    public function isUserGroup(Content $content) : bool;
+    public function isUserGroup(Content $content): bool;
 
     /**
      * Instantiate a user create class.
