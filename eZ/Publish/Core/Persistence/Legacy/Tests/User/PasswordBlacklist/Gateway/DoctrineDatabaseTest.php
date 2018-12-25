@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\User\PasswordBlacklist\Gateway;
 
+use Doctrine\DBAL\FetchMode;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\User\PasswordBlacklist\Gateway\DoctrineDatabase;
 
@@ -32,6 +33,41 @@ class DoctrineDatabaseTest extends TestCase
     {
         $this->assertTrue($this->getGateway()->isBlacklisted('publish'));
         $this->assertFalse($this->getGateway()->isBlacklisted('H@xi0R!'));
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\PasswordBlacklist\Gateway\DoctrineDatabase::removeAll
+     */
+    public function testRemoveAll()
+    {
+        $this->getGateway()->removeAll();
+
+        $this->assertEquals(0, (int)$this->connection->executeQuery(
+            'SELECT COUNT(*) FROM ezpasswordblacklist'
+        )->fetchColumn());
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\PasswordBlacklist\Gateway\DoctrineDatabase::removeAll
+     */
+    public function testInsert()
+    {
+        $passwords = ['publish', 'publish', 'abc123', '111111', 'master'];
+
+        $this->getGateway()->insert($passwords);
+
+        $actualResult = $this->connection->executeQuery(
+            'SELECT password FROM ezpasswordblacklist ORDER BY password ASC'
+        )->fetchAll(FetchMode::COLUMN);
+
+        $this->assertEquals([
+            '111111',
+            '123456',
+            'abc123',
+            'master',
+            'publish',
+            'qwerty',
+        ], $actualResult);
     }
 
     /**

@@ -41,4 +41,31 @@ class HandlerTest extends TestCase
 
         $this->assertTrue($this->handler->isBlacklisted($password));
     }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\PasswordBlacklist\Handler::removeAll
+     */
+    public function testRemoveAll()
+    {
+        $this->gateway
+            ->expects($this->once())
+            ->method('removeAll');
+
+        $this->handler->removeAll();
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\User\PasswordBlacklist\Handler::insert
+     */
+    public function testInsert()
+    {
+        $passwords = ['123456', 'qwerty', 'password'];
+
+        $this->gateway
+            ->expects($this->once())
+            ->method('insert')
+            ->with($passwords);
+
+        $this->handler->insert($passwords);
+    }
 }

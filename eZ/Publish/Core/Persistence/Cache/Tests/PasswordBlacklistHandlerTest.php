@@ -28,6 +28,8 @@ class PasswordBlacklistHandlerTest extends AbstractCacheHandlerTest
         // string $method, array $arguments, array? $tags, string? $key, mixed $returnValue
         return [
             ['isBlacklisted', ['pass'], [], null, false],
+            ['removeAll', [], [], null, null],
+            ['insert', [['123456', 'qwerty', 'password']], [], null, null],
         ];
     }
 
