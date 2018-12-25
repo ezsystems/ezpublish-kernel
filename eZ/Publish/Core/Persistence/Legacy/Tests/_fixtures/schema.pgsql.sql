@@ -503,7 +503,7 @@ CREATE TABLE ezpreferences (
 
 CREATE TABLE IF NOT EXISTS ezpasswordblacklist (
    id SERIAL,
-   password character varying(255) NOT NULL
+   password character varying(64) NOT NULL
 );
 
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
@@ -838,7 +838,7 @@ ALTER TABLE ONLY ezpreferences
   ADD CONSTRAINT ezpreferences_pkey PRIMARY KEY (id);
 
 ALTER TABLE ONLY ezpasswordblacklist
-  ADD CONSTRAINT ezpasswordblacklist_pkey PRIMARY KEY (id)
+  ADD CONSTRAINT ezpasswordblacklist_pkey PRIMARY KEY (id);
 
 ALTER TABLE ezcontentbrowsebookmark
 ADD CONSTRAINT ezcontentbrowsebookmark_location_fk

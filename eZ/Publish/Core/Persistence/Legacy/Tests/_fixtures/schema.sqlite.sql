@@ -577,7 +577,7 @@ CREATE INDEX ezpreferences_user_id_idx ON ezpreferences (user_id, name);
 
 CREATE TABLE ezpasswordblacklist (
  id integer NOT NULL PRIMARY KEY AUTOINCREMENT,
- password text(255) DEFAULT NULL
+ password text(64) DEFAULT NULL
 );
 
 CREATE UNIQUE INDEX ezpasswordblacklist_password ON ezpasswordblacklist (password);

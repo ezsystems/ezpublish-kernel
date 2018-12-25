@@ -5,7 +5,7 @@ UPDATE ezsite_data SET value='7.5.0' WHERE name='ezpublish-version';
 
 CREATE TABLE IF NOT EXISTS ezpasswordblacklist (
   id SERIAL,
-  password character varying(255) NOT NULL,
+  password character varying(64) NOT NULL,
   CONSTRAINT ezpasswordblacklist_pkey PRIMARY KEY (id)
 );
 

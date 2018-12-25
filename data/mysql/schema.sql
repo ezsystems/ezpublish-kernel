@@ -2579,7 +2579,7 @@ CREATE TABLE `eznotification` (
 DROP TABLE IF EXISTS `ezpasswordblacklist`;
 CREATE TABLE `ezpasswordblacklist` (
    `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-   `password` varchar(255) NOT NULL DEFAULT '',
+   `password` varchar(64) NOT NULL DEFAULT '',
    PRIMARY KEY (`id`),
    UNIQUE KEY `ezpasswordblacklist_password` (`password`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
