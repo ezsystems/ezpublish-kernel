@@ -31,8 +31,24 @@ class Handler implements HandlerInterface
     /**
      * {@inheritdoc}
      */
+    public function removeAll(): void
+    {
+        $this->gateway->removeAll();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isBlacklisted(string $password): bool
     {
         return $this->gateway->isBlacklisted($password);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function insert(iterable $passwords): void
+    {
+        $this->gateway->insert($passwords);
     }
 }

@@ -15,6 +15,16 @@ class PasswordBlacklistHandler extends AbstractHandler implements PasswordBlackl
     /**
      * {@inheritdoc}
      */
+    public function removeAll(): void
+    {
+        $this->logger->logCall(__METHOD__);
+
+        $this->persistenceHandler->passwordBlacklistHandler()->removeAll();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isBlacklisted(string $password): bool
     {
         $this->logger->logCall(__METHOD__, [
@@ -22,5 +32,15 @@ class PasswordBlacklistHandler extends AbstractHandler implements PasswordBlackl
         ]);
 
         return $this->persistenceHandler->passwordBlacklistHandler()->isBlacklisted($password);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function insert(iterable $passwords): void
+    {
+        $this->logger->logCall(__METHOD__);
+
+        $this->persistenceHandler->passwordBlacklistHandler()->insert($passwords);
     }
 }

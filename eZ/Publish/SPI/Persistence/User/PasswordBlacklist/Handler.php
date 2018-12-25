@@ -11,10 +11,22 @@ namespace eZ\Publish\SPI\Persistence\User\PasswordBlacklist;
 interface Handler
 {
     /**
+     * Removes all entries from the password blacklist.
+     */
+    public function removeAll(): void;
+
+    /**
      * Returns true if blacklist contains given password.
      *
      * @param string $password
      * @return bool
      */
     public function isBlacklisted(string $password): bool;
+
+    /**
+     * Add given passwords to the blacklist.
+     *
+     * @param iterable $passwords
+     */
+    public function insert(iterable $passwords): void;
 }

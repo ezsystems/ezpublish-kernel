@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Persistence\Legacy\User\PasswordBlacklist\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\User\PasswordBlacklist\Gateway;
 
 /**
@@ -51,5 +52,36 @@ class DoctrineDatabase extends Gateway
             );
 
         return (int)$queryBuilder->execute()->fetchColumn() > 0;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function insert(iterable $passwords): void
+    {
+        $query = $this->connection
+            ->createQueryBuilder()
+            ->insert(self::TABLE_NAME)
+            ->values(['password' => ':password']);
+
+        foreach ($passwords as $password) {
+            if ($this->isBlacklisted($password)) {
+                continue;
+            }
+
+            $query->setParameter('password', $password, ParameterType::STRING);
+            $query->execute();
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function removeAll(): void
+    {
+        $this->connection
+            ->createQueryBuilder()
+            ->delete(self::TABLE_NAME)
+            ->execute();
     }
 }

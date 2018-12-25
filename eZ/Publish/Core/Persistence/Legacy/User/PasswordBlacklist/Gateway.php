@@ -20,4 +20,18 @@ abstract class Gateway
      * @return bool
      */
     abstract public function isBlacklisted(string $password): bool;
+
+    /**
+     * Add given passwords to the blacklist.
+     *
+     * For performance reasons should be executed as single transaction.
+     *
+     * @param iterable $passwords
+     */
+    abstract public function insert(iterable $passwords): void;
+
+    /**
+     * Removes all entries from the password blacklist.
+     */
+    abstract public function removeAll(): void;
 }
