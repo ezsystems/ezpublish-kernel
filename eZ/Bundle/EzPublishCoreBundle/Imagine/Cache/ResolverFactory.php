@@ -27,11 +27,6 @@ class ResolverFactory
     private $resolverDecoratorClass;
 
     /**
-     * @var array
-     */
-    private $hosts = [];
-
-    /**
      * @var string
      */
     private $proxyResolverClass;
@@ -64,21 +59,20 @@ class ResolverFactory
      */
     public function createCacheResolver()
     {
-        if ($this->configResolver->hasParameter('image_host')
-            && ($imageHost = $this->configResolver->getParameter('image_host')) !== '') {
-            if ($imageHost === '/') {
-                $this->resolverDecoratorClass = $this->relativeResolverClass;
-            } else {
-                $this->resolverDecoratorClass = $this->proxyResolverClass;
-            }
+        $imageHost = $this->configResolver->hasParameter('image_host') ?
+            $this->configResolver->getParameter('image_host') :
+            '';
 
-            $this->hosts = [$imageHost];
+        if ($imageHost === '') {
+            return $this->resolver;
         }
 
-        if ($this->resolverDecoratorClass !== null) {
-            return new $this->resolverDecoratorClass($this->resolver, $this->hosts);
+        if ($imageHost === '/') {
+            $this->resolverDecoratorClass = $this->relativeResolverClass;
+        } else {
+            $this->resolverDecoratorClass = $this->proxyResolverClass;
         }
 
-        return $this->resolver;
+        return new $this->resolverDecoratorClass($this->resolver, [$imageHost]);
     }
 }
