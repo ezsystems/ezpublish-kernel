@@ -2,6 +2,7 @@ parameters:
     liip_imagine.filter.configuration.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration
 
     ezpublish.image_alias.imagine.binary_loader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
+    ezpublish.image_alias.imagine.cache_resolver.interface: Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
     ezpublish.image_alias.imagine.cache_resolver_decorator_factory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\ResolverFactory
     ezpublish.image_alias.imagine.cache_resolver_decorator_relative.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\Resolver\RelativeResolver
     ezpublish.image_alias.imagine.cache_resolver_decorator_proxy.class: Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
@@ -95,7 +96,7 @@ services:
             - '%ezpublish.image_alias.imagine.cache_resolver_decorator_relative.class%'
 
     ezpublish.image_alias.imagine.cache_resolver_decorator:
-        class: '%ezpublish.image_alias.imagine.cache_resolver_decorator_proxy.class%'
+        class: '%ezpublish.image_alias.imagine.cache_resolver.interface%'
         factory: 'ezpublish.image_alias.imagine.cache_resolver_decorator_factory:createCacheResolver'
         decorates: ezpublish.image_alias.imagine.cache_resolver
 
