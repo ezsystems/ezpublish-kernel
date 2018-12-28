@@ -9,17 +9,11 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
-use eZ\Publish\API\Repository\Values\UserPreference\UserPreference;
-use eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceList;
+use eZ\Publish\Core\Repository\Decorator\UserPreferenceServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\UserPreferenceService\UserPreferenceSetSignal;
 
-class UserPreferenceService implements UserPreferenceServiceInterface
+class UserPreferenceService extends UserPreferenceServiceDecorator
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserPreferenceService
-     */
-    protected $service;
-
     /**
      * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
      */
@@ -31,7 +25,8 @@ class UserPreferenceService implements UserPreferenceServiceInterface
      */
     public function __construct(UserPreferenceServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -48,29 +43,5 @@ class UserPreferenceService implements UserPreferenceServiceInterface
                 'value' => $userPreferenceSetStruct->value,
             ]));
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserPreference(string $userPreferenceName): UserPreference
-    {
-        return $this->service->getUserPreference($userPreferenceName);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadUserPreferences(int $offset = 0, int $limit = 25): UserPreferenceList
-    {
-        return $this->service->loadUserPreferences($offset, $limit);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserPreferenceCount(): int
-    {
-        return $this->service->getUserPreferenceCount();
     }
 }

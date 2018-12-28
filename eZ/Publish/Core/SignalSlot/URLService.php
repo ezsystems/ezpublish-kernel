@@ -8,19 +8,12 @@ namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
-use eZ\Publish\API\Repository\Values\URL\URLQuery;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
+use eZ\Publish\Core\Repository\Decorator\URLServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\URLService\UpdateUrlSignal;
 
-class URLService implements URLServiceInterface
+class URLService extends URLServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\URLService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -36,48 +29,9 @@ class URLService implements URLServiceInterface
      */
     public function __construct(URLServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createUpdateStruct()
-    {
-        return $this->service->createUpdateStruct();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findUrls(URLQuery $query)
-    {
-        return $this->service->findUrls($query);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findUsages(URL $url, $offset = 0, $limit = -1)
-    {
-        return $this->service->findUsages($url, $offset, $limit);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadById($id)
-    {
-        return $this->service->loadById($id);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadByUrl($url)
-    {
-        return $this->service->loadByUrl($url);
     }
 
     /**

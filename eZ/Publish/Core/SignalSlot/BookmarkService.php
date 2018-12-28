@@ -9,20 +9,13 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
-use eZ\Publish\API\Repository\Values\Bookmark\BookmarkList;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Decorator\BookmarkServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\BookmarkService\CreateBookmarkSignal;
 use eZ\Publish\Core\SignalSlot\Signal\BookmarkService\DeleteBookmarkSignal;
 
-class BookmarkService implements BookmarkServiceInterface
+class BookmarkService extends BookmarkServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\BookmarkService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -38,7 +31,8 @@ class BookmarkService implements BookmarkServiceInterface
      */
     public function __construct(BookmarkServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -64,21 +58,5 @@ class BookmarkService implements BookmarkServiceInterface
         $this->signalDispatcher->emit(new DeleteBookmarkSignal([
             'locationId' => $location->id,
         ]));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadBookmarks(int $offset = 0, int $limit = 25): BookmarkList
-    {
-        return $this->service->loadBookmarks($offset, $limit);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isBookmarked(Location $location): bool
-    {
-        return $this->service->isBookmarked($location);
     }
 }

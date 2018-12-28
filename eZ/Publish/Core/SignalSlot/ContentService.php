@@ -17,8 +17,8 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
 use eZ\Publish\API\Repository\Values\Content\TranslationValues;
-use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\Decorator\ContentServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteTranslationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
@@ -37,15 +37,8 @@ use eZ\Publish\Core\SignalSlot\Signal\ContentService\AddTranslationInfoSignal;
 /**
  * ContentService class.
  */
-class ContentService implements ContentServiceInterface
+class ContentService extends ContentServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -64,154 +57,9 @@ class ContentService implements ContentServiceInterface
      */
     public function __construct(ContentServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
-    }
-
-    /**
-     * Loads a content info object.
-     *
-     * To load fields use loadContent
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given id does not exist
-     *
-     * @param int $contentId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
-    public function loadContentInfo($contentId)
-    {
-        return $this->service->loadContentInfo($contentId);
-    }
-
-    /**
-     * Loads a content info object for the given remoteId.
-     *
-     * To load fields use loadContent
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
-     *
-     * @param string $remoteId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
-    public function loadContentInfoByRemoteId($remoteId)
-    {
-        return $this->service->loadContentInfoByRemoteId($remoteId);
-    }
-
-    /**
-     * Loads a version info of the given content object.
-     *
-     * If no version number is given, the method returns the current version
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the version with the given number does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param int $versionNo the version number. If not given the current version is returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
-    public function loadVersionInfo(ContentInfo $contentInfo, $versionNo = null)
-    {
-        return $this->service->loadVersionInfo($contentInfo, $versionNo);
-    }
-
-    /**
-     * Loads a version info of the given content object id.
-     *
-     * If no version number is given, the method returns the current version
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the version with the given number does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
-     *
-     * @param mixed $contentId
-     * @param int $versionNo the version number. If not given the current version is returned.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
-    public function loadVersionInfoById($contentId, $versionNo = null)
-    {
-        return $this->service->loadVersionInfoById($contentId, $versionNo);
-    }
-
-    /**
-     * Loads content in a version for the given content info object.
-     *
-     * If no version number is given, the method returns the current version
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if version with the given number does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function loadContentByContentInfo(ContentInfo $contentInfo, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
-    {
-        return $this->service->loadContentByContentInfo($contentInfo, $languages, $versionNo, $useAlwaysAvailable);
-    }
-
-    /**
-     * Loads content in the version given by version info.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function loadContentByVersionInfo(VersionInfo $versionInfo, array $languages = null, $useAlwaysAvailable = true)
-    {
-        return $this->service->loadContentByVersionInfo($versionInfo, $languages, $useAlwaysAvailable);
-    }
-
-    /**
-     * Loads content in a version of the given content object.
-     *
-     * If no version number is given, the method returns the current version
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the content or version with the given id and languages does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
-     *
-     * @param int $contentId
-     * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function loadContent($contentId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
-    {
-        return $this->service->loadContent($contentId, $languages, $versionNo, $useAlwaysAvailable);
-    }
-
-    /**
-     * Loads content in a version for the content object reference by the given remote id.
-     *
-     * If no version is given, the method returns the current version
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content or version with the given remote id does not exist
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
-     *
-     * @param string $remoteId
-     * @param array $languages A language filter for fields. If not given all languages are returned
-     * @param int $versionNo the version number. If not given the current version is returned
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content
-     */
-    public function loadContentByRemoteId($remoteId, array $languages = null, $versionNo = null, $useAlwaysAvailable = true)
-    {
-        return $this->service->loadContentByRemoteId($remoteId, $languages, $versionNo, $useAlwaysAvailable);
     }
 
     /**
@@ -335,22 +183,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Loads drafts for a user.
-     *
-     * If no user is given the drafts for the authenticated user a returned
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] the drafts ({@link VersionInfo}) owned by the given user
-     */
-    public function loadContentDrafts(User $user = null)
-    {
-        return $this->service->loadContentDrafts($user);
-    }
-
-    /**
      * Translate a version.
      *
      * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
@@ -465,20 +297,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Loads all versions for the given content.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to list versions
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
-     */
-    public function loadVersions(ContentInfo $contentInfo)
-    {
-        return $this->service->loadVersions($contentInfo);
-    }
-
-    /**
      * Copies the content to a new location. If no version is given,
      * all versions are copied, otherwise only the given version.
      *
@@ -506,36 +324,6 @@ class ContentService implements ContentServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Loads all outgoing relations for the given version.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    public function loadRelations(VersionInfo $versionInfo)
-    {
-        return $this->service->loadRelations($versionInfo);
-    }
-
-    /**
-     * Loads all incoming relations for a content object.
-     *
-     * The relations come only from published versions of the source content objects
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
-    public function loadReverseRelations(ContentInfo $contentInfo)
-    {
-        return $this->service->loadReverseRelations($contentInfo);
     }
 
     /**
@@ -616,25 +404,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * lists the translations done on this content object.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter
-     *
-     * @todo TBD - filter by source version, destination version and languages
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
-     *
-     * @since 5.0
-     */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
-    {
-        return $this->service->loadTranslationInfos($contentInfo, $filter);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function removeTranslation(ContentInfo $contentInfo, $languageCode)
@@ -672,90 +441,5 @@ class ContentService implements ContentServiceInterface
         $this->signalDispatcher->emit(
             new DeleteTranslationSignal(['contentId' => $contentInfo->id, 'languageCode' => $languageCode])
         );
-    }
-
-    /**
-     * Delete specified Translation from a Content Draft.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
-     *         is the only one the Content Draft has or it is the main Translation of a Content Object.
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed
-     *         to edit the Content (in one of the locations of the given Content Object).
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if languageCode argument
-     *         is invalid for the given Draft.
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if specified Version was not found
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo Content Version Draft
-     * @param string $languageCode Language code of the Translation to be removed
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content Content Draft w/o the specified Translation
-     *
-     * @since 6.12
-     */
-    public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode)
-    {
-        return $this->service->deleteTranslationFromDraft($versionInfo, $languageCode);
-    }
-
-    /**
-     * Bulk-load Content items by the list of ContentInfo Value Objects.
-     *
-     * Note: it does not throw exceptions on load, just ignores erroneous Content item.
-     * Moreover, since the method works on pre-loaded ContentInfo list, it is assumed that user is
-     * allowed to access every Content on the list.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo[] $contentInfoList
-     * @param string[] $languages A language priority, filters returned fields and is used as prioritized language code on
-     *                            returned value object. If not given all languages are returned.
-     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true,
-     *                                 unless all languages have been asked for.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content[] list of Content items with Content Ids as keys
-     */
-    public function loadContentListByContentInfo(
-        array $contentInfoList,
-        array $languages = [],
-        $useAlwaysAvailable = true
-    ) {
-        return $this->service->loadContentListByContentInfo(
-            $contentInfoList,
-            $languages,
-            $useAlwaysAvailable
-        );
-    }
-
-    /**
-     * Instantiates a new content create struct object.
-     *
-     * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param string $mainLanguageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
-     */
-    public function newContentCreateStruct(ContentType $contentType, $mainLanguageCode)
-    {
-        return $this->service->newContentCreateStruct($contentType, $mainLanguageCode);
-    }
-
-    /**
-     * Instantiates a new content meta data update struct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct
-     */
-    public function newContentMetadataUpdateStruct()
-    {
-        return $this->service->newContentMetadataUpdateStruct();
-    }
-
-    /**
-     * Instantiates a new content update struct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
-     */
-    public function newContentUpdateStruct()
-    {
-        return $this->service->newContentUpdateStruct();
     }
 }

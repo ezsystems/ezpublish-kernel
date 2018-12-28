@@ -21,6 +21,7 @@ use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
+use eZ\Publish\Core\Repository\Decorator\RoleServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicyByRoleDraftSignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AddPolicySignal;
 use eZ\Publish\Core\SignalSlot\Signal\RoleService\AssignRoleToUserGroupSignal;
@@ -42,15 +43,8 @@ use eZ\Publish\Core\SignalSlot\Signal\RoleService\UpdateRoleSignal;
 /**
  * RoleService class.
  */
-class RoleService implements RoleServiceInterface
+class RoleService extends RoleServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\RoleService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -69,7 +63,8 @@ class RoleService implements RoleServiceInterface
      */
     public function __construct(RoleServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -127,38 +122,6 @@ class RoleService implements RoleServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Loads a role for the given id.
-     *
-     * @since 6.0
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given id was not found
-     *
-     * @param mixed $id
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
-    public function loadRoleDraft($id)
-    {
-        return $this->service->loadRoleDraft($id);
-    }
-
-    /**
-     * Loads a RoleDraft by the ID of the role it was created from.
-     *
-     * @param mixed $roleId ID of the role the draft was created from.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a RoleDraft with the given id was not found
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
-    public function loadRoleDraftByRoleId($roleId)
-    {
-        return $this->service->loadRoleDraftByRoleId($roleId);
     }
 
     /**
@@ -434,48 +397,6 @@ class RoleService implements RoleServiceInterface
     }
 
     /**
-     * Loads a role for the given id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
-     *
-     * @param mixed $id
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function loadRole($id)
-    {
-        return $this->service->loadRole($id);
-    }
-
-    /**
-     * Loads a role for the given identifier.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a role with the given name was not found
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role
-     */
-    public function loadRoleByIdentifier($identifier)
-    {
-        return $this->service->loadRoleByIdentifier($identifier);
-    }
-
-    /**
-     * Loads all roles.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Role[]
-     */
-    public function loadRoles()
-    {
-        return $this->service->loadRoles();
-    }
-
-    /**
      * Deletes the given role.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
@@ -494,20 +415,6 @@ class RoleService implements RoleServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Loads all policies from roles which are assigned to a user or to user groups to which the user belongs.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
-     *
-     * @param mixed $userId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
-     */
-    public function loadPoliciesByUserId($userId)
-    {
-        return $this->service->loadPoliciesByUserId($userId);
     }
 
     /**
@@ -627,135 +534,5 @@ class RoleService implements RoleServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Loads a role assignment for the given id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the role assignment was not found
-     *
-     * @param mixed $roleAssignmentId
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment
-     */
-    public function loadRoleAssignment($roleAssignmentId)
-    {
-        return $this->service->loadRoleAssignment($roleAssignmentId);
-    }
-
-    /**
-     * Returns the assigned user and user groups to this role.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Role $role
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleAssignment[]
-     */
-    public function getRoleAssignments(Role $role)
-    {
-        return $this->service->getRoleAssignments($role);
-    }
-
-    /**
-     * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
-     */
-    public function getRoleAssignmentsForUser(User $user, $inherited = false)
-    {
-        return $this->service->getRoleAssignmentsForUser($user, $inherited);
-    }
-
-    /**
-     * Returns the roles assigned to the given user group.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment[]
-     */
-    public function getRoleAssignmentsForUserGroup(UserGroup $userGroup)
-    {
-        return $this->service->getRoleAssignmentsForUserGroup($userGroup);
-    }
-
-    /**
-     * Instantiates a role create class.
-     *
-     * @param string $name
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
-     */
-    public function newRoleCreateStruct($name)
-    {
-        return $this->service->newRoleCreateStruct($name);
-    }
-
-    /**
-     * Instantiates a policy create class.
-     *
-     * @param string $module
-     * @param string $function
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
-     */
-    public function newPolicyCreateStruct($module, $function)
-    {
-        return $this->service->newPolicyCreateStruct($module, $function);
-    }
-
-    /**
-     * Instantiates a policy update class.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
-     */
-    public function newPolicyUpdateStruct()
-    {
-        return $this->service->newPolicyUpdateStruct();
-    }
-
-    /**
-     * Instantiates a policy update class.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
-     */
-    public function newRoleUpdateStruct()
-    {
-        return $this->service->newRoleUpdateStruct();
-    }
-
-    /**
-     * Returns the LimitationType registered with the given identifier.
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\SPI\Limitation\Type
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if there is no LimitationType with $identifier
-     */
-    public function getLimitationType($identifier)
-    {
-        return $this->service->getLimitationType($identifier);
-    }
-
-    /**
-     * Returns the LimitationType's assigned to a given module/function.
-     *
-     * Typically used for:
-     *  - Internal validation limitation value use on Policies
-     *  - Role admin gui for editing policy limitations incl list limitation options via valueSchema()
-     *
-     * @param string $module Legacy name of "controller", it's a unique identifier like "content"
-     * @param string $function Legacy name of a controller "action", it's a unique within the controller like "read"
-     *
-     * @return \eZ\Publish\SPI\Limitation\Type[]
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If module/function to limitation type mapping
-     *                                                                 refers to a non existing identifier.
-     */
-    public function getLimitationTypesByModuleFunction($module, $function)
-    {
-        return $this->service->getLimitationTypesByModuleFunction($module, $function);
     }
 }

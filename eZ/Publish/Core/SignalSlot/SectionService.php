@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Decorator\SectionServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\CreateSectionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\UpdateSectionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
@@ -21,15 +22,8 @@ use eZ\Publish\Core\SignalSlot\Signal\SectionService\DeleteSectionSignal;
 /**
  * SectionService class.
  */
-class SectionService implements SectionServiceInterface
+class SectionService extends SectionServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\SectionService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -48,7 +42,8 @@ class SectionService implements SectionServiceInterface
      */
     public function __construct(SectionServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -102,78 +97,6 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * Loads a Section from its id ($sectionId).
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
-     *
-     * @param mixed $sectionId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Section
-     */
-    public function loadSection($sectionId)
-    {
-        return $this->service->loadSection($sectionId);
-    }
-
-    /**
-     * Loads all sections.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
-     *
-     * @return array of {@link \eZ\Publish\API\Repository\Values\Content\Section}
-     */
-    public function loadSections()
-    {
-        return $this->service->loadSections();
-    }
-
-    /**
-     * Loads a Section from its identifier ($sectionIdentifier).
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
-     *
-     * @param string $sectionIdentifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Section
-     */
-    public function loadSectionByIdentifier($sectionIdentifier)
-    {
-        return $this->service->loadSectionByIdentifier($sectionIdentifier);
-    }
-
-    /**
-     * Counts the contents which $section is assigned to.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
-     *
-     * @return int
-     *
-     * @deprecated since 6.0
-     */
-    public function countAssignedContents(Section $section)
-    {
-        return $this->service->countAssignedContents($section);
-    }
-
-    /**
-     * Returns true if the given section is assigned to contents, or used in role policies, or in role assignments.
-     *
-     * This does not check user permissions.
-     *
-     * @since 6.0
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
-     *
-     * @return bool
-     */
-    public function isSectionUsed(Section $section)
-    {
-        return $this->service->isSectionUsed($section);
-    }
-
-    /**
      * Assigns the content to the given section
      * this method overrides the current assigned section.
      *
@@ -219,25 +142,5 @@ class SectionService implements SectionServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Instantiates a new SectionCreateStruct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
-     */
-    public function newSectionCreateStruct()
-    {
-        return $this->service->newSectionCreateStruct();
-    }
-
-    /**
-     * Instantiates a new SectionUpdateStruct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
-     */
-    public function newSectionUpdateStruct()
-    {
-        return $this->service->newSectionUpdateStruct();
     }
 }

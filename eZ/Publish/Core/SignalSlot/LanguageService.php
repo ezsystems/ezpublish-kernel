@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\Core\Repository\Decorator\LanguageServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\LanguageService\CreateLanguageSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LanguageService\UpdateLanguageNameSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LanguageService\EnableLanguageSignal;
@@ -20,15 +21,8 @@ use eZ\Publish\Core\SignalSlot\Signal\LanguageService\DeleteLanguageSignal;
 /**
  * LanguageService class.
  */
-class LanguageService implements LanguageServiceInterface
+class LanguageService extends LanguageServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\LanguageService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -47,7 +41,8 @@ class LanguageService implements LanguageServiceInterface
      */
     public function __construct(LanguageServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -147,44 +142,6 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
-     * Loads a Language from its language code ($languageCode).
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
-     *
-     * @param string $languageCode
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Language
-     */
-    public function loadLanguage($languageCode)
-    {
-        return $this->service->loadLanguage($languageCode);
-    }
-
-    /**
-     * Loads all Languages.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Language[]
-     */
-    public function loadLanguages()
-    {
-        return $this->service->loadLanguages();
-    }
-
-    /**
-     * Loads a Language by its id ($languageId).
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if language could not be found
-     *
-     * @param mixed $languageId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Language
-     */
-    public function loadLanguageById($languageId)
-    {
-        return $this->service->loadLanguageById($languageId);
-    }
-
-    /**
      * Deletes  a language from content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
@@ -206,25 +163,5 @@ class LanguageService implements LanguageServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Returns a configured default language code.
-     *
-     * @return string
-     */
-    public function getDefaultLanguageCode()
-    {
-        return $this->service->getDefaultLanguageCode();
-    }
-
-    /**
-     * Instantiates an object to be used for creating languages.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
-     */
-    public function newLanguageCreateStruct()
-    {
-        return $this->service->newLanguageCreateStruct();
     }
 }

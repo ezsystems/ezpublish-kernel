@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\Core\Repository\Decorator\ContentTypeServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\CreateContentTypeGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\RemoveContentTypeDraftTranslationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\UpdateContentTypeGroupSignal;
@@ -39,15 +40,8 @@ use eZ\Publish\Core\SignalSlot\Signal\ContentTypeService\PublishContentTypeDraft
 /**
  * ContentTypeService class.
  */
-class ContentTypeService implements ContentTypeServiceInterface
+class ContentTypeService extends ContentTypeServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -66,7 +60,8 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     public function __construct(ContentTypeServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -92,30 +87,6 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentTypeGroup($contentTypeGroupId, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadContentTypeGroup($contentTypeGroupId, $prioritizedLanguages);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, $prioritizedLanguages);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentTypeGroups(array $prioritizedLanguages = [])
-    {
-        return $this->service->loadContentTypeGroups($prioritizedLanguages);
     }
 
     /**
@@ -196,60 +167,6 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentType($contentTypeId, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadContentType($contentTypeId, $prioritizedLanguages);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentTypeByIdentifier($identifier, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadContentTypeByIdentifier($identifier, $prioritizedLanguages);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentTypeByRemoteId($remoteId, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadContentTypeByRemoteId($remoteId, $prioritizedLanguages);
-    }
-
-    /**
-     * Get a Content Type object draft by id.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the content type draft owned by the current user can not be found
-     *
-     * @param mixed $contentTypeId
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
-    public function loadContentTypeDraft($contentTypeId)
-    {
-        return $this->service->loadContentTypeDraft($contentTypeId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable
-    {
-        return $this->service->loadContentTypeList($contentTypeIds, $prioritizedLanguages);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadContentTypes($contentTypeGroup, $prioritizedLanguages);
     }
 
     /**
@@ -509,87 +426,6 @@ class ContentTypeService implements ContentTypeServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Instantiates a new content type group create class.
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
-     */
-    public function newContentTypeGroupCreateStruct($identifier)
-    {
-        return $this->service->newContentTypeGroupCreateStruct($identifier);
-    }
-
-    /**
-     * Instantiates a new content type create class.
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
-     */
-    public function newContentTypeCreateStruct($identifier)
-    {
-        return $this->service->newContentTypeCreateStruct($identifier);
-    }
-
-    /**
-     * Instantiates a new content type update struct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
-     */
-    public function newContentTypeUpdateStruct()
-    {
-        return $this->service->newContentTypeUpdateStruct();
-    }
-
-    /**
-     * Instantiates a new content type update struct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
-     */
-    public function newContentTypeGroupUpdateStruct()
-    {
-        return $this->service->newContentTypeGroupUpdateStruct();
-    }
-
-    /**
-     * Instantiates a field definition create struct.
-     *
-     * @param string $fieldTypeIdentifier the required field type identifier
-     * @param string $identifier the required identifier for the field definition
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
-     */
-    public function newFieldDefinitionCreateStruct($identifier, $fieldTypeIdentifier)
-    {
-        return $this->service->newFieldDefinitionCreateStruct($identifier, $fieldTypeIdentifier);
-    }
-
-    /**
-     * Instantiates a field definition update class.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
-     */
-    public function newFieldDefinitionUpdateStruct()
-    {
-        return $this->service->newFieldDefinitionUpdateStruct();
-    }
-
-    /**
-     * Returns true if the given content type $contentType has content instances.
-     *
-     * @since 6.0.1
-     *
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     *
-     * @return bool
-     */
-    public function isContentTypeUsed(ContentType $contentType)
-    {
-        return $this->service->isContentTypeUsed($contentType);
     }
 
     /**

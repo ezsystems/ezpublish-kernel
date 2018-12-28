@@ -16,6 +16,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Repository\Decorator\ObjectStateServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\CreateObjectStateGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\UpdateObjectStateGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\DeleteObjectStateGroupSignal;
@@ -28,15 +29,8 @@ use eZ\Publish\Core\SignalSlot\Signal\ObjectStateService\SetContentStateSignal;
 /**
  * ObjectStateService class.
  */
-class ObjectStateService implements ObjectStateServiceInterface
+class ObjectStateService extends ObjectStateServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\ObjectStateService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -55,7 +49,8 @@ class ObjectStateService implements ObjectStateServiceInterface
      */
     public function __construct(ObjectStateServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -81,30 +76,6 @@ class ObjectStateService implements ObjectStateServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadObjectStateGroup($objectStateGroupId, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadObjectStateGroups($offset, $limit, $prioritizedLanguages);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadObjectStates($objectStateGroup, $prioritizedLanguages);
     }
 
     /**
@@ -180,14 +151,6 @@ class ObjectStateService implements ObjectStateServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadObjectState($stateId, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadObjectState($stateId, $prioritizedLanguages);
     }
 
     /**
@@ -284,76 +247,5 @@ class ObjectStateService implements ObjectStateServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Gets the object-state of object identified by $contentId.
-     *
-     * The $state is the id of the state within one group.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup $objectStateGroup
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
-     */
-    public function getContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup)
-    {
-        return $this->service->getContentState($contentInfo, $objectStateGroup);
-    }
-
-    /**
-     * Returns the number of objects which are in this state.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ObjectState\ObjectState $objectState
-     *
-     * @return int
-     */
-    public function getContentCount(ObjectState $objectState)
-    {
-        return $this->service->getContentCount($objectState);
-    }
-
-    /**
-     * Instantiates a new Object State Group Create Struct and sets $identified in it.
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
-     */
-    public function newObjectStateGroupCreateStruct($identifier)
-    {
-        return $this->service->newObjectStateGroupCreateStruct($identifier);
-    }
-
-    /**
-     * Instantiates a new Object State Group Update Struct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct
-     */
-    public function newObjectStateGroupUpdateStruct()
-    {
-        return $this->service->newObjectStateGroupUpdateStruct();
-    }
-
-    /**
-     * Instantiates a new Object State Create Struct and sets $identifier in it.
-     *
-     * @param string $identifier
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
-     */
-    public function newObjectStateCreateStruct($identifier)
-    {
-        return $this->service->newObjectStateCreateStruct($identifier);
-    }
-
-    /**
-     * Instantiates a new Object State Update Struct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct
-     */
-    public function newObjectStateUpdateStruct()
-    {
-        return $this->service->newObjectStateUpdateStruct();
     }
 }

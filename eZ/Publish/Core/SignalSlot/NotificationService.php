@@ -11,16 +11,13 @@ namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use eZ\Publish\API\Repository\Values\Notification\NotificationList;
+use eZ\Publish\Core\Repository\Decorator\NotificationServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationDeleteSignal;
 use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationCreateSignal;
 use eZ\Publish\Core\SignalSlot\Signal\NotificationService\NotificationReadSignal;
 
-class NotificationService implements NotificationServiceInterface
+class NotificationService extends NotificationServiceDecorator
 {
-    /** @var \eZ\Publish\API\Repository\NotificationService */
-    protected $service;
-
     /** @var \eZ\Publish\Core\SignalSlot\SignalDispatcher */
     protected $signalDispatcher;
 
@@ -30,24 +27,9 @@ class NotificationService implements NotificationServiceInterface
      */
     public function __construct(NotificationServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadNotifications(int $offset, int $limit): NotificationList
-    {
-        return $this->service->loadNotifications($offset, $limit);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNotification(int $notificationId): Notification
-    {
-        return $this->service->getNotification($notificationId);
     }
 
     /**
@@ -60,22 +42,6 @@ class NotificationService implements NotificationServiceInterface
         ]));
 
         $this->service->markNotificationAsRead($notification);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPendingNotificationCount(): int
-    {
-        return $this->service->getPendingNotificationCount();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNotificationCount(): int
-    {
-        return $this->service->getNotificationCount();
     }
 
     /**

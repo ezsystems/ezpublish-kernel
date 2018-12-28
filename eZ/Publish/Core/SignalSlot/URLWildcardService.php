@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
+use eZ\Publish\Core\Repository\Decorator\URLWildcardServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\CreateSignal;
 use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\RemoveSignal;
 use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\TranslateSignal;
@@ -17,15 +18,8 @@ use eZ\Publish\Core\SignalSlot\Signal\URLWildcardService\TranslateSignal;
 /**
  * URLWildcardService class.
  */
-class URLWildcardService implements URLWildcardServiceInterface
+class URLWildcardService extends URLWildcardServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\URLWildcardService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -44,7 +38,8 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     public function __construct(URLWildcardServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -96,33 +91,6 @@ class URLWildcardService implements URLWildcardServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Loads a url wild card.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
-     *
-     * @param mixed $id
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard
-     */
-    public function load($id)
-    {
-        return $this->service->load($id);
-    }
-
-    /**
-     * Loads all url wild card (paged).
-     *
-     * @param int $offset
-     * @param int $limit
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\UrlWildcard[]
-     */
-    public function loadAll($offset = 0, $limit = -1)
-    {
-        return $this->service->loadAll($offset, $limit);
     }
 
     /**

@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\SignalSlot;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\Core\Repository\Decorator\TrashServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\TrashSignal;
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal;
 use eZ\Publish\Core\SignalSlot\Signal\TrashService\EmptyTrashSignal;
@@ -20,15 +20,8 @@ use eZ\Publish\Core\SignalSlot\Signal\TrashService\DeleteTrashItemSignal;
 /**
  * TrashService class.
  */
-class TrashService implements TrashServiceInterface
+class TrashService extends TrashServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\TrashService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -47,25 +40,9 @@ class TrashService implements TrashServiceInterface
      */
     public function __construct(TrashServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
-        $this->signalDispatcher = $signalDispatcher;
-    }
+        parent::__construct($service);
 
-    /**
-     * Loads a trashed location object from its $id.
-     *
-     * Note that $id is identical to original location, which has been previously trashed
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the trashed location
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
-     *
-     * @param mixed $trashItemId
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
-     */
-    public function loadTrashItem($trashItemId)
-    {
-        return $this->service->loadTrashItem($trashItemId);
+        $this->signalDispatcher = $signalDispatcher;
     }
 
     /**
@@ -163,19 +140,5 @@ class TrashService implements TrashServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Returns a collection of Trashed locations contained in the trash, which are readable by the current user.
-     *
-     * $query allows to filter/sort the elements to be contained in the collection.
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Trash\SearchResult
-     */
-    public function findTrashItems(Query $query)
-    {
-        return $this->service->findTrashItems($query);
     }
 }

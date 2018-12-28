@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
@@ -18,6 +17,7 @@ use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\Core\Repository\Decorator\UserServiceDecorator;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\CreateUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\DeleteUserGroupSignal;
 use eZ\Publish\Core\SignalSlot\Signal\UserService\MoveUserGroupSignal;
@@ -32,15 +32,8 @@ use eZ\Publish\Core\SignalSlot\Signal\UserService\UnAssignUserFromUserGroupSigna
 /**
  * UserService class.
  */
-class UserService implements UserServiceInterface
+class UserService extends UserServiceDecorator
 {
-    /**
-     * Aggregated service.
-     *
-     * @var \eZ\Publish\API\Repository\UserService
-     */
-    protected $service;
-
     /**
      * SignalDispatcher.
      *
@@ -59,7 +52,8 @@ class UserService implements UserServiceInterface
      */
     public function __construct(UserServiceInterface $service, SignalDispatcher $signalDispatcher)
     {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->signalDispatcher = $signalDispatcher;
     }
 
@@ -92,39 +86,6 @@ class UserService implements UserServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Loads a user group for the given id.
-     *
-     * @param mixed $id
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroup
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
-     */
-    public function loadUserGroup($id, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadUserGroup($id, $prioritizedLanguages);
-    }
-
-    /**
-     * Loads the sub groups of a user group.
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param int $offset the start offset for paging
-     * @param int $limit the number of user groups returned
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
-     */
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadSubUserGroups($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
     /**
@@ -233,103 +194,6 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Loads a user.
-     *
-     * @param mixed $userId
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given id was not found
-     */
-    public function loadUser($userId, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadUser($userId, $prioritizedLanguages);
-    }
-
-    /**
-     * Loads anonymous user.
-     *
-     * @deprecated since 5.3, use loadUser( $anonymousUserId ) instead
-     *
-     * @uses ::loadUser()
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     */
-    public function loadAnonymousUser()
-    {
-        return $this->service->loadAnonymousUser();
-    }
-
-    /**
-     * Loads a user for the given login and password.
-     *
-     * {@inheritdoc}
-     *
-     * @param string $login
-     * @param string $password the plain password
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if credentials are invalid
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
-     */
-    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadUserByCredentials($login, $password, $prioritizedLanguages);
-    }
-
-    /**
-     * Loads a user for the given login.
-     *
-     * {@inheritdoc}
-     *
-     * @param string $login
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given credentials was not found
-     */
-    public function loadUserByLogin($login, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadUserByLogin($login, $prioritizedLanguages);
-    }
-
-    /**
-     * Loads a user for the given email.
-     *
-     * {@inheritdoc}
-     *
-     * @param string $email
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User[]
-     */
-    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadUsersByEmail($email, $prioritizedLanguages);
-    }
-
-    /**
-     * Loads a user with user hash key.
-     *
-     * {@inheritdoc}
-     *
-     * @param string $hash
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if a user with the given hash was not found
-     */
-    public function loadUserByToken($hash, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadUserByToken($hash, $prioritizedLanguages);
-    }
-
-    /**
      * This method deletes a user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -402,16 +266,6 @@ class UserService implements UserServiceInterface
     }
 
     /**
-     * Expires user token with user hash.
-     *
-     * @param string $hash
-     */
-    public function expireUserToken($hash)
-    {
-        return $this->service->expireUserToken($hash);
-    }
-
-    /**
      * Assigns a new user group to the user.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
@@ -457,121 +311,5 @@ class UserService implements UserServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Loads the user groups the user belongs to.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed read the user or user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param int $offset the start offset for paging
-     * @param int $limit the number of user groups returned
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroup[]
-     */
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
-    {
-        return $this->service->loadUserGroupsOfUser($user, $offset, $limit, $prioritizedLanguages);
-    }
-
-    /**
-     * Loads the users of a user group.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the users or user group
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param int $offset the start offset for paging
-     * @param int $limit the number of users returned
-     * @param string[] $prioritizedLanguages Used as prioritized language code on translated properties of returned object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\User[]
-     */
-    public function loadUsersOfUserGroup(
-        UserGroup $userGroup,
-        $offset = 0,
-        $limit = 25,
-        array $prioritizedLanguages = []
-    ) {
-        return $this->service->loadUsersOfUserGroup(
-            $userGroup,
-            $offset,
-            $limit,
-            $prioritizedLanguages
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isUser(Content $content): bool
-    {
-        return $this->service->isUser($content);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isUserGroup(Content $content): bool
-    {
-        return $this->service->isUserGroup($content);
-    }
-
-    /**
-     * Instantiate a user create class.
-     *
-     * @param string $login the login of the new user
-     * @param string $email the email of the new user
-     * @param string $password the plain password of the new user
-     * @param string $mainLanguageCode the main language for the underlying content object
-     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserCreateStruct
-     */
-    public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null)
-    {
-        return $this->service->newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType);
-    }
-
-    /**
-     * Instantiate a user group create class.
-     *
-     * @param string $mainLanguageCode The main language for the underlying content object
-     * @param null|\eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
-     */
-    public function newUserGroupCreateStruct($mainLanguageCode, $contentType = null)
-    {
-        return $this->service->newUserGroupCreateStruct($mainLanguageCode, $contentType);
-    }
-
-    /**
-     * Instantiate a new user update struct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
-     */
-    public function newUserUpdateStruct()
-    {
-        return $this->service->newUserUpdateStruct();
-    }
-
-    /**
-     * Instantiate a new user group update struct.
-     *
-     * @return \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
-     */
-    public function newUserGroupUpdateStruct()
-    {
-        return $this->service->newUserGroupUpdateStruct();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function validatePassword(string $password, PasswordValidationContext $context = null): array
-    {
-        return $this->service->validatePassword($password, $context);
     }
 }
