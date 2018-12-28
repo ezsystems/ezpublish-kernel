@@ -10,16 +10,14 @@ namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\Core\Repository\Decorator\URLAliasServiceDecorator;
 use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 
 /**
  * SiteAccess aware implementation of URLAliasService injecting languages where needed.
  */
-class URLAliasService implements URLAliasServiceInterface
+class URLAliasService extends URLAliasServiceDecorator
 {
-    /** @var \eZ\Publish\API\Repository\URLAliasService */
-    protected $service;
-
     /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
     protected $languageResolver;
 
@@ -33,18 +31,9 @@ class URLAliasService implements URLAliasServiceInterface
         URLAliasServiceInterface $service,
         LanguageResolver $languageResolver
     ) {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->languageResolver = $languageResolver;
-    }
-
-    public function createUrlAlias(Location $location, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
-    {
-        return $this->service->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
-    }
-
-    public function createGlobalUrlAlias($resource, $path, $languageCode, $forwarding = false, $alwaysAvailable = false)
-    {
-        return $this->service->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
     }
 
     public function listLocationAliases(
@@ -63,21 +52,6 @@ class URLAliasService implements URLAliasServiceInterface
         );
     }
 
-    public function listGlobalAliases($languageCode = null, $offset = 0, $limit = -1)
-    {
-        return $this->service->listGlobalAliases($languageCode, $offset, $limit);
-    }
-
-    public function removeAliases(array $aliasList)
-    {
-        return $this->service->removeAliases($aliasList);
-    }
-
-    public function lookup($url, $languageCode = null)
-    {
-        return $this->service->lookup($url, $languageCode);
-    }
-
     public function reverseLookup(
         Location $location,
         $languageCode = null,
@@ -90,20 +64,5 @@ class URLAliasService implements URLAliasServiceInterface
             $this->languageResolver->getShowAllTranslations($showAllTranslations),
             $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
         );
-    }
-
-    public function load($id)
-    {
-        return $this->service->load($id);
-    }
-
-    public function refreshSystemUrlAliasesForLocation(Location $location): void
-    {
-        $this->service->refreshSystemUrlAliasesForLocation($location);
-    }
-
-    public function deleteCorruptedUrlAliases(): int
-    {
-        return $this->service->deleteCorruptedUrlAliases();
     }
 }

@@ -9,15 +9,9 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
-use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
-use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\User;
-use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
+use eZ\Publish\Core\Repository\Decorator\UserServiceDecorator;
 use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 
 /**
@@ -25,11 +19,8 @@ use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
  *
  * Currently does nothing but hand over calls to aggregated service.
  */
-class UserService implements UserServiceInterface
+class UserService extends UserServiceDecorator
 {
-    /** @var \eZ\Publish\API\Repository\UserService */
-    protected $service;
-
     /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
     protected $languageResolver;
 
@@ -43,13 +34,9 @@ class UserService implements UserServiceInterface
         UserServiceInterface $service,
         LanguageResolver $languageResolver
     ) {
-        $this->service = $service;
-        $this->languageResolver = $languageResolver;
-    }
+        parent::__construct($service);
 
-    public function createUserGroup(UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup)
-    {
-        return $this->service->createUserGroup($userGroupCreateStruct, $parentGroup);
+        $this->languageResolver = $languageResolver;
     }
 
     public function loadUserGroup($id, array $prioritizedLanguages = null)
@@ -66,36 +53,11 @@ class UserService implements UserServiceInterface
         return $this->service->loadSubUserGroups($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
-    public function deleteUserGroup(UserGroup $userGroup)
-    {
-        return $this->service->deleteUserGroup($userGroup);
-    }
-
-    public function moveUserGroup(UserGroup $userGroup, UserGroup $newParent)
-    {
-        return $this->service->moveUserGroup($userGroup, $newParent);
-    }
-
-    public function updateUserGroup(UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct)
-    {
-        return $this->service->updateUserGroup($userGroup, $userGroupUpdateStruct);
-    }
-
-    public function createUser(UserCreateStruct $userCreateStruct, array $parentGroups)
-    {
-        return $this->service->createUser($userCreateStruct, $parentGroups);
-    }
-
     public function loadUser($userId, array $prioritizedLanguages = null)
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
 
         return $this->service->loadUser($userId, $prioritizedLanguages);
-    }
-
-    public function loadAnonymousUser()
-    {
-        return $this->service->loadAnonymousUser();
     }
 
     public function loadUserByCredentials($login, $password, array $prioritizedLanguages = null)
@@ -119,26 +81,6 @@ class UserService implements UserServiceInterface
         return $this->service->loadUsersByEmail($email, $prioritizedLanguages);
     }
 
-    public function deleteUser(User $user)
-    {
-        return $this->service->deleteUser($user);
-    }
-
-    public function updateUser(User $user, UserUpdateStruct $userUpdateStruct)
-    {
-        return $this->service->updateUser($user, $userUpdateStruct);
-    }
-
-    public function assignUserToUserGroup(User $user, UserGroup $userGroup)
-    {
-        return $this->service->assignUserToUserGroup($user, $userGroup);
-    }
-
-    public function unAssignUserFromUserGroup(User $user, UserGroup $userGroup)
-    {
-        return $this->service->unAssignUserFromUserGroup($user, $userGroup);
-    }
-
     public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25, array $prioritizedLanguages = null)
     {
         $prioritizedLanguages = $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages);
@@ -159,50 +101,5 @@ class UserService implements UserServiceInterface
             $hash,
             $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
         );
-    }
-
-    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)
-    {
-        return $this->service->updateUserToken($user, $userTokenUpdateStruct);
-    }
-
-    public function expireUserToken($hash)
-    {
-        return $this->service->expireUserToken($hash);
-    }
-
-    public function isUser(Content $content): bool
-    {
-        return $this->service->isUser($content);
-    }
-
-    public function isUserGroup(Content $content): bool
-    {
-        return $this->service->isUserGroup($content);
-    }
-
-    public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null)
-    {
-        return $this->service->newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType);
-    }
-
-    public function newUserGroupCreateStruct($mainLanguageCode, $contentType = null)
-    {
-        return $this->service->newUserGroupCreateStruct($mainLanguageCode, $contentType);
-    }
-
-    public function newUserUpdateStruct()
-    {
-        return $this->service->newUserUpdateStruct();
-    }
-
-    public function newUserGroupUpdateStruct()
-    {
-        return $this->service->newUserGroupUpdateStruct();
-    }
-
-    public function validatePassword(string $password, PasswordValidationContext $context = null): array
-    {
-        return $this->service->validatePassword($password, $context);
     }
 }

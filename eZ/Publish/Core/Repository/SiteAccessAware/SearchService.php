@@ -12,16 +12,14 @@ use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\Core\Repository\Decorator\SearchServiceDecorator;
 use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 
 /**
  * SiteAccess aware implementation of SearchService injecting languages where needed.
  */
-class SearchService implements SearchServiceInterface
+class SearchService extends SearchServiceDecorator
 {
-    /** @var \eZ\Publish\API\Repository\SearchService */
-    protected $service;
-
     /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
     protected $languageResolver;
 
@@ -35,7 +33,8 @@ class SearchService implements SearchServiceInterface
         SearchServiceInterface $service,
         LanguageResolver $languageResolver
     ) {
-        $this->service = $service;
+        parent::__construct($service);
+
         $this->languageResolver = $languageResolver;
     }
 
@@ -78,11 +77,6 @@ class SearchService implements SearchServiceInterface
         return $this->service->findSingle($filter, $languageFilter, $filterOnUserPermissions);
     }
 
-    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
-    {
-        return $this->service->suggest($prefix, $fieldPaths, $limit, $filter);
-    }
-
     public function findLocations(LocationQuery $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         $languageFilter['languages'] = $this->languageResolver->getPrioritizedLanguages(
@@ -94,10 +88,5 @@ class SearchService implements SearchServiceInterface
         );
 
         return $this->service->findLocations($query, $languageFilter, $filterOnUserPermissions);
-    }
-
-    public function supports($capabilityFlag)
-    {
-        return $this->service->supports($capabilityFlag);
     }
 }

@@ -1,8 +1,6 @@
 <?php
 
 /**
- * LocationService class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -12,8 +10,7 @@ use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\Core\Repository\Decorator\LocationServiceDecorator;
 use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
 
 /**
@@ -21,11 +18,8 @@ use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
  *
  * Currently does nothing but hand over calls to aggregated service.
  */
-class LocationService implements LocationServiceInterface
+class LocationService extends LocationServiceDecorator
 {
-    /** @var \eZ\Publish\API\Repository\LocationService */
-    protected $service;
-
     /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
     protected $languageResolver;
 
@@ -39,13 +33,9 @@ class LocationService implements LocationServiceInterface
         LocationServiceInterface $service,
         LanguageResolver $languageResolver
     ) {
-        $this->service = $service;
-        $this->languageResolver = $languageResolver;
-    }
+        parent::__construct($service);
 
-    public function copySubtree(Location $subtree, Location $targetParentLocation)
-    {
-        return $this->service->copySubtree($subtree, $targetParentLocation);
+        $this->languageResolver = $languageResolver;
     }
 
     public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
@@ -100,80 +90,5 @@ class LocationService implements LocationServiceInterface
             $versionInfo,
             $this->languageResolver->getPrioritizedLanguages($prioritizedLanguages)
         );
-    }
-
-    public function getLocationChildCount(Location $location)
-    {
-        return $this->service->getLocationChildCount($location);
-    }
-
-    public function createLocation(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct)
-    {
-        return $this->service->createLocation($contentInfo, $locationCreateStruct);
-    }
-
-    public function updateLocation(Location $location, LocationUpdateStruct $locationUpdateStruct)
-    {
-        return $this->service->updateLocation($location, $locationUpdateStruct);
-    }
-
-    public function swapLocation(Location $location1, Location $location2)
-    {
-        return $this->service->swapLocation($location1, $location2);
-    }
-
-    public function hideLocation(Location $location)
-    {
-        return $this->service->hideLocation($location);
-    }
-
-    public function unhideLocation(Location $location)
-    {
-        return $this->service->unhideLocation($location);
-    }
-
-    public function moveSubtree(Location $location, Location $newParentLocation)
-    {
-        return $this->service->moveSubtree($location, $newParentLocation);
-    }
-
-    public function deleteLocation(Location $location)
-    {
-        $this->service->deleteLocation($location);
-    }
-
-    public function newLocationCreateStruct($parentLocationId)
-    {
-        return $this->service->newLocationCreateStruct($parentLocationId);
-    }
-
-    public function newLocationUpdateStruct()
-    {
-        return $this->service->newLocationUpdateStruct();
-    }
-
-    /**
-     * Get the total number of all existing Locations. Can be combined with loadAllLocations.
-     *
-     * @see loadAllLocations
-     *
-     * @return int Total number of Locations
-     */
-    public function getAllLocationsCount(): int
-    {
-        return $this->service->getAllLocationsCount();
-    }
-
-    /**
-     * Bulk-load all existing Locations, constrained by $limit and $offset to paginate results.
-     *
-     * @param int $limit
-     * @param int $offset
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
-     */
-    public function loadAllLocations(int $offset = 0, int $limit = 25): array
-    {
-        return $this->service->loadAllLocations($offset, $limit);
     }
 }
