@@ -14,6 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 abstract class LocationServiceDecorator implements LocationService
 {
@@ -153,9 +154,9 @@ abstract class LocationServiceDecorator implements LocationService
     /**
      * {@inheritdoc}
      */
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
     {
-        return $this->service->newLocationCreateStruct($parentLocationId);
+        return $this->service->newLocationCreateStruct($parentLocationId, $contentType);
     }
 
     /**

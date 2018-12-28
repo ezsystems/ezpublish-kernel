@@ -77,9 +77,9 @@ class URLAliasServiceDecorator implements URLAliasService
     /**
      * {@inheritdoc}
      */
-    public function reverseLookup(Location $location, $languageCode = null)
+    public function reverseLookup(Location $location, $languageCode = null, bool $showAllTranslations = null, array $prioritizedLanguageList = null)
     {
-        return $this->service->reverseLookup($location, $languageCode);
+        return $this->service->reverseLookup($location, $languageCode, $showAllTranslations, $prioritizedLanguageList);
     }
 
     /**
