@@ -189,7 +189,7 @@ EOT
 
         if (getenv('INNER_CALL')) {
             $this->timezone = $input->getArgument('timezone');
-            $this->processTimestamps((int) $input->getOption('offset'), $iterationCount);
+            $this->processTimestamps((int) $input->getOption('offset'), $iterationCount, $output);
             $output->writeln($this->done);
         } else {
             $timezone = $input->getArgument('timezone');
@@ -258,9 +258,10 @@ EOT
                     throw new RuntimeException($process->getErrorOutput());
                 }
 
-                $this->done += (int) $process->getOutput();
+                $doneInProcess = (int) $process->getOutput();
+                $this->done += $doneInProcess;
 
-                $progressBar->advance($this->done);
+                $progressBar->advance($doneInProcess);
             }
 
             $progressBar->finish();
@@ -274,8 +275,9 @@ EOT
     /**
      * @param int $offset
      * @param int $limit
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function processTimestamps($offset, $limit)
+    protected function processTimestamps($offset, $limit, $output)
     {
         $timestampBasedFields = $this->getTimestampBasedFields($offset, $limit);
 
@@ -287,7 +289,8 @@ EOT
             $dateTimeInUTC->setTimestamp($timestamp);
             $newTimestamp = $this->convertToUtcTimestamp($timestamp);
 
-            if (!$this->dryRun) {
+            //failsafe for int field limitation (dates/datetimes after 01/19/2038 @ 4:14am (UTC))
+            if ($newTimestamp <= 2147483647 && !$this->dryRun) {
                 $this->updateTimestampToUTC($timestampBasedField['id'], $newTimestamp);
             }
             ++$this->done;
