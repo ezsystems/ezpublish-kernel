@@ -24,6 +24,7 @@ use PDO;
 
 class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
 {
+    const MAX_TIMESTAMP_VALUE = 2147483647;
     const DEFAULT_ITERATION_COUNT = 100;
     const MODES = [
         'date' => ['ezdate'],
@@ -290,7 +291,7 @@ EOT
             $newTimestamp = $this->convertToUtcTimestamp($timestamp);
 
             //failsafe for int field limitation (dates/datetimes after 01/19/2038 @ 4:14am (UTC))
-            if ($newTimestamp <= 2147483647 && !$this->dryRun) {
+            if ($newTimestamp <= self::MAX_TIMESTAMP_VALUE && !$this->dryRun) {
                 $this->updateTimestampToUTC($timestampBasedField['id'], $newTimestamp);
             }
             ++$this->done;
