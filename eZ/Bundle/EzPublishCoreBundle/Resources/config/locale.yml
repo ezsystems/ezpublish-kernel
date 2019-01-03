@@ -54,7 +54,7 @@ parameters:
         de: ['ger-DE']
         dk: ['dan-DK']
         en: ['eng-GB', 'eng-US']
-        en-us: ['eng-US']
+        en_us: ['eng-US']
         es: ['esl-ES']
         fi: ['fin-FI']
         fr: ['fre-FR']
@@ -103,3 +103,4 @@ services:
         autowire: true
         arguments:
             $languageCodesMap: '%ezpublish.locale.browser_map%'
+            $localeFallback: '%locale_fallback%'
