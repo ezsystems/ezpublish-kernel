@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
-use RuntimeException;
 
 /**
  * Language MaskGenerator.
@@ -36,35 +35,26 @@ class MaskGenerator
     /**
      * Generates a language mask from the keys of $languages.
      *
+     * @deprecated Move towards using {@see generateLanguageMaskFromLanguageMap()} or the other specific methods.
+     *
      * @param array $languages
      *
      * @return int
      */
     public function generateLanguageMask(array $languages)
     {
-        $mask = 0;
-        if (isset($languages['always-available'])) {
-            $mask |= $languages['always-available'] ? 1 : 0;
-            unset($languages['always-available']);
-        }
-
-        $languageList = $this->languageHandler->loadListByLanguageCodes(array_keys($languages));
-        foreach ($languageList as $language) {
-            $mask |= $language->id;
-        }
-
-        return $mask;
+        return $this->generateLanguageMaskFromLanguageMap($languages);
     }
 
     /**
      * Generates a language mask from pre-loaded Language Ids.
      *
-     * @param array $languageIds
+     * @param int[] $languageIds
      * @param bool $alwaysAvailable
      *
      * @return int
      */
-    public function generateLanguageMaskFromLanguageIds(array $languageIds, $alwaysAvailable)
+    public function generateLanguageMaskFromLanguageIds(array $languageIds, $alwaysAvailable): int
     {
         // make sure alwaysAvailable part of bit mask always results in 1 or 0
         $languageMask = $alwaysAvailable ? 1 : 0;
@@ -74,6 +64,52 @@ class MaskGenerator
         }
 
         return $languageMask;
+    }
+
+    /**
+     * Generates a language mask from the keys of $languageMap.
+     *
+     * Typically used for ->name values to get language mask directly from such structure.
+     *
+     * @param array $languageMap Key values are language code, value is ignored.
+     *              Exception if 'always-available' key with language value is set, then always available flag is added.
+     *
+     * @return int
+     */
+    public function generateLanguageMaskFromLanguageMap(array $languageMap): int
+    {
+        $mask = 0;
+        if (isset($languageMap['always-available'])) {
+            $mask |= $languageMap['always-available'] ? 1 : 0;
+            unset($languageMap['always-available']);
+        }
+
+        $languageList = $this->languageHandler->loadListByLanguageCodes(array_keys($languageMap));
+        foreach ($languageList as $language) {
+            $mask |= $language->id;
+        }
+
+        return $mask;
+    }
+
+    /**
+     * Generates a language mask from plain array of language codes and always available flag.
+     *
+     * @param string[] $languageCodes
+     * @param bool $isAlwaysAvailable
+     *
+     * @return int
+     */
+    public function generateLanguageMaskFromLanguageCodes(array $languageCodes, bool $isAlwaysAvailable = false): int
+    {
+        $mask = $isAlwaysAvailable ? 1 : 0;
+
+        $languageList = $this->languageHandler->loadListByLanguageCodes($languageCodes);
+        foreach ($languageList as $language) {
+            $mask |= $language->id;
+        }
+
+        return $mask;
     }
 
     /**
@@ -97,7 +133,7 @@ class MaskGenerator
      *
      * @return bool
      */
-    public function isLanguageAlwaysAvailable($language, array $languages)
+    public function isLanguageAlwaysAvailable($language, array $languages): bool
     {
         return isset($languages['always-available'])
            && ($languages['always-available'] == $language)
@@ -111,7 +147,7 @@ class MaskGenerator
      *
      * @return bool
      */
-    public function isAlwaysAvailable($languageMask)
+    public function isAlwaysAvailable($languageMask): bool
     {
         return (bool)($languageMask & 1);
     }
@@ -123,7 +159,7 @@ class MaskGenerator
      *
      * @return int
      */
-    public function removeAlwaysAvailableFlag($languageId)
+    public function removeAlwaysAvailableFlag($languageId): int
     {
         return $languageId & ~1;
     }
@@ -135,7 +171,7 @@ class MaskGenerator
      *
      * @return array Array of language Id
      */
-    public function extractLanguageIdsFromMask($languageMask)
+    public function extractLanguageIdsFromMask($languageMask): array
     {
         $exp = 2;
         $result = array();
@@ -159,7 +195,7 @@ class MaskGenerator
      *
      * @return array
      */
-    public function extractLanguageCodesFromMask($languageMask)
+    public function extractLanguageCodesFromMask($languageMask): array
     {
         $languageCodes = [];
         $languageList = $this->languageHandler->loadList(
@@ -179,7 +215,7 @@ class MaskGenerator
      *
      * @return bool
      */
-    public function isLanguageMaskComposite($languageMask)
+    public function isLanguageMaskComposite($languageMask): bool
     {
         // Ignore first bit
         $languageMask = $this->removeAlwaysAvailableFlag($languageMask);
@@ -191,23 +227,5 @@ class MaskGenerator
 
         // Return false if power of 2
         return (bool)($languageMask & ($languageMask - 1));
-    }
-
-    /**
-     * @param array $languageCodes
-     * @param bool $isAlwaysAvailable
-     *
-     * @return int
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     */
-    public function generateLanguageMaskFromLanguageCodes(array $languageCodes, bool $isAlwaysAvailable = false): int
-    {
-        $mask = $isAlwaysAvailable ? 1 : 0;
-
-        foreach ($languageCodes as $languageCode) {
-            $mask |= $this->languageHandler->loadByLanguageCode($languageCode)->id;
-        }
-
-        return $mask;
     }
 }
