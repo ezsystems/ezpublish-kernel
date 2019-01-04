@@ -29,14 +29,7 @@ class CachingHandler implements BaseLanguageHandler
      *
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
-    protected $languageCache;
-
-    /**
-     * If the cache has already been initialized.
-     *
-     * @var bool
-     */
-    protected $isCacheInitialized = false;
+    protected $inMemoryCache;
 
     /**
      * Creates a caching handler around $innerHandler.
@@ -46,21 +39,17 @@ class CachingHandler implements BaseLanguageHandler
     public function __construct(BaseLanguageHandler $innerHandler, Cache $languageCache)
     {
         $this->innerHandler = $innerHandler;
-        $this->languageCache = $languageCache;
+        $this->inMemoryCache = $languageCache;
     }
 
     /**
      * Initializes the cache if necessary.
      */
-    protected function initializeCache()
+    private function initializeCache()
     {
-        if (false === $this->isCacheInitialized) {
-            $languages = $this->innerHandler->loadAll();
-            foreach ($languages as $language) {
-                $this->languageCache->store($language);
-            }
-            $this->isCacheInitialized = true;
-        }
+        $this->inMemoryCache->initialize(function() {
+            return $this->innerHandler->loadAll();
+        });
     }
 
     /**
@@ -72,9 +61,8 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function create(CreateStruct $struct)
     {
-        $this->initializeCache();
         $language = $this->innerHandler->create($struct);
-        $this->languageCache->store($language);
+        $this->inMemoryCache->updateIfInitialized($language);
 
         return $language;
     }
@@ -86,9 +74,8 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function update(Language $language)
     {
-        $this->initializeCache();
         $this->innerHandler->update($language);
-        $this->languageCache->store($language);
+        $this->inMemoryCache->updateIfInitialized($language);
     }
 
     /**
@@ -104,7 +91,7 @@ class CachingHandler implements BaseLanguageHandler
     {
         $this->initializeCache();
 
-        return $this->languageCache->getById($id);
+        return $this->inMemoryCache->getById($id);
     }
 
     /**
@@ -114,7 +101,7 @@ class CachingHandler implements BaseLanguageHandler
     {
         $this->initializeCache();
 
-        return $this->languageCache->getListById($ids);
+        return $this->inMemoryCache->getListById($ids);
     }
 
     /**
@@ -130,7 +117,7 @@ class CachingHandler implements BaseLanguageHandler
     {
         $this->initializeCache();
 
-        return $this->languageCache->getByLocale($languageCode);
+        return $this->inMemoryCache->getByLocale($languageCode);
     }
 
     /**
@@ -140,7 +127,7 @@ class CachingHandler implements BaseLanguageHandler
     {
         $this->initializeCache();
 
-        return $this->languageCache->getListByLocale($languageCodes);
+        return $this->inMemoryCache->getListByLocale($languageCodes);
     }
 
     /**
@@ -152,7 +139,7 @@ class CachingHandler implements BaseLanguageHandler
     {
         $this->initializeCache();
 
-        return $this->languageCache->getAll();
+        return $this->inMemoryCache->getAll();
     }
 
     /**
@@ -162,9 +149,8 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function delete($id)
     {
-        $this->initializeCache();
         $this->innerHandler->delete($id);
-        $this->languageCache->remove($id);
+        $this->inMemoryCache->remove($id);
     }
 
     /**
@@ -172,7 +158,6 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function clearCache()
     {
-        $this->isCacheInitialized = false;
-        $this->languageCache->clearCache();
+        $this->inMemoryCache->clearCache();
     }
 }
