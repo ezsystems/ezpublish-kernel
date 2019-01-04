@@ -10,10 +10,8 @@ parameters:
     ezpublish.spi.persistence.cache.contentLanguageHandler.class: eZ\Publish\Core\Persistence\Cache\ContentLanguageHandler
     ezpublish.spi.persistence.cache.contentTypeHandler.class: eZ\Publish\Core\Persistence\Cache\ContentTypeHandler
     ezpublish.spi.persistence.cache.userHandler.class: eZ\Publish\Core\Persistence\Cache\UserHandler
-    ezpublish.spi.persistence.cache.searchHandler.class: eZ\Publish\Core\Persistence\Cache\SearchHandler
     ezpublish.spi.persistence.cache.transactionhandler.class: eZ\Publish\Core\Persistence\Cache\TransactionHandler
     ezpublish.spi.persistence.cache.trashHandler.class: eZ\Publish\Core\Persistence\Cache\TrashHandler
-    ezpublish.spi.persistence.cache.locationSearchHandler.class: eZ\Publish\Core\Persistence\Cache\LocationSearchHandler
     ezpublish.spi.persistence.cache.urlAliasHandler.class: eZ\Publish\Core\Persistence\Cache\UrlAliasHandler
     ezpublish.spi.persistence.cache.objectStateHandler.class: eZ\Publish\Core\Persistence\Cache\ObjectStateHandler
     ezpublish.spi.persistence.cache.urlHandler.class: eZ\Publish\Core\Persistence\Cache\URLHandler
@@ -23,6 +21,10 @@ parameters:
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: "%kernel.debug%"
+    # Global in-memory settings
+    ezpublish.spi.persistence.cache.inmemory.ttl: 3000
+    ezpublish.spi.persistence.cache.inmemory.limit: 100
+    ezpublish.spi.persistence.cache.inmemory.enable: true
 
 services:
     ezpublish.cache_pool:
@@ -35,11 +37,22 @@ services:
         class: "%ezpublish.cache_pool.driver.class%"
         arguments: ["", 120]
 
+    # Logger which logs info when in dev for synfony web toolbar
     ezpublish.spi.persistence.cache.persistenceLogger:
         class: "%ezpublish.spi.persistence.cache.persistenceLogger.class%"
         arguments:
             - "%ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging%"
 
+    # In-Memory cache pools
+    ezpublish.spi.persistence.cache.inmemory:
+      class: eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
+      arguments:
+        - "%ezpublish.spi.persistence.cache.inmemory.ttl%"
+        - "%ezpublish.spi.persistence.cache.inmemory.limit%"
+        - "%ezpublish.spi.persistence.cache.inmemory.enable%"
+
+
+    # SPI Persistence Cache Handlers, incl abstracts
     ezpublish.spi.persistence.cache.abstractHandler:
         class: "%ezpublish.spi.persistence.cache.abstractHandler.class%"
         abstract:  true
@@ -47,6 +60,15 @@ services:
             - "@ezpublish.cache_pool"
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
+
+    ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler:
+      class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
+      abstract:  true
+      arguments:
+        - "@ezpublish.cache_pool"
+        - "@ezpublish.api.storage_engine"
+        - "@ezpublish.spi.persistence.cache.persistenceLogger"
+        - "@ezpublish.spi.persistence.cache.inmemory"
 
     ezpublish.spi.persistence.cache.sectionHandler:
         class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"

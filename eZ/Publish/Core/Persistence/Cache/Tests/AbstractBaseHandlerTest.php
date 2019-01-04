@@ -23,8 +23,9 @@ use eZ\Publish\Core\Persistence\Cache\URLHandler as CacheUrlHandler;
 use eZ\Publish\Core\Persistence\Cache\BookmarkHandler as CacheBookmarkHandler;
 use eZ\Publish\Core\Persistence\Cache\NotificationHandler as CacheNotificationHandler;
 use eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler as CacheUserPreferenceHandler;
-use eZ\Publish\SPI\Persistence\Handler;
+use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
+use eZ\Publish\SPI\Persistence\Handler;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Cache\CacheItem;
 use PHPUnit\Framework\TestCase;
@@ -55,6 +56,11 @@ abstract class AbstractBaseHandlerTest extends TestCase
     protected $loggerMock;
 
     /**
+     * @var \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected $inMemoryMock;
+
+    /**
      * @var \Closure
      */
     protected $cacheItemsClosure;
@@ -69,6 +75,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
         $this->persistenceHandlerMock = $this->createMock(Handler::class);
         $this->cacheMock = $this->createMock(TagAwareAdapterInterface::class);
         $this->loggerMock = $this->createMock(PersistenceLogger::class);
+        $this->inMemoryMock = $this->createMock(InMemoryCache::class);
 
         $this->persistenceCacheHandler = new CacheHandler(
             $this->persistenceHandlerMock,
@@ -90,7 +97,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
         );
 
         $this->cacheItemsClosure = \Closure::bind(
-            function ($key, $value, $isHit, $defaultLifetime = 0) {
+            static function ($key, $value, $isHit, $defaultLifetime = 0) {
                 $item = new CacheItem();
                 $item->key = $key;
                 $item->value = $value;
@@ -114,6 +121,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
         unset($this->persistenceCacheHandler);
         unset($this->loggerMock);
         unset($this->cacheItemsClosure);
+        unset($this->inMemoryMock);
         parent::tearDown();
     }
 
