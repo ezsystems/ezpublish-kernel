@@ -772,18 +772,6 @@ XML
         return $document;
     }
 
-    /**
-     * @todo Drop this once Legacy Engine is able to do basic searching on this; shortened text like Search on sort_key_string.
-     */
-    protected function checkSearchEngineSupport()
-    {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                "'ezrichtext' field type is not searchable with Legacy Search Engine"
-            );
-        }
-    }
-
     protected function getValidSearchValueOne()
     {
         return <<<EOT

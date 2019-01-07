@@ -279,7 +279,7 @@ class Type extends FieldType
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return false;
+        return SearchField::extractShortText($value->xml);
     }
 
     /**
