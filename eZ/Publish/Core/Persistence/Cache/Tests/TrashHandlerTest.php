@@ -12,6 +12,8 @@ use eZ\Publish\Core\Persistence\Cache\ContentHandler;
 use eZ\Publish\Core\Persistence\Cache\LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
+use eZ\Publish\SPI\Persistence\Content\Relation;
 
 /**
  * Test case for Persistence\Cache\SectionHandler.
@@ -33,8 +35,6 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
         // string $method, array $arguments, array? $tags, string? $key
         return [
             ['loadTrashItem', [6]],
-            ['emptyTrash', []],
-            ['deleteTrashItem', [6]],
         ];
     }
 
@@ -148,5 +148,96 @@ class TrashHandlerTest extends AbstractCacheHandlerTest
 
         $handler = $this->persistenceCacheHandler->$handlerMethodName();
         $handler->trashSubtree($locationId);
+    }
+
+    public function testDeleteTrashItem()
+    {
+        $trashedId = 6;
+        $contentId = 42;
+        $relationSourceContentId = 42;
+
+        $handlerMethodName = $this->getHandlerMethodName();
+
+        $innerHandler = $this->createMock($this->getHandlerClassName());
+
+        $innerHandler
+            ->expects($this->once())
+            ->method('loadTrashItem')
+            ->with($trashedId)
+            ->will($this->returnValue(new Trashed(['id' => $trashedId, 'contentId' => $contentId])));
+
+        $this->persistenceHandlerMock
+            ->method($handlerMethodName)
+            ->will($this->returnValue($innerHandler));
+
+        $contentHandlerMock = $this->createMock(ContentHandler::class);
+
+        $contentHandlerMock
+            ->expects($this->once())
+            ->method('loadReverseRelations')
+            ->with($contentId)
+            ->will($this->returnValue([new Relation(['sourceContentId' => $relationSourceContentId])]));
+
+        $this->persistenceHandlerMock
+            ->method('contentHandler')
+            ->will($this->returnValue($contentHandlerMock));
+
+        $tags = [
+            'content-fields-' . $relationSourceContentId,
+        ];
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('invalidateTags')
+            ->with($tags);
+
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler $handler */
+        $handler = $this->persistenceCacheHandler->$handlerMethodName();
+        $handler->deleteTrashItem($trashedId);
+    }
+
+    public function testEmptyTrash()
+    {
+        $trashedId = 6;
+        $contentId = 42;
+        $relationSourceContentId = 42;
+
+        $handlerMethodName = $this->getHandlerMethodName();
+
+        $innerHandler = $this->createMock($this->getHandlerClassName());
+
+        $innerHandler
+            ->expects($this->once())
+            ->method('findTrashItems')
+            ->will($this->returnValue([new Trashed(['id' => $trashedId, 'contentId' => $contentId])]));
+
+        $this->persistenceHandlerMock
+            ->method($handlerMethodName)
+            ->will($this->returnValue($innerHandler));
+
+        $contentHandlerMock = $this->createMock(ContentHandler::class);
+
+        $contentHandlerMock
+            ->expects($this->once())
+            ->method('loadReverseRelations')
+            ->with($contentId)
+            ->will($this->returnValue([new Relation(['sourceContentId' => $relationSourceContentId])]));
+
+        $this->persistenceHandlerMock
+            ->method('contentHandler')
+            ->will($this->returnValue($contentHandlerMock));
+
+        $tags = [
+            'content-fields-' . $relationSourceContentId,
+        ];
+
+        $this->cacheMock
+            ->expects($this->once())
+            ->method('invalidateTags')
+            ->with($tags);
+
+        /** @var \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler $handler */
+        $handler = $this->persistenceCacheHandler->$handlerMethodName();
+        $handler->emptyTrash();
     }
 }
