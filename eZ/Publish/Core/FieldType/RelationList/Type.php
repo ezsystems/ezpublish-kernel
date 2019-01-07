@@ -205,7 +205,8 @@ class Type extends FieldType
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
-     * For this FieldType, the related object's name is returned.
+     *
+     * For this FieldType, the related object's name is returned, separated by ",".
      *
      * @param \eZ\Publish\Core\FieldType\RelationList\Value $value
      *
@@ -213,7 +214,7 @@ class Type extends FieldType
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return false;
+        return implode(',', $value->destinationContentIds);
     }
 
     /**

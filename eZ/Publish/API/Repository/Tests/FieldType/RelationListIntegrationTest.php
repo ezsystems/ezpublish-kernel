@@ -407,19 +407,6 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         );
     }
 
-    /**
-     * @todo Drop this once Legacy Engine is able to do basic searching on this, basically same value as "sort_value"
-     *       field as sort_key_string (- as separator between relation ids).
-     */
-    protected function checkSearchEngineSupport()
-    {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                "'ezobjectrelationlist' field type is not searchable with Legacy Search Engine"
-            );
-        }
-    }
-
     protected function getValidSearchValueOne()
     {
         return array(11);
