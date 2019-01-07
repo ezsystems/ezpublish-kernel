@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests\FieldType;
 
 use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -223,6 +224,9 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
     /**
      * Used to control test execution by search engine.
+     *
+     * WARNING: Using this will block any testing on a given search engine for FieldType, if partial limited on LegacySE
+     *          rather use checkCustomFieldsSupport(), checkFullTextSupport(), $legacyUnsupportedOperators, (...).
      */
     protected function checkSearchEngineSupport()
     {
@@ -1052,6 +1056,87 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         $criteria = new LogicalNot(
             new Field('data', Operator::CONTAINS, $valueTwo)
+        );
+
+        $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
+    }
+
+    /**
+     * Tests search with LIKE operator, with NO wildcard.
+     *
+     * @dataProvider findProvider
+     * @depends testCreateTestContent
+     */
+    public function testFindLikeOne($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
+    {
+        $criteria = new Field('data', Operator::LIKE, $valueOne);
+
+        $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
+    }
+
+    /**
+     * Tests search with LIKE operator, with wildcard at the end (on strings).
+     *
+     * @dataProvider findProvider
+     * @depends testCreateTestContent
+     */
+    public function testFindNotLikeOne($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
+    {
+        if (!is_numeric($valueOne)) {
+            $valueOne = substr_replace($valueOne, '*', -1, 1);
+        }
+
+        $criteria = new LogicalNot(new Field('data', Operator::LIKE, $valueOne));
+
+        $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
+    }
+
+    /**
+     * Tests search with LIKE operator, with wildcard at the start (on strings).
+     *
+     * @dataProvider findProvider
+     * @depends testCreateTestContent
+     */
+    public function testFindLikeTwo($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
+    {
+        if (!is_numeric($valueTwo)) {
+            $valueTwo = substr_replace($valueTwo, '*', 1, 1);
+        }
+
+        $criteria = new Field('data', Operator::LIKE, $valueTwo);
+
+        $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
+
+
+        // BC support for "%" for Legacy Storage engine only
+        // @deprecated In 6.7.x/6.13.x/7.3.x and higher, to be removed in 8.0
+        if (get_class($this->getSetupFactory()) !== Legacy::class) {
+            return;
+        }
+
+        if (!is_numeric($valueTwo)) {
+            $valueTwo = substr_replace($valueTwo, '%', 1, 1);
+        }
+
+        $criteria = new Field('data', Operator::LIKE, $valueTwo);
+
+        $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
+    }
+
+    /**
+     * Tests search with LIKE operator, with wildcard in the middle (on strings).
+     *
+     * @dataProvider findProvider
+     * @depends testCreateTestContent
+     */
+    public function testFindNotLikeTwo($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
+    {
+        if (!is_numeric($valueTwo)) {
+            $valueTwo = substr_replace($valueTwo, '*', 2, 1);
+        }
+
+        $criteria = new LogicalNot(
+            new Field('data', Operator::LIKE, $valueTwo)
         );
 
         $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
