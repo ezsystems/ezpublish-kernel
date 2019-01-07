@@ -85,7 +85,7 @@ class Type extends FieldType
         if (!$value->authors instanceof AuthorCollection) {
             throw new InvalidArgumentType(
                 '$value->authors',
-                'eZ\\Publish\\Core\\FieldType\\Author\\AuthorCollection',
+                AuthorCollection::class,
                 $value->authors
             );
         }
@@ -96,7 +96,17 @@ class Type extends FieldType
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return false;
+        if (empty($value->authors)) {
+            return false;
+        }
+
+        return implode(',', array_map(
+            function(Author $author){
+                return str_replace(',', '.', $author->name);
+            },
+            $value->authors->getArrayCopy()
+        ));
+
     }
 
     /**
