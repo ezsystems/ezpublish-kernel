@@ -271,13 +271,11 @@ class Type extends FieldType
     }
 
     /**
-     * Returns sortKey information.
-     *
-     * @see \eZ\Publish\Core\FieldType
+     * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @param \eZ\Publish\Core\FieldType\RichText\Value $value
      *
-     * @return array|bool
+     * @return string|null
      */
     protected function getSortInfo(BaseValue $value)
     {
