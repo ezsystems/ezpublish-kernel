@@ -100,12 +100,14 @@ class Type extends FieldType
             return false;
         }
 
-        return implode(',', array_map(
-            function (Author $author) {
-                return str_replace(',', '.', $author->name);
-            },
-            $value->authors->getArrayCopy()
-        ));
+        $authors = [];
+        foreach ($value->authors as $author) {
+            $authors[] = $this->transformationProcessor->transformByGroup($author->name, 'lowercase');
+        }
+
+        sort($authors);
+
+        return implode(',', $authors);
     }
 
     /**

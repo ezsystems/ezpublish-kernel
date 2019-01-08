@@ -138,7 +138,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Author\\Value',
+            AuthorValue::class,
             $field->value
         );
 
@@ -219,7 +219,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Author\\Value',
+            AuthorValue::class,
             $field->value
         );
 
@@ -279,7 +279,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Author\\Value',
+            AuthorValue::class,
             $field->value
         );
 
