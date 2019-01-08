@@ -1119,7 +1119,6 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
 
-
         // BC support for "%" for Legacy Storage engine only
         // @deprecated In 6.7.x/6.13.x/7.3.x and higher, to be removed in 8.0
         if (!$this->supportsLikeWildcard() || get_class($this->getSetupFactory()) !== Legacy::class) {

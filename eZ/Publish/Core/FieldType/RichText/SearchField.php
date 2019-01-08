@@ -96,7 +96,6 @@ class SearchField implements Indexable
             $result = $document->documentElement->textContent;
         }
 
-
         // In case of newlines, extract first line. Also limit size to 255 which is maxsize on sql impl.
         $lines = preg_split('/\r\n|\n|\r/', trim($result), -1, PREG_SPLIT_NO_EMPTY);
 

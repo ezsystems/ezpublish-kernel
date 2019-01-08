@@ -101,12 +101,11 @@ class Type extends FieldType
         }
 
         return implode(',', array_map(
-            function(Author $author){
+            function (Author $author) {
                 return str_replace(',', '.', $author->name);
             },
             $value->authors->getArrayCopy()
         ));
-
     }
 
     /**
