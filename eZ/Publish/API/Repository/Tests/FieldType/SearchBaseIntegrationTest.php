@@ -223,6 +223,18 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     }
 
     /**
+     * Overload for field types that does not support wildcards in LIKE Field criteria.
+     *
+     * E.g. Any field type that needs to be matched as a whole: Email, bool, date/time, (singular) relation, integer.
+     *
+     * @return bool
+     */
+    protected function supportsLikeWildcard()
+    {
+        return true;
+    }
+
+    /**
      * Used to control test execution by search engine.
      *
      * WARNING: Using this will block any testing on a given search engine for FieldType, if partial limited on LegacySE
@@ -1082,7 +1094,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindNotLikeOne($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
-        if (!is_numeric($valueOne)) {
+        if ($this->supportsLikeWildcard()) {
             $valueOne = substr_replace($valueOne, '*', -1, 1);
         }
 
@@ -1099,7 +1111,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindLikeTwo($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
-        if (!is_numeric($valueTwo)) {
+        if ($this->supportsLikeWildcard()) {
             $valueTwo = substr_replace($valueTwo, '*', 1, 1);
         }
 
@@ -1110,15 +1122,11 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         // BC support for "%" for Legacy Storage engine only
         // @deprecated In 6.7.x/6.13.x/7.3.x and higher, to be removed in 8.0
-        if (get_class($this->getSetupFactory()) !== Legacy::class) {
+        if (!$this->supportsLikeWildcard() || get_class($this->getSetupFactory()) !== Legacy::class) {
             return;
         }
 
-        if (!is_numeric($valueTwo)) {
-            $valueTwo = substr_replace($valueTwo, '%', 1, 1);
-        }
-
-        $criteria = new Field('data', Operator::LIKE, $valueTwo);
+        $criteria = new Field('data', Operator::LIKE, substr_replace($valueTwo, '%', 1, 1));
 
         $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
     }
@@ -1131,7 +1139,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindNotLikeTwo($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
-        if (!is_numeric($valueTwo)) {
+        if ($this->supportsLikeWildcard()) {
             $valueTwo = substr_replace($valueTwo, '*', 2, 1);
         }
 

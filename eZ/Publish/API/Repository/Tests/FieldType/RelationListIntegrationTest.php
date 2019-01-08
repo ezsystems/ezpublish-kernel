@@ -35,6 +35,14 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function supportsLikeWildcard()
+    {
+        return false;
+    }
+
+    /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
      * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
