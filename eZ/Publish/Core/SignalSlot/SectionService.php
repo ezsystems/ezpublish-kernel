@@ -9,10 +9,12 @@
 namespace eZ\Publish\Core\SignalSlot;
 
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionToSubtreeSignal;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\CreateSectionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\UpdateSectionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal;
@@ -195,6 +197,30 @@ class SectionService implements SectionServiceInterface
         );
 
         return $returnValue;
+    }
+
+    /**
+     * Assigns the subtree to the given section.
+     *
+     * This method overrides the current assigned section.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     */
+    public function assignSectionToSubtree(Location $location, Section $section): void
+    {
+        $this->service->assignSectionToSubtree($location, $section);
+
+        $this->signalDispatcher->emit(
+            new AssignSectionToSubtreeSignal(
+                [
+                    'locationId' => $location->id,
+                    'sectionId' => $section->id,
+                ]
+            )
+        );
     }
 
     /**

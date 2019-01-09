@@ -605,6 +605,8 @@ class Repository implements RepositoryInterface
         $this->sectionService = new SectionService(
             $this,
             $this->persistenceHandler->sectionHandler(),
+            $this->persistenceHandler->locationHandler(),
+            $this->getPermissionCriterionResolver(),
             $this->serviceSettings['section']
         );
 
