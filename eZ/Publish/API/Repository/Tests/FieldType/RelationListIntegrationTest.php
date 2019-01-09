@@ -37,7 +37,7 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     /**
      * {@inheritdoc}
      */
-    protected function supportsLikeWildcard()
+    protected function supportsLikeWildcard($value)
     {
         return false;
     }

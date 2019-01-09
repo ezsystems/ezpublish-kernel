@@ -227,18 +227,24 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      *
      * E.g. Any field type that needs to be matched as a whole: Email, bool, date/time, (singular) relation, integer.
      *
+     * @param mixed $value
+     *
      * @return bool
      */
-    protected function supportsLikeWildcard()
+    protected function supportsLikeWildcard($value)
     {
-        return true;
+        if ($this->getSetupFactory() instanceof LegacyElasticsearch) {
+            $this->markTestSkipped('Elasticsearch Search Engine does not support Field Criterion LIKE');
+        }
+
+        return !is_numeric($value) && !is_bool($value);
     }
 
     /**
      * Used to control test execution by search engine.
      *
-     * WARNING: Using this will block any testing on a given search engine for FieldType, if partial limited on LegacySE
-     *          rather use checkCustomFieldsSupport(), checkFullTextSupport(), $legacyUnsupportedOperators, (...).
+     * WARNING: Using this will block testing on a given search engine for FieldType, if partial limited on LegacySE use:
+     * checkCustomFieldsSupport(), checkFullTextSupport(), supportsLikeWildcard(), $legacyUnsupportedOperators, (...).
      */
     protected function checkSearchEngineSupport()
     {
@@ -247,19 +253,15 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
     protected function checkCustomFieldsSupport()
     {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                'Legacy Search Engine does not support custom fields'
-            );
+        if (get_class($this->getSetupFactory()) === Legacy::class) {
+            $this->markTestSkipped('Legacy Search Engine does not support custom fields');
         }
     }
 
     protected function checkLocationFieldSearchSupport()
     {
         if ($this->getSetupFactory() instanceof LegacyElasticsearch) {
-            $this->markTestSkipped(
-                'Elasticsearch Search Engine does not support custom fields'
-            );
+            $this->markTestSkipped('Elasticsearch Search Engine does not support custom fields');
         }
     }
 
@@ -1094,11 +1096,13 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindNotLikeOne($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
-        if ($this->supportsLikeWildcard()) {
+        if ($this->supportsLikeWildcard($valueOne)) {
             $valueOne = substr_replace($valueOne, '*', -1, 1);
         }
 
-        $criteria = new LogicalNot(new Field('data', Operator::LIKE, $valueOne));
+        $criteria = new LogicalNot(
+            new Field('data', Operator::LIKE, $valueOne)
+        );
 
         $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
     }
@@ -1111,7 +1115,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindLikeTwo($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
-        if ($this->supportsLikeWildcard()) {
+        if ($this->supportsLikeWildcard($valueTwo)) {
             $valueTwo = substr_replace($valueTwo, '*', 1, 1);
         }
 
@@ -1120,8 +1124,8 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
 
         // BC support for "%" for Legacy Storage engine only
-        // @deprecated In 6.7.x/6.13.x/7.3.x and higher, to be removed in 8.0
-        if (!$this->supportsLikeWildcard() || get_class($this->getSetupFactory()) !== Legacy::class) {
+        // @deprecated In 6.13.x/7.3.x and higher, to be removed in 8.0
+        if (!$this->supportsLikeWildcard($valueTwo) || get_class($this->getSetupFactory()) !== Legacy::class) {
             return;
         }
 
@@ -1138,7 +1142,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindNotLikeTwo($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
-        if ($this->supportsLikeWildcard()) {
+        if ($this->supportsLikeWildcard($valueTwo)) {
             $valueTwo = substr_replace($valueTwo, '*', 2, 1);
         }
 

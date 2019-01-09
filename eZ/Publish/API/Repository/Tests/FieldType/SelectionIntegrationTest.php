@@ -30,16 +30,6 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * If Selection is improved to be able to index + search for string also with LegacySearch, then adapt this too.
-     */
-    protected function supportsLikeWildcard()
-    {
-        return false;
-    }
-
-    /**
      * Get expected settings schema.
      *
      * @return array

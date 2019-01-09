@@ -31,14 +31,6 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function supportsLikeWildcard()
-    {
-        return false;
-    }
-
-    /**
      * Get expected settings schema.
      *
      * @return array

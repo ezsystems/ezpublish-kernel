@@ -60,7 +60,7 @@ class Collection extends Handler
             case Criterion\Operator::CONTAINS:
                 if ($criterion->operator === Criterion\Operator::LIKE) {
                     if (strpos($criterion->value, '%') !== false) {
-                        // @deprecated In 6.7.x/6.13.x/7.3.x and higher, to be removed in 8.0
+                        // @deprecated In 6.13.x/7.3.x and higher, to be removed in 8.0
                         @trigger_error(
                             "Usage of '%' in Operator::LIKE criteria with Legacy Search Engine was never intended, " .
                             "and is deprecated for removal in 8.0. Please use '*' like in FullText, works across engines",
