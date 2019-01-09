@@ -26,11 +26,17 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class Type extends FieldType
 {
-    /**
-     * @todo Consider to add all 6 selection options
-     */
     const SELECTION_BROWSE = 0;
     const SELECTION_DROPDOWN = 1;
+    /**
+     * @todo following selection methods needs to be implemented in 8.0.
+     * Please, refer to: https://jira.ez.no/browse/EZP-29924
+     */
+    const SELECTION_LIST_WITH_RADIO_BUTTONS = 2;
+    const SELECTION_LIST_WITH_CHECKBOXES = 3;
+    const SELECTION_MULTIPLE_SELECTION_LIST = 4;
+    const SELECTION_TEMPLATE_BASED_MULTI = 5;
+    const SELECTION_TEMPLATE_BASED_SINGLE = 6;
 
     protected $settingsSchema = array(
         'selectionMethod' => array(
@@ -73,7 +79,15 @@ class Type extends FieldType
 
             switch ($name) {
                 case 'selectionMethod':
-                    if ($value !== self::SELECTION_BROWSE && $value !== self::SELECTION_DROPDOWN) {
+                    if (!in_array($value, [
+                        self::SELECTION_BROWSE,
+                        self::SELECTION_DROPDOWN,
+                        self::SELECTION_LIST_WITH_RADIO_BUTTONS,
+                        self::SELECTION_LIST_WITH_CHECKBOXES,
+                        self::SELECTION_MULTIPLE_SELECTION_LIST,
+                        self::SELECTION_TEMPLATE_BASED_MULTI,
+                        self::SELECTION_TEMPLATE_BASED_SINGLE,
+                    ], true)) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
                             null,
@@ -81,6 +95,11 @@ class Type extends FieldType
                                 '%setting%' => $name,
                                 '%selection_browse%' => self::SELECTION_BROWSE,
                                 '%selection_dropdown%' => self::SELECTION_DROPDOWN,
+                                '%selection_list_with_radio_buttons%' => self::SELECTION_LIST_WITH_RADIO_BUTTONS,
+                                '%selection_list_with_checkboxes%' => self::SELECTION_LIST_WITH_CHECKBOXES,
+                                '%selection_multiple_selection_list%' => self::SELECTION_MULTIPLE_SELECTION_LIST,
+                                '%selection_template_based_multi%' => self::SELECTION_TEMPLATE_BASED_MULTI,
+                                '%selection_template_based_single%' => self::SELECTION_TEMPLATE_BASED_SINGLE,
                             ),
                             "[$name]"
                         );
