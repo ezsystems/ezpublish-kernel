@@ -75,4 +75,15 @@ interface URLWildcardService
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
      */
     public function translate($url);
+
+    /**
+     * Performs lookup for the given url.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param string $url
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
+     */
+    public function lookup($url);
 }

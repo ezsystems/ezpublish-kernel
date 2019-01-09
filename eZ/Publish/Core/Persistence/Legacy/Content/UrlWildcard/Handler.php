@@ -113,4 +113,26 @@ class Handler implements BaseUrlWildcardHandler
             $this->gateway->loadUrlWildcardsData($offset, $limit)
         );
     }
+
+    /**
+     * Performs lookup for given URL.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
+     *
+     * @param string $url
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
+     */
+    public function lookup($url)
+    {
+        $row = $this->gateway->loadUrlWildcardByUrl($url);
+
+        if (empty($row)) {
+            throw new NotFoundException('UrlWildcard', $url);
+        }
+
+        return $this->mapper->extractUrlWildcardFromRow(
+            $this->gateway->loadUrlWildcardByUrl($url)
+        );
+    }
 }

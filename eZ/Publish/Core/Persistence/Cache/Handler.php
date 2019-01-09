@@ -19,6 +19,7 @@ use eZ\Publish\Core\Persistence\Cache\TransactionHandler as CacheTransactionHand
 use eZ\Publish\Core\Persistence\Cache\TrashHandler as CacheTrashHandler;
 use eZ\Publish\Core\Persistence\Cache\UrlAliasHandler as CacheUrlAliasHandler;
 use eZ\Publish\Core\Persistence\Cache\ObjectStateHandler as CacheObjectStateHandler;
+use eZ\Publish\Core\Persistence\Cache\UrlWildcardHandler as CacheUrlWildcardHandler;
 
 /**
  * Persistence Cache Handler class.
@@ -81,6 +82,11 @@ class Handler implements PersistenceHandlerInterface
     protected $transactionHandler;
 
     /**
+     * @var UrlWildcardHandler
+     */
+    private $urlWildcardHandler;
+
+    /**
      * @var PersistenceLogger
      */
     protected $logger;
@@ -99,6 +105,7 @@ class Handler implements PersistenceHandlerInterface
      * @param \eZ\Publish\Core\Persistence\Cache\TrashHandler $trashHandler
      * @param \eZ\Publish\Core\Persistence\Cache\UrlAliasHandler $urlAliasHandler
      * @param \eZ\Publish\Core\Persistence\Cache\ObjectStateHandler $objectStateHandler
+     * @param \eZ\Publish\Core\Persistence\Cache\UrlWildcardHandler $urlWildcardHandler
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      */
     public function __construct(
@@ -113,6 +120,7 @@ class Handler implements PersistenceHandlerInterface
         CacheTrashHandler $trashHandler,
         CacheUrlAliasHandler $urlAliasHandler,
         CacheObjectStateHandler $objectStateHandler,
+        CacheUrlWildcardHandler $urlWildcardHandler,
         PersistenceLogger $logger
     ) {
         $this->persistenceHandler = $persistenceHandler;
@@ -126,6 +134,7 @@ class Handler implements PersistenceHandlerInterface
         $this->trashHandler = $trashHandler;
         $this->urlAliasHandler = $urlAliasHandler;
         $this->objectStateHandler = $objectStateHandler;
+        $this->urlWildcardHandler = $urlWildcardHandler;
         $this->logger = $logger;
     }
 
@@ -203,14 +212,10 @@ class Handler implements PersistenceHandlerInterface
 
     /**
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
-     *
-     * @todo Create cache implementation so we can avoid injecting persistenceHandler and logger
      */
     public function urlWildcardHandler()
     {
-        $this->logger->logUnCachedHandler(__METHOD__);
-
-        return $this->persistenceHandler->urlWildcardHandler();
+        return $this->urlWildcardHandler;
     }
 
     /**

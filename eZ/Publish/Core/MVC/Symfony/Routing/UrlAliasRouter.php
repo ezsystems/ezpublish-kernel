@@ -123,6 +123,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     {
         try {
             $requestedPath = $request->attributes->get('semanticPathinfo', $request->getPathInfo());
+
             $urlAlias = $this->getUrlAlias($requestedPath);
             if ($this->rootLocationId === null) {
                 $pathPrefix = '/';

@@ -151,4 +151,28 @@ class URLWildcardService implements URLWildcardServiceInterface
 
         return $returnValue;
     }
+
+    /**
+     * Performs lookup for the given url.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param string $url
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
+     */
+    public function lookup($url)
+    {
+        $returnValue = $this->service->lookup($url);
+        // @todo implement LookupSignal
+        $this->signalDispatcher->emit(
+            new TranslateSignal(
+                array(
+                    'url' => $url,
+                )
+            )
+        );
+
+        return $returnValue;
+    }
 }

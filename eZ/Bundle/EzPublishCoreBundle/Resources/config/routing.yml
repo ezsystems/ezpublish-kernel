@@ -13,6 +13,7 @@ parameters:
     ezpublish.url_generator.base.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator
     ezpublish.urlalias_router.class: eZ\Bundle\EzPublishCoreBundle\Routing\UrlAliasRouter
     ezpublish.urlalias_generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
+    ezpublish.urlwildcard_router.class: eZ\Publish\Core\MVC\Symfony\Routing\UrlWildcardRouter
     ezpublish.siteaccess.matcher_builder.class: eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder
     ezpublish.siteaccess_router.class: eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
     ezpublish.siteaccess_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\SiteAccessListener
@@ -60,6 +61,16 @@ services:
             - [setConfigResolver, ["@ezpublish.config.resolver"]]
         tags:
             - {name: router, priority: 200}
+
+    ezpublish.urlwildcard_router:
+        class: "%ezpublish.urlwildcard_router.class%"
+        arguments:
+            - "@ezpublish.api.service.url_wildcard"
+            - "@ezpublish.urlalias_generator"
+            - "@?router.request_context"
+            - "@logger"
+        tags:
+            - { name: router, priority: 210 }
 
     ezpublish.urlalias_generator:
         class: "%ezpublish.urlalias_generator.class%"

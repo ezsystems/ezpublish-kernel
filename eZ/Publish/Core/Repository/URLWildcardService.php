@@ -53,10 +53,7 @@ class URLWildcardService implements URLWildcardServiceInterface
     {
         $this->repository = $repository;
         $this->urlWildcardHandler = $urlWildcardHandler;
-        // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
-            //'defaultSetting' => array(),
-        );
+        $this->settings = $settings;
     }
 
     /**
@@ -127,11 +124,28 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     protected function cleanUrl($url)
     {
+        // if $url is an absolute URL, then we don't want to prepend it with /
+        if (parse_url($url, PHP_URL_SCHEME)) {
+            return trim($url);
+        }
+
         return '/' . trim($url, '/ ');
     }
 
     /**
-     * removes an url wildcard.
+     * Removes leading slash from given path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    protected function cleanPath($path)
+    {
+        return trim($path, '/ ');
+    }
+
+    /**
+     * Removes an url wildcard.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove url wildcards
      *
@@ -229,6 +243,23 @@ class URLWildcardService implements URLWildcardServiceInterface
         }
 
         throw new NotFoundException('URLWildcard', $url);
+    }
+
+    /**
+     * Performs lookup for the given url.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     *
+     * @param string $url
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
+     */
+    public function lookup($url)
+    {
+        $cleanUrl = $this->cleanPath($url);
+        $spiUrlWildcard = $this->urlWildcardHandler->lookup($cleanUrl);
+
+        return $this->buildUrlWildcardDomainObject($spiUrlWildcard);
     }
 
     /**
