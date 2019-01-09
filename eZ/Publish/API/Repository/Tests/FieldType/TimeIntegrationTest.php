@@ -30,6 +30,15 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
         return 'eztime';
     }
 
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function supportsLikeWildcard($value)
+    {
+        return false;
+    }
+
     /**
      * Get expected settings schema.
      *
