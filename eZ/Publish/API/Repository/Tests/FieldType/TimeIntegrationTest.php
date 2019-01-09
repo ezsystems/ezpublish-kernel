@@ -30,12 +30,13 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
         return 'eztime';
     }
 
-
     /**
      * {@inheritdoc}
      */
     protected function supportsLikeWildcard($value)
     {
+        parent::supportsLikeWildcard($value);
+
         return false;
     }
 

@@ -36,6 +36,8 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     protected function supportsLikeWildcard($value)
     {
+        parent::supportsLikeWildcard($value);
+
         return false;
     }
 
