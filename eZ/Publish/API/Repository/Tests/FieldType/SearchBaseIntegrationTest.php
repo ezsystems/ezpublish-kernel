@@ -1083,6 +1083,9 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindLikeOne($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
+        // (in case test is skipped for current search engine)
+        $this->supportsLikeWildcard($valueOne);
+
         $criteria = new Field('data', Operator::LIKE, $valueOne);
 
         $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
