@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\SignalSlot\Tests;
 
 use eZ\Publish\API\Repository\TrashService as APITrashService;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 use eZ\Publish\Core\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Query;
@@ -33,7 +35,8 @@ class TrashServiceTest extends ServiceTest
     {
         $newParentLocationId = 2;
         $trashItemId = $locationId = 60;
-        $trashItemContentInfo = $this->getContentInfo(59, md5('trash'));
+        $contentId = 59;
+        $trashItemContentInfo = $this->getContentInfo($contentId, md5('trash'));
         $trashItemParentLocationId = 17;
 
         $trashItem = new TrashItem(
@@ -66,6 +69,12 @@ class TrashServiceTest extends ServiceTest
                 'parentLocationId' => $newParentLocationId,
             )
         );
+
+        $trashItemDeleteResult = new TrashItemDeleteResult([
+            'trashItemId' => $trashItemId,
+            'contentId' => $contentId,
+            'contentRemoved' => true,
+        ]);
 
         return array(
             array(
@@ -109,18 +118,25 @@ class TrashServiceTest extends ServiceTest
             array(
                 'emptyTrash',
                 array(),
-                null,
+                new TrashItemDeleteResultList(['items' => [$trashItemDeleteResult]]),
                 1,
                 TrashServiceSignals\EmptyTrashSignal::class,
-                array(),
+                array(
+                    'deletedTrashItemIds' => array($trashItemId),
+                    'deletedContentIds' => array($contentId),
+                ),
             ),
             array(
                 'deleteTrashItem',
                 array($trashItem),
-                null,
+                $trashItemDeleteResult,
                 1,
                 TrashServiceSignals\DeleteTrashItemSignal::class,
-                array('trashItemId' => $trashItemId),
+                array(
+                    'trashItemId' => $trashItemId,
+                    'contentId' => $contentId,
+                    'contentRemoved' => true,
+                ),
             ),
             array(
                 'findTrashItems',
