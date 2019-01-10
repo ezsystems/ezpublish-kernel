@@ -89,7 +89,7 @@ class Type extends FieldType
                         self::SELECTION_TEMPLATE_BASED_SINGLE,
                     ], true)) {
                         $validationErrors[] = new ValidationError(
-                            "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
+                            "Setting '%setting%' must be one of %selection_browse%, %selection_dropdown%, %selection_list_with_radio_buttons%, %selection_list_with_checkboxes%, %selection_multiple_selection_list%, %selection_template_based_multi%, %selection_template_based_single%",
                             null,
                             array(
                                 '%setting%' => $name,
