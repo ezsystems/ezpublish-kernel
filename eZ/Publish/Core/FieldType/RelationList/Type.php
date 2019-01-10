@@ -27,11 +27,11 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
 class Type extends FieldType
 {
     const SELECTION_BROWSE = 0;
-    const SELECTION_DROPDOWN = 1;
     /**
-     * @todo following selection methods needs to be implemented in 8.0.
-     * Please, refer to: https://jira.ez.no/browse/EZP-29924
+     * @todo following selection methods comes from legacy and may be interpreted as SELECTION_BROWSE by UI.
+     * UI support will be evaluated on a case by case basis for future versions.
      */
+    const SELECTION_DROPDOWN = 1;
     const SELECTION_LIST_WITH_RADIO_BUTTONS = 2;
     const SELECTION_LIST_WITH_CHECKBOXES = 3;
     const SELECTION_MULTIPLE_SELECTION_LIST = 4;
