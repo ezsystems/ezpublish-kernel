@@ -70,11 +70,19 @@ class TrashServiceTest extends ServiceTest
             )
         );
 
-        $trashItemDeleteResult = new TrashItemDeleteResult([
-            'trashItemId' => $trashItemId,
-            'contentId' => $contentId,
-            'contentRemoved' => true,
-        ]);
+        $trashItemDeleteResult = new TrashItemDeleteResult(
+            array(
+                'trashItemId' => $trashItemId,
+                'contentId' => $contentId,
+                'contentRemoved' => true,
+            )
+        );
+
+        $trashItemDeleteResultList = new TrashItemDeleteResultList(
+            array(
+                'items' => array($trashItemDeleteResult),
+            )
+        );
 
         return array(
             array(
@@ -118,13 +126,10 @@ class TrashServiceTest extends ServiceTest
             array(
                 'emptyTrash',
                 array(),
-                new TrashItemDeleteResultList(['items' => [$trashItemDeleteResult]]),
+                $trashItemDeleteResultList,
                 1,
                 TrashServiceSignals\EmptyTrashSignal::class,
-                array(
-                    'deletedTrashItemIds' => array($trashItemId),
-                    'deletedContentIds' => array($contentId),
-                ),
+                array('trashItemDeleteResultList' => $trashItemDeleteResultList),
             ),
             array(
                 'deleteTrashItem',
@@ -134,8 +139,7 @@ class TrashServiceTest extends ServiceTest
                 TrashServiceSignals\DeleteTrashItemSignal::class,
                 array(
                     'trashItemId' => $trashItemId,
-                    'contentId' => $contentId,
-                    'contentRemoved' => true,
+                    'trashItemDeleteResult' => $trashItemDeleteResult,
                 ),
             ),
             array(

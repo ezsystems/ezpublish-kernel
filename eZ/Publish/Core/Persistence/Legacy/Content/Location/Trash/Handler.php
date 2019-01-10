@@ -194,8 +194,7 @@ class Handler implements BaseTrashHandler
     }
 
     /**
-     * Empties the trash
-     * Everything contained in the trash must be removed.
+     * {@inheritdoc}
      */
     public function emptyTrash()
     {

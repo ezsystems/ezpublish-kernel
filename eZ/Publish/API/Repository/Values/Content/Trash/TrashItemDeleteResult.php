@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace eZ\Publish\API\Repository\Values\Content\Trash;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
@@ -7,19 +11,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 class TrashItemDeleteResult extends ValueObject
 {
     /**
-     * @var mixed
+     * @var int
      */
     public $trashItemId;
 
     /**
-     * @var mixed
+     * @var int
      */
     public $contentId;
-
-    /**
-     * @var bool
-     */
-    public $itemRemoved = true;
 
     /**
      * Flag indicating content was removed.

@@ -16,12 +16,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 class EmptyTrashSignal extends Signal
 {
     /**
-     * @var mixed[]
+     * @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList
      */
-    public $deletedTrashItemIds;
-
-    /**
-     * @var mixed[]
-     */
-    public $deletedContentIds;
+    public $trashItemDeleteResultList;
 }
