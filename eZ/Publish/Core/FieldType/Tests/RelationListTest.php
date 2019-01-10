@@ -305,6 +305,41 @@ class RelationListTest extends FieldTypeTest
                     'selectionContentTypes' => array(1, 2, 3),
                 ),
             ),
+            array(
+                array(
+                    'selectionMethod' => RelationList::SELECTION_LIST_WITH_RADIO_BUTTONS,
+                    'selectionDefaultLocation' => 'foo',
+                    'selectionContentTypes' => array(1, 2, 3),
+                ),
+            ),
+            array(
+                array(
+                    'selectionMethod' => RelationList::SELECTION_LIST_WITH_CHECKBOXES,
+                    'selectionDefaultLocation' => 'foo',
+                    'selectionContentTypes' => array(1, 2, 3),
+                ),
+            ),
+            array(
+                array(
+                    'selectionMethod' => RelationList::SELECTION_MULTIPLE_SELECTION_LIST,
+                    'selectionDefaultLocation' => 'foo',
+                    'selectionContentTypes' => array(1, 2, 3),
+                ),
+            ),
+            array(
+                array(
+                    'selectionMethod' => RelationList::SELECTION_TEMPLATE_BASED_MULTI,
+                    'selectionDefaultLocation' => 'foo',
+                    'selectionContentTypes' => array(1, 2, 3),
+                ),
+            ),
+            array(
+                array(
+                    'selectionMethod' => RelationList::SELECTION_TEMPLATE_BASED_SINGLE,
+                    'selectionDefaultLocation' => 'foo',
+                    'selectionContentTypes' => array(1, 2, 3),
+                ),
+            ),
         );
     }
 
@@ -355,6 +390,14 @@ class RelationListTest extends FieldTypeTest
                 // Invalid value for 'selectionContentTypes'
                 array(
                     'selectionMethod' => RelationList::SELECTION_DROPDOWN,
+                    'selectionDefaultLocation' => 23,
+                    'selectionContentTypes' => true,
+                ),
+            ),
+            array(
+                // Invalid value for 'selectionMethod'
+                array(
+                    'selectionMethod' => 9,
                     'selectionDefaultLocation' => 23,
                     'selectionContentTypes' => true,
                 ),
