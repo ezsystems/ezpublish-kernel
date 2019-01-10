@@ -66,6 +66,8 @@ interface TrashService
      * if all locations of the content are gone.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to empty the trash
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList
      */
     public function emptyTrash();
 
@@ -77,6 +79,8 @@ interface TrashService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete this trash item
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult
      */
     public function deleteTrashItem(TrashItem $trashItem);
 

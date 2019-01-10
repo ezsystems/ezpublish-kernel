@@ -21,4 +21,18 @@ class DeleteTrashItemSignal extends Signal
      * @var mixed
      */
     public $trashItemId;
+
+    /**
+     * Identifier of content associated with deleted TrashItem.
+     *
+     * @var mixed
+     */
+    public $contentId;
+
+    /**
+     * Indicates that content was removed.
+     *
+     * @var bool
+     */
+    public $contentRemoved;
 }

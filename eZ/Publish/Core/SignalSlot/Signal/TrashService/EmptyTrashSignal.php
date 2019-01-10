@@ -15,4 +15,13 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class EmptyTrashSignal extends Signal
 {
+    /**
+     * @var mixed[]
+     */
+    public $deletedTrashItemIds;
+
+    /**
+     * @var mixed[]
+     */
+    public $deletedContentIds;
 }

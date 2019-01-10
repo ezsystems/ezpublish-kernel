@@ -99,7 +99,8 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     public function emptyTrash()
     {
         $this->logger->logCall(__METHOD__, array());
-        $this->persistenceHandler->trashHandler()->emptyTrash();
+
+        return $this->persistenceHandler->trashHandler()->emptyTrash();
     }
 
     /**
@@ -108,6 +109,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     public function deleteTrashItem($trashedId)
     {
         $this->logger->logCall(__METHOD__, array('id' => $trashedId));
-        $this->persistenceHandler->trashHandler()->deleteTrashItem($trashedId);
+
+        return $this->persistenceHandler->trashHandler()->deleteTrashItem($trashedId);
     }
 }

@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
 
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler;
@@ -197,12 +199,15 @@ class Handler implements BaseTrashHandler
      */
     public function emptyTrash()
     {
+        $resultList = new TrashItemDeleteResultList();
         $trashedItems = $this->findTrashItems();
         foreach ($trashedItems as $item) {
-            $this->delete($item);
+            $resultList->items[] = $this->delete($item);
         }
 
         $this->locationGateway->cleanupTrash();
+
+        return $resultList;
     }
 
     /**
@@ -210,10 +215,12 @@ class Handler implements BaseTrashHandler
      * Associated content has to be deleted.
      *
      * @param int $trashedId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult
      */
     public function deleteTrashItem($trashedId)
     {
-        $this->delete($this->loadTrashItem($trashedId));
+        return $this->delete($this->loadTrashItem($trashedId));
     }
 
     /**
@@ -221,13 +228,22 @@ class Handler implements BaseTrashHandler
      * If there is no more locations for corresponding content, then it will be deleted as well.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Trashed $trashItem
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult
      */
     protected function delete(Trashed $trashItem)
     {
+        $result = new TrashItemDeleteResult();
+        $result->trashItemId = $trashItem->id;
+        $result->contentId = $trashItem->contentId;
+
         $this->locationGateway->removeElementFromTrash($trashItem->id);
 
         if ($this->locationGateway->countLocationsByContentId($trashItem->contentId) < 1) {
             $this->contentHandler->deleteContent($trashItem->contentId);
+            $result->contentRemoved = true;
         }
+
+        return $result;
     }
 }

@@ -235,8 +235,10 @@ class TrashService implements TrashServiceInterface
         $this->repository->beginTransaction();
         try {
             // Persistence layer takes care of deleting content objects
-            $this->persistenceHandler->trashHandler()->emptyTrash();
+            $result = $this->persistenceHandler->trashHandler()->emptyTrash();
             $this->repository->commit();
+
+            return $result;
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;
@@ -251,6 +253,8 @@ class TrashService implements TrashServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete this trash item
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult
      */
     public function deleteTrashItem(APITrashItem $trashItem)
     {
@@ -264,8 +268,10 @@ class TrashService implements TrashServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $this->persistenceHandler->trashHandler()->deleteTrashItem($trashItem->id);
+            $trashItemDeleteResult = $this->persistenceHandler->trashHandler()->deleteTrashItem($trashItem->id);
             $this->repository->commit();
+
+            return $trashItemDeleteResult;
         } catch (Exception $e) {
             $this->repository->rollback();
             throw $e;

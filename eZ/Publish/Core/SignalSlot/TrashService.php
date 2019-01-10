@@ -137,7 +137,12 @@ class TrashService implements TrashServiceInterface
     public function emptyTrash()
     {
         $returnValue = $this->service->emptyTrash();
-        $this->signalDispatcher->emit(new EmptyTrashSignal(array()));
+
+        $signal = new EmptyTrashSignal();
+        $signal->deletedTrashItemIds = array_column($returnValue->items, 'trashItemId');
+        $signal->deletedContentIds = array_column($returnValue->items, 'contentId');
+
+        $this->signalDispatcher->emit($signal);
 
         return $returnValue;
     }
@@ -158,6 +163,8 @@ class TrashService implements TrashServiceInterface
             new DeleteTrashItemSignal(
                 array(
                     'trashItemId' => $trashItem->id,
+                    'contentId' => $trashItem->contentInfo->id,
+                    'contentRemoved' => $returnValue->contentRemoved,
                 )
             )
         );
