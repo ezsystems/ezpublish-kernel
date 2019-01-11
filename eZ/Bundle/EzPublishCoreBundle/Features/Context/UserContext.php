@@ -563,7 +563,7 @@ class UserContext implements Context
         }
 
         for ($i = 0; $i < 20; ++$i) {
-            $email = 'User#' . uniqid() . '@ez.no';
+            $email = uniqid('User#', true) . '@ez.no';
             if (!$this->checkUserExistenceByEmail($email)) {
                 return $email;
             }
@@ -582,7 +582,7 @@ class UserContext implements Context
     private function findNonExistingUserName()
     {
         for ($i = 0; $i < 20; ++$i) {
-            $username = 'User#' . uniqid();
+            $username = uniqid('User#', true);
             if (!$this->checkUserExistenceByUsername($username)) {
                 return $username;
             }

@@ -395,8 +395,10 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function testKeywordsAreCaseSensitive()
     {
         $contentType = $this->testCreateContentType();
-        $publishedContent01 = $this->createAndPublishContent('Foo', $contentType, md5(uniqid() . microtime()));
-        $publishedContent02 = $this->createAndPublishContent('foo', $contentType, md5(uniqid() . microtime()));
+        /** @noinspection NonSecureUniqidUsageInspection */
+        $publishedContent01 = $this->createAndPublishContent('Foo', $contentType, md5(uniqid('', true)));
+        /** @noinspection NonSecureUniqidUsageInspection */
+        $publishedContent02 = $this->createAndPublishContent('foo', $contentType, md5(uniqid('', true)));
 
         $data = $publishedContent01->getField('data')->value;
         $this->assertCount(1, $data->values);

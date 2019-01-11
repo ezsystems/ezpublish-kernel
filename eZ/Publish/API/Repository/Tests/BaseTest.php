@@ -544,7 +544,7 @@ abstract class BaseTest extends TestCase
             $userCreateStruct->setField('last_name', $login);
             $user = $userService->createUser($userCreateStruct, [$userService->loadUserGroup(4)]);
 
-            $role = $this->createRoleWithPolicies(uniqid('role_for_' . $login . '_'), $policiesData);
+            $role = $this->createRoleWithPolicies(uniqid('role_for_' . $login . '_', true), $policiesData);
             $roleService->assignRoleToUser($role, $user);
 
             $repository->commit();
