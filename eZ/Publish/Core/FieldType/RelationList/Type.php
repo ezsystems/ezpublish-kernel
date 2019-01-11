@@ -35,7 +35,7 @@ class Type extends FieldType
     const SELECTION_LIST_WITH_RADIO_BUTTONS = 2;
     const SELECTION_LIST_WITH_CHECKBOXES = 3;
     const SELECTION_MULTIPLE_SELECTION_LIST = 4;
-    const SELECTION_TEMPLATE_BASED_MULTI = 5;
+    const SELECTION_TEMPLATE_BASED_MULTIPLE = 5;
     const SELECTION_TEMPLATE_BASED_SINGLE = 6;
 
     protected $settingsSchema = array(
@@ -85,11 +85,11 @@ class Type extends FieldType
                         self::SELECTION_LIST_WITH_RADIO_BUTTONS,
                         self::SELECTION_LIST_WITH_CHECKBOXES,
                         self::SELECTION_MULTIPLE_SELECTION_LIST,
-                        self::SELECTION_TEMPLATE_BASED_MULTI,
+                        self::SELECTION_TEMPLATE_BASED_MULTIPLE,
                         self::SELECTION_TEMPLATE_BASED_SINGLE,
                     ], true)) {
                         $validationErrors[] = new ValidationError(
-                            "Setting '%setting%' must be one of %selection_browse%, %selection_dropdown%, %selection_list_with_radio_buttons%, %selection_list_with_checkboxes%, %selection_multiple_selection_list%, %selection_template_based_multi%, %selection_template_based_single%",
+                            "Setting '%setting%' must be one of %selection_browse%, %selection_dropdown%, %selection_list_with_radio_buttons%, %selection_list_with_checkboxes%, %selection_multiple_selection_list%, %selection_template_based_multiple%, %selection_template_based_single%",
                             null,
                             array(
                                 '%setting%' => $name,
@@ -98,7 +98,7 @@ class Type extends FieldType
                                 '%selection_list_with_radio_buttons%' => self::SELECTION_LIST_WITH_RADIO_BUTTONS,
                                 '%selection_list_with_checkboxes%' => self::SELECTION_LIST_WITH_CHECKBOXES,
                                 '%selection_multiple_selection_list%' => self::SELECTION_MULTIPLE_SELECTION_LIST,
-                                '%selection_template_based_multi%' => self::SELECTION_TEMPLATE_BASED_MULTI,
+                                '%selection_template_based_multiple%' => self::SELECTION_TEMPLATE_BASED_MULTIPLE,
                                 '%selection_template_based_single%' => self::SELECTION_TEMPLATE_BASED_SINGLE,
                             ),
                             "[$name]"

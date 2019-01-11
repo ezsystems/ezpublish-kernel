@@ -328,7 +328,7 @@ class RelationListTest extends FieldTypeTest
             ),
             array(
                 array(
-                    'selectionMethod' => RelationList::SELECTION_TEMPLATE_BASED_MULTI,
+                    'selectionMethod' => RelationList::SELECTION_TEMPLATE_BASED_MULTIPLE,
                     'selectionDefaultLocation' => 'foo',
                     'selectionContentTypes' => array(1, 2, 3),
                 ),
