@@ -407,7 +407,6 @@ class TrashHandlerTest extends TestCase
         foreach ($returnValue->items as $key => $trashItemDeleteResult) {
             $this->assertEquals($trashItemDeleteResult->trashItemId, $trashedItemIds[$key]);
             $this->assertEquals($trashItemDeleteResult->contentId, $trashedContentIds[$key]);
-            $this->assertTrue($trashItemDeleteResult->itemRemoved);
             $this->assertTrue($trashItemDeleteResult->contentRemoved);
         }
     }
@@ -471,7 +470,6 @@ class TrashHandlerTest extends TestCase
         $this->assertInstanceOf(TrashItemDeleteResult::class, $trashItemDeleteResult);
         $this->assertEquals($trashItemId, $trashItemDeleteResult->trashItemId);
         $this->assertEquals($contentId, $trashItemDeleteResult->contentId);
-        $this->assertTrue($trashItemDeleteResult->itemRemoved);
         $this->assertTrue($trashItemDeleteResult->contentRemoved);
     }
 
@@ -533,7 +531,6 @@ class TrashHandlerTest extends TestCase
         $this->assertInstanceOf(TrashItemDeleteResult::class, $trashItemDeleteResult);
         $this->assertEquals($trashItemId, $trashItemDeleteResult->trashItemId);
         $this->assertEquals($contentId, $trashItemDeleteResult->contentId);
-        $this->assertTrue($trashItemDeleteResult->itemRemoved);
         $this->assertFalse($trashItemDeleteResult->contentRemoved);
     }
 }
