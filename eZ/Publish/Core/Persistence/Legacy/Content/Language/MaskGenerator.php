@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 
 /**
@@ -71,6 +72,8 @@ class MaskGenerator
      *
      * Typically used for ->name values to get language mask directly from such structure.
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language(s) in $languageMap was not be found
+     *
      * @param array $languageMap Key values are language code, value is ignored.
      *              Exception if 'always-available' key with language value is set, then always available flag is added.
      *
@@ -84,9 +87,14 @@ class MaskGenerator
             unset($languageMap['always-available']);
         }
 
-        $languageList = $this->languageHandler->loadListByLanguageCodes(array_keys($languageMap));
+        $languageCodes = array_keys($languageMap);
+        $languageList = $this->languageHandler->loadListByLanguageCodes($languageCodes);
         foreach ($languageList as $language) {
             $mask |= $language->id;
+        }
+
+        if ($missing = array_diff($languageCodes, array_keys($languageList))) {
+            throw new NotFoundException('Language', implode(', ', $missing));
         }
 
         return $mask;
@@ -94,6 +102,8 @@ class MaskGenerator
 
     /**
      * Generates a language mask from plain array of language codes and always available flag.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language(s) in $languageCodes was not be found
      *
      * @param string[] $languageCodes
      * @param bool $isAlwaysAvailable
@@ -109,6 +119,11 @@ class MaskGenerator
             $mask |= $language->id;
         }
 
+        if ($missing = array_diff($languageCodes, array_keys($languageList))) {
+            throw new NotFoundException('Language', implode(', ', $missing));
+        }
+
+
         return $mask;
     }
 
@@ -119,6 +134,8 @@ class MaskGenerator
      * @param bool $alwaysAvailable
      *
      * @return int
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function generateLanguageIndicator($languageCode, $alwaysAvailable)
     {

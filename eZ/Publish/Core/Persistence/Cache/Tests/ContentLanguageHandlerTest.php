@@ -42,10 +42,12 @@ class ContentLanguageHandlerTest extends AbstractCacheHandlerTest
     {
         $object = new SPILanguage(['id' => 5]);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, mixed? $data, bool $multi
         return [
             ['load', [5], 'ez-language-5', $object],
-            ['loadByLanguageCode', ['eng-GB'], 'ez-language-eng-GB-by-code', $object],
+            ['loadList', [[5]], 'ez-language-5', [5 => $object], true],
+            ['loadByLanguageCode', ['eng-GB'], 'ez-language-code-eng-GB', $object],
+            ['loadListByLanguageCodes', [['eng-GB']], 'ez-language-code-eng-GB', ['eng-GB' => $object], true],
         ];
     }
 }

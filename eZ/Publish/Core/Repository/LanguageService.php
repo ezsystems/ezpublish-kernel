@@ -300,7 +300,7 @@ class LanguageService implements LanguageServiceInterface
 
         $returnArray = array();
         foreach ($languages as $language) {
-            $returnArray[] = $this->buildDomainObject($language);
+            $returnArray[$language->languageCode] = $this->buildDomainObject($language);
         }
 
         return $returnArray;
@@ -315,7 +315,7 @@ class LanguageService implements LanguageServiceInterface
 
         $returnArray = array();
         foreach ($languages as $language) {
-            $returnArray[] = $this->buildDomainObject($language);
+            $returnArray[$language->id] = $this->buildDomainObject($language);
         }
 
         return $returnArray;

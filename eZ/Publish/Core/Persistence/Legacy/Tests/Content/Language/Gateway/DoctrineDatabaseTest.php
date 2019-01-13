@@ -123,14 +123,14 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadLanguageData
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadLanguageListData
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
      */
     public function testLoadLanguageData()
     {
         $gateway = $this->getDatabaseGateway();
 
-        $result = $gateway->loadLanguageData(2);
+        $result = $gateway->loadLanguageListData([2]);
 
         $this->assertEquals(
             array(

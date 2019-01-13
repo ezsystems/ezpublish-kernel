@@ -46,6 +46,8 @@ class LanguageServiceTest extends ServiceTest
 
         $languageCreateStruct = new LanguageCreateStruct();
 
+
+        // string $method, array $parameters, mixed $return, int $emitNr, ?string $signalClass
         return array(
             array(
                 'createLanguage',
@@ -93,6 +95,12 @@ class LanguageServiceTest extends ServiceTest
                 0,
             ),
             array(
+                'loadLanguageListByCode',
+                [[$languageCode]],
+                [$languageCode => $language],
+                0,
+            ),
+            array(
                 'loadLanguages',
                 array(),
                 array($language),
@@ -102,6 +110,12 @@ class LanguageServiceTest extends ServiceTest
                 'loadLanguageById',
                 array($languageId),
                 $language,
+                0,
+            ),
+            array(
+                'loadLanguageListById',
+                [[$languageId]],
+                [$languageId => $language],
                 0,
             ),
             array(

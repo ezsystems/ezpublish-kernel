@@ -46,9 +46,9 @@ class Mapper
     {
         $objectState = new ObjectState();
 
-        $languageIds = [ $data[0]['ezcobj_state_default_language_id'] ];
+        $languageIds = [ (int)$data[0]['ezcobj_state_default_language_id'] ];
         foreach ($data as $stateTranslation) {
-            $languageIds[] = $stateTranslation['ezcobj_state_language_language_id'] & ~1;
+            $languageIds[] = (int)$stateTranslation['ezcobj_state_language_language_id'] & ~1;
         }
         $languages = $this->languageHandler->loadList($languageIds);
 
@@ -101,9 +101,9 @@ class Mapper
     {
         $objectStateGroup = new Group();
 
-        $languageIds = [ $data[0]['ezcobj_state_group_default_language_id'] ];
-        foreach ($data as $stateTranslation) {
-            $languageIds[] = $stateTranslation['ezcobj_state_group_language_real_language_id'];
+        $languageIds = [ (int)$data[0]['ezcobj_state_group_default_language_id'] ];
+        foreach ($data as $groupTranslation) {
+            $languageIds[] = (int)$groupTranslation['ezcobj_state_group_language_real_language_id'];
         }
         $languages = $this->languageHandler->loadList($languageIds);
 
@@ -118,7 +118,7 @@ class Mapper
         $objectStateGroup->description = array();
 
         foreach ($data as $groupTranslation) {
-            $languageCode = $languages[(int)$data[0]['ezcobj_state_group_language_real_language_id']]->languageCode;
+            $languageCode = $languages[(int)$groupTranslation['ezcobj_state_group_language_real_language_id']]->languageCode;
             $objectStateGroup->languageCodes[] = $languageCode;
             $objectStateGroup->name[$languageCode] = $groupTranslation['ezcobj_state_group_language_name'];
             $objectStateGroup->description[$languageCode] = $groupTranslation['ezcobj_state_group_language_description'];
