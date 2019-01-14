@@ -15,4 +15,8 @@ use eZ\Publish\Core\SignalSlot\Signal;
  */
 class EmptyTrashSignal extends Signal
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList
+     */
+    public $trashItemDeleteResultList;
 }

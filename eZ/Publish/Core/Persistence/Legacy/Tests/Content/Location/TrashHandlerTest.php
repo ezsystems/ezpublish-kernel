@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
 
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
+use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler;
 use eZ\Publish\SPI\Persistence\Content\Location\Trashed;
@@ -360,6 +362,9 @@ class TrashHandlerTest extends TestCase
                 $this->returnValue($expectedTrashed)
             );
 
+        $trashedItemIds = [];
+        $trashedContentIds = [];
+
         foreach ($expectedTrashed as $trashedElement) {
             $this->locationMapper
                 ->expects($this->at($iLocation++))
@@ -390,9 +395,20 @@ class TrashHandlerTest extends TestCase
                 ->expects($this->at($iContent++))
                 ->method('deleteContent')
                 ->with($trashedElement['contentobject_id']);
+
+            $trashedItemIds[] = $trashedElement['node_id'];
+            $trashedContentIds[] = $trashedElement['contentobject_id'];
         }
 
-        $handler->emptyTrash();
+        $returnValue = $handler->emptyTrash();
+
+        $this->assertInstanceOf(TrashItemDeleteResultList::class, $returnValue);
+
+        foreach ($returnValue->items as $key => $trashItemDeleteResult) {
+            $this->assertEquals($trashItemDeleteResult->trashItemId, $trashedItemIds[$key]);
+            $this->assertEquals($trashItemDeleteResult->contentId, $trashedContentIds[$key]);
+            $this->assertTrue($trashItemDeleteResult->contentRemoved);
+        }
     }
 
     /**
@@ -402,15 +418,17 @@ class TrashHandlerTest extends TestCase
     {
         $handler = $this->getTrashHandler();
 
+        $trashItemId = 69;
+        $contentId = 67;
         $this->locationGateway
             ->expects($this->once())
             ->method('loadTrashByLocation')
-            ->with(69)
+            ->with($trashItemId)
             ->will(
                 $this->returnValue(
                     array(
-                        'node_id' => 69,
-                        'contentobject_id' => 67,
+                        'node_id' => $trashItemId,
+                        'contentobject_id' => $contentId,
                         'path_string' => '/1/2/69',
                     )
                 )
@@ -423,8 +441,8 @@ class TrashHandlerTest extends TestCase
                 $this->returnValue(
                     new Trashed(
                         array(
-                            'id' => 69,
-                            'contentId' => 67,
+                            'id' => $trashItemId,
+                            'contentId' => $contentId,
                             'pathString' => '/1/2/69',
                         )
                     )
@@ -434,20 +452,25 @@ class TrashHandlerTest extends TestCase
         $this->locationGateway
             ->expects($this->once())
             ->method('removeElementFromTrash')
-            ->with(69);
+            ->with($trashItemId);
 
         $this->locationGateway
             ->expects($this->once())
             ->method('countLocationsByContentId')
-            ->with(67)
+            ->with($contentId)
             ->will($this->returnValue(0));
 
         $this->contentHandler
             ->expects($this->once())
             ->method('deleteContent')
-            ->with(67);
+            ->with($contentId);
 
-        $handler->deleteTrashItem(69);
+        $trashItemDeleteResult = $handler->deleteTrashItem($trashItemId);
+
+        $this->assertInstanceOf(TrashItemDeleteResult::class, $trashItemDeleteResult);
+        $this->assertEquals($trashItemId, $trashItemDeleteResult->trashItemId);
+        $this->assertEquals($contentId, $trashItemDeleteResult->contentId);
+        $this->assertTrue($trashItemDeleteResult->contentRemoved);
     }
 
     /**
@@ -457,15 +480,17 @@ class TrashHandlerTest extends TestCase
     {
         $handler = $this->getTrashHandler();
 
+        $trashItemId = 69;
+        $contentId = 67;
         $this->locationGateway
             ->expects($this->once())
             ->method('loadTrashByLocation')
-            ->with(69)
+            ->with($trashItemId)
             ->will(
                 $this->returnValue(
                     array(
-                        'node_id' => 69,
-                        'contentobject_id' => 67,
+                        'node_id' => $trashItemId,
+                        'contentobject_id' => $contentId,
                         'path_string' => '/1/2/69',
                     )
                 )
@@ -478,8 +503,8 @@ class TrashHandlerTest extends TestCase
                 $this->returnValue(
                     new Trashed(
                         array(
-                            'id' => 69,
-                            'contentId' => 67,
+                            'id' => $trashItemId,
+                            'contentId' => $contentId,
                             'pathString' => '/1/2/69',
                         )
                     )
@@ -489,18 +514,23 @@ class TrashHandlerTest extends TestCase
         $this->locationGateway
             ->expects($this->once())
             ->method('removeElementFromTrash')
-            ->with(69);
+            ->with($trashItemId);
 
         $this->locationGateway
             ->expects($this->once())
             ->method('countLocationsByContentId')
-            ->with(67)
+            ->with($contentId)
             ->will($this->returnValue(1));
 
         $this->contentHandler
             ->expects($this->never())
             ->method('deleteContent');
 
-        $handler->deleteTrashItem(69);
+        $trashItemDeleteResult = $handler->deleteTrashItem($trashItemId);
+
+        $this->assertInstanceOf(TrashItemDeleteResult::class, $trashItemDeleteResult);
+        $this->assertEquals($trashItemId, $trashItemDeleteResult->trashItemId);
+        $this->assertEquals($contentId, $trashItemDeleteResult->contentId);
+        $this->assertFalse($trashItemDeleteResult->contentRemoved);
     }
 }

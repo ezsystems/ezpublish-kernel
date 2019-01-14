@@ -75,6 +75,8 @@ interface Handler
     /**
      * Empties the trash
      * Everything contained in the trash must be removed.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList
      */
     public function emptyTrash();
 
@@ -83,6 +85,8 @@ interface Handler
      * Associated content has to be deleted.
      *
      * @param int $trashedId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult
      */
     public function deleteTrashItem($trashedId);
 }
