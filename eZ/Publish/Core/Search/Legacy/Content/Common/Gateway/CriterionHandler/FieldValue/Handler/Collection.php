@@ -55,7 +55,6 @@ class Collection extends Handler
      */
     public function handle(SelectQuery $query, Criterion $criterion, $column)
     {
-        $value = $this->prepareLikeString($criterion->value);
         $singleValueExpr = 'eq';
 
         switch ($criterion->operator) {
@@ -70,12 +69,13 @@ class Collection extends Handler
                     $value = $this->lowerCase($criterion->value);
                 } else {
                     // Allow usage of * as wildcards in ::LIKE
-                    $value = str_replace('*', '%', $value);
+                    $value = str_replace('*', '%', $this->prepareLikeString($criterion->value));
                 }
                 $singleValueExpr = 'like';
                 // No break here, rest is handled by shared code with ::CONTAINS below
 
             case Criterion\Operator::CONTAINS:
+                $value = isset($value) ? $value : $this->prepareLikeString($criterion->value);
                 $quotedColumn = $this->dbHandler->quoteColumn($column);
                 $filter = $query->expr->lOr(
                     array(
