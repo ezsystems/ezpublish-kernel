@@ -102,7 +102,6 @@ interface LanguageService
      */
     public function loadLanguageListByCode(array $languageCodes): iterable;
 
-
     /**
      * Bulk-load Languages by ids.
      *

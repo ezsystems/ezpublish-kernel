@@ -46,7 +46,6 @@ class LanguageServiceTest extends ServiceTest
 
         $languageCreateStruct = new LanguageCreateStruct();
 
-
         // string $method, array $parameters, mixed $return, int $emitNr, ?string $signalClass
         return array(
             array(

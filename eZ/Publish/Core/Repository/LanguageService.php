@@ -321,7 +321,6 @@ class LanguageService implements LanguageServiceInterface
         return $returnArray;
     }
 
-
     /**
      * Deletes  a language from content repository.
      *

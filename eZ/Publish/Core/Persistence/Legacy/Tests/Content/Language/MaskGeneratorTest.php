@@ -46,7 +46,6 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     {
         $generator = $this->getMaskGenerator();
 
-
         if (isset($languages['always-available'])) {
             $isAlwaysAvailable = true;
             unset($languages['always-available']);
@@ -300,7 +299,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
                                   ->will(
                                       $this->returnCallback(
                                           function ($languageCodes) {
-                                              if (is_string($languageCodes)){
+                                              if (is_string($languageCodes)) {
                                                   $language = $languageCodes;
                                                   $languageCodes = [$language];
                                               }

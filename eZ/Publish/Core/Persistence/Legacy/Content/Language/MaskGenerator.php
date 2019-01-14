@@ -123,7 +123,6 @@ class MaskGenerator
             throw new NotFoundException('Language', implode(', ', $missing));
         }
 
-
         return $mask;
     }
 

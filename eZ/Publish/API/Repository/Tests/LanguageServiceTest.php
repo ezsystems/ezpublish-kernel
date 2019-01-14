@@ -364,8 +364,7 @@ class LanguageServiceTest extends BaseTest
             $language
         );
 
-
-        $languages = $languageService->loadLanguageListByCode(  ['eng-NZ']);
+        $languages = $languageService->loadLanguageListByCode(['eng-NZ']);
 
         $this->assertInternalType('iterable', $languages);
         $this->assertCount(1, $languages);
