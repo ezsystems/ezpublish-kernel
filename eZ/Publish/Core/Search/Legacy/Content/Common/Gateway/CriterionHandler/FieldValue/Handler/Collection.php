@@ -55,27 +55,27 @@ class Collection extends Handler
      */
     public function handle(SelectQuery $query, Criterion $criterion, $column)
     {
+        $value = $this->prepareLikeString($criterion->value);
+        $singleValueExpr = 'eq';
+
         switch ($criterion->operator) {
             case Criterion\Operator::LIKE:
-            case Criterion\Operator::CONTAINS:
-                if ($criterion->operator === Criterion\Operator::LIKE) {
-                    if (strpos($criterion->value, '%') !== false) {
-                        // @deprecated In 6.13.x/7.3.x and higher, to be removed in 8.0
-                        @trigger_error(
-                            "Usage of '%' in Operator::LIKE criteria with Legacy Search Engine was never intended, " .
-                            "and is deprecated for removal in 8.0. Please use '*' like in FullText, works across engines",
-                            E_USER_DEPRECATED
-                        );
-                        $value = $this->lowerCase($criterion->value);
-                    } else {
-                        $value = str_replace('*', '%', $this->prepareLikeString($criterion->value));
-                    }
-                    $singleValueExpr = 'like';
+                if (strpos($criterion->value, '%') !== false) {
+                    // @deprecated In 6.13.x/7.3.x and higher, to be removed in 8.0
+                    @trigger_error(
+                        "Usage of '%' in Operator::LIKE criteria with Legacy Search Engine was never intended, " .
+                        "and is deprecated for removal in 8.0. Please use '*' like in FullText, works across engines",
+                        E_USER_DEPRECATED
+                    );
+                    $value = $this->lowerCase($criterion->value);
                 } else {
-                    $value = $this->prepareLikeString($criterion->value);
-                    $singleValueExpr = 'eq';
+                    // Allow usage of * as wildcards in ::LIKE
+                    $value = str_replace('*', '%', $value);
                 }
+                $singleValueExpr = 'like';
+                // No break here, rest is handled by shared code with ::CONTAINS below
 
+            case Criterion\Operator::CONTAINS:
                 $quotedColumn = $this->dbHandler->quoteColumn($column);
                 $filter = $query->expr->lOr(
                     array(
