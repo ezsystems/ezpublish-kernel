@@ -533,13 +533,12 @@ class RoleService implements RoleServiceInterface
             );
         }
 
-        // TODO: Uncomment when role policy editing is done, see EZP-24711 & EZP-24713
-        /*if (count($loadedRoleDraft->getPolicies()) === 0) {
+        if (count($loadedRoleDraft->getPolicies()) === 0) {
             throw new InvalidArgumentException(
-                "\$roleDraft",
+                '$roleDraft',
                 'The role draft should have at least one policy.'
             );
-        }*/
+        }
 
         $this->repository->beginTransaction();
         try {
