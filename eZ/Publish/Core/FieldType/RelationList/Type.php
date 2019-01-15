@@ -79,15 +79,7 @@ class Type extends FieldType
 
             switch ($name) {
                 case 'selectionMethod':
-                    if (!in_array($value, [
-                        self::SELECTION_BROWSE,
-                        self::SELECTION_DROPDOWN,
-                        self::SELECTION_LIST_WITH_RADIO_BUTTONS,
-                        self::SELECTION_LIST_WITH_CHECKBOXES,
-                        self::SELECTION_MULTIPLE_SELECTION_LIST,
-                        self::SELECTION_TEMPLATE_BASED_MULTIPLE,
-                        self::SELECTION_TEMPLATE_BASED_SINGLE,
-                    ], true)) {
+                    if (!$this->isValidSelectionMethod($value)) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' must be one of %selection_browse%, %selection_dropdown%, %selection_list_with_radio_buttons%, %selection_list_with_checkboxes%, %selection_multiple_selection_list%, %selection_template_based_multiple%, %selection_template_based_single%",
                             null,
@@ -300,5 +292,25 @@ class Type extends FieldType
         return array(
             Relation::FIELD => $value->destinationContentIds,
         );
+    }
+
+    /**
+     * Checks whether given selectionMethod is valid.
+     *
+     * @param int $selectionMethod
+     *
+     * @return bool
+     */
+    private function isValidSelectionMethod($selectionMethod)
+    {
+        return in_array($selectionMethod, [
+            self::SELECTION_BROWSE,
+            self::SELECTION_DROPDOWN,
+            self::SELECTION_LIST_WITH_RADIO_BUTTONS,
+            self::SELECTION_LIST_WITH_CHECKBOXES,
+            self::SELECTION_MULTIPLE_SELECTION_LIST,
+            self::SELECTION_TEMPLATE_BASED_MULTIPLE,
+            self::SELECTION_TEMPLATE_BASED_SINGLE,
+        ], true);
     }
 }
