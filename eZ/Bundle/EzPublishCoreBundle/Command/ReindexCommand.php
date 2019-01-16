@@ -67,6 +67,7 @@ class ReindexCommand extends ContainerAwareCommand
         $this->searchIndexer = $this->getContainer()->get('ezpublish.spi.search.indexer');
         $this->connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.connection');
         $this->logger = $this->getContainer()->get('logger');
+        $this->env = $this->getContainer()->getParameter('kernel.environment');
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
@@ -154,7 +155,6 @@ EOT
         $commit = !$input->getOption('no-commit');
         $iterationCount = $input->getOption('iteration-count');
         $this->siteaccess = $input->getOption('siteaccess');
-        $this->env = $this->getContainer()->getParameter('kernel.environment');
         if (!is_numeric($iterationCount) || (int) $iterationCount < 1) {
             throw new RuntimeException("'--iteration-count' option should be > 0, got '{$iterationCount}'");
         }
