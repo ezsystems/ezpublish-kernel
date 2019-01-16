@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\FetchMode;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -16,8 +17,8 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\Query;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
 use RuntimeException;
 
 /**
@@ -1291,7 +1292,7 @@ class DoctrineDatabase extends Gateway
      *
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function deleteUrlAliasesWithoutLocation()
+    public function deleteUrlAliasesWithoutLocation(): int
     {
         $dbPlatform = $this->connection->getDatabasePlatform();
 
@@ -1333,7 +1334,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return int Number of affected rows.
      */
-    public function deleteUrlAliasesWithoutParent()
+    public function deleteUrlAliasesWithoutParent(): int
     {
         $existingAliasesQuery = $this->getAllUrlAliasesQuery();
 
@@ -1405,7 +1406,7 @@ class DoctrineDatabase extends Gateway
         $updateQueryBuilder
             ->update('ezurlalias_ml')
             ->set('link', ':linkId')
-            ->set('parent', ':parentId')
+            ->set('parent', ':newParentId')
             ->where(
                 $expr->eq('action', ':action')
             )
@@ -1438,11 +1439,21 @@ class DoctrineDatabase extends Gateway
 
             $updateQueryBuilder
                 ->setParameter(':linkId', $originalUrlAlias['link'], ParameterType::INTEGER)
-                ->setParameter(':parentId', $originalUrlAlias['parent'], ParameterType::INTEGER)
+                // attempt to fix missing parent case
+                ->setParameter(
+                    ':newParentId',
+                    $urlAliasData['existing_parent'] ?? $originalUrlAlias['parent'],
+                    ParameterType::INTEGER
+                )
                 ->setParameter(':oldParentId', $urlAliasData['parent'], ParameterType::INTEGER)
                 ->setParameter(':textMD5', $urlAliasData['text_md5']);
 
-            $updateQueryBuilder->execute();
+            try {
+                $updateQueryBuilder->execute();
+            } catch (UniqueConstraintViolationException $e) {
+                // edge case: if such row already exists, there's no way to restore history
+                $this->deleteRow($urlAliasData['parent'], $urlAliasData['text_md5']);
+            }
         }
     }
 
@@ -1475,7 +1486,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return string Query
      */
-    private function getAllUrlAliasesQuery()
+    private function getAllUrlAliasesQuery(): string
     {
         $existingAliasesQueryBuilder = $this->connection->createQueryBuilder();
         $innerQueryBuilder = $this->connection->createQueryBuilder();
@@ -1497,7 +1508,7 @@ class DoctrineDatabase extends Gateway
      *
      * @return string
      */
-    private function getIntegerType(AbstractPlatform $databasePlatform)
+    private function getIntegerType(AbstractPlatform $databasePlatform): string
     {
         switch ($databasePlatform->getName()) {
             case 'mysql':
@@ -1518,15 +1529,56 @@ class DoctrineDatabase extends Gateway
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
-            ->select('id', 'is_original', 'lang_mask', 'link', 'parent', 'text_md5')
-            ->from($this->table)
+            ->select(
+                't1.id',
+                't1.is_original',
+                't1.lang_mask',
+                't1.link',
+                't1.parent',
+                // show existing parent only if its row exists, special case for root parent
+                'CASE t1.parent WHEN 0 THEN 0 ELSE t2.id END AS existing_parent',
+                't1.text_md5'
+            )
+            ->from($this->table, 't1')
+            // selecting t2.id above will result in null if parent is broken
+            ->leftJoin('t1', $this->table, 't2', $queryBuilder->expr()->eq('t1.parent', 't2.id'))
             ->where(
                 $queryBuilder->expr()->eq(
-                    'action',
+                    't1.action',
                     $queryBuilder->createPositionalParameter("eznode:{$locationId}")
                 )
             );
 
         return $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    /**
+     * Delete URL alias row by its primary composite key.
+     *
+     * @param int $parentId
+     * @param string $textMD5
+     *
+     * @return int number of affected rows
+     */
+    private function deleteRow(int $parentId, string $textMD5): int
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->delete($this->table)
+            ->where(
+                $expr->andX(
+                    $expr->eq(
+                        'parent',
+                        $queryBuilder->createPositionalParameter($parentId, ParameterType::INTEGER)
+                    ),
+                    $expr->eq(
+                        'text_md5',
+                        $queryBuilder->createPositionalParameter($textMD5)
+                    )
+                )
+            );
+
+        return $queryBuilder->execute();
     }
 }
