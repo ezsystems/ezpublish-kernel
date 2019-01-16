@@ -51,6 +51,11 @@ class ReindexCommand extends ContainerAwareCommand
     private $siteaccess;
 
     /**
+     * @var string
+     */
+    private $env;
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -149,6 +154,7 @@ EOT
         $commit = !$input->getOption('no-commit');
         $iterationCount = $input->getOption('iteration-count');
         $this->siteaccess = $input->getOption('siteaccess');
+        $this->env = $this->getContainer()->getParameter('kernel.environment');
         if (!is_numeric($iterationCount) || (int) $iterationCount < 1) {
             throw new RuntimeException("'--iteration-count' option should be > 0, got '{$iterationCount}'");
         }
@@ -380,6 +386,7 @@ EOT
             $this->siteaccess ? '--siteaccess=' . $this->siteaccess : null,
             'ezplatform:reindex',
             '--content-ids=' . implode(',', $contentIds),
+            '--env=' . $this->env,
         ]));
         $process->setTimeout(null);
         $process->setPrefix($this->getPhpPath());
