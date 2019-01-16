@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -1403,7 +1404,7 @@ class DoctrineDatabase extends Gateway
         $updateQueryBuilder
             ->update('ezurlalias_ml')
             ->set('link', ':linkId')
-            ->set('parent', ':parentId')
+            ->set('parent', ':newParentId')
             ->where(
                 $expr->eq('action', ':action')
             )
@@ -1436,11 +1437,20 @@ class DoctrineDatabase extends Gateway
 
             $updateQueryBuilder
                 ->setParameter(':linkId', $originalUrlAlias['link'], \PDO::PARAM_INT)
-                ->setParameter(':parentId', $originalUrlAlias['parent'], \PDO::PARAM_INT)
+                // attempt to fix missing parent case
+                ->setParameter(
+                    ':newParentId',
+                    null !== $urlAliasData['existing_parent'] ? $urlAliasData['existing_parent'] : $originalUrlAlias['parent']
+                )
                 ->setParameter(':oldParentId', $urlAliasData['parent'], \PDO::PARAM_INT)
                 ->setParameter(':textMD5', $urlAliasData['text_md5']);
 
-            $updateQueryBuilder->execute();
+            try {
+                $updateQueryBuilder->execute();
+            } catch (UniqueConstraintViolationException $e) {
+                // edge case: if such row already exists, there's no way to restore history
+                $this->deleteRow($urlAliasData['parent'], $urlAliasData['text_md5']);
+            }
         }
     }
 
@@ -1516,15 +1526,56 @@ class DoctrineDatabase extends Gateway
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $queryBuilder
-            ->select('id', 'is_original', 'lang_mask', 'link', 'parent', 'text_md5')
-            ->from($this->table)
+            ->select(
+                't1.id',
+                't1.is_original',
+                't1.lang_mask',
+                't1.link',
+                't1.parent',
+                // show existing parent only if its row exists, special case for root parent
+                'CASE t1.parent WHEN 0 THEN 0 ELSE t2.id END AS existing_parent',
+                't1.text_md5'
+            )
+            ->from($this->table, 't1')
+            // selecting t2.id above will result in null if parent is broken
+            ->leftJoin('t1', $this->table, 't2', $queryBuilder->expr()->eq('t1.parent', 't2.id'))
             ->where(
                 $queryBuilder->expr()->eq(
-                    'action',
+                    't1.action',
                     $queryBuilder->createPositionalParameter("eznode:{$locationId}")
                 )
             );
 
         return $queryBuilder->execute()->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Delete URL alias row by its primary composite key.
+     *
+     * @param int $parentId
+     * @param string $textMD5
+     *
+     * @return int number of affected rows
+     */
+    private function deleteRow($parentId, $textMD5)
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->delete($this->table)
+            ->where(
+                $expr->andX(
+                    $expr->eq(
+                        'parent',
+                        $queryBuilder->createPositionalParameter($parentId, \PDO::PARAM_INT)
+                    ),
+                    $expr->eq(
+                        'text_md5',
+                        $queryBuilder->createPositionalParameter($textMD5)
+                    )
+                )
+            );
+
+        return $queryBuilder->execute();
     }
 }
