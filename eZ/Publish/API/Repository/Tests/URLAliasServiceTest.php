@@ -1363,6 +1363,75 @@ DOCBOOK
     }
 
     /**
+     * Test edge case when updated and archived entry gets moved to another subtree.
+     *
+     * @see https://jira.ez.no/browse/EZP-30004
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @throws \Exception
+     */
+    public function testRefreshSystemUrlAliasesForMovedLocation()
+    {
+        $repository = $this->getRepository();
+        $urlAliasService = $repository->getURLAliasService();
+        $locationService = $repository->getLocationService();
+
+        $folderNames = ['eng-GB' => 'folder'];
+        $folder = $this->createFolder($folderNames, 2);
+        $nestedFolder = $this->createFolder($folderNames, $folder->contentInfo->mainLocationId);
+
+        $nestedFolder = $this->updateContentField(
+            $nestedFolder->contentInfo,
+            'name',
+            ['eng-GB' => 'folder2']
+        );
+
+        $nestedFolderLocation = $locationService->loadLocation(
+            $nestedFolder->contentInfo->mainLocationId
+        );
+        $rootLocation = $locationService->loadLocation(2);
+
+        $locationService->moveSubtree($nestedFolderLocation, $rootLocation);
+        // reload nested Location to get proper parent information
+        $nestedFolderLocation = $locationService->loadLocation($nestedFolderLocation->id);
+
+        // corrupt database by breaking link to the original URL alias
+        $this->performRawDatabaseOperation(
+            function (Connection $connection) use ($nestedFolderLocation) {
+                $queryBuilder = $connection->createQueryBuilder();
+                $expr = $queryBuilder->expr();
+                $queryBuilder
+                    ->update('ezurlalias_ml')
+                    ->set('link', $queryBuilder->createPositionalParameter(666, \PDO::PARAM_INT))
+                    ->where(
+                        $expr->eq(
+                            'action',
+                            $queryBuilder->createPositionalParameter(
+                                "eznode:{$nestedFolderLocation->id}"
+                            )
+                        )
+                    )
+                    ->andWhere(
+                        $expr->eq(
+                            'is_original',
+                            $queryBuilder->createPositionalParameter(0, \PDO::PARAM_INT)
+                        )
+                    )
+                    ->andWhere(
+                        $expr->eq('text', $queryBuilder->createPositionalParameter('folder'))
+                    )
+                ;
+
+                return $queryBuilder->execute();
+            }
+        );
+
+        $urlAliasService->refreshSystemUrlAliasesForLocation($nestedFolderLocation);
+    }
+
+    /**
      * Lookup given URL and check if it is archived and points to the given Location Id.
      *
      * @param string $lookupUrl
