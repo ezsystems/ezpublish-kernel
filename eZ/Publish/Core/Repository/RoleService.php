@@ -486,7 +486,6 @@ class RoleService implements RoleServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to publish this RoleDraft
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the role draft cannot be loaded
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the role draft has no policies
      *
      * @param \eZ\Publish\API\Repository\Values\User\RoleDraft $roleDraft
      */
@@ -505,14 +504,6 @@ class RoleService implements RoleServiceInterface
                 $e
             );
         }
-
-        // TODO: Uncomment when role policy editing is done, see EZP-24711 & EZP-24713
-        /*if (count($loadedRoleDraft->getPolicies()) === 0) {
-            throw new InvalidArgumentException(
-                "\$roleDraft",
-                'The role draft should have at least one policy.'
-            );
-        }*/
 
         $this->repository->beginTransaction();
         try {
