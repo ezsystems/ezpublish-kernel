@@ -226,10 +226,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
         $newRoleDraft = $roleService->createRoleDraft($role);
@@ -287,10 +283,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
         $roleService->createRoleDraft($role); // First role draft
@@ -431,10 +423,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
 
         // Load the newly created role by its ID
@@ -486,10 +474,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $role = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $role,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($role);
 
         // Now create a new draft based on the role
@@ -584,10 +568,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
 
         // Load the newly created role by its identifier
@@ -639,10 +619,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
 
         // Now load all available roles
@@ -730,10 +706,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
@@ -800,10 +772,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
@@ -862,10 +830,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
@@ -960,13 +924,13 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'delete')
-        );
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
+        $role = $roleService->addPolicy(
+            $role,
+            $roleService->newPolicyCreateStruct('content', 'delete')
+        );
         $role = $roleService->addPolicy(
             $role,
             $roleService->newPolicyCreateStruct('content', 'create')
@@ -1083,10 +1047,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'read')
-        );
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
@@ -1187,30 +1147,6 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * Test for the publishRoleDraft() method.
-     *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
-     */
-    public function testPublishEmptyRoleThrowsInvalidArgumentException()
-    {
-        $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
-        $roleService = $repository->getRoleService();
-
-        $roleCreate = $roleService->newRoleCreateStruct('Lumberjack');
-
-        // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
-        // $roleCreate->mainLanguageCode = 'eng-US';
-
-        $roleDraft = $roleService->createRole($roleCreate);
-        // This call will fail with an InvalidArgumentException, because the role has no policies
-        $roleService->publishRoleDraft($roleDraft);
-        /* END: Use Case */
-    }
-
-    /**
      * Test for the addPolicy() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
@@ -1231,11 +1167,6 @@ class RoleServiceTest extends BaseTest
         // $roleCreate->mainLanguageCode = 'eng-US';
 
         $roleDraft = $roleService->createRole($roleCreate);
-        $roleService->addPolicyByRoleDraft(
-            $roleDraft,
-            $roleService->newPolicyCreateStruct('content', 'create')
-        );
-
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 

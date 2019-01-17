@@ -67,12 +67,7 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
 
         // switch user context before testing TrashService::trash method
         $repository->getPermissionResolver()->setCurrentUserReference(
-            $this->createUserWithPolicies(
-                'trash_test_user',
-                [
-                    ['module' => 'content', 'function' => 'read'],
-                ]
-            )
+            $this->createUserWithPolicies('trash_test_user', [])
         );
         $trashService->trash($mediaLocation);
     }
