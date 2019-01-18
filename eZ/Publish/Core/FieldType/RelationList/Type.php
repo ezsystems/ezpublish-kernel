@@ -206,7 +206,7 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * For this FieldType, the related object's name is returned, separated by ",".
+     * For this FieldType, the related objects IDs are returned, separated by ",".
      *
      * @param \eZ\Publish\Core\FieldType\RelationList\Value $value
      *
