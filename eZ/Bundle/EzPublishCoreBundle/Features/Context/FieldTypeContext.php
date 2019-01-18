@@ -334,7 +334,7 @@ class FieldTypeContext implements Context
     private function createContentType()
     {
         $name = $this->fieldConstructionObject['fieldType']->identifier;
-        $name = $name . '#' . uniqid();
+        $name = uniqid($name . '#', true);
         $identifier = strtolower($name);
         $contentTypeCreateStruct = $this->contentTypeService->newContentTypeCreateStruct($identifier);
         $contentTypeCreateStruct->mainLanguageCode = self::DEFAULT_LANGUAGE;
