@@ -374,7 +374,8 @@ XML;
     protected function addTestSuffix($string)
     {
         if (!isset(self::$testSuffix)) {
-            self::$testSuffix = uniqid();
+            /** @noinspection NonSecureUniqidUsageInspection */
+            self::$testSuffix = uniqid('', true);
         }
 
         return $string . '_' . self::$testSuffix;
