@@ -36,7 +36,7 @@ class RootTest extends RESTFunctionalTestCase
     {
         self::markTestSkipped('@todo fixme');
         $response = $this->sendHttpRequest(
-            $this->createHttpRequest('GET', '/api/ezp/v2/' . uniqid('rest'), '', 'Stuff+json')
+            $this->createHttpRequest('GET', '/api/ezp/v2/' . uniqid('rest', true), '', 'Stuff+json')
         );
         self::assertHttpResponseCodeEquals($response, 404);
         $responseArray = json_decode($response->getBody(), true);
