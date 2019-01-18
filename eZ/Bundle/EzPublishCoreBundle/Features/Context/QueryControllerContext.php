@@ -108,7 +108,7 @@ class QueryControllerContext extends RawMinkContext implements Context
             'eng-GB'
         );
 
-        $struct->setField('name', uniqid('Query Controller BDD '));
+        $struct->setField('name', uniqid('Query Controller BDD ', true));
 
         $contentDraft = $contentService->createContent(
             $struct,
