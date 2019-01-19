@@ -140,6 +140,23 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadContentInfoList(array $contentIds): iterable
+    {
+        $contentInfoList = [];
+        $spiInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList($contentIds);
+        foreach ($spiInfoList as $id => $spiInfo) {
+            $contentInfo = $this->domainMapper->buildContentInfoDomainObject($spiInfo);
+            if ($this->repository->canUser('content', 'read', $contentInfo)) {
+                $contentInfoList[$id] = $contentInfo;
+            }
+        }
+
+        return $contentInfoList;
+    }
+
+    /**
      * Loads a content info object.
      *
      * To load fields use loadContent

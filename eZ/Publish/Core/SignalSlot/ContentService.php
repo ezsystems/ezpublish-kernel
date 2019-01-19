@@ -86,6 +86,14 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadContentInfoList(array $contentIds): iterable
+    {
+        return $this->service->loadContentInfoList($contentIds);
+    }
+
+    /**
      * Loads a content info object for the given remoteId.
      *
      * To load fields use loadContent
