@@ -555,4 +555,12 @@ class Repository implements APIRepository
     {
         // @todo: Implement / discuss
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function sudo(callable $callback, APIRepository $outerRepository = null)
+    {
+        // TODO: Implement sudo() method.
+    }
 }

@@ -128,7 +128,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
     /**
      * @internal For internal use only, do not depend on this method.
      */
-    public function sudo(Closure $callback, RepositoryInterface $outerRepository)
+    public function sudo(callable $callback, RepositoryInterface $outerRepository)
     {
         ++$this->sudoNestingLevel;
         try {
