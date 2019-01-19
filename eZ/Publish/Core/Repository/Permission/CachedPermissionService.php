@@ -11,7 +11,6 @@ use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriter
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use Closure;
 use Exception;
 
 /**

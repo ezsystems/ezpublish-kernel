@@ -103,7 +103,7 @@ interface Repository
      *
      * @return mixed
      */
-    public function sudo(callable $callback, Repository $outerRepository = null);
+    public function sudo(callable $callback, self $outerRepository = null);
 
     /**
      * Get Content Service.
