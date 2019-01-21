@@ -1127,6 +1127,83 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test swapping secondary Location.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::swapLocation
+     *
+     * @see https://jira.ez.no/browse/EZP-28663
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testSwapLocationForSecondaryLocation()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $folder1 = $this->createFolder(['eng-GB' => 'Folder1'], 2);
+        $folder2 = $this->createFolder(['eng-GB' => 'Folder2'], 2);
+        $folder3 = $this->createFolder(['eng-GB' => 'Folder3'], 2);
+
+        $primaryLocation = $locationService->loadLocation($folder1->contentInfo->mainLocationId);
+        $parentLocation = $locationService->loadLocation($folder2->contentInfo->mainLocationId);
+        $secondaryLocation = $locationService->createLocation(
+            $folder1->contentInfo,
+            $locationService->newLocationCreateStruct($parentLocation->id)
+        );
+
+        $targetLocation = $locationService->loadLocation($folder3->contentInfo->mainLocationId);
+
+        // perform sanity checks
+        $folder1Locations = $locationService->loadLocations($folder1->contentInfo);
+        self::assertCount(2, $folder1Locations);
+        self::assertContains(
+            $primaryLocation,
+            $folder1Locations,
+            "Location {$primaryLocation->id} not found in Folder1 Locations",
+            false,
+            false
+        );
+        self::assertContains(
+            $secondaryLocation,
+            $folder1Locations,
+            "Location {$secondaryLocation->id} not found in Folder1 Locations",
+            false,
+            false
+        );
+
+        // begin use case
+        $locationService->swapLocation($secondaryLocation, $targetLocation);
+
+        // test results
+        $primaryLocation = $locationService->loadLocation($primaryLocation->id);
+        $secondaryLocation = $locationService->loadLocation($secondaryLocation->id);
+        $targetLocation = $locationService->loadLocation($targetLocation->id);
+
+        self::assertEquals($folder1->id, $primaryLocation->contentInfo->id);
+        self::assertEquals($folder1->id, $targetLocation->contentInfo->id);
+        self::assertEquals($folder3->id, $secondaryLocation->contentInfo->id);
+
+        $folder1Locations = $locationService->loadLocations($folder1->contentInfo);
+        self::assertCount(2, $folder1Locations);
+        self::assertContains(
+            $primaryLocation,
+            $folder1Locations,
+            "Location {$primaryLocation->id} not found in Folder1 Locations",
+            false,
+            false
+        );
+        self::assertContains(
+            $targetLocation,
+            $folder1Locations,
+            "Location {$targetLocation->id} not found in Folder1 Locations",
+            false,
+            false
+        );
+    }
+
+    /**
      * Test for the hideLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
