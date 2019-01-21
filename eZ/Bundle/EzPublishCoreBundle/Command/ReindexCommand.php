@@ -56,6 +56,11 @@ class ReindexCommand extends ContainerAwareCommand
     private $env;
 
     /**
+     * @var boolean
+     */
+    private $isDebug;
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -68,6 +73,7 @@ class ReindexCommand extends ContainerAwareCommand
         $this->connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.connection');
         $this->logger = $this->getContainer()->get('logger');
         $this->env = $this->getContainer()->getParameter('kernel.environment');
+        $this->isDebug = $this->getContainer()->getParameter('kernel.debug');
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
@@ -381,13 +387,21 @@ EOT
      */
     private function getPhpProcess(array $contentIds, $commit)
     {
-        $process = new ProcessBuilder(array_filter([
-            file_exists('bin/console') ? 'bin/console' : 'app/console',
-            $this->siteaccess ? '--siteaccess=' . $this->siteaccess : null,
+        $consolePath = file_exists('bin/console') ? 'bin/console' : 'app/console';
+        $subProcessArgs = [
+            $consolePath,
             'ezplatform:reindex',
             '--content-ids=' . implode(',', $contentIds),
             '--env=' . $this->env,
-        ]));
+        ];
+        if ($this->siteaccess) {
+            $subProcessArgs[] = '--siteaccess=' . $this->siteaccess;
+        }
+        if (!$this->isDebug) {
+            $subProcessArgs[] = '--no-debug';
+        }
+
+        $process = new ProcessBuilder($subProcessArgs);
         $process->setTimeout(null);
         $process->setPrefix($this->getPhpPath());
 
