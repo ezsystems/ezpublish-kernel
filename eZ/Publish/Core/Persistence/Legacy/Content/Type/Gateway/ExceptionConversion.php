@@ -441,10 +441,10 @@ class ExceptionConversion extends Gateway
      * @param mixed $typeId
      * @param int $status
      */
-    public function delete($typeId, $status)
+    public function delete($typeId, $status, array $fieldDefinitions = [])
     {
         try {
-            return $this->innerGateway->delete($typeId, $status);
+            return $this->innerGateway->delete($typeId, $status, $fieldDefinitions);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -458,10 +458,10 @@ class ExceptionConversion extends Gateway
      * @param mixed $typeId
      * @param int $status
      */
-    public function deleteFieldDefinitionsForType($typeId, $status)
+    public function deleteFieldDefinitionsForType($typeId, $status, array $fieldDefinitions = [])
     {
         try {
-            return $this->innerGateway->deleteFieldDefinitionsForType($typeId, $status);
+            return $this->innerGateway->deleteFieldDefinitionsForType($typeId, $status, $fieldDefinitions);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -513,10 +513,10 @@ class ExceptionConversion extends Gateway
      * @param int $sourceStatus
      * @param int $targetStatus
      */
-    public function publishTypeAndFields($typeId, $sourceStatus, $targetStatus)
+    public function publishTypeAndFields($typeId, $sourceStatus, $targetStatus, array $fieldDefinitions = [])
     {
         try {
-            return $this->innerGateway->publishTypeAndFields($typeId, $sourceStatus, $targetStatus);
+            return $this->innerGateway->publishTypeAndFields($typeId, $sourceStatus, $targetStatus, $fieldDefinitions);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

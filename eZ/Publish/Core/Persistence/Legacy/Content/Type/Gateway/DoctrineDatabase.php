@@ -611,14 +611,57 @@ class DoctrineDatabase extends Gateway
         $this->setCommonFieldColumns($q, $fieldDefinition, $storageFieldDef);
 
         $q->prepare()->execute();
-
+        
         if (!isset($fieldDefinition->id)) {
-            return $this->dbHandler->lastInsertId(
+            $fieldDefinitionId =  $this->dbHandler->lastInsertId(
                 $this->dbHandler->getSequenceName('ezcontentclass_attribute', 'id')
             );
+            $this->insertMultilingualFieldDefinition($fieldDefinitionId, $storageFieldDef->multilingualData, $status);
+
+            return $fieldDefinitionId;
         }
 
+        $this->insertMultilingualFieldDefinition($fieldDefinition->id, $storageFieldDef->multilingualData, $status);
+
         return $fieldDefinition->id;
+    }
+
+    /**
+     * @param int $fieldDefinitionId
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition[] $multilingualData
+     * @param int $status
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private function insertMultilingualFieldDefinition(
+        int $fieldDefinitionId,
+        array $multilingualData,
+        int $status
+    ):void {
+
+        foreach ($multilingualData as $languageCode => $data) {
+            $query = $this->connection->createQueryBuilder();
+            $query
+                ->insert('ezcontentclass_attribute_ml')
+                ->values([
+                    'data_text' => ':data_text',
+                    'data_json' => ':data_json',
+                    'name' => ':name',
+                    'description' => ':description',
+                    'contentclass_attribute_id' => ':fieldDefinitionId',
+                    'version' => ':status',
+                    'language_id' => ':languageId'
+                ])
+                ->setParameter('data_text', $data->dataText)
+                ->setParameter('data_json', $data->dataJson)
+                ->setParameter('name', $data->name)
+                ->setParameter('description', $data->description)
+                ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
+                ->setParameter('status', $status, ParameterType::INTEGER)
+                ->setParameter('languageId', $data->languageId, ParameterType::INTEGER);
+
+            $query->execute();
+        }
     }
 
     /**
@@ -720,8 +763,15 @@ class DoctrineDatabase extends Gateway
     {
         $q = $this->dbHandler->createSelectQuery();
         $this->selectColumns($q, 'ezcontentclass_attribute');
+        $q->select('ezcontentclass.initial_language_id AS ezcontentclass_initial_language_id');
         $q->from(
             $this->dbHandler->quoteTable('ezcontentclass_attribute')
+        )->leftJoin(
+            'ezcontentclass',
+            $q->expr->lAnd(
+                $q->expr->eq('ezcontentclass_attribute.contentclass_id', 'ezcontentclass.id'),
+                $q->expr->eq('ezcontentclass_attribute.version', 'ezcontentclass.version')
+            )
         )->where(
             $q->expr->lAnd(
                 $q->expr->eq(
@@ -810,6 +860,42 @@ class DoctrineDatabase extends Gateway
         $this->setCommonFieldColumns($q, $fieldDefinition, $storageFieldDef);
 
         $q->prepare()->execute();
+        $this->updateMultilingualFieldDefinition($fieldDefinition, $storageFieldDef->multilingualData, $status);
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition[] $multilingualData
+     * @param int $status
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    private function updateMultilingualFieldDefinition(
+        FieldDefinition $fieldDefinition,
+        array $multilingualData,
+        int $status
+    ):void {
+        foreach ($multilingualData as $languageCode => $data) {
+            $query = $this->connection->createQueryBuilder();
+            $query
+                ->update('ezcontentclass_attribute_ml')
+                ->set('data_text', ':dataText')
+                ->set('data_json', ':dataJson')
+                ->set('name', ':name')
+                ->set('description', ':description')
+                ->where('contentclass_attribute_id = :fieldDefinitionId')
+                ->andWhere('version = :status')
+                ->andWhere('language_id = :languageId')
+                ->setParameter(':dataText', $data->dataText)
+                ->setParameter(':dataJson', $data->dataJson)
+                ->setParameter(':name', $data->name)
+                ->setParameter(':description', $data->description)
+                ->setParameter('fieldDefinitionId', $fieldDefinition->id, ParameterType::INTEGER)
+                ->setParameter('status', $status, ParameterType::INTEGER)
+                ->setParameter('languageId', $data->languageId, ParameterType::INTEGER);
+
+            $query->execute();
+        }
     }
 
     /**
@@ -999,6 +1085,12 @@ class DoctrineDatabase extends Gateway
                 'a.serialized_data_text AS ezcontentclass_attribute_serialized_data_text',
 
                 'g.group_id AS ezcontentclass_classgroup_group_id',
+
+                'ml.name AS ezcontentclass_attribute_multilingual_name',
+                'ml.description AS ezcontentclass_attribute_multilingual_description',
+                'ml.language_id AS ezcontentclass_attribute_multilingual_language_id',
+                'ml.data_text AS ezcontentclass_attribute_multilingual_data_text',
+                'ml.data_json AS ezcontentclass_attribute_multilingual_data_json',
             ])
             ->from('ezcontentclass', 'c')
             ->leftJoin(
@@ -1017,6 +1109,15 @@ class DoctrineDatabase extends Gateway
                 $expr->andX(
                     $expr->eq('c.id', 'g.contentclass_id'),
                     $expr->eq('c.version', 'g.contentclass_version')
+                )
+            )
+            ->leftJoin(
+                'a',
+                'ezcontentclass_attribute_ml',
+                'ml',
+                $expr->andX(
+                    $expr->eq('a.id', 'ml.contentclass_attribute_id'),
+                    $expr->eq('a.version', 'ml.version')
                 )
             )
             ->orderBy('a.placement');
@@ -1062,7 +1163,7 @@ class DoctrineDatabase extends Gateway
      * @param mixed $typeId
      * @param int $status
      */
-    public function deleteFieldDefinitionsForType($typeId, $status)
+    public function deleteFieldDefinitionsForType($typeId, $status, array $fieldDefinitions = [])
     {
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom(
@@ -1079,7 +1180,18 @@ class DoctrineDatabase extends Gateway
                 )
             )
         );
+
         $q->prepare()->execute();
+
+        $deleteQuery = $this->connection->createQueryBuilder();
+        $deleteQuery
+            ->delete('ezcontentclass_attribute_ml')
+            ->where('contentclass_attribute_id IN (:fieldDefinitionIdList)')
+            ->andWhere('version = :status')
+            ->setParameter('fieldDefinitionIdList', array_column($fieldDefinitions, 'id'), Connection::PARAM_STR_ARRAY)
+            ->setParameter('status', $status, ParameterType::INTEGER);
+
+        $deleteQuery->execute();
     }
 
     /**
@@ -1088,10 +1200,10 @@ class DoctrineDatabase extends Gateway
      * @param mixed $typeId
      * @param int $status
      */
-    public function delete($typeId, $status)
+    public function delete($typeId, $status, array $fieldDefinitions = [])
     {
         $this->deleteGroupAssignmentsForType($typeId, $status);
-        $this->deleteFieldDefinitionsForType($typeId, $status);
+        $this->deleteFieldDefinitionsForType($typeId, $status, $fieldDefinitions);
         $this->deleteTypeNameData($typeId, $status);
         $this->deleteType($typeId, $status);
     }
@@ -1157,8 +1269,9 @@ class DoctrineDatabase extends Gateway
      * @param int $typeId
      * @param int $sourceVersion
      * @param int $targetVersion
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions
      */
-    public function publishTypeAndFields($typeId, $sourceVersion, $targetVersion)
+    public function publishTypeAndFields($typeId, $sourceVersion, $targetVersion, array $fieldDefinitions = [])
     {
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1243,6 +1356,18 @@ class DoctrineDatabase extends Gateway
         );
 
         $query->prepare()->execute();
+
+        $mlDataPublishQuery = $this->connection->createQueryBuilder();
+        $mlDataPublishQuery
+            ->update('ezcontentclass_attribute_ml')
+            ->set('version', ':newVersion')
+            ->where('contentclass_attribute_id IN (:fieldDefinitionIdList)')
+            ->andWhere('version = :sourceVersion')
+            ->setParameter('fieldDefinitionIdList', array_column($fieldDefinitions, 'id'), Connection::PARAM_STR_ARRAY)
+            ->setParameter('newVersion', $targetVersion, ParameterType::INTEGER)
+            ->setParameter('sourceVersion', $sourceVersion, ParameterType::INTEGER);
+
+        $mlDataPublishQuery->execute();
     }
 
     /**
@@ -1307,5 +1432,27 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function loadMultilingualFieldDefinitionData(int $fieldDefinitionId, int $status)
+    {
+        $q = $this->connection->createQueryBuilder();
+        $q
+            ->select([
+                'ml.contentclass_attribute_id AS ezcontentclass_attribute_multilingual_id',
+                'ml.name AS ezcontentclass_attribute_multilingual_name',
+                'ml.description AS ezcontentclass_attribute_multilingual_description',
+                'ml.language_id AS ezcontentclass_attribute_multilingual_language_id',
+                'ml.data_text AS ezcontentclass_attribute_multilingual_data_text',
+                'ml.data_json AS ezcontentclass_attribute_multilingual_data_json',
+                'ml.version AS ezcontentclass_attribute_multilingual_version',
+            ])
+            ->from('ezcontentclass_attribute_ml', 'ml')
+            ->where($q->expr()->eq('ml.contentclass_attribute_id', ':id'))
+            ->andWhere($q->expr()->eq('ml.version', ':version'))
+            ->setParameter('id', $fieldDefinitionId, ParameterType::INTEGER)
+            ->setParameter('version', $status, ParameterType::INTEGER);
+
+        return $q->execute()->fetchAll();
     }
 }

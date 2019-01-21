@@ -2585,3 +2585,20 @@ CREATE TABLE `eznotification` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2012-08-14 15:46:37
+
+DROP TABLE IF EXISTS `ezcontentclass_attribute_ml`;
+create table `ezcontentclass_attribute_ml`
+(
+	contentclass_attribute_id int not null,
+	version int not null,
+	language_id bigint not null,
+	name varchar(255) not null,
+	description text null,
+	data_text text null,
+	data_json text null,
+	primary key (contentclass_attribute_id, version, language_id),
+	constraint ezcontentclass_attribute_ml_lang_fk
+		foreign key (language_id) references ezcontent_language (id)
+			on update cascade on delete cascade
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+

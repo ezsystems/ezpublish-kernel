@@ -200,7 +200,7 @@ class Type extends FieldType
         }
 
         foreach ($fieldValue->selection as $optionIndex) {
-            if (!isset($fieldSettings['options'][$optionIndex])) {
+            if (!isset($fieldSettings['options'][$fieldDefinition->mainLanguageCode][$optionIndex])) {
                 $validationErrors[] = new ValidationError(
                     'Option with index %index% does not exist in the field definition.',
                     null,

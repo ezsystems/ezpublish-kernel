@@ -81,6 +81,8 @@ services:
 
     ezpublish.fieldType.ezselection.converter:
         class: "%ezpublish.fieldType.ezselection.converter.class%"
+        arguments:
+            - '@ezpublish.api.service.language'
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezselection}
 

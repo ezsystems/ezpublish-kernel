@@ -1101,13 +1101,15 @@ class ContentTypeService implements ContentTypeServiceInterface
             if (!$contentType instanceof APIContentTypeDraft) {
                 $this->contentTypeHandler->delete(
                     $contentType->id,
-                    APIContentTypeDraft::STATUS_DEFINED
+                    APIContentTypeDraft::STATUS_DEFINED,
+                    $contentType->fieldDefinitions
                 );
             }
 
             $this->contentTypeHandler->delete(
                 $contentType->id,
-                APIContentTypeDraft::STATUS_DRAFT
+                APIContentTypeDraft::STATUS_DRAFT,
+                $contentType->fieldDefinitions
             );
 
             $this->repository->commit();
