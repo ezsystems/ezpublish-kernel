@@ -1142,10 +1142,6 @@ class DoctrineDatabase extends Gateway
                     ),
                     $query->expr->eq(
                         $dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
-                        $dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree')
-                    ),
-                    $query->expr->eq(
-                        $dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
                         $query->bindValue($locationId, null, \PDO::PARAM_INT)
                     )
                 )
