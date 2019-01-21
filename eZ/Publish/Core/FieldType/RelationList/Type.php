@@ -26,11 +26,17 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class Type extends FieldType
 {
-    /**
-     * @todo Consider to add all 6 selection options
-     */
     const SELECTION_BROWSE = 0;
+    /**
+     * @todo following selection methods comes from legacy and may be interpreted as SELECTION_BROWSE by UI.
+     * UI support will be evaluated on a case by case basis for future versions.
+     */
     const SELECTION_DROPDOWN = 1;
+    const SELECTION_LIST_WITH_RADIO_BUTTONS = 2;
+    const SELECTION_LIST_WITH_CHECKBOXES = 3;
+    const SELECTION_MULTIPLE_SELECTION_LIST = 4;
+    const SELECTION_TEMPLATE_BASED_MULTIPLE = 5;
+    const SELECTION_TEMPLATE_BASED_SINGLE = 6;
 
     protected $settingsSchema = array(
         'selectionMethod' => array(
@@ -73,14 +79,19 @@ class Type extends FieldType
 
             switch ($name) {
                 case 'selectionMethod':
-                    if ($value !== self::SELECTION_BROWSE && $value !== self::SELECTION_DROPDOWN) {
+                    if (!$this->isValidSelectionMethod($value)) {
                         $validationErrors[] = new ValidationError(
-                            "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
+                            "Setting '%setting%' must be one of %selection_browse%, %selection_dropdown%, %selection_list_with_radio_buttons%, %selection_list_with_checkboxes%, %selection_multiple_selection_list%, %selection_template_based_multiple%, %selection_template_based_single%",
                             null,
                             array(
                                 '%setting%' => $name,
                                 '%selection_browse%' => self::SELECTION_BROWSE,
                                 '%selection_dropdown%' => self::SELECTION_DROPDOWN,
+                                '%selection_list_with_radio_buttons%' => self::SELECTION_LIST_WITH_RADIO_BUTTONS,
+                                '%selection_list_with_checkboxes%' => self::SELECTION_LIST_WITH_CHECKBOXES,
+                                '%selection_multiple_selection_list%' => self::SELECTION_MULTIPLE_SELECTION_LIST,
+                                '%selection_template_based_multiple%' => self::SELECTION_TEMPLATE_BASED_MULTIPLE,
+                                '%selection_template_based_single%' => self::SELECTION_TEMPLATE_BASED_SINGLE,
                             ),
                             "[$name]"
                         );
@@ -281,5 +292,25 @@ class Type extends FieldType
         return array(
             Relation::FIELD => $value->destinationContentIds,
         );
+    }
+
+    /**
+     * Checks whether given selectionMethod is valid.
+     *
+     * @param int $selectionMethod
+     *
+     * @return bool
+     */
+    private function isValidSelectionMethod($selectionMethod)
+    {
+        return in_array($selectionMethod, [
+            self::SELECTION_BROWSE,
+            self::SELECTION_DROPDOWN,
+            self::SELECTION_LIST_WITH_RADIO_BUTTONS,
+            self::SELECTION_LIST_WITH_CHECKBOXES,
+            self::SELECTION_MULTIPLE_SELECTION_LIST,
+            self::SELECTION_TEMPLATE_BASED_MULTIPLE,
+            self::SELECTION_TEMPLATE_BASED_SINGLE,
+        ], true);
     }
 }
