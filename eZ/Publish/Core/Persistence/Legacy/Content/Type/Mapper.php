@@ -298,7 +298,6 @@ class Mapper
         return $storageFieldDef;
     }
 
-
     /**
      * Maps properties from $struct to $type.
      *

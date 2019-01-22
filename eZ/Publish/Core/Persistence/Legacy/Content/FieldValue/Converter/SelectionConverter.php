@@ -94,6 +94,7 @@ class SelectionConverter implements Converter
         if ($isAssocArray) {
             $xml = $this->buildOptionsXml($fieldSettings['options']);
             $storageDef->dataText5 = $xml->saveXML();
+
             return;
         }
 

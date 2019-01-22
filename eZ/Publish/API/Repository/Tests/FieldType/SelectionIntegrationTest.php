@@ -76,7 +76,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                     2 => 'Sindelfingen',
                     3 => 'Turtles',
                     4 => 'Zombies',
-                ]
+                ],
             ],
         ];
     }

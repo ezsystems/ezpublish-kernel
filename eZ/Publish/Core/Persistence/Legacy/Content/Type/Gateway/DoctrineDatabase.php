@@ -611,9 +611,9 @@ class DoctrineDatabase extends Gateway
         $this->setCommonFieldColumns($q, $fieldDefinition, $storageFieldDef);
 
         $q->prepare()->execute();
-        
+
         if (!isset($fieldDefinition->id)) {
-            $fieldDefinitionId =  $this->dbHandler->lastInsertId(
+            $fieldDefinitionId = $this->dbHandler->lastInsertId(
                 $this->dbHandler->getSequenceName('ezcontentclass_attribute', 'id')
             );
             $this->insertMultilingualFieldDefinition($fieldDefinitionId, $storageFieldDef->multilingualData, $status);
@@ -637,8 +637,7 @@ class DoctrineDatabase extends Gateway
         int $fieldDefinitionId,
         array $multilingualData,
         int $status
-    ):void {
-
+    ): void {
         foreach ($multilingualData as $languageCode => $data) {
             $query = $this->connection->createQueryBuilder();
             $query
@@ -650,7 +649,7 @@ class DoctrineDatabase extends Gateway
                     'description' => ':description',
                     'contentclass_attribute_id' => ':fieldDefinitionId',
                     'version' => ':status',
-                    'language_id' => ':languageId'
+                    'language_id' => ':languageId',
                 ])
                 ->setParameter('data_text', $data->dataText)
                 ->setParameter('data_json', $data->dataJson)
@@ -874,7 +873,7 @@ class DoctrineDatabase extends Gateway
         FieldDefinition $fieldDefinition,
         array $multilingualData,
         int $status
-    ):void {
+    ): void {
         foreach ($multilingualData as $languageCode => $data) {
             $query = $this->connection->createQueryBuilder();
             $query
