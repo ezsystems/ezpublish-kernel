@@ -407,6 +407,7 @@ class ContentTypeDomainMapper
                 'isSearchable' => $fieldDefinitionCreateStruct->isSearchable === null ?
                     $fieldType->isSearchable() :
                     $fieldDefinitionCreateStruct->isSearchable,
+                'mainLanguageCode' => $fieldDefinitionCreateStruct->mainLanguageCode
                 // These properties are precreated in constructor
                 //"fieldTypeConstraints"
                 //"defaultValue"

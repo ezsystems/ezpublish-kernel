@@ -88,9 +88,7 @@ class SelectionConverter implements Converter
         if (isset($fieldSettings['isMultiple'])) {
             $storageDef->dataInt1 = (int)$fieldSettings['isMultiple'];
         }
-        if (isset($fieldSettings['isMultiple'])) {
-            $storageDef->dataInt1 = (int)$fieldSettings['isMultiple'];
-        }
+
         $isAssocArray = array_keys($fieldSettings['options']) === range(0, count($fieldSettings['options']) - 1);
 
         if ($isAssocArray) {
@@ -126,12 +124,12 @@ class SelectionConverter implements Converter
         $options = array_fill_keys(array_keys($fieldDef->name), []);
         $simpleXmlList = [];
 
-        if (!isset($storageDef->multilingualData[$fieldDef->mainLanguageCode])) {
-            $simpleXmlList[$fieldDef->mainLanguageCode] = simplexml_load_string($storageDef->dataText5);
-        }
-
         foreach ($storageDef->multilingualData as $languageCode => $mlData) {
             $simpleXmlList[$languageCode] = simplexml_load_string($mlData->dataText);
+        }
+
+        if (isset($storageDef->dataText5)) {
+            $simpleXmlList[$fieldDef->mainLanguageCode] = simplexml_load_string($storageDef->dataText5);
         }
 
         foreach ($simpleXmlList as $optionLanguageCode => $simpleXml) {

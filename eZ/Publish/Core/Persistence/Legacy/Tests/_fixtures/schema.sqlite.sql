@@ -575,20 +575,16 @@ CREATE TABLE ezpreferences (
 CREATE INDEX ezpreferences_name ON ezpreferences (name);
 CREATE INDEX ezpreferences_user_id_idx ON ezpreferences (user_id, name);
 
-create table `ezcontentclass_attribute_ml`
+create table ezcontentclass_attribute_ml
 (
-	contentclass_attribute_id int not null,
-	version int not null,
-	language_id bigint not null,
-	name varchar(255) not null,
-	description text null,
-	data_text text null,
-	data_json text null,
-	primary key (contentclass_attribute_id, version, language_id),
-	constraint ezcontentclass_attribute_ml_lang_fk
-		foreign key (language_id) references ezcontent_language (id)
-			on update cascade on delete cascade
-)
+	contentclass_attribute_id integer not null,
+	version integer not null,
+	language_id integer not null,
+	name text(255) not null,
+	description text DEFAULT null,
+	data_text text DEFAULT null,
+	data_json text DEFAULT null
+);
 
 CREATE INDEX ezcontentclass_attribute_ml_language_id ON ezcontentclass_attribute_ml (language_id);
 CREATE INDEX ezcontentclass_attribute_ml_id ON ezcontentclass_attribute_ml (contentclass_attribute_id, version, language_id);

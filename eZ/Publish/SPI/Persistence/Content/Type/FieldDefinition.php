@@ -114,8 +114,6 @@ class FieldDefinition extends ValueObject
 
     public $mainLanguageCode;
 
-    public $languageCode;
-
     /**
      * Constructor.
      */

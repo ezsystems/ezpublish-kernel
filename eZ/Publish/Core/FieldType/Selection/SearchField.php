@@ -34,10 +34,12 @@ class SearchField implements Indexable
         $options = $fieldSettings['options'];
         $positionSet = array_flip($field->value->data);
 
-        foreach ($options as $index => $value) {
-            if (isset($positionSet[$index])) {
-                $values[] = $value;
-                $indexes[] = $index;
+        foreach ($options as $languageCode => $mlOption) {
+            foreach ($mlOption as $index => $value) {
+                if (isset($positionSet[$index])) {
+                    $values[] = $value;
+                    $indexes[] = $index;
+                }
             }
         }
 

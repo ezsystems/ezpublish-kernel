@@ -704,6 +704,8 @@ class ContentTypeService implements ContentTypeServiceInterface
                     "Argument contains duplicate field definition position '{$fieldDefinitionCreateStruct->position}'"
                 );
             }
+
+            $fieldDefinitionCreateStruct->mainLanguageCode = $contentTypeCreateStruct->mainLanguageCode;
         }
 
         $allValidationErrors = array();

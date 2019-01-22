@@ -67,16 +67,18 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'isMultiple' => true,
-            'options' => array(
-                0 => 'A first',
-                1 => 'Bielefeld',
-                2 => 'Sindelfingen',
-                3 => 'Turtles',
-                4 => 'Zombies',
-            ),
-        );
+            'options' => [
+                'eng-GB' => [
+                    0 => 'A first',
+                    1 => 'Bielefeld',
+                    2 => 'Sindelfingen',
+                    3 => 'Turtles',
+                    4 => 'Zombies',
+                ]
+            ],
+        ];
     }
 
     /**

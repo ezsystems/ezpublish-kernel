@@ -112,4 +112,6 @@ class FieldDefinitionCreateStruct extends ValueObject
      * @var bool
      */
     public $isSearchable;
+
+    public $mainLanguageCode;
 }

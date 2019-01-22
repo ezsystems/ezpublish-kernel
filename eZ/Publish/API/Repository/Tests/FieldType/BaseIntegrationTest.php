@@ -1012,6 +1012,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
             'data',
             $this->getTypeName()
         );
+
+        $fieldDefinitionCreateStruct->names[$contentType->mainLanguageCode] = $this->getTypeName();
         $fieldDefinitionCreateStruct->validatorConfiguration = $this->getValidValidatorConfiguration();
         $fieldDefinitionCreateStruct->fieldSettings = $this->getValidFieldSettings();
         $fieldDefinitionCreateStruct->defaultValue = null;
