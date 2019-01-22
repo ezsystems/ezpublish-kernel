@@ -184,9 +184,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     public function load($typeId, $status = Type::STATUS_DEFINED)
     {
         $cacheItem = $this->cache->getItem('ez-content-type-' . $typeId . '-' . $status);
-//        if ($cacheItem->isHit()) {
-//            return $cacheItem->get();
-//        }
+        if ($cacheItem->isHit()) {
+            return $cacheItem->get();
+        }
 
         $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status));
         $type = $this->persistenceHandler->contentTypeHandler()->load($typeId, $status);
