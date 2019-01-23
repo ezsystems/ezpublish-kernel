@@ -9,13 +9,10 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 
 class ParameterProvider implements ParameterProviderInterface
 {
@@ -24,20 +21,17 @@ class ParameterProvider implements ParameterProviderInterface
      */
     private $repository;
     /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
+     * @var \eZ\Publish\API\Repository\PermissionResolver
      */
-    private $authorizationChecker;
+    private $permissionsResolver;
 
     /**
      * @param \eZ\Publish\API\Repository\Repository $repository
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
      */
-    public function __construct(
-        Repository $repository,
-        AuthorizationCheckerInterface $authorizationChecker
-    ) {
+    public function __construct(Repository $repository)
+    {
         $this->repository = $repository;
-        $this->authorizationChecker = $authorizationChecker;
+        $this->permissionsResolver = $repository->getPermissionResolver();
     }
 
     /**
@@ -57,7 +51,7 @@ class ParameterProvider implements ParameterProviderInterface
             }
 
             return ['available' => !$contentInfo->isTrashed()];
-        } catch (NotFoundException | UnauthorizedException $exception) {
+        } catch (NotFoundException $exception) {
             return [
                 'available' => false,
             ];
@@ -84,14 +78,14 @@ class ParameterProvider implements ParameterProviderInterface
      */
     private function userHasPermissions(ContentInfo $contentInfo): bool
     {
-        $readAttribute = new Attribute('content', 'read', [
-            'valueObject' => $contentInfo,
-        ]);
+        if ($this->permissionsResolver->canUser('content', 'read', $contentInfo)) {
+            return true;
+        }
 
-        $viewEmbedAttribute = new Attribute('content', 'view_embed', [
-            'valueObject' => $contentInfo,
-        ]);
+        if ($this->permissionsResolver->canUser('content', 'view_embed', $contentInfo)) {
+            return true;
+        }
 
-        return $this->authorizationChecker->isGranted($readAttribute) || $this->authorizationChecker->isGranted($viewEmbedAttribute);
+        return false;
     }
 }

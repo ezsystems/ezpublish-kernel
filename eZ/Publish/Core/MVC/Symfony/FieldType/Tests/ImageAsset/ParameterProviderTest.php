@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\ImageAsset;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
@@ -16,7 +17,6 @@ use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider;
 use eZ\Publish\Core\Repository\SiteAccessAware\Repository;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class ParameterProviderTest extends TestCase
 {
@@ -24,7 +24,7 @@ class ParameterProviderTest extends TestCase
     private $repository;
 
     /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
-    private $authorizationChecker;
+    private $permissionsResolver;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider */
     private $parameterProvider;
@@ -32,12 +32,19 @@ class ParameterProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->repository = $this->createMock(Repository::class);
-        $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $this->permissionsResolver = $this->createMock(PermissionResolver::class);
 
-        $this->parameterProvider = new ParameterProvider(
-            $this->repository,
-            $this->authorizationChecker
-        );
+        $this->permissionsResolver
+            ->method('canUser')
+            ->willReturn(true)
+        ;
+
+        $this->repository
+            ->method('getPermissionResolver')
+            ->willReturn($this->permissionsResolver)
+        ;
+
+        $this->parameterProvider = new ParameterProvider($this->repository);
     }
 
     public function dataProviderForTestGetViewParameters(): array
@@ -66,11 +73,6 @@ class ParameterProviderTest extends TestCase
                 'status' => $status,
             ]));
 
-        $this->authorizationChecker
-            ->method('isGranted')
-            ->willReturn(true)
-        ;
-
         $actual = $this->parameterProvider->getViewParameters(new Field([
             'value' => new ImageAssetValue($destinationContentId),
         ]));
@@ -91,11 +93,6 @@ class ParameterProviderTest extends TestCase
             ->method('sudo')
             ->with($closure)
             ->willThrowException($this->createMock(NotFoundException::class));
-
-        $this->authorizationChecker
-            ->method('isGranted')
-            ->willReturn(true)
-            ;
 
         $actual = $this->parameterProvider->getViewParameters(new Field([
             'value' => new ImageAssetValue($destinationContentId),
@@ -119,11 +116,6 @@ class ParameterProviderTest extends TestCase
             ->method('sudo')
             ->with($closure)
             ->willThrowException($this->createMock(UnauthorizedException::class));
-
-        $this->authorizationChecker
-            ->method('isGranted')
-            ->willReturn(true)
-        ;
 
         $actual = $this->parameterProvider->getViewParameters(new Field([
             'value' => new ImageAssetValue($destinationContentId),
