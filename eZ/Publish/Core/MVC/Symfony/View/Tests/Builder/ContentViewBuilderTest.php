@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\MVC\Symfony\View\Tests\Builder;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -23,7 +24,6 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -35,11 +35,6 @@ class ContentViewBuilderTest extends TestCase
      * @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $repository;
-
-    /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $authorizationChecker;
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject
@@ -61,20 +56,30 @@ class ContentViewBuilderTest extends TestCase
      */
     private $contentViewBuilder;
 
+    /**
+     * @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $permissionResolver;
+
     public function setUp(): void
     {
-        $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->setMethods(['sudo'])->getMock();
-        $this->authorizationChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)->getMock();
+        $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->setMethods(['sudo', 'getPermissionResolver'])->getMock();
         $this->viewConfigurator = $this->getMockBuilder(Configurator::class)->getMock();
         $this->parametersInjector = $this->getMockBuilder(ParametersInjector::class)->getMock();
         $this->contentInfoLocationLoader = $this->getMockBuilder(ContentInfoLocationLoader::class)->getMock();
+        $this->permissionResolver = $this->getMockBuilder(PermissionResolver::class)->getMock();
+        $this->repository
+            ->expects($this->any())
+            ->method('getPermissionResolver')
+            ->willReturn($this->permissionResolver);
+
         $this->contentViewBuilder = new ContentViewBuilder(
             $this->repository,
-            $this->authorizationChecker,
             $this->viewConfigurator,
             $this->parametersInjector,
             $this->contentInfoLocationLoader
         );
+
     }
 
     public function testMatches(): void
@@ -158,9 +163,9 @@ class ContentViewBuilderTest extends TestCase
             ->method('sudo')
             ->willReturn($location);
 
-        $this->authorizationChecker
-            ->expects($this->once())
-            ->method('isGranted')
+        $this->permissionResolver
+            ->expects($this->any())
+            ->method('canUser')
             ->willReturn(false);
 
         $this->expectException(UnauthorizedException::class);
@@ -198,14 +203,14 @@ class ContentViewBuilderTest extends TestCase
             ->method('sudo')
             ->willReturn($location);
 
-        $this->authorizationChecker
+        $this->permissionResolver
             ->expects($this->at(0))
-            ->method('isGranted')
+            ->method('canUser')
             ->willReturn(false);
 
-        $this->authorizationChecker
+        $this->permissionResolver
             ->expects($this->at(1))
-            ->method('isGranted')
+            ->method('canUser')
             ->willReturn(false);
 
         $this->expectException(UnauthorizedException::class);
@@ -243,9 +248,9 @@ class ContentViewBuilderTest extends TestCase
             ->method('sudo')
             ->willReturn($location);
 
-        $this->authorizationChecker
+        $this->permissionResolver
             ->expects($this->at(0))
-            ->method('isGranted')
+            ->method('canUser')
             ->willReturn(true);
 
         $this->expectException(InvalidArgumentException::class);
@@ -285,9 +290,9 @@ class ContentViewBuilderTest extends TestCase
             ->method('sudo')
             ->willReturn($location);
 
-        $this->authorizationChecker
+        $this->permissionResolver
             ->expects($this->at(0))
-            ->method('isGranted')
+            ->method('canUser')
             ->willReturn(true);
 
         $this->assertEquals($expectedView, $this->contentViewBuilder->buildView($parameters));
@@ -325,9 +330,9 @@ class ContentViewBuilderTest extends TestCase
             ->method('sudo')
             ->willReturn($location);
 
-        $this->authorizationChecker
+        $this->permissionResolver
             ->expects($this->at(0))
-            ->method('isGranted')
+            ->method('canUser')
             ->willReturn(true);
 
         $this->assertEquals($expectedView, $this->contentViewBuilder->buildView($parameters));
