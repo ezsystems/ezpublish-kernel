@@ -220,7 +220,6 @@ services:
         class: "%ezpublish.view_builder.content.class%"
         arguments:
             - "@ezpublish.api.repository"
-            - "@security.authorization_checker"
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
             - "@ezpublish.content_info_location_loader.main"
