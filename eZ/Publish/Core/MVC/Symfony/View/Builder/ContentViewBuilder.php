@@ -248,7 +248,7 @@ class ContentViewBuilder implements ViewBuilder
 
         return
             $this->permissionResolver->canUser('content', 'read', $content->contentInfo, $targets) ||
-            $this->permissionResolver->canUser('content', 'read_embed', $content->contentInfo, $targets);
+            $this->permissionResolver->canUser('content', 'view_embed', $content->contentInfo, $targets);
     }
 
     /**
