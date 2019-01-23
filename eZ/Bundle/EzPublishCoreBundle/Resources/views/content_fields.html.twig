@@ -448,7 +448,7 @@
         {% if not ez_is_field_empty(content, field) and parameters.available %}
             {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
             <div {{ block('field_attributes') }}>
-                {{ render(controller('ez_content:viewAction', {
+                {{ render(controller('ez_content:embedAction', {
                     contentId: field.value.destinationContentId,
                     viewType: 'asset_image',
                     noLayout: true,

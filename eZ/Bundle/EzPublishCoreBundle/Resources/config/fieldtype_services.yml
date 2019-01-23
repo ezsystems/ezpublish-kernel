@@ -63,9 +63,8 @@ services:
     ezpublish.fieldType.ezimageasset.parameterProvider:
         class: \eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider
         arguments:
-            - "@ezpublish.api.service.content"
-            - "@ezpublish.api.service.inner_field_type"
-            - "@eZ\\Publish\\Core\\FieldType\\ImageAsset\\AssetMapper"
+            - "@ezpublish.siteaccessaware.repository"
+            - "@security.authorization_checker"
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezimageasset}
 
