@@ -99,7 +99,27 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     public function emptyTrash()
     {
         $this->logger->logCall(__METHOD__, array());
-        $this->persistenceHandler->trashHandler()->emptyTrash();
+
+        // We can not use the return value of emptyTrash method because, in the next step, we are not able
+        // to fetch the reverse relations of deleted content.
+        $trashedItems = $this->persistenceHandler->trashHandler()->findTrashItems();
+
+        $tags = [];
+        foreach ($trashedItems as $trashedItem) {
+            $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashedItem->contentId);
+
+            foreach ($reverseRelations as $relation) {
+                $tags[] = 'content-fields-' . $relation->sourceContentId;
+            }
+        }
+
+        $return = $this->persistenceHandler->trashHandler()->emptyTrash();
+
+        if (!empty($tags)) {
+            $this->cache->invalidateTags(array_unique($tags));
+        }
+
+        return $return;
     }
 
     /**
@@ -108,6 +128,22 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
     public function deleteTrashItem($trashedId)
     {
         $this->logger->logCall(__METHOD__, array('id' => $trashedId));
-        $this->persistenceHandler->trashHandler()->deleteTrashItem($trashedId);
+
+        // We can not use the return value of deleteTrashItem method because, in the next step, we are not able
+        // to fetch the reverse relations of deleted content.
+        $trashed = $this->persistenceHandler->trashHandler()->loadTrashItem($trashedId);
+
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashed->contentId);
+        $tags = array_map(function (Relation $relation) {
+            return 'content-fields-' . $relation->sourceContentId;
+        }, $reverseRelations);
+
+        $return = $this->persistenceHandler->trashHandler()->deleteTrashItem($trashedId);
+
+        if (!empty($tags)) {
+            $this->cache->invalidateTags($tags);
+        }
+
+        return $return;
     }
 }
