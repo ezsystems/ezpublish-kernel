@@ -20,6 +20,7 @@ class ParameterProvider implements ParameterProviderInterface
      * @var \eZ\Publish\API\Repository\Repository
      */
     private $repository;
+
     /**
      * @var \eZ\Publish\API\Repository\PermissionResolver
      */

@@ -20,10 +20,10 @@ use PHPUnit\Framework\TestCase;
 
 class ParameterProviderTest extends TestCase
 {
-    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Repository|\PHPUnit\Framework\MockObject\MockObject */
     private $repository;
 
-    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionsResolver;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider */
@@ -36,13 +36,11 @@ class ParameterProviderTest extends TestCase
 
         $this->permissionsResolver
             ->method('canUser')
-            ->willReturn(true)
-        ;
+            ->willReturn(true);
 
         $this->repository
             ->method('getPermissionResolver')
-            ->willReturn($this->permissionsResolver)
-        ;
+            ->willReturn($this->permissionsResolver);
 
         $this->parameterProvider = new ParameterProvider($this->repository);
     }
