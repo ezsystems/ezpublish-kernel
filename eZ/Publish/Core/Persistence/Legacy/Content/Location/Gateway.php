@@ -176,12 +176,12 @@ abstract class Gateway
      * Make the location identified by $locationId1 refer to the Content
      * referred to by $locationId2 and vice versa.
      *
-     * @param mixed $locationId1
-     * @param mixed $locationId2
+     * @param int $locationId1
+     * @param int $locationId2
      *
      * @return bool
      */
-    abstract public function swap($locationId1, $locationId2);
+    abstract public function swap(int $locationId1, int $locationId2): bool;
 
     /**
      * Creates a new location in given $parentNode.
