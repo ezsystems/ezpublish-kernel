@@ -1128,31 +1128,19 @@ class DoctrineDatabase extends Gateway
 
     public function getLocationContentMainLanguageId($locationId)
     {
-        $dbHandler = $this->dbHandler;
-        $query = $dbHandler->createSelectQuery();
-        $query
-            ->select($dbHandler->quoteColumn('initial_language_id', 'ezcontentobject'))
-            ->from($dbHandler->quoteTable('ezcontentobject'))
-            ->innerJoin(
-                $dbHandler->quoteTable('ezcontentobject_tree'),
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
-                        $dbHandler->quoteColumn('id', 'ezcontentobject')
-                    ),
-                    $query->expr->eq(
-                        $dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
-                        $dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree')
-                    ),
-                    $query->expr->eq(
-                        $dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
-                        $query->bindValue($locationId, null, \PDO::PARAM_INT)
-                    )
-                )
-            );
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->select('c.initial_language_id')
+            ->from('ezcontentobject', 'c')
+            ->join('c', 'ezcontentobject_tree', 't', $expr->eq('t.contentobject_id', 'c.id'))
+            ->where(
+                $expr->eq('t.node_id', ':locationId')
+            )
+            ->setParameter('locationId', $locationId, \PDO::PARAM_INT)
+        ;
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $queryBuilder->execute();
         $languageId = $statement->fetchColumn();
 
         if ($languageId === false) {
