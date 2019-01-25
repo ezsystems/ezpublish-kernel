@@ -936,12 +936,24 @@ class DoctrineDatabase extends Gateway
      *
      * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList(), loadContentInfoByLocationId()
      *
+     * @param bool $joinMainLocation
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function createLoadContentInfoQueryBuilder()
+    private function createLoadContentInfoQueryBuilder($joinMainLocation = true)
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $expr = $queryBuilder->expr();
+
+        $joinCondition = $expr->eq('c.id', 't.contentobject_id');
+        if ($joinMainLocation) {
+            // wrap join condition with AND operator and join by a Main Location
+            $joinCondition = $expr->andX(
+                $joinCondition,
+                $expr->eq('t.node_id', 't.main_node_id')
+            );
+        }
+
         $queryBuilder
             ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
             ->from('ezcontentobject', 'c')
@@ -949,10 +961,7 @@ class DoctrineDatabase extends Gateway
                 'c',
                 'ezcontentobject_tree',
                 't',
-                $expr->andX(
-                    $expr->eq('c.id', 't.contentobject_id'),
-                    $expr->eq('t.node_id', 't.main_node_id')
-                )
+                $joinCondition
             );
 
         return $queryBuilder;
@@ -1034,14 +1043,14 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByLocationId($locationId)
     {
-        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder(false);
         $queryBuilder
-            ->where('t.main_node_id = :id')
+            ->where('t.node_id = :id')
             ->setParameter('id', $locationId, PDO::PARAM_INT);
 
         $results = $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
         if (empty($results)) {
-            throw new NotFound('content', "main_node_id: $locationId");
+            throw new NotFound('content', "node_id: $locationId");
         }
 
         return $results[0];
