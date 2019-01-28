@@ -8,13 +8,20 @@
  */
 namespace eZ\Publish\Core\Repository;
 
+use eZ\Publish\API\Repository\PermissionCriterionResolver;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Subtree as CriterionSubtree;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as CriterionLogicalNot;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\SPI\Persistence\Content\Section\Handler;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandler;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandler;
 use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
@@ -39,9 +46,19 @@ class SectionService implements SectionServiceInterface
     protected $permissionResolver;
 
     /**
+     * @var \eZ\Publish\API\Repository\PermissionCriterionResolver
+     */
+    protected $permissionCriterionResolver;
+
+    /**
      * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     protected $sectionHandler;
+
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
+     */
+    protected $locationHandler;
 
     /**
      * @var array
@@ -53,13 +70,17 @@ class SectionService implements SectionServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\Content\Section\Handler $sectionHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
+     * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $sectionHandler, array $settings = array())
+    public function __construct(RepositoryInterface $repository, SectionHandler $sectionHandler, LocationHandler $locationHandler, PermissionCriterionResolver $permissionCriterionResolver, array $settings = array())
     {
         $this->repository = $repository;
-        $this->permissionResolver = $repository->getPermissionResolver();
         $this->sectionHandler = $sectionHandler;
+        $this->locationHandler = $locationHandler;
+        $this->permissionResolver = $repository->getPermissionResolver();
+        $this->permissionCriterionResolver = $permissionCriterionResolver;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             //'defaultSetting' => array(),
@@ -304,6 +325,69 @@ class SectionService implements SectionServiceInterface
             $this->sectionHandler->assign(
                 $loadedSection->id,
                 $loadedContentInfo->id
+            );
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+    }
+
+    /**
+     * Assigns the subtree to the given section
+     * this method overrides the current assigned section.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     */
+    public function assignSectionToSubtree(Location $location, Section $section): void
+    {
+        $loadedSubtree = $this->repository->getLocationService()->loadLocation($location->id);
+        $loadedSection = $this->loadSection($section->id);
+
+        /**
+         * Check read access to whole source subtree.
+         *
+         * @var bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
+         */
+        $sectionAssignCriterion = $this->permissionCriterionResolver->getPermissionsCriterion(
+            'section', 'assign', [$loadedSection]
+        );
+        if ($sectionAssignCriterion === false) {
+            throw new UnauthorizedException('section', 'assign', [
+                'name' => $loadedSection->name,
+                'subtree' => $loadedSubtree->pathString,
+            ]);
+        } elseif ($sectionAssignCriterion !== true) {
+            // Query if there are any content in subtree current user don't have access to
+            $query = new Query(
+                [
+                    'limit' => 0,
+                    'filter' => new CriterionLogicalAnd(
+                        [
+                            new CriterionSubtree($loadedSubtree->pathString),
+                            new CriterionLogicalNot($sectionAssignCriterion),
+                        ]
+                    ),
+                ]
+            );
+
+            $result = $this->repository->getSearchService()->findContent($query, [], false);
+            if ($result->totalCount > 0) {
+                throw new UnauthorizedException('section', 'assign', [
+                    'name' => $loadedSection->name,
+                    'subtree' => $loadedSubtree->pathString,
+                ]);
+            }
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $this->locationHandler->setSectionForSubtree(
+                $loadedSubtree->id,
+                $loadedSection->id
             );
             $this->repository->commit();
         } catch (Exception $e) {

@@ -589,6 +589,58 @@ class SectionServiceTest extends BaseTest
     }
 
     /**
+     * Test for the assignSectionToSubtree() method.
+     *
+     * @see \eZ\Publish\API\Repository\SectionService::assignSectionToSubtree()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     */
+    public function testAssignSectionToSubtree()
+    {
+        $repository = $this->getRepository();
+        $sectionService = $repository->getSectionService();
+
+        $standardSectionId = $this->generateId('section', 1);
+        $mediaSectionId = $this->generateId('section', 3);
+
+        $beforeStandardCount = $sectionService->countAssignedContents(
+            $sectionService->loadSection($standardSectionId)
+        );
+
+        $beforeMediaCount = $sectionService->countAssignedContents(
+            $sectionService->loadSection($mediaSectionId)
+        );
+
+        // RemoteId of the "Media" page of an eZ Publish demo installation
+        $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
+
+        /* BEGIN: Use Case */
+        $locationService = $repository->getLocationService();
+
+        // Load a location instance
+        $location = $locationService->loadLocationByRemoteId($mediaRemoteId);
+
+        // Load the "Standard" section
+        $section = $sectionService->loadSection($standardSectionId);
+
+        // Assign Section to ContentInfo
+        $sectionService->assignSectionToSubtree($location, $section);
+
+        /* END: Use Case */
+        $this->assertEquals(
+            $beforeStandardCount + 4,
+            $sectionService->countAssignedContents(
+                $sectionService->loadSection($standardSectionId)
+            )
+        );
+        $this->assertEquals(
+            $beforeMediaCount - 4,
+            $sectionService->countAssignedContents(
+                $sectionService->loadSection($mediaSectionId)
+            )
+        );
+    }
+
+    /**
      * Test for the countAssignedContents() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
