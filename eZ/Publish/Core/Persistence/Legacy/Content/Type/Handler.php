@@ -360,7 +360,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @return bool
      */
-    public function delete($contentTypeId, $status, array $fieldDefinitions = [])
+    public function delete($contentTypeId, $status)
     {
         if (Type::STATUS_DEFINED === $status && $this->contentTypeGateway->countInstancesOfType($contentTypeId)) {
             throw new BadStateException(
@@ -369,7 +369,7 @@ class Handler implements BaseContentTypeHandler
             );
         }
 
-        $this->contentTypeGateway->delete($contentTypeId, $status, $fieldDefinitions);
+        $this->contentTypeGateway->delete($contentTypeId, $status);
 
         // @todo FIXME: Return true only if deletion happened
         return true;

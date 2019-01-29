@@ -112,6 +112,10 @@ class FieldDefinition extends ValueObject
      */
     public $isSearchable;
 
+    /**
+     * Based on mainLanguageCode of contentType
+     * @var string
+     */
     public $mainLanguageCode;
 
     /**

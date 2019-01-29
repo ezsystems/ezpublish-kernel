@@ -275,7 +275,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
     /**
      * {@inheritdoc}
      */
-    public function delete($typeId, $status, $fieldDefinitions = [])
+    public function delete($typeId, $status)
     {
         $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status));
         $return = $this->persistenceHandler->contentTypeHandler()->delete($typeId, $status);

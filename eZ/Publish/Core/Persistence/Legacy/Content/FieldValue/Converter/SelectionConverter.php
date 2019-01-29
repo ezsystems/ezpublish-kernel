@@ -20,14 +20,17 @@ use DOMDocument;
 
 class SelectionConverter implements Converter
 {
-    /** @var \eZ\Publish\API\Repository\LanguageService */
+    /**
+     * @var \eZ\Publish\API\Repository\LanguageService
+     */
     private $languageService;
 
     /**
      * @param \eZ\Publish\API\Repository\LanguageService $languageService
      */
-    public function __construct(LanguageService $languageService)
-    {
+    public function __construct(
+        LanguageService $languageService
+    ) {
         $this->languageService = $languageService;
     }
 
@@ -89,17 +92,13 @@ class SelectionConverter implements Converter
             $storageDef->dataInt1 = (int)$fieldSettings['isMultiple'];
         }
 
-        $isAssocArray = array_keys($fieldSettings['options']) === range(0, count($fieldSettings['options']) - 1);
-
-        if ($isAssocArray) {
+        if (!empty($fieldSettings['options'])) {
             $xml = $this->buildOptionsXml($fieldSettings['options']);
             $storageDef->dataText5 = $xml->saveXML();
-
-            return;
         }
 
-        foreach (array_keys($fieldSettings['options']) as $languageCode) {
-            $xml = $this->buildOptionsXml($fieldSettings['options'][$languageCode]);
+        foreach ($fieldSettings['multilingualOptions'] as $languageCode => $option) {
+            $xml = $this->buildOptionsXml($option);
             $multilingualData = new MultilingualStorageFieldDefinition();
             $multilingualData->dataText = $xml->saveXML();
             $multilingualData->name = $fieldDef->name[$languageCode];
@@ -122,7 +121,7 @@ class SelectionConverter implements Converter
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
-        $options = array_fill_keys(array_keys($fieldDef->name), []);
+        $options = [];
         $simpleXmlList = [];
 
         foreach ($storageDef->multilingualData as $languageCode => $mlData) {
@@ -141,11 +140,11 @@ class SelectionConverter implements Converter
             }
         }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings([
                 'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
-                'options' => $options,
-            )
+                'options' => $options[$fieldDef->mainLanguageCode] ?? reset($options),
+                'multilingualOptions' => $options
+            ]
         );
 
         // @todo: Can Selection store a default value in the DB?
@@ -173,7 +172,7 @@ class SelectionConverter implements Converter
      *
      * @return \DOMDocument
      */
-    private function buildOptionsXml(array $selectionOptions)
+    private function buildOptionsXml(array $selectionOptions): DOMDocument
     {
         $xml = new DOMDocument('1.0', 'utf-8');
         $xml->appendChild(

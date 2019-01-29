@@ -39,6 +39,10 @@ class Type extends FieldType
             'type' => 'hash',
             'default' => array(),
         ),
+        'multilingualOptions' => [
+            'type' => 'hash',
+            'default' => [],
+        ],
     );
 
     /**
@@ -70,6 +74,20 @@ class Type extends FieldType
                     break;
                 case 'options':
                     if (!is_array($settingValue)) {
+                        $validationErrors[] = new ValidationError(
+                            "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
+                            null,
+                            array(
+                                '%fieldType%' => $this->getFieldTypeIdentifier(),
+                                '%setting%' => $settingKey,
+                                '%type%' => 'hash',
+                            ),
+                            "[$settingKey]"
+                        );
+                    }
+                    break;
+                case 'multilingualOptions':
+                    if (!is_array($settingValue) && !is_array(reset($settingValue))) {
                         $validationErrors[] = new ValidationError(
                             "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
@@ -200,7 +218,7 @@ class Type extends FieldType
         }
 
         foreach ($fieldValue->selection as $optionIndex) {
-            if (!isset($fieldSettings['options'][$fieldDefinition->mainLanguageCode][$optionIndex])) {
+            if (!isset($fieldSettings['options'][$optionIndex]) && empty($fieldSettings['multilingualOptions'])) {
                 $validationErrors[] = new ValidationError(
                     'Option with index %index% does not exist in the field definition.',
                     null,

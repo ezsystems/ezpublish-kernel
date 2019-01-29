@@ -124,7 +124,7 @@ class Mapper
             $fieldId = (int)$row['ezcontentclass_attribute_id'];
 
             if ($fieldId && !isset($fields[$fieldId])) {
-                $multilingualData = array_map(function ($fieldData) use ($row) {
+                $multilingualData = array_map(function (array $fieldData) use ($row) {
                     return [
                         'ezcontentclass_attribute_multilingual_name' => $fieldData['ezcontentclass_attribute_multilingual_name'] ?? $this->unserialize($row['ezcontentclass_serialized_name_list']),
                         'ezcontentclass_attribute_multilingual_description' => $fieldData['ezcontentclass_attribute_multilingual_description'] ?? $this->unserialize($row['ezcontentclass_serialized_description_list']),
@@ -132,7 +132,7 @@ class Mapper
                         'ezcontentclass_attribute_multilingual_data_text' => $fieldData['ezcontentclass_attribute_multilingual_data_text'] ?? '',
                         'ezcontentclass_attribute_multilingual_data_json' => $fieldData['ezcontentclass_attribute_multilingual_data_json'] ?? '',
                     ];
-                }, array_filter($rows, function ($row) use ($fieldId) {
+                }, array_filter($rows, function (array $row) use ($fieldId) {
                     return $row['ezcontentclass_attribute_id'] === (string) $fieldId;
                 }));
 
@@ -281,18 +281,16 @@ class Mapper
         $storageFieldDef->dataText5 = $row['ezcontentclass_attribute_data_text5'];
         $storageFieldDef->serializedDataText = $row['ezcontentclass_attribute_serialized_data_text'];
 
-        if (!empty($multilingualDataRow)) {
-            foreach ($multilingualDataRow as $languageDataRow) {
-                $multilingualData = new MultilingualStorageFieldDefinition();
-                $multilingualData->name = $languageDataRow['ezcontentclass_attribute_multilingual_name'];
-                $multilingualData->description = $languageDataRow['ezcontentclass_attribute_multilingual_description'];
-                $multilingualData->dataText = $languageDataRow['ezcontentclass_attribute_multilingual_data_text'];
-                $multilingualData->dataJson = $languageDataRow['ezcontentclass_attribute_multilingual_data_json'];
-                $multilingualData->languageId = (int)$languageDataRow['ezcontentclass_attribute_multilingual_language_id'];
+        foreach ($multilingualDataRow as $languageDataRow) {
+            $multilingualData = new MultilingualStorageFieldDefinition();
+            $multilingualData->name = $languageDataRow['ezcontentclass_attribute_multilingual_name'];
+            $multilingualData->description = $languageDataRow['ezcontentclass_attribute_multilingual_description'];
+            $multilingualData->dataText = $languageDataRow['ezcontentclass_attribute_multilingual_data_text'];
+            $multilingualData->dataJson = $languageDataRow['ezcontentclass_attribute_multilingual_data_json'];
+            $multilingualData->languageId = (int)$languageDataRow['ezcontentclass_attribute_multilingual_language_id'];
 
-                $languageCode = $this->maskGenerator->extractLanguageCodesFromMask((int)$languageDataRow['ezcontentclass_attribute_multilingual_language_id']);
-                $storageFieldDef->multilingualData[reset($languageCode)] = $multilingualData;
-            }
+            $languageCode = $this->maskGenerator->extractLanguageCodesFromMask((int)$languageDataRow['ezcontentclass_attribute_multilingual_language_id']);
+            $storageFieldDef->multilingualData[reset($languageCode)] = $multilingualData;
         }
 
         return $storageFieldDef;

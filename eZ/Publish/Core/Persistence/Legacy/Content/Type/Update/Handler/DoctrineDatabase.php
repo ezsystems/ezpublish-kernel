@@ -77,8 +77,7 @@ class DoctrineDatabase extends Handler
         $this->contentTypeGateway->publishTypeAndFields(
             $toType->id,
             $toType->status,
-            $newStatus,
-            $toType->fieldDefinitions
+            $newStatus
         );
     }
 }

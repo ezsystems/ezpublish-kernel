@@ -704,8 +704,6 @@ class ContentTypeService implements ContentTypeServiceInterface
                     "Argument contains duplicate field definition position '{$fieldDefinitionCreateStruct->position}'"
                 );
             }
-
-            $fieldDefinitionCreateStruct->mainLanguageCode = $contentTypeCreateStruct->mainLanguageCode;
         }
 
         $allValidationErrors = array();
@@ -741,7 +739,11 @@ class ContentTypeService implements ContentTypeServiceInterface
                 continue;
             }
 
-            $spiFieldDefinitions[] = $this->contentTypeDomainMapper->buildSPIFieldDefinitionCreate($fieldDefinitionCreateStruct, $fieldType);
+            $spiFieldDefinitions[] = $this->contentTypeDomainMapper->buildSPIFieldDefinitionFromCreateStruct(
+                $fieldDefinitionCreateStruct,
+                $fieldType,
+                $contentTypeCreateStruct->mainLanguageCode
+            );
         }
 
         if (!empty($allValidationErrors)) {
@@ -1103,15 +1105,13 @@ class ContentTypeService implements ContentTypeServiceInterface
             if (!$contentType instanceof APIContentTypeDraft) {
                 $this->contentTypeHandler->delete(
                     $contentType->id,
-                    APIContentTypeDraft::STATUS_DEFINED,
-                    $contentType->fieldDefinitions
+                    APIContentTypeDraft::STATUS_DEFINED
                 );
             }
 
             $this->contentTypeHandler->delete(
                 $contentType->id,
-                APIContentTypeDraft::STATUS_DRAFT,
-                $contentType->fieldDefinitions
+                APIContentTypeDraft::STATUS_DRAFT
             );
 
             $this->repository->commit();
@@ -1323,14 +1323,18 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $spiFieldDefinitionCreateStruct = $this->contentTypeDomainMapper->buildSPIFieldDefinitionCreate($fieldDefinitionCreateStruct, $fieldType);
+        $spiFieldDefinition = $this->contentTypeDomainMapper->buildSPIFieldDefinitionFromCreateStruct(
+            $fieldDefinitionCreateStruct,
+            $fieldType,
+            $contentTypeDraft->mainLanguageCode
+        );
 
         $this->repository->beginTransaction();
         try {
             $this->contentTypeHandler->addFieldDefinition(
                 $contentTypeDraft->id,
                 $contentTypeDraft->status,
-                $spiFieldDefinitionCreateStruct
+                $spiFieldDefinition
             );
             $this->repository->commit();
         } catch (Exception $e) {
@@ -1417,9 +1421,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $spiFieldDefinitionUpdateStruct = $this->contentTypeDomainMapper->buildSPIFieldDefinitionUpdate(
+        $spiFieldDefinition = $this->contentTypeDomainMapper->buildSPIFieldDefinitionFromUpdateStruct(
             $fieldDefinitionUpdateStruct,
-            $fieldDefinition
+            $fieldDefinition,
+            $contentTypeDraft->mainLanguageCode
         );
 
         $this->repository->beginTransaction();
@@ -1427,7 +1432,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->contentTypeHandler->updateFieldDefinition(
                 $contentTypeDraft->id,
                 SPIContentType::STATUS_DRAFT,
-                $spiFieldDefinitionUpdateStruct
+                $spiFieldDefinition
             );
             $this->repository->commit();
         } catch (Exception $e) {

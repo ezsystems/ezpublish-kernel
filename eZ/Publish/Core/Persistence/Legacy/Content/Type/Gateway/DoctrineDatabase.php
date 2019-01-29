@@ -643,16 +643,16 @@ class DoctrineDatabase extends Gateway
             $query
                 ->insert('ezcontentclass_attribute_ml')
                 ->values([
-                    'data_text' => ':data_text',
-                    'data_json' => ':data_json',
+                    'data_text' => ':dataText',
+                    'data_json' => ':dataJson',
                     'name' => ':name',
                     'description' => ':description',
                     'contentclass_attribute_id' => ':fieldDefinitionId',
                     'version' => ':status',
                     'language_id' => ':languageId',
                 ])
-                ->setParameter('data_text', $data->dataText)
-                ->setParameter('data_json', $data->dataJson)
+                ->setParameter('dataText', $data->dataText)
+                ->setParameter('dataJson', $data->dataJson)
                 ->setParameter('name', $data->name)
                 ->setParameter('description', $data->description)
                 ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
@@ -821,6 +821,16 @@ class DoctrineDatabase extends Gateway
         );
 
         $q->prepare()->execute();
+
+        $deleteQuery = $this->connection->createQueryBuilder();
+        $deleteQuery
+            ->delete('ezcontentclass_attribute_ml')
+            ->where('contentclass_attribute_id = :fieldDefinitionId')
+            ->andWhere('version = :status')
+            ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
+            ->setParameter('status', $status, ParameterType::INTEGER);
+
+        $deleteQuery->execute();
     }
 
     /**
@@ -1162,7 +1172,7 @@ class DoctrineDatabase extends Gateway
      * @param mixed $typeId
      * @param int $status
      */
-    public function deleteFieldDefinitionsForType($typeId, $status, array $fieldDefinitions = [])
+    public function deleteFieldDefinitionsForType($typeId, $status)
     {
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom(
@@ -1182,15 +1192,16 @@ class DoctrineDatabase extends Gateway
 
         $q->prepare()->execute();
 
-        $deleteQuery = $this->connection->createQueryBuilder();
-        $deleteQuery
-            ->delete('ezcontentclass_attribute_ml')
-            ->where('contentclass_attribute_id IN (:fieldDefinitionIdList)')
-            ->andWhere('version = :status')
-            ->setParameter('fieldDefinitionIdList', array_column($fieldDefinitions, 'id'), Connection::PARAM_STR_ARRAY)
-            ->setParameter('status', $status, ParameterType::INTEGER);
+        $deleteSql = 'DELETE 
+                      FROM ezcontentclass_attribute_ml
+                      WHERE EXISTS (SELECT contentclass_id FROM ezcontentclass_attribute WHERE contentclass_id = :typeId)
+                      AND version = :status';
 
-        $deleteQuery->execute();
+        $stmt = $this->connection->prepare($deleteSql);
+        $stmt->bindValue('typeId', $typeId, ParameterType::INTEGER);
+        $stmt->bindValue('status', $status, ParameterType::INTEGER);
+
+        $stmt->execute();
     }
 
     /**
@@ -1199,10 +1210,10 @@ class DoctrineDatabase extends Gateway
      * @param mixed $typeId
      * @param int $status
      */
-    public function delete($typeId, $status, array $fieldDefinitions = [])
+    public function delete($typeId, $status)
     {
         $this->deleteGroupAssignmentsForType($typeId, $status);
-        $this->deleteFieldDefinitionsForType($typeId, $status, $fieldDefinitions);
+        $this->deleteFieldDefinitionsForType($typeId, $status);
         $this->deleteTypeNameData($typeId, $status);
         $this->deleteType($typeId, $status);
     }
@@ -1268,9 +1279,8 @@ class DoctrineDatabase extends Gateway
      * @param int $typeId
      * @param int $sourceVersion
      * @param int $targetVersion
-     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] $fieldDefinitions
      */
-    public function publishTypeAndFields($typeId, $sourceVersion, $targetVersion, array $fieldDefinitions = [])
+    public function publishTypeAndFields($typeId, $sourceVersion, $targetVersion)
     {
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
@@ -1356,17 +1366,17 @@ class DoctrineDatabase extends Gateway
 
         $query->prepare()->execute();
 
-        $mlDataPublishQuery = $this->connection->createQueryBuilder();
-        $mlDataPublishQuery
-            ->update('ezcontentclass_attribute_ml')
-            ->set('version', ':newVersion')
-            ->where('contentclass_attribute_id IN (:fieldDefinitionIdList)')
-            ->andWhere('version = :sourceVersion')
-            ->setParameter('fieldDefinitionIdList', array_column($fieldDefinitions, 'id'), Connection::PARAM_STR_ARRAY)
-            ->setParameter('newVersion', $targetVersion, ParameterType::INTEGER)
-            ->setParameter('sourceVersion', $sourceVersion, ParameterType::INTEGER);
+        $updateSql = 'UPDATE ezcontentclass_attribute_ml
+                      SET version = :targetVersion
+                      WHERE EXISTS (SELECT contentclass_id FROM ezcontentclass_attribute WHERE contentclass_id = :typeId)
+                      AND version = :sourceVersion';
 
-        $mlDataPublishQuery->execute();
+        $stmt = $this->connection->prepare($updateSql);
+        $stmt->bindValue('typeId', $typeId, ParameterType::INTEGER);
+        $stmt->bindValue('targetVersion', $targetVersion, ParameterType::INTEGER);
+        $stmt->bindValue('sourceVersion', $sourceVersion, ParameterType::INTEGER);
+
+        $stmt->execute();
     }
 
     /**
@@ -1431,27 +1441,5 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    public function loadMultilingualFieldDefinitionData(int $fieldDefinitionId, int $status)
-    {
-        $q = $this->connection->createQueryBuilder();
-        $q
-            ->select([
-                'ml.contentclass_attribute_id AS ezcontentclass_attribute_multilingual_id',
-                'ml.name AS ezcontentclass_attribute_multilingual_name',
-                'ml.description AS ezcontentclass_attribute_multilingual_description',
-                'ml.language_id AS ezcontentclass_attribute_multilingual_language_id',
-                'ml.data_text AS ezcontentclass_attribute_multilingual_data_text',
-                'ml.data_json AS ezcontentclass_attribute_multilingual_data_json',
-                'ml.version AS ezcontentclass_attribute_multilingual_version',
-            ])
-            ->from('ezcontentclass_attribute_ml', 'ml')
-            ->where($q->expr()->eq('ml.contentclass_attribute_id', ':id'))
-            ->andWhere($q->expr()->eq('ml.version', ':version'))
-            ->setParameter('id', $fieldDefinitionId, ParameterType::INTEGER)
-            ->setParameter('version', $status, ParameterType::INTEGER);
-
-        return $q->execute()->fetchAll();
     }
 }

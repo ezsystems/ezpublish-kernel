@@ -8,15 +8,32 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
-class MultilingualStorageFieldDefinition
+use eZ\Publish\SPI\Persistence\ValueObject;
+
+class MultilingualStorageFieldDefinition extends ValueObject
 {
+    /**
+     * @var string
+     */
     public $name;
 
+    /**
+     * @var string
+     */
     public $description;
 
+    /**
+     * @var string
+     */
     public $dataText;
 
+    /**
+     * @var string
+     */
     public $dataJson;
 
+    /**
+     * @var int
+     */
     public $languageId;
 }

@@ -111,9 +111,9 @@ class StorageFieldDefinition extends ValueObject
     public $serializedDataText;
 
     /**
-     * associative array with language codes keys.
+     * Associative array with language codes keys.
      *
-     * @var MultilingualStorageFieldDefinition[]
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition[]
      */
     public $multilingualData = [];
 }

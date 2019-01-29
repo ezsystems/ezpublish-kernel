@@ -113,4 +113,10 @@ abstract class FieldDefinition extends ValueObject implements MultiLanguageName,
      * @var bool
      */
     protected $isSearchable;
+
+    /**
+     * Based on mainLanguageCode of contentType
+     * @var string
+     */
+    protected $mainLanguageCode;
 }
