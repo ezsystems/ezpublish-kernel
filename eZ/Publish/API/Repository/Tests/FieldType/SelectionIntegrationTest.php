@@ -57,6 +57,10 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 'type' => 'hash',
                 'default' => array(),
             ),
+            'multilingualOptions' => array(
+                'type' => 'hash',
+                'default' => array(),
+            ),
         );
     }
 
@@ -70,6 +74,13 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         return [
             'isMultiple' => true,
             'options' => [
+                0 => 'A first',
+                1 => 'Bielefeld',
+                2 => 'Sindelfingen',
+                3 => 'Turtles',
+                4 => 'Zombies',
+            ],
+            'multilingualOptions' => [
                 'eng-GB' => [
                     0 => 'A first',
                     1 => 'Bielefeld',

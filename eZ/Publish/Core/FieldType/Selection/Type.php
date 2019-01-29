@@ -230,6 +230,29 @@ class Type extends FieldType
             }
         }
 
+        //@todo: find a way to include selection language
+        if (isset($fieldSettings['multilingualOptions'])) {
+
+            $possibleOptionIndexesByLanguage = array_map(function ($languageOptionIndexes) {
+                return array_keys($languageOptionIndexes);
+            }, $fieldSettings['multilingualOptions']);
+
+            $possibleOptionIndexes = call_user_func_array('array_merge', $possibleOptionIndexesByLanguage);
+
+            foreach ($fieldValue->selection as $optionIndex) {
+                if (!in_array($optionIndex, $possibleOptionIndexes)) {
+                    $validationErrors[] = new ValidationError(
+                        'Option with index %index% does not exist in the field definition.',
+                        null,
+                        array(
+                            '%index%' => $optionIndex,
+                        ),
+                        'selection'
+                    );
+                }
+            }
+        }
+
         return $validationErrors;
     }
 
