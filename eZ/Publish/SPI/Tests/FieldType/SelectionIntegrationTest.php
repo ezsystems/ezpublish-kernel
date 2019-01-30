@@ -99,11 +99,13 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                                     3 => 'Sindelfingen',
                                 ),
                                 'multilingualOptions' => array(
+                                    // mainLanguageCode of contentType is not consistent with names provided for FieldDefinition
                                     'eng-US' => array(
                                         1 => 'First',
                                         2 => 'Second',
                                         3 => 'Sindelfingen',
                                     ),
+                                    'eng-GB' => array(),
                                 ),
                             )
                         ),

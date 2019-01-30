@@ -126,7 +126,7 @@ class SelectionConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $options = [];
-        $multiLingualOptions = [];
+        $multiLingualOptions = array_fill_keys(array_keys($fieldDef->name), []);
 
         if (isset($storageDef->dataText5)) {
             $optionsXml = simplexml_load_string($storageDef->dataText5);
@@ -149,7 +149,6 @@ class SelectionConverter implements Converter
                 }
             }
         }
-
 
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings([
                 'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,

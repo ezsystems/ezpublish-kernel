@@ -33,9 +33,6 @@ class SelectionTest extends TestCase
         parent::setUp();
         $languageServiceMock = $this->createMock(LanguageService::class);
 
-//        $languageServiceMock
-//            ->method('getPrioritizedLanguageCodeList')
-//            ->will($this->returnValue(array('prioritizedLanguageList')));
         $this->converter = new SelectionConverter($languageServiceMock);
     }
 
@@ -241,6 +238,9 @@ EOT;
 
         $expectedFieldDefinition = new PersistenceFieldDefinition(
             array(
+                'name' => array(
+                    'eng-GB' => 'test name',
+                ),
                 'fieldTypeConstraints' => new FieldTypeConstraints(
                     array(
                         'fieldSettings' => new FieldSettings(
@@ -251,7 +251,9 @@ EOT;
                                     1 => 'Second',
                                     2 => 'Third',
                                 ),
-                                'multilingualOptions' => array ()
+                                'multilingualOptions' => array(
+                                    'eng-GB' => array(),
+                                ),
                             )
                         ),
                     )
@@ -265,7 +267,13 @@ EOT;
             )
         );
 
-        $actualFieldDefinition = new PersistenceFieldDefinition();
+        $actualFieldDefinition = new PersistenceFieldDefinition(
+            array(
+                'name' => array(
+                    'eng-GB' => 'test name',
+                ),
+            )
+        );
 
         $this->converter->toFieldDefinition($storageFieldDefinition, $actualFieldDefinition);
 
@@ -291,13 +299,18 @@ EOT;
 
         $expectedFieldDefinition = new PersistenceFieldDefinition(
             array(
+                'name' => array(
+                    'eng-GB' => 'test name',
+                ),
                 'fieldTypeConstraints' => new FieldTypeConstraints(
                     array(
                         'fieldSettings' => new FieldSettings(
                             array(
                                 'isMultiple' => false,
                                 'options' => array(),
-                                'multilingualOptions' => array(),
+                                'multilingualOptions' => array(
+                                    'eng-GB' => array(),
+                                ),
                             )
                         ),
                     )
@@ -306,7 +319,13 @@ EOT;
             )
         );
 
-        $actualFieldDefinition = new PersistenceFieldDefinition();
+        $actualFieldDefinition = new PersistenceFieldDefinition(
+            array(
+                'name' => array(
+                    'eng-GB' => 'test name',
+                ),
+            )
+        );
 
         $this->converter->toFieldDefinition($storageFieldDefinition, $actualFieldDefinition);
 
