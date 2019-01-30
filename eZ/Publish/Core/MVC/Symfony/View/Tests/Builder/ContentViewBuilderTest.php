@@ -79,7 +79,6 @@ class ContentViewBuilderTest extends TestCase
             $this->parametersInjector,
             $this->contentInfoLocationLoader
         );
-
     }
 
     public function testMatches(): void
