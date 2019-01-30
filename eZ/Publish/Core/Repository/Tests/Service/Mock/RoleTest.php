@@ -18,6 +18,7 @@ use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\Core\Repository\LimitationService;
 use eZ\Publish\Core\Repository\RoleService;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
@@ -35,8 +36,8 @@ class RoleTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::createRole
      * @covers \eZ\Publish\Core\Repository\RoleService::validateRoleCreateStruct
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitations
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testCreateRoleThrowsLimitationValidationException()
@@ -102,8 +103,8 @@ class RoleTest extends BaseServiceMockTest
      * Test for the addPolicy() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::addPolicy
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitations
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAddPolicyThrowsLimitationValidationException()
@@ -168,8 +169,8 @@ class RoleTest extends BaseServiceMockTest
      * Test for the updatePolicy() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::updatePolicy
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitations
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testUpdatePolicyThrowsLimitationValidationException()
@@ -265,7 +266,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUser() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAssignRoleToUserThrowsLimitationValidationException()
@@ -314,7 +315,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUser() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testAssignRoleToUserThrowsBadStateException()
@@ -348,7 +349,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUser() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      */
     public function testAssignRoleToUser()
     {
@@ -433,7 +434,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUser() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      */
     public function testAssignRoleToUserWithNullLimitation()
     {
@@ -497,7 +498,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUser() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \Exception
      */
     public function testAssignRoleToUserWithRollback()
@@ -589,7 +590,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUserGroup() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAssignRoleToUserGroupThrowsLimitationValidationException()
@@ -638,7 +639,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUserGroup() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testAssignRoleGroupToUserThrowsBadStateException()
@@ -672,7 +673,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUserGroup() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      */
     public function testAssignRoleToUserGroup()
     {
@@ -761,7 +762,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUserGroup() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      */
     public function testAssignRoleToUserGroupWithNullLimitation()
     {
@@ -829,7 +830,7 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUserGroup() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
+     * @covers \eZ\Publish\Core\Repository\LimitationService::validateLimitation
      * @expectedException \Exception
      */
     public function testAssignRoleToUserGroupWithRollback()
@@ -1056,12 +1057,12 @@ class RoleTest extends BaseServiceMockTest
      * @param string[] $methods
      * @param array $settings
      *
-     * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit\Framework\MockObject\MockObject
+     * @return \eZ\Publish\Core\Repository\LimitationService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getPartlyMockedLimitationService(array $methods = null, array $settings = array())
     {
         if (!isset($this->partlyMockedLimitationService) || !empty($settings)) {
-            $this->partlyMockedLimitationService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\LimitationService')
+            $this->partlyMockedLimitationService = $this->getMockBuilder(LimitationService::class)
                 ->setMethods($methods)
                 ->setConstructorArgs(
                     array(

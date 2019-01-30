@@ -170,6 +170,11 @@ class Repository implements RepositoryInterface
         return $this->repository->getRoleService();
     }
 
+    public function getLimitationService()
+    {
+        return $this->repository->getLimitationService();
+    }
+
     public function getSearchService()
     {
         return $this->searchService;

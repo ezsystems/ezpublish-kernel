@@ -13,8 +13,8 @@ use eZ\Publish\Core\Repository\PermissionsCriterionHandler;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitation;
+use eZ\Publish\API\Repository\LimitationService;
 use eZ\Publish\Core\Repository\Values\User\Policy;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
 
 /**
  * Mock test case for PermissionCriterionHandler.
@@ -434,11 +434,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     protected function getLimitationServiceMock($methods = [])
     {
         if ($this->limitationServiceMock === null) {
-            $this->limitationServiceMock = $this
-                ->getMockBuilder(LimitationService::class)
-                ->setMethods($methods)
-                ->disableOriginalConstructor()
-                ->getMock();
+            $this->limitationServiceMock = $this->createMock(LimitationService::class);
         }
 
         return $this->limitationServiceMock;

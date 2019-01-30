@@ -44,6 +44,7 @@ services:
             - "@ezpublish.signalslot.service.bookmark"
             - '@eZ\Publish\Core\SignalSlot\NotificationService'
             - '@eZ\Publish\Core\SignalSlot\UserPreferenceService'
+            - '@eZ\Publish\Core\SignalSlot\LimitationService'
 
     ezpublish.signalslot.service.content:
         class: "%ezpublish.signalslot.service.content.class%"
@@ -143,6 +144,11 @@ services:
     eZ\Publish\Core\SignalSlot\UserPreferenceService:
         arguments:
             - "@ezpublish.api.service.inner_user_preference"
+            - "@ezpublish.signalslot.signal_dispatcher_transaction_wrapper"
+
+    eZ\Publish\Core\SignalSlot\LimitationService:
+        arguments:
+            - "@ezpublish.api.service.inner_limitation"
             - "@ezpublish.signalslot.signal_dispatcher_transaction_wrapper"
 
     # Single slot internal services

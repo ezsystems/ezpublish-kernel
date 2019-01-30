@@ -6,18 +6,18 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\Helper;
+namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\LimitationService as LimitationServiceInterface;
+use eZ\Publish\SPI\Limitation\Type;
 
 /**
- * Internal service to deal with limitations and limitation types.
- *
- * @internal Meant for internal use by Repository.
+ * This service provides methods for managing Limitations.
  */
-class LimitationService
+class LimitationService implements LimitationServiceInterface
 {
     /**
      * @var array
@@ -34,18 +34,9 @@ class LimitationService
     }
 
     /**
-     * Returns the LimitationType registered with the given identifier.
-     *
-     * Returns the correct implementation of API Limitation value object
-     * based on provided identifier
-     *
-     * @param string $identifier
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException
-     *
-     * @return \eZ\Publish\SPI\Limitation\Type
+     * {@inheritdoc}
      */
-    public function getLimitationType($identifier)
+    public function getLimitationType($identifier): Type
     {
         if (!isset($this->settings['limitationTypes'][$identifier])) {
             throw new LimitationNotFoundException($identifier);
@@ -55,15 +46,9 @@ class LimitationService
     }
 
     /**
-     * Validates an array of Limitations.
-     *
-     * @uses ::validateLimitation()
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
-     *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[][]
+     * {@inheritdoc}
      */
-    public function validateLimitations(array $limitations)
+    public function validateLimitations(array $limitations): array
     {
         $allErrors = array();
         foreach ($limitations as $limitation) {
@@ -77,15 +62,9 @@ class LimitationService
     }
 
     /**
-     * Validates single Limitation.
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException If the Role settings is in a bad state
-     *
-     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
-     *
-     * @return \eZ\Publish\Core\FieldType\ValidationError[]
+     * {@inheritdoc}
      */
-    public function validateLimitation(Limitation $limitation)
+    public function validateLimitation(Limitation $limitation): array
     {
         $identifier = $limitation->getIdentifier();
         if (!isset($this->settings['limitationTypes'][$identifier])) {
@@ -95,9 +74,7 @@ class LimitationService
             );
         }
 
-        /**
-         * @var \eZ\Publish\SPI\Limitation\Type
-         */
+        /** @var \eZ\Publish\SPI\Limitation\Type $type */
         $type = $this->settings['limitationTypes'][$identifier];
 
         // This will throw if it does not pass

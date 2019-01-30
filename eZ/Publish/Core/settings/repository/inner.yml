@@ -18,6 +18,7 @@ parameters:
     ezpublish.api.service.bookmark.class: eZ\Publish\Core\Repository\BookmarkService
     ezpublish.api.service.notification.class: eZ\Publish\Core\Repository\NotificationService
     ezpublish.api.service.user_preference.class: eZ\Publish\Core\Repository\UserPreferenceService
+    ezpublish.api.service.limitation.class: eZ\Publish\Core\Repository\LimitationService
 
     ezpublish.field_type_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
     ezpublish.field_type_nameable_collection.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
@@ -131,6 +132,11 @@ services:
     ezpublish.api.service.inner_user_preference:
         class: '%ezpublish.api.service.user_preference.class%'
         factory: ["@ezpublish.api.inner_repository", getUserPreferenceService]
+        lazy: true
+
+    ezpublish.api.service.inner_limitation:
+        class: '%ezpublish.api.service.limitation.class%'
+        factory: ["@ezpublish.api.inner_repository", getLimitationService]
         lazy: true
 
     # Factories

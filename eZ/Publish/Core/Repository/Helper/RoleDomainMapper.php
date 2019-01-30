@@ -11,12 +11,12 @@ namespace eZ\Publish\Core\Repository\Helper;
 use eZ\Publish\Core\Repository\Values\User\Policy;
 use eZ\Publish\Core\Repository\Values\User\PolicyDraft;
 use eZ\Publish\Core\Repository\Values\User\Role;
+use eZ\Publish\API\Repository\LimitationService;
 use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Repository\Values\User\RoleDraft;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
 use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
-use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\SPI\Persistence\User\Policy as SPIPolicy;
@@ -32,12 +32,12 @@ use eZ\Publish\SPI\Persistence\User\RoleCreateStruct as SPIRoleCreateStruct;
 class RoleDomainMapper
 {
     /**
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
+     * @var \eZ\Publish\API\Repository\LimitationService
      */
     protected $limitationService;
 
     /**
-     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
+     * @param \eZ\Publish\API\Repository\LimitationService $limitationService
      */
     public function __construct(LimitationService $limitationService)
     {

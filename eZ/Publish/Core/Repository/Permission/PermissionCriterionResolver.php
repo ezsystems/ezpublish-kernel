@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Repository\Permission;
 
+use eZ\Publish\API\Repository\LimitationService;
 use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
@@ -13,7 +14,6 @@ use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
 use eZ\Publish\API\Repository\Values\User\UserReference;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Limitation\TargetOnlyLimitationType;
 use RuntimeException;
 
@@ -28,7 +28,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
     private $permissionResolver;
 
     /**
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
+     * @var \eZ\Publish\API\Repository\LimitationService
      */
     private $limitationService;
 
@@ -36,7 +36,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
      * Constructor.
      *
      * @param \eZ\Publish\API\Repository\PermissionResolver $permissionResolver
-     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
+     * @param \eZ\Publish\API\Repository\LimitationService $limitationService
      */
     public function __construct(
         PermissionResolverInterface $permissionResolver,

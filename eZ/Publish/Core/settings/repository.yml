@@ -71,3 +71,7 @@ services:
     ezpublish.api.service.user_preference:
         alias: eZ\Publish\Core\SignalSlot\UserPreferenceService
         public: true
+
+    ezpublish.api.service.limitation:
+        alias: eZ\Publish\Core\SignalSlot\LimitationService
+        public: true

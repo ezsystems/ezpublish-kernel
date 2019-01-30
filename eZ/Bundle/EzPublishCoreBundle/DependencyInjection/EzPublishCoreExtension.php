@@ -376,6 +376,7 @@ class EzPublishCoreExtension extends Extension
         $coreLoader->load('policies.yml');
         $coreLoader->load('notification.yml');
         $coreLoader->load('user_preference.yml');
+        $coreLoader->load('limitation.yml');
 
         // Load Core RichText settings
         if (!$this->isRichTextBundleEnabled($container)) {

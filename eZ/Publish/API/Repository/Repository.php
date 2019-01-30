@@ -185,6 +185,13 @@ interface Repository
     public function getRoleService();
 
     /**
+     * Get LimitationService.
+     *
+     * @return \eZ\Publish\API\Repository\LimitationService
+     */
+    public function getLimitationService();
+
+    /**
      * Get FieldTypeService.
      *
      * @return \eZ\Publish\API\Repository\FieldTypeService

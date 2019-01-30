@@ -9,7 +9,7 @@ namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\API\Repository\LimitationService;
 use eZ\Publish\Core\Repository\Permission\PermissionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Repository\Repository as CoreRepository;
@@ -130,7 +130,7 @@ class PermissionTest extends BaseServiceMockTest
 
         $result = $mockedService->hasAccess('dummy-module', 'dummy-function');
 
-        self::assertEquals(true, $result);
+        self::assertTrue($result);
     }
 
     public function providerForTestHasAccessReturnsFalse()
@@ -207,7 +207,7 @@ class PermissionTest extends BaseServiceMockTest
 
         $result = $service->hasAccess('dummy-module2', 'dummy-function2');
 
-        self::assertEquals(false, $result);
+        self::assertFalse($result);
     }
 
     /**
@@ -235,7 +235,7 @@ class PermissionTest extends BaseServiceMockTest
             $repositoryMock
         );
 
-        self::assertEquals(true, $result);
+        self::assertTrue($result);
     }
 
     /**
@@ -1108,7 +1108,7 @@ class PermissionTest extends BaseServiceMockTest
     protected $limitationServiceMock;
 
     /**
-     * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit\Framework\MockObject\MockObject
+     * @return \eZ\Publish\API\Repository\LimitationService|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getLimitationServiceMock($methods = [])
     {

@@ -12,12 +12,12 @@ use eZ\Publish\Core\Base\Exceptions\Httpable;
 use Exception;
 use eZ\Publish\Core\Base\TranslatableBase;
 use eZ\Publish\Core\Base\Translatable;
-use RuntimeException;
+use eZ\Publish\API\Repository\Exceptions\NotFound\LimitationNotFoundException as APILimitationNotFoundException;
 
 /**
  * Limitation Not Found Exception implementation.
  */
-class LimitationNotFoundException extends RuntimeException implements Httpable, Translatable
+class LimitationNotFoundException extends APILimitationNotFoundException implements Httpable, Translatable
 {
     use TranslatableBase;
 

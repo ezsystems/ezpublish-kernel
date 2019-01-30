@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\LimitationService;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
-use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
@@ -28,15 +28,12 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\LimitationValidationException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use eZ\Publish\Core\Repository\Values\User\Policy;
 use eZ\Publish\Core\Repository\Values\User\PolicyCreateStruct;
 use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\Core\Repository\Values\User\Role;
 use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
-use eZ\Publish\Core\Repository\Values\User\RoleDraft;
 use eZ\Publish\SPI\Persistence\User\Handler;
 use eZ\Publish\SPI\Persistence\User\Role as SPIRole;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct;
@@ -58,7 +55,7 @@ class RoleService implements RoleServiceInterface
     protected $userHandler;
 
     /**
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
+     * @var \eZ\Publish\API\Repository\LimitationService
      */
     protected $limitationService;
 
@@ -77,14 +74,14 @@ class RoleService implements RoleServiceInterface
      *
      * @param \eZ\Publish\API\Repository\Repository $repository
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
-     * @param \eZ\Publish\Core\Repository\Helper\LimitationService $limitationService
+     * @param \eZ\Publish\API\Repository\LimitationService $limitationService
      * @param \eZ\Publish\Core\Repository\Helper\RoleDomainMapper $roleDomainMapper
      * @param array $settings
      */
     public function __construct(
         RepositoryInterface $repository,
         Handler $userHandler,
-        Helper\LimitationService $limitationService,
+        LimitationService $limitationService,
         Helper\RoleDomainMapper $roleDomainMapper,
         array $settings = array()
     ) {

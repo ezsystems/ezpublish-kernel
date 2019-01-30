@@ -13,9 +13,9 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Limitation\TargetOnlyLimitationType;
+use eZ\Publish\API\Repository\LimitationService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\Core\Repository\Values\User\Policy;
-use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\SPI\Limitation\Type;
 use PHPUnit\Framework\TestCase;
 
@@ -412,10 +412,6 @@ class PermissionCriterionResolverTest extends TestCase
             return $this->limitationServiceMock;
         }
 
-        return $this->limitationServiceMock = $this
-            ->getMockBuilder(LimitationService::class)
-            ->setMethods($methods)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->limitationServiceMock = $this->createMock(LimitationService::class);
     }
 }

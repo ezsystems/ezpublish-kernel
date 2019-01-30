@@ -54,6 +54,13 @@ class Repository implements RepositoryInterface
     protected $roleService;
 
     /**
+     * Instance of limitation service.
+     *
+     * @var \eZ\Publish\API\Repository\LimitationService
+     */
+    protected $limitationService;
+
+    /**
      * Instance of search service.
      *
      * @var \eZ\Publish\API\Repository\SearchService
@@ -173,6 +180,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\Core\SignalSlot\BookmarkService $bookmarkService
      * @param \eZ\Publish\API\Repository\NotificationService $notificationService
      * @param \eZ\Publish\Core\SignalSlot\UserPreferenceService $userPreferenceService
+     * @param \eZ\Publish\Core\SignalSlot\LimitationService $limitationService
      */
     public function __construct(
         RepositoryInterface $repository,
@@ -193,7 +201,8 @@ class Repository implements RepositoryInterface
         URLService $urlService,
         BookmarkService $bookmarkService,
         NotificationService $notificationService,
-        UserPreferenceService $userPreferenceService
+        UserPreferenceService $userPreferenceService,
+        LimitationService $limitationService
     ) {
         $this->signalDispatcher = $signalDispatcher;
         $this->repository = $repository;
@@ -214,6 +223,7 @@ class Repository implements RepositoryInterface
         $this->bookmarkService = $bookmarkService;
         $this->notificationService = $notificationService;
         $this->userPreferenceService = $userPreferenceService;
+        $this->limitationService = $limitationService;
     }
 
     /**
@@ -485,6 +495,16 @@ class Repository implements RepositoryInterface
     public function getRoleService()
     {
         return $this->roleService;
+    }
+
+    /**
+     * Get LimitationService.
+     *
+     * @return \eZ\Publish\API\Repository\LimitationService
+     */
+    public function getLimitationService()
+    {
+        return $this->limitationService;
     }
 
     /**
