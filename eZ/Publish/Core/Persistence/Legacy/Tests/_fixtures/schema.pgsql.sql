@@ -501,6 +501,17 @@ CREATE TABLE ezpreferences (
     value text DEFAULT NULL
 );
 
+DROP TABLE IF EXISTS ezcontentclass_attribute_ml;
+CREATE TABLE ezcontentclass_attribute_ml (
+	contentclass_attribute_id INT NOT NULL,
+	version integer NOT NULL,
+	language_id SERIAL NOT NULL,
+	name character varying(255) NOT NULL,
+	description text DEFAULT NULL,
+	data_text text DEFAULT NULL,
+	data_json text DEFAULT NULL
+);
+
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
 
 CREATE INDEX ezimagefile_file ON ezimagefile USING btree (filepath);
@@ -695,6 +706,8 @@ CREATE INDEX ezpreferences_name ON ezpreferences USING btree (name);
 
 CREATE INDEX ezpreferences_user_id_idx ON ezpreferences USING btree (user_id,name);
 
+CREATE INDEX contentclass_attribute_id ON ezcontentclass_attribute_ml USING btree (contentclass_attribute_id, version, language_id);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -843,3 +856,10 @@ ADD CONSTRAINT ezcontentbrowsebookmark_user_fk
   REFERENCES ezuser (contentobject_id)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
+ALTER TABLE ezcontentclass_attribute_ml
+ADD CONSTRAINT ezcontentclass_attribute_ml_lang_fk
+  FOREIGN KEY (language_id)
+  REFERENCES ezcontent_language (id)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
