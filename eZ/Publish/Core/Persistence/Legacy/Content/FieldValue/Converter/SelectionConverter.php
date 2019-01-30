@@ -97,6 +97,10 @@ class SelectionConverter implements Converter
             $storageDef->dataText5 = $xml->saveXML();
         }
 
+        if (!isset($fieldSettings['multilingualOptions'])) {
+            return;
+        }
+
         foreach ($fieldSettings['multilingualOptions'] as $languageCode => $option) {
             $xml = $this->buildOptionsXml($option);
             $multilingualData = new MultilingualStorageFieldDefinition();
@@ -122,28 +126,35 @@ class SelectionConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $options = [];
-        $simpleXmlList = [];
-
-        foreach ($storageDef->multilingualData as $languageCode => $mlData) {
-            $simpleXmlList[$languageCode] = simplexml_load_string($mlData->dataText);
-        }
+        $multiLingualOptions = [];
 
         if (isset($storageDef->dataText5)) {
-            $simpleXmlList[$fieldDef->mainLanguageCode] = simplexml_load_string($storageDef->dataText5);
-        }
-
-        foreach ($simpleXmlList as $optionLanguageCode => $simpleXml) {
-            if ($simpleXml !== false) {
-                foreach ($simpleXml->options->option as $option) {
-                    $options[$optionLanguageCode][(int)$option['id']] = (string)$option['name'];
+            $optionsXml = simplexml_load_string($storageDef->dataText5);
+            if ($optionsXml !== false) {
+                foreach ($optionsXml->options->option as $option) {
+                    $options[(int)$option['id']] = (string)$option['name'];
                 }
             }
         }
 
+        if (isset($fieldDef->mainLanguageCode) && !empty($options)) {
+            $multiLingualOptions[$fieldDef->mainLanguageCode] = $options;
+        }
+
+        foreach ($storageDef->multilingualData as $languageCode => $mlData) {
+            $xml = simplexml_load_string($mlData->dataText);
+            if ($xml !== false) {
+                foreach ($xml->options->option as $option) {
+                    $multiLingualOptions[$languageCode][(int)$option['id']] = (string)$option['name'];
+                }
+            }
+        }
+
+
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings([
                 'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
-                'options' => $options[$fieldDef->mainLanguageCode] ?? reset($options),
-                'multilingualOptions' => $options
+                'options' => $options,
+                'multilingualOptions' => $multiLingualOptions,
             ]
         );
 

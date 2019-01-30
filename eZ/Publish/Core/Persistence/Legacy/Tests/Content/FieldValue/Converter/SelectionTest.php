@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
+use eZ\Publish\API\Repository\LanguageService;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
@@ -30,7 +31,12 @@ class SelectionTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new SelectionConverter();
+        $languageServiceMock = $this->createMock(LanguageService::class);
+
+//        $languageServiceMock
+//            ->method('getPrioritizedLanguageCodeList')
+//            ->will($this->returnValue(array('prioritizedLanguageList')));
+        $this->converter = new SelectionConverter($languageServiceMock);
     }
 
     /**
@@ -245,6 +251,7 @@ EOT;
                                     1 => 'Second',
                                     2 => 'Third',
                                 ),
+                                'multilingualOptions' => array ()
                             )
                         ),
                     )
@@ -290,6 +297,7 @@ EOT;
                             array(
                                 'isMultiple' => false,
                                 'options' => array(),
+                                'multilingualOptions' => array(),
                             )
                         ),
                     )

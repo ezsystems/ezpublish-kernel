@@ -65,6 +65,10 @@ class SelectionTest extends FieldTypeTest
                 'type' => 'hash',
                 'default' => array(),
             ),
+            'multilingualOptions' => array(
+                'type' => 'hash',
+                'default' => array(),
+            ),
         );
     }
 

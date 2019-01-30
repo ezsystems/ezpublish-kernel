@@ -1493,7 +1493,6 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $fieldDefCreate->fieldSettings = array();
         $fieldDefCreate->isSearchable = true;
         $fieldDefCreate->defaultValue = 'default tags';
-        $fieldDefCreate->mainLanguageCode = $contentTypeDraft->mainLanguageCode;
 
         $contentTypeService->addFieldDefinition($contentTypeDraft, $fieldDefCreate);
         /* END: Use Case */

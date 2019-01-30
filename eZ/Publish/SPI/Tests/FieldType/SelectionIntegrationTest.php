@@ -39,11 +39,12 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     {
         $fieldType = new FieldType\Selection\Type();
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
+        $languageService = self::$container->get('ezpublish.api.service.language');
 
         return $this->getHandler(
             'ezselection',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\SelectionConverter(),
+            new Legacy\Content\FieldValue\Converter\SelectionConverter($languageService),
             new FieldType\NullStorage()
         );
     }
@@ -96,6 +97,13 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                                     1 => 'First',
                                     2 => 'Second',
                                     3 => 'Sindelfingen',
+                                ),
+                                'multilingualOptions' => array(
+                                    'eng-US' => array(
+                                        1 => 'First',
+                                        2 => 'Second',
+                                        3 => 'Sindelfingen',
+                                    ),
                                 ),
                             )
                         ),

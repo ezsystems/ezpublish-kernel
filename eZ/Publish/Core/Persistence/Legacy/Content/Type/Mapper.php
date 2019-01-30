@@ -290,6 +290,9 @@ class Mapper
             $multilingualData->languageId = (int)$languageDataRow['ezcontentclass_attribute_multilingual_language_id'];
 
             $languageCode = $this->maskGenerator->extractLanguageCodesFromMask((int)$languageDataRow['ezcontentclass_attribute_multilingual_language_id']);
+            if (null === $languageCode) {
+                continue;
+            }
             $storageFieldDef->multilingualData[reset($languageCode)] = $multilingualData;
         }
 

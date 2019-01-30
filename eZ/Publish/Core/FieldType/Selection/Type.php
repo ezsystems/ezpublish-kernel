@@ -232,7 +232,6 @@ class Type extends FieldType
 
         //@todo: find a way to include selection language
         if (isset($fieldSettings['multilingualOptions'])) {
-
             $possibleOptionIndexesByLanguage = array_map(function ($languageOptionIndexes) {
                 return array_keys($languageOptionIndexes);
             }, $fieldSettings['multilingualOptions']);
