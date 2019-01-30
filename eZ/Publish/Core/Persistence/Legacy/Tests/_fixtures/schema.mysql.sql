@@ -656,17 +656,20 @@ CREATE TABLE `ezpreferences` (
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 
 DROP TABLE IF EXISTS `ezcontentclass_attribute_ml`;
-create table `ezcontentclass_attribute_ml`
-(
-	contentclass_attribute_id int not null,
-	version int not null,
-	language_id bigint not null,
-	name varchar(255) not null,
-	description text null,
-	data_text text null,
-	data_json text null,
-	primary key (contentclass_attribute_id, version, language_id),
-	constraint ezcontentclass_attribute_ml_lang_fk
-		foreign key (language_id) references ezcontent_language (id)
-			on update cascade on delete cascade
+CREATE TABLE `ezcontentclass_attribute_ml` (
+	`contentclass_attribute_id` INT NOT NULL,
+	`version` INT NOT NULL,
+	`language_id` BIGINT NOT NULL,
+	`name` VARCHAR(255) NOT NULL,
+	`description` TEXT NULL,
+	`data_text` TEXT NULL,
+	`data_json` TEXT NULL,
+	PRIMARY KEY (`contentclass_attribute_id`, `version`, `language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `ezcontentclass_attribute_ml`
+ADD CONSTRAINT `ezcontentclass_attribute_ml_lang_fk`
+  FOREIGN KEY (`language_id`)
+  REFERENCES `ezcontent_language` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
