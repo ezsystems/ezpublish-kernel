@@ -762,7 +762,14 @@ class DoctrineDatabase extends Gateway
     {
         $q = $this->dbHandler->createSelectQuery();
         $this->selectColumns($q, 'ezcontentclass_attribute');
-        $q->select('ezcontentclass.initial_language_id AS ezcontentclass_initial_language_id');
+        $q->select([
+                'ezcontentclass.initial_language_id AS ezcontentclass_initial_language_id',
+                'ezcontentclass_attribute_ml.name AS ezcontentclass_attribute_multilingual_name',
+                'ezcontentclass_attribute_ml.description AS ezcontentclass_attribute_multilingual_description',
+                'ezcontentclass_attribute_ml.language_id AS ezcontentclass_attribute_multilingual_language_id',
+                'ezcontentclass_attribute_ml.data_text AS ezcontentclass_attribute_multilingual_data_text',
+                'ezcontentclass_attribute_ml.data_json AS ezcontentclass_attribute_multilingual_data_json',
+            ]);
         $q->from(
             $this->dbHandler->quoteTable('ezcontentclass_attribute')
         )->leftJoin(
@@ -770,6 +777,12 @@ class DoctrineDatabase extends Gateway
             $q->expr->lAnd(
                 $q->expr->eq('ezcontentclass_attribute.contentclass_id', 'ezcontentclass.id'),
                 $q->expr->eq('ezcontentclass_attribute.version', 'ezcontentclass.version')
+            )
+        )->leftJoin(
+            'ezcontentclass_attribute_ml',
+            $q->expr->lAnd(
+                $q->expr->eq('ezcontentclass_attribute.id', 'ezcontentclass_attribute_ml.contentclass_attribute_id'),
+                $q->expr->eq('ezcontentclass_attribute.version', 'ezcontentclass_attribute_ml.version')
             )
         )->where(
             $q->expr->lAnd(
@@ -787,7 +800,7 @@ class DoctrineDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**
@@ -884,6 +897,8 @@ class DoctrineDatabase extends Gateway
         array $multilingualData,
         int $status
     ): void {
+
+        $newData = [];
         foreach ($multilingualData as $languageCode => $data) {
             $query = $this->connection->createQueryBuilder();
             $query
@@ -903,8 +918,17 @@ class DoctrineDatabase extends Gateway
                 ->setParameter('status', $status, ParameterType::INTEGER)
                 ->setParameter('languageId', $data->languageId, ParameterType::INTEGER);
 
-            $query->execute();
+            $result = $query->execute();
+
+            if (!$result) {
+                $newData[$languageCode] = $data;
+            }
         }
+        $this->insertMultilingualFieldDefinition(
+            $fieldDefinition->id,
+            $newData,
+            $status
+        );
     }
 
     /**
@@ -1194,7 +1218,7 @@ class DoctrineDatabase extends Gateway
 
         $deleteSql = 'DELETE 
                       FROM ezcontentclass_attribute_ml
-                      WHERE EXISTS (SELECT contentclass_id FROM ezcontentclass_attribute WHERE contentclass_id = :typeId)
+                      WHERE contentclass_attribute_id IN (SELECT id FROM ezcontentclass_attribute WHERE contentclass_id = :typeId)
                       AND version = :status';
 
         $stmt = $this->connection->prepare($deleteSql);
@@ -1368,7 +1392,7 @@ class DoctrineDatabase extends Gateway
 
         $updateSql = 'UPDATE ezcontentclass_attribute_ml
                       SET version = :targetVersion
-                      WHERE EXISTS (SELECT contentclass_id FROM ezcontentclass_attribute WHERE contentclass_id = :typeId)
+                      WHERE contentclass_attribute_id IN (SELECT id FROM ezcontentclass_attribute WHERE contentclass_id = :typeId)
                       AND version = :sourceVersion';
 
         $stmt = $this->connection->prepare($updateSql);
