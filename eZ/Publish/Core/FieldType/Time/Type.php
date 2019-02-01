@@ -128,7 +128,7 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\Time\Value $value
      *
-     * @return array
+     * @return int
      */
     protected function getSortInfo(BaseValue $value)
     {

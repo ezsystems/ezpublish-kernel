@@ -120,7 +120,7 @@ class Type extends FieldType
     }
 
     /**
-     * Returns information for FieldValue->$sortKey relevant to the field type.
+     * {@inheritdoc}
      */
     protected function getSortInfo(BaseValue $value)
     {

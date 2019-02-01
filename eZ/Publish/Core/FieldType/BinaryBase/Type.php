@@ -148,11 +148,11 @@ abstract class Type extends FieldType
     }
 
     /**
-     * BinaryBase does not support sorting.
+     * BinaryBase does not support sorting, yet.
      *
      * @param \eZ\Publish\Core\FieldType\BinaryBase\Value $value
      *
-     * @return bool
+     * @return mixed
      */
     protected function getSortInfo(BaseValue $value)
     {
