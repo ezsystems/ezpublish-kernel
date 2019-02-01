@@ -11,7 +11,6 @@ use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriter
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use Closure;
 use Exception;
 
 /**
@@ -128,7 +127,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
     /**
      * @internal For internal use only, do not depend on this method.
      */
-    public function sudo(Closure $callback, RepositoryInterface $outerRepository)
+    public function sudo(callable $callback, RepositoryInterface $outerRepository)
     {
         ++$this->sudoNestingLevel;
         try {

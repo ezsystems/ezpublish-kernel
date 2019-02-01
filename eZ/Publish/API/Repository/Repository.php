@@ -83,6 +83,29 @@ interface Repository
     public function canUser($module, $function, ValueObject $object, $targets = null);
 
     /**
+     * Allows API execution to be performed with full access, sand-boxed.
+     *
+     * The closure sandbox will do a catch all on exceptions and rethrow after
+     * re-setting the sudo flag.
+     *
+     * Example use:
+     *     $location = $repository->sudo(function (Repository $repo) use ($locationId) {
+     *             return $repo->getLocationService()->loadLocation($locationId)
+     *         }
+     *     );
+     *
+     *
+     * @param callable $callback
+     * @param \eZ\Publish\API\Repository\Repository|null $outerRepository Optional, mostly for internal use but allows to
+     *                                                   specify Repository to pass to closure.
+     *
+     * @throws \Exception Re-throws exceptions thrown inside $callback
+     *
+     * @return mixed
+     */
+    public function sudo(callable $callback, self $outerRepository = null);
+
+    /**
      * Get Content Service.
      *
      * Get service object to perform operations on Content objects and it's aggregate members.

@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\User\Limitation\LocationLimitation;
 
@@ -112,6 +114,29 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // $contentId contains a content object ID not accessible for anonymous
         $contentService->loadContentInfo($contentId);
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the sudo() method.
+     *
+     * @see \eZ\Publish\API\Repository\Repository::sudo()
+     * @depends testLoadContentInfoThrowsUnauthorizedException
+     */
+    public function testSudo()
+    {
+        $repository = $this->getRepository();
+        $contentId = $this->generateId('object', 10);
+        // Set restricted editor user
+        $repository->setCurrentUser($this->createAnonymousWithEditorRole());
+
+        $contentInfo = $repository->sudo(function (Repository $repository) use ($contentId) {
+            return $repository->getContentService()->loadContentInfo($contentId);
+        });
+
+        $this->assertInstanceOf(
+            ContentInfo::class,
+            $contentInfo
+        );
     }
 
     /**

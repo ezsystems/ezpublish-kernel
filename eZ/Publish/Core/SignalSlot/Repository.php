@@ -11,7 +11,6 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\SPI\Persistence\TransactionHandler;
-use Closure;
 
 /**
  * Repository class.
@@ -253,29 +252,9 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Allows API execution to be performed with full access sand-boxed.
-     *
-     * The closure sandbox will do a catch all on exceptions and rethrow after
-     * re-setting the sudo flag.
-     *
-     * Example use:
-     *     $location = $repository->sudo(
-     *         function ( Repository $repo ) use ( $locationId )
-     *         {
-     *             return $repo->getLocationService()->loadLocation( $locationId )
-     *         }
-     *     );
-     *
-     *
-     * @param \Closure $callback
-     * @param \eZ\Publish\API\Repository\Repository|null $outerRepository
-     *
-     * @throws \RuntimeException Thrown on recursive sudo() use.
-     * @throws \Exception Re throws exceptions thrown inside $callback
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function sudo(Closure $callback, RepositoryInterface $outerRepository = null)
+    public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
     {
         return $this->repository->sudo($callback, $outerRepository ?? $this);
     }
