@@ -35,6 +35,16 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function supportsLikeWildcard($value)
+    {
+        parent::supportsLikeWildcard($value);
+
+        return false;
+    }
+
+    /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
      * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]
@@ -416,15 +426,6 @@ class RelationListIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 $this->getValidCreationFieldData(),
             ),
         );
-    }
-
-    protected function checkSearchEngineSupport()
-    {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                "'ezobjectrelationlist' field type is not searchable with Legacy Search Engine"
-            );
-        }
     }
 
     protected function getValidSearchValueOne()

@@ -32,6 +32,16 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function supportsLikeWildcard($value)
+    {
+        parent::supportsLikeWildcard($value);
+
+        return false;
+    }
+
+    /**
      * Get expected settings schema.
      *
      * @return array
