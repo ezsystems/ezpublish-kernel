@@ -40,6 +40,7 @@ class AuthorConverter implements Converter
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
         $storageFieldValue->dataText = $this->generateXmlString($value->data);
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -51,6 +52,7 @@ class AuthorConverter implements Converter
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
         $fieldValue->data = $this->restoreValueFromXmlString($value->dataText);
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -86,7 +88,7 @@ class AuthorConverter implements Converter
      */
     public function getIndexColumn()
     {
-        return false;
+        return 'sort_key_string';
     }
 
     /**

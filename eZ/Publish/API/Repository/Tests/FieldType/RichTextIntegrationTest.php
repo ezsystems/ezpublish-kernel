@@ -772,15 +772,6 @@ XML
         return $document;
     }
 
-    protected function checkSearchEngineSupport()
-    {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                "'ezrichtext' field type is not searchable with Legacy Search Engine"
-            );
-        }
-    }
-
     protected function getValidSearchValueOne()
     {
         return <<<EOT

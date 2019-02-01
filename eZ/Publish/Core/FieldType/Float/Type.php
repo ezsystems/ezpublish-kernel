@@ -227,11 +227,7 @@ class Type extends FieldType
     }
 
     /**
-     * Returns information for FieldValue->$sortKey relevant to the field type.
-     *
-     * @param \eZ\Publish\Core\FieldType\Float\Value $value
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getSortInfo(BaseValue $value)
     {

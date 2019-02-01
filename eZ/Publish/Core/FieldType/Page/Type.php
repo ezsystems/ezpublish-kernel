@@ -202,20 +202,7 @@ class Type extends FieldType
     }
 
     /**
-     * Returns information for FieldValue->$sortKey relevant to the field type.
-     *
-     * Return value is mixed. It should be something which is sensible for
-     * sorting.
-     *
-     * It is up to the persistence implementation to handle those values.
-     * Common string and integer values are safe.
-     *
-     * For the legacy storage it is up to the field converters to set this
-     * value in either sort_key_string or sort_key_int.
-     *
-     * @param \eZ\Publish\Core\FieldType\Page\Value $value
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     protected function getSortInfo(BaseValue $value)
     {

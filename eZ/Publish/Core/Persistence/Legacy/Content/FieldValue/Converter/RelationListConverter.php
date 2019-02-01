@@ -77,6 +77,7 @@ class RelationListConverter implements Converter
         $doc->appendChild($root);
 
         $storageFieldValue->dataText = $doc->saveXML();
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -106,6 +107,7 @@ class RelationListConverter implements Converter
         asort($priorityByContentId, SORT_NUMERIC);
 
         $fieldValue->data['destinationContentIds'] = array_keys($priorityByContentId);
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
