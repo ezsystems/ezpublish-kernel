@@ -512,6 +512,7 @@ class Handler implements BaseContentTypeHandler
         }, $rows);
 
         reset($rows);
+
         return $this->mapper->extractFieldFromRow($rows, $multilingualData);
     }
 

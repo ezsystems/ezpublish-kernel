@@ -897,7 +897,6 @@ class DoctrineDatabase extends Gateway
         array $multilingualData,
         int $status
     ): void {
-
         $newData = [];
         foreach ($multilingualData as $languageCode => $data) {
             $query = $this->connection->createQueryBuilder();

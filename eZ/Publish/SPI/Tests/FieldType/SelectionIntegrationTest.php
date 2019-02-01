@@ -174,7 +174,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             [
                 'name' => [
                     'eng-US' => 'Test',
-                    'ger-DE' => 'Test NOR'
+                    'ger-DE' => 'Test NOR',
                 ],
                 'identifier' => 'test-' . $this->getTypeName(),
                 'status' => 0,
@@ -192,7 +192,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                 [
                     'name' => [
                         'eng-US' => 'Name',
-                        'ger-DE' => 'Name NOR'
+                        'ger-DE' => 'Name NOR',
                     ],
                     'identifier' => 'name',
                     'fieldGroup' => 'main',
@@ -207,7 +207,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                 [
                     'name' => [
                         'eng-US' => 'Data',
-                        'ger-DE' => 'Data NOR'
+                        'ger-DE' => 'Data NOR',
                     ],
                     'identifier' => 'data',
                     'fieldGroup' => 'main',

@@ -79,8 +79,8 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
             'names' => [
                 'eng-GB' => 'Test',
                 'eng-US' => 'US TEST',
-                'ger-DE' => 'GER Test'
-            ]
+                'ger-DE' => 'GER Test',
+            ],
         ];
     }
 
