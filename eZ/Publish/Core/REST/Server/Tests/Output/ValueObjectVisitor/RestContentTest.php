@@ -109,6 +109,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
                     'modificationDate' => new \DateTime('2012-09-05 15:27 Europe/Berlin'),
                     'publishedDate' => null,
                     'alwaysAvailable' => true,
+                    'status' => ContentInfo::STATUS_PUBLISHED,
                     'remoteId' => 'abc123',
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
@@ -352,6 +353,16 @@ class RestContentTest extends ValueObjectVisitorBaseTest
     public function testAlwaysAvailableCorrect(\DOMDocument $dom)
     {
         $this->assertXPath($dom, '/Content/alwaysAvailable[text()="true"]');
+    }
+
+    /**
+     * @param \DOMDocument $dom
+     *
+     * @depends testVisitWithoutEmbeddedVersion
+     */
+    public function testStatusCorrect(\DOMDocument $dom)
+    {
+        $this->assertXPath($dom, '/Content/status[text()="PUBLISHED"]');
     }
 
     /**
