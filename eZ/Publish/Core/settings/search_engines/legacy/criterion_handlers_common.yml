@@ -250,6 +250,7 @@ services:
         arguments:
             - ,
         tags:
+            - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezauthor}
             - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezcountry}
             - {name: ezpublish.search.legacy.gateway.criterion_field_value_handler, alias: ezobjectrelationlist}
 

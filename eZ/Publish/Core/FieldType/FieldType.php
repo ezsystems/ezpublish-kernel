@@ -263,6 +263,8 @@ abstract class FieldType implements FieldTypeInterface
      * For the legacy storage it is up to the field converters to set this
      * value in either sort_key_string or sort_key_int.
      *
+     * In case of multi value, values should be string and separated by "-" or ",".
+     *
      * @param \eZ\Publish\Core\FieldType\Value $value
      *
      * @return mixed

@@ -40,6 +40,7 @@ class RichTextConverter implements Converter
     public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
     {
         $storageFieldValue->dataText = $value->data;
+        $storageFieldValue->sortKeyString = $value->sortKey;
     }
 
     /**
@@ -51,6 +52,7 @@ class RichTextConverter implements Converter
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
         $fieldValue->data = $value->dataText ?: Value::EMPTY_VALUE;
+        $fieldValue->sortKey = $value->sortKeyString;
     }
 
     /**
@@ -86,6 +88,6 @@ class RichTextConverter implements Converter
      */
     public function getIndexColumn()
     {
-        return false;
+        return 'sort_key_string';
     }
 }

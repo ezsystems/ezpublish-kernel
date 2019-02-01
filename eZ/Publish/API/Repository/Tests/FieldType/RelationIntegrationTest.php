@@ -34,6 +34,16 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function supportsLikeWildcard($value)
+    {
+        parent::supportsLikeWildcard($value);
+
+        return false;
+    }
+
+    /**
      * @param \eZ\Publish\API\Repository\Values\Content\Content $content
      *
      * @return array|\eZ\Publish\API\Repository\Values\Content\Relation[]

@@ -206,7 +206,7 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\Relation\Value $value
      *
-     * @return mixed
+     * @return string
      */
     protected function getSortInfo(BaseValue $value)
     {

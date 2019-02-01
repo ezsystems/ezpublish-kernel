@@ -144,7 +144,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function assertFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Author\\Value',
+            AuthorValue::class,
             $field->value
         );
 
@@ -225,7 +225,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function assertUpdatedFieldDataLoadedCorrect(Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Author\\Value',
+            AuthorValue::class,
             $field->value
         );
 
@@ -285,7 +285,7 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function assertCopiedFieldDataLoadedCorrectly(Field $field)
     {
         $this->assertInstanceOf(
-            'eZ\\Publish\\Core\\FieldType\\Author\\Value',
+            AuthorValue::class,
             $field->value
         );
 
@@ -415,15 +415,6 @@ class AuthorIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 ),
             ),
         );
-    }
-
-    protected function checkSearchEngineSupport()
-    {
-        if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\\Publish\\API\\Repository\\Tests\\SetupFactory\\Legacy') {
-            $this->markTestSkipped(
-                "'ezauthor' field type is not searchable with Legacy Search Engine"
-            );
-        }
     }
 
     protected function getValidSearchValueOne()
