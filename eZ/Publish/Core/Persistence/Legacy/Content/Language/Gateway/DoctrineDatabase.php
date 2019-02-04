@@ -168,7 +168,7 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->connection->createQueryBuilder();
         $query
-            ->select('id', 'locale', 'id', 'name', 'disabled')
+            ->select('id', 'locale', 'name', 'disabled')
             ->from('ezcontent_language');
 
         return $query;
