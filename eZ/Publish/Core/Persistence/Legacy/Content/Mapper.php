@@ -324,7 +324,7 @@ class Mapper
         if (!empty($missing)) {
             throw new NotFoundException(
                 'Language',
-                implode(', ', $missing). "' when building content '" . $row['ezcontentobject_id']
+                implode(', ', $missing) . "' when building content '" . $row['ezcontentobject_id']
             );
         }
 
@@ -377,7 +377,7 @@ class Mapper
                 if (!empty($missing)) {
                     throw new NotFoundException(
                         'Language',
-                        implode(', ', $missing). "' when building content '" . $row['ezcontentobject_id']
+                        implode(', ', $missing) . "' when building content '" . $row['ezcontentobject_id']
                     );
                 }
             }
@@ -393,7 +393,7 @@ class Mapper
      *
      * @return string[]
      */
-    private function extractLanguageCodesFromMask(int $languageMask, array $allLanguages, array &$missing = [])
+    private function extractLanguageCodesFromMask(int $languageMask, array $allLanguages, &$missing = [])
     {
         $exp = 2;
         $result = [];
