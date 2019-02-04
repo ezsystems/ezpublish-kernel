@@ -124,17 +124,11 @@ class Mapper
             $fieldId = (int)$row['ezcontentclass_attribute_id'];
 
             if ($fieldId && !isset($fields[$fieldId])) {
-                $multilingualData = array_map(function (array $fieldData) use ($row) {
-                    return [
-                        'ezcontentclass_attribute_multilingual_name' => $fieldData['ezcontentclass_attribute_multilingual_name'] ?? $this->unserialize($row['ezcontentclass_serialized_name_list']),
-                        'ezcontentclass_attribute_multilingual_description' => $fieldData['ezcontentclass_attribute_multilingual_description'] ?? $this->unserialize($row['ezcontentclass_serialized_description_list']),
-                        'ezcontentclass_attribute_multilingual_language_id' => $fieldData['ezcontentclass_attribute_multilingual_language_id'] ?? (int)$row['ezcontentclass_initial_language_id'],
-                        'ezcontentclass_attribute_multilingual_data_text' => $fieldData['ezcontentclass_attribute_multilingual_data_text'] ?? '',
-                        'ezcontentclass_attribute_multilingual_data_json' => $fieldData['ezcontentclass_attribute_multilingual_data_json'] ?? '',
-                    ];
-                }, array_filter($rows, function (array $row) use ($fieldId) {
+                $fieldDataRows = array_filter($rows, function (array $row) use ($fieldId) {
                     return $row['ezcontentclass_attribute_id'] === (string) $fieldId;
-                }));
+                });
+
+                $multilingualData = $this->extractMultilingualData($fieldDataRows);
 
                 $types[$typeId]->fieldDefinitions[] = $fields[$fieldId] = $this->extractFieldFromRow($row, $multilingualData);
             }
@@ -151,6 +145,19 @@ class Mapper
 
         // Re-index $types to avoid people relying on ID keys
         return array_values($types);
+    }
+
+    public function extractMultilingualData(array $fieldDefinitionRows): array
+    {
+        return array_map(function (array $fieldData) {
+            return [
+                'ezcontentclass_attribute_multilingual_name' => $fieldData['ezcontentclass_attribute_multilingual_name'] ?? $this->unserialize($fieldData['ezcontentclass_attribute_serialized_name_list']),
+                'ezcontentclass_attribute_multilingual_description' => $fieldData['ezcontentclass_attribute_multilingual_description'] ?? $this->unserialize($fieldData['ezcontentclass_attribute_serialized_description_list']),
+                'ezcontentclass_attribute_multilingual_language_id' => $fieldData['ezcontentclass_attribute_multilingual_language_id'] ?? (int)$fieldData['ezcontentclass_initial_language_id'],
+                'ezcontentclass_attribute_multilingual_data_text' => $fieldData['ezcontentclass_attribute_multilingual_data_text'] ?? '',
+                'ezcontentclass_attribute_multilingual_data_json' => $fieldData['ezcontentclass_attribute_multilingual_data_json'] ?? '',
+            ];
+        }, $fieldDefinitionRows);
     }
 
     /**

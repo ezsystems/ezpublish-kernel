@@ -501,19 +501,9 @@ class Handler implements BaseContentTypeHandler
             );
         }
 
-        $multilingualData = array_map(function (array $fieldData) use ($rows) {
-            return [
-                'ezcontentclass_attribute_multilingual_name' => $fieldData['ezcontentclass_attribute_multilingual_name'],
-                'ezcontentclass_attribute_multilingual_description' => $fieldData['ezcontentclass_attribute_multilingual_description'],
-                'ezcontentclass_attribute_multilingual_language_id' => $fieldData['ezcontentclass_attribute_multilingual_language_id'],
-                'ezcontentclass_attribute_multilingual_data_text' => $fieldData['ezcontentclass_attribute_multilingual_data_text'],
-                'ezcontentclass_attribute_multilingual_data_json' => $fieldData['ezcontentclass_attribute_multilingual_data_json'],
-            ];
-        }, $rows);
+        $multilingualData = $this->mapper->extractMultilingualData($rows);
 
-        reset($rows);
-
-        return $this->mapper->extractFieldFromRow($rows, $multilingualData);
+        return $this->mapper->extractFieldFromRow(reset($rows), $multilingualData);
     }
 
     /**
