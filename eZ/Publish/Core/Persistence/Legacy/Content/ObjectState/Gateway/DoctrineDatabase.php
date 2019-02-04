@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -249,7 +250,7 @@ class DoctrineDatabase extends Gateway
             $query->bindValue(
                 $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectState->languageCodes, true),
                 null,
-                \PDO::PARAM_INT
+                ParameterType::INTEGER
             )
         )->set(
             $this->dbHandler->quoteColumn('priority'),
@@ -300,7 +301,7 @@ class DoctrineDatabase extends Gateway
             $query->bindValue(
                 $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectState->languageCodes, true),
                 null,
-                \PDO::PARAM_INT
+                ParameterType::INTEGER
             )
         )->where(
             $query->expr->eq(
@@ -411,7 +412,7 @@ class DoctrineDatabase extends Gateway
             $query->bindValue(
                 $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectStateGroup->languageCodes, true),
                 null,
-                \PDO::PARAM_INT
+                ParameterType::INTEGER
             )
         );
 
@@ -450,7 +451,7 @@ class DoctrineDatabase extends Gateway
             $query->bindValue(
                 $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectStateGroup->languageCodes, true),
                 null,
-                \PDO::PARAM_INT
+                ParameterType::INTEGER
             )
         )->where(
             $query->expr->eq(
