@@ -36,7 +36,9 @@ class MaskGenerator
     /**
      * Generates a language mask from the keys of $languages.
      *
-     * @deprecated Move towards using {@see generateLanguageMaskFromLanguageMap()} or the other specific methods.
+     * @deprecated Move towards using {@see generateLanguageMaskFromLanguageCodes()} or the other generate* methods.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language(s) in $languageCodes was not be found
      *
      * @param array $languages
      *
@@ -44,7 +46,23 @@ class MaskGenerator
      */
     public function generateLanguageMask(array $languages)
     {
-        return $this->generateLanguageMaskFromLanguageMap($languages);
+        $mask = 0;
+        if (isset($languages['always-available'])) {
+            $mask |= $languages['always-available'] ? 1 : 0;
+            unset($languages['always-available']);
+        }
+
+        $languageCodes = array_keys($languages);
+        $languageList = $this->languageHandler->loadListByLanguageCodes($languageCodes);
+        foreach ($languageList as $language) {
+            $mask |= $language->id;
+        }
+
+        if ($missing = array_diff($languageCodes, array_keys($languageList))) {
+            throw new NotFoundException('Language', implode(', ', $missing));
+        }
+
+        return $mask;
     }
 
     /**
@@ -65,65 +83,6 @@ class MaskGenerator
         }
 
         return $languageMask;
-    }
-
-    /**
-     * Generates a language mask from the keys of $languageMap.
-     *
-     * Typically used for ->name values to get language mask directly from such structure.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language(s) in $languageMap was not be found
-     *
-     * @param array $languageMap Key values are language code, value is ignored.
-     *              Exception if 'always-available' key with language value is set, then always available flag is added.
-     *
-     * @return int
-     */
-    public function generateLanguageMaskFromLanguageMap(array $languageMap): int
-    {
-        $mask = 0;
-        if (isset($languageMap['always-available'])) {
-            $mask |= $languageMap['always-available'] ? 1 : 0;
-            unset($languageMap['always-available']);
-        }
-
-        $languageCodes = array_keys($languageMap);
-        $languageList = $this->languageHandler->loadListByLanguageCodes($languageCodes);
-        foreach ($languageList as $language) {
-            $mask |= $language->id;
-        }
-
-        if ($missing = array_diff($languageCodes, array_keys($languageList))) {
-            throw new NotFoundException('Language', implode(', ', $missing));
-        }
-
-        return $mask;
-    }
-
-    /**
-     * Generates a language mask from plain array of language codes and always available flag.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language(s) in $languageCodes was not be found
-     *
-     * @param string[] $languageCodes
-     * @param bool $isAlwaysAvailable
-     *
-     * @return int
-     */
-    public function generateLanguageMaskFromLanguageCodes(array $languageCodes, bool $isAlwaysAvailable = false): int
-    {
-        $mask = $isAlwaysAvailable ? 1 : 0;
-
-        $languageList = $this->languageHandler->loadListByLanguageCodes($languageCodes);
-        foreach ($languageList as $language) {
-            $mask |= $language->id;
-        }
-
-        if ($missing = array_diff($languageCodes, array_keys($languageList))) {
-            throw new NotFoundException('Language', implode(', ', $missing));
-        }
-
-        return $mask;
     }
 
     /**
@@ -243,5 +202,31 @@ class MaskGenerator
 
         // Return false if power of 2
         return (bool)($languageMask & ($languageMask - 1));
+    }
+
+    /**
+     * Generates a language mask from plain array of language codes and always available flag.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If language(s) in $languageCodes was not be found
+     *
+     * @param string[] $languageCodes
+     * @param bool $isAlwaysAvailable
+     *
+     * @return int
+     */
+    public function generateLanguageMaskFromLanguageCodes(array $languageCodes, bool $isAlwaysAvailable = false): int
+    {
+        $mask = $isAlwaysAvailable ? 1 : 0;
+
+        $languageList = $this->languageHandler->loadListByLanguageCodes($languageCodes);
+        foreach ($languageList as $language) {
+            $mask |= $language->id;
+        }
+
+        if ($missing = array_diff($languageCodes, array_keys($languageList))) {
+            throw new NotFoundException('Language', implode(', ', $missing));
+        }
+
+        return $mask;
     }
 }
