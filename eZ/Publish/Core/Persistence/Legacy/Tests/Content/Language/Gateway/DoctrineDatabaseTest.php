@@ -126,7 +126,7 @@ class DoctrineDatabaseTest extends TestCase
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::loadLanguageListData
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase::createFindQuery
      */
-    public function testLoadLanguageData()
+    public function testLoadLanguageListData()
     {
         $gateway = $this->getDatabaseGateway();
 
