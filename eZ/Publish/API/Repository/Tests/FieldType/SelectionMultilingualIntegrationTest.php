@@ -63,6 +63,8 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
                         0 => 'Missouri',
                         1 => 'Mississippi',
                         2 => 'Yukon',
+                        3 => 'Rio Grande',
+                        4 => 'Arkansas',
                     ],
                     'ger-DE' => [
                         0 => 'Zuerst',
@@ -89,10 +91,38 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
         return 'Missouri' . ' ' . 'Yukon';
     }
 
+
+    protected function getAdditionallyIndexedFieldData()
+    {
+        return [
+            [
+                'selected_option_value',
+                'Mississippi',
+                'Yukon',
+            ],
+            [
+                'sort_value',
+                '1',
+                '2',
+            ],
+        ];
+    }
+
+    protected function getAdditionallyIndexedMultivaluedFieldData()
+    {
+        return [
+            [
+                'selected_option_value',
+                ['Missouri', 'Mississippi'],
+                ['Yukon', 'Rio Grande', 'Arkansas'],
+            ],
+        ];
+    }
+
     protected function getFullTextIndexedFieldData()
     {
         return [
-            ['Bielefeld', 'Dritte'],
+            ['Mississippi', 'Yukon'],
         ];
     }
 }

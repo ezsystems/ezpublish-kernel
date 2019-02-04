@@ -33,21 +33,12 @@ class SearchField implements Indexable
         $fieldSettings = $fieldDefinition->fieldTypeConstraints->fieldSettings;
         $positionSet = array_flip($field->value->data);
 
-        if (isset($fieldSettings['multilingualOptions'])) {
-            foreach ($fieldSettings['multilingualOptions'] as $languageCode => $multilingualOption) {
-                foreach ($multilingualOption as $index => $value) {
-                    if (isset($positionSet[$index])) {
-                        $values[] = $value;
-                        $indexes[] = $index;
-                    }
-                }
-            }
-        } else {
-            foreach ($fieldSettings['options'] as $index => $value) {
-                if (isset($positionSet[$index])) {
-                    $values[] = $value;
-                    $indexes[] = $index;
-                }
+        $options = $fieldSettings['multilingualOptions'][$field->languageCode] ?? $fieldSettings['options'];
+
+        foreach ($options as $index => $value) {
+            if (isset($positionSet[$index])) {
+                $values[] = $value;
+                $indexes[] = $index;
             }
         }
 
