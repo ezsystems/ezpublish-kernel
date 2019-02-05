@@ -125,7 +125,7 @@ class Mapper
 
             if ($fieldId && !isset($fields[$fieldId])) {
                 $fieldDataRows = array_filter($rows, function (array $row) use ($fieldId) {
-                    return $row['ezcontentclass_attribute_id'] === (string) $fieldId;
+                    return (int) $row['ezcontentclass_attribute_id'] === (int) $fieldId;
                 });
 
                 $multilingualData = $this->extractMultilingualData($fieldDataRows);

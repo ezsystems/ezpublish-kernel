@@ -91,7 +91,6 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
         return 'Missouri' . ' ' . 'Yukon';
     }
 
-
     protected function getAdditionallyIndexedFieldData()
     {
         return [
