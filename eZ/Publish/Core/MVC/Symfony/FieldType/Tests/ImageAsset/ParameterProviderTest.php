@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider;
 use eZ\Publish\Core\Repository\SiteAccessAware\Repository;
@@ -33,10 +32,6 @@ class ParameterProviderTest extends TestCase
     {
         $this->repository = $this->createMock(Repository::class);
         $this->permissionsResolver = $this->createMock(PermissionResolver::class);
-
-        $this->permissionsResolver
-            ->method('canUser')
-            ->willReturn(true);
 
         $this->repository
             ->method('getPermissionResolver')
@@ -71,6 +66,10 @@ class ParameterProviderTest extends TestCase
                 'status' => $status,
             ]));
 
+        $this->permissionsResolver
+            ->method('canUser')
+            ->willReturn(true);
+
         $actual = $this->parameterProvider->getViewParameters(new Field([
             'value' => new ImageAssetValue($destinationContentId),
         ]));
@@ -101,19 +100,29 @@ class ParameterProviderTest extends TestCase
         ], $actual);
     }
 
-    public function testGetViewParametersHandleUnauthorizedException(): void
+    public function testGetViewParametersHandleUnauthorizedAccess(): void
     {
         $destinationContentId = 1;
 
-        $closure = function (Repository $repository) use ($destinationContentId) {
-            return $repository->getContentService()->loadContentInfo($destinationContentId);
-        };
-
+        $contentInfo = $this->createMock(ContentInfo::class);
         $this->repository
-            ->expects($this->once())
             ->method('sudo')
-            ->with($closure)
-            ->willThrowException($this->createMock(UnauthorizedException::class));
+            ->willReturn($contentInfo)
+        ;
+
+        $this->permissionsResolver
+            ->expects($this->at(0))
+            ->method('canUser')
+            ->with('content', 'read', $contentInfo)
+            ->willReturn(false)
+        ;
+
+        $this->permissionsResolver
+            ->expects($this->at(1))
+            ->method('canUser')
+            ->with('content', 'view_embed', $contentInfo)
+            ->willReturn(false)
+        ;
 
         $actual = $this->parameterProvider->getViewParameters(new Field([
             'value' => new ImageAssetValue($destinationContentId),
