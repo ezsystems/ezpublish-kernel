@@ -51,7 +51,9 @@ class ParameterProvider implements ParameterProviderInterface
                 ];
             }
 
-            return ['available' => !$contentInfo->isTrashed()];
+            return [
+                'available' => !$contentInfo->isTrashed(),
+            ];
         } catch (NotFoundException $exception) {
             return [
                 'available' => false,
@@ -62,11 +64,11 @@ class ParameterProvider implements ParameterProviderInterface
     /**
      * @param int $id
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     * @throws \Exception
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function loadContentInfo(int $id): ContentInfo
     {
-        return  $this->repository->sudo(
+        return $this->repository->sudo(
             function (Repository $repository) use ($id) {
                 return $repository->getContentService()->loadContentInfo($id);
             }
