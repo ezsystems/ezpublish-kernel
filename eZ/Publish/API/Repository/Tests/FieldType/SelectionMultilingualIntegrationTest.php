@@ -60,11 +60,11 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
                         4 => 'Zombies',
                     ],
                     'eng-US' => [
-                        0 => 'Missouri',
-                        1 => 'Mississippi',
-                        2 => 'Yukon',
-                        3 => 'Rio Grande',
-                        4 => 'Arkansas',
+                        0 => 'Arkansas',
+                        1 => 'Hudson',
+                        2 => 'Mississippi',
+                        3 => 'RioGrande',
+                        4 => 'Yukon',
                     ],
                     'ger-DE' => [
                         0 => 'Zuerst',
@@ -88,7 +88,7 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
 
     public function getFieldName()
     {
-        return 'Missouri' . ' ' . 'Yukon';
+        return 'Arkansas' . ' ' . 'Mississippi';
     }
 
     protected function getAdditionallyIndexedFieldData()
@@ -96,8 +96,8 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
         return [
             [
                 'selected_option_value',
+                'Hudson',
                 'Mississippi',
-                'Yukon',
             ],
             [
                 'sort_value',
@@ -112,8 +112,8 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
         return [
             [
                 'selected_option_value',
-                ['Missouri', 'Mississippi'],
-                ['Yukon', 'Rio Grande', 'Arkansas'],
+                ['Arkansas', 'Hudson'],
+                ['Mississippi', 'RioGrande', 'Yukon2'],
             ],
         ];
     }
@@ -121,7 +121,7 @@ class SelectionMultilingualIntegrationTest extends SelectionIntegrationTest
     protected function getFullTextIndexedFieldData()
     {
         return [
-            ['Mississippi', 'Yukon'],
+            ['Hudson', 'Mississippi'],
         ];
     }
 }
