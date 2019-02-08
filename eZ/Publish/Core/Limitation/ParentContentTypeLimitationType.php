@@ -238,17 +238,19 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
 
     /**
      * @param \eZ\Publish\API\Repository\Values\ValueObject $contentInfo
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     private function loadParentLocations(ValueObject $contentInfo)
     {
         $isRootChecker = new IsRoot();
-        
+
         $locations = $this->persistence->locationHandler()->loadLocationsByContent($contentInfo->id);
         $parentLocations = [];
         foreach ($locations as $location) {
-            if(!$isRootChecker->isSatisfiedBy($location)) {
+            if (!$isRootChecker->isSatisfiedBy($location)) {
                 $parentLocations[] = $this->persistence->locationHandler()->load($location->parentId);
             }
         }
