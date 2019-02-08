@@ -503,13 +503,13 @@ CREATE TABLE ezpreferences (
 
 DROP TABLE IF EXISTS ezcontentclass_attribute_ml;
 CREATE TABLE ezcontentclass_attribute_ml (
-	contentclass_attribute_id INT NOT NULL,
-	version integer NOT NULL,
-	language_id SERIAL NOT NULL,
-	name character varying(255) NOT NULL,
-	description text DEFAULT NULL,
-	data_text text DEFAULT NULL,
-	data_json text DEFAULT NULL
+    contentclass_attribute_id INT NOT NULL,
+    version integer NOT NULL,
+    language_id SERIAL NOT NULL,
+    name character varying(255) NOT NULL,
+    description text DEFAULT NULL,
+    data_text text DEFAULT NULL,
+    data_json text DEFAULT NULL
 );
 
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);

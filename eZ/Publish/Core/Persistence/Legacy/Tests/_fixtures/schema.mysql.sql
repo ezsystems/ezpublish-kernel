@@ -657,14 +657,14 @@ CREATE TABLE `ezpreferences` (
 
 DROP TABLE IF EXISTS `ezcontentclass_attribute_ml`;
 CREATE TABLE `ezcontentclass_attribute_ml` (
-	`contentclass_attribute_id` INT NOT NULL,
-	`version` INT NOT NULL,
-	`language_id` BIGINT NOT NULL,
-	`name` VARCHAR(255) NOT NULL,
-	`description` TEXT NULL,
-	`data_text` TEXT NULL,
-	`data_json` TEXT NULL,
-	PRIMARY KEY (`contentclass_attribute_id`, `version`, `language_id`)
+  `contentclass_attribute_id` INT NOT NULL,
+  `version` INT NOT NULL,
+  `language_id` BIGINT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `data_text` TEXT NULL,
+  `data_json` TEXT NULL,
+  PRIMARY KEY (`contentclass_attribute_id`, `version`, `language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `ezcontentclass_attribute_ml`

@@ -114,6 +114,7 @@ class FieldDefinition extends ValueObject
 
     /**
      * Based on mainLanguageCode of contentType.
+     *
      * @var string
      */
     public $mainLanguageCode;

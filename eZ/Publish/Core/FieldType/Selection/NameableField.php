@@ -36,13 +36,9 @@ class NameableField implements Nameable
         foreach ($value->selection as $optionIndex) {
             if (isset($fieldSettings['multilingualOptions'][$languageCode][$optionIndex])) {
                 $names[] = $fieldSettings['multilingualOptions'][$languageCode][$optionIndex];
-                continue;
-            }
-            if (isset($fieldSettings['multilingualOptions'][$fieldDefinition->mainLanguageCode][$optionIndex])) {
+            } elseif (isset($fieldSettings['multilingualOptions'][$fieldDefinition->mainLanguageCode][$optionIndex])) {
                 $names[] = $fieldSettings['multilingualOptions'][$fieldDefinition->mainLanguageCode][$optionIndex];
-                continue;
-            }
-            if (isset($fieldSettings['options'][$optionIndex])) {
+            } elseif (isset($fieldSettings['options'][$optionIndex])) {
                 $names[] = $fieldSettings['options'][$optionIndex];
             }
         }

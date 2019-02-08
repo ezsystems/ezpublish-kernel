@@ -575,14 +575,14 @@ CREATE TABLE ezpreferences (
 CREATE INDEX ezpreferences_name ON ezpreferences (name);
 CREATE INDEX ezpreferences_user_id_idx ON ezpreferences (user_id, name);
 
-create table ezcontentclass_attribute_ml (
-	contentclass_attribute_id integer NOT NULL,
-	version integer NOT NULL,
-	language_id integer NOT NULL,
-	name text(255) NOT NULL,
-	description text DEFAULT NULL,
-	data_text text DEFAULT NULL,
-	data_json text DEFAULT NULL
+CREATE TABLE ezcontentclass_attribute_ml (
+  contentclass_attribute_id integer NOT NULL,
+  version integer NOT NULL,
+  language_id integer NOT NULL,
+  name text(255) NOT NULL,
+  description text DEFAULT NULL,
+  data_text text DEFAULT NULL,
+  data_json text DEFAULT NULL
 );
 
 CREATE INDEX ezcontentclass_attribute_ml_language_id ON ezcontentclass_attribute_ml (language_id);
