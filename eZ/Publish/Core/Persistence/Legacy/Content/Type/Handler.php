@@ -637,6 +637,17 @@ class Handler implements BaseContentTypeHandler
         unset($type->description[$languageCode]);
 
         foreach ($type->fieldDefinitions as $fieldDefinition) {
+            $this->contentTypeGateway->removeFieldDefinitionTranslation(
+                $fieldDefinition->id,
+                $languageCode,
+                Type::STATUS_DRAFT
+            );
+
+            //Refresh FieldDefinition object after removing translation data.
+            $fieldDefinition = $this->getFieldDefinition(
+                $fieldDefinition->id,
+                Type::STATUS_DRAFT
+            );
             unset($fieldDefinition->name[$languageCode]);
             unset($fieldDefinition->description[$languageCode]);
             $storageFieldDefinition = new StorageFieldDefinition();

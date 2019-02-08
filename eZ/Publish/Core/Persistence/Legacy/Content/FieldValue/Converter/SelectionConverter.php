@@ -103,13 +103,8 @@ class SelectionConverter implements Converter
 
         foreach ($fieldSettings['multilingualOptions'] as $languageCode => $option) {
             $xml = $this->buildOptionsXml($option);
-            $multilingualData = new MultilingualStorageFieldDefinition();
-            $multilingualData->dataText = $xml->saveXML();
-            $multilingualData->name = $fieldDef->name[$languageCode];
-            $multilingualData->description = $fieldDef->description[$languageCode] ?? null;
-            $multilingualData->languageId = $this->languageService->loadLanguage($languageCode)->id;
 
-            $storageDef->multilingualData[$languageCode] = $multilingualData;
+            $storageDef->multilingualData[$languageCode]->dataText = $xml->saveXML();
 
             if ($fieldDef->mainLanguageCode === $languageCode) {
                 $storageDef->dataText5 = $xml->saveXML();
@@ -126,7 +121,7 @@ class SelectionConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $options = [];
-        $multiLingualOptions = array_fill_keys(array_keys($fieldDef->name), []);
+        $multiLingualOptions = [$fieldDef->mainLanguageCode => []];
 
         if (isset($storageDef->dataText5)) {
             $optionsXml = simplexml_load_string($storageDef->dataText5);

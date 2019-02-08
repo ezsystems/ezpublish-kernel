@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
@@ -923,11 +924,19 @@ class DoctrineDatabase extends Gateway
                 $newData[$languageCode] = $data;
             }
         }
-        $this->insertMultilingualFieldDefinition(
-            $fieldDefinition->id,
-            $newData,
-            $status
-        );
+
+        try {
+            //New, non-existing translation is added.
+            // As name for fieldDefinition cannot be null in new table, entry for ML data cant be created at that same time.
+            $this->insertMultilingualFieldDefinition(
+                $fieldDefinition->id,
+                $newData,
+                $status
+            );
+        } catch (DBALException $e) {
+            //Silently fail when updating multilingual data with those same values.
+            //Happens when translation is deleted.
+        }
     }
 
     /**
@@ -1214,17 +1223,24 @@ class DoctrineDatabase extends Gateway
         );
 
         $q->prepare()->execute();
+        $subQuery = $this->connection->createQueryBuilder();
+        $subQuery
+            ->select('attr.id as ezcontentclass_attribute_id')
+            ->from('ezcontentclass_attribute', 'attr')
+            ->where('attr.contentclass_id = :typeId')
+            ->andWhere('attr.id = ezcontentclass_attribute_ml.contentclass_attribute_id');
 
-        $deleteSql = 'DELETE 
-                      FROM ezcontentclass_attribute_ml
-                      WHERE contentclass_attribute_id IN (SELECT id FROM ezcontentclass_attribute WHERE contentclass_id = :typeId)
-                      AND version = :status';
+        $deleteQuery = $this->connection->createQueryBuilder();
+        $deleteQuery
+            ->delete('ezcontentclass_attribute_ml')
+            ->where(
+                sprintf('EXISTS (%s)', $subQuery->getSQL())
+            )
+            ->andWhere('ezcontentclass_attribute_ml.version = :status')
+            ->setParameter('typeId', $typeId, ParameterType::INTEGER)
+            ->setParameter('status', $status, ParameterType::INTEGER);
 
-        $stmt = $this->connection->prepare($deleteSql);
-        $stmt->bindValue('typeId', $typeId, ParameterType::INTEGER);
-        $stmt->bindValue('status', $status, ParameterType::INTEGER);
-
-        $stmt->execute();
+        $deleteQuery->execute();
     }
 
     /**
@@ -1389,17 +1405,26 @@ class DoctrineDatabase extends Gateway
 
         $query->prepare()->execute();
 
-        $updateSql = 'UPDATE ezcontentclass_attribute_ml
-                      SET version = :targetVersion
-                      WHERE contentclass_attribute_id IN (SELECT id FROM ezcontentclass_attribute WHERE contentclass_id = :typeId)
-                      AND version = :sourceVersion';
+        $subQuery = $this->connection->createQueryBuilder();
+        $subQuery
+            ->select('attr.id as ezcontentclass_attribute_id')
+            ->from('ezcontentclass_attribute', 'attr')
+            ->where('attr.contentclass_id = :typeId')
+            ->andWhere('attr.id = attr_ml.contentclass_attribute_id');
 
-        $stmt = $this->connection->prepare($updateSql);
-        $stmt->bindValue('typeId', $typeId, ParameterType::INTEGER);
-        $stmt->bindValue('targetVersion', $targetVersion, ParameterType::INTEGER);
-        $stmt->bindValue('sourceVersion', $sourceVersion, ParameterType::INTEGER);
+        $mlDataPublishQuery = $this->connection->createQueryBuilder();
+        $mlDataPublishQuery
+            ->update('ezcontentclass_attribute_ml', 'attr_ml')
+            ->set('attr_ml.version', ':newVersion')
+            ->where(
+                sprintf('EXISTS (%s)', $subQuery->getSQL())
+            )
+            ->andWhere('attr_ml.version = :sourceVersion')
+            ->setParameter('typeId', $typeId, ParameterType::INTEGER)
+            ->setParameter('newVersion', $targetVersion, ParameterType::INTEGER)
+            ->setParameter('sourceVersion', $sourceVersion, ParameterType::INTEGER);
 
-        $stmt->execute();
+        $mlDataPublishQuery->execute();
     }
 
     /**
@@ -1464,5 +1489,36 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         return $statement->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Removes fieldDefinition data from multilingual table.
+     *
+     * @param int $fieldDefinitionId
+     * @param string $languageCode
+     * @param int $status
+     *
+     * @return void
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function removeFieldDefinitionTranslation(
+        int $fieldDefinitionId,
+        string $languageCode,
+        int $status
+    ): void {
+        $languageId = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes([$languageCode]);
+
+        $deleteQuery = $this->connection->createQueryBuilder();
+        $deleteQuery
+            ->delete('ezcontentclass_attribute_ml')
+            ->where('contentclass_attribute_id = :fieldDefinitionId')
+            ->andWhere('version = :status')
+            ->andWhere('language_id = :languageId')
+            ->setParameter('fieldDefinitionId', $fieldDefinitionId, ParameterType::INTEGER)
+            ->setParameter('status', $status, ParameterType::INTEGER)
+            ->setParameter('languageId', $languageId, ParameterType::INTEGER);
+
+        $deleteQuery->execute();
     }
 }

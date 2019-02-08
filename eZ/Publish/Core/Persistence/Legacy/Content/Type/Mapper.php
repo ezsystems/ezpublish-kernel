@@ -419,9 +419,20 @@ class Mapper
         FieldDefinition $fieldDef,
         StorageFieldDefinition $storageFieldDef
     ) {
+        foreach (array_keys($fieldDef->name) as $languageCode) {
+            $multilingualData = new MultilingualStorageFieldDefinition();
+            $multilingualData->name = $fieldDef->name[$languageCode];
+            $multilingualData->description = $fieldDef->description[$languageCode] ?? null;
+            $multilingualData->languageId =
+                $this->maskGenerator->generateLanguageMaskFromLanguageCodes([$languageCode]);
+
+            $storageFieldDef->multilingualData[$languageCode] = $multilingualData;
+        }
+
         $converter = $this->converterRegistry->getConverter(
             $fieldDef->fieldType
         );
+
         $converter->toStorageFieldDefinition(
             $fieldDef,
             $storageFieldDef

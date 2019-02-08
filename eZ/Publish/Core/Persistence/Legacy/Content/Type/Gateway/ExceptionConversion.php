@@ -539,4 +539,31 @@ class ExceptionConversion extends Gateway
             throw new RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * Removes fieldDefinition data from multilingual table.
+     *
+     * @param int $fieldDefinitionId
+     * @param string $languageCode
+     * @param int $status
+     *
+     * @return void
+     */
+    public function removeFieldDefinitionTranslation(
+        int $fieldDefinitionId,
+        string $languageCode,
+        int $status
+    ): void {
+        try {
+            $this->innerGateway->removeFieldDefinitionTranslation(
+                $fieldDefinitionId,
+                $languageCode,
+                $status
+            );
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
 }
