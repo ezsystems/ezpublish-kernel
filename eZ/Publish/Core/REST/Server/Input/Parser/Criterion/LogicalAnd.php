@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
 use eZ\Publish\API\Repository\Values;
@@ -16,7 +15,7 @@ use eZ\Publish\API\Repository\Values;
 /**
  * Parser for LogicalAnd Criterion.
  */
-class LogicalAnd extends CriterionParser
+class LogicalAnd extends LogicalOperator
 {
     /**
      * @var string
@@ -51,49 +50,5 @@ class LogicalAnd extends CriterionParser
         }
 
         return new Values\Content\Query\Criterion\LogicalAnd($criteria);
-    }
-
-    /**
-     * @param array $criteriaByType
-     * @return array
-     */
-    protected function getFlattenedCriteriaData(array $criteriaByType)
-    {
-        $criteria = [];
-        foreach ($criteriaByType as $type => $criterion) {
-            if (is_array($criterion) && $this->isNumericArray($criterion)) {
-                foreach ($criterion as $criterionElement) {
-                    $criteria[] = [
-                        'type' => $type,
-                        'data' => $criterionElement,
-                    ];
-                }
-            } else {
-                $criteria[] = [
-                    'type' => $type,
-                    'data' => $criterion,
-                ];
-            }
-        }
-
-        return $criteria;
-    }
-
-    /**
-     * Checks if the given $value is a purely numeric array.
-     *
-     * @param array $value
-     *
-     * @return bool
-     */
-    protected function isNumericArray(array $value)
-    {
-        foreach (array_keys($value) as $key) {
-            if (is_string($key)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
