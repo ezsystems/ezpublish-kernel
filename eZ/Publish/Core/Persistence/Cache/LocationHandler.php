@@ -303,4 +303,14 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         return $this->persistenceHandler->locationHandler()->loadAllLocations($offset, $limit);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRootLocation(Location $location)
+    {
+        $this->logger->logCall(__METHOD__, array('location' => $location->id));
+
+        return $this->persistenceHandler->locationHandler()->isRootLocation($location);
+    }
 }

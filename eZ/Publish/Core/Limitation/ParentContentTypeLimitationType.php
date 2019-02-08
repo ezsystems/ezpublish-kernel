@@ -24,7 +24,6 @@ use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
-use EzSystems\EzPlatformAdminUi\Specification\Location\IsRoot;
 
 /**
  * ParentContentTypeLimitation is a Content limitation.
@@ -237,20 +236,18 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    private function loadParentLocations(ValueObject $contentInfo)
+    private function loadParentLocations(ContentInfo $contentInfo)
     {
-        $isRootChecker = new IsRoot();
-
         $locations = $this->persistence->locationHandler()->loadLocationsByContent($contentInfo->id);
         $parentLocations = [];
         foreach ($locations as $location) {
-            if (!$isRootChecker->isSatisfiedBy($location)) {
+            if (!$this->persistence->locationHandler()->isRootLocation($location)) {
                 $parentLocations[] = $this->persistence->locationHandler()->load($location->parentId);
             }
         }
