@@ -240,7 +240,7 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    private function loadParentLocations(ValueObject $contentInfo): array
+    private function loadParentLocations(ValueObject $contentInfo)
     {
         $locations = $this->persistence->locationHandler()->loadLocationsByContent($contentInfo->id);
         $parentLocations = [];
