@@ -105,17 +105,13 @@ class BookmarkService implements BookmarkServiceInterface
         if ($list->totalCount > 0) {
             $bookmarks = $this->bookmarkHandler->loadUserBookmarks($currentUserId, $offset, $limit);
 
-            // https://jira.ez.no/browse/EZP-30120 
-            // The bookmark page should not crash if the user has content in his bookmark that he is not allowed to read. 
-            $list->items = array_map(function (Bookmark $bookmark) {
-                return $this->repository->getLocationService()->loadLocation($bookmark->locationId);
-                try {
-                } catch (UnauthorizedException $e) {
-                    // TODO Warning
-                    return null;
-                }
+            // https://jira.ez.no/browse/EZP-30120
+            // The bookmark page should not crash if the user has content in his bookmark that he is not allowed to read.
+            // V2 with loadLocationList().
+            $locationIdList = array_map(function (Bookmark $bookmark) {
+                return $bookmark->locationId;
             }, $bookmarks);
-            $list->items = array_filter($list->items);
+            $list->items = $this->repository->getLocationService()->loadLocationList($locationIdList);
         }
 
         return $list;
