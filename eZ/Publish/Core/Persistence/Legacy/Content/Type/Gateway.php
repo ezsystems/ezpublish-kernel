@@ -291,8 +291,6 @@ abstract class Gateway
      * @param int $fieldDefinitionId
      * @param string $languageCode
      * @param int $status
-     *
-     * @return void
      */
     abstract public function removeFieldDefinitionTranslation(
         int $fieldDefinitionId,

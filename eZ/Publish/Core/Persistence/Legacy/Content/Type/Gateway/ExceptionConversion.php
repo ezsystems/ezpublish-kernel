@@ -546,8 +546,6 @@ class ExceptionConversion extends Gateway
      * @param int $fieldDefinitionId
      * @param string $languageCode
      * @param int $status
-     *
-     * @return void
      */
     public function removeFieldDefinitionTranslation(
         int $fieldDefinitionId,

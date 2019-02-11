@@ -241,6 +241,7 @@ EOT;
                 'name' => array(
                     'eng-GB' => 'test name',
                 ),
+                'mainLanguageCode' => 'eng-GB',
                 'fieldTypeConstraints' => new FieldTypeConstraints(
                     array(
                         'fieldSettings' => new FieldSettings(
@@ -252,7 +253,11 @@ EOT;
                                     2 => 'Third',
                                 ),
                                 'multilingualOptions' => array(
-                                    'eng-GB' => array(),
+                                    'eng-GB' => array(
+                                        0 => 'First',
+                                        1 => 'Second',
+                                        2 => 'Third',
+                                    ),
                                 ),
                             )
                         ),
@@ -272,6 +277,7 @@ EOT;
                 'name' => array(
                     'eng-GB' => 'test name',
                 ),
+                'mainLanguageCode' => 'eng-GB'
             )
         );
 
@@ -302,6 +308,7 @@ EOT;
                 'name' => array(
                     'eng-GB' => 'test name',
                 ),
+                'mainLanguageCode' => 'eng-GB',
                 'fieldTypeConstraints' => new FieldTypeConstraints(
                     array(
                         'fieldSettings' => new FieldSettings(
@@ -324,6 +331,7 @@ EOT;
                 'name' => array(
                     'eng-GB' => 'test name',
                 ),
+                'mainLanguageCode' => 'eng-GB',
             )
         );
 

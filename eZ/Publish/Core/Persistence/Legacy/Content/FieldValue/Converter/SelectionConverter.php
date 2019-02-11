@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\API\Repository\LanguageService;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
-use eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;

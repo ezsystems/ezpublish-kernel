@@ -1410,16 +1410,16 @@ class DoctrineDatabase extends Gateway
             ->select('attr.id as ezcontentclass_attribute_id')
             ->from('ezcontentclass_attribute', 'attr')
             ->where('attr.contentclass_id = :typeId')
-            ->andWhere('attr.id = attr_ml.contentclass_attribute_id');
+            ->andWhere('attr.id = ezcontentclass_attribute_ml.contentclass_attribute_id');
 
         $mlDataPublishQuery = $this->connection->createQueryBuilder();
         $mlDataPublishQuery
-            ->update('ezcontentclass_attribute_ml', 'attr_ml')
-            ->set('attr_ml.version', ':newVersion')
+            ->update('ezcontentclass_attribute_ml')
+            ->set('version', ':newVersion')
             ->where(
                 sprintf('EXISTS (%s)', $subQuery->getSQL())
             )
-            ->andWhere('attr_ml.version = :sourceVersion')
+            ->andWhere('ezcontentclass_attribute_ml.version = :sourceVersion')
             ->setParameter('typeId', $typeId, ParameterType::INTEGER)
             ->setParameter('newVersion', $targetVersion, ParameterType::INTEGER)
             ->setParameter('sourceVersion', $sourceVersion, ParameterType::INTEGER);
@@ -1497,8 +1497,6 @@ class DoctrineDatabase extends Gateway
      * @param int $fieldDefinitionId
      * @param string $languageCode
      * @param int $status
-     *
-     * @return void
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
