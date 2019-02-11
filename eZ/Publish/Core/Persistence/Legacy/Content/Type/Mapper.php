@@ -139,6 +139,10 @@ class Mapper
             }
         }
 
+        foreach ($types as $type) {
+            sort($type->groupIds);
+        }
+
         if ($keepTypeIdAsKey) {
             return $types;
         }
