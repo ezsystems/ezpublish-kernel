@@ -277,7 +277,7 @@ EOT;
                 'name' => array(
                     'eng-GB' => 'test name',
                 ),
-                'mainLanguageCode' => 'eng-GB'
+                'mainLanguageCode' => 'eng-GB',
             )
         );
 
