@@ -8,23 +8,31 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset;
 
-use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderInterface;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class ParameterProvider implements ParameterProviderInterface
 {
-    /** @var \eZ\Publish\API\Repository\ContentService */
-    private $contentService;
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
 
     /**
-     * @param \eZ\Publish\API\Repository\ContentService
+     * @var \eZ\Publish\API\Repository\PermissionResolver
      */
-    public function __construct(ContentService $contentService)
+    private $permissionsResolver;
+
+    /**
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct(Repository $repository)
     {
-        $this->contentService = $contentService;
+        $this->repository = $repository;
+        $this->permissionsResolver = $repository->getPermissionResolver();
     }
 
     /**
@@ -33,17 +41,54 @@ class ParameterProvider implements ParameterProviderInterface
     public function getViewParameters(Field $field): array
     {
         try {
-            $contentInfo = $this->contentService->loadContentInfo(
+            $contentInfo = $this->loadContentInfo(
                 $field->value->destinationContentId
             );
+
+            if (!$this->userHasPermissions($contentInfo)) {
+                return [
+                    'available' => false,
+                ];
+            }
 
             return [
                 'available' => !$contentInfo->isTrashed(),
             ];
-        } catch (NotFoundException | UnauthorizedException $exception) {
+        } catch (NotFoundException $exception) {
             return [
                 'available' => false,
             ];
         }
+    }
+
+    /**
+     * @param int $id
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    private function loadContentInfo(int $id): ContentInfo
+    {
+        return $this->repository->sudo(
+            function (Repository $repository) use ($id) {
+                return $repository->getContentService()->loadContentInfo($id);
+            }
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @return bool
+     */
+    private function userHasPermissions(ContentInfo $contentInfo): bool
+    {
+        if ($this->permissionsResolver->canUser('content', 'read', $contentInfo)) {
+            return true;
+        }
+
+        if ($this->permissionsResolver->canUser('content', 'view_embed', $contentInfo)) {
+            return true;
+        }
+
+        return false;
     }
 }
