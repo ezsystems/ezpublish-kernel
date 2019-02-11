@@ -4173,4 +4173,198 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
             $this->assertArrayNotHasKey('ger-DE', $fieldDefinition->getDescriptions());
         }
     }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::removeContentTypeTranslation
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRemoveContentTypeTranslationWithMultilingualData()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $selectionFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('selection', 'ezselection');
+
+        $selectionFieldCreate->names = [
+            'eng-US' => 'Selection',
+            'ger-DE' => 'GER Selection',
+        ];
+
+        $selectionFieldCreate->fieldGroup = 'blog-content';
+        $selectionFieldCreate->position = 3;
+        $selectionFieldCreate->isTranslatable = true;
+        $selectionFieldCreate->isRequired = true;
+        $selectionFieldCreate->isInfoCollector = false;
+        $selectionFieldCreate->validatorConfiguration = [];
+        $selectionFieldCreate->fieldSettings = [
+            'multilingualOptions' => [
+                'eng-US' => [
+                    0 => 'A first',
+                    1 => 'Bielefeld',
+                    2 => 'Sindelfingen',
+                    3 => 'Turtles',
+                    4 => 'Zombies',
+                ],
+                'ger-DE' => [
+                    0 => 'Berlin',
+                    1 => 'Cologne',
+                    2 => 'Bonn',
+                    3 => 'Frankfurt',
+                    4 => 'Hamburg',
+                ],
+            ],
+        ];
+        $selectionFieldCreate->isSearchable = false;
+
+        $contentTypeDraft = $this->createContentTypeDraft([$selectionFieldCreate]);
+
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+
+        $contentTypeService->removeContentTypeTranslation(
+            $contentTypeService->createContentTypeDraft($contentType),
+            'ger-DE'
+        );
+
+        $loadedContentTypeDraft = $contentTypeService->loadContentTypeDraft($contentType->id);
+
+        $fieldDefinition = $loadedContentTypeDraft->getFieldDefinition('selection');
+        $this->assertArrayNotHasKey('ger-DE', $fieldDefinition->fieldSettings['multilingualOptions']);
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateContentTypeDraftWithNewTranslationWithMultilingualData()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $selectionFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('selection', 'ezselection');
+
+        $selectionFieldCreate->names = [
+            'eng-US' => 'Selection',
+            'ger-DE' => 'GER Selection',
+        ];
+
+        $selectionFieldCreate->fieldGroup = 'blog-content';
+        $selectionFieldCreate->position = 3;
+        $selectionFieldCreate->isTranslatable = true;
+        $selectionFieldCreate->isRequired = true;
+        $selectionFieldCreate->isInfoCollector = false;
+        $selectionFieldCreate->validatorConfiguration = [];
+        $selectionFieldCreate->fieldSettings = array(
+            'multilingualOptions' => [
+                'eng-US' => [
+                    0 => 'A first',
+                    1 => 'Bielefeld',
+                    2 => 'Sindelfingen',
+                    3 => 'Turtles',
+                    4 => 'Zombies',
+                ],
+                'ger-DE' => [
+                    0 => 'Berlin',
+                    1 => 'Cologne',
+                    2 => 'Bonn',
+                    3 => 'Frankfurt',
+                    4 => 'Hamburg',
+                ],
+            ],
+        );
+        $selectionFieldCreate->isSearchable = false;
+
+        $contentTypeDraft = $this->createContentTypeDraft([$selectionFieldCreate]);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);
+        // sanity check
+        self::assertEquals(
+            ['eng-US', 'ger-DE'],
+            array_keys($contentType->getNames())
+        );
+
+        $contentTypeDraft = $contentTypeService->createContentTypeDraft($contentType);
+        $updateStruct = $contentTypeService->newContentTypeUpdateStruct();
+        $updateStruct->names = [
+            'eng-GB' => 'BrE blog post',
+        ];
+
+        $selectionFieldUpdate = $contentTypeService->newFieldDefinitionUpdateStruct();
+
+        $selectionFieldUpdate->names = [
+            'eng-GB' => 'GB Selection',
+        ];
+
+        $selectionFieldUpdate->fieldGroup = 'blog-content';
+        $selectionFieldUpdate->position = 3;
+        $selectionFieldUpdate->isTranslatable = true;
+        $selectionFieldUpdate->isRequired = true;
+        $selectionFieldUpdate->isInfoCollector = false;
+        $selectionFieldUpdate->validatorConfiguration = [];
+        $selectionFieldUpdate->fieldSettings = [
+            'multilingualOptions' => [
+                'eng-US' => [
+                    0 => 'A first',
+                    1 => 'Bielefeld',
+                    2 => 'Sindelfingen',
+                    3 => 'Turtles',
+                    4 => 'Zombies',
+                ],
+                'ger-DE' => [
+                    0 => 'Berlin',
+                    1 => 'Cologne',
+                    2 => 'Bonn',
+                    3 => 'Frankfurt',
+                    4 => 'Hamburg',
+                ],
+                'eng-GB' => [
+                    0 => 'London',
+                    1 => 'Liverpool',
+                ],
+            ],
+        ];
+        $selectionFieldUpdate->isSearchable = false;
+
+        $contentTypeService->updateFieldDefinition(
+            $contentTypeDraft,
+            $contentType->getFieldDefinition('selection'),
+            $selectionFieldUpdate
+        );
+        $contentTypeService->updateContentTypeDraft($contentTypeDraft, $updateStruct);
+        $contentTypeService->publishContentTypeDraft($contentTypeDraft);
+
+        $loadedFieldDefinition = $contentTypeService->loadContentType($contentType->id)->getFieldDefinition('selection');
+        self::assertEquals(
+            [
+                'eng-US' => [
+                    0 => 'A first',
+                    1 => 'Bielefeld',
+                    2 => 'Sindelfingen',
+                    3 => 'Turtles',
+                    4 => 'Zombies',
+                ],
+                'ger-DE' => [
+                    0 => 'Berlin',
+                    1 => 'Cologne',
+                    2 => 'Bonn',
+                    3 => 'Frankfurt',
+                    4 => 'Hamburg',
+                ],
+                'eng-GB' => [
+                    0 => 'London',
+                    1 => 'Liverpool',
+                ],
+            ],
+            $loadedFieldDefinition->fieldSettings['multilingualOptions']
+        );
+    }
 }
