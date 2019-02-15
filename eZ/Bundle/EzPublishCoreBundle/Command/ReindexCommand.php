@@ -51,6 +51,16 @@ class ReindexCommand extends ContainerAwareCommand
     private $siteaccess;
 
     /**
+     * @var string
+     */
+    private $env;
+
+    /**
+     * @var bool
+     */
+    private $isDebug;
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -62,6 +72,8 @@ class ReindexCommand extends ContainerAwareCommand
         $this->searchIndexer = $this->getContainer()->get('ezpublish.spi.search.indexer');
         $this->connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.connection');
         $this->logger = $this->getContainer()->get('logger');
+        $this->env = $this->getContainer()->getParameter('kernel.environment');
+        $this->isDebug = $this->getContainer()->getParameter('kernel.debug');
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
@@ -186,7 +198,7 @@ EOT
             $contentIds = explode(',', $contentIds);
             $output->writeln(sprintf(
                 'Indexing list of content id\'s (%s)' . ($commit ? ', with commit' : ''),
-                count($contentIds)
+                \count($contentIds)
             ));
 
             return $this->searchIndexer->updateSearchIndex($contentIds, $commit);
@@ -375,12 +387,21 @@ EOT
      */
     private function getPhpProcess(array $contentIds, $commit)
     {
-        $process = new ProcessBuilder(array_filter([
-            file_exists('bin/console') ? 'bin/console' : 'app/console',
-            $this->siteaccess ? '--siteaccess=' . $this->siteaccess : null,
+        $consolePath = file_exists('bin/console') ? 'bin/console' : 'app/console';
+        $subProcessArgs = [
+            $consolePath,
             'ezplatform:reindex',
             '--content-ids=' . implode(',', $contentIds),
-        ]));
+            '--env=' . $this->env,
+        ];
+        if ($this->siteaccess) {
+            $subProcessArgs[] = '--siteaccess=' . $this->siteaccess;
+        }
+        if (!$this->isDebug) {
+            $subProcessArgs[] = '--no-debug';
+        }
+
+        $process = new ProcessBuilder($subProcessArgs);
         $process->setTimeout(null);
         $process->setPrefix($this->getPhpPath());
 
@@ -421,8 +442,8 @@ EOT
             // Linux (and potentially Windows with linux sub systems)
             $cpuinfo = file_get_contents('/proc/cpuinfo');
             preg_match_all('/^processor/m', $cpuinfo, $matches);
-            $cores = count($matches[0]);
-        } elseif (DIRECTORY_SEPARATOR === '\\') {
+            $cores = \count($matches[0]);
+        } elseif (\DIRECTORY_SEPARATOR === '\\') {
             // Windows
             if (($process = @popen('wmic cpu get NumberOfCores', 'rb')) !== false) {
                 fgets($process);
