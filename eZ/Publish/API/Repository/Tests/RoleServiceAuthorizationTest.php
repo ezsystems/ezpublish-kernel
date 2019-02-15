@@ -258,7 +258,7 @@ class RoleServiceAuthorizationTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\RoleService::removePolicy()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testRemovePolicy
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testRemovePolicyByRoleDraft
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testRemovePolicyThrowsUnauthorizedException()
@@ -548,7 +548,7 @@ class RoleServiceAuthorizationTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\RoleService::getRoleAssignmentsForUser()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignmentsForUser
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testGetRoleAssignmentsForUserEmpty
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testGetRoleAssignmentsForUserThrowsUnauthorizedException()
