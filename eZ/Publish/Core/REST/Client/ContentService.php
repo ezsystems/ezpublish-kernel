@@ -114,6 +114,14 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadContentInfoList(array $contentIds): iterable
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
      * Loads a content info object for the given remoteId.
      *
      * To load fields use loadContent

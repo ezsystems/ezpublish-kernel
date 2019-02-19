@@ -572,6 +572,44 @@ class ContentServiceTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the loadContentInfoList() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoList()
+     */
+    public function testLoadContentInfoList()
+    {
+        $repository = $this->getRepository();
+
+        $mediaFolderId = $this->generateId('object', 41);
+        $contentService = $repository->getContentService();
+        $list = $contentService->loadContentInfoList([$mediaFolderId]);
+
+        $this->assertCount(1, $list);
+        $this->assertEquals([$mediaFolderId], array_keys($list), 'Array key was not content id');
+        $this->assertInstanceOf(
+            ContentInfo::class,
+            $list[$mediaFolderId]
+        );
+    }
+
+    /**
+     * Test for the loadContentInfoList() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoList()
+     * @depends testLoadContentInfoList
+     */
+    public function testLoadContentInfoListSkipsNotFoundItems()
+    {
+        $repository = $this->getRepository();
+
+        $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
+        $contentService = $repository->getContentService();
+        $list = $contentService->loadContentInfoList([$nonExistentContentId]);
+
+        $this->assertCount(0, $list);
+    }
+
+    /**
      * Test for the loadContentInfoByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()

@@ -86,6 +86,12 @@ class ContentServiceTest extends ServiceTest
                 0,
             ),
             array(
+                'loadContentInfoList',
+                array(array($contentId)),
+                [$contentInfo],
+                0,
+            ),
+            array(
                 'loadContentInfoByRemoteId',
                 array($remoteId),
                 $contentInfo,

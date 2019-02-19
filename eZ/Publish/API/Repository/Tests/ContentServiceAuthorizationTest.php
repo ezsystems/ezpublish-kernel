@@ -140,6 +140,24 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
     }
 
     /**
+     * Test for the loadContentInfoList() method.
+     *
+     * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoList()
+     * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoList
+     */
+    public function testLoadContentInfoListSkipsUnauthorizedItems()
+    {
+        $repository = $this->getRepository();
+        $contentId = $this->generateId('object', 10);
+        $contentService = $repository->getContentService();
+        $repository->setCurrentUser($this->createAnonymousWithEditorRole());
+
+        $list = $contentService->loadContentInfoList([$contentId]);
+
+        $this->assertCount(0, $list);
+    }
+
+    /**
      * Test for the loadContentInfoByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
