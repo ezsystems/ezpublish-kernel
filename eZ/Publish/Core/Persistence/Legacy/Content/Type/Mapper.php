@@ -241,7 +241,9 @@ class Mapper
 
         $field->isSearchable = (bool)$row['ezcontentclass_attribute_is_searchable'];
         $field->position = (int)$row['ezcontentclass_attribute_placement'];
-        $field->mainLanguageCode = $this->maskGenerator->extractLanguageCodesFromMask((int)$row['ezcontentclass_initial_language_id'])[0];
+
+        $mainLanguageCode = $this->maskGenerator->extractLanguageCodesFromMask((int)$row['ezcontentclass_initial_language_id']);
+        $field->mainLanguageCode = array_shift($mainLanguageCode);
 
         $this->toFieldDefinition($storageFieldDef, $field);
 
