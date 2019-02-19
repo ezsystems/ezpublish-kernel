@@ -607,14 +607,14 @@ class MapperTest extends LanguageAwareTestCase
     protected function getLanguageHandler()
     {
         $languages = array(
-            new Language(
+            'eng-US' => new Language(
                 array(
                     'id' => 2,
                     'languageCode' => 'eng-US',
                     'name' => 'US english',
                 )
             ),
-            new Language(
+            'eng-GB' => new Language(
                 array(
                     'id' => 4,
                     'languageCode' => 'eng-GB',
@@ -651,6 +651,9 @@ class MapperTest extends LanguageAwareTestCase
                         }
                     )
                 );
+            $this->languageHandler->expects($this->any())
+                ->method('loadAll')
+                ->willReturn($languages);
         }
 
         return $this->languageHandler;

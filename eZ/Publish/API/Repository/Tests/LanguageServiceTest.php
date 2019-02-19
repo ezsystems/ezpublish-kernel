@@ -152,13 +152,13 @@ class LanguageServiceTest extends BaseTest
      * Test for the loadLanguageById() method.
      *
      * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageListById
+     * @depends testCreateLanguage
      */
     public function testLoadLanguageById()
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
         $languageCreate = $languageService->newLanguageCreateStruct();
@@ -169,20 +169,25 @@ class LanguageServiceTest extends BaseTest
         $languageId = $languageService->createLanguage($languageCreate)->id;
 
         $language = $languageService->loadLanguageById($languageId);
-        /* END: Use Case */
 
         $this->assertInstanceOf(
             Language::class,
             $language
         );
+
+        $languages = $languageService->loadLanguageListById([$languageId]);
+
+        $this->assertInternalType('iterable', $languages);
+        $this->assertCount(1, $languages);
+        $this->assertInstanceOf(Language::class, $languages[$languageId]);
     }
 
     /**
      * Test for the loadLanguageById() method.
      *
      * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageById
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguageById
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageListById
+     * @depends testLoadLanguageById
      */
     public function testLoadLanguageByIdThrowsNotFoundException()
     {
@@ -192,7 +197,13 @@ class LanguageServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        // This call should fail with a "NotFoundException"
+        $languages = $languageService->loadLanguageListById([$nonExistentLanguageId]);
+
+        $this->assertInternalType('iterable', $languages);
+        $this->assertCount(0, $languages);
+
+        $this->expectException(NotFoundException::class);
+
         $languageService->loadLanguageById($nonExistentLanguageId);
         /* END: Use Case */
     }
@@ -322,7 +333,8 @@ class LanguageServiceTest extends BaseTest
      * Test for the loadLanguage() method.
      *
      * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageListByCode
+     * @depends testCreateLanguage
      */
     public function testLoadLanguage()
     {
@@ -351,25 +363,44 @@ class LanguageServiceTest extends BaseTest
             ],
             $language
         );
+
+        $languages = $languageService->loadLanguageListByCode(['eng-NZ']);
+
+        $this->assertInternalType('iterable', $languages);
+        $this->assertCount(1, $languages);
+
+        $this->assertPropertiesCorrect(
+            [
+                'id' => $languageId,
+                'languageCode' => 'eng-NZ',
+                'name' => 'English',
+                'enabled' => true,
+            ],
+            $languages['eng-NZ']
+        );
     }
 
     /**
      * Test for the loadLanguage() method.
      *
      * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguage
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testLoadLanguage
+     * @covers \eZ\Publish\API\Repository\LanguageService::loadLanguageListByCode
+     * @depends testLoadLanguage
      */
     public function testLoadLanguageThrowsNotFoundException()
     {
         $repository = $this->getRepository();
 
-        /* BEGIN: Use Case */
         $languageService = $repository->getContentLanguageService();
 
-        // This call should fail with an exception
+        $languages = $languageService->loadLanguageListById(['fre-FR']);
+
+        $this->assertInternalType('iterable', $languages);
+        $this->assertCount(0, $languages);
+
+        $this->expectException(NotFoundException::class);
+
         $languageService->loadLanguage('fre-FR');
-        /* END: Use Case */
     }
 
     /**

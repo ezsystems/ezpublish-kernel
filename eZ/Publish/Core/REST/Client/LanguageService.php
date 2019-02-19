@@ -179,6 +179,22 @@ class LanguageService implements APILanguageService, Sessionable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadLanguageListByCode(array $languageCodes): iterable
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadLanguageListById(array $languageIds): iterable
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
      * Deletes  a language from content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException

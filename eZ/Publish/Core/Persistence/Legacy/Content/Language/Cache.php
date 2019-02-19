@@ -76,6 +76,25 @@ class Cache
     }
 
     /**
+     * Returns Languages with $ids from the cache.
+     *
+     * @param int[] $ids
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]|iterable
+     */
+    public function getListById(array $ids): iterable
+    {
+        $languages = [];
+        foreach ($ids as $id) {
+            if (isset($this->mapById[$id])) {
+                $languages[$id] = $this->mapById[$id];
+            }
+        }
+
+        return $languages;
+    }
+
+    /**
      * Returns the Language with $languageCode from the cache.
      *
      * @param string $languageCode
@@ -92,6 +111,25 @@ class Cache
         }
 
         return $this->mapByLocale[$languageCode];
+    }
+
+    /**
+     * Returns Languages with $languageCodes from the cache.
+     *
+     * @param string[] $languageCodes
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]|iterable
+     */
+    public function getListByLocale(array $languageCodes): iterable
+    {
+        $languages = [];
+        foreach ($languageCodes as $languageCode) {
+            if (isset($this->mapByLocale[$languageCode])) {
+                $languages[$languageCode] = $this->mapByLocale[$languageCode];
+            }
+        }
+
+        return $languages;
     }
 
     /**

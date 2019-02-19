@@ -125,8 +125,8 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects($this->once())
-            ->method('loadLanguageData')
-            ->with($this->equalTo(2))
+            ->method('loadLanguageListData')
+            ->with($this->equalTo([2]))
             ->will($this->returnValue(array()));
 
         $mapperMock->expects($this->once())
@@ -153,8 +153,8 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects($this->once())
-            ->method('loadLanguageData')
-            ->with($this->equalTo(2))
+            ->method('loadLanguageListData')
+            ->with($this->equalTo([2]))
             ->will($this->returnValue(array()));
 
         $mapperMock->expects($this->once())
@@ -176,8 +176,8 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects($this->once())
-            ->method('loadLanguageDataByLanguageCode')
-            ->with($this->equalTo('eng-US'))
+            ->method('loadLanguageListDataByLanguageCode')
+            ->with($this->equalTo(['eng-US']))
             ->will($this->returnValue(array()));
 
         $mapperMock->expects($this->once())
@@ -204,8 +204,8 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects($this->once())
-            ->method('loadLanguageDataByLanguageCode')
-            ->with($this->equalTo('eng-US'))
+            ->method('loadLanguageListDataByLanguageCode')
+            ->with($this->equalTo(['eng-US']))
             ->will($this->returnValue(array()));
 
         $mapperMock->expects($this->once())

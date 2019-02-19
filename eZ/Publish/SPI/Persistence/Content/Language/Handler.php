@@ -43,6 +43,18 @@ interface Handler
     public function load($id);
 
     /**
+     * Get list of languages by id.
+     *
+     * Missing items (NotFound) will be missing from the returned iterable and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param array $ids
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]|iterable
+     */
+    public function loadList(array $ids): iterable;
+
+    /**
      * Get language by Language Code (eg: eng-GB).
      *
      * @param string $languageCode
@@ -52,6 +64,18 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function loadByLanguageCode($languageCode);
+
+    /**
+     * Get list of languages by Language Code (eg: eng-GB).
+     *
+     * Missing items (NotFound) will be missing from the returned iterable and not cause an exception, it's up
+     * to calling logic to determine if this should cause exception or not.
+     *
+     * @param string[] $languageCodes
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]|iterable
+     */
+    public function loadListByLanguageCodes(array $languageCodes): iterable;
 
     /**
      * Get all languages.

@@ -185,6 +185,22 @@ class LanguageService implements LanguageServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadLanguageListByCode(array $languageCodes): iterable
+    {
+        return $this->service->loadLanguageListByCode($languageCodes);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadLanguageListById(array $languageIds): iterable
+    {
+        return $this->service->loadLanguageListById($languageIds);
+    }
+
+    /**
      * Deletes  a language from content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException

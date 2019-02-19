@@ -68,6 +68,16 @@ class LanguageService implements LanguageServiceInterface
         return $this->service->loadLanguageById($languageId);
     }
 
+    public function loadLanguageListByCode(array $languageCodes): iterable
+    {
+        return $this->service->loadLanguageListByCode($languageCodes);
+    }
+
+    public function loadLanguageListById(array $languageIds): iterable
+    {
+        return $this->service->loadLanguageListById($languageIds);
+    }
+
     public function deleteLanguage(Language $language)
     {
         return $this->service->deleteLanguage($language);

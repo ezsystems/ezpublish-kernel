@@ -35,10 +35,12 @@ class LanguageServiceTest extends AbstractServiceTest
             ['disableLanguage', [$language]],
 
             ['loadLanguage', ['eng-GB']],
+            ['loadLanguageListByCode', [['eng-GB']], []],
 
             ['loadLanguages', []],
 
             ['loadLanguageById', [4]],
+            ['loadLanguageListById', [[4]], []],
 
             ['deleteLanguage', [$language]],
 

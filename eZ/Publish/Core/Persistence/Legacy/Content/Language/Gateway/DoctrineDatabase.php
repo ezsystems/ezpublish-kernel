@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -28,6 +30,13 @@ class DoctrineDatabase extends Gateway
     protected $dbHandler;
 
     /**
+     * The native Doctrine connection.
+     *
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Creates a new Doctrine database Section Gateway.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
@@ -35,6 +44,7 @@ class DoctrineDatabase extends Gateway
     public function __construct(DatabaseHandler $dbHandler)
     {
         $this->dbHandler = $dbHandler;
+        $this->connection = $dbHandler->getConnection();
     }
 
     /**
@@ -126,67 +136,40 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data for the Language with $id.
-     *
-     * @param int $id
-     *
-     * @return string[][]
+     * {@inheritdoc}
      */
-    public function loadLanguageData($id)
+    public function loadLanguageListData(array $ids): iterable
     {
         $query = $this->createFindQuery();
-        $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('id'),
-                $query->bindValue($id, null, \PDO::PARAM_INT)
-            )
-        );
+        $query
+            ->where('id IN (:ids)')
+            ->setParameter('ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll();
     }
 
     /**
-     * Loads data for the Language with Language Code (eg: eng-GB).
-     *
-     * @param string $languageCode
-     *
-     * @return string[][]
+     * {@inheritdoc}
      */
-    public function loadLanguageDataByLanguageCode($languageCode)
+    public function loadLanguageListDataByLanguageCode(array $languageCodes): iterable
     {
         $query = $this->createFindQuery();
-        $query->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn('locale'),
-                $query->bindValue($languageCode, null, \PDO::PARAM_STR)
-            )
-        );
+        $query
+            ->where('locale IN (:locale)')
+            ->setParameter('locale', $languageCodes, Connection::PARAM_STR_ARRAY);
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll();
     }
 
     /**
      * Creates a Language find query.
-     *
-     * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
      */
-    protected function createFindQuery()
+    protected function createFindQuery(): QueryBuilder
     {
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            $this->dbHandler->quoteColumn('id'),
-            $this->dbHandler->quoteColumn('locale'),
-            $this->dbHandler->quoteColumn('name'),
-            $this->dbHandler->quoteColumn('disabled')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontent_language')
-        );
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('id', 'locale', 'name', 'disabled')
+            ->from('ezcontent_language');
 
         return $query;
     }
@@ -200,10 +183,7 @@ class DoctrineDatabase extends Gateway
     {
         $query = $this->createFindQuery();
 
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll();
     }
 
     /**

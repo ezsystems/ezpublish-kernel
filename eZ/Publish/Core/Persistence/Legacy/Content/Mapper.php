@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -303,10 +304,29 @@ class Mapper
         $versionInfo->creatorId = (int)$row['ezcontentobject_version_creator_id'];
         $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
         $versionInfo->modificationDate = (int)$row['ezcontentobject_version_modified'];
-        $versionInfo->initialLanguageCode = $this->languageHandler->load($row['ezcontentobject_version_initial_language_id'])->languageCode;
-        $versionInfo->languageCodes = $this->extractLanguageCodesFromMask($row['ezcontentobject_version_language_mask']);
         $versionInfo->status = (int)$row['ezcontentobject_version_status'];
         $versionInfo->names = $names;
+
+        // Map language codes
+        $allLanguages = $this->loadAllLanguagesWithIdKey();
+        $versionInfo->languageCodes = $this->extractLanguageCodesFromMask(
+            (int)$row['ezcontentobject_version_language_mask'],
+            $allLanguages,
+            $missing
+        );
+        $initialLanguageId = (int)$row['ezcontentobject_version_initial_language_id'];
+        if (isset($allLanguages[$initialLanguageId])) {
+            $versionInfo->initialLanguageCode = $allLanguages[$initialLanguageId]->languageCode;
+        } else {
+            $missing[] = $initialLanguageId;
+        }
+
+        if (!empty($missing)) {
+            throw new NotFoundException(
+                'Language',
+                implode(', ', $missing) . "' when building content '" . $row['ezcontentobject_id']
+            );
+        }
 
         return $versionInfo;
     }
@@ -327,6 +347,7 @@ class Mapper
             $nameData[$versionId][$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
         }
 
+        $allLanguages = $this->loadAllLanguagesWithIdKey();
         $versionInfoList = array();
         foreach ($rows as $row) {
             $versionId = $row['ezcontentobject_id'] . '_' . $row['ezcontentobject_version_version'];
@@ -338,11 +359,27 @@ class Mapper
                 $versionInfo->creatorId = (int)$row['ezcontentobject_version_creator_id'];
                 $versionInfo->creationDate = (int)$row['ezcontentobject_version_created'];
                 $versionInfo->modificationDate = (int)$row['ezcontentobject_version_modified'];
-                $versionInfo->initialLanguageCode = $this->languageHandler->load($row['ezcontentobject_version_initial_language_id'])->languageCode;
-                $versionInfo->languageCodes = $this->extractLanguageCodesFromMask((int)$row['ezcontentobject_version_language_mask']);
                 $versionInfo->status = (int)$row['ezcontentobject_version_status'];
                 $versionInfo->names = $nameData[$versionId];
                 $versionInfoList[$versionId] = $versionInfo;
+                $versionInfo->languageCodes = $this->extractLanguageCodesFromMask(
+                    (int)$row['ezcontentobject_version_language_mask'],
+                    $allLanguages,
+                    $missing
+                );
+                $initialLanguageId = (int)$row['ezcontentobject_version_initial_language_id'];
+                if (isset($allLanguages[$initialLanguageId])) {
+                    $versionInfo->initialLanguageCode = $allLanguages[$initialLanguageId]->languageCode;
+                } else {
+                    $missing[] = $initialLanguageId;
+                }
+
+                if (!empty($missing)) {
+                    throw new NotFoundException(
+                        'Language',
+                        implode(', ', $missing) . "' when building content '" . $row['ezcontentobject_id']
+                    );
+                }
             }
         }
 
@@ -351,24 +388,43 @@ class Mapper
 
     /**
      * @param int $languageMask
+     * @param \eZ\Publish\SPI\Persistence\Content\Language[] $allLanguages
+     * @param int[] &$missing
      *
      * @return string[]
      */
-    public function extractLanguageCodesFromMask($languageMask)
+    private function extractLanguageCodesFromMask(int $languageMask, array $allLanguages, &$missing = [])
     {
         $exp = 2;
         $result = [];
 
-        // Decomposition of $languageMask into its binary components.
+        // Decomposition of $languageMask into its binary components to extract language codes
         while ($exp <= $languageMask) {
             if ($languageMask & $exp) {
-                $result[] = $this->languageHandler->load($exp)->languageCode;
+                if (isset($allLanguages[$exp])) {
+                    $result[] = $allLanguages[$exp]->languageCode;
+                } else {
+                    $missing[] = $exp;
+                }
             }
 
             $exp *= 2;
         }
 
         return $result;
+    }
+
+    /**
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
+     */
+    private function loadAllLanguagesWithIdKey()
+    {
+        $languagesById = [];
+        foreach ($this->languageHandler->loadAll() as $language) {
+            $languagesById[$language->id] = $language;
+        }
+
+        return $languagesById;
     }
 
     /**

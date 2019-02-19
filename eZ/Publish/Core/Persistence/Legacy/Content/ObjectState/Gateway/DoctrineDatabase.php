@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 
+use Doctrine\DBAL\ParameterType;
 use eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Gateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
@@ -246,7 +247,11 @@ class DoctrineDatabase extends Gateway
             $query->bindValue($objectState->identifier)
         )->set(
             $this->dbHandler->quoteColumn('language_mask'),
-            $query->bindValue($this->generateLanguageMask($objectState->languageCodes), null, \PDO::PARAM_INT)
+            $query->bindValue(
+                $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectState->languageCodes, true),
+                null,
+                ParameterType::INTEGER
+            )
         )->set(
             $this->dbHandler->quoteColumn('priority'),
             $query->bindValue($objectState->priority, null, \PDO::PARAM_INT)
@@ -293,7 +298,11 @@ class DoctrineDatabase extends Gateway
             $query->bindValue($objectState->identifier)
         )->set(
             $this->dbHandler->quoteColumn('language_mask'),
-            $query->bindValue($this->generateLanguageMask($objectState->languageCodes), null, \PDO::PARAM_INT)
+            $query->bindValue(
+                $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectState->languageCodes, true),
+                null,
+                ParameterType::INTEGER
+            )
         )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn('id'),
@@ -400,7 +409,11 @@ class DoctrineDatabase extends Gateway
             $query->bindValue($objectStateGroup->identifier)
         )->set(
             $this->dbHandler->quoteColumn('language_mask'),
-            $query->bindValue($this->generateLanguageMask($objectStateGroup->languageCodes), null, \PDO::PARAM_INT)
+            $query->bindValue(
+                $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectStateGroup->languageCodes, true),
+                null,
+                ParameterType::INTEGER
+            )
         );
 
         $query->prepare()->execute();
@@ -435,7 +448,11 @@ class DoctrineDatabase extends Gateway
             $query->bindValue($objectStateGroup->identifier)
         )->set(
             $this->dbHandler->quoteColumn('language_mask'),
-            $query->bindValue($this->generateLanguageMask($objectStateGroup->languageCodes), null, \PDO::PARAM_INT)
+            $query->bindValue(
+                $this->maskGenerator->generateLanguageMaskFromLanguageCodes($objectStateGroup->languageCodes, true),
+                null,
+                ParameterType::INTEGER
+            )
         )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn('id'),
@@ -816,24 +833,5 @@ class DoctrineDatabase extends Gateway
         );
 
         $query->prepare()->execute();
-    }
-
-    /**
-     * Generates language mask from provided language codes
-     * Also sets always available bit.
-     *
-     * @param array $languageCodes
-     *
-     * @return int
-     */
-    protected function generateLanguageMask(array $languageCodes)
-    {
-        $maskLanguageCodes = array();
-        foreach ($languageCodes as $languageCode) {
-            $maskLanguageCodes[$languageCode] = 1;
-        }
-        $maskLanguageCodes['always-available'] = 1;
-
-        return $this->maskGenerator->generateLanguageMask($maskLanguageCodes);
     }
 }

@@ -121,4 +121,34 @@ class LanguageHandlerMock implements LanguageHandler
     {
         throw new \RuntimeException('Not implemented, yet.');
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadList(array $ids): iterable
+    {
+        $languages = [];
+        foreach ($this->languages as $language) {
+            if (in_array($language->id, $ids)) {
+                $languages[$language->id] = $language;
+            }
+        }
+
+        return $languages;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadListByLanguageCodes(array $languageCodes): iterable
+    {
+        $languages = [];
+        foreach ($this->languages as $language) {
+            if (in_array($language->languageCode, $languageCodes)) {
+                $languages[$language->languageCode] = $language;
+            }
+        }
+
+        return $languages;
+    }
 }
