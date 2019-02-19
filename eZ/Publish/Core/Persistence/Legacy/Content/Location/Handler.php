@@ -549,12 +549,4 @@ class Handler implements BaseLocationHandler
 
         return $this->locationMapper->createLocationsFromRows($rows);
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isRootLocation(Location $location)
-    {
-        return $location->depth === 0;
-    }
 }

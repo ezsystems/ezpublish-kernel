@@ -247,7 +247,7 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
         $locations = $this->persistence->locationHandler()->loadLocationsByContent($contentInfo->id);
         $parentLocations = [];
         foreach ($locations as $location) {
-            if (!$this->persistence->locationHandler()->isRootLocation($location)) {
+            if ($location->depth > 0) {
                 $parentLocations[] = $this->persistence->locationHandler()->load($location->parentId);
             }
         }

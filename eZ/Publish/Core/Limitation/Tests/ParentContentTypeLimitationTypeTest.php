@@ -343,7 +343,7 @@ class ParentContentTypeLimitationTypeTest extends Base
                 'object' => new ContentInfo(array('published' => true, 'id' => 40)),
                 'targets' => array(),
                 'persistence' => array(
-                    'locations' => array(new SPILocation(array('id' => 40, 'contentId' => '24', 'parentId' => 43))),
+                    'locations' => array(new SPILocation(array('id' => 40, 'contentId' => '24', 'parentId' => 43, 'depth' => 1))),
                     'parentLocations' => array(43 => new SPILocation(array('id' => 43, 'contentId' => 24))),
                     'parentContents' => array(24 => new SPIContentInfo(array('id' => 24, 'contentTypeId' => 43))),
                     'contentInfos' => array(new SPIContentInfo(array('contentTypeId' => '42'))),
@@ -356,7 +356,7 @@ class ParentContentTypeLimitationTypeTest extends Base
                 'object' => new ContentInfo(array('published' => true, 'id' => 40)),
                 'targets' => array(),
                 'persistence' => array(
-                    'locations' => array(new SPILocation(array('id' => 40, 'contentId' => '24', 'parentId' => 43))),
+                    'locations' => array(new SPILocation(array('id' => 40, 'contentId' => '24', 'parentId' => 43, 'depth' => 1))),
                     'parentLocations' => array(43 => new SPILocation(array('id' => 43, 'contentId' => 24))),
                     'parentContents' => array(24 => new SPIContentInfo(array('id' => 24, 'contentTypeId' => 39))),
                     'contentInfos' => array(new SPIContentInfo(array('contentTypeId' => '42'))),
