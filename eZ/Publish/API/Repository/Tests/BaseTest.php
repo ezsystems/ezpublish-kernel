@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use Doctrine\DBAL\Connection;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
+use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
@@ -162,12 +163,13 @@ abstract class BaseTest extends TestCase
     protected function getSetupFactory()
     {
         if (null === $this->setupFactory) {
-            $setupClass = getenv('setupFactory');
+            if (false === ($setupClass = getenv('setupFactory'))) {
+                $setupClass = Legacy::class;
+                putenv("setupFactory=${setupClass}");
+            }
 
-            if (false === $setupClass) {
-                throw new \ErrorException(
-                    'Missing mandatory environment variable "setupFactory", this should normally be set in the relevant phpunit-integration-*.xml file and refer to a setupFactory for the given StorageEngine/SearchEngine in use'
-                );
+            if (false === ($fixtureDir = getenv('fixtureDir'))) {
+                putenv('fixtureDir=Legacy');
             }
 
             if (false === class_exists($setupClass)) {
