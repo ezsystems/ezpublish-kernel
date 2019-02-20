@@ -643,6 +643,15 @@ services:
         tags:
             - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.LocationPriority }
 
+    ezpublish_rest.input.parser.internal.sortclause.location_id:
+        parent: ezpublish_rest.input.parser
+        class: '%ezpublish_rest.input.parser.internal.sortclause.data_key_value_object.class%'
+        arguments:
+            - 'LocationId'
+            - 'eZ\Publish\API\Repository\Values\Content\Query\SortClause\Location\Id'
+        tags:
+            - { name: ezpublish_rest.input.parser, mediaType: application/vnd.ez.api.internal.sortclause.LocationId }
+
     ezpublish_rest.input.parser.internal.sortclause.section_identifier:
         parent: ezpublish_rest.input.parser
         class: '%ezpublish_rest.input.parser.internal.sortclause.data_key_value_object.class%'
