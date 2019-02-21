@@ -97,15 +97,20 @@ class PersistenceLoggerTest extends TestCase
      */
     public function testGetCallValues($logger)
     {
+        $calls =  $logger->getCalls();
+        // As we don't care about the hash index we get the array values instead
+        $calls = array_values($calls);
+
         $method = __CLASS__ . '::testLogCall';
-        $this->assertEquals(
-            [
-                ['method' => $method, 'arguments' => [], 'trace' => ['PHPUnit\Framework\TestCase->runTest()']],
-                ['method' => $method, 'arguments' => [], 'trace' => ['PHPUnit\Framework\TestCase->runTest()']],
-                ['method' => $method, 'arguments' => [], 'trace' => ['PHPUnit\Framework\TestCase->runTest()']],
-                ['method' => $method, 'arguments' => [33], 'trace' => ['PHPUnit\Framework\TestCase->runTest()']],
-            ],
-            $logger->getCalls()
-        );
+
+        $this->assertEquals($method, $calls[0]['method']);
+        $this->assertEquals([], $calls[0]['arguments']);
+        $this->assertCount(1, $calls[0]['traces']);
+        $this->assertEquals(['uncached' => 3, 'miss' => 0, 'hit' => 0, 'memory' => 0], $calls[0]['stats']);
+
+        $this->assertEquals($method, $calls[1]['method']);
+        $this->assertEquals([33], $calls[1]['arguments']);
+        $this->assertCount(1, $calls[1]['traces']);
+        $this->assertEquals(['uncached' => 1, 'miss' => 0, 'hit' => 0, 'memory' => 0], $calls[1]['stats']);
     }
 }

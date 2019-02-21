@@ -31,7 +31,7 @@ class PersistenceCacheCollector extends DataCollector
     public function collect(Request $request, Response $response, \Exception $exception = null)
     {
         $this->data = [
-            'count' => $this->logger->getCount(),
+            'stats' => $this->logger->getStats(),
             'calls_logging_enabled' => $this->logger->isCallsLoggingEnabled(),
             'calls' => $this->logger->getCalls(),
             'handlers' => $this->logger->getLoadedUnCachedHandlers(),
@@ -46,11 +46,25 @@ class PersistenceCacheCollector extends DataCollector
     /**
      * Returns call count.
      *
+     * @deprecaterd since 7.5, use getStats().
+     *
      * @return int
      */
     public function getCount()
     {
-        return $this->data['count'];
+        return $this->data['stats']['call'] + $this->data['stats']['miss'];
+    }
+
+    /**
+     * Returns stats on Persistance cache usage.
+     *
+     * @since 7.5
+     *
+     * @return int[<string>]
+     */
+    public function getStats()
+    {
+        return $this->data['stats'];
     }
 
     /**
@@ -66,27 +80,35 @@ class PersistenceCacheCollector extends DataCollector
     }
 
     /**
-     * Returns calls.
+     * Returns all calls.
      *
      * @return array
      */
     public function getCalls()
     {
-        $calls = [];
-        foreach ($this->data['calls'] as $call) {
+        if (empty($this->data['calls'])) {
+            return [];
+        }
+
+        $calls = $count = [];
+        foreach ($this->data['calls'] as $hash => $call) {
             list($class, $method) = explode('::', $call['method']);
             $namespace = explode('\\', $class);
             $class = array_pop($namespace);
-            $calls[] = array(
+            $calls[$hash] = [
                 'namespace' => $namespace,
                 'class' => $class,
                 'method' => $method,
-                'arguments' => empty($call['arguments']) ?
-                    '' :
-                    preg_replace(array('/^array\s\(\s/', '/,\s\)$/'), '', var_export($call['arguments'], true)),
-                'trace' => implode(', ', $call['trace']),
-            );
+                'arguments' => $call['arguments'],
+                'traces' => $call['traces'],
+                'stats' => $call['stats'],
+            ];
+            // Leave out in-memory lookups from sorting
+            $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'];
         }
+        unset($data);
+
+        array_multisort($count, SORT_DESC, $calls);
 
         return $calls;
     }

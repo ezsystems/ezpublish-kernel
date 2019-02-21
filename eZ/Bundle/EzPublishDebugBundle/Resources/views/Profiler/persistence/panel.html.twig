@@ -1,37 +1,89 @@
-<h3 title="Calls made to SPI\Persistence, persistance layer beneath Repository, which where not cached in SPI\Persistence\Cache">
-    Uncached Persistence\Cache calls
+<h3 title="Calls made to SPI\Persistence, persistance layer beneath Repository">
+    Persistence\Cache calls
 </h3>
 
-<p class="text-small text-muted">TIP: This can represent both cold cache, and calls to methods which has not been made to be cached <em>(yet)</em>. Make sure to reload a few times to warmup cache in order to only see the latter.</p>
+{% set stats = collector.stats %}
 
 <table>
     <tr>
-        <th>Total Uncached calls:</th>
-        <td>{{ collector.count }}</td>
+        <th>Uncached method calls:</th>
+        <td>{{ stats.uncached }}</td>
+    </tr>
+    <tr>
+        <th>Cached method calls:</th>
+        <td>From memory: {{ stats.memory }}, hits: {{ stats.hit }}, misses: {{ stats.miss }}</td>
     </tr>
     {% if collector.handlerscount %}
         <tr>
-            <th>Uncached SPI handlers(times loaded):</th>
+            <th>Uncached SPI handlers:</th>
             <td>{{ collector.handlers|join(', ') }}</td>
         </tr>
     {% endif %}
 </table>
 
 {% if collector.callsLoggingEnabled %}
+
+    <h4 title="Calls made to SPI\Persistence">
+        Logged calls to Persistence\Cache
+    </h4>
+
+    <p class="text-small text-muted">
+        TIP: Calls are ordered by # of backend lookups. As misses <em>can</em> represent cold cache, make sure to reload corresponding page to warmup cache a few times to see info on cached paged.
+    </p>
+
     <table>
         <tr>
-            <th>Class</th>
-            <th>Method</th>
+            <th>Class::method</th>
             <th>Arguments</th>
-            <th title="Simplified trace">Trace</th>
+            <th title="Simplified traces of the calls being done">Traces</th>
         </tr>
+
         {% for call in collector.calls %}
             <tr>
-                <td>{{ call.class }}</td>
-                <td>{{ call.method }}</td>
-                <td>{{ call.arguments }}</td>
-                <td class="text-small text-muted">{{ call.trace }}</td>
+                <td>
+                    {{ call.class }}<wbr>::{{ call.method }}<br/>
+                    <p class="text-small text-muted">
+                        {% if call.stats.uncached %}<br/>Uncached calls: {{ call.stats.uncached }}{% endif %}
+                        {% if call.stats.miss %}<br/>Cache misses: {{ call.stats.miss }}{% endif %}
+                        {% if call.stats.hit %}<br/>Cache hits: {{ call.stats.hit }}{% endif %}
+                        {% if call.stats.memory %}<br/>Cache hits from memory: {{ call.stats.memory }}{% endif %}
+                    </p>
+                </td>
+                <td>
+                    {% for key, argument  in call.arguments %}
+                        {{ key }}:
+                        {% if argument is iterable %}
+                           {{  argument|join(', ') }}
+                        {% else %}
+                            {{  argument }}
+                        {% endif %}
+                        <br>
+                    {% endfor %}
+                </td>
+                <td>
+                    <table style="margin: 0; box-shadow: none;">
+                        <tr>
+                            <th>#</th>
+                            <th title="Simplified trace">Trace</th>
+                        </tr>
+                        {% for traceInfo  in call.traces %}
+                            <tr>
+                                <td class="text-small text-muted">
+                                    {{ traceInfo.count }}
+                                </td>
+                                <td class="text-small text-muted">
+                                    {% for calltrace  in traceInfo.trace %}
+                                        {{ calltrace }}<br>
+                                    {% endfor %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </td>
             </tr>
         {% endfor %}
     </table>
+
+{% else %}
+    <p class="text-small text-muted">TIP: Call logging is disabled by default as it consumes considerably memory, enable <code>@TODO</code> in order to see calls made and trace for where the calls comes from.</p>
 {% endif %}
