@@ -144,12 +144,22 @@ abstract class Gateway
      * Returns an array with the relevant data.
      *
      * @param mixed $contentId
-     * @param mixed $version
+     * @param int|null $version Current version on null value.
      * @param string[] $translations
      *
      * @return array
      */
-    abstract public function load($contentId, $version, array $translations = null);
+    abstract public function load($contentId, $version = null, array $translations = null);
+
+    /**
+     * Loads current version for a list of content objects.
+     *
+     * @param int[] $contentIds
+     * @param string[]|null $translations If languages is not set, ALL will be loaded.
+     *
+     * @return array[]
+     */
+    abstract public function loadContentList(array $contentIds, array $translations = null);
 
     /**
      * Loads info for a content object identified by its remote ID.
@@ -161,6 +171,19 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadContentInfoByRemoteId($remoteId);
+
+    /**
+     * Loads info for a content object identified by its location ID (node ID).
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
+     */
+    abstract public function loadContentInfoByLocationId($locationId);
 
     /**
      * Loads info for content identified by $contentId.
@@ -175,6 +198,18 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadContentInfo($contentId);
+
+    /**
+     * Loads rows of info for content identified by $contentIds.
+     *
+     * @see loadContentInfo For the returned structure.
+     * @see \eZ\Publish\SPI\Persistence\Content\Handler::loadContentInfoList For how this will only return items found and not throw.
+     *
+     * @param array $contentIds
+     *
+     * @return array[]
+     */
+    abstract public function loadContentInfoList(array $contentIds);
 
     /**
      * Loads version info for content identified by $contentId and $versionNo.

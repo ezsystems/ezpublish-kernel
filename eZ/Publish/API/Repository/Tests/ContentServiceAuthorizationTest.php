@@ -1577,6 +1577,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         );
         $roleCreateStruct->addPolicy($roleService->newPolicyCreateStruct('content', 'read'));
         $roleCreateStruct->addPolicy($roleService->newPolicyCreateStruct('content', 'versionread'));
+        $roleCreateStruct->addPolicy($roleService->newPolicyCreateStruct('content', 'manage_locations'));
 
         $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreateStruct->addLimitation($locationLimitation);

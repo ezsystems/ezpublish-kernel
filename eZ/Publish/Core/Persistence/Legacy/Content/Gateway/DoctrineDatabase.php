@@ -43,6 +43,7 @@ class DoctrineDatabase extends Gateway
      * eZ Doctrine database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
 
@@ -820,83 +821,150 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads data for a content object.
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param mixed $contentId
-     * @param mixed $version
-     * @param string[] $translations
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function load($contentId, $version, array $translations = null)
+    public function load($contentId, $version = null, array $translations = null)
     {
-        $query = $this->queryBuilder->createFindQuery($translations);
-        $query->where(
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('id', 'ezcontentobject'),
-                    $query->bindValue($contentId)
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('version', 'ezcontentobject_version'),
-                    $query->bindValue($version)
-                )
-            )
-        );
-        $statement = $query->prepare();
-        $statement->execute();
-
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->internalLoadContent([$contentId], $version, $translations);
     }
 
     /**
-     * @see loadContentInfo(), loadContentInfoByRemoteId()
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $contentIds, array $translations = null)
+    {
+        return $this->internalLoadContent($contentIds, null, $translations);
+    }
+
+    /**
+     * @see loadContentList()
      *
-     * @param string $column
-     * @param mixed $id
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     * @param array $contentIds
+     * @param int|null $version
+     * @param string[]|null $translations
      *
      * @return array
      */
-    private function internalLoadContentInfo($column, $id)
+    private function internalLoadContent(array $contentIds, $version = null, array $translations = null)
     {
-        /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
-        $query = $this->dbHandler->createSelectQuery();
-        $query->select(
-            'ezcontentobject.*',
-            $this->dbHandler->aliasedColumn($query, 'main_node_id', 'ezcontentobject_tree')
-        )->from(
-            $this->dbHandler->quoteTable('ezcontentobject')
-        )->leftJoin(
-            $this->dbHandler->quoteTable('ezcontentobject_tree'),
-            $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
-                    $this->dbHandler->quoteColumn('id', 'ezcontentobject')
-                ),
-                $query->expr->eq(
-                    $this->dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree'),
-                    $this->dbHandler->quoteColumn('node_id', 'ezcontentobject_tree')
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->select(
+                'c.id AS ezcontentobject_id',
+                'c.contentclass_id AS ezcontentobject_contentclass_id',
+                'c.section_id AS ezcontentobject_section_id',
+                'c.owner_id AS ezcontentobject_owner_id',
+                'c.remote_id AS ezcontentobject_remote_id',
+                'c.current_version AS ezcontentobject_current_version',
+                'c.initial_language_id AS ezcontentobject_initial_language_id',
+                'c.modified AS ezcontentobject_modified',
+                'c.published AS ezcontentobject_published',
+                'c.status AS ezcontentobject_status',
+                'c.name AS ezcontentobject_name',
+                'c.language_mask AS ezcontentobject_language_mask',
+                'v.id AS ezcontentobject_version_id',
+                'v.version AS ezcontentobject_version_version',
+                'v.modified AS ezcontentobject_version_modified',
+                'v.creator_id AS ezcontentobject_version_creator_id',
+                'v.created AS ezcontentobject_version_created',
+                'v.status AS ezcontentobject_version_status',
+                'v.language_mask AS ezcontentobject_version_language_mask',
+                'v.initial_language_id AS ezcontentobject_version_initial_language_id',
+                'a.id AS ezcontentobject_attribute_id',
+                'a.contentclassattribute_id AS ezcontentobject_attribute_contentclassattribute_id',
+                'a.data_type_string AS ezcontentobject_attribute_data_type_string',
+                'a.language_code AS ezcontentobject_attribute_language_code',
+                'a.language_id AS ezcontentobject_attribute_language_id',
+                'a.data_float AS ezcontentobject_attribute_data_float',
+                'a.data_int AS ezcontentobject_attribute_data_int',
+                'a.data_text AS ezcontentobject_attribute_data_text',
+                'a.sort_key_int AS ezcontentobject_attribute_sort_key_int',
+                'a.sort_key_string AS ezcontentobject_attribute_sort_key_string',
+                't.main_node_id AS ezcontentobject_tree_main_node_id'
+            )
+            ->from('ezcontentobject', 'c')
+            ->innerJoin(
+                'c',
+                'ezcontentobject_version',
+                'v',
+                $expr->andX(
+                    $expr->eq('c.id', 'v.contentobject_id'),
+                    $expr->eq('v.version', $version ?: 'c.current_version')
                 )
             )
-        )->where(
-            $query->expr->eq(
-                $this->dbHandler->quoteColumn($column, 'ezcontentobject'),
-                $query->bindValue($id, null, $column === 'id' ? PDO::PARAM_INT : PDO::PARAM_STR)
+            ->innerJoin(
+                'v',
+                'ezcontentobject_attribute',
+                'a',
+                $expr->andX(
+                    $expr->eq('v.contentobject_id', 'a.contentobject_id'),
+                    $expr->eq('v.version', 'a.version')
+                )
+            )
+            ->leftJoin(
+                'c',
+                'ezcontentobject_tree',
+                't',
+                $expr->andX(
+                    $expr->eq('c.id', 't.contentobject_id'),
+                    $expr->eq('t.node_id', 't.main_node_id')
+                )
+            );
+
+        $queryBuilder->where(
+            $expr->in(
+                'c.id',
+                $queryBuilder->createNamedParameter($contentIds, Connection::PARAM_INT_ARRAY)
             )
         );
-        $statement = $query->prepare();
-        $statement->execute();
-        $row = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if (empty($row)) {
-            throw new NotFound('content', "$column: $id");
+        if (!empty($translations)) {
+            $queryBuilder->andWhere(
+                $expr->in(
+                    'a.language_code',
+                    $queryBuilder->createNamedParameter($translations, Connection::PARAM_STR_ARRAY)
+                )
+            );
         }
 
-        return $row;
+        return $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get query builder to load Content Info data.
+     *
+     * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList(), loadContentInfoByLocationId()
+     *
+     * @param bool $joinMainLocation
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function createLoadContentInfoQueryBuilder($joinMainLocation = true)
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+
+        $joinCondition = $expr->eq('c.id', 't.contentobject_id');
+        if ($joinMainLocation) {
+            // wrap join condition with AND operator and join by a Main Location
+            $joinCondition = $expr->andX(
+                $joinCondition,
+                $expr->eq('t.node_id', 't.main_node_id')
+            );
+        }
+
+        $queryBuilder
+            ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
+            ->from('ezcontentobject', 'c')
+            ->leftJoin(
+                'c',
+                'ezcontentobject_tree',
+                't',
+                $joinCondition
+            );
+
+        return $queryBuilder;
     }
 
     /**
@@ -913,7 +981,27 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfo($contentId)
     {
-        return $this->internalLoadContentInfo('id', $contentId);
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder
+            ->where('c.id = :id')
+            ->setParameter('id', $contentId, PDO::PARAM_INT);
+
+        $results = $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($results)) {
+            throw new NotFound('content', "id: $contentId");
+        }
+
+        return $results[0];
+    }
+
+    public function loadContentInfoList(array $contentIds)
+    {
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder
+            ->where('c.id IN (:ids)')
+            ->setParameter('ids', $contentIds, Connection::PARAM_INT_ARRAY);
+
+        return $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -929,7 +1017,43 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
-        return $this->internalLoadContentInfo('remote_id', $remoteId);
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder
+            ->where('c.remote_id = :id')
+            ->setParameter('id', $remoteId, PDO::PARAM_STR);
+
+        $results = $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($results)) {
+            throw new NotFound('content', "remote_id: $remoteId");
+        }
+
+        return $results[0];
+    }
+
+    /**
+     * Loads info for a content object identified by its location ID (node ID).
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
+     */
+    public function loadContentInfoByLocationId($locationId)
+    {
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder(false);
+        $queryBuilder
+            ->where('t.node_id = :id')
+            ->setParameter('id', $locationId, PDO::PARAM_INT);
+
+        $results = $queryBuilder->execute()->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($results)) {
+            throw new NotFound('content', "node_id: $locationId");
+        }
+
+        return $results[0];
     }
 
     /**

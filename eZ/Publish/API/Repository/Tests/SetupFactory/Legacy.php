@@ -259,10 +259,10 @@ class Legacy extends SetupFactory
             $contentTypeHandler->clearCache();
         }
 
-        /** @var $decorator \eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator */
+        /** @var \eZ\Publish\Core\Persistence\Cache\CacheServiceDecorator $decorator */
         $decorator = $this->getServiceContainer()->get('ezpublish.cache_pool.spi.cache.decorator');
 
-        $decorator->clearAllTestData();
+        $decorator->clear();
     }
 
     /**
@@ -378,6 +378,9 @@ class Legacy extends SetupFactory
 
             $containerBuilder->addCompilerPass(new Compiler\Search\SearchEngineSignalSlotPass('legacy'));
             $containerBuilder->addCompilerPass(new Compiler\Search\FieldRegistryPass());
+
+            // load overrides just before creating test Container
+            $loader->load('tests/override.yml');
 
             self::$serviceContainer = new ServiceContainer(
                 $containerBuilder,

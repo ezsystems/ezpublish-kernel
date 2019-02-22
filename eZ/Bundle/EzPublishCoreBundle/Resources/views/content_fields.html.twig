@@ -160,13 +160,14 @@
 
 {% block ezselection_field %}
 {% spaceless %}
-    {% if fieldSettings.isMultiple and field.value.selection|length() > 0  %}
+    {% if field.value.selection|length() <= 0 %}
+    {% elseif fieldSettings.isMultiple %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for selectedIndex in field.value.selection %}
             <li>{{ fieldSettings.options[selectedIndex] }}</li>
         {% endfor %}
         </ul>
-    {% elseif not fieldSettings.isMultiple %}
+    {% else %}
         {% set field_value = fieldSettings.options[field.value.selection.0] %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
@@ -263,9 +264,10 @@
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
-        {% for contentId in field.value.destinationContentIds %}
+        {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
+        {{ fos_httpcache_tag('relation-' ~ contentId) }}
         <li>
-            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'noLayout': 1} ) ) }}
+            {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
         </li>
         {% endfor %}
     </ul>
@@ -330,7 +332,7 @@
     {% if parameters.showInfo is defined and not parameters.showInfo %}
         {% set showInfo = false %}
     {% endif %}
-    
+
     {% set draggable = defaultDraggable %}
     {% if parameters.draggable is defined and not parameters.draggable %}
         {% set draggable = 'false' %}
@@ -423,8 +425,8 @@
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
     {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
-    {% set width = parameters.width is defined ? parameters.width : imageAlias.width %}
-    {% set height = parameters.height is defined ? parameters.height : imageAlias.height %}
+    {% set width = parameters.width is defined ? parameters.width : (imageAlias ? imageAlias.width : '') %}
+    {% set height = parameters.height is defined ? parameters.height : (imageAlias ? imageAlias.height : '') %}
     <img src="{{ src }}"{% if width %} width="{{ width }}"{% endif %}{% if height %} height="{{ height }}"{% endif %} alt="{{ field.value.alternativeText }}"{% if parameters.class is defined and parameters.class is not empty %} class="{{ parameters.class }}"{% endif %} />
 </figure>
 {% endif %}
@@ -433,9 +435,10 @@
 
 {% block ezobjectrelation_field %}
 {% spaceless %}
-{% if not ez_is_field_empty( content, field ) %}
+{% if not ez_is_field_empty( content, field ) and parameters.available %}
+    {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
     <div {{ block( 'field_attributes' ) }}>
-        {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'noLayout': 1} ) ) }}
+        {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'layout': false} ) ) }}
     </div>
 {% endif %}
 {% endspaceless %}

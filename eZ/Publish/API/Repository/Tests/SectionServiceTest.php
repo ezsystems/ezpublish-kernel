@@ -525,8 +525,8 @@ class SectionServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertEquals(
-            true, // Taken from the fixture
+        $this->assertTrue(
+            // Taken from the fixture
             $isSectionUsed
         );
     }
@@ -637,7 +637,7 @@ class SectionServiceTest extends BaseTest
         $isSectionUsed = $sectionService->isSectionUsed($section);
         /* END: Use Case */
 
-        $this->assertSame(false, $isSectionUsed);
+        $this->assertFalse($isSectionUsed);
     }
 
     /**

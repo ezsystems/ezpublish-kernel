@@ -85,22 +85,29 @@ class Type extends FieldType
         if (!$value->authors instanceof AuthorCollection) {
             throw new InvalidArgumentType(
                 '$value->authors',
-                'eZ\\Publish\\Core\\FieldType\\Author\\AuthorCollection',
+                AuthorCollection::class,
                 $value->authors
             );
         }
     }
 
     /**
-     * Returns information for FieldValue->$sortKey relevant to the field type.
-     *
-     * @param \eZ\Publish\Core\FieldType\Author\Value $value
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getSortInfo(BaseValue $value)
     {
-        return false;
+        if (empty($value->authors)) {
+            return false;
+        }
+
+        $authors = [];
+        foreach ($value->authors as $author) {
+            $authors[] = $this->transformationProcessor->transformByGroup($author->name, 'lowercase');
+        }
+
+        sort($authors);
+
+        return implode(',', $authors);
     }
 
     /**

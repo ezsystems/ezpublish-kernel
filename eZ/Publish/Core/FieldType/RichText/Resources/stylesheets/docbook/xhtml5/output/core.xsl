@@ -18,6 +18,23 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template match="docbook:programlisting">
+    <xsl:element name="pre" namespace="{$outputNamespace}">
+      <xsl:if test="@ezxhtml:class">
+        <xsl:attribute name="class">
+          <xsl:value-of select="@ezxhtml:class"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:if test="@language">
+        <!-- Unsure about what to do with language attribute, adding it as a custom attribute for now -->
+        <xsl:attribute name="data-language">
+          <xsl:value-of select="@language"/>
+        </xsl:attribute>
+      </xsl:if>
+      <xsl:value-of select="./text()"/>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="docbook:section">
     <xsl:element name="section" namespace="{$outputNamespace}">
       <xsl:apply-templates/>
@@ -365,6 +382,12 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="docbook:th/text()">
+    <xsl:call-template name="breakLine">
+      <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
+  </xsl:template>
+
   <xsl:template match="docbook:th">
     <xsl:element name="th" namespace="{$outputNamespace}">
       <xsl:if test="@class">
@@ -426,6 +449,12 @@
       </xsl:if>
       <xsl:apply-templates/>
     </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="docbook:td/text()">
+    <xsl:call-template name="breakLine">
+      <xsl:with-param name="text" select="."/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="docbook:td">

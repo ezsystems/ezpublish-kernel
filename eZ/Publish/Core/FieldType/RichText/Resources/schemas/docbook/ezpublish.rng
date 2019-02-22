@@ -22,6 +22,36 @@
       </a:documentation>
       <ref name="db.title"/>
     </define>
+
+    <define name="db.blockquote.info" combine="choice">
+      <a:documentation>
+        Needed by the LIBXML engine to allow for multiple title elements on the same level below blockquote
+      </a:documentation>
+      <optional>
+        <ref name="db.title"/>
+      </optional>
+    </define>
+
+    <define name="db.superscript.attlist" combine="interleave">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="db.emphasis"/>
+          <ref name="db.link"/>
+        </choice>
+      </zeroOrMore>
+    </define>
+
+    <define name="db.subscript.attlist" combine="interleave">
+      <zeroOrMore>
+        <choice>
+          <text/>
+          <ref name="db.emphasis"/>
+          <ref name="db.link"/>
+        </choice>
+      </zeroOrMore>
+    </define>
+
     <define name="db.orderedlist">
       <element name="orderedlist">
         <a:documentation>A list in which each entry is marked with a sequentially incremented label</a:documentation>
@@ -311,7 +341,6 @@
     <define name="db.productionset"><notAllowed/></define>
     <define name="db.productname"><notAllowed/></define>
     <define name="db.productnumber"><notAllowed/></define>
-    <define name="db.programlisting"><notAllowed/></define>
     <define name="db.programlistingco"><notAllowed/></define>
     <define name="db.prompt"><notAllowed/></define>
     <define name="db.property"><notAllowed/></define>
@@ -638,6 +667,7 @@
     <define name="db.emphasis.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
     <!--define name="db.html.table.attributes" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define-->
     <define name="db.link.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
+    <define name="db.programlisting.attlist" combine="interleave"><ref name="ez.xhtml.class.attribute"/></define>
     <define name="ez.xhtml.class.attribute">
       <optional>
         <attribute name="ezxhtml:class"><text/></attribute>

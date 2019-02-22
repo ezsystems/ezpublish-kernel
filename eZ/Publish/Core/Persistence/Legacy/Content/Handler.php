@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
+use Exception;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
@@ -20,6 +21,8 @@ use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException as NotFound;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * The Content Handler stores Content and ContentType objects.
@@ -83,6 +86,11 @@ class Handler implements BaseContentHandler
     protected $treeHandler;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
@@ -93,6 +101,7 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler $treeHandler
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
         Gateway $contentGateway,
@@ -102,7 +111,8 @@ class Handler implements BaseContentHandler
         SlugConverter $slugConverter,
         UrlAliasGateway $urlAliasGateway,
         ContentTypeHandler $contentTypeHandler,
-        TreeHandler $treeHandler
+        TreeHandler $treeHandler,
+        LoggerInterface $logger = null
     ) {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
@@ -112,6 +122,7 @@ class Handler implements BaseContentHandler
         $this->urlAliasGateway = $urlAliasGateway;
         $this->contentTypeHandler = $contentTypeHandler;
         $this->treeHandler = $treeHandler;
+        $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
     /**
@@ -292,23 +303,9 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Returns the raw data of a content object identified by $id, in a struct.
-     *
-     * A version to load must be specified. If you want to load the current
-     * version of a content object use SearchHandler::findSingle() with the
-     * ContentId criterion.
-     *
-     * Optionally a translation filter may be specified. If specified only the
-     * translations with the listed language codes will be retrieved. If not,
-     * all translations will be retrieved.
-     *
-     * @param int|string $id
-     * @param int|string $version
-     * @param string[] $translations
-     *
-     * @return \eZ\Publish\SPI\Persistence\Content Content value object
+     * {@inheritdoc}
      */
-    public function load($id, $version, array $translations = null)
+    public function load($id, $version = null, array $translations = null)
     {
         $rows = $this->contentGateway->load($id, $version, $translations);
 
@@ -318,13 +315,92 @@ class Handler implements BaseContentHandler
 
         $contentObjects = $this->mapper->extractContentFromRows(
             $rows,
-            $this->contentGateway->loadVersionedNameData(array(array('id' => $id, 'version' => $version)))
+            $this->contentGateway->loadVersionedNameData([[
+                'id' => $id,
+                'version' => $rows[0]['ezcontentobject_version_version'],
+            ]])
         );
         $content = $contentObjects[0];
 
         $this->fieldHandler->loadExternalFieldData($content);
 
         return $content;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $contentIds, array $translations = null)
+    {
+        $rawList = $this->contentGateway->loadContentList($contentIds, $translations);
+        if (empty($rawList)) {
+            return [];
+        }
+
+        $idVersionPairs = [];
+        foreach ($rawList as $row) {
+            // As there is only one version per id, set id as key to avoid duplicates
+            $idVersionPairs[$row['ezcontentobject_id']] = [
+                'id' => $row['ezcontentobject_id'],
+                'version' => $row['ezcontentobject_version_version'],
+            ];
+        }
+
+        // group name data per Content Id
+        $nameData = $this->contentGateway->loadVersionedNameData(array_values($idVersionPairs));
+        $contentItemNameData = [];
+        foreach ($nameData as $nameDataRow) {
+            $contentId = $nameDataRow['ezcontentobject_name_contentobject_id'];
+            $contentItemNameData[$contentId][] = $nameDataRow;
+        }
+
+        // group rows per Content Id be able to ignore Content items with erroneous data
+        $contentItemsRows = [];
+        foreach ($rawList as $row) {
+            $contentId = $row['ezcontentobject_id'];
+            $contentItemsRows[$contentId][] = $row;
+        }
+        unset($rawList, $idVersionPairs);
+
+        // try to extract Content from each Content data
+        $contentItems = [];
+        foreach ($contentItemsRows as $contentId => $contentItemsRow) {
+            try {
+                $contentList = $this->mapper->extractContentFromRows(
+                    $contentItemsRow,
+                    $contentItemNameData[$contentId]
+                );
+                $contentItems[$contentId] = $contentList[0];
+            } catch (Exception $e) {
+                $this->logger->warning(
+                    sprintf(
+                        '%s: Content %d not loaded: %s',
+                        __METHOD__,
+                        $contentId,
+                        $e->getMessage()
+                    )
+                );
+            }
+        }
+
+        // try to load External Storage data for each Content, ignore Content items for which it failed
+        foreach ($contentItems as $contentId => $content) {
+            try {
+                $this->fieldHandler->loadExternalFieldData($content);
+            } catch (Exception $e) {
+                unset($contentItems[$contentId]);
+                $this->logger->warning(
+                    sprintf(
+                        '%s: Content %d not loaded: %s',
+                        __METHOD__,
+                        $contentId,
+                        $e->getMessage()
+                    )
+                );
+            }
+        }
+
+        return $contentItems;
     }
 
     /**
@@ -337,6 +413,20 @@ class Handler implements BaseContentHandler
     public function loadContentInfo($contentId)
     {
         return $this->treeHandler->loadContentInfo($contentId);
+    }
+
+    public function loadContentInfoList(array $contentIds)
+    {
+        $list = $this->mapper->extractContentInfoFromRows(
+            $this->contentGateway->loadContentInfoList($contentIds)
+        );
+
+        $listByContentId = [];
+        foreach ($list as $item) {
+            $listByContentId[$item->id] = $item;
+        }
+
+        return $listByContentId;
     }
 
     /**
@@ -582,10 +672,11 @@ class Handler implements BaseContentHandler
      *
      * @param mixed $contentId
      * @param mixed|null $versionNo Copy all versions if left null
+     * @param int|null $newOwnerId
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function copy($contentId, $versionNo = null)
+    public function copy($contentId, $versionNo = null, $newOwnerId = null)
     {
         $currentVersionNo = isset($versionNo) ?
             $versionNo :
@@ -595,6 +686,9 @@ class Handler implements BaseContentHandler
         $createStruct = $this->mapper->createCreateStructFromContent(
             $this->load($contentId, $currentVersionNo)
         );
+        if ($newOwnerId) {
+            $createStruct->ownerId = $newOwnerId;
+        }
         $content = $this->internalCreate($createStruct, $currentVersionNo);
 
         // If version was not passed also copy other versions

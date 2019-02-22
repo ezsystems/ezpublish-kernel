@@ -8,7 +8,6 @@ parameters:
     languages:
         - eng-US
         - eng-GB
-    ezpublish.cache_pool.spi.cache.decorator.class: eZ\Publish\Core\Persistence\Cache\Tests\Helpers\IntegrationTestCacheServiceDecorator
     ignored_storage_files:
         -
             var/ezdemo_site/storage/images/design/plain-site/172-2-eng-US/eZ-Publish-Demo-Design-without-demo-content1.png
@@ -17,9 +16,6 @@ parameters:
     ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot\SignalDispatcherFactory
 
 services:
-    ezpublish.cache_pool.spi.cache.decorator:
-        class: "%ezpublish.cache_pool.spi.cache.decorator.class%"
-
     ezpublish.spi.search_engine:
         alias: ezpublish.spi.search.elasticsearch
 

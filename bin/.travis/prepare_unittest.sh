@@ -35,16 +35,10 @@ if [ "$DB" = "postgresql" ] ; then psql -c "CREATE DATABASE testdb;" -U postgres
 # Setup GitHub key to avoid api rate limit (pure auth read only key, no rights, for use by ezsystems repos only!)
 composer config -g github-oauth.github.com "d0285ed5c8644f30547572ead2ed897431c1fc09"
 
-COMPOSER_UPDATE=""
-
 # solr package search API integration tests
 if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then
     echo "> Require ezsystems/ezplatform-solr-search-engine:^1.3.0@dev"
     composer require --no-update ezsystems/ezplatform-solr-search-engine:^1.3.0@dev
-    COMPOSER_UPDATE="true"
-
-    # Because of either some changes in travis, composer or git, composer is not able to pick version for "self" on inclusion of solr anymore, so we force it:
-    export COMPOSER_ROOT_VERSION=`php -r 'echo json_decode(file_get_contents("./composer.json"), true)["extra"]["branch-alias"]["dev-tmp_ci_branch"];'`
 fi
 
 # Switch to another Symfony version if asked for
@@ -54,18 +48,4 @@ if [ "$SYMFONY_VERSION" != "" ] ; then
     # Remove php-cs-fixer as it is not needed for these tests and tends to cause Symfony version conflicts
     echo "> Remove php-cs-fixer"
     composer remove --dev --no-update friendsofphp/php-cs-fixer
-    COMPOSER_UPDATE="true"
 fi
-
-# Install packages with composer update if asked for to make sure not use composer.lock if present
-if [ "$COMPOSER_UPDATE" = "true" ] ; then
-    echo "> Install dependencies through Composer (using update as other packages was requested)"
-    composer update --no-progress --no-interaction --prefer-dist
-else
-    echo "> Install dependencies through Composer"
-    composer install --no-progress --no-interaction --prefer-dist
-fi
-
-# Setup Solr / Elastic search if asked for
-if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
-if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh; fi

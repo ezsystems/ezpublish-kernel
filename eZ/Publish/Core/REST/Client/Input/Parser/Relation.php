@@ -72,18 +72,30 @@ class Relation extends BaseParser
      */
     protected function convertRelationType($stringType)
     {
-        switch (strtoupper($stringType)) {
-            case 'COMMON':
-                return Values\Content\Relation::COMMON;
-            case 'EMBED':
-                return Values\Content\Relation::EMBED;
-            case 'LINK':
-                return Values\Content\Relation::LINK;
-            case 'FIELD':
-                return Values\Content\Relation::FIELD;
+        $stringTypeList = explode(',', strtoupper($stringType));
+        $relationType = 0;
+
+        foreach ($stringTypeList as $stringTypeValue) {
+            switch ($stringTypeValue) {
+                case 'COMMON':
+                    $relationType |= Values\Content\Relation::COMMON;
+                    break;
+                case 'EMBED':
+                    $relationType |= Values\Content\Relation::EMBED;
+                    break;
+                case 'LINK':
+                    $relationType |= Values\Content\Relation::LINK;
+                    break;
+                case 'FIELD':
+                    $relationType |= Values\Content\Relation::FIELD;
+                    break;
+                default:
+                    throw new \RuntimeException(
+                        sprintf('Unknown Relation type: "%s"', $stringTypeValue)
+                    );
+            }
         }
-        throw new \RuntimeException(
-            sprintf('Unknown Relation type: "%s"', $stringType)
-        );
+
+        return $relationType;
     }
 }

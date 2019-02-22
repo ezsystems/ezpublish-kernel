@@ -12,6 +12,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AsseticPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BinaryContentDownloadPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConsoleCacheWarmupPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FieldTypeParameterProviderRegistryPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\FragmentPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\HttpCachePass;
@@ -31,6 +32,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RouterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TranslationCollectorPass;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StashPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewProvidersPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
@@ -94,6 +96,7 @@ class EzPublishCoreBundle extends Bundle
         );
         $container->addCompilerPass(new BinaryContentDownloadPass());
         $container->addCompilerPass(new ViewProvidersPass());
+        $container->addCompilerPass(new ConsoleCacheWarmupPass());
 
         // Storage passes
         $container->addCompilerPass(new ExternalStorageRegistryPass());
@@ -101,6 +104,7 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new FieldValueConverterRegistryPass());
         $container->addCompilerPass(new RoleLimitationConverterPass());
         $container->addCompilerPass(new QueryTypePass());
+        $container->addCompilerPass(new StashPass());
 
         $securityExtension = $container->getExtension('security');
         $securityExtension->addSecurityListenerFactory(new HttpBasicFactory());

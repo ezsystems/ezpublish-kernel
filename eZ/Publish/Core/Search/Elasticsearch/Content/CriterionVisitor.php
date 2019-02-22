@@ -14,6 +14,8 @@ use RuntimeException;
 
 /**
  * Visits the criterion tree into a hash representation of Elasticsearch query/filter AST.
+ *
+ * @deprecated
  */
 abstract class CriterionVisitor
 {

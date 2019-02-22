@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Repository;
 use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -227,6 +228,7 @@ class ContentService implements ContentServiceInterface
      */
     public function loadVersionInfoById($contentId, $versionNo = null)
     {
+        // @todo SPI should also support null to avoid concurrency issues
         if ($versionNo === null) {
             $versionNo = $this->loadContentInfo($contentId)->currentVersionNo;
         }
@@ -272,15 +274,10 @@ class ContentService implements ContentServiceInterface
             $useAlwaysAvailable = false;
         }
 
-        // As we have content info we can avoid that current version is looked up using spi in loadContent() if not set
-        if ($versionNo === null) {
-            $versionNo = $contentInfo->currentVersionNo;
-        }
-
         return $this->loadContent(
             $contentInfo->id,
             $languages,
-            $versionNo,
+            $versionNo,// On purpose pass as-is and not use $contentInfo, to make sure to return actual current version on null
             $useAlwaysAvailable
         );
     }
@@ -351,18 +348,10 @@ class ContentService implements ContentServiceInterface
                 $isRemoteId = false;
             }
 
-            // Get current version if $versionNo is not defined
-            if ($versionNo === null) {
-                if (!isset($spiContentInfo)) {
-                    $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($id);
-                }
-
-                $versionNo = $spiContentInfo->currentVersionNo;
-            }
-
             $loadLanguages = $languages;
             $alwaysAvailableLanguageCode = null;
             // Set main language on $languages filter if not empty (all) and $useAlwaysAvailable being true
+            // @todo Move use always available logic to SPI load methods, like done in location handler in 7.x
             if (!empty($loadLanguages) && $useAlwaysAvailable) {
                 if (!isset($spiContentInfo)) {
                     $spiContentInfo = $this->persistenceHandler->contentHandler()->loadContentInfo($id);
@@ -433,6 +422,57 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Bulk-load Content items by the list of ContentInfo Value Objects.
+     *
+     * Note: it does not throw exceptions on load, just ignores erroneous Content item.
+     * Moreover, since the method works on pre-loaded ContentInfo list, it is assumed that user is
+     * allowed to access every Content on the list.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo[] $contentInfoList
+     * @param string[] $languages A language priority, filters returned fields and is used as prioritized language code on
+     *                            returned value object. If not given all languages are returned.
+     * @param bool $useAlwaysAvailable Add Main language to \$languages if true (default) and if alwaysAvailable is true,
+     *                                 unless all languages have been asked for.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content[] list of Content items with Content Ids as keys
+     */
+    public function loadContentListByContentInfo(
+        array $contentInfoList,
+        array $languages = [],
+        $useAlwaysAvailable = true
+    ) {
+        $loadAllLanguages = $languages === Language::ALL;
+        $contentIds = [];
+        $translations = $languages;
+        foreach ($contentInfoList as $contentInfo) {
+            $contentIds[] = $contentInfo->id;
+            // Unless we are told to load all languages, we add main language to translations so they are loaded too
+            // Might in some case load more languages then intended, but prioritised handling will pick right one
+            if (!$loadAllLanguages && $useAlwaysAvailable && $contentInfo->alwaysAvailable) {
+                $translations[] = $contentInfo->mainLanguageCode;
+            }
+        }
+        $translations = array_unique($translations);
+
+        $spiContentList = $this->persistenceHandler->contentHandler()->loadContentList(
+            $contentIds,
+            $translations
+        );
+        $contentList = [];
+        foreach ($spiContentList as $contentId => $spiContent) {
+            $contentInfo = $spiContent->versionInfo->contentInfo;
+            $contentList[$contentId] = $this->domainMapper->buildContentDomainObject(
+                $spiContent,
+                null,
+                $languages,
+                $contentInfo->alwaysAvailable ? $contentInfo->mainLanguageCode : null
+            );
+        }
+
+        return $contentList;
+    }
+
+    /**
      * Creates a new content draft assigned to the authenticated user.
      *
      * If a different userId is given in $contentCreateStruct it is assigned to the given user
@@ -474,7 +514,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if ($contentCreateStruct->alwaysAvailable === null) {
-            $contentCreateStruct->alwaysAvailable = false;
+            $contentCreateStruct->alwaysAvailable = $contentCreateStruct->contentType->defaultAlwaysAvailable ?: false;
         }
 
         $contentCreateStruct->contentType = $this->repository->getContentTypeService()->loadContentType(
@@ -801,6 +841,14 @@ class ContentService implements ContentServiceInterface
                 );
             }
 
+            if (!array_key_exists($locationCreateStruct->sortField, Location::SORT_FIELD_MAP)) {
+                $locationCreateStruct->sortField = Location::SORT_FIELD_NAME;
+            }
+
+            if (!array_key_exists($locationCreateStruct->sortOrder, Location::SORT_ORDER_MAP)) {
+                $locationCreateStruct->sortOrder = Location::SORT_ORDER_ASC;
+            }
+
             $parentLocationIdSet[$locationCreateStruct->parentLocationId] = true;
             $parentLocation = $this->repository->getLocationService()->loadLocation(
                 $locationCreateStruct->parentLocationId
@@ -1095,6 +1143,7 @@ class ContentService implements ContentServiceInterface
         $versionInfoList = array();
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
+            // @todo: Change this to filter returned drafts by permissions instead of throwing
             if (!$this->repository->canUser('content', 'versionread', $versionInfo)) {
                 throw new UnauthorizedException('content', 'versionread', array('contentId' => $versionInfo->contentInfo->id));
             }
@@ -1171,7 +1220,16 @@ class ContentService implements ContentServiceInterface
         }
 
         $mainLanguageCode = $content->contentInfo->mainLanguageCode;
-        $languageCodes = $this->getLanguageCodesForUpdate($contentUpdateStruct, $content);
+        if ($contentUpdateStruct->initialLanguageCode === null) {
+            $contentUpdateStruct->initialLanguageCode = $mainLanguageCode;
+        }
+
+        $allLanguageCodes = $this->getLanguageCodesForUpdate($contentUpdateStruct, $content);
+        foreach ($allLanguageCodes as $languageCode) {
+            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
+        }
+
+        $updatedLanguageCodes = $this->getUpdatedLanguageCodes($contentUpdateStruct);
         $contentType = $this->repository->getContentTypeService()->loadContentType(
             $content->contentInfo->contentTypeId
         );
@@ -1193,9 +1251,10 @@ class ContentService implements ContentServiceInterface
                 $fieldDefinition->fieldTypeIdentifier
             );
 
-            foreach ($languageCodes as $languageCode) {
+            foreach ($allLanguageCodes as $languageCode) {
                 $isCopied = $isEmpty = $isRetained = false;
                 $isLanguageNew = !in_array($languageCode, $content->versionInfo->languageCodes);
+                $isLanguageUpdated = in_array($languageCode, $updatedLanguageCodes);
                 $valueLanguageCode = $fieldDefinition->isTranslatable ? $languageCode : $mainLanguageCode;
                 $isFieldUpdated = isset($fields[$fieldDefinition->identifier][$valueLanguageCode]);
                 $isProcessed = isset($fieldValues[$fieldDefinition->identifier][$valueLanguageCode]);
@@ -1216,7 +1275,7 @@ class ContentService implements ContentServiceInterface
 
                 if ($fieldType->isEmptyValue($fieldValue)) {
                     $isEmpty = true;
-                    if ($fieldDefinition->isRequired) {
+                    if ($isLanguageUpdated && $fieldDefinition->isRequired) {
                         $allFieldErrors[$fieldDefinition->id][$languageCode] = new ValidationError(
                             "Value for required field definition '%identifier%' with language '%languageCode%' is empty",
                             null,
@@ -1224,7 +1283,7 @@ class ContentService implements ContentServiceInterface
                             'empty'
                         );
                     }
-                } else {
+                } elseif ($isLanguageUpdated) {
                     $fieldErrors = $fieldType->validate(
                         $fieldDefinition,
                         $fieldValue
@@ -1275,7 +1334,7 @@ class ContentService implements ContentServiceInterface
                 'name' => $this->nameSchemaService->resolveNameSchema(
                     $content,
                     $fieldValues,
-                    $languageCodes,
+                    $allLanguageCodes,
                     $contentType
                 ),
                 'creatorId' => $contentUpdateStruct->creatorId ?: $this->repository->getCurrentUserReference()->getUserId(),
@@ -1315,6 +1374,30 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Returns only updated language codes.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
+     *
+     * @return array
+     */
+    private function getUpdatedLanguageCodes(APIContentUpdateStruct $contentUpdateStruct)
+    {
+        $languageCodes = [
+            $contentUpdateStruct->initialLanguageCode => true,
+        ];
+
+        foreach ($contentUpdateStruct->fields as $field) {
+            if ($field->languageCode === null || isset($languageCodes[$field->languageCode])) {
+                continue;
+            }
+
+            $languageCodes[$field->languageCode] = true;
+        }
+
+        return array_keys($languageCodes);
+    }
+
+    /**
      * Returns all language codes used in given $fields.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if no field value exists in initial language
@@ -1326,26 +1409,12 @@ class ContentService implements ContentServiceInterface
      */
     protected function getLanguageCodesForUpdate(APIContentUpdateStruct $contentUpdateStruct, APIContent $content)
     {
-        if ($contentUpdateStruct->initialLanguageCode !== null) {
-            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
-                $contentUpdateStruct->initialLanguageCode
-            );
-        } else {
-            $contentUpdateStruct->initialLanguageCode = $content->contentInfo->mainLanguageCode;
-        }
-
         $languageCodes = array_fill_keys($content->versionInfo->languageCodes, true);
         $languageCodes[$contentUpdateStruct->initialLanguageCode] = true;
 
-        foreach ($contentUpdateStruct->fields as $field) {
-            if ($field->languageCode === null || isset($languageCodes[$field->languageCode])) {
-                continue;
-            }
-
-            $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
-                $field->languageCode
-            );
-            $languageCodes[$field->languageCode] = true;
+        $updatedLanguageCodes = $this->getUpdatedLanguageCodes($contentUpdateStruct);
+        foreach ($updatedLanguageCodes as $languageCode) {
+            $languageCodes[$languageCode] = true;
         }
 
         return array_keys($languageCodes);
@@ -1503,7 +1572,7 @@ class ContentService implements ContentServiceInterface
      * Removes the given version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is in
-     *         published state or is the last version of the Content
+     *         published state or is a last version of Content in non draft state
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to remove this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
@@ -1531,7 +1600,7 @@ class ContentService implements ContentServiceInterface
             2
         );
 
-        if (count($versionList) === 1) {
+        if (count($versionList) === 1 && !$versionInfo->isDraft()) {
             throw new BadStateException(
                 '$versionInfo',
                 'Version is the last version of the Content and can not be removed'
@@ -1615,7 +1684,8 @@ class ContentService implements ContentServiceInterface
         try {
             $spiContent = $this->persistenceHandler->contentHandler()->copy(
                 $contentInfo->id,
-                $versionInfo ? $versionInfo->versionNo : null
+                $versionInfo ? $versionInfo->versionNo : null,
+                $this->repository->getPermissionResolver()->getCurrentUserReference()->getUserId()
             );
 
             foreach ($defaultObjectStates as $objectStateGroupId => $objectState) {

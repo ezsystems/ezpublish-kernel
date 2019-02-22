@@ -22,6 +22,12 @@ abstract class Operator
     const LTE = '<=';
     const IN = 'in';
     const BETWEEN = 'between';
+
+    /**
+     * Does a lookup where a the value _can_ contain a "*" (a wildcard) in order to match a pattern.
+     *
+     * E.g: $criterion->value = "Oper*or";
+     */
     const LIKE = 'like';
     const CONTAINS = 'contains';
 }

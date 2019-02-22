@@ -24,6 +24,7 @@ abstract class Handler
      * DB handler to fetch additional field information.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
 
@@ -39,7 +40,6 @@ abstract class Handler
         CriterionOperator::GTE => 'gte',
         CriterionOperator::LT => 'lt',
         CriterionOperator::LTE => 'lte',
-        CriterionOperator::LIKE => 'like',
     );
 
     /**
@@ -80,15 +80,15 @@ abstract class Handler
             case Criterion\Operator::IN:
                 $filter = $query->expr->in(
                     $column,
-                    array_map(array($this, 'lowercase'), $criterion->value)
+                    array_map(array($this, 'lowerCase'), $criterion->value)
                 );
                 break;
 
             case Criterion\Operator::BETWEEN:
                 $filter = $query->expr->between(
                     $column,
-                    $query->bindValue($this->lowercase($criterion->value[0])),
-                    $query->bindValue($this->lowercase($criterion->value[1]))
+                    $query->bindValue($this->lowerCase($criterion->value[0])),
+                    $query->bindValue($this->lowerCase($criterion->value[1]))
                 );
                 break;
 
@@ -97,11 +97,29 @@ abstract class Handler
             case Criterion\Operator::GTE:
             case Criterion\Operator::LT:
             case Criterion\Operator::LTE:
-            case Criterion\Operator::LIKE:
                 $operatorFunction = $this->comparatorMap[$criterion->operator];
                 $filter = $query->expr->$operatorFunction(
                     $column,
-                    $query->bindValue($this->lowercase($criterion->value))
+                    $query->bindValue($this->lowerCase($criterion->value))
+                );
+                break;
+
+            case Criterion\Operator::LIKE:
+                if (strpos($criterion->value, '%') !== false) {
+                    // @deprecated In 6.13.x/7.3.x and higher, to be removed in 8.0
+                    @trigger_error(
+                        "Usage of '%' in Operator::LIKE criteria with Legacy Search Engine was never intended, " .
+                        "and is deprecated for removal in 8.0. Please use '*' like in FullText, works across engines",
+                        E_USER_DEPRECATED
+                    );
+                    $value = $this->lowerCase($criterion->value);
+                } else {
+                    $value = str_replace('*', '%', $this->prepareLikeString($criterion->value));
+                }
+
+                $filter = $query->expr->like(
+                    $column,
+                    $query->bindValue($value)
                 );
                 break;
 
@@ -132,7 +150,7 @@ abstract class Handler
      */
     protected function prepareLikeString($string)
     {
-        return addcslashes($this->lowercase($string), '%_');
+        return addcslashes($this->lowerCase($string), '%_');
     }
 
     /**

@@ -12,11 +12,17 @@ parameters:
     ezpublish.http_cache.content.parent_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\ParentLocationsListener
     ezpublish.cache_clear.content.related_locations_listener.class: eZ\Publish\Core\MVC\Symfony\Cache\Http\EventListener\RelatedLocationsListener
 
+    # Override for Stash
+    ezpublish.stash_cache.driver_factory.class: eZ\Bundle\EzPublishCoreBundle\Cache\Driver\DriverFactory
+    ezpublish.stash_cache.redis_driver.name: 'Redis'
+    ezpublish.stash_cache.redis_driver.class: \Stash\Driver\Redis
+
 services:
     # Parameter %ezpublish.cache_pool.class% and cache decorator service are defined
     # in Core configuration, see eZ/Publish/Core/settings/storage_engines/cache.yml for details
     ezpublish.cache_pool:
         class: "%ezpublish.cache_pool.class%"
+        lazy: true
         factory: ["@ezpublish.cache_pool.factory", getCachePool]
         arguments: ["@ezpublish.config.resolver"]
 

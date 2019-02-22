@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Base class for content specific tests.
@@ -68,8 +69,12 @@ abstract class BaseContentServiceTest extends BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    protected function createContentDraftVersion1($locationId = 56, $contentTypeIdentifier = 'forum', $contentFieldNameIdentifier = 'name')
-    {
+    protected function createContentDraftVersion1(
+        $locationId = 56,
+        $contentTypeIdentifier = 'forum',
+        $contentFieldNameIdentifier = 'name',
+        User $contentOwner = null
+    ) {
         $repository = $this->getRepository();
 
         $parentLocationId = $this->generateId('location', $locationId);
@@ -101,6 +106,10 @@ abstract class BaseContentServiceTest extends BaseTest
         // $sectionId is the ID of section 1
         $contentCreate->sectionId = $sectionId;
         $contentCreate->alwaysAvailable = true;
+
+        if ($contentOwner) {
+            $contentCreate->ownerId = $contentOwner->id;
+        }
 
         // Create a draft
         $draft = $contentService->createContent($contentCreate, array($locationCreate));

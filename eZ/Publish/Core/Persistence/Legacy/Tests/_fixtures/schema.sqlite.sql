@@ -189,6 +189,7 @@ CREATE INDEX ezcontentobject_lmask ON ezcontentobject (language_mask);
 CREATE INDEX ezcontentobject_owner ON ezcontentobject (owner_id);
 CREATE INDEX ezcontentobject_pub ON ezcontentobject (published);
 CREATE INDEX ezcontentobject_status ON ezcontentobject (status);
+CREATE INDEX ezcontentobject_section ON ezcontentobject (section_id);
 
 CREATE TABLE ezcontentobject_attribute (
   attribute_original_id integer DEFAULT 0,
@@ -286,6 +287,7 @@ CREATE INDEX ezcontentobject_tree_p_node_id ON ezcontentobject_tree (parent_node
 CREATE INDEX ezcontentobject_tree_path ON ezcontentobject_tree (path_string);
 CREATE INDEX ezcontentobject_tree_path_ident ON ezcontentobject_tree (path_identification_string);
 CREATE INDEX modified_subnode ON ezcontentobject_tree (modified_subnode);
+CREATE INDEX ezcontentobject_tree_contentobject_id_path_string ON ezcontentobject_tree (path_string, contentobject_id);
 
 CREATE TABLE ezcontentobject_version (
   contentobject_id integer,

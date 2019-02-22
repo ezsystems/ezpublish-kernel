@@ -8,6 +8,10 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use Doctrine\DBAL\Connection;
+use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -543,5 +547,153 @@ abstract class BaseTest extends TestCase
         $roleService->publishRoleDraft($roleDraft);
 
         return $roleService->loadRole($roleDraft->id);
+    }
+
+    /**
+     * Create user and assign new role with the given policies.
+     *
+     * @param string $login
+     * @param array $policiesData list of policies in the form of <code>[ [ 'module' => 'name', 'function' => 'name'] ]</code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\User
+     *
+     * @throws \Exception
+     */
+    public function createUserWithPolicies($login, array $policiesData)
+    {
+        $repository = $this->getRepository(false);
+        $roleService = $repository->getRoleService();
+        $userService = $repository->getUserService();
+
+        $repository->beginTransaction();
+        try {
+            $userCreateStruct = $userService->newUserCreateStruct(
+                $login,
+                "{$login}@test.local",
+                $login,
+                'eng-GB'
+            );
+            $userCreateStruct->setField('first_name', $login);
+            $userCreateStruct->setField('last_name', $login);
+            $user = $userService->createUser($userCreateStruct, [$userService->loadUserGroup(4)]);
+
+            $role = $this->createRoleWithPolicies(uniqid('role_for_' . $login . '_', true), $policiesData);
+            $roleService->assignRoleToUser($role, $user);
+
+            $repository->commit();
+
+            return $user;
+        } catch (\Exception $ex) {
+            $repository->rollback();
+            throw $ex;
+        }
+    }
+
+    /**
+     * @return \Doctrine\DBAL\Connection
+     *
+     * @throws \ErrorException
+     */
+    protected function getRawDatabaseConnection()
+    {
+        $connection = $this
+            ->getSetupFactory()
+            ->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.connection');
+
+        if (!$connection instanceof Connection) {
+            throw new \RuntimeException(
+                sprintf('Expected %s got %s', Connection::class, get_class($connection))
+            );
+        }
+
+        return $connection;
+    }
+
+    /**
+     * Executes the given callback passing raw Database Connection (\Doctrine\DBAL\Connection).
+     * Returns the result returned by the given callback.
+     *
+     * **Note**: The method clears the entire persistence cache pool.
+     *
+     * @throws \Exception
+     *
+     * @param callable $callback
+     *
+     * @return mixed the return result of the given callback
+     */
+    public function performRawDatabaseOperation(callable $callback)
+    {
+        $repository = $this->getRepository(false);
+        $repository->beginTransaction();
+        try {
+            $callback(
+                $this->getRawDatabaseConnection()
+            );
+            $repository->commit();
+        } catch (Exception $e) {
+            $repository->rollback();
+            throw $e;
+        }
+
+        /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cachePool */
+        $cachePool = $this
+            ->getSetupFactory()
+            ->getServiceContainer()->get('ezpublish.cache_pool');
+
+        $cachePool->clear();
+    }
+
+    /**
+     * Traverse all errors for all fields in all Translations to find expected one.
+     *
+     * @param \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException $exception
+     * @param string $expectedValidationErrorMessage
+     */
+    protected function assertValidationErrorOccurs(
+        ContentFieldValidationException $exception,
+        $expectedValidationErrorMessage
+    ) {
+        $constraint = new PHPUnitConstraintValidationErrorOccurs($expectedValidationErrorMessage);
+
+        self::assertThat($exception, $constraint);
+    }
+
+    /**
+     * Create 'folder' Content.
+     *
+     * @param array $names Folder names in the form of <code>['&lt;language_code&gt;' => '&lt;name&gt;']</code>
+     * @param int $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content published Content
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function createFolder(array $names, $parentLocationId)
+    {
+        $repository = $this->getRepository(false);
+        $contentService = $repository->getContentService();
+        $contentTypeService = $repository->getContentTypeService();
+        $locationService = $repository->getLocationService();
+
+        if (empty($names)) {
+            throw new \RuntimeException(sprintf('%s expects non-empty names list', __METHOD__));
+        }
+        $mainLanguageCode = array_keys($names)[0];
+
+        $struct = $contentService->newContentCreateStruct(
+            $contentTypeService->loadContentTypeByIdentifier('folder'),
+            $mainLanguageCode
+        );
+        foreach ($names as $languageCode => $translatedName) {
+            $struct->setField('name', $translatedName, $languageCode);
+        }
+        $contentDraft = $contentService->createContent(
+            $struct,
+            [$locationService->newLocationCreateStruct($parentLocationId)]
+        );
+
+        return $contentService->publishVersion($contentDraft->versionInfo);
     }
 }

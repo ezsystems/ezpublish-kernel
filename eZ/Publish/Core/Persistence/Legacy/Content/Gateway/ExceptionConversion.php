@@ -255,20 +255,26 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Loads data for a content object.
-     *
-     * Returns an array with the relevant data.
-     *
-     * @param mixed $contentId
-     * @param mixed $version
-     * @param string[] $translations
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function load($contentId, $version, array $translations = null)
+    public function load($contentId, $version = null, array $translations = null)
     {
         try {
             return $this->innerGateway->load($contentId, $version, $translations);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentList(array $contentIds, array $translations = null)
+    {
+        try {
+            return $this->innerGateway->loadContentList($contentIds, $translations);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {
@@ -297,6 +303,28 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * Loads info for a content object identified by its location ID (node ID).
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\NotFoundException
+     *
+     * @return array
+     */
+    public function loadContentInfoByLocationId($locationId)
+    {
+        try {
+            return $this->innerGateway->loadContentInfoByLocationId($locationId);
+        } catch (DBALException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        } catch (\PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Loads info for content identified by $contentId.
      * Will basically return a hash containing all field values for ezcontentobject table plus following keys:
      *  - always_available => Boolean indicating if content's language mask contains alwaysAvailable bit field
@@ -312,6 +340,17 @@ class ExceptionConversion extends Gateway
     {
         try {
             return $this->innerGateway->loadContentInfo($contentId);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    public function loadContentInfoList(array $contentIds)
+    {
+        try {
+            return $this->innerGateway->loadContentInfoList($contentIds);
         } catch (DBALException $e) {
             throw new RuntimeException('Database error', 0, $e);
         } catch (PDOException $e) {

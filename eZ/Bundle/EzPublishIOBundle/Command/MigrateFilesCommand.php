@@ -159,16 +159,18 @@ EOT
             return;
         }
 
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion(
-            '<question>Are you sure you want to proceed?</question> ',
-            false
-        );
+        if (!$input->getOption('no-interaction')) {
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion(
+                '<question>Are you sure you want to proceed?</question> ',
+                false
+            );
 
-        if (!$helper->ask($input, $output, $question)) {
-            $output->writeln('Aborting.');
+            if (!$helper->ask($input, $output, $question)) {
+                $output->writeln('Aborting.');
 
-            return;
+                return;
+            }
         }
 
         $this->migrateFiles(

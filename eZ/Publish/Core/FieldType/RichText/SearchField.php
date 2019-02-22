@@ -41,7 +41,7 @@ class SearchField implements Indexable
         return array(
             new Search\Field(
                 'value',
-                $this->extractShortText($document),
+                self::extractShortText($document),
                 new Search\FieldType\StringField()
             ),
             new Search\Field(
@@ -77,13 +77,16 @@ class SearchField implements Indexable
     /**
      * Extracts short text content of the given $document.
      *
+     * @internal Only for use by RichText FieldType itself.
+     *
      * @param \DOMDocument $document
      *
      * @return string
      */
-    private function extractShortText(DOMDocument $document)
+    public static function extractShortText(DOMDocument $document)
     {
         $result = null;
+        // try to extract first paragraph/tag
         if ($section = $document->documentElement->firstChild) {
             $textDom = $section->firstChild;
 
@@ -98,7 +101,10 @@ class SearchField implements Indexable
             $result = $document->documentElement->textContent;
         }
 
-        return trim($result);
+        // In case of newlines, extract first line. Also limit size to 255 which is maxsize on sql impl.
+        $lines = preg_split('/\r\n|\n|\r/', trim($result), -1, PREG_SPLIT_NO_EMPTY);
+
+        return empty($lines) ? '' : trim(mb_substr($lines[0], 0, 255));
     }
 
     /**

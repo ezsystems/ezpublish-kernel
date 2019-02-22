@@ -20,6 +20,7 @@ use eZ\Publish\API\Repository\Exceptions\ContentValidationException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\Core\REST\Server\Exceptions\ContentFieldValidationException as RESTContentFieldValidationException;
+use eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 
@@ -227,50 +228,15 @@ class Content extends RestController
      * object in the source server). The user has to publish the content if
      * it should be visible.
      *
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedContent
      */
     public function createContent(Request $request)
     {
-        $contentCreate = $this->inputDispatcher->parse(
-            new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
-                $request->getContent()
-            )
-        );
+        $contentCreate = $this->parseContentRequest($request);
 
-        try {
-            $content = $this->repository->getContentService()->createContent(
-                $contentCreate->contentCreateStruct,
-                array($contentCreate->locationCreateStruct)
-            );
-        } catch (ContentValidationException $e) {
-            throw new BadRequestException($e->getMessage());
-        } catch (ContentFieldValidationException $e) {
-            throw new RESTContentFieldValidationException($e);
-        }
-
-        $contentValue = null;
-        $contentType = null;
-        $relations = null;
-        if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
-            $contentValue = $content;
-            $contentType = $this->repository->getContentTypeService()->loadContentType(
-                $content->getVersionInfo()->getContentInfo()->contentTypeId
-            );
-            $relations = $this->repository->getContentService()->loadRelations($contentValue->getVersionInfo());
-        }
-
-        return new Values\CreatedContent(
-            array(
-                'content' => new Values\RestContent(
-                    $content->contentInfo,
-                    null,
-                    $contentValue,
-                    $contentType,
-                    $relations
-                ),
-            )
-        );
+        return $this->doCreateContent($request, $contentCreate);
     }
 
     /**
@@ -793,5 +759,71 @@ class Content extends RestController
         $subRequest = $this->container->get('request_stack')->getCurrentRequest()->duplicate(null, null, $path);
 
         return $this->container->get('http_kernel')->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
+     * @return mixed
+     */
+    protected function parseContentRequest(Request $request)
+    {
+        return $this->inputDispatcher->parse(
+            new Message(
+                array('Content-Type' => $request->headers->get('Content-Type'), 'Url' => $request->getPathInfo()),
+                $request->getContent()
+            )
+        );
+    }
+
+    /**
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct $contentCreate
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @return \eZ\Publish\Core\REST\Server\Values\CreatedContent
+     */
+    protected function doCreateContent(Request $request, RestContentCreateStruct $contentCreate)
+    {
+        try {
+            $contentCreateStruct = $contentCreate->contentCreateStruct;
+            $contentCreate->locationCreateStruct->sortField = $contentCreateStruct->contentType->defaultSortField;
+            $contentCreate->locationCreateStruct->sortOrder = $contentCreateStruct->contentType->defaultSortOrder;
+
+            $content = $this->repository->getContentService()->createContent(
+                $contentCreateStruct,
+                array($contentCreate->locationCreateStruct)
+            );
+        } catch (ContentValidationException $e) {
+            throw new BadRequestException($e->getMessage());
+        } catch (ContentFieldValidationException $e) {
+            throw new RESTContentFieldValidationException($e);
+        }
+
+        $contentValue = null;
+        $contentType = null;
+        $relations = null;
+        if ($this->getMediaType($request) === 'application/vnd.ez.api.content') {
+            $contentValue = $content;
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $content->getVersionInfo()->getContentInfo()->contentTypeId
+            );
+            $relations = $this->repository->getContentService()->loadRelations($contentValue->getVersionInfo());
+        }
+
+        return new Values\CreatedContent(
+            array(
+                'content' => new Values\RestContent(
+                    $content->contentInfo,
+                    null,
+                    $contentValue,
+                    $contentType,
+                    $relations
+                ),
+            )
+        );
     }
 }

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\API\Repository\Values\Content\URLWildcard as URLWildcardValue;
 
 /**
  * URLWildcard value object visitor.
@@ -26,9 +27,14 @@ class URLWildcard extends ValueObjectVisitor
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
     {
-        $generator->startObjectElement('UrlWildcard');
         $visitor->setHeader('Content-Type', $generator->getMediaType('UrlWildcard'));
+        $generator->startObjectElement('UrlWildcard');
+        $this->visitURLWildcardAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('UrlWildcard');
+    }
 
+    protected function visitURLWildcardAttributes(Visitor $visitor, Generator $generator, URLWildcardValue $data)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadURLWildcard', array('urlWildcardId' => $data->id))
@@ -49,7 +55,5 @@ class URLWildcard extends ValueObjectVisitor
             $this->serializeBool($generator, $data->forward)
         );
         $generator->endValueElement('forward');
-
-        $generator->endObjectElement('UrlWildcard');
     }
 }

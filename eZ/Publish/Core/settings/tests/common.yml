@@ -1,3 +1,10 @@
 services:
     logger:
         class: Psr\Log\NullLogger
+
+    # Override Slug Converter service to expose mutating Service configuration
+    ezpublish.persistence.slug_converter:
+        class: eZ\Publish\API\Repository\Tests\Common\SlugConverter
+        arguments:
+            - '@ezpublish.api.storage_engine.transformation_processor'
+            - []

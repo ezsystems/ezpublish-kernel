@@ -122,7 +122,7 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\Date\Value $value
      *
-     * @return array
+     * @return mixed
      */
     protected function getSortInfo(BaseValue $value)
     {

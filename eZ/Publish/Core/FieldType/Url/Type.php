@@ -82,7 +82,7 @@ class Type extends FieldType
      */
     protected function checkValueStructure(BaseValue $value)
     {
-        if (!is_string($value->link)) {
+        if (null !== $value->link && !is_string($value->link)) {
             throw new InvalidArgumentType(
                 '$value->link',
                 'string',
@@ -90,7 +90,7 @@ class Type extends FieldType
             );
         }
 
-        if (isset($value->text) && !is_string($value->text)) {
+        if (null !== $value->text && !is_string($value->text)) {
             throw new InvalidArgumentType(
                 '$value->text',
                 'string',
@@ -100,11 +100,7 @@ class Type extends FieldType
     }
 
     /**
-     * Returns information for FieldValue->$sortKey relevant to the field type.
-     *
-     * @param \eZ\Publish\Core\FieldType\Url\Value $value
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getSortInfo(BaseValue $value)
     {

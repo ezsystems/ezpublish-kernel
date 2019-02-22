@@ -83,13 +83,29 @@ class ConsoleCommandListenerTest extends TestCase
 
     /**
      * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
+     * @expectedExceptionMessageRegExp /^Invalid siteaccess 'foo', matched by .+\. Valid siteaccesses are/
      */
-    public function testInvalidSiteAccess()
+    public function testInvalidSiteAccessDev()
     {
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
         $input = new ArrayInput(array('--siteaccess' => 'foo'), $this->inputDefinition);
         $event = new ConsoleCommandEvent($this->command, $input, $this->testOutput);
+        $this->listener->setDebug(true);
+        $this->listener->onConsoleCommand($event);
+    }
+
+    /**
+     * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
+     * @expectedExceptionMessageRegExp /^Invalid siteaccess 'foo', matched by .+\.$/
+     */
+    public function testInvalidSiteAccessProd()
+    {
+        $this->dispatcher->expects($this->never())
+            ->method('dispatch');
+        $input = new ArrayInput(array('--siteaccess' => 'foo'), $this->inputDefinition);
+        $event = new ConsoleCommandEvent($this->command, $input, $this->testOutput);
+        $this->listener->setDebug(false);
         $this->listener->onConsoleCommand($event);
     }
 

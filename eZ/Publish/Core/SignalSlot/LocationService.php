@@ -22,6 +22,7 @@ use eZ\Publish\Core\SignalSlot\Signal\LocationService\HideLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\UnhideLocationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\MoveSubtreeSignal;
 use eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * LocationService class.
@@ -359,12 +360,13 @@ class LocationService implements LocationServiceInterface
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
+     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
     {
-        return $this->service->newLocationCreateStruct($parentLocationId);
+        return $this->service->newLocationCreateStruct($parentLocationId, $contentType);
     }
 
     /**
@@ -375,5 +377,30 @@ class LocationService implements LocationServiceInterface
     public function newLocationUpdateStruct()
     {
         return $this->service->newLocationUpdateStruct();
+    }
+
+    /**
+     * Get the total number of all existing Locations. Can be combined with loadAllLocations.
+     *
+     * @see loadAllLocations
+     *
+     * @return int Total number of Locations
+     */
+    public function getAllLocationsCount()
+    {
+        return $this->service->getAllLocationsCount();
+    }
+
+    /**
+     * Bulk-load all existing Locations, constrained by $limit and $offset to paginate results.
+     *
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]
+     */
+    public function loadAllLocations($offset = 0, $limit = 25)
+    {
+        return $this->service->loadAllLocations($offset, $limit);
     }
 }

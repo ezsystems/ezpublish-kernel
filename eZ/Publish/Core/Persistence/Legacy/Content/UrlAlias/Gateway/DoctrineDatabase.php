@@ -9,11 +9,14 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 
 use Doctrine\DBAL\Connection;
-use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Database\Query;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Language;
+use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway;
 use RuntimeException;
 
 /**
@@ -54,6 +57,7 @@ class DoctrineDatabase extends Gateway
      * Doctrine database handler.
      *
      * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     * @deprecated Start to use DBAL $connection instead.
      */
     protected $dbHandler;
 
@@ -72,6 +76,11 @@ class DoctrineDatabase extends Gateway
     protected $table;
 
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
      * Creates a new DoctrineDatabase UrlAlias Gateway.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $dbHandler
@@ -84,6 +93,7 @@ class DoctrineDatabase extends Gateway
         $this->dbHandler = $dbHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
         $this->table = static::TABLE;
+        $this->connection = $dbHandler->getConnection();
     }
 
     public function setTable($name)
@@ -860,9 +870,9 @@ class DoctrineDatabase extends Gateway
     /**
      * Loads all data for the path identified by given $id.
      *
-     * @throws \RuntimeException
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      *
-     * @param mixed $id
+     * @param int $id
      *
      * @return array
      */
@@ -892,9 +902,21 @@ class DoctrineDatabase extends Gateway
             $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
             if (empty($rows)) {
                 // Normally this should never happen
-                // @todo remove throw when tested
-                $path = implode('/', $pathData);
-                throw new \RuntimeException("Path ({$path}...) is broken, last id is '{$id}': " . __METHOD__);
+                $pathDataArray = [];
+                foreach ($pathData as $path) {
+                    if (!isset($path[0]['text'])) {
+                        continue;
+                    }
+
+                    $pathDataArray[] = $path[0]['text'];
+                }
+
+                $path = implode('/', $pathDataArray);
+                throw new BadStateException(
+                    'id',
+                    "Unable to load path data, the path ...'{$path}' is broken, alias id '{$id}' not found. " .
+                    'To fix all broken paths run the ezplatform:urls:regenerate-aliases command'
+                );
             }
 
             $id = $rows[0]['parent'];
@@ -1109,31 +1131,19 @@ class DoctrineDatabase extends Gateway
 
     public function getLocationContentMainLanguageId($locationId)
     {
-        $dbHandler = $this->dbHandler;
-        $query = $dbHandler->createSelectQuery();
-        $query
-            ->select($dbHandler->quoteColumn('initial_language_id', 'ezcontentobject'))
-            ->from($dbHandler->quoteTable('ezcontentobject'))
-            ->innerJoin(
-                $dbHandler->quoteTable('ezcontentobject_tree'),
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $dbHandler->quoteColumn('contentobject_id', 'ezcontentobject_tree'),
-                        $dbHandler->quoteColumn('id', 'ezcontentobject')
-                    ),
-                    $query->expr->eq(
-                        $dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
-                        $dbHandler->quoteColumn('main_node_id', 'ezcontentobject_tree')
-                    ),
-                    $query->expr->eq(
-                        $dbHandler->quoteColumn('node_id', 'ezcontentobject_tree'),
-                        $query->bindValue($locationId, null, \PDO::PARAM_INT)
-                    )
-                )
-            );
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->select('c.initial_language_id')
+            ->from('ezcontentobject', 'c')
+            ->join('c', 'ezcontentobject_tree', 't', $expr->eq('t.contentobject_id', 'c.id'))
+            ->where(
+                $expr->eq('t.node_id', ':locationId')
+            )
+            ->setParameter('locationId', $locationId, \PDO::PARAM_INT)
+        ;
 
-        $statement = $query->prepare();
-        $statement->execute();
+        $statement = $queryBuilder->execute();
         $languageId = $statement->fetchColumn();
 
         if ($languageId === false) {
@@ -1250,14 +1260,310 @@ class DoctrineDatabase extends Gateway
             ->from($this->table)
             ->where('action = :action')
             // fetch rows matching any of the given Languages
-            ->where('lang_mask & :languageMask <> 0')
+            ->andWhere('lang_mask & :languageMask <> 0')
             ->setParameter(':action', 'eznode:' . $locationId)
             ->setParameter(':languageMask', $languageMask)
         ;
 
         $statement = $query->execute();
-        while (false !== ($row = $statement->fetch(\PDO::FETCH_ASSOC))) {
-            yield $row;
+        $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
+
+        return $rows ?: [];
+    }
+
+    /**
+     * Delete URL aliases pointing to non-existent Locations.
+     *
+     * @return int Number of affected rows.
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function deleteUrlAliasesWithoutLocation()
+    {
+        $dbPlatform = $this->connection->getDatabasePlatform();
+
+        $subquery = $this->connection->createQueryBuilder();
+        $subquery
+            ->select('node_id')
+            ->from('ezcontentobject_tree', 't')
+            ->where(
+                $subquery->expr()->eq(
+                    't.node_id',
+                    sprintf(
+                        'CAST(%s as %s)',
+                        $dbPlatform->getSubstringExpression($this->table . '.action', 8),
+                        $this->getIntegerType($dbPlatform)
+                    )
+                )
+            )
+        ;
+
+        $deleteQuery = $this->connection->createQueryBuilder();
+        $deleteQuery
+            ->delete($this->table)
+            ->where(
+                $deleteQuery->expr()->eq(
+                    'action_type',
+                    $deleteQuery->createPositionalParameter('eznode')
+                )
+            )
+            ->andWhere(
+                sprintf('NOT EXISTS (%s)', $subquery->getSQL())
+            )
+        ;
+
+        return $deleteQuery->execute();
+    }
+
+    /**
+     * Delete URL aliases pointing to non-existent parent nodes.
+     *
+     * @return int Number of affected rows.
+     */
+    public function deleteUrlAliasesWithoutParent()
+    {
+        $existingAliasesQuery = $this->getAllUrlAliasesQuery();
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->table)
+            ->where(
+                $query->expr()->neq(
+                    'parent',
+                    $query->createPositionalParameter(0, \PDO::PARAM_INT)
+                )
+            )
+            ->andWhere(
+                $query->expr()->notIn(
+                    'parent',
+                    $existingAliasesQuery
+                )
+            )
+        ;
+
+        return $query->execute();
+    }
+
+    /**
+     * Delete URL aliases which do not link to any existing URL alias node.
+     *
+     * Note: Typically link column value is used to determine original alias for an archived entries.
+     */
+    public function deleteUrlAliasesWithBrokenLink()
+    {
+        $existingAliasesQuery = $this->getAllUrlAliasesQuery();
+
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->delete($this->table)
+            ->where(
+                $query->expr()->neq('id', 'link')
+            )
+            ->andWhere(
+                $query->expr()->notIn(
+                    'link',
+                    $existingAliasesQuery
+                )
+            )
+        ;
+
+        return $query->execute();
+    }
+
+    /**
+     * Attempt repairing data corruption for broken archived URL aliases for Location,
+     * assuming there exists restored original (current) entry.
+     *
+     * @param int $locationId
+     */
+    public function repairBrokenUrlAliasesForLocation($locationId)
+    {
+        $urlAliasesData = $this->getUrlAliasesForLocation($locationId);
+
+        $originalUrlAliases = $this->filterOriginalAliases($urlAliasesData);
+
+        if (count($originalUrlAliases) === count($urlAliasesData)) {
+            // no archived aliases - nothing to fix
+            return;
         }
+
+        $updateQueryBuilder = $this->connection->createQueryBuilder();
+        $expr = $updateQueryBuilder->expr();
+        $updateQueryBuilder
+            ->update('ezurlalias_ml')
+            ->set('link', ':linkId')
+            ->set('parent', ':newParentId')
+            ->where(
+                $expr->eq('action', ':action')
+            )
+            ->andWhere(
+                $expr->eq(
+                    'is_original',
+                    $updateQueryBuilder->createNamedParameter(0, \PDO::PARAM_INT)
+                )
+            )
+            ->andWhere(
+                $expr->eq('parent', ':oldParentId')
+            )
+            ->andWhere(
+                $expr->eq('text_md5', ':textMD5')
+            )
+            ->setParameter(':action', "eznode:{$locationId}");
+
+        foreach ($urlAliasesData as $urlAliasData) {
+            if ($urlAliasData['is_original'] === 1 || !isset($originalUrlAliases[$urlAliasData['lang_mask']])) {
+                // ignore non-archived entries and deleted Translations
+                continue;
+            }
+
+            $originalUrlAlias = $originalUrlAliases[$urlAliasData['lang_mask']];
+
+            if ($urlAliasData['link'] === $originalUrlAlias['link']) {
+                // ignore correct entries to avoid unnecessary updates
+                continue;
+            }
+
+            $updateQueryBuilder
+                ->setParameter(':linkId', $originalUrlAlias['link'], \PDO::PARAM_INT)
+                // attempt to fix missing parent case
+                ->setParameter(
+                    ':newParentId',
+                    null !== $urlAliasData['existing_parent'] ? $urlAliasData['existing_parent'] : $originalUrlAlias['parent']
+                )
+                ->setParameter(':oldParentId', $urlAliasData['parent'], \PDO::PARAM_INT)
+                ->setParameter(':textMD5', $urlAliasData['text_md5']);
+
+            try {
+                $updateQueryBuilder->execute();
+            } catch (UniqueConstraintViolationException $e) {
+                // edge case: if such row already exists, there's no way to restore history
+                $this->deleteRow($urlAliasData['parent'], $urlAliasData['text_md5']);
+            }
+        }
+    }
+
+    /**
+     * Filter from the given result set original (current) only URL aliases and index them by language_mask.
+     *
+     * Note: each language_mask can have one URL Alias.
+     *
+     * @param array $urlAliasesData
+     *
+     * @return array
+     */
+    private function filterOriginalAliases(array $urlAliasesData)
+    {
+        $originalUrlAliases = array_filter(
+            $urlAliasesData,
+            function ($urlAliasData) {
+                return (int)$urlAliasData['is_original'] === 1;
+            }
+        );
+        // return language_mask-indexed array
+        return array_combine(
+            array_column($originalUrlAliases, 'lang_mask'),
+            $originalUrlAliases
+        );
+    }
+
+    /**
+     * Get subquery for IDs of all URL aliases.
+     *
+     * @return string Query
+     */
+    private function getAllUrlAliasesQuery()
+    {
+        $existingAliasesQueryBuilder = $this->connection->createQueryBuilder();
+        $innerQueryBuilder = $this->connection->createQueryBuilder();
+
+        return $existingAliasesQueryBuilder
+            ->select('tmp.id')
+            ->from(
+                // nest subquery to avoid same-table update error
+                '(' . $innerQueryBuilder->select('id')->from($this->table)->getSQL() . ')',
+                'tmp'
+            )
+            ->getSQL();
+    }
+
+    /**
+     * Get DBMS-specific integer type.
+     *
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $databasePlatform
+     *
+     * @return string
+     */
+    private function getIntegerType(AbstractPlatform $databasePlatform)
+    {
+        switch ($databasePlatform->getName()) {
+            case 'mysql':
+                return 'signed';
+            default:
+                return 'integer';
+        }
+    }
+
+    /**
+     * Get all URL aliases for the given Location (including archived ones).
+     *
+     * @param int $locationId
+     *
+     * @return array
+     */
+    protected function getUrlAliasesForLocation($locationId)
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder
+            ->select(
+                't1.id',
+                't1.is_original',
+                't1.lang_mask',
+                't1.link',
+                't1.parent',
+                // show existing parent only if its row exists, special case for root parent
+                'CASE t1.parent WHEN 0 THEN 0 ELSE t2.id END AS existing_parent',
+                't1.text_md5'
+            )
+            ->from($this->table, 't1')
+            // selecting t2.id above will result in null if parent is broken
+            ->leftJoin('t1', $this->table, 't2', $queryBuilder->expr()->eq('t1.parent', 't2.id'))
+            ->where(
+                $queryBuilder->expr()->eq(
+                    't1.action',
+                    $queryBuilder->createPositionalParameter("eznode:{$locationId}")
+                )
+            );
+
+        return $queryBuilder->execute()->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Delete URL alias row by its primary composite key.
+     *
+     * @param int $parentId
+     * @param string $textMD5
+     *
+     * @return int number of affected rows
+     */
+    private function deleteRow($parentId, $textMD5)
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->delete($this->table)
+            ->where(
+                $expr->andX(
+                    $expr->eq(
+                        'parent',
+                        $queryBuilder->createPositionalParameter($parentId, \PDO::PARAM_INT)
+                    ),
+                    $expr->eq(
+                        'text_md5',
+                        $queryBuilder->createPositionalParameter($textMD5)
+                    )
+                )
+            );
+
+        return $queryBuilder->execute();
     }
 }

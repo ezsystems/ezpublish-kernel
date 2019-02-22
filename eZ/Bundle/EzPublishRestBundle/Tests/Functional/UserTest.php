@@ -276,7 +276,7 @@ XML;
     }
 
     /**
-     * @depends testCreateGroup
+     * @depends testCreateUserGroup
      * Covers GET /user/groups/{groupPath}/subgroups
      */
     public function testLoadSubUserGroups($groupHref)

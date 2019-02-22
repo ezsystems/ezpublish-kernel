@@ -6,7 +6,6 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\LocationService as APILocationService;
@@ -18,6 +17,7 @@ use eZ\Publish\Core\REST\Common\RequestParser;
 use eZ\Publish\Core\REST\Common\Input\Dispatcher;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
 use eZ\Publish\Core\REST\Common\Message;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 
 /**
  * Location service, used for complex subtree operations.
@@ -80,16 +80,21 @@ class LocationService implements APILocationService, Sessionable
      * Instantiates a new location create class.
      *
      * @param mixed $parentLocationId the parent under which the new location should be created
+     * @param eZ\Publish\API\Repository\Values\ContentType\ContentType|null $contentType
      *
      * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId)
+    public function newLocationCreateStruct($parentLocationId, ContentType $contentType = null)
     {
-        return new LocationCreateStruct(
-            array(
-                'parentLocationId' => $parentLocationId,
-            )
-        );
+        $properties = [
+            'parentLocationId' => $parentLocationId,
+        ];
+        if ($contentType) {
+            $properties['sortField'] = $contentType->defaultSortField;
+            $properties['sortOrder'] = $contentType->defaultSortOrder;
+        }
+
+        return new LocationCreateStruct($properties);
     }
 
     /**
@@ -353,6 +358,24 @@ class LocationService implements APILocationService, Sessionable
      * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      */
     public function moveSubtree(Location $location, Location $newParentLocation)
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    public function getAllLocationsCount()
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[]|void
+     *
+     * @throws \Exception
+     */
+    public function loadAllLocations($offset = 0, $limit = 25)
     {
         throw new \Exception('@todo: Implement.');
     }

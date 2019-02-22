@@ -99,8 +99,7 @@ class ContentCreateTest extends BaseTest
             'sectionId not created correctly'
         );
 
-        $this->assertEquals(
-            true,
+        $this->assertTrue(
             $result->contentCreateStruct->alwaysAvailable,
             'alwaysAvailable not created correctly'
         );

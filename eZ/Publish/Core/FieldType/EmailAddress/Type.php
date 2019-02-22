@@ -166,7 +166,7 @@ class Type extends FieldType
      *
      * @param \eZ\Publish\Core\FieldType\EmailAddress\Value $value
      *
-     * @return array
+     * @return string
      */
     protected function getSortInfo(BaseValue $value)
     {

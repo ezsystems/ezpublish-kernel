@@ -9,6 +9,8 @@ namespace eZ\Publish\Core\Base\Tests;
 
 /**
  * Trait for PHPUnit 5 Forward Compatibility, for PHPUnit 4.8 use and up.
+ *
+ * @deprecated since 6.13.5, use createMock from PHPUnit package instead.
  */
 trait PHPUnit5CompatTrait
 {
@@ -30,24 +32,5 @@ trait PHPUnit5CompatTrait
             $callOriginalMethods,
             $proxyTarget
         );
-    }
-
-    /**
-     * Returns a test double for the specified class.
-     *
-     * @internal Forward compatibility with PHPUnit 5/6, so unit tests written on 6.7 & backported to 5.4 can use this.
-     *
-     * @param string $originalClassName
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function createMock($originalClassName)
-    {
-        return $this->getMockBuilder($originalClassName)
-            ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            //->disallowMockingUnknownTypes() Not defined in PHPunit 4.8
-            ->getMock();
     }
 }

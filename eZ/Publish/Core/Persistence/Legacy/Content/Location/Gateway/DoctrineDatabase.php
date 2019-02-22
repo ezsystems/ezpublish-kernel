@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
+use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -41,6 +42,11 @@ class DoctrineDatabase extends Gateway
     protected $handler;
 
     /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    protected $connection;
+
+    /**
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
@@ -48,6 +54,7 @@ class DoctrineDatabase extends Gateway
     public function __construct(DatabaseHandler $handler)
     {
         $this->handler = $handler;
+        $this->connection = $handler->getConnection();
     }
 
     /**
@@ -577,63 +584,80 @@ class DoctrineDatabase extends Gateway
      */
     public function swap($locationId1, $locationId2)
     {
-        $query = $this->handler->createSelectQuery();
-        $query
-            ->select(
-                $this->handler->quoteColumn('node_id'),
-                $this->handler->quoteColumn('contentobject_id'),
-                $this->handler->quoteColumn('contentobject_version')
-            )
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->select('node_id', 'main_node_id', 'contentobject_id', 'contentobject_version')
+            ->from('ezcontentobject_tree')
             ->where(
-                $query->expr->in(
-                    $this->handler->quoteColumn('node_id'),
-                    array($locationId1, $locationId2)
+                $expr->in(
+                    'node_id',
+                    ':locationIds'
                 )
-            );
-        $statement = $query->prepare();
-        $statement->execute();
-        foreach ($statement->fetchAll() as $row) {
+            )
+            ->setParameter('locationIds', [$locationId1, $locationId2], Connection::PARAM_INT_ARRAY)
+        ;
+        $statement = $queryBuilder->execute();
+        $contentObjects = [];
+        foreach ($statement->fetchAll(PDO::FETCH_ASSOC) as $row) {
+            $row['is_main_node'] = (int)$row['main_node_id'] === (int)$row['node_id'];
             $contentObjects[$row['node_id']] = $row;
         }
 
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set(
-                $this->handler->quoteColumn('contentobject_id'),
-                $query->bindValue($contentObjects[$locationId2]['contentobject_id'])
-            )
-            ->set(
-                $this->handler->quoteColumn('contentobject_version'),
-                $query->bindValue($contentObjects[$locationId2]['contentobject_version'])
-            )
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('node_id'),
-                    $query->bindValue($locationId1)
+        if (!isset($contentObjects[$locationId1], $contentObjects[$locationId2])) {
+            throw new RuntimeException(
+                sprintf(
+                    '%s: failed to fetch either Location %d or Location %d',
+                    __METHOD__,
+                    $locationId1,
+                    $locationId2
                 )
             );
-        $query->prepare()->execute();
+        }
+        $content1data = $contentObjects[$locationId1];
+        $content2data = $contentObjects[$locationId2];
 
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set(
-                $this->handler->quoteColumn('contentobject_id'),
-                $query->bindValue($contentObjects[$locationId1]['contentobject_id'])
-            )
-            ->set(
-                $this->handler->quoteColumn('contentobject_version'),
-                $query->bindValue($contentObjects[$locationId1]['contentobject_version'])
-            )
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder
+            ->update('ezcontentobject_tree')
+            ->set('contentobject_id', ':contentId')
+            ->set('contentobject_version', ':versionNo')
+            ->set('main_node_id', ':mainNodeId')
             ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('node_id'),
-                    $query->bindValue($locationId2)
-                )
+                $expr->eq('node_id', ':locationId')
             );
-        $query->prepare()->execute();
+
+        $queryBuilder
+            ->setParameter(':contentId', $content2data['contentobject_id'])
+            ->setParameter(':versionNo', $content2data['contentobject_version'])
+            ->setParameter(
+                ':mainNodeId',
+                // make main Location main again, preserve main Location id of non-main one
+                $content2data['is_main_node']
+                    ? $content1data['node_id']
+                    : $content2data['main_node_id']
+            )
+            ->setParameter('locationId', $locationId1);
+
+        // update Location 1 entry
+        $queryBuilder->execute();
+
+        $queryBuilder
+            ->setParameter(':contentId', $content1data['contentobject_id'])
+            ->setParameter(':versionNo', $content1data['contentobject_version'])
+            ->setParameter(
+                ':mainNodeId',
+                $content1data['is_main_node']
+                    // make main Location main again, preserve main Location id of non-main one
+                    ? $content2data['node_id']
+                    : $content1data['main_node_id']
+            )
+            ->setParameter('locationId', $locationId2);
+
+        // update Location 2 entry
+        $queryBuilder->execute();
+
+        return true;
     }
 
     /**
@@ -1144,7 +1168,7 @@ class DoctrineDatabase extends Gateway
         $query->prepare()->execute();
 
         $this->removeLocation($locationRow['node_id']);
-        $this->setContentStatus($locationRow['contentobject_id'], ContentInfo::STATUS_ARCHIVED);
+        $this->setContentStatus($locationRow['contentobject_id'], ContentInfo::STATUS_TRASHED);
     }
 
     /**
@@ -1330,39 +1354,49 @@ class DoctrineDatabase extends Gateway
     /**
      * Set section on all content objects in the subtree.
      *
-     * @param mixed $pathString
-     * @param mixed $sectionId
+     * @param string $pathString
+     * @param int $sectionId
      *
      * @return bool
      */
     public function setSectionForSubtree($pathString, $sectionId)
     {
-        $query = $this->handler->createUpdateQuery();
-
-        $subSelect = $query->subSelect();
-        $subSelect
-            ->select($this->handler->quoteColumn('contentobject_id'))
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
+        $selectContentIdsQuery = $this->connection->createQueryBuilder();
+        $selectContentIdsQuery
+            ->select('t.contentobject_id')
+            ->from('ezcontentobject_tree', 't')
             ->where(
-                $subSelect->expr->like(
-                    $this->handler->quoteColumn('path_string'),
-                    $subSelect->bindValue($pathString . '%')
+                $selectContentIdsQuery->expr()->like(
+                    't.path_string',
+                    $selectContentIdsQuery->createPositionalParameter("{$pathString}%")
                 )
             );
 
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject'))
+        $contentIds = array_map(
+            'intval',
+            $selectContentIdsQuery->execute()->fetchAll(PDO::FETCH_COLUMN)
+        );
+
+        if (empty($contentIds)) {
+            return false;
+        }
+
+        $updateSectionQuery = $this->connection->createQueryBuilder();
+        $updateSectionQuery
+            ->update('ezcontentobject')
             ->set(
-                $this->handler->quoteColumn('section_id'),
-                $query->bindValue($sectionId)
+                'section_id',
+                $updateSectionQuery->createPositionalParameter($sectionId, PDO::PARAM_INT)
             )
             ->where(
-                $query->expr->in(
-                    $this->handler->quoteColumn('id'),
-                    $subSelect
+                $updateSectionQuery->expr()->in(
+                    'id',
+                    $contentIds
                 )
             );
-        $query->prepare()->execute();
+        $affectedRows = $updateSectionQuery->execute();
+
+        return $affectedRows > 0;
     }
 
     /**
@@ -1471,5 +1505,78 @@ class DoctrineDatabase extends Gateway
             )
         );
         $q->prepare()->execute();
+    }
+
+    /**
+     * Get the total number of all Locations, except the Root node.
+     *
+     * @see loadAllLocationsData
+     *
+     * @return int
+     */
+    public function countAllLocations()
+    {
+        $query = $this->getAllLocationsQueryBuilder(['count(node_id)']);
+
+        $statement = $query->execute();
+
+        return (int) $statement->fetch(PDO::FETCH_COLUMN);
+    }
+
+    /**
+     * Load data of every Location, except the Root node.
+     *
+     * @param int $offset Paginator offset
+     * @param int $limit Paginator limit
+     *
+     * @return array
+     */
+    public function loadAllLocationsData($offset, $limit)
+    {
+        $query = $this
+            ->getAllLocationsQueryBuilder(
+                [
+                    'node_id',
+                    'priority',
+                    'is_hidden',
+                    'is_invisible',
+                    'remote_id',
+                    'contentobject_id',
+                    'parent_node_id',
+                    'path_identification_string',
+                    'path_string',
+                    'depth',
+                    'sort_field',
+                    'sort_order',
+                ]
+            )
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->orderBy('depth', 'ASC')
+            ->addOrderBy('node_id', 'ASC')
+        ;
+
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get Query Builder for fetching data of all Locations except the Root node.
+     *
+     * @param array $columns list of columns to fetch
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function getAllLocationsQueryBuilder(array $columns)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select($columns)
+            ->from('ezcontentobject_tree')
+            ->where($query->expr()->neq('node_id', 'parent_node_id'))
+        ;
+
+        return $query;
     }
 }

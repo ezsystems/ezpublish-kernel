@@ -126,10 +126,26 @@ return array(
         0 => array(
             'id' => 2,
             'initial_language_id' => 2,
+            'current_version' => 1,
         ),
         1 => array(
             'id' => 3,
             'initial_language_id' => 2,
+            'current_version' => 1,
         ),
     ),
+    'ezcontentobject_name' => [
+        0 => [
+            'contentobject_id' => 2,
+            'content_version' => 1,
+            'name' => 'dva new',
+            'content_translation' => 'cro-HR',
+        ],
+        1 => [
+            'contentobject_id' => 3,
+            'content_version' => 1,
+            'name' => 'jedan new',
+            'content_translation' => 'cro-HR',
+        ],
+    ],
 );

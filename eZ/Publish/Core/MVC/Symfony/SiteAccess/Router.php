@@ -85,6 +85,11 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
     protected $request;
 
     /**
+     * @var bool
+     */
+    protected $debug;
+
+    /**
      * Constructor.
      *
      * @param \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface $matcherBuilder
@@ -93,8 +98,9 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
      * @param array $siteAccessesConfiguration
      * @param array $siteAccessList
      * @param string|null $siteAccessClass
+     * @param bool $debug
      */
-    public function __construct(MatcherBuilderInterface $matcherBuilder, LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null)
+    public function __construct(MatcherBuilderInterface $matcherBuilder, LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null, $debug = false)
     {
         $this->matcherBuilder = $matcherBuilder;
         $this->logger = $logger;
@@ -103,6 +109,7 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
         $this->siteAccessList = array_fill_keys($siteAccessList, true);
         $this->siteAccessClass = $siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
         $this->request = new SimplifiedRequest();
+        $this->debug = $debug;
     }
 
     /**
@@ -139,7 +146,7 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
             $siteaccessName = $request->headers['x-siteaccess'][0];
             if (!isset($this->siteAccessList[$siteaccessName])) {
                 unset($this->siteAccess);
-                throw new InvalidSiteAccessException($siteaccessName, array_keys($this->siteAccessList), 'X-Siteaccess request header');
+                throw new InvalidSiteAccessException($siteaccessName, array_keys($this->siteAccessList), 'X-Siteaccess request header', $this->debug);
             }
 
             $this->siteAccess->name = $siteaccessName;
@@ -153,7 +160,7 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
         if ($siteaccessEnvName !== false) {
             if (!isset($this->siteAccessList[$siteaccessEnvName])) {
                 unset($this->siteAccess);
-                throw new InvalidSiteAccessException($siteaccessEnvName, array_keys($this->siteAccessList), 'EZPUBLISH_SITEACCESS Environment variable');
+                throw new InvalidSiteAccessException($siteaccessEnvName, array_keys($this->siteAccessList), 'EZPUBLISH_SITEACCESS Environment variable', $this->debug);
             }
 
             $this->siteAccess->name = $siteaccessEnvName;

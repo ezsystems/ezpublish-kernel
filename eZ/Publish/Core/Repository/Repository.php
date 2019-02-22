@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
+use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Repository\Permission\CachedPermissionService;
 use eZ\Publish\Core\Repository\Permission\PermissionCriterionResolver;
 use eZ\Publish\Core\Repository\Values\User\UserReference;
@@ -19,6 +20,8 @@ use eZ\Publish\Core\Search\Common\BackgroundIndexer;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use Exception;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use RuntimeException;
 
 /**
@@ -247,25 +250,36 @@ class Repository implements RepositoryInterface
     private $transactionCount = 0;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor.
      *
      * Construct repository object with provided storage engine
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\Search\Handler $searchHandler
+     * @param \eZ\Publish\Core\Search\Common\BackgroundIndexer $backgroundIndexer
+     * @param \eZ\Publish\Core\Repository\Helper\RelationProcessor $relationProcessor
      * @param array $serviceSettings
      * @param \eZ\Publish\API\Repository\Values\User\UserReference|null $user
+     * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
         PersistenceHandler $persistenceHandler,
         SearchHandler $searchHandler,
         BackgroundIndexer $backgroundIndexer,
+        RelationProcessor $relationProcessor,
         array $serviceSettings = array(),
-        APIUserReference $user = null
+        APIUserReference $user = null,
+        LoggerInterface $logger = null
     ) {
         $this->persistenceHandler = $persistenceHandler;
         $this->searchHandler = $searchHandler;
         $this->backgroundIndexer = $backgroundIndexer;
+        $this->relationProcessor = $relationProcessor;
         $this->serviceSettings = $serviceSettings + array(
             'content' => array(),
             'contentType' => array(),
@@ -300,6 +314,8 @@ class Repository implements RepositoryInterface
         } else {
             $this->currentUserRef = new UserReference($this->serviceSettings['user']['anonymousUserID']);
         }
+
+        $this->logger = null !== $logger ? $logger : new NullLogger();
     }
 
     /**
@@ -539,7 +555,8 @@ class Repository implements RepositoryInterface
             $this->getDomainMapper(),
             $this->getNameSchemaService(),
             $this->getPermissionCriterionResolver(),
-            $this->serviceSettings['location']
+            $this->serviceSettings['location'],
+            $this->logger
         );
 
         return $this->locationService;
@@ -627,6 +644,7 @@ class Repository implements RepositoryInterface
         $this->urlAliasService = new URLAliasService(
             $this,
             $this->persistenceHandler->urlAliasHandler(),
+            $this->getNameSchemaService(),
             $this->serviceSettings['urlAlias']
         );
 
@@ -860,12 +878,6 @@ class Repository implements RepositoryInterface
      */
     protected function getRelationProcessor()
     {
-        if ($this->relationProcessor !== null) {
-            return $this->relationProcessor;
-        }
-
-        $this->relationProcessor = new Helper\RelationProcessor($this->persistenceHandler);
-
         return $this->relationProcessor;
     }
 

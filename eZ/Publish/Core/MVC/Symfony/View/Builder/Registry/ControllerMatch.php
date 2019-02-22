@@ -32,6 +32,10 @@ class ControllerMatch implements ViewBuilderRegistry
      */
     public function getFromRegistry($controllerString)
     {
+        if (!is_string($controllerString)) {
+            return null;
+        }
+
         foreach ($this->registry as $viewBuilder) {
             if ($viewBuilder->matches($controllerString)) {
                 return $viewBuilder;

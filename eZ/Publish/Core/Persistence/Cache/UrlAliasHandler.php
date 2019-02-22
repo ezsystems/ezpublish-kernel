@@ -394,4 +394,38 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
 
         $this->clearLocation($locationId);
     }
+
+    /**
+     * Delete corrupted URL aliases (global, custom and system).
+     *
+     * @return int Number of deleted URL aliases
+     */
+    public function deleteCorruptedUrlAliases()
+    {
+        $this->logger->logCall(__METHOD__);
+
+        $deletedCount = $this->persistenceHandler->urlAliasHandler()->deleteCorruptedUrlAliases();
+
+        $this->cache->clear('urlAlias');
+
+        return $deletedCount;
+    }
+
+    /**
+     * Attempt repairing auto-generated URL aliases for the given Location (including history).
+     *
+     * Note: it is assumed that at this point original, working, URL Alias for Location is published.
+     *
+     * @param int $locationId
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     */
+    public function repairBrokenUrlAliasesForLocation($locationId)
+    {
+        $this->logger->logCall(__METHOD__, ['locationId' => $locationId]);
+
+        $this->persistenceHandler->urlAliasHandler()->repairBrokenUrlAliasesForLocation($locationId);
+
+        $this->clearLocation($locationId);
+    }
 }

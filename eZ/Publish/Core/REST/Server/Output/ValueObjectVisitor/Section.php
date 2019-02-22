@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
+use eZ\Publish\API\Repository\Values\Content\Section as SectionValue;
 
 /**
  * Section value object visitor.
@@ -29,7 +30,12 @@ class Section extends ValueObjectVisitor
         $generator->startObjectElement('Section');
         $visitor->setHeader('Content-Type', $generator->getMediaType('Section'));
         $visitor->setHeader('Accept-Patch', $generator->getMediaType('SectionInput'));
+        $this->visitSectionAttributes($visitor, $generator, $data);
+        $generator->endObjectElement('Section');
+    }
 
+    protected function visitSectionAttributes(Visitor $visitor, Generator $generator, SectionValue $data)
+    {
         $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadSection', array('sectionId' => $data->id))
@@ -44,7 +50,5 @@ class Section extends ValueObjectVisitor
 
         $generator->startValueElement('name', $data->name);
         $generator->endValueElement('name');
-
-        $generator->endObjectElement('Section');
     }
 }

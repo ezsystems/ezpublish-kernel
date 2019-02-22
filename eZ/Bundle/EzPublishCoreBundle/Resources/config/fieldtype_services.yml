@@ -18,6 +18,7 @@ parameters:
     ezpublish.fieldType.ezrichtext.converter.output.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5
     ezpublish.fieldType.ezrichtext.converter.edit.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Edit
     ezpublish.fieldType.ezrichtext.converter.input.html5.class: eZ\Bundle\EzPublishCoreBundle\FieldType\RichText\Converter\Html5Input
+    ezpublish.fieldType.ezrichtext.converter.programlisting.class: eZ\Publish\Core\FieldType\RichText\Converter\ProgramListing
     ezpublish.fieldType.ezrichtext.converter.link.class: eZ\Publish\Core\FieldType\RichText\Converter\Link
     ezpublish.fieldType.ezrichtext.converter.embed.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Embed
     ezpublish.fieldType.ezrichtext.converter.template.class: eZ\Publish\Core\FieldType\RichText\Converter\Render\Template
@@ -77,6 +78,20 @@ services:
         tags:
             - {name: ezpublish.fieldType.parameterProvider, alias: ezpage}
 
+    ezpublish.fieldType.ezobjectrelation.parameterProvider:
+        class: \eZ\Publish\Core\MVC\Symfony\FieldType\Relation\ParameterProvider
+        arguments:
+            - "@ezpublish.api.service.content"
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelation}
+
+    ezpublish.fieldType.ezobjectrelationlist.parameterProvider:
+        class: \eZ\Publish\Core\MVC\Symfony\FieldType\RelationList\ParameterProvider
+        arguments:
+            - "@ezpublish.api.service.content"
+        tags:
+            - {name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelationlist}
+
     # Page
     ezpublish.fieldType.ezpage.pageService.factory:
         class: "%ezpublish.fieldType.ezpage.pageService.factory.class%"
@@ -102,11 +117,25 @@ services:
             - "http://ez.no/namespaces/ezpublish5/xhtml5/edit"
             - "%ezpublish.kernel.root_dir%/eZ/Publish/Core/FieldType/RichText/Resources/dtd/ezxhtml5_edit_html_character_entities.dtd"
 
-    ezpublish.fieldType.ezrichtext.converter.input.xhtml5:
+    ezpublish.fieldType.ezrichtext.converter.input.xhtml5.core:
         class: "%ezpublish.fieldType.ezrichtext.converter.input.html5.class%"
         arguments:
             - "%ezpublish.fieldType.ezrichtext.converter.input.xhtml5.resources%"
             - "@ezpublish.config.resolver"
+        tags:
+            - {name: ezpublish.ezrichtext.converter.input.xhtml5, priority: 50}
+
+    # Note: should run before xsl transformation
+    ezpublish.fieldType.ezrichtext.converter.input.xhtml5.programlisting:
+        class: "%ezpublish.fieldType.ezrichtext.converter.programlisting.class%"
+        tags:
+            - {name: ezpublish.ezrichtext.converter.input.xhtml5, priority: 10}
+
+    # Aggregate converter for XHTML5 input that other converters register to
+    # through service tags.
+    ezpublish.fieldType.ezrichtext.converter.input.xhtml5:
+        class: "%ezpublish.fieldType.ezrichtext.converter.aggregate.class%"
+        lazy: true
 
     ezpublish.fieldType.ezrichtext.converter.input.dispatcher:
         class: "%ezpublish.fieldType.ezrichtext.converter.dispatcher.class%"
@@ -217,7 +246,7 @@ services:
 
     # Image alias generator
     ezpublish.fieldType.ezimage.variation_service:
-        alias: ezpublish.image_alias.imagine.alias_generator
+        alias: ezpublish.image_alias.imagine.cache.alias_generator_decorator
 
     ezpublish.fieldType.ezimage.io_service.published:
         parent: ezpublish.core.io.service
