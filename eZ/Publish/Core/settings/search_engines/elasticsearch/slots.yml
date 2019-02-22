@@ -9,6 +9,7 @@ parameters:
     ezpublish.search.elasticsearch.slot.delete_location.class: eZ\Publish\Core\Search\Common\Slot\DeleteLocation
     ezpublish.search.elasticsearch.slot.create_user.class: eZ\Publish\Core\Search\Common\Slot\CreateUser
     ezpublish.search.elasticsearch.slot.delete_user.class: eZ\Publish\Core\Search\Common\Slot\DeleteUser
+    ezpublish.search.elasticsearch.slot.update_user.class: eZ\Publish\Core\Search\Common\Slot\UpdateUser
     ezpublish.search.elasticsearch.slot.create_user_group.class: eZ\Publish\Core\Search\Common\Slot\CreateUserGroup
     ezpublish.search.elasticsearch.slot.move_user_group.class: eZ\Publish\Core\Search\Common\Slot\MoveUserGroup
     ezpublish.search.elasticsearch.slot.delete_user_group.class: eZ\Publish\Core\Search\Common\Slot\DeleteUserGroup
@@ -87,6 +88,12 @@ services:
         class: "%ezpublish.search.elasticsearch.slot.delete_user.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: UserService\DeleteUserSignal}
+
+    ezpublish.search.elasticsearch.slot.update_user:
+        parent: ezpublish.search.elasticsearch.slot
+        class: "%ezpublish.search.elasticsearch.slot.update_user.class%"
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: UserService\UpdateUserSignal}
 
     ezpublish.search.elasticsearch.slot.create_user_group:
         parent: ezpublish.search.elasticsearch.slot
