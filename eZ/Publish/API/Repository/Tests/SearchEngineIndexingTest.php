@@ -324,6 +324,38 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
+     * Test that a newly updated user is available for search.
+     */
+    public function testUpdateUser()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $contentService = $repository->getContentService();
+        $searchService = $repository->getSearchService();
+
+        $user = $this->createUserVersion1();
+
+        $newName = 'Drizzt Do\'Urden';
+        $userUpdate = $userService->newUserUpdateStruct();
+        $userUpdate->contentUpdateStruct = $contentService->newContentUpdateStruct();
+        $userUpdate->contentUpdateStruct->setField('first_name', $newName);
+
+        $userService->updateUser($user, $userUpdate);
+
+        $this->refreshSearch($repository);
+
+        // Should be found
+        $query = new Query(
+            [
+                'query' => new Criterion\FullText($newName),
+            ]
+        );
+        $result = $searchService->findContentInfo($query);
+
+        $this->assertEquals(1, $result->totalCount);
+    }
+
+    /**
      * Test that a newly created user group is available for search.
      */
     public function testCreateUserGroup()
