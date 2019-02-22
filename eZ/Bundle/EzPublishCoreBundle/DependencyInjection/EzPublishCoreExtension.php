@@ -17,6 +17,8 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\Po
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\PolicyProviderInterface;
 use eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader;
@@ -25,7 +27,7 @@ use Symfony\Component\Config\FileLocator;
 use InvalidArgumentException;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface;
 
-class EzPublishCoreExtension extends Extension
+class EzPublishCoreExtension extends Extension implements PrependExtensionInterface
 {
     const RICHTEXT_CUSTOM_STYLES_PARAMETER = 'ezplatform.ezrichtext.custom_styles';
     const RICHTEXT_CUSTOM_TAGS_PARAMETER = 'ezplatform.ezrichtext.custom_tags';
@@ -157,6 +159,14 @@ class EzPublishCoreExtension extends Extension
         $configuration->setSiteAccessConfigurationFilters($this->siteaccessConfigurationFilters);
 
         return $configuration;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $this->prependTranslatorConfiguration($container);
     }
 
     /**
@@ -633,5 +643,22 @@ class EzPublishCoreExtension extends Extension
                 'EzPlatformRichTextBundle',
                 $container->getParameter('kernel.bundles')
             );
+    }
+
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    private function prependTranslatorConfiguration(ContainerBuilder $container)
+    {
+        if (!$container->hasExtension('framework')) {
+            return;
+        }
+
+        $fileSystem = new Filesystem();
+        $translationsPath = $container->getParameterBag()->get('kernel.root_dir') . '/../vendor/ezplatform-i18n';
+
+        if ($fileSystem->exists($translationsPath)) {
+            $container->prependExtensionConfig('framework', ['translator' => ['paths' => [$translationsPath]]]);
+        }
     }
 }
