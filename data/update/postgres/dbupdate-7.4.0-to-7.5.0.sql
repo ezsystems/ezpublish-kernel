@@ -36,4 +36,4 @@ ALTER TABLE eznotification ALTER COLUMN is_pending SET DEFAULT true;
 -- EZP-30139: As an editor I want to hide and reveal a content item
 --
 
-ALTER TABLE ezcontentobject ADD is_hidden integer DEFAULT 0 NOT NULL;
+ALTER TABLE ezcontentobject ADD is_hidden boolean DEFAULT 0 NOT NULL;
