@@ -183,7 +183,8 @@ CREATE TABLE ezcontentobject (
   published integer NOT NULL DEFAULT 0,
   remote_id text(100),
   section_id integer NOT NULL DEFAULT 0,
-  status integer DEFAULT 0
+  status integer DEFAULT 0,
+  is_hidden integer DEFAULT 0
 );
 CREATE UNIQUE INDEX ezcontentobject_remote_id ON ezcontentobject (remote_id);
 CREATE INDEX ezcontentobject_classid ON ezcontentobject (contentclass_id);

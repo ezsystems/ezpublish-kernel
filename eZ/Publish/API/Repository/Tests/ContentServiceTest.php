@@ -6186,4 +6186,143 @@ XML
             'status' => ContentInfo::STATUS_PUBLISHED,
         ];
     }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToHide
+     *
+     * @dataProvider provideLocationsToHideAndReveal
+     */
+    public function testHideContent(array $locationsToHide)
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'Folder to hide');
+
+        $content = $contentService->createContent(
+            $contentCreate,
+            $locationsToHide
+        );
+
+        $publishedContent = $contentService->publishVersion($content->versionInfo);
+        $locations = $locationService->loadLocations($publishedContent->contentInfo);
+
+        // Sanity check
+        $this->assertCount(3, $locations);
+        $this->assertEquals(
+            [
+                false,
+                false,
+                false,
+            ],
+            array_column($locations, 'hidden')
+        );
+
+        /* BEGIN: Use Case */
+        $contentService->hideContent($publishedContent->contentInfo);
+        /* END: Use Case */
+
+        $hiddenLocations = $locationService->loadLocations($publishedContent->contentInfo);
+        $this->assertEquals(
+            [
+                true,
+                true,
+                true,
+            ],
+            array_column($hiddenLocations, 'hidden')
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToHide
+     *
+     * @dataProvider provideLocationsToHideAndReveal
+     */
+    public function testRevealContent(array $locationsToReveal)
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'Folder to hide');
+
+        $locationsToReveal[0]->hidden = true;
+
+        $content = $contentService->createContent(
+            $contentCreate,
+            $locationsToReveal
+        );
+
+        $publishedContent = $contentService->publishVersion($content->versionInfo);
+        $locations = $locationService->loadLocations($publishedContent->contentInfo);
+
+        // Sanity check
+        $this->assertCount(3, $locations);
+        $this->assertEquals(
+            [
+                true,
+                false,
+                false,
+            ],
+            array_column($locations, 'hidden')
+        );
+
+        /* BEGIN: Use Case */
+        $contentService->hideContent($publishedContent->contentInfo);
+
+        $this->assertEquals(
+            [
+                true,
+                true,
+                true,
+            ],
+            array_column($locationService->loadLocations($publishedContent->contentInfo), 'hidden')
+        );
+
+        $contentService->revealContent($publishedContent->contentInfo);
+        /* END: Use Case */
+
+        $this->assertEquals(
+            [
+                true,
+                false,
+                false,
+            ],
+            array_column($locationService->loadLocations($publishedContent->contentInfo), 'hidden')
+        );
+    }
+
+    public function provideLocationsToHideAndReveal()
+    {
+        $locationService = $this->getRepository()->getLocationService();
+
+        return [
+            [
+                [
+                    $mainLocationCreateStruct = $locationService->newLocationCreateStruct(
+                        $this->generateId('location', 2)
+                    ),
+                    $otherCreateStruct = $locationService->newLocationCreateStruct(
+                        $this->generateId('location', 5)
+                    ),
+                    $thirdCreateStruct = $locationService->newLocationCreateStruct(
+                        $this->generateId('location', 43)
+                    ),
+                ],
+            ],
+        ];
+    }
 }
