@@ -400,6 +400,7 @@ class DomainMapper
                 'mainLanguageCode' => $spiContentInfo->mainLanguageCode,
                 'mainLocationId' => $spiContentInfo->mainLocationId,
                 'status' => $status,
+                'isHidden' => $spiContentInfo->isHidden
             )
         );
     }
@@ -520,7 +521,7 @@ class DomainMapper
                 'contentInfo' => $contentInfo,
                 'id' => $spiLocation->id,
                 'priority' => $spiLocation->priority,
-                'hidden' => $spiLocation->hidden,
+                'hidden' => $spiLocation->hidden || $contentInfo->isHidden,
                 'invisible' => $spiLocation->invisible,
                 'remoteId' => $spiLocation->remoteId,
                 'parentLocationId' => $spiLocation->parentId,

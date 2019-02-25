@@ -30,3 +30,9 @@ ADD CONSTRAINT `ezcontentclass_attribute_ml_lang_fk`
 --
 
 ALTER TABLE `eznotification` MODIFY COLUMN `data` TEXT;
+
+--
+-- EZP-30139: As an editor I want to hide and reveal a content item
+--
+
+ALTER TABLE `ezcontentobject` ADD COLUMN `is_hidden` INT(11) NOT NULL DEFAULT '0';

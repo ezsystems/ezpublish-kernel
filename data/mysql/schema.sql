@@ -620,6 +620,7 @@ CREATE TABLE `ezcontentobject` (
   `remote_id` varchar(100) DEFAULT NULL,
   `section_id` int(11) NOT NULL DEFAULT '0',
   `status` int(11) DEFAULT '0',
+  `is_hidden` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `ezcontentobject_remote_id` (`remote_id`),
   KEY `ezcontentobject_classid` (`contentclass_id`),
