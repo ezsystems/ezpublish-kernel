@@ -464,4 +464,18 @@ interface ContentService
      * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */
     public function newContentUpdateStruct();
+
+    /**
+     * Hides content, have priority over Location hiding.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function hideContent(ContentInfo $contentInfo): void;
+
+    /**
+     * Reveals previously hidden Content. Hidden Locations stills apply.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function revealContent(ContentInfo $contentInfo): void;
 }
