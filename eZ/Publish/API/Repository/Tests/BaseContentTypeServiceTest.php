@@ -18,9 +18,15 @@ abstract class BaseContentTypeServiceTest extends BaseTest
     /**
      * Creates a fully functional ContentTypeDraft and returns it.
      *
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct[] $additionalFieldDefinitionsCreateStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    protected function createContentTypeDraft()
+    protected function createContentTypeDraft(array $additionalFieldDefinitionsCreateStruct = [])
     {
         $repository = $this->getRepository();
 
@@ -96,6 +102,10 @@ abstract class BaseContentTypeServiceTest extends BaseTest
         $bodyFieldCreate->isSearchable = false;
 
         $typeCreate->addFieldDefinition($bodyFieldCreate);
+
+        foreach ($additionalFieldDefinitionsCreateStruct as $fieldDefinitionCreateStruct) {
+            $typeCreate->addFieldDefinition($fieldDefinitionCreateStruct);
+        }
 
         $contentTypeDraft = $contentTypeService->createContentType(
             $typeCreate,

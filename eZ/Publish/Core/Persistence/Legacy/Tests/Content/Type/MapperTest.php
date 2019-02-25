@@ -390,6 +390,9 @@ class MapperTest extends TestCase
 
         $fieldDef = new FieldDefinition();
         $fieldDef->fieldType = 'some_type';
+        $fieldDef->name = [
+            'eng-GB' => 'some name',
+        ];
 
         $storageFieldDef = new StorageFieldDefinition();
 

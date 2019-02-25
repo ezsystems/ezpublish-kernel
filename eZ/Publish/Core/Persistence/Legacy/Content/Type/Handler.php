@@ -489,9 +489,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function getFieldDefinition($id, $status)
     {
-        $row = $this->contentTypeGateway->loadFieldDefinition($id, $status);
+        $rows = $this->contentTypeGateway->loadFieldDefinition($id, $status);
 
-        if ($row === false) {
+        if ($rows === false) {
             throw new NotFoundException(
                 'FieldDefinition',
                 array(
@@ -501,7 +501,9 @@ class Handler implements BaseContentTypeHandler
             );
         }
 
-        return $this->mapper->extractFieldFromRow($row);
+        $multilingualData = $this->mapper->extractMultilingualData($rows);
+
+        return $this->mapper->extractFieldFromRow(reset($rows), $multilingualData);
     }
 
     /**
@@ -635,6 +637,17 @@ class Handler implements BaseContentTypeHandler
         unset($type->description[$languageCode]);
 
         foreach ($type->fieldDefinitions as $fieldDefinition) {
+            $this->contentTypeGateway->removeFieldDefinitionTranslation(
+                $fieldDefinition->id,
+                $languageCode,
+                Type::STATUS_DRAFT
+            );
+
+            //Refresh FieldDefinition object after removing translation data.
+            $fieldDefinition = $this->getFieldDefinition(
+                $fieldDefinition->id,
+                Type::STATUS_DRAFT
+            );
             unset($fieldDefinition->name[$languageCode]);
             unset($fieldDefinition->description[$languageCode]);
             $storageFieldDefinition = new StorageFieldDefinition();

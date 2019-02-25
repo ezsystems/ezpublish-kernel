@@ -265,6 +265,16 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         // Do nothing by default
     }
 
+    public function getValidContentTypeConfiguration(): array
+    {
+        return [];
+    }
+
+    public function getValidFieldConfiguration(): array
+    {
+        return [];
+    }
+
     /**
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
@@ -272,7 +282,9 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     {
         $contentType = $this->createContentType(
             $this->getValidFieldSettings(),
-            $this->getValidValidatorConfiguration()
+            $this->getValidValidatorConfiguration(),
+            $this->getValidContentTypeConfiguration(),
+            $this->getValidFieldConfiguration()
         );
 
         $this->assertNotNull($contentType->id);
@@ -563,8 +575,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $contentType = $this->createContentType(
             $this->getValidFieldSettings(),
             $this->getValidValidatorConfiguration(),
-            [],
-            ['isTranslatable' => true]
+            $this->getValidContentTypeConfiguration(),
+            array_merge(
+                $this->getValidFieldConfiguration(),
+                ['isTranslatable' => true]
+            )
         );
 
         $repository = $this->getRepository();
@@ -1012,6 +1027,8 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
             'data',
             $this->getTypeName()
         );
+
+        $fieldDefinitionCreateStruct->names = $this->getOverride('names', $this->getValidFieldConfiguration(), [$contentType->mainLanguageCode => $this->getTypeName()]);
         $fieldDefinitionCreateStruct->validatorConfiguration = $this->getValidValidatorConfiguration();
         $fieldDefinitionCreateStruct->fieldSettings = $this->getValidFieldSettings();
         $fieldDefinitionCreateStruct->defaultValue = null;

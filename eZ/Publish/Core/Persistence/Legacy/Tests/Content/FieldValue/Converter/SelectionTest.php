@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
+use eZ\Publish\API\Repository\LanguageService;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
@@ -30,7 +31,9 @@ class SelectionTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->converter = new SelectionConverter();
+        $languageServiceMock = $this->createMock(LanguageService::class);
+
+        $this->converter = new SelectionConverter($languageServiceMock);
     }
 
     /**
@@ -235,6 +238,10 @@ EOT;
 
         $expectedFieldDefinition = new PersistenceFieldDefinition(
             array(
+                'name' => array(
+                    'eng-GB' => 'test name',
+                ),
+                'mainLanguageCode' => 'eng-GB',
                 'fieldTypeConstraints' => new FieldTypeConstraints(
                     array(
                         'fieldSettings' => new FieldSettings(
@@ -244,6 +251,13 @@ EOT;
                                     0 => 'First',
                                     1 => 'Second',
                                     2 => 'Third',
+                                ),
+                                'multilingualOptions' => array(
+                                    'eng-GB' => array(
+                                        0 => 'First',
+                                        1 => 'Second',
+                                        2 => 'Third',
+                                    ),
                                 ),
                             )
                         ),
@@ -258,7 +272,14 @@ EOT;
             )
         );
 
-        $actualFieldDefinition = new PersistenceFieldDefinition();
+        $actualFieldDefinition = new PersistenceFieldDefinition(
+            array(
+                'name' => array(
+                    'eng-GB' => 'test name',
+                ),
+                'mainLanguageCode' => 'eng-GB',
+            )
+        );
 
         $this->converter->toFieldDefinition($storageFieldDefinition, $actualFieldDefinition);
 
@@ -284,12 +305,19 @@ EOT;
 
         $expectedFieldDefinition = new PersistenceFieldDefinition(
             array(
+                'name' => array(
+                    'eng-GB' => 'test name',
+                ),
+                'mainLanguageCode' => 'eng-GB',
                 'fieldTypeConstraints' => new FieldTypeConstraints(
                     array(
                         'fieldSettings' => new FieldSettings(
                             array(
                                 'isMultiple' => false,
                                 'options' => array(),
+                                'multilingualOptions' => array(
+                                    'eng-GB' => array(),
+                                ),
                             )
                         ),
                     )
@@ -298,7 +326,14 @@ EOT;
             )
         );
 
-        $actualFieldDefinition = new PersistenceFieldDefinition();
+        $actualFieldDefinition = new PersistenceFieldDefinition(
+            array(
+                'name' => array(
+                    'eng-GB' => 'test name',
+                ),
+                'mainLanguageCode' => 'eng-GB',
+            )
+        );
 
         $this->converter->toFieldDefinition($storageFieldDefinition, $actualFieldDefinition);
 

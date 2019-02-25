@@ -900,7 +900,10 @@ class ContentTypeHandlerTest extends TestCase
     public function testGetFieldDefinition()
     {
         $mapperMock = $this->getMapperMock(
-            array('extractFieldFromRow')
+            array(
+                'extractFieldFromRow',
+                'extractMultilingualData',
+            )
         );
         $mapperMock->expects($this->once())
             ->method('extractFieldFromRow')
@@ -910,6 +913,16 @@ class ContentTypeHandlerTest extends TestCase
                 $this->returnValue(new FieldDefinition())
             );
 
+        $mapperMock->expects($this->once())
+            ->method('extractMultilingualData')
+            ->with(
+                $this->equalTo(array(
+                    array(),
+                ))
+            )->will(
+                $this->returnValue(array())
+            );
+
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects($this->once())
             ->method('loadFieldDefinition')
@@ -917,7 +930,9 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(42),
                 $this->equalTo(Type::STATUS_DEFINED)
             )->will(
-                $this->returnValue(array())
+                $this->returnValue(array(
+                    array(),
+                ))
             );
 
         $handler = $this->getHandler();

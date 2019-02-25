@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
+use eZ\Publish\Core\Persistence\Legacy\Content\MultilingualStorageFieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
@@ -121,8 +122,15 @@ class Mapper
             }
 
             $fieldId = (int)$row['ezcontentclass_attribute_id'];
+
             if ($fieldId && !isset($fields[$fieldId])) {
-                $types[$typeId]->fieldDefinitions[] = $fields[$fieldId] = $this->extractFieldFromRow($row);
+                $fieldDataRows = array_filter($rows, function (array $row) use ($fieldId) {
+                    return (int) $row['ezcontentclass_attribute_id'] === (int) $fieldId;
+                });
+
+                $multilingualData = $this->extractMultilingualData($fieldDataRows);
+
+                $types[$typeId]->fieldDefinitions[] = $fields[$fieldId] = $this->extractFieldFromRow($row, $multilingualData);
             }
 
             $groupId = (int)$row['ezcontentclass_classgroup_group_id'];
@@ -131,12 +139,29 @@ class Mapper
             }
         }
 
+        foreach ($types as $type) {
+            sort($type->groupIds);
+        }
+
         if ($keepTypeIdAsKey) {
             return $types;
         }
 
         // Re-index $types to avoid people relying on ID keys
         return array_values($types);
+    }
+
+    public function extractMultilingualData(array $fieldDefinitionRows): array
+    {
+        return array_map(function (array $fieldData) {
+            return [
+                'ezcontentclass_attribute_multilingual_name' => $fieldData['ezcontentclass_attribute_multilingual_name'] ?? null,
+                'ezcontentclass_attribute_multilingual_description' => $fieldData['ezcontentclass_attribute_multilingual_description'] ?? null,
+                'ezcontentclass_attribute_multilingual_language_id' => $fieldData['ezcontentclass_attribute_multilingual_language_id'] ?? null,
+                'ezcontentclass_attribute_multilingual_data_text' => $fieldData['ezcontentclass_attribute_multilingual_data_text'] ?? null,
+                'ezcontentclass_attribute_multilingual_data_json' => $fieldData['ezcontentclass_attribute_multilingual_data_json'] ?? null,
+            ];
+        }, $fieldDefinitionRows);
     }
 
     /**
@@ -187,11 +212,13 @@ class Mapper
      *
      * @param array $row
      *
+     * @param array $multilingualData
+     *
      * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
-    public function extractFieldFromRow(array $row)
+    public function extractFieldFromRow(array $row, array $multilingualData = [])
     {
-        $storageFieldDef = $this->extractStorageFieldFromRow($row);
+        $storageFieldDef = $this->extractStorageFieldFromRow($row, $multilingualData);
 
         $field = new FieldDefinition();
 
@@ -215,6 +242,9 @@ class Mapper
         $field->isSearchable = (bool)$row['ezcontentclass_attribute_is_searchable'];
         $field->position = (int)$row['ezcontentclass_attribute_placement'];
 
+        $mainLanguageCode = $this->maskGenerator->extractLanguageCodesFromMask((int)$row['ezcontentclass_initial_language_id']);
+        $field->mainLanguageCode = array_shift($mainLanguageCode);
+
         $this->toFieldDefinition($storageFieldDef, $field);
 
         return $field;
@@ -225,9 +255,11 @@ class Mapper
      *
      * @param array $row
      *
+     * @param array $multilingualDataRow
+     *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
-    protected function extractStorageFieldFromRow(array $row)
+    protected function extractStorageFieldFromRow(array $row, array $multilingualDataRow = [])
     {
         $storageFieldDef = new StorageFieldDefinition();
 
@@ -261,6 +293,29 @@ class Mapper
         $storageFieldDef->dataText4 = $row['ezcontentclass_attribute_data_text4'];
         $storageFieldDef->dataText5 = $row['ezcontentclass_attribute_data_text5'];
         $storageFieldDef->serializedDataText = $row['ezcontentclass_attribute_serialized_data_text'];
+
+        foreach ($multilingualDataRow as $languageDataRow) {
+            $languageCodes = $this->maskGenerator->extractLanguageCodesFromMask((int)$languageDataRow['ezcontentclass_attribute_multilingual_language_id']);
+
+            if (empty($languageCodes)) {
+                continue;
+            }
+            $languageCode = reset($languageCodes);
+
+            $multilingualData = new MultilingualStorageFieldDefinition();
+
+            $nameList = $this->unserialize($row['ezcontentclass_attribute_serialized_name_list']);
+            $name = $nameList[$languageCode] ?? reset($nameList);
+            $description = $this->unserialize($row['ezcontentclass_attribute_serialized_description_list'])[$languageCode] ?? null;
+
+            $multilingualData->name = $languageDataRow['ezcontentclass_attribute_multilingual_name'] ?? $name;
+            $multilingualData->description = $languageDataRow['ezcontentclass_attribute_multilingual_description'] ?? $description;
+            $multilingualData->dataText = $languageDataRow['ezcontentclass_attribute_multilingual_data_text'];
+            $multilingualData->dataJson = $languageDataRow['ezcontentclass_attribute_multilingual_data_json'];
+            $multilingualData->languageId = (int)$languageDataRow['ezcontentclass_attribute_multilingual_language_id'];
+
+            $storageFieldDef->multilingualData[$languageCode] = $multilingualData;
+        }
 
         return $storageFieldDef;
     }
@@ -370,9 +425,20 @@ class Mapper
         FieldDefinition $fieldDef,
         StorageFieldDefinition $storageFieldDef
     ) {
+        foreach (array_keys($fieldDef->name) as $languageCode) {
+            $multilingualData = new MultilingualStorageFieldDefinition();
+            $multilingualData->name = $fieldDef->name[$languageCode];
+            $multilingualData->description = $fieldDef->description[$languageCode] ?? null;
+            $multilingualData->languageId =
+                $this->maskGenerator->generateLanguageMaskFromLanguageCodes([$languageCode]);
+
+            $storageFieldDef->multilingualData[$languageCode] = $multilingualData;
+        }
+
         $converter = $this->converterRegistry->getConverter(
             $fieldDef->fieldType
         );
+
         $converter->toStorageFieldDefinition(
             $fieldDef,
             $storageFieldDef
@@ -438,5 +504,22 @@ class Mapper
         $type->languageCodes = array_keys($updateStruct->name);
 
         return $type;
+    }
+
+    public function extractMultilingualDataFromRows(array $mlFieldDefinitionsRows): array
+    {
+        $mlFieldDefinitionData = [];
+        foreach ($mlFieldDefinitionsRows as $row) {
+            $mlStorageFieldDefinition = new MultilingualStorageFieldDefinition();
+            $mlStorageFieldDefinition->name = $row['ezcontentclass_attribute_multilingual_name'];
+            $mlStorageFieldDefinition->description = $row['ezcontentclass_attribute_multilingual_description'];
+            $mlStorageFieldDefinition->languageId = $row['ezcontentclass_attribute_multilingual_language_id'];
+            $mlStorageFieldDefinition->dataText = $row['ezcontentclass_attribute_multilingual_data_text'];
+            $mlStorageFieldDefinition->dataJson = $row['ezcontentclass_attribute_multilingual_data_json'];
+
+            $mlFieldDefinitionData[] = $mlStorageFieldDefinition;
+        }
+
+        return $mlFieldDefinitionData;
     }
 }

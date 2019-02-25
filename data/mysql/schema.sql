@@ -2573,6 +2573,28 @@ CREATE TABLE `eznotification` (
   KEY `eznotification_owner_is_pending` (`owner_id`, `is_pending`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Table structure for table `ezcontentclass_attribute_ml`
+--
+DROP TABLE IF EXISTS `ezcontentclass_attribute_ml`;
+CREATE TABLE `ezcontentclass_attribute_ml` (
+  `contentclass_attribute_id` INT NOT NULL,
+  `version` INT NOT NULL,
+  `language_id` BIGINT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `data_text` TEXT NULL,
+  `data_json` TEXT NULL,
+  PRIMARY KEY (`contentclass_attribute_id`, `version`, `language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `ezcontentclass_attribute_ml`
+ADD CONSTRAINT `ezcontentclass_attribute_ml_lang_fk`
+  FOREIGN KEY (`language_id`)
+  REFERENCES `ezcontent_language` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

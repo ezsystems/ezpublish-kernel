@@ -654,3 +654,22 @@ CREATE TABLE `ezpreferences` (
   KEY `ezpreferences_name` (`name`),
   KEY `ezpreferences_user_id_idx` (`user_id`,`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `ezcontentclass_attribute_ml`;
+CREATE TABLE `ezcontentclass_attribute_ml` (
+  `contentclass_attribute_id` INT NOT NULL,
+  `version` INT NOT NULL,
+  `language_id` BIGINT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `data_text` TEXT NULL,
+  `data_json` TEXT NULL,
+  PRIMARY KEY (`contentclass_attribute_id`, `version`, `language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `ezcontentclass_attribute_ml`
+ADD CONSTRAINT `ezcontentclass_attribute_ml_lang_fk`
+  FOREIGN KEY (`language_id`)
+  REFERENCES `ezcontent_language` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
