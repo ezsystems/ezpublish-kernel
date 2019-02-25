@@ -34,6 +34,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   1 =>
   array(
@@ -68,6 +69,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => 'new test article (2)',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   2 =>
   array(
@@ -102,6 +104,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => 'something',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   3 =>
   array(
@@ -138,6 +141,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   4 =>
   array(
@@ -174,6 +178,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   5 =>
   array(
@@ -210,6 +215,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   6 =>
   array(
@@ -244,6 +250,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '1',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   7 =>
   array(
@@ -280,6 +287,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   8 =>
   array(
@@ -316,6 +324,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   9 =>
   array(
@@ -350,6 +359,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   10 =>
   array(
@@ -384,6 +394,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   11 =>
   array(
@@ -418,6 +429,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
   12 =>
   array(
@@ -452,5 +464,6 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '228',
+    'ezcontentobject_is_hidden' => '0',
   ),
 );

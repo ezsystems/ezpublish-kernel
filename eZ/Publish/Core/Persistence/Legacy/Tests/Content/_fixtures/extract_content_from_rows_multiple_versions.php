@@ -34,6 +34,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '12',
+    'ezcontentobject_is_hidden' => '0',
   ),
   1 =>
   array(
@@ -68,6 +69,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '12',
+    'ezcontentobject_is_hidden' => '0',
   ),
   2 =>
   array(
@@ -102,6 +104,7 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => 'members',
     'ezcontentobject_tree_main_node_id' => '12',
+    'ezcontentobject_is_hidden' => '0',
   ),
   3 =>
   array(
@@ -136,5 +139,6 @@ return array(
     'ezcontentobject_attribute_sort_key_int' => '0',
     'ezcontentobject_attribute_sort_key_string' => '',
     'ezcontentobject_tree_main_node_id' => '12',
+    'ezcontentobject_is_hidden' => '0',
   ),
 );
