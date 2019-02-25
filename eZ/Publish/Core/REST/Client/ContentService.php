@@ -753,4 +753,32 @@ class ContentService implements APIContentService, Sessionable
     {
         throw new \Exception('@todo: Implement.');
     }
+
+    /**
+     * Hides Content by making all the Locations appear hidden.
+     * It does not persist hidden state on Location object itself.
+     *
+     * Content hidden by this API can be revealed by revealContent API.
+     *
+     * @see revealContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function hideContent(ContentInfo $contentInfo): void
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Reveals Content hidden by hideContent API.
+     * Locations which were hidden before hiding Content will remain hidden.
+     *
+     * @see hideContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function revealContent(ContentInfo $contentInfo): void
+    {
+        throw new \Exception('@todo: Implement.');
+    }
 }

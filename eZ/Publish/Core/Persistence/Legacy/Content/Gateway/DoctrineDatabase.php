@@ -339,6 +339,12 @@ class DoctrineDatabase extends Gateway
                 $q->bindValue($mask, null, \PDO::PARAM_INT)
             );
         }
+        if (isset($struct->isHidden)) {
+            $q->set(
+                $this->dbHandler->quoteColumn('is_hidden'),
+                $q->bindValue($struct->isHidden, null, \PDO::PARAM_BOOL)
+            );
+        }
         $q->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn('id'),

@@ -400,7 +400,7 @@ class DomainMapper
                 'mainLanguageCode' => $spiContentInfo->mainLanguageCode,
                 'mainLocationId' => $spiContentInfo->mainLocationId,
                 'status' => $status,
-                'isHidden' => $spiContentInfo->isHidden
+                'isHidden' => $spiContentInfo->isHidden,
             )
         );
     }

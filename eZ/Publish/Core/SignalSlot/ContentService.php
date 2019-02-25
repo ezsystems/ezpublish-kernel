@@ -733,6 +733,46 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Hides Content by making all the Locations appear hidden.
+     * It does not persist hidden state on Location object itself.
+     *
+     * Content hidden by this API can be revealed by revealContent API.
+     *
+     * @see revealContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function hideContent(ContentInfo $contentInfo): void
+    {
+        $this->service->hideContent($contentInfo);
+        $this->signalDispatcher->emit(
+            new UpdateContentMetadataSignal([
+                    'contentId' => $contentInfo->id,
+                ]
+            )
+        );
+    }
+
+    /**
+     * Reveals Content hidden by hideContent API.
+     * Locations which were hidden before hiding Content will remain hidden.
+     *
+     * @see hideContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function revealContent(ContentInfo $contentInfo): void
+    {
+        $this->service->revealContent($contentInfo);
+        $this->signalDispatcher->emit(
+            new UpdateContentMetadataSignal([
+                    'contentId' => $contentInfo->id,
+                ]
+            )
+        );
+    }
+
+    /**
      * Instantiates a new content create struct object.
      *
      * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable

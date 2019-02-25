@@ -62,4 +62,11 @@ class MetadataUpdateStruct extends ValueObject
      * @var string
      */
     public $remoteId;
+
+    /**
+     * If set, this value will change the hidden flag.
+     *
+     * @var bool
+     */
+    public $isHidden;
 }
