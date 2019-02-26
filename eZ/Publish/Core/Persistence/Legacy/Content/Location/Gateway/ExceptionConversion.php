@@ -299,6 +299,62 @@ class ExceptionConversion extends Gateway
     }
 
     /**
+     * @param string $pathString
+     **/
+    public function setNodeWithChildrenInvisible(string $pathString): void
+    {
+        try {
+            $this->innerGateway->setNodeWithChildrenInvisible($pathString);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * @param string $pathString
+     **/
+    public function setNodeHidden(string $pathString): void
+    {
+        try {
+            $this->innerGateway->setNodeHidden($pathString);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * @param string $pathString
+     **/
+    public function setNodeWithChildrenVisible(string $pathString): void
+    {
+        try {
+            $this->innerGateway->setNodeWithChildrenVisible($pathString);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
+     * @param string $pathString
+     **/
+    public function setNodeUnhidden(string $pathString): void
+    {
+        try {
+            $this->innerGateway->setNodeUnhidden($pathString);
+        } catch (DBALException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        } catch (PDOException $e) {
+            throw new RuntimeException('Database error', 0, $e);
+        }
+    }
+
+    /**
      * Swaps the content object being pointed to by a location object.
      *
      * Make the location identified by $locationId1 refer to the Content

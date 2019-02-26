@@ -6325,4 +6325,57 @@ XML
             ],
         ];
     }
+
+    public function testHideContentWithParentLocation()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'Parent');
+
+        $content = $contentService->createContent(
+            $contentCreate,
+            [
+                $locationService->newLocationCreateStruct(
+                    $this->generateId('location', 2)
+                ),
+            ]
+        );
+
+        $publishedContent = $contentService->publishVersion($content->versionInfo);
+
+        /* BEGIN: Use Case */
+        $contentService->hideContent($publishedContent->contentInfo);
+        /* END: Use Case */
+
+        $locations = $locationService->loadLocations($publishedContent->contentInfo);
+
+        $childContentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $childContentCreate->setField('name', 'Child');
+
+        $childContent = $contentService->createContent(
+            $childContentCreate,
+            [
+                $locationService->newLocationCreateStruct(
+                    $locations[0]->id
+                ),
+            ]
+        );
+
+        $publishedChildContent = $contentService->publishVersion($childContent->versionInfo);
+
+        $childLocations = $locationService->loadLocations($publishedChildContent->contentInfo);
+
+        $this->assertTrue($locations[0]->hidden);
+        $this->assertTrue($locations[0]->invisible);
+
+        $this->assertFalse($childLocations[0]->hidden);
+        $this->assertTrue($childLocations[0]->invisible);
+    }
 }

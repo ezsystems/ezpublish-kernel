@@ -2138,7 +2138,7 @@ class ContentService implements ContentServiceInterface
      */
     public function hideContent(ContentInfo $contentInfo): void
     {
-        if (!$this->repository->canUser('content', 'edit', $contentInfo)) {
+        if (!$this->repository->canUser('content', 'hide', $contentInfo)) {
             throw new UnauthorizedException('content', 'edit', ['contentId' => $contentInfo->id]);
         }
 
@@ -2150,6 +2150,11 @@ class ContentService implements ContentServiceInterface
                     'isHidden' => true,
                 ])
             );
+            $locationHandler = $this->persistenceHandler->locationHandler();
+            $childLocations = $locationHandler->loadLocationsByContent($contentInfo->id);
+            foreach ($childLocations as $childLocation) {
+                $locationHandler->setInvisible($childLocation->id);
+            }
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
@@ -2167,7 +2172,7 @@ class ContentService implements ContentServiceInterface
      */
     public function revealContent(ContentInfo $contentInfo): void
     {
-        if (!$this->repository->canUser('content', 'edit', $contentInfo)) {
+        if (!$this->repository->canUser('content', 'hide', $contentInfo)) {
             throw new UnauthorizedException('content', 'edit', ['contentId' => $contentInfo->id]);
         }
 
@@ -2179,6 +2184,11 @@ class ContentService implements ContentServiceInterface
                     'isHidden' => false,
                 ])
             );
+            $locationHandler = $this->persistenceHandler->locationHandler();
+            $childLocations = $locationHandler->loadLocationsByContent($contentInfo->id);
+            foreach ($childLocations as $childLocation) {
+                $locationHandler->setVisible($childLocation->id);
+            }
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
