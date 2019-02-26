@@ -383,7 +383,7 @@ class TrashService implements TrashServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    private function userHasPermissionsToRemove(ContentInfo $contentInfo, Location $location): bool
+    private function userHasPermissionsToRemove(ContentInfo $contentInfo, Location $location)
     {
         if (!$this->repository->canUser('content', 'remove', $contentInfo, [$location])) {
             return false;

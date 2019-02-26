@@ -264,7 +264,9 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         );
         $parentLocation = $locationService->loadLocations($parentContent->contentInfo)[0];
         $childContent = $this->createFolder(['eng-US' => 'Child Folder'], $parentLocation->id);
-        $this->setExpectedException(UnauthorizedException::class);
+
+        $this->refreshSearch($repository);
+        $this->setExpectedException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
         $trashService->trash($parentLocation);
     }
 }
