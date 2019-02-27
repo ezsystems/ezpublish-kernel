@@ -8,6 +8,12 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation;
+use eZ\Publish\Core\Repository\Repository;
+use eZ\Publish\Core\Repository\TrashService;
+
 /**
  * Test case for operations in the TrashService using in memory storage.
  *
@@ -223,5 +229,44 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
         // This call will fail with an "UnauthorizedException"
         $trashService->deleteTrashItem($trashItem);
         /* END: Use Case */
+    }
+
+    public function testTrashRequiresPremissionsToRemoveAllSubitems()
+    {
+        $this->createRoleWithPolicies('Publisher', [
+            ['module' => 'content', 'function' => 'read'],
+            ['module' => 'content', 'function' => 'create'],
+            ['module' => 'content', 'function' => 'publish'],
+            ['module' => 'state', 'function' => 'assign'],
+            ['module' => 'content', 'function' => 'remove', 'limitations' => [
+                new ObjectStateLimitation(['limitationValues' => [
+                    $this->generateId('objectstate', 2),
+                ]]),
+            ]],
+        ]);
+        $publisherUser = $this->createCustomUserWithLogin(
+            'publisher',
+            'publisher@example.com',
+            'Publishers',
+            'Publisher'
+        );
+        /** @var Repository $repository */
+        $repository = $this->getRepository();
+        $repository->getPermissionResolver()->setCurrentUserReference($publisherUser);
+        $trashService = $repository->getTrashService();
+        $locationService = $repository->getLocationService();
+        $objectStateService = $repository->getObjectStateService();
+        $parentContent = $this->createFolder(['eng-US' => 'Parent Folder'], 2);
+        $objectStateService->setContentState(
+            $parentContent->contentInfo,
+            $objectStateService->loadObjectStateGroup(2),
+            $objectStateService->loadObjectState(2)
+        );
+        $parentLocation = $locationService->loadLocations($parentContent->contentInfo)[0];
+        $childContent = $this->createFolder(['eng-US' => 'Child Folder'], $parentLocation->id);
+
+        $this->refreshSearch($repository);
+        $this->setExpectedException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+        $trashService->trash($parentLocation);
     }
 }
