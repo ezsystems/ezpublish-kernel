@@ -88,7 +88,7 @@ services:
 
     ezpublish.spi.persistence.cache.contentTypeHandler:
         class: "%ezpublish.spi.persistence.cache.contentTypeHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler
 
     ezpublish.spi.persistence.cache.userHandler:
         class: "%ezpublish.spi.persistence.cache.userHandler.class%"

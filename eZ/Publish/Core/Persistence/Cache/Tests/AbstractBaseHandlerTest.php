@@ -83,7 +83,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
             new CacheLocationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheContentHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheContentLanguageHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->inMemoryMock),
-            new CacheContentTypeHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
+            new CacheContentTypeHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->inMemoryMock),
             new CacheUserHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheTransactionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
