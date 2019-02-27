@@ -1090,7 +1090,7 @@ class SearchServiceLocationTest extends BaseTest
                 ),
             ]
         );
-        $rootLocation = $locationService->loadLocation($publishedContent->contentInfo->mainLocationId);
+        $rootLocation = $locationService->loadLocation($publishedRootContent->contentInfo->mainLocationId);
 
         $contentService->publishVersion($childContent->versionInfo);
         $this->refreshSearch($repository);
