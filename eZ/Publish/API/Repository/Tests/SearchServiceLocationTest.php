@@ -1044,7 +1044,7 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testVisibilityCriterionWithHiddenContent()
     {
-        $repository = $this->getRepository();
+        $repository = $this->getRepository(false);
         $contentTypeService = $repository->getContentTypeService();
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
@@ -1090,6 +1090,8 @@ class SearchServiceLocationTest extends BaseTest
                 ),
             ]
         );
+        $rootLocation = $locationService->loadLocation($publishedContent->contentInfo->mainLocationId);
+
         $contentService->publishVersion($childContent->versionInfo);
         $this->refreshSearch($repository);
 
@@ -1099,7 +1101,7 @@ class SearchServiceLocationTest extends BaseTest
                     Criterion\Visibility::VISIBLE
                 ),
                 new Criterion\Subtree(
-                    '/1/2/' . $publishedRootContent->contentInfo->mainLocationId . '/'
+                    $rootLocation->pathString
                 ),
             ]),
         ]);
@@ -1122,7 +1124,7 @@ class SearchServiceLocationTest extends BaseTest
                     Criterion\Visibility::HIDDEN
                 ),
                 new Criterion\Subtree(
-                    '/1/2/' . $publishedRootContent->contentInfo->mainLocationId . '/'
+                    $rootLocation->pathString
                 ),
             ]),
         ]);

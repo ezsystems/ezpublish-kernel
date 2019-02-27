@@ -583,7 +583,7 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Sets location to be unhidden
+     * Sets location to be unhidden.
      *
      * @param string $pathString
      **/

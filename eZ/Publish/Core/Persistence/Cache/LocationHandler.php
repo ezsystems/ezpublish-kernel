@@ -227,7 +227,6 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         return $return;
     }
 
-
     /**
      * Sets a location + all children to invisible.
      *
@@ -240,7 +239,6 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
 
         $this->cache->invalidateTags(['location-path-data-' . $id]);
     }
-
 
     /**
      * Sets a location + all children to visible.

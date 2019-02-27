@@ -114,3 +114,13 @@ services:
         class: "%ezpublish.search.legacy.slot.delete_user_group.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: UserService\DeleteUserGroupSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\HideContent:
+        parent: ezpublish.search.legacy.slot
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\HideContentSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\RevealContent:
+        parent: ezpublish.search.legacy.slot
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\RevealContentSignal}

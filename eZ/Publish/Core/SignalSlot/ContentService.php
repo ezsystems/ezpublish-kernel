@@ -21,7 +21,9 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteTranslationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\HideContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\RevealContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentDraftSignal;
@@ -746,10 +748,9 @@ class ContentService implements ContentServiceInterface
     {
         $this->service->hideContent($contentInfo);
         $this->signalDispatcher->emit(
-            new UpdateContentMetadataSignal([
-                    'contentId' => $contentInfo->id,
-                ]
-            )
+            new HideContentSignal([
+                'contentId' => $contentInfo->id,
+            ])
         );
     }
 
@@ -765,10 +766,9 @@ class ContentService implements ContentServiceInterface
     {
         $this->service->revealContent($contentInfo);
         $this->signalDispatcher->emit(
-            new UpdateContentMetadataSignal([
-                    'contentId' => $contentInfo->id,
-                ]
-            )
+            new RevealContentSignal([
+                'contentId' => $contentInfo->id,
+            ])
         );
     }
 
