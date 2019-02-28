@@ -1044,7 +1044,7 @@ class SearchServiceLocationTest extends BaseTest
      */
     public function testVisibilityCriterionWithHiddenContent()
     {
-        $repository = $this->getRepository(false);
+        $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
         $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 

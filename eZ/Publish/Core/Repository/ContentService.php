@@ -2139,7 +2139,7 @@ class ContentService implements ContentServiceInterface
     public function hideContent(ContentInfo $contentInfo): void
     {
         if (!$this->repository->canUser('content', 'hide', $contentInfo)) {
-            throw new UnauthorizedException('content', 'edit', ['contentId' => $contentInfo->id]);
+            throw new UnauthorizedException('content', 'hide', ['contentId' => $contentInfo->id]);
         }
 
         $this->repository->beginTransaction();
@@ -2173,7 +2173,7 @@ class ContentService implements ContentServiceInterface
     public function revealContent(ContentInfo $contentInfo): void
     {
         if (!$this->repository->canUser('content', 'hide', $contentInfo)) {
-            throw new UnauthorizedException('content', 'edit', ['contentId' => $contentInfo->id]);
+            throw new UnauthorizedException('content', 'hide', ['contentId' => $contentInfo->id]);
         }
 
         $this->repository->beginTransaction();
