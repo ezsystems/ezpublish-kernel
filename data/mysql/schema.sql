@@ -2567,7 +2567,7 @@ CREATE TABLE `eznotification` (
   `is_pending` tinyint(1) NOT NULL DEFAULT '1',
   `type` varchar(128) NOT NULL DEFAULT '',
   `created` int(11) NOT NULL DEFAULT 0,
-  `data` blob,
+  `data` text,
   PRIMARY KEY (`id`),
   KEY `eznotification_owner` (`owner_id`),
   KEY `eznotification_owner_is_pending` (`owner_id`, `is_pending`)
