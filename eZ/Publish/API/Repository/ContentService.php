@@ -440,6 +440,28 @@ interface ContentService
     public function deleteTranslationFromDraft(VersionInfo $versionInfo, $languageCode);
 
     /**
+     * Hides Content by making all the Locations appear hidden.
+     * It does not persist hidden state on Location object itself.
+     *
+     * Content hidden by this API can be revealed by revealContent API.
+     *
+     * @see revealContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function hideContent(ContentInfo $contentInfo): void;
+
+    /**
+     * Reveals Content hidden by hideContent API.
+     * Locations which were hidden before hiding Content will remain hidden.
+     *
+     * @see hideContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function revealContent(ContentInfo $contentInfo): void;
+
+    /**
      * Instantiates a new content create struct object.
      *
      * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable

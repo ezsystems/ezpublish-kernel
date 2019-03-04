@@ -421,6 +421,15 @@ class DoctrineDatabase extends Gateway
      */
     public function hideSubtree($pathString)
     {
+        $this->setNodeWithChildrenInvisible($pathString);
+        $this->setNodeHidden($pathString);
+    }
+
+    /**
+     * @param string $pathString
+     **/
+    public function setNodeWithChildrenInvisible(string $pathString): void
+    {
         $query = $this->handler->createUpdateQuery();
         $query
             ->update($this->handler->quoteTable('ezcontentobject_tree'))
@@ -438,14 +447,30 @@ class DoctrineDatabase extends Gateway
                     $query->bindValue($pathString . '%')
                 )
             );
-        $query->prepare()->execute();
 
+        $query->prepare()->execute();
+    }
+
+    /**
+     * @param string $pathString
+     **/
+    public function setNodeHidden(string $pathString): void
+    {
+        $this->setNodeHiddenStatus($pathString, true);
+    }
+
+    /**
+     * @param string $pathString
+     * @param bool $isHidden
+     */
+    private function setNodeHiddenStatus(string $pathString, bool $isHidden): void
+    {
         $query = $this->handler->createUpdateQuery();
         $query
             ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
                 $this->handler->quoteColumn('is_hidden'),
-                $query->bindValue(1)
+                $query->bindValue((int) $isHidden)
             )
             ->where(
                 $query->expr->eq(
@@ -453,6 +478,7 @@ class DoctrineDatabase extends Gateway
                     $query->bindValue($pathString)
                 )
             );
+
         $query->prepare()->execute();
     }
 
@@ -464,22 +490,17 @@ class DoctrineDatabase extends Gateway
      */
     public function unHideSubtree($pathString)
     {
-        // Unhide the requested node
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set(
-                $this->handler->quoteColumn('is_hidden'),
-                $query->bindValue(0)
-            )
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('path_string'),
-                    $query->bindValue($pathString)
-                )
-            );
-        $query->prepare()->execute();
+        $this->setNodeUnhidden($pathString);
+        $this->setNodeWithChildrenVisible($pathString);
+    }
 
+    /**
+     * Sets a location + children to visible unless a parent is hiding the tree.
+     *
+     * @param string $pathString
+     **/
+    public function setNodeWithChildrenVisible(string $pathString): void
+    {
         // Check if any parent nodes are explicitly hidden
         $query = $this->handler->createSelectQuery();
         $query
@@ -497,6 +518,7 @@ class DoctrineDatabase extends Gateway
                     )
                 )
             );
+
         $statement = $query->prepare();
         $statement->execute();
         if (count($statement->fetchAll(\PDO::FETCH_COLUMN))) {
@@ -565,7 +587,17 @@ class DoctrineDatabase extends Gateway
             );
         }
         $query->where($where);
-        $statement = $query->prepare()->execute();
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Sets location to be unhidden.
+     *
+     * @param string $pathString
+     **/
+    public function setNodeUnhidden(string $pathString): void
+    {
+        $this->setNodeHiddenStatus($pathString, false);
     }
 
     /**

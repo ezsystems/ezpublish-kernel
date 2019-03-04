@@ -147,6 +147,20 @@ interface Handler
     public function unHide($id);
 
     /**
+     * Sets a location + all children to invisible.
+     *
+     * @param int $id Location ID
+     */
+    public function setInvisible(int $id): void;
+
+    /**
+     * Sets a location + all children to visible.
+     *
+     * @param int $id Location ID
+     */
+    public function setVisible(int $id): void;
+
+    /**
      * Swaps the content object being pointed to by a location object.
      *
      * Make the location identified by $locationId1 refer to the Content

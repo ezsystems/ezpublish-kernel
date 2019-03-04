@@ -201,6 +201,16 @@ class ContentService implements ContentServiceInterface
         return $this->service->loadContentListByContentInfo($contentInfoList, $languages, $useAlwaysAvailable);
     }
 
+    public function hideContent(ContentInfo $contentInfo): void
+    {
+        $this->service->hideContent($contentInfo);
+    }
+
+    public function revealContent(ContentInfo $contentInfo): void
+    {
+        $this->service->revealContent($contentInfo);
+    }
+
     public function newContentCreateStruct(ContentType $contentType, $mainLanguageCode)
     {
         return $this->service->newContentCreateStruct($contentType, $mainLanguageCode);

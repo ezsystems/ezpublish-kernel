@@ -228,6 +228,32 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     }
 
     /**
+     * Sets a location + all children to invisible.
+     *
+     * @param int $id Location ID
+     */
+    public function setInvisible(int $id): void
+    {
+        $this->logger->logCall(__METHOD__, ['location' => $id]);
+        $this->persistenceHandler->locationHandler()->setInvisible($id);
+
+        $this->cache->invalidateTags(['location-path-data-' . $id]);
+    }
+
+    /**
+     * Sets a location + all children to visible.
+     *
+     * @param int $id Location ID
+     */
+    public function setVisible(int $id): void
+    {
+        $this->logger->logCall(__METHOD__, ['location' => $id]);
+        $this->persistenceHandler->locationHandler()->setVisible($id);
+
+        $this->cache->invalidateTags(['location-path-data-' . $id]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function swap($locationId1, $locationId2)

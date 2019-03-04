@@ -31,3 +31,9 @@ ADD CONSTRAINT ezcontentclass_attribute_ml_lang_fk
 
 ALTER TABLE eznotification ALTER COLUMN is_pending TYPE BOOLEAN;
 ALTER TABLE eznotification ALTER COLUMN is_pending SET DEFAULT true;
+
+--
+-- EZP-30139: As an editor I want to hide and reveal a content item
+--
+
+ALTER TABLE ezcontentobject ADD is_hidden boolean DEFAULT false NOT NULL;

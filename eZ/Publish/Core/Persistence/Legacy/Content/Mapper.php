@@ -261,6 +261,7 @@ class Mapper
         $contentInfo->mainLocationId = ($row["{$treePrefix}main_node_id"] !== null ? (int)$row["{$treePrefix}main_node_id"] : null);
         $contentInfo->status = (int)$row["{$prefix}status"];
         $contentInfo->isPublished = ($contentInfo->status == ContentInfo::STATUS_PUBLISHED);
+        $contentInfo->isHidden = (bool)$row["{$prefix}is_hidden"];
 
         return $contentInfo;
     }

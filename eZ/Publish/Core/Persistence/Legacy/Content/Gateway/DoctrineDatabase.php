@@ -339,6 +339,12 @@ class DoctrineDatabase extends Gateway
                 $q->bindValue($mask, null, \PDO::PARAM_INT)
             );
         }
+        if (isset($struct->isHidden)) {
+            $q->set(
+                $this->dbHandler->quoteColumn('is_hidden'),
+                $q->bindValue($struct->isHidden, null, \PDO::PARAM_BOOL)
+            );
+        }
         $q->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn('id'),
@@ -855,6 +861,7 @@ class DoctrineDatabase extends Gateway
                 'c.status AS ezcontentobject_status',
                 'c.name AS ezcontentobject_name',
                 'c.language_mask AS ezcontentobject_language_mask',
+                'c.is_hidden AS ezcontentobject_is_hidden',
                 'v.id AS ezcontentobject_version_id',
                 'v.version AS ezcontentobject_version_version',
                 'v.modified AS ezcontentobject_version_modified',

@@ -192,7 +192,8 @@ CREATE TABLE ezcontentobject (
     published integer DEFAULT 0 NOT NULL,
     remote_id character varying(100),
     section_id integer DEFAULT 0 NOT NULL,
-    status integer DEFAULT 0
+    status integer DEFAULT 0,
+    is_hidden boolean DEFAULT FALSE NOT NULL
 );
 
 DROP TABLE IF EXISTS ezcontentobject_attribute;

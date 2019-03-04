@@ -215,7 +215,8 @@ class QueryBuilder
             $this->dbHandler->aliasedColumn($query, 'published', 'ezcontentobject'),
             $this->dbHandler->aliasedColumn($query, 'status', 'ezcontentobject'),
             $this->dbHandler->aliasedColumn($query, 'name', 'ezcontentobject'),
-            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcontentobject')
+            $this->dbHandler->aliasedColumn($query, 'language_mask', 'ezcontentobject'),
+            $this->dbHandler->aliasedColumn($query, 'is_hidden', 'ezcontentobject')
         )->from(
             $this->dbHandler->quoteTable('ezcontentobject_version')
         )->innerJoin(

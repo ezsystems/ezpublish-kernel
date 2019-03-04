@@ -178,3 +178,13 @@ services:
         class: "%ezpublish.search.elasticsearch.slot.assign_section.class%"
         tags:
             - {name: ezpublish.search.elasticsearch.slot, signal: SectionService\AssignSectionSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\HideContent:
+        parent: ezpublish.search.elasticsearch.slot
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\HideContentSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\RevealContent:
+        parent: ezpublish.search.elasticsearch.slot
+        tags:
+            - {name: ezpublish.search.elasticsearch.slot, signal: ContentService\RevealContentSignal}

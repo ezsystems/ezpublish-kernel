@@ -661,7 +661,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         foreach ($res as $row) {
             $this->assertEquals(
-                22,
+                23,
                 count($row)
             );
         }
@@ -719,7 +719,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         foreach ($res as $row) {
             $this->assertEquals(
-                22,
+                23,
                 count($row)
             );
         }

@@ -2127,6 +2127,76 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
+     * Hides Content by making all the Locations appear hidden.
+     * It does not persist hidden state on Location object itself.
+     *
+     * Content hidden by this API can be revealed by revealContent API.
+     *
+     * @see revealContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function hideContent(ContentInfo $contentInfo): void
+    {
+        if (!$this->repository->canUser('content', 'hide', $contentInfo)) {
+            throw new UnauthorizedException('content', 'hide', ['contentId' => $contentInfo->id]);
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $this->persistenceHandler->contentHandler()->updateMetadata(
+                $contentInfo->id,
+                new SPIMetadataUpdateStruct([
+                    'isHidden' => true,
+                ])
+            );
+            $locationHandler = $this->persistenceHandler->locationHandler();
+            $childLocations = $locationHandler->loadLocationsByContent($contentInfo->id);
+            foreach ($childLocations as $childLocation) {
+                $locationHandler->setInvisible($childLocation->id);
+            }
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+    }
+
+    /**
+     * Reveals Content hidden by hideContent API.
+     * Locations which were hidden before hiding Content will remain hidden.
+     *
+     * @see hideContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function revealContent(ContentInfo $contentInfo): void
+    {
+        if (!$this->repository->canUser('content', 'hide', $contentInfo)) {
+            throw new UnauthorizedException('content', 'hide', ['contentId' => $contentInfo->id]);
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $this->persistenceHandler->contentHandler()->updateMetadata(
+                $contentInfo->id,
+                new SPIMetadataUpdateStruct([
+                    'isHidden' => false,
+                ])
+            );
+            $locationHandler = $this->persistenceHandler->locationHandler();
+            $childLocations = $locationHandler->loadLocationsByContent($contentInfo->id);
+            foreach ($childLocations as $childLocation) {
+                $locationHandler->setVisible($childLocation->id);
+            }
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+    }
+
+    /**
      * Instantiates a new content create struct object.
      *
      * alwaysAvailable is set to the ContentType's defaultAlwaysAvailable
