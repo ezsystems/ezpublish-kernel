@@ -13,6 +13,7 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
 use EzSystems\DoctrineSchema\API\Builder\SchemaBuilder;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Filesystem\Filesystem;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
@@ -71,26 +72,32 @@ class DbBasedInstaller
             $schema->toSql($databasePlatform)
         );
 
-        if (!$this->output->isQuiet()) {
-            $this->output->writeln(
-                sprintf(
-                    'Executing %d queries on database %s',
-                    count($queries),
-                    $this->db->getDatabase()
-                )
-            );
-        }
+        $queriesCount = count($queries);
+        $this->output->writeln(
+            sprintf(
+                'Executing %d queries on database %s',
+                $queriesCount,
+                $this->db->getDatabase()
+            )
+        );
+        $progressBar = new ProgressBar($this->output);
+        $progressBar->start($queriesCount);
 
         try {
             $this->db->beginTransaction();
             foreach ($queries as $query) {
                 $this->db->exec($query);
+                $progressBar->advance(1);
             }
             $this->db->commit();
         } catch (DBALException $e) {
             $this->db->rollBack();
             throw $e;
         }
+
+        $progressBar->finish();
+        // go to the next line after ProgressBar::finish
+        $this->output->writeln('');
     }
 
     /**
