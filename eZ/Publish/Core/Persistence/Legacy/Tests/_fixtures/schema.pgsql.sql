@@ -487,7 +487,7 @@ DROP TABLE IF EXISTS eznotification;
 CREATE TABLE eznotification (
     id SERIAL,
     owner_id integer DEFAULT 0 NOT NULL ,
-    is_pending integer DEFAULT 1 NOT NULL,
+    is_pending boolean DEFAULT true NOT NULL,
     type character varying(128) NOT NULL,
     created integer DEFAULT 0 NOT NULL,
     data text

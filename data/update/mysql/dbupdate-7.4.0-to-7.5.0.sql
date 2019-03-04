@@ -24,3 +24,9 @@ ADD CONSTRAINT `ezcontentclass_attribute_ml_lang_fk`
   REFERENCES `ezcontent_language` (`id`)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
+
+--
+-- EZP-30149: As a Developer I want uniform eznotification DB table definition across all DBMS-es
+--
+
+ALTER TABLE `eznotification` MODIFY COLUMN `data` TEXT;

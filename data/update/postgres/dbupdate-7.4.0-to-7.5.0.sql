@@ -2,7 +2,7 @@
 UPDATE ezsite_data SET value='7.5.0' WHERE name='ezpublish-version';
 
 --
--- EZP-29990 - Add table for multilingual FieldDefinitions
+-- EZP-29990: Add table for multilingual FieldDefinitions
 --
 
 DROP TABLE IF EXISTS ezcontentclass_attribute_ml;
@@ -24,3 +24,10 @@ ADD CONSTRAINT ezcontentclass_attribute_ml_lang_fk
   REFERENCES ezcontent_language (id)
   ON DELETE CASCADE
   ON UPDATE CASCADE;
+
+--
+-- EZP-30149: As a Developer I want uniform eznotification DB table definition across all DBMS-es
+--
+
+ALTER TABLE eznotification ALTER COLUMN is_pending TYPE BOOLEAN;
+ALTER TABLE eznotification ALTER COLUMN is_pending SET DEFAULT true;

@@ -559,7 +559,7 @@ CREATE TABLE eznotification (
   is_pending integer NOT NULL DEFAULT 1,
   type text(255) NOT NULL DEFAULT '',
   created integer NOT NULL DEFAULT 0,
-  data blob
+  data text
 );
 
 CREATE INDEX eznotification_owner ON eznotification(owner_id);
