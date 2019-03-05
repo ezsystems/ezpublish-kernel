@@ -75,9 +75,10 @@ class DbBasedInstaller
         $queriesCount = count($queries);
         $this->output->writeln(
             sprintf(
-                'Executing %d queries on database %s',
+                '<info>Executing %d queries on database <comment>%s</comment> (<comment>%s</comment>)</info>',
                 $queriesCount,
-                $this->db->getDatabase()
+                $this->db->getDatabase(),
+                $this->db->getDatabasePlatform()->getName()
             )
         );
         $progressBar = new ProgressBar($this->output);
