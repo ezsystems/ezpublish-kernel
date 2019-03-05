@@ -21,7 +21,7 @@ use eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as SPILocationHa
 /**
  * Test case for Persistence\Cache\UserHandler.
  */
-class UserHandlerTest extends AbstractCacheHandlerTest
+class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
 {
     public function getHandlerMethodName(): string
     {
@@ -35,16 +35,20 @@ class UserHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        $user = new User(['id' => 14]);
+        $user = new User(['id' => 14, 'login' => 'otto', 'email' => 'otto@ez.no']);
         $policy = new Policy(['id' => 13, 'roleId' => 9]);
-        $userToken = new User\UserTokenUpdateStruct(['userId' => 14]);
+        $userToken = new User\UserTokenUpdateStruct(['userId' => 14, 'hashKey' => '4irj8t43r']);
 
-        // string $method, array $arguments, array? $tags, string? $key
+        // string $method, array $arguments, array? $tags, array? $key
         return [
-            ['create', [$user], ['content-fields-14']],
+            ['create', [$user], ['content-fields-14'], [
+                'ez-user-14',
+                'ez-user-' . str_replace('@', '§', $user->login) . '-by-login',
+                'ez-user-' . str_replace('@', '§', $user->email) . '-by-email',
+            ]],
             ['update', [$user], ['content-fields-14', 'user-14']],
-            ['updateUserToken', [$userToken], ['content-fields-14', 'user-14']],
-            ['expireUserToken', [14]],
+            ['updateUserToken', [$userToken], ['user-14-account-key'], ['ez-user-4irj8t43r-by-account-key']],
+            ['expireUserToken', ['4irj8t43r'], null, ['ez-user-4irj8t43r-by-account-key']],
             ['delete', [14], ['content-fields-14', 'user-14']],
             ['createRole', [new RoleCreateStruct()]],
             ['createRoleDraft', [new RoleCreateStruct()]],
