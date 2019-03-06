@@ -11,7 +11,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\FieldDefinitionSettingsTemplates;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\FieldTemplates;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
-use function eZ\Publish\API\Repository\Tests\writeFixtureFile;
 use Symfony\Component\Yaml\Yaml;
 
 class TemplatesTest extends AbstractParserTestCase
