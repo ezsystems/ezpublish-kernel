@@ -148,7 +148,7 @@ class DbBasedInstaller
         if (!$this->output->isQuiet()) {
             $this->output->writeln(
                 sprintf(
-                    'Executing %d queries from %s on database %s',
+                    '<info>Executing %d queries from <comment>%s</comment> on database <comment>%s</comment></info>',
                     count($queries),
                     $file,
                     $this->db->getDatabase()
