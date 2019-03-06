@@ -20,12 +20,17 @@ parameters:
     ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
 
+    # Default templates
+    ezplatform.default_templates.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
+    ezplatform.default_templates.field_templates: 'EzPublishCoreBundle::content_fields.html.twig'
+    ezplatform.default_templates.fielddefinition_settings_templates: 'EzPublishCoreBundle::fielddefinition_settings.html.twig'
+
     # Rich Text Custom Tags global configuration
     ezplatform.ezrichtext.custom_tags: {}
     # Rich Text Custom Tags default scope (for SiteAccess) configuration
     ezsettings.default.fieldtypes.ezrichtext.custom_tags: []
 
-    ezsettings.default.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
+    ezsettings.default.pagelayout: '%ezplatform.default_templates.pagelayout%'
 
     # List of content type identifiers to display as image when embedded
     ezplatform.content_view.image_embed_content_types_identifiers: ['image']
@@ -145,14 +150,14 @@ parameters:
 
     # Templates to use while rendering fields
     ezsettings.default.field_templates:
-        - {template: EzPublishCoreBundle::content_fields.html.twig, priority: 0}
+        - {template: '%ezplatform.default_templates.field_templates%', priority: 0}
 
     # Templates for Field edition. Follows the same structure than for field_templates
     ezsettings.default.field_edit_templates: []
 
     # Templates to use while rendering field definition settings
     ezsettings.default.fielddefinition_settings_templates:
-        - {template: EzPublishCoreBundle::fielddefinition_settings.html.twig, priority: 0}
+        - {template: '%ezplatform.default_templates.fielddefinition_settings_templates%', priority: 0}
 
     # Templates for FieldDefinition edition. Follows the same structure than for field_templates
     ezsettings.default.fielddefinition_edit_templates: []
