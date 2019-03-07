@@ -1459,7 +1459,8 @@ class DoctrineDatabase extends Gateway
         $originalUrlAliases = array_filter(
             $urlAliasesData,
             function ($urlAliasData) {
-                return (int)$urlAliasData['is_original'] === 1;
+                // filter is_original=true ignoring broken parent records (cleaned up elsewhere)
+                return (bool)$urlAliasData['is_original'] && $urlAliasData['existing_parent'] !== null;
             }
         );
         // return language_mask-indexed array
