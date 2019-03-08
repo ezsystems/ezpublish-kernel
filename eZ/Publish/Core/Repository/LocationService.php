@@ -575,11 +575,8 @@ class LocationService implements LocationServiceInterface
         $loadedLocation1 = $this->loadLocation($location1->id);
         $loadedLocation2 = $this->loadLocation($location2->id);
 
-        if (!$this->repository->canUser('content', 'edit', $loadedLocation1->getContentInfo(), $loadedLocation1)) {
-            throw new UnauthorizedException('content', 'edit', ['locationId' => $loadedLocation1->id]);
-        }
-        if (!$this->repository->canUser('content', 'edit', $loadedLocation2->getContentInfo(), $loadedLocation2)) {
-            throw new UnauthorizedException('content', 'edit', ['locationId' => $loadedLocation2->id]);
+        if (!$this->repository->canUser('content', 'swap', $loadedLocation1->getContentInfo())) {
+            throw new UnauthorizedException('content', 'swap');
         }
 
         $this->repository->beginTransaction();

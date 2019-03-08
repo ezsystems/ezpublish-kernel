@@ -19,6 +19,7 @@ parameters:
             pendinglist: ~
             restore: ~
             cleantrash: ~
+            swap: ~
 
         class:
             update: ~
