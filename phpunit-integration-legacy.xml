@@ -20,6 +20,7 @@
             <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/PermissionServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/PermissionResolverTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceMaximumSupportedLanguagesTest.php</file>
