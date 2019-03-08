@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException as CoreBadStateException;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -221,6 +221,6 @@ class RestContent extends ValueObjectVisitor
                 return 'TRASHED';
         }
 
-        throw new BadStateException('status', $status);
+        throw new CoreBadStateException('status', $status);
     }
 }
