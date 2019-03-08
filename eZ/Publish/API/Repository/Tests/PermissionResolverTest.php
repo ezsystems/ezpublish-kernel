@@ -852,6 +852,14 @@ class PermissionResolverTest extends BaseTest
                 [],
                 false,
             ],
+            3 => [
+                new Limitation\ParentContentTypeLimitation(['limitationValues' => [3]]), // parent type has to be the UserGroup
+                'content',
+                'create',
+                $contentService->loadContentInfo(14), // content type user (Administrator)
+                [],
+                true,
+            ],
         ];
     }
 }
