@@ -83,7 +83,7 @@
 {% block ezdate_field %}
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
-        {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale ) %}
+        {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale, false ) %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
 {% endspaceless %}
