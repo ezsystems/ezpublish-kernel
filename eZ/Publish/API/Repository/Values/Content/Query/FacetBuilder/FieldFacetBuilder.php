@@ -41,6 +41,27 @@ class FieldFacetBuilder extends FacetBuilder
     public $regex;
 
     /**
+     * A value that field values must start with.
+     *
+     * @var string
+     */
+    public $prefix;
+
+    /**
+     * A value that field values must contain.
+     *
+     * @var string
+     */
+    public $contains;
+
+    /**
+     * Whether or not contains should be case sensitive.
+     *
+     * @var bool
+     */
+    public $containsIgnoreCase = false;
+
+    /**
      * The sort order of the terms.
      *
      * One of FieldFacetBuilder::COUNT_ASC, FieldFacetBuilder::COUNT_DESC, FieldFacetBuilder::TERM_ASC, FieldFacetBuilder::TERM_DESC
