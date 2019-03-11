@@ -27,12 +27,18 @@ class ParameterProvider implements ParameterProviderInterface
     private $permissionsResolver;
 
     /**
+     * @var \eZ\Publish\Core\Repository\FieldTypeService
+     */
+    private $fieldTypeService;
+
+    /**
      * @param \eZ\Publish\API\Repository\Repository $repository
      */
     public function __construct(Repository $repository)
     {
         $this->repository = $repository;
         $this->permissionsResolver = $repository->getPermissionResolver();
+        $this->fieldTypeService = $repository->getFieldTypeService();
     }
 
     /**
@@ -40,25 +46,30 @@ class ParameterProvider implements ParameterProviderInterface
      */
     public function getViewParameters(Field $field): array
     {
+        $fieldType = $this->fieldTypeService->getFieldType($field->fieldTypeIdentifier);
+
+        if ($fieldType->isEmptyValue($field->value)) {
+            return [
+                'available' => null,
+            ];
+        }
+
         try {
             $contentInfo = $this->loadContentInfo(
                 $field->value->destinationContentId
             );
 
-            if (!$this->userHasPermissions($contentInfo)) {
+            if ($this->userHasPermissions($contentInfo)) {
                 return [
-                    'available' => false,
+                    'available' => !$contentInfo->isTrashed(),
                 ];
             }
-
-            return [
-                'available' => !$contentInfo->isTrashed(),
-            ];
         } catch (NotFoundException $exception) {
-            return [
-                'available' => false,
-            ];
         }
+
+        return [
+            'available' => false,
+        ];
     }
 
     /**
