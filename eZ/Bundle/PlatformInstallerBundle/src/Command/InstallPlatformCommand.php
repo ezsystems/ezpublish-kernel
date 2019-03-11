@@ -121,8 +121,9 @@ class InstallPlatformCommand extends Command
         } catch (\RuntimeException $exception) {
             $this->output->writeln(
                 sprintf(
-                    "<error>The configured database '%s' does not exist or cannot be created.</error>",
-                    $this->db->getDatabase()
+                    "<error>The configured database '%s' does not exist or cannot be created (%s).</error>",
+                    $this->db->getDatabase(),
+                    $exception->getMessage()
                 )
             );
             $this->output->writeln("Please check the database configuration in 'app/config/parameters.yml'");

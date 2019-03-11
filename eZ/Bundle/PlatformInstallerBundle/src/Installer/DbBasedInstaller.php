@@ -14,13 +14,19 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class DbBasedInstaller
 {
-    /** @var Connection */
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
     protected $db;
 
-    /** @var \Symfony\Component\Console\Output\OutputInterface */
+    /**
+     * @var \Symfony\Component\Console\Output\OutputInterface
+     */
     protected $output;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $baseDataDir;
 
     public function __construct(Connection $db)
@@ -61,7 +67,7 @@ class DbBasedInstaller
         if (!$this->output->isQuiet()) {
             $this->output->writeln(
                 sprintf(
-                    'Executing %d queries from %s on database %s',
+                    '<info>Executing %d queries from <comment>%s</comment> on database <comment>%s</comment></info>',
                     count($queries),
                     $file,
                     $this->db->getDatabase()
@@ -81,7 +87,9 @@ class DbBasedInstaller
      *
      * @return string absolute existing file path
      *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     *
+     * @throws \Doctrine\DBAL\DBALException
      *
      * @since 6.13
      */
