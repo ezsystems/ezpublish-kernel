@@ -24,7 +24,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read bool $isRequired indicates if this field is required in the content object
  * @property-read bool $isSearchable indicates if the field is searchable
  * @property-read bool $isInfoCollector indicates if this field is used for information collection
- * @property-read $defaultValue the default value of the field
+ * @property-read mixed $defaultValue the default value of the field
  */
 abstract class FieldDefinition extends ValueObject
 {
