@@ -34,6 +34,7 @@
         "twig/twig": "^2.5"
     },
     "require-dev": {
+        "brianium/paratest": "^2.2",
         "friendsofphp/php-cs-fixer": "~2.7.5",
         "phpunit/phpunit": "^7.0",
         "matthiasnoback/symfony-dependency-injection-test": "~3.0",
@@ -66,7 +67,17 @@
         }
     },
     "scripts": {
-        "fix-cs": "@php ./vendor/bin/php-cs-fixer fix -v --show-progress=estimating"
+        "fix-cs": "php-cs-fixer fix -v --show-progress=estimating",
+        "unit": "paratest -p half -c phpunit.xml --runner=WrapperRunner",
+        "integration": "paratest -p half -c phpunit-integration-legacy.xml --runner=WrapperRunner",
+        "test": [
+            "@unit",
+            "@integration"
+        ]
+    },
+    "scripts-descriptions": {
+        "fix-cs": "Fix Coding standard issues in current checkout.",
+        "test": "Run all tests (unit & integration, not functional), might not work on Windows."
     },
     "extra": {
         "_ci_branch-comment_": "Keep ci branch up-to-date with master or branch if on stable. ci is never on github but convention used for ci behat testing!",
