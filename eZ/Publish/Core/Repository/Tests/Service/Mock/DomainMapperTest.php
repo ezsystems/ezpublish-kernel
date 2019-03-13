@@ -8,13 +8,16 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
 use eZ\Publish\Core\Repository\Tests\Service\Mock\Base as BaseServiceMockTest;
 use eZ\Publish\Core\Repository\Helper\DomainMapper;
+use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo as SPIContentInfo;
 
@@ -42,6 +45,48 @@ class DomainMapperTest extends BaseServiceMockTest
                 $versionInfo
             );
         }
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Repository\Helper\DomainMapper::buildLocationWithContent
+     */
+    public function testBuildLocationWithContentForRootLocation()
+    {
+        $spiRootLocation = new Location(['id' => 1]);
+        $apiRootLocation = $this->getDomainMapper()->buildLocationWithContent($spiRootLocation, null);
+
+        $expectedContentInfo = new ContentInfo([
+            'id' => 0,
+        ]);
+        $expectedContent = new Content();
+
+        $this->assertInstanceOf(APILocation::class, $apiRootLocation);
+        $this->assertEquals($spiRootLocation->id, $apiRootLocation->id);
+        $this->assertEquals($expectedContentInfo->id, $apiRootLocation->getContentInfo()->id);
+        $this->assertEquals($expectedContent, $apiRootLocation->getContent());
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Repository\Helper\DomainMapper::buildLocationWithContent
+     */
+    public function testBuildLocationWithContentThrowsInvalidArgumentException()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$content\' is invalid: Location 2 has missing Content');
+
+        $nonRootLocation = new Location(['id' => 2]);
+
+        $this->getDomainMapper()->buildLocationWithContent($nonRootLocation, null);
+    }
+
+    public function testBuildLocationWithContentIsAlignedWithBuildLocation()
+    {
+        $spiRootLocation = new Location(['id' => 1]);
+
+        $this->assertEquals(
+            $this->getDomainMapper()->buildLocationWithContent($spiRootLocation, null),
+            $this->getDomainMapper()->buildLocation($spiRootLocation)
+        );
     }
 
     public function providerForBuildVersionInfo()
