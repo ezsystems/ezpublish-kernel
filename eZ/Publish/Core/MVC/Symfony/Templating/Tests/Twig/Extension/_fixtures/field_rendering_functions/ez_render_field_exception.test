@@ -20,4 +20,4 @@ return array(
     )
 )
 --EXCEPTION--
-Twig_Error_Runtime: An exception has been thrown during the rendering of a template ("Cannot find 'notexisting_field' template block.") in "index.twig" at line 4.
+An exception has been thrown during the rendering of a template ("Cannot find 'notexisting_field' template block.") in "index.twig" at line 4.
