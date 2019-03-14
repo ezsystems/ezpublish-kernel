@@ -97,7 +97,7 @@ class PersistenceLoggerTest extends TestCase
      */
     public function testGetCallValues($logger)
     {
-        $calls =  $logger->getCalls();
+        $calls = $logger->getCalls();
         // As we don't care about the hash index we get the array values instead
         $calls = array_values($calls);
 
