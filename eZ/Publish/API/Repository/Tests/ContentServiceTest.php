@@ -6388,13 +6388,13 @@ XML
             'folder',
             $this->generateId('location', 2),
             [
-                'name' => 'Marco'
+                'name' => 'Marco',
             ]
         );
 
         $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
         $contentMetadataUpdateStruct = new ContentMetadataUpdateStruct([
-            'name' => 'Polo'
+            'name' => 'Polo',
         ]);
         $contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
 
