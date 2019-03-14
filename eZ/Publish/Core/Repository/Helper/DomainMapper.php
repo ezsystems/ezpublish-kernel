@@ -554,6 +554,7 @@ class DomainMapper
                 'priority' => $spiLocation->priority,
                 'hidden' => $spiLocation->hidden || $contentInfo->isHidden,
                 'invisible' => $spiLocation->invisible,
+                'explicitlyHidden' => $spiLocation->hidden,
                 'remoteId' => $spiLocation->remoteId,
                 'parentLocationId' => $spiLocation->parentId,
                 'pathString' => $spiLocation->pathString,
