@@ -59,17 +59,14 @@ class ParameterProvider implements ParameterProviderInterface
                 $field->value->destinationContentId
             );
 
-            if ($this->userHasPermissions($contentInfo)) {
-                return [
-                    'available' => !$contentInfo->isTrashed(),
-                ];
-            }
+            return [
+                'available' => !$contentInfo->isTrashed() && $this->userHasPermissions($contentInfo),
+            ];
         } catch (NotFoundException $exception) {
+            return [
+                'available' => false,
+            ];
         }
-
-        return [
-            'available' => false,
-        ];
     }
 
     /**
