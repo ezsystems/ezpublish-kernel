@@ -133,7 +133,7 @@ class InMemoryCache
                 continue;
             }
 
-            $key = array_shift($indexes);
+            $key = \array_shift($indexes);
             $this->cache[$key] = $object;
             $this->cacheTime[$key] = $time;
 

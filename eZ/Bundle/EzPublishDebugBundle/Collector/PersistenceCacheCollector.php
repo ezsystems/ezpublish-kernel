@@ -106,7 +106,6 @@ class PersistenceCacheCollector extends DataCollector
             // Leave out in-memory lookups from sorting
             $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'];
         }
-        unset($data);
 
         array_multisort($count, SORT_DESC, $calls);
 

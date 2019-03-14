@@ -189,14 +189,20 @@ class CachingHandler implements BaseLanguageHandler
     }
 
     /**
-     * Clear internal cache.
+     * Clear internal in-memory cache.
      */
-    public function clearCache()
+    public function clearCache(): void
     {
         $this->cache->clear();
     }
 
-    protected function storeCache(array $languages, string $listIndex = null)
+    /**
+     * Helper to store languages in internal in-memory cache with all needed keys.
+     *
+     * @param array $languages
+     * @param string|null $listIndex
+     */
+    protected function storeCache(array $languages, string $listIndex = null): void
     {
         $this->cache->setMulti(
             $languages,
