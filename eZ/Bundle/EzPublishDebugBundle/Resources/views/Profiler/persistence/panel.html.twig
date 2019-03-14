@@ -85,5 +85,5 @@
     </table>
 
 {% else %}
-    <p class="text-small text-muted">TIP: Call logging is disabled by default as it consumes considerably memory, enable <code>@TODO</code> in order to see calls made and trace for where the calls comes from.</p>
+    <p class="text-small text-muted">NOTE: Call logging is by default only enabled in debug mode as <code>ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: "%kernel.debug%"</code>, enable debug or change the setting in order to see calls made and trace for where the calls comes from.</p>
 {% endif %}
