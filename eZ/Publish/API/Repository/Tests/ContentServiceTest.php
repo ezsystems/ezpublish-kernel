@@ -6378,4 +6378,29 @@ XML
         $this->assertFalse($childLocations[0]->hidden);
         $this->assertTrue($childLocations[0]->invisible);
     }
+
+    public function testChangeContentName()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $contentDraft = $this->createContentDraft(
+            'folder',
+            $this->generateId('location', 2),
+            [
+                'name' => 'Marco',
+            ]
+        );
+
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+        $contentMetadataUpdateStruct = new ContentMetadataUpdateStruct([
+            'name' => 'Polo',
+        ]);
+        $contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
+
+        $updatedContent = $contentService->loadContent($publishedContent->id);
+
+        $this->assertEquals('Marco', $publishedContent->contentInfo->name);
+        $this->assertEquals('Polo', $updatedContent->contentInfo->name);
+    }
 }

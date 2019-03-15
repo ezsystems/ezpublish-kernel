@@ -965,6 +965,7 @@ class ContentService implements ContentServiceInterface
                                 null,
                             'alwaysAvailable' => $contentMetadataUpdateStruct->alwaysAvailable,
                             'remoteId' => $contentMetadataUpdateStruct->remoteId,
+                            'name' => $contentMetadataUpdateStruct->name,
                         )
                     )
                 );
