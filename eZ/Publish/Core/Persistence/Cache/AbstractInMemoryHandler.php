@@ -125,7 +125,7 @@ abstract class AbstractInMemoryHandler
      * @param callable $backendLoader Function for loading ALL objects, value is cached as-is.
      * @param callable $cacheTagger Gets cache object as argument, return array of cache tags.
      * @param callable $cacheIndexes Gets cache object as argument, return array of cache keys.
-     * @param array|callable $listTags Optional, global tags for the list cache, either as array or lazy callable.
+     * @param callable $listTags Optional, global tags for the list cache.
      * @param array $arguments Optional, arguments when parnt method takes arguments that key varies on.
      *
      * @return object
@@ -135,7 +135,7 @@ abstract class AbstractInMemoryHandler
         callable $backendLoader,
         callable $cacheTagger,
         callable $cacheIndexes,
-        $listTags = [],
+        callable $listTags = null,
         array $arguments = []
     ) {
         // In-memory
@@ -159,10 +159,10 @@ abstract class AbstractInMemoryHandler
         $this->inMemory->setMulti($objects, $cacheIndexes, $key);
         $this->logger->logCacheMiss($arguments, 3);
 
-        if (is_callable($listTags)) {
+        if ($listTags !== null) {
             $tagSet = [$listTags()];
         } else {
-            $tagSet = [$listTags];
+            $tagSet = [[]];
         }
 
         foreach ($objects as $object) {

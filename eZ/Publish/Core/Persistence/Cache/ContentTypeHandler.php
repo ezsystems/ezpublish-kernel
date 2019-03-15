@@ -189,7 +189,7 @@ class ContentTypeHandler extends AbstractInMemoryHandler implements ContentTypeH
             },
             $this->getTypeTags,
             $this->getTypeKeys,
-            ['type-group-' . $groupId],
+            static function () use ($groupId) { return ['type-group-' . $groupId]; },
             [$groupId]
         );
     }
@@ -490,7 +490,7 @@ class ContentTypeHandler extends AbstractInMemoryHandler implements ContentTypeH
             },
             static function () {return [];},
             static function () {return [];},
-            ['type-map']
+            static function () { return ['type-map']; }
         );
     }
 

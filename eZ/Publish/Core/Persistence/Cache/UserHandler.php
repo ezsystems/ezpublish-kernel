@@ -351,9 +351,8 @@ class UserHandler extends AbstractInMemoryHandler implements UserHandlerInterfac
             },
             $this->getRoleAssignmentTags,
             $this->getRoleAssignmentKeys,
-            [
-                'role-' . $roleId, /* Role update (policies) changes role assignment id */
-            ],
+            /* Role update (policies) changes role assignment id */
+            static function () use ($roleId) { return ['role-' . $roleId]; },
             [$roleId]
         );
     }
