@@ -506,11 +506,18 @@ class DoctrineDatabase extends Gateway
         $query
             ->select($this->handler->quoteColumn('path_string'))
             ->from($this->handler->quoteTable('ezcontentobject_tree'))
+            ->leftJoin('ezcontentobject', 'ezcontentobject_tree.contentobject_id', 'ezcontentobject.id')
             ->where(
                 $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn('is_hidden'),
-                        $query->bindValue(1)
+                    $query->expr->lOr(
+                        $query->expr->eq(
+                            $this->handler->quoteColumn('is_hidden', 'ezcontentobject_tree'),
+                            $query->bindValue(1)
+                        ),
+                        $query->expr->eq(
+                            $this->handler->quoteColumn('is_hidden', 'ezcontentobject'),
+                            $query->bindValue(1)
+                        )
                     ),
                     $query->expr->in(
                         $this->handler->quoteColumn('node_id'),
@@ -533,11 +540,18 @@ class DoctrineDatabase extends Gateway
         $query
             ->select($this->handler->quoteColumn('path_string'))
             ->from($this->handler->quoteTable('ezcontentobject_tree'))
+            ->leftJoin('ezcontentobject', 'ezcontentobject_tree.contentobject_id', 'ezcontentobject.id')
             ->where(
                 $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn('is_hidden'),
-                        $query->bindValue(1)
+                    $query->expr->lOr(
+                        $query->expr->eq(
+                            $this->handler->quoteColumn('is_hidden', 'ezcontentobject_tree'),
+                            $query->bindValue(1)
+                        ),
+                        $query->expr->eq(
+                            $this->handler->quoteColumn('is_hidden', 'ezcontentobject'),
+                            $query->bindValue(1)
+                        )
                     ),
                     $query->expr->like(
                         $this->handler->quoteColumn('path_string'),

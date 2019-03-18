@@ -6326,6 +6326,140 @@ XML
         ];
     }
 
+    /**
+     * @depends testRevealContent
+     */
+    public function testRevealContentWithHiddenParent()
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentNames = [
+            'Parent Content',
+            'Child (Nesting 1)',
+            'Child (Nesting 2)',
+            'Child (Nesting 3)',
+            'Child (Nesting 4)',
+        ];
+
+        $parentLocation = $locationService->newLocationCreateStruct(
+            $this->generateId('location', 2)
+        );
+
+        /** @var Content[] $contents */
+        $contents = [];
+
+        foreach ($contentNames as $contentName) {
+            $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+            $contentCreate->setField('name', $contentName);
+
+            $content = $contentService->createContent($contentCreate, [$parentLocation]);
+            $contents[] = $publishedContent = $contentService->publishVersion($content->versionInfo);
+
+            $parentLocation = $locationService->newLocationCreateStruct(
+                $this->generateId('location', $publishedContent->contentInfo->mainLocationId)
+            );
+        }
+
+        $contentService->hideContent($contents[0]->contentInfo);
+        $contentService->hideContent($contents[2]->contentInfo);
+        $contentService->revealContent($contents[2]->contentInfo);
+
+        $parentContent = $contentService->loadContent($contents[0]->id);
+        $parentLocation = $locationService->loadLocation($parentContent->contentInfo->mainLocationId);
+        $parentSublocations = $locationService->loadLocationList([
+            $contents[1]->contentInfo->mainLocationId,
+            $contents[2]->contentInfo->mainLocationId,
+            $contents[3]->contentInfo->mainLocationId,
+            $contents[4]->contentInfo->mainLocationId,
+        ]);
+
+        // Parent remains invisible
+        self::assertTrue($parentLocation->invisible);
+
+        // All parent sublocations remain invisible as well
+        foreach ($parentSublocations as $parentSublocation) {
+            self::assertTrue($parentSublocation->invisible);
+        }
+    }
+
+    /**
+     * @depends testRevealContent
+     */
+    public function testRevealContentWithHiddenChildren()
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentNames = [
+            'Parent Content',
+            'Child (Nesting 1)',
+            'Child (Nesting 2)',
+            'Child (Nesting 3)',
+            'Child (Nesting 4)',
+        ];
+
+        $parentLocation = $locationService->newLocationCreateStruct(
+            $this->generateId('location', 2)
+        );
+
+        /** @var Content[] $contents */
+        $contents = [];
+
+        foreach ($contentNames as $contentName) {
+            $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+            $contentCreate->setField('name', $contentName);
+
+            $content = $contentService->createContent($contentCreate, [$parentLocation]);
+            $contents[] = $publishedContent = $contentService->publishVersion($content->versionInfo);
+
+            $parentLocation = $locationService->newLocationCreateStruct(
+                $this->generateId('location', $publishedContent->contentInfo->mainLocationId)
+            );
+        }
+
+        $contentService->hideContent($contents[0]->contentInfo);
+        $contentService->hideContent($contents[2]->contentInfo);
+        $contentService->revealContent($contents[0]->contentInfo);
+
+        $directChildContent = $contentService->loadContent($contents[1]->id);
+        $directChildLocation = $locationService->loadLocation($directChildContent->contentInfo->mainLocationId);
+
+        $childContent = $contentService->loadContent($contents[2]->id);
+        $childLocation = $locationService->loadLocation($childContent->contentInfo->mainLocationId);
+        $childSublocations = $locationService->loadLocationList([
+            $contents[3]->contentInfo->mainLocationId,
+            $contents[4]->contentInfo->mainLocationId,
+        ]);
+
+        // Direct child content is not hidden
+        self::assertFalse($directChildContent->contentInfo->isHidden);
+
+        // Direct child content location is still invisible
+        self::assertFalse($directChildLocation->invisible);
+
+        // Child content is still hidden
+        self::assertTrue($childContent->contentInfo->isHidden);
+
+        // Child content location is still invisible
+        self::assertTrue($childLocation->invisible);
+
+        // All childs sublocations remain invisible as well
+        foreach ($childSublocations as $childSublocation) {
+            self::assertTrue($childSublocation->invisible);
+        }
+    }
+
     public function testHideContentWithParentLocation()
     {
         $repository = $this->getRepository();
