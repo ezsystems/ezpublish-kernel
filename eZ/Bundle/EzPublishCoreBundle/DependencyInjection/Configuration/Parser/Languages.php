@@ -39,7 +39,7 @@ class Languages extends AbstractParser
 
     public function preMap(array $config, ContextualizerInterface $contextualizer)
     {
-        $contextualizer->mapConfigArray('languages', $config, ContextualizerInterface::UNIQUE);
+        $contextualizer->mapConfigArray('languages', $config, ContextualizerInterface::UNIQUE | ContextualizerInterface::REVERSE_ARRAY_MERGING_ORDER);
         $contextualizer->mapConfigArray('translation_siteaccesses', $config, ContextualizerInterface::UNIQUE);
 
         $container = $contextualizer->getContainer();
