@@ -37,7 +37,7 @@ services:
         class: "%ezpublish.cache_pool.driver.class%"
         arguments: ["", 120]
 
-    # Logger which logs info when in dev for synfony web toolbar
+    # Logger which logs info when in dev for Symfony web toolbar
     ezpublish.spi.persistence.cache.persistenceLogger:
         class: "%ezpublish.spi.persistence.cache.persistenceLogger.class%"
         arguments:
