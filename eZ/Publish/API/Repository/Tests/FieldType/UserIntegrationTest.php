@@ -73,15 +73,15 @@ class UserIntegrationTest extends BaseIntegrationTest
             'PasswordValueValidator' => array(
                 'requireAtLeastOneUpperCaseCharacter' => array(
                     'type' => 'int',
-                    'default' => null,
+                    'default' => 1,
                 ),
                 'requireAtLeastOneLowerCaseCharacter' => array(
                     'type' => 'int',
-                    'default' => null,
+                    'default' => 1,
                 ),
                 'requireAtLeastOneNumericCharacter' => array(
                     'type' => 'int',
-                    'default' => null,
+                    'default' => 1,
                 ),
                 'requireAtLeastOneNonAlphanumericCharacter' => array(
                     'type' => 'int',
@@ -89,7 +89,7 @@ class UserIntegrationTest extends BaseIntegrationTest
                 ),
                 'minLength' => array(
                     'type' => 'int',
-                    'default' => null,
+                    'default' => 10,
                 ),
             ),
         );
@@ -104,11 +104,11 @@ class UserIntegrationTest extends BaseIntegrationTest
     {
         return array(
             'PasswordValueValidator' => array(
-                'requireAtLeastOneUpperCaseCharacter' => false,
-                'requireAtLeastOneLowerCaseCharacter' => false,
-                'requireAtLeastOneNumericCharacter' => false,
+                'requireAtLeastOneUpperCaseCharacter' => true,
+                'requireAtLeastOneLowerCaseCharacter' => true,
+                'requireAtLeastOneNumericCharacter' => true,
                 'requireAtLeastOneNonAlphanumericCharacter' => false,
-                'minLength' => null,
+                'minLength' => 10,
             ),
         );
     }
@@ -389,7 +389,7 @@ class UserIntegrationTest extends BaseIntegrationTest
         $userCreate = $userService->newUserCreateStruct(
             'hans',
             'hans@example.com',
-            'password',
+            'PassWord42',
             'eng-US',
             $contentType
         );
