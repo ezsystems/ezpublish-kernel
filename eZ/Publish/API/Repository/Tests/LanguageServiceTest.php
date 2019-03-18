@@ -393,7 +393,7 @@ class LanguageServiceTest extends BaseTest
 
         $languageService = $repository->getContentLanguageService();
 
-        $languages = $languageService->loadLanguageListById(['fre-FR']);
+        $languages = $languageService->loadLanguageListByCode(['fre-FR']);
 
         $this->assertInternalType('iterable', $languages);
         $this->assertCount(0, $languages);

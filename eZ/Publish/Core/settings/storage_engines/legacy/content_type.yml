@@ -77,6 +77,7 @@ services:
         lazy: true
         arguments:
             - "@ezpublish.spi.persistence.legacy.content_type.handler.inner"
+            - "@ezpublish.spi.persistence.cache.inmemory"
 
     ezpublish.spi.persistence.legacy.content_type.handler:
         alias: ezpublish.spi.persistence.legacy.content_type.handler.caching

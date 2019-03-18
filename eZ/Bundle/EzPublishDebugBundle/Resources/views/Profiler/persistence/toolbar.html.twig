@@ -1,9 +1,16 @@
+{% set stats = collector.stats %}
+{# Set cache status to green  if misses is below 1 and total hits is below 20 (with remote Redis 20 cache lookups can take 50-100ms) #}
+{% set status_cache = stats.miss > 100 ? 'red' : (stats.hit > 100 ? 'yellow' : (stats.miss < 1  and stats.hit < 20 ? 'green' : '')) %}
+
 <div class="sf-toolbar-info-piece">
-    <b>SPI (persistence)</b>
+    <b>SPI Persistence/Cache</b>
 </div>
 <div class="sf-toolbar-info-piece">
-    <b>calls</b> <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.count }}</span>
+    <b>uncached calls</b> <span class="sf-toolbar-status sf-toolbar-status-{{ stats.uncached > 10 ? 'yellow' : (stats.uncached < 2 ? 'green' : '') }}">{{ stats.uncached }}</span>
 </div>
 <div class="sf-toolbar-info-piece">
-    <b>handlers</b> <span class="sf-toolbar-status sf-toolbar-status-green">{{ collector.handlerscount }}</span>
+    <b>misses / hits / memory</b> <span class="sf-toolbar-status sf-toolbar-status-{{ status_cache }}">{{ stats.miss }} / {{ stats.hit }} / {{ stats.memory }}</span>
+</div>
+<div class="sf-toolbar-info-piece">
+    <b>uncached handlers</b> <span class="sf-toolbar-status sf-toolbar-status-{{ collector.handlerscount > 1 ? '' : 'green' }}">{{ collector.handlerscount }}</span>
 </div>

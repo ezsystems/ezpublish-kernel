@@ -1,7 +1,6 @@
 parameters:
     ezpublish.spi.persistence.legacy.language.handler.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
     ezpublish.spi.persistence.legacy.language.handler.caching.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
-    ezpublish.persistence.legacy.language.cache.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
     ezpublish.persistence.legacy.language.mapper.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper
     ezpublish.persistence.legacy.language.gateway.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\DoctrineDatabase
     ezpublish.persistence.legacy.language.gateway.exception_conversion.class: eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\ExceptionConversion
@@ -31,15 +30,12 @@ services:
             - "@ezpublish.persistence.legacy.language.gateway"
             - "@ezpublish.persistence.legacy.language.mapper"
 
-    ezpublish.persistence.legacy.language.cache:
-        class: "%ezpublish.persistence.legacy.language.cache.class%"
-
     ezpublish.spi.persistence.legacy.language.handler.caching:
         class: "%ezpublish.spi.persistence.legacy.language.handler.caching.class%"
         lazy: true
         arguments:
             - "@ezpublish.spi.persistence.legacy.language.handler.inner"
-            - "@ezpublish.persistence.legacy.language.cache"
+            - "@ezpublish.spi.persistence.cache.inmemory"
 
     ezpublish.spi.persistence.legacy.language.handler:
         alias: ezpublish.spi.persistence.legacy.language.handler.caching
