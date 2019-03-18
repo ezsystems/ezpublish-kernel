@@ -27,6 +27,12 @@ interface ContextualizerInterface
     const MERGE_FROM_SECOND_LEVEL = 2;
 
     /**
+     * With this option, mapConfigArray() will merge arrays in reverse order (global, scope, group, default).
+     * Contrary to scalar settings, such merging order provides more natural and expected result for array settings.
+     */
+    const REVERSE_ARRAY_MERGING_ORDER = 4;
+
+    /**
      * Defines a contextual parameter in the container for given scope in current namespace.
      * Resulting parameter will have format <namespace>.<scope>.<parameterName> .
      *

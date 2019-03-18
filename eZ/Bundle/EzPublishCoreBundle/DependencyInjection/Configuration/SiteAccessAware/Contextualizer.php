@@ -143,6 +143,13 @@ class Contextualizer implements ContextualizerInterface
                         );
                     }
                 }
+            } elseif ($options & static::REVERSE_ARRAY_MERGING_ORDER) {
+                $mergedSettings = array_merge(
+                    $globalSettings,
+                    $scopeSettings,
+                    $groupsSettings,
+                    $defaultSettings
+                );
             } else {
                 $mergedSettings = array_merge(
                     $defaultSettings,
