@@ -44,8 +44,6 @@ use DateTime;
  */
 class DomainMapper
 {
-    private const ROOT_LOCATION_ID = 1;
-
     const MAX_LOCATION_PRIORITY = 2147483647;
     const MIN_LOCATION_PRIORITY = -2147483648;
 
@@ -848,6 +846,6 @@ class DomainMapper
      */
     private function isRootLocation(SPILocation $spiLocation): bool
     {
-        return self::ROOT_LOCATION_ID === (int)$spiLocation->id;
+        return $spiLocation->id === $spiLocation->parentId;
     }
 }

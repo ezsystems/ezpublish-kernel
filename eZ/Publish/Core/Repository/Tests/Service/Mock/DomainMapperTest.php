@@ -52,7 +52,7 @@ class DomainMapperTest extends BaseServiceMockTest
      */
     public function testBuildLocationWithContentForRootLocation()
     {
-        $spiRootLocation = new Location(['id' => 1]);
+        $spiRootLocation = new Location(['id' => 1, 'parentId' => 1]);
         $apiRootLocation = $this->getDomainMapper()->buildLocationWithContent($spiRootLocation, null);
 
         $expectedContentInfo = new ContentInfo([
@@ -74,14 +74,14 @@ class DomainMapperTest extends BaseServiceMockTest
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Argument \'$content\' is invalid: Location 2 has missing Content');
 
-        $nonRootLocation = new Location(['id' => 2]);
+        $nonRootLocation = new Location(['id' => 2, 'parentId' => 1]);
 
         $this->getDomainMapper()->buildLocationWithContent($nonRootLocation, null);
     }
 
     public function testBuildLocationWithContentIsAlignedWithBuildLocation()
     {
-        $spiRootLocation = new Location(['id' => 1]);
+        $spiRootLocation = new Location(['id' => 1, 'parentId' => 1]);
 
         $this->assertEquals(
             $this->getDomainMapper()->buildLocationWithContent($spiRootLocation, null),
