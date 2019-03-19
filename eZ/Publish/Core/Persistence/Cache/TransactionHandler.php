@@ -15,6 +15,11 @@ use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface
  */
 class TransactionHandler extends AbstractInMemoryHandler implements TransactionHandlerInterface
 {
+    protected function init(): void
+    {
+        // do nothing yet here.
+    }
+
     /**
      * @todo Maybe this can be solved by contributing to Symfony, as in for instance using a layered cache with memory
      * cache first and use saveDefered so cache is not persisted before commit is made, and omitted on rollback.

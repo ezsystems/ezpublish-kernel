@@ -60,7 +60,14 @@ abstract class AbstractInMemoryHandler
         $this->persistenceHandler = $persistenceHandler;
         $this->logger = $logger;
         $this->inMemory = $inMemory;
+
+        $this->init();
     }
+
+    /**
+     * Function to initialize handler without having to overload __construct().
+     */
+    abstract protected function init(): void;
 
     /**
      * Load one cache item from cache and loggs the hits / misses.

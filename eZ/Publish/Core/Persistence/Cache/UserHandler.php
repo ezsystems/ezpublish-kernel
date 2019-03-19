@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Persistence\User\UserTokenUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface;
 use eZ\Publish\SPI\Persistence\User;
@@ -18,7 +16,6 @@ use eZ\Publish\SPI\Persistence\User\RoleAssignment;
 use eZ\Publish\SPI\Persistence\User\RoleCreateStruct;
 use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct;
 use eZ\Publish\SPI\Persistence\User\Policy;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Cache handler for user module.
@@ -43,14 +40,11 @@ class UserHandler extends AbstractInMemoryHandler implements UserHandlerInterfac
     /** @var callable */
     private $getRoleAssignmentKeys;
 
-    public function __construct(
-        TagAwareAdapterInterface $cache,
-        PersistenceHandler $persistenceHandler,
-        PersistenceLogger $logger,
-        InMemoryCache $inMemory
-    ) {
-        parent::__construct($cache, $persistenceHandler, $logger, $inMemory);
-
+    /**
+     * Set callback functions for use in cache retrival.
+     */
+    public function init(): void
+    {
         $this->getUserTags = static function (User $user) {
             return ['content-' . $user->id, 'user-' . $user->id];
         };
