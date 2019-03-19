@@ -152,7 +152,7 @@ class UserContentContext extends RawMinkContext implements Context, SnippetAccep
         $login = 'user_content_' . microtime(true);
         $email = $login . '@example.com';
 
-        $struct = $this->userService->newUserCreateStruct($login, $email, 'publish', 'eng-GB');
+        $struct = $this->userService->newUserCreateStruct($login, $email, 'PassWord42', 'eng-GB');
         $struct->setField('first_name', 'John');
         $struct->setField('last_name', 'Doe');
 
