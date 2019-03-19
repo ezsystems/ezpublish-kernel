@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
@@ -17,7 +15,6 @@ use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * ContentType cache.
@@ -40,14 +37,11 @@ class ContentTypeHandler extends AbstractInMemoryHandler implements ContentTypeH
     /** @var callable */
     private $getTypeKeys;
 
-    public function __construct(
-        TagAwareAdapterInterface $cache,
-        PersistenceHandler $persistenceHandler,
-        PersistenceLogger $logger,
-        InMemoryCache $inMemory
-    ) {
-        parent::__construct($cache, $persistenceHandler, $logger, $inMemory);
-
+    /**
+     * Set callback functions for use in cache retrival.
+     */
+    protected function init(): void
+    {
         $this->getGroupTags = static function (Type\Group $group) { return ['type-group-' . $group->id]; };
         $this->getGroupKeys = static function (Type\Group $group) {
             return [
