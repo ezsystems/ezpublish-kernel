@@ -40,9 +40,9 @@ class InMemoryCache
     private $cache = [];
 
     /**
-     * @var float[] Timestamp (float microtime) for individual cache by primary key.
+     * @var float[] Expiry timestamp (float microtime) for individual cache by primary key.
      */
-    private $cacheTime = [];
+    private $cacheExpiryTime = [];
 
     /**
      * Mapping of secondary index to primary key.
@@ -92,7 +92,7 @@ class InMemoryCache
         }
 
         $index = $this->cacheIndex[$key] ?? $key;
-        if (!isset($this->cache[$index]) || $this->cacheTime[$index] + $this->ttl < microtime(true)) {
+        if (!isset($this->cache[$index]) || $this->cacheExpiryTime[$index] < microtime(true)) {
             return null;
         }
 
@@ -120,11 +120,11 @@ class InMemoryCache
             $this->vacuum();
         }
 
-        $time = microtime(true);
+        $expiryTime = microtime(true) + $this->ttl;
         // if set add objects to cache on list index (typically a "all" key)
         if ($listIndex) {
             $this->cache[$listIndex] = $objects;
-            $this->cacheTime[$listIndex] = $time;
+            $this->cacheExpiryTime[$listIndex] = $expiryTime;
         }
 
         foreach ($objects as $object) {
@@ -135,7 +135,7 @@ class InMemoryCache
 
             $key = \array_shift($indexes);
             $this->cache[$key] = $object;
-            $this->cacheTime[$key] = $time;
+            $this->cacheExpiryTime[$key] = $expiryTime;
 
             foreach ($indexes as $index) {
                 $this->cacheIndex[$index] = $key;
@@ -156,9 +156,9 @@ class InMemoryCache
 
         foreach ($keys as $key) {
             if ($index = $this->cacheIndex[$key] ?? null) {
-                unset($this->cacheIndex[$key], $this->cache[$index], $this->cacheTime[$index]);
+                unset($this->cacheIndex[$key], $this->cache[$index], $this->cacheExpiryTime[$index]);
             } else {
-                unset($this->cache[$key], $this->cacheTime[$key]);
+                unset($this->cache[$key], $this->cacheExpiryTime[$key]);
             }
         }
     }
@@ -169,7 +169,7 @@ class InMemoryCache
     public function clear(): void
     {
         // On purpose does not check if enabled, in case of several instances we allow clearing cache
-        $this->cache = $this->cacheIndex = $this->cacheTime = [];
+        $this->cache = $this->cacheIndex = $this->cacheExpiryTime = [];
     }
 
     /**
@@ -185,7 +185,7 @@ class InMemoryCache
         // Cleanup secondary index and cache time for missing primary keys
         foreach ($this->cacheIndex as $index => $key) {
             if (!isset($this->cache[$key])) {
-                unset($this->cacheIndex[$index], $this->cacheTime[$key]);
+                unset($this->cacheIndex[$index], $this->cacheExpiryTime[$key]);
             }
         }
     }
