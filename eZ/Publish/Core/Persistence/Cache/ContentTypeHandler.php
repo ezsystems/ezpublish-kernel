@@ -189,6 +189,7 @@ class ContentTypeHandler extends AbstractInMemoryHandler implements ContentTypeH
             },
             $this->getTypeTags,
             $this->getTypeKeys,
+            // Add tag in case of empty list
             static function () use ($groupId) { return ['type-group-' . $groupId]; },
             [$groupId]
         );
