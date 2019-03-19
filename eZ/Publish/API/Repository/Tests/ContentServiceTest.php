@@ -6241,9 +6241,13 @@ XML
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToHide
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToReveal
      *
      * @dataProvider provideLocationsToHideAndReveal
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testRevealContent(array $locationsToReveal)
     {
@@ -6268,6 +6272,13 @@ XML
 
         $publishedContent = $contentService->publishVersion($content->versionInfo);
         $locations = $locationService->loadLocations($publishedContent->contentInfo);
+        // sort the Locations putting hidden one on top, as the order in which they're returned is not deterministic
+        usort(
+            $locations,
+            function (Location $location) {
+                return $location->hidden ? -1 : 1;
+            }
+        );
 
         // Sanity check
         $this->assertCount(3, $locations);
