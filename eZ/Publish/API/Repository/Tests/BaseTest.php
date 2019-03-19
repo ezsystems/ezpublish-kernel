@@ -10,6 +10,9 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use Doctrine\DBAL\Connection;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
+use eZ\Publish\API\Repository\Exceptions\ForbiddenException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
 use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -581,7 +584,9 @@ abstract class BaseTest extends TestCase
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      *
-     * @throws \Exception
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function createUserWithPolicies($login, array $policiesData)
     {
@@ -607,7 +612,7 @@ abstract class BaseTest extends TestCase
             $repository->commit();
 
             return $user;
-        } catch (\Exception $ex) {
+        } catch (ForbiddenException | NotFoundException | UnauthorizedException $ex) {
             $repository->rollback();
             throw $ex;
         }
