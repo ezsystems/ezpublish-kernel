@@ -14,6 +14,17 @@ namespace eZ\Publish\Core\Persistence\Cache\InMemory;
  * Simple In-Memory Cache Pool.
  *
  * @internal Only for use in eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler, may change depending on needs there.
+ *
+ * Goal:
+ * By nature caches stale objects in memory to avoid round-trips to cache backend over network.
+ * Thus should only be used for meta data which changes in-frequently, and has limits and short expiry to keep the risk
+ * of using out-of-date data to a minimum. Besides backend round trips, also aims to keep memory usage to a minimum.
+ *
+ * Properties:
+ * - Limited by amount and time, to make sure to use minimal amount of memory, and reduce risk of stale cache.
+ * - Secondary indexes, allows for populating memory quickly, and safely able to delete only knowing primary key
+ *   E.g. I language object is loaded first by id, locale (eng-GB) lookup is also populated. Opposite is also true.
+ * - On object limits, will first try to vacuum in-frequently used cache items, then by FIFO principle if needed.
  */
 class InMemoryCache
 {
@@ -40,9 +51,14 @@ class InMemoryCache
     private $cache = [];
 
     /**
-     * @var float[] Expiry timestamp (float microtime) for individual cache by primary key.
+     * @var float[] Expiry timestamp (float microtime) for individual cache (by primary key).
      */
     private $cacheExpiryTime = [];
+
+    /**
+     * @var int[] Access counter for individual cache (by primary key), to order by by popularity on vacuum().
+     */
+    private $cacheAccessCount = [];
 
     /**
      * Mapping of secondary index to primary key.
@@ -55,7 +71,7 @@ class InMemoryCache
      * In Memory Cache constructor.
      *
      * @param int $ttl Seconds for the cache to live, by default 300 milliseconds
-     * @param int $limit Limit for values to keep in cache, by default 100 cache values (per pool instance).
+     * @param int $limit Limit for values to keep in cache, by default 100 cache values.
      * @param bool $enabled For use by configuration to be able to disable or enable depending on needs.
      */
     public function __construct(int $ttl = 300, int $limit = 100, bool $enabled = true)
@@ -96,6 +112,8 @@ class InMemoryCache
             return null;
         }
 
+        ++$this->cacheAccessCount[$index];
+
         return $this->cache[$index];
     }
 
@@ -110,7 +128,7 @@ class InMemoryCache
      */
     public function setMulti(array $objects, callable $objectIndexes, string $listIndex = null): void
     {
-        // If objects accounts for more then 20% of our limit, assume it's bulk content load and skip saving in-memory
+        // If objects accounts for more then 20% of our limit, assume it's bulk load and skip saving in-memory
         if ($this->enabled === false || \count($objects) >= $this->limit / 5) {
             return;
         }
@@ -125,6 +143,7 @@ class InMemoryCache
         if ($listIndex) {
             $this->cache[$listIndex] = $objects;
             $this->cacheExpiryTime[$listIndex] = $expiryTime;
+            $this->cacheAccessCount[$listIndex] = 0;
         }
 
         foreach ($objects as $object) {
@@ -136,6 +155,7 @@ class InMemoryCache
             $key = \array_shift($indexes);
             $this->cache[$key] = $object;
             $this->cacheExpiryTime[$key] = $expiryTime;
+            $this->cacheAccessCount[$key] = 0;
 
             foreach ($indexes as $index) {
                 $this->cacheIndex[$index] = $key;
@@ -154,12 +174,14 @@ class InMemoryCache
             return;
         }
 
-        foreach ($keys as $key) {
-            if ($index = $this->cacheIndex[$key] ?? null) {
-                unset($this->cacheIndex[$key], $this->cache[$index], $this->cacheExpiryTime[$index]);
+        foreach ($keys as $index) {
+            if ($key = $this->cacheIndex[$index] ?? null) {
+                unset($this->cacheIndex[$index]);
             } else {
-                unset($this->cache[$key], $this->cacheExpiryTime[$key]);
+                $key = $index;
             }
+
+            unset($this->cache[$key], $this->cacheExpiryTime[$key], $this->cacheAccessCount[$key]);
         }
     }
 
@@ -168,8 +190,8 @@ class InMemoryCache
      */
     public function clear(): void
     {
-        // On purpose does not check if enabled, in case of several instances we allow clearing cache
-        $this->cache = $this->cacheIndex = $this->cacheExpiryTime = [];
+        // On purpose does not check if enabled, in case of prior phase being enabled we clear cache when someone asks.
+        $this->cache = $this->cacheIndex = $this->cacheExpiryTime = $this->cacheAccessCount = [];
     }
 
     /**
@@ -179,13 +201,39 @@ class InMemoryCache
      */
     private function vacuum(): void
     {
-        // Vacuuming cache in bulk, clearing the 33% oldest cache values
-        $this->cache = \array_slice($this->cache, (int) ($this->limit / 3));
+        // To not having to call this too often, we aim to clear 33% of cache values in bulk
+        $deleteTarget = (int) ($this->limit / 3);
 
-        // Cleanup secondary index and cache time for missing primary keys
+        // First delete items which has not been read after initial store (oldest first)
+        foreach ($this->cacheAccessCount as $key => $accessCount) {
+            if ($accessCount > 0) {
+                continue;
+            }
+
+            unset($this->cache[$key], $this->cacheExpiryTime[$key], $this->cacheAccessCount[$key]);
+            --$deleteTarget;
+
+            if ($deleteTarget <= 0) {
+                break;
+            }
+        }
+
+        // Secondly if still items to be deleted, vacuuming remaining cache in bulk from the start of the array
+        if ($deleteTarget) {
+            $this->cache = \array_slice($this->cache, $deleteTarget);
+
+            // Cleanup cacheExpiryTime & cacheAccessCount for sanity here
+            foreach ($this->cacheExpiryTime as $key => $time) {
+                if (!isset($this->cache[$key])) {
+                    unset($this->cacheExpiryTime[$key], $this->cacheAccessCount[$key]);
+                }
+            }
+        }
+
+        // Cleanup secondary indexes for missing primary keys
         foreach ($this->cacheIndex as $index => $key) {
             if (!isset($this->cache[$key])) {
-                unset($this->cacheIndex[$index], $this->cacheExpiryTime[$key]);
+                unset($this->cacheIndex[$index]);
             }
         }
     }

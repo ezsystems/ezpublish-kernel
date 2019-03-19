@@ -164,6 +164,36 @@ class InMemoryCacheTest extends TestCase
         $this->assertSame($obj, $this->cache->get('seventh'));
         $this->assertSame($obj, $this->cache->get('eight'));
     }
+
+    /**
+     * Tests logic behind access counts, making sure least frequently used items are deleted first.
+     */
+    public function testAccessCountsWhenReachingTotalLimit(): void
+    {
+        $obj = new \stdClass();
+        $this->cache->setMulti([$obj], static function ($o) { return ['first']; });
+        $this->cache->setMulti([$obj], static function ($o) { return ['second']; });
+        $this->cache->setMulti([$obj], static function ($o) { return ['third']; });
+        $this->cache->setMulti([$obj], static function ($o) { return ['fourth']; });
+
+        // Make sure these are read before we set further objects.
+        $this->cache->get('first');
+        $this->cache->get('third');
+
+        $this->cache->setMulti([$obj], static function ($o) { return ['fifth']; });
+        $this->cache->setMulti([$obj], static function ($o) { return ['sixth']; });
+        $this->cache->setMulti([$obj], static function ($o) { return ['seventh']; });
+        $this->cache->setMulti([$obj], static function ($o) { return ['eight']; });
+
+        $this->assertSame($obj, $this->cache->get('first'));
+        $this->assertNull($this->cache->get('second'));
+        $this->assertSame($obj, $this->cache->get('third'));
+        $this->assertNull($this->cache->get('fourth'));
+        $this->assertSame($obj, $this->cache->get('fifth'));
+        $this->assertSame($obj, $this->cache->get('sixth'));
+        $this->assertSame($obj, $this->cache->get('seventh'));
+        $this->assertSame($obj, $this->cache->get('eight'));
+    }
 }
 
 namespace eZ\Publish\Core\Persistence\Cache\InMemory;
