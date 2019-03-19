@@ -351,8 +351,10 @@ class UserHandler extends AbstractInMemoryHandler implements UserHandlerInterfac
             },
             $this->getRoleAssignmentTags,
             $this->getRoleAssignmentKeys,
-            /* Role update (policies) changes role assignment id */
-            static function () use ($roleId) { return ['role-' . $roleId]; },
+            /* Role update (policies) changes role assignment id, also need list tag in case of empty result */
+            static function () use ($roleId) {
+                return ['role-assignment-role-list-' . $roleId, 'role-' . $roleId];
+            },
             [$roleId]
         );
     }
@@ -377,8 +379,9 @@ class UserHandler extends AbstractInMemoryHandler implements UserHandlerInterfac
             $this->getRoleAssignmentTags,
             $this->getRoleAssignmentKeys,
             static function () use ($groupId, $innerHandler) {
+                // Tag needed for empty results, if not empty will alse be added by getRoleAssignmentTags().
+                $cacheTags = ['role-assignment-group-list-' . $groupId];
                 // To make sure tree operations affecting this can clear the permission cache
-                $cacheTags = [];
                 $locations = $innerHandler->locationHandler()->loadLocationsByContent($groupId);
                 foreach ($locations as $location) {
                     foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
