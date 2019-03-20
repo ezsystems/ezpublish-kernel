@@ -81,6 +81,7 @@ abstract class AbstractInMemoryHandler
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $cacheTagger Gets cache object as argument, return array of cache tags.
      * @param callable $cacheIndexes Gets cache object as argument, return array of cache keys.
+     * @param string $keyPostfix Optional, e.g "-by-identifier"
      *
      * @return object
      */
@@ -200,6 +201,7 @@ abstract class AbstractInMemoryHandler
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $cacheTagger Gets cache object as argument, return array of cache tags.
      * @param callable $cacheIndexes Gets cache object as argument, return array of cache keys.
+     * @param string $keyPostfix Optional, e.g "-by-identifier"
      *
      * @return array
      */
