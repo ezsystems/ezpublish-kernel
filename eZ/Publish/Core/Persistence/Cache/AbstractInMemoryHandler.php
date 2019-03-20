@@ -74,6 +74,7 @@ abstract class AbstractInMemoryHandler
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $cacheTagger Gets cache object as argument, return array of cache tags.
      * @param callable $cacheIndexes Gets cache object as argument, return array of cache keys.
+     * @param string $keySuffix Optional, e.g "-by-identifier"
      *
      * @return object
      */
@@ -83,9 +84,9 @@ abstract class AbstractInMemoryHandler
         callable $backendLoader,
         callable $cacheTagger,
         callable $cacheIndexes,
-        string $keyPostfix = ''
+        string $keySuffix = ''
     ) {
-        $key = $keyPrefix . $id . $keyPostfix;
+        $key = $keyPrefix . $id . $keySuffix;
         // In-memory
         if ($object = $this->inMemory->get($key)) {
             $this->logger->logCacheHit([$id], 3, true);
@@ -193,6 +194,7 @@ abstract class AbstractInMemoryHandler
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $cacheTagger Gets cache object as argument, return array of cache tags.
      * @param callable $cacheIndexes Gets cache object as argument, return array of cache keys.
+     * @param string $keySuffix Optional, e.g "-by-identifier"
      *
      * @return array
      */
@@ -202,7 +204,7 @@ abstract class AbstractInMemoryHandler
         callable $backendLoader,
         callable $cacheTagger,
         callable $cacheIndexes,
-        string $keyPostfix = ''
+        string $keySuffix = ''
     ): array {
         if (empty($ids)) {
             return [];
@@ -213,7 +215,7 @@ abstract class AbstractInMemoryHandler
         $cacheKeys = [];
         $cacheKeysToIdMap = [];
         foreach (array_unique($ids) as $id) {
-            $key = $keyPrefix . $id . $keyPostfix;
+            $key = $keyPrefix . $id . $keySuffix;
             if ($object = $this->inMemory->get($key)) {
                 $list[$id] = $object;
             } else {
