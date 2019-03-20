@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File containing the ContentHandler implementation.
+ * File containing the AbstractHandler.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -18,6 +18,8 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  */
 abstract class AbstractHandler
 {
+    use AbstractTrait;
+
     /**
      * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
      */
@@ -27,11 +29,6 @@ abstract class AbstractHandler
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
-     */
-    protected $logger;
 
     /**
      * Setups current handler with everything needed.
@@ -58,6 +55,8 @@ abstract class AbstractHandler
      *
      * It also optionally supports a key suffixs, for use on a variable argument that affects all lookups,
      * like translations, i.e. "ez-content-${id}-${translationKey}" where $keySuffixes = [$id => "-${translationKey}"].
+     *
+     * @deprecated since 7.5, use {@see getMultipleCacheValues()} instead.
      *
      * @param array $ids
      * @param string $keyPrefix E.g "ez-content-"

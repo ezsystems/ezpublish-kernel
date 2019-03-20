@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File containing the ContentHandler implementation.
+ * File containing the AbstractInMemoryHandler.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
@@ -19,6 +19,10 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  */
 abstract class AbstractInMemoryHandler
 {
+    use AbstractTrait {
+        getMultipleCacheValues as getMultipleCacheValuesWithoutInMemoryCache;
+    }
+
     /**
      * NOTE: $cache and $inMemory is private in order to abstract interactions across both,
      *       and be able to optimize this later without affecting all classes extending this.
@@ -31,11 +35,6 @@ abstract class AbstractInMemoryHandler
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
-
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
-     */
-    protected $logger;
 
     /**
      * @var \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
@@ -81,7 +80,7 @@ abstract class AbstractInMemoryHandler
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $cacheTagger Gets cache object as argument, return array of cache tags.
      * @param callable $cacheIndexes Gets cache object as argument, return array of cache keys.
-     * @param string $keyPostfix Optional, e.g "-by-identifier"
+     * @param string $keySuffix Optional, e.g "-by-identifier"
      *
      * @return object
      */
@@ -91,9 +90,9 @@ abstract class AbstractInMemoryHandler
         callable $backendLoader,
         callable $cacheTagger,
         callable $cacheIndexes,
-        string $keyPostfix = ''
+        string $keySuffix = ''
     ) {
-        $key = $keyPrefix . $id . $keyPostfix;
+        $key = $keyPrefix . $id . $keySuffix;
         // In-memory
         if ($object = $this->inMemory->get($key)) {
             $this->logger->logCacheHit([$id], 3, true);
@@ -201,7 +200,7 @@ abstract class AbstractInMemoryHandler
      *                                expects return value to be array with id as key. Missing items should be missing.
      * @param callable $cacheTagger Gets cache object as argument, return array of cache tags.
      * @param callable $cacheIndexes Gets cache object as argument, return array of cache keys.
-     * @param string $keyPostfix Optional, e.g "-by-identifier"
+     * @param string $keySuffix Optional, e.g "-by-identifier"
      *
      * @return array
      */
@@ -211,7 +210,7 @@ abstract class AbstractInMemoryHandler
         callable $backendLoader,
         callable $cacheTagger,
         callable $cacheIndexes,
-        string $keyPostfix = ''
+        string $keySuffix = ''
     ): array {
         if (empty($ids)) {
             return [];
@@ -219,67 +218,42 @@ abstract class AbstractInMemoryHandler
 
         // Generate unique cache keys and check if in-memory
         $list = [];
-        $cacheKeys = [];
-        $cacheKeysToIdMap = [];
-        foreach (array_unique($ids) as $id) {
-            $key = $keyPrefix . $id . $keyPostfix;
-            if ($object = $this->inMemory->get($key)) {
+        foreach (\array_unique($ids) as $id) {
+            if ($object = $this->inMemory->get($keyPrefix . $id . $keySuffix)) {
                 $list[$id] = $object;
             } else {
-                $cacheKeys[] = $key;
-                $cacheKeysToIdMap[$key] = $id;
+                $list[$id] = null;
+                $misses[] = $id;
             }
         }
 
         // No in-memory misses
-        if (empty($cacheKeys)) {
+        if (empty($misses)) {
             $this->logger->logCacheHit($ids, 3, true);
 
             return $list;
         }
 
-        // Load cache items by cache keys (will contain hits and misses)
-        $loaded = [];
-        $cacheMisses = [];
-        foreach ($this->cache->getItems($cacheKeys) as $key => $cacheItem) {
-            $id = $cacheKeysToIdMap[$key];
-            if ($cacheItem->isHit()) {
-                $list[$id] = $cacheItem->get();
-                $loaded[$id] = $list[$id];
-            } else {
-                $cacheMisses[] = $id;
-                $list[$id] = $cacheItem;
-            }
-        }
+        $loaded = $this->getMultipleCacheValuesWithoutInMemoryCache(
+            $misses,
+            $keyPrefix,
+            $backendLoader,
+            $cacheTagger,
+            $keySuffix
+        );
 
-        // No cache pool misses, cache loaded items in-memory and return
-        if (empty($cacheMisses)) {
-            $this->logger->logCacheHit($ids, 3);
-            $this->inMemory->setMulti($loaded, $cacheIndexes);
-
-            return $list;
-        }
-
-        // Load missing items, save to cache & apply to list if found
-        $backendLoadedList = $backendLoader($cacheMisses);
-        foreach ($cacheMisses as $id) {
-            if (isset($backendLoadedList[$id])) {
-                $this->cache->save(
-                    $list[$id]
-                        ->set($backendLoadedList[$id])
-                        ->tag($cacheTagger($backendLoadedList[$id]))
-                );
-                $loaded[$id] = $backendLoadedList[$id];
-                $list[$id] = $backendLoadedList[$id];
+        foreach ($misses as $id) {
+            if (isset($loaded[$id])) {
+                $list[$id] = $loaded[$id];
             } else {
                 // not found
                 unset($list[$id]);
             }
         }
 
+        // save cache to memory
         $this->inMemory->setMulti($loaded, $cacheIndexes);
-        unset($loaded, $backendLoadedList);
-        $this->logger->logCacheMiss($cacheMisses, 3);
+        unset($loaded);
 
         return $list;
     }
