@@ -80,20 +80,18 @@ abstract class AbstractHandler
 
         // Generate unique cache keys
         $cacheKeys = [];
-        foreach (array_unique($ids) as $id) {
-            $cacheKeys[] = $keyPrefix . $id . ($keySuffixes[$id] ?? '');
+        $cacheKeysToIdMap = [];
+        foreach (\array_unique($ids) as $id) {
+            $key = $keyPrefix . $id . ($keySuffixes[$id] ?? '');
+            $cacheKeys[] = $key;
+            $cacheKeysToIdMap[$key] = $id;
         }
 
         // Load cache items by cache keys (will contain hits and misses)
         $list = [];
         $cacheMisses = [];
-        $keyPrefixLength = strlen($keyPrefix);
         foreach ($this->cache->getItems($cacheKeys) as $key => $cacheItem) {
-            $id = substr($key, $keyPrefixLength);
-            if (!empty($keySuffixes)) {
-                $id = explode('-', $id, 2)[0];
-            }
-
+            $id = $cacheKeysToIdMap[$key];
             if ($cacheItem->isHit()) {
                 $list[$id] = $cacheItem->get();
             } else {
