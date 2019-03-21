@@ -32,15 +32,15 @@ class Type extends FieldType
         'PasswordValueValidator' => [
             'requireAtLeastOneUpperCaseCharacter' => [
                 'type' => 'int',
-                'default' => null,
+                'default' => 1,
             ],
             'requireAtLeastOneLowerCaseCharacter' => [
                 'type' => 'int',
-                'default' => null,
+                'default' => 1,
             ],
             'requireAtLeastOneNumericCharacter' => [
                 'type' => 'int',
-                'default' => null,
+                'default' => 1,
             ],
             'requireAtLeastOneNonAlphanumericCharacter' => [
                 'type' => 'int',
@@ -48,7 +48,7 @@ class Type extends FieldType
             ],
             'minLength' => [
                 'type' => 'int',
-                'default' => null,
+                'default' => 10,
             ],
         ],
     ];
