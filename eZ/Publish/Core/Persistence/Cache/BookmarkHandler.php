@@ -48,15 +48,10 @@ class BookmarkHandler extends AbstractHandler implements BookmarkHandlerInterfac
      */
     public function loadByUserIdAndLocationId(int $userId, array $locationIds): array
     {
-        return $this->getMultipleCacheItems(
+        return $this->getMultipleCacheValues(
             $locationIds,
             'ez-bookmark-' . $userId . '-',
             function (array $missingIds) use ($userId) {
-                $this->logger->logCall(__CLASS__ . '::loadByUserIdAndLocationId', [
-                    'userId' => $userId,
-                    'locationIds' => $missingIds,
-                ]);
-
                 return $this->persistenceHandler->bookmarkHandler()->loadByUserIdAndLocationId($userId, $missingIds);
             },
             function (Bookmark $bookmark) {

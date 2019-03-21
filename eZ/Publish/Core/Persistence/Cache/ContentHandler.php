@@ -85,24 +85,16 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
     public function loadContentList(array $contentIds, array $translations = null): array
     {
-        // Extract suffix for each one
-        $keySuffixes = [];
-        foreach ($contentIds as $contentId) {
-            $keySuffixes[$contentId] = '-' . (empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations));
-        }
-
-        return $this->getMultipleCacheItems(
+        return $this->getMultipleCacheValues(
             $contentIds,
             'ez-content-',
             function (array $cacheMissIds) use ($translations) {
-                $this->logger->logCall(__CLASS__ . '::loadContentList', ['content' => $cacheMissIds]);
-
                 return $this->persistenceHandler->contentHandler()->loadContentList($cacheMissIds, $translations);
             },
             function (Content $content) {
                 return $this->getCacheTagsForContent($content);
             },
-            $keySuffixes
+            '-' . (empty($translations) ? self::ALL_TRANSLATIONS_KEY : implode('|', $translations))
         );
     }
 
@@ -127,12 +119,10 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 
     public function loadContentInfoList(array $contentIds)
     {
-        return $this->getMultipleCacheItems(
+        return $this->getMultipleCacheValues(
             $contentIds,
             'ez-content-info-',
             function (array $cacheMissIds) {
-                $this->logger->logCall(__CLASS__ . '::loadContentInfoList', ['content' => $cacheMissIds]);
-
                 return $this->persistenceHandler->contentHandler()->loadContentInfoList($cacheMissIds);
             },
             function (ContentInfo $info) {
