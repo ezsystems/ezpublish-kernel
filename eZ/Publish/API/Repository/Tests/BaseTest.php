@@ -738,9 +738,8 @@ abstract class BaseTest extends TestCase
         $contentService = $repository->getContentService();
 
         $draft = $contentService->createContentDraft($content->contentInfo);
-        $mainLanguageCode = array_keys($names)[0];
         $struct = $contentService->newContentUpdateStruct();
-        $struct->initialLanguageCode = $mainLanguageCode;
+        $struct->initialLanguageCode = array_keys($names)[0];
 
         foreach ($names as $languageCode => $translatedName) {
             $struct->setField('name', $translatedName, $languageCode);

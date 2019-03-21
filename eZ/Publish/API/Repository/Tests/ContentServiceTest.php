@@ -5886,8 +5886,7 @@ XML
     /**
      * Test loading content versions after removing exactly two drafts.
      *
-     * Test for the issue EZP-30271:
-     * "Published version table disappears after bulk removing of drafts under edit"
+     * @see https://jira.ez.no/browse/EZP-30271
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteVersion
      */
