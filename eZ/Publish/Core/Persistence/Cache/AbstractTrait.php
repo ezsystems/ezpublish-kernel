@@ -50,7 +50,7 @@ trait AbstractTrait
 
         // Generate unique cache keys
         $cacheKeys = [];
-         $cacheKeysToIdMap = [];
+        $cacheKeysToIdMap = [];
         foreach (\array_unique($ids) as $id) {
             $key = $keyPrefix . $id . $keySuffix;
             $cacheKeys[] = $key;
