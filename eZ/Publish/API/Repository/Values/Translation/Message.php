@@ -45,4 +45,12 @@ class Message extends Translation
         $this->message = $message;
         $this->values = $values;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __toString()
+    {
+        return strtr($this->message, $this->values);
+    }
 }

@@ -17,9 +17,15 @@ parameters:
     ezplatform.default_view_templates.content.line: 'EzPublishCoreBundle:default:content/line.html.twig'
     ezplatform.default_view_templates.content.text_linked: 'EzPublishCoreBundle:default:content/text_linked.html.twig'
     ezplatform.default_view_templates.content.embed: 'EzPublishCoreBundle:default:content/embed.html.twig'
+    ezplatform.default_view_templates.content.embed_inline: 'EzPublishCoreBundle:default:content/embed_inline.html.twig'
     ezplatform.default_view_templates.content.embed_image: 'EzPublishCoreBundle:default:content/embed_image.html.twig'
     ezplatform.default_view_templates.content.asset_image: 'EzPublishCoreBundle:default:content/asset_image.html.twig'
     ezplatform.default_view_templates.block: 'EzPublishCoreBundle:default:block/block.html.twig'
+
+    # Default templates
+    ezplatform.default_templates.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
+    ezplatform.default_templates.field_templates: 'EzPublishCoreBundle::content_fields.html.twig'
+    ezplatform.default_templates.fielddefinition_settings_templates: 'EzPublishCoreBundle::fielddefinition_settings.html.twig'
 
     # Image Asset mappings
     ezsettings.default.fieldtypes.ezimageasset.mappings:
@@ -28,7 +34,7 @@ parameters:
         name_field_identifier: name
         parent_location_id: 51
 
-    ezsettings.default.pagelayout: 'EzPublishCoreBundle::pagelayout.html.twig'
+    ezsettings.default.pagelayout: '%ezplatform.default_templates.pagelayout%'
 
     # List of content type identifiers to display as image when embedded
     ezplatform.content_view.image_embed_content_types_identifiers: ['image']
@@ -53,6 +59,10 @@ parameters:
                     Identifier\ContentType: '%ezplatform.content_view.image_embed_content_types_identifiers%'
             default:
                 template: "%ezplatform.default_view_templates.content.embed%"
+                match: []
+        embed-inline:
+            default:
+                template: "%ezplatform.default_view_templates.content.embed_inline%"
                 match: []
         asset_image:
             default:
@@ -114,14 +124,14 @@ parameters:
 
     # Templates to use while rendering fields
     ezsettings.default.field_templates:
-        - {template: EzPublishCoreBundle::content_fields.html.twig, priority: 0}
+        - {template: '%ezplatform.default_templates.field_templates%', priority: 0}
 
     # Templates for Field edition. Follows the same structure than for field_templates
     ezsettings.default.field_edit_templates: []
 
     # Templates to use while rendering field definition settings
     ezsettings.default.fielddefinition_settings_templates:
-        - {template: EzPublishCoreBundle::fielddefinition_settings.html.twig, priority: 0}
+        - {template: '%ezplatform.default_templates.fielddefinition_settings_templates%', priority: 0}
 
     # Templates for FieldDefinition edition. Follows the same structure than for field_templates
     ezsettings.default.fielddefinition_edit_templates: []
@@ -184,6 +194,8 @@ parameters:
         flatten: "-flatten"
         resize: "-resize {1}"
         optimize: "-strip"
+
+    ezsettings.default.image_host: ''
 
     ###
     # default ezpage settings

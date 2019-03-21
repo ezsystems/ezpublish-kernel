@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\Repository\SiteAccessAware;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference;
-use Closure;
 
 /**
  * Repository class.
@@ -100,7 +99,7 @@ class Repository implements RepositoryInterface
         return $this->repository->setCurrentUser($user);
     }
 
-    public function sudo(Closure $callback, RepositoryInterface $outerRepository = null)
+    public function sudo(callable $callback, RepositoryInterface $outerRepository = null)
     {
         return $this->repository->sudo($callback, $outerRepository ?? $this);
     }

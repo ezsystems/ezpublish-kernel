@@ -183,7 +183,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertVersion
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguage
      */
     public function testInsertVersion()
     {
@@ -661,7 +661,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         foreach ($res as $row) {
             $this->assertEquals(
-                22,
+                23,
                 count($row)
             );
         }
@@ -719,7 +719,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         foreach ($res as $row) {
             $this->assertEquals(
-                22,
+                23,
                 count($row)
             );
         }

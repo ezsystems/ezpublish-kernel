@@ -13,11 +13,14 @@ use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface
 /**
  * Persistence Transaction Cache Handler class.
  */
-class TransactionHandler extends AbstractHandler implements TransactionHandlerInterface
+class TransactionHandler extends AbstractInMemoryHandler implements TransactionHandlerInterface
 {
     /**
      * @todo Maybe this can be solved by contributing to Symfony, as in for instance using a layered cache with memory
-     * cache first and use saveDefered so cache is not persisted before commit is made, and ommited on rollback.
+     * cache first and use saveDefered so cache is not persisted before commit is made, and omitted on rollback.
+     *
+     * Or if we can get a checksum /fingerprint from cache pool which changes on actually cache commit so we can
+     * keep track to see if it has changed (to know if it is enough to clear inMemory cache + cache pool defer que)
      *
      * {@inheritdoc}
      */
@@ -42,7 +45,7 @@ class TransactionHandler extends AbstractHandler implements TransactionHandlerIn
     public function rollback()
     {
         $this->logger->logCall(__METHOD__);
-        $this->cache->clear(); // TIMBER!! @see beginTransaction()
+        $this->clearCache(); // TIMBER!! @see beginTransaction()
         $this->persistenceHandler->transactionHandler()->rollback();
     }
 }

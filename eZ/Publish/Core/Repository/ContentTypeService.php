@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException as APIBadStateException;
@@ -738,7 +739,11 @@ class ContentTypeService implements ContentTypeServiceInterface
                 continue;
             }
 
-            $spiFieldDefinitions[] = $this->contentTypeDomainMapper->buildSPIFieldDefinitionCreate($fieldDefinitionCreateStruct, $fieldType);
+            $spiFieldDefinitions[] = $this->contentTypeDomainMapper->buildSPIFieldDefinitionFromCreateStruct(
+                $fieldDefinitionCreateStruct,
+                $fieldType,
+                $contentTypeCreateStruct->mainLanguageCode
+            );
         }
 
         if (!empty($allValidationErrors)) {
@@ -1055,6 +1060,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
+        //Merge new translations into existing before update
+        $contentTypeUpdateStruct->names = array_merge($contentTypeDraft->getNames(), $contentTypeUpdateStruct->names ?? []);
+        $contentTypeUpdateStruct->descriptions = array_merge($contentTypeDraft->getDescriptions(), $contentTypeUpdateStruct->descriptions ?? []);
+
         $this->repository->beginTransaction();
         try {
             $this->contentTypeHandler->update(
@@ -1273,6 +1282,14 @@ class ContentTypeService implements ContentTypeServiceInterface
                 "Another FieldDefinition with identifier '{$fieldDefinitionCreateStruct->identifier}' exists in the ContentType"
             );
         }
+        //Fill default translations with default value for mainLanguageCode with fallback if no exist
+        if (is_array($fieldDefinitionCreateStruct->names)) {
+            foreach ($contentTypeDraft->languageCodes as $languageCode) {
+                if (!array_key_exists($languageCode, $fieldDefinitionCreateStruct->names)) {
+                    $fieldDefinitionCreateStruct->names[$languageCode] = $fieldDefinitionCreateStruct->names[$contentTypeDraft->mainLanguageCode] ?? reset($fieldDefinitionCreateStruct->names);
+                }
+            }
+        }
 
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->fieldTypeRegistry->getFieldType(
@@ -1306,14 +1323,18 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $spiFieldDefinitionCreateStruct = $this->contentTypeDomainMapper->buildSPIFieldDefinitionCreate($fieldDefinitionCreateStruct, $fieldType);
+        $spiFieldDefinition = $this->contentTypeDomainMapper->buildSPIFieldDefinitionFromCreateStruct(
+            $fieldDefinitionCreateStruct,
+            $fieldType,
+            $contentTypeDraft->mainLanguageCode
+        );
 
         $this->repository->beginTransaction();
         try {
             $this->contentTypeHandler->addFieldDefinition(
                 $contentTypeDraft->id,
                 $contentTypeDraft->status,
-                $spiFieldDefinitionCreateStruct
+                $spiFieldDefinition
             );
             $this->repository->commit();
         } catch (Exception $e) {
@@ -1400,9 +1421,10 @@ class ContentTypeService implements ContentTypeServiceInterface
             );
         }
 
-        $spiFieldDefinitionUpdateStruct = $this->contentTypeDomainMapper->buildSPIFieldDefinitionUpdate(
+        $spiFieldDefinition = $this->contentTypeDomainMapper->buildSPIFieldDefinitionFromUpdateStruct(
             $fieldDefinitionUpdateStruct,
-            $fieldDefinition
+            $fieldDefinition,
+            $contentTypeDraft->mainLanguageCode
         );
 
         $this->repository->beginTransaction();
@@ -1410,7 +1432,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $this->contentTypeHandler->updateFieldDefinition(
                 $contentTypeDraft->id,
                 SPIContentType::STATUS_DRAFT,
-                $spiFieldDefinitionUpdateStruct
+                $spiFieldDefinition
             );
             $this->repository->commit();
         } catch (Exception $e) {
@@ -1597,5 +1619,36 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function isContentTypeUsed(APIContentType $contentType)
     {
         return $this->contentTypeHandler->getContentCount($contentType->id) > 0;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function removeContentTypeTranslation(APIContentTypeDraft $contentTypeDraft, string $languageCode): APIContentTypeDraft
+    {
+        if (!$this->repository->canUser('class', 'update', $contentTypeDraft)) {
+            throw new UnauthorizedException('ContentType', 'update');
+        }
+
+        $this->repository->beginTransaction();
+        try {
+            $contentType = $this->contentTypeHandler->removeContentTypeTranslation(
+                $contentTypeDraft->id,
+                $languageCode
+            );
+
+            $this->repository->commit();
+        } catch (Exception $e) {
+            $this->repository->rollback();
+            throw $e;
+        }
+
+        return $this->contentTypeDomainMapper->buildContentTypeDraftDomainObject($contentType);
     }
 }

@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
+use eZ\Publish\API\Repository\LanguageService;
 use eZ\Publish\Core\FieldType\FieldSettings;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
@@ -18,6 +19,20 @@ use DOMDocument;
 
 class SelectionConverter implements Converter
 {
+    /**
+     * @var \eZ\Publish\API\Repository\LanguageService
+     */
+    private $languageService;
+
+    /**
+     * @param \eZ\Publish\API\Repository\LanguageService $languageService
+     */
+    public function __construct(
+        LanguageService $languageService
+    ) {
+        $this->languageService = $languageService;
+    }
+
     /**
      * Factory for current class.
      *
@@ -77,21 +92,22 @@ class SelectionConverter implements Converter
         }
 
         if (!empty($fieldSettings['options'])) {
-            $xml = new DOMDocument('1.0', 'utf-8');
-            $xml->appendChild(
-                $selection = $xml->createElement('ezselection')
-            );
-            $selection->appendChild(
-                $options = $xml->createElement('options')
-            );
-            foreach ($fieldSettings['options'] as $id => $name) {
-                $options->appendChild(
-                    $option = $xml->createElement('option')
-                );
-                $option->setAttribute('id', $id);
-                $option->setAttribute('name', $name);
-            }
+            $xml = $this->buildOptionsXml($fieldSettings['options']);
             $storageDef->dataText5 = $xml->saveXML();
+        }
+
+        if (!isset($fieldSettings['multilingualOptions'])) {
+            return;
+        }
+
+        foreach ($fieldSettings['multilingualOptions'] as $languageCode => $option) {
+            $xml = $this->buildOptionsXml($option);
+
+            $storageDef->multilingualData[$languageCode]->dataText = $xml->saveXML();
+
+            if ($fieldDef->mainLanguageCode === $languageCode) {
+                $storageDef->dataText5 = $xml->saveXML();
+            }
         }
     }
 
@@ -103,20 +119,36 @@ class SelectionConverter implements Converter
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
-        $options = array();
-        $simpleXml = simplexml_load_string($storageDef->dataText5);
+        $options = [];
+        $multiLingualOptions = [$fieldDef->mainLanguageCode => []];
 
-        if ($simpleXml !== false) {
-            foreach ($simpleXml->options->option as $option) {
-                $options[(int)$option['id']] = (string)$option['name'];
+        if (isset($storageDef->dataText5)) {
+            $optionsXml = simplexml_load_string($storageDef->dataText5);
+            if ($optionsXml !== false) {
+                foreach ($optionsXml->options->option as $option) {
+                    $options[(int)$option['id']] = (string)$option['name'];
+                }
             }
         }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+        if (isset($fieldDef->mainLanguageCode) && !empty($options)) {
+            $multiLingualOptions[$fieldDef->mainLanguageCode] = $options;
+        }
+
+        foreach ($storageDef->multilingualData as $languageCode => $mlData) {
+            $xml = simplexml_load_string($mlData->dataText);
+            if ($xml !== false) {
+                foreach ($xml->options->option as $option) {
+                    $multiLingualOptions[$languageCode][(int)$option['id']] = (string)$option['name'];
+                }
+            }
+        }
+
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings([
                 'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
                 'options' => $options,
-            )
+                'multilingualOptions' => $multiLingualOptions,
+            ]
         );
 
         // @todo: Can Selection store a default value in the DB?
@@ -137,5 +169,30 @@ class SelectionConverter implements Converter
     public function getIndexColumn()
     {
         return 'sort_key_string';
+    }
+
+    /**
+     * @param string[] $selectionOptions
+     *
+     * @return \DOMDocument
+     */
+    private function buildOptionsXml(array $selectionOptions): DOMDocument
+    {
+        $xml = new DOMDocument('1.0', 'utf-8');
+        $xml->appendChild(
+            $selection = $xml->createElement('ezselection')
+        );
+        $selection->appendChild(
+            $options = $xml->createElement('options')
+        );
+        foreach ($selectionOptions as $id => $name) {
+            $options->appendChild(
+                $option = $xml->createElement('option')
+            );
+            $option->setAttribute('id', $id);
+            $option->setAttribute('name', $name);
+        }
+
+        return $xml;
     }
 }

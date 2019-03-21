@@ -24,7 +24,8 @@ return array(
     'ezcontentobject_published' => '1033920746',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Members',
-    'ezcontentobject_language_mask' => '3'
+    'ezcontentobject_language_mask' => '3',
+    'ezcontentobject_is_hidden' => '0',
   ),
   1 =>
   array(
@@ -49,6 +50,7 @@ return array(
     'ezcontentobject_published' => '1033920746',
     'ezcontentobject_status' => '1',
     'ezcontentobject_name' => 'Members',
-    'ezcontentobject_language_mask' => '3'
+    'ezcontentobject_language_mask' => '3',
+    'ezcontentobject_is_hidden' => '0',
   ),
 );

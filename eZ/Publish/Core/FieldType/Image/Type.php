@@ -264,13 +264,7 @@ class Type extends FieldType
     }
 
     /**
-     * @see \eZ\Publish\Core\FieldType::getSortInfo()
-     *
-     * @todo Correct?
-     *
-     * @param \eZ\Publish\Core\FieldType\Image\Value $value
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     protected function getSortInfo(BaseValue $value)
     {

@@ -32,6 +32,7 @@ services:
         class: "%ezpublish.persistence.legacy.content_type.mapper.class%"
         arguments:
             - "@ezpublish.persistence.legacy.field_value_converter.registry"
+            - '@ezpublish.persistence.legacy.language.mask_generator'
 
     ezpublish.persistence.legacy.content_type.content_updater:
         class: "%ezpublish.persistence.legacy.content_type.content_updater.class%"
@@ -76,6 +77,7 @@ services:
         lazy: true
         arguments:
             - "@ezpublish.spi.persistence.legacy.content_type.handler.inner"
+            - "@ezpublish.spi.persistence.cache.inmemory"
 
     ezpublish.spi.persistence.legacy.content_type.handler:
         alias: ezpublish.spi.persistence.legacy.content_type.handler.caching

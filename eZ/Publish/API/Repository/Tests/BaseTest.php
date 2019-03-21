@@ -11,7 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 use Doctrine\DBAL\Connection;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
-use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Tests\SetupFactory\Legacy;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;
@@ -162,12 +163,13 @@ abstract class BaseTest extends TestCase
     protected function getSetupFactory()
     {
         if (null === $this->setupFactory) {
-            $setupClass = getenv('setupFactory');
+            if (false === ($setupClass = getenv('setupFactory'))) {
+                $setupClass = Legacy::class;
+                putenv("setupFactory=${setupClass}");
+            }
 
-            if (false === $setupClass) {
-                throw new \ErrorException(
-                    'Missing mandatory environment variable "setupFactory", this should normally be set in the relevant phpunit-integration-*.xml file and refer to a setupFactory for the given StorageEngine/SearchEngine in use'
-                );
+            if (false === ($fixtureDir = getenv('fixtureDir'))) {
+                putenv('fixtureDir=Legacy');
             }
 
             if (false === class_exists($setupClass)) {
@@ -598,7 +600,7 @@ abstract class BaseTest extends TestCase
             $userCreateStruct->setField('last_name', $login);
             $user = $userService->createUser($userCreateStruct, [$userService->loadUserGroup(4)]);
 
-            $role = $this->createRoleWithPolicies(uniqid('role_for_' . $login . '_'), $policiesData);
+            $role = $this->createRoleWithPolicies(uniqid('role_for_' . $login . '_', true), $policiesData);
             $roleService->assignRoleToUser($role, $user);
 
             $repository->commit();
@@ -716,5 +718,27 @@ abstract class BaseTest extends TestCase
         );
 
         return $contentService->publishVersion($contentDraft->versionInfo);
+    }
+
+    /**
+     * Add new Language to the Repository.
+     *
+     * @param string $languageCode
+     * @param string $name
+     * @param bool $enabled
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Language
+     */
+    protected function createLanguage(string $languageCode, string $name, bool $enabled = true): Language
+    {
+        $repository = $this->getRepository(false);
+
+        $languageService = $repository->getContentLanguageService();
+        $languageStruct = $languageService->newLanguageCreateStruct();
+        $languageStruct->name = $name;
+        $languageStruct->languageCode = $languageCode;
+        $languageStruct->enabled = $enabled;
+
+        return $languageService->createLanguage($languageStruct);
     }
 }

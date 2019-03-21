@@ -49,6 +49,14 @@ class ContentService implements ContentServiceInterface
         return $this->service->loadContentInfo($contentId);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentInfoList(array $contentIds): iterable
+    {
+        return $this->service->loadContentInfoList($contentIds);
+    }
+
     public function loadContentInfoByRemoteId($remoteId)
     {
         return $this->service->loadContentInfoByRemoteId($remoteId);
@@ -191,6 +199,16 @@ class ContentService implements ContentServiceInterface
     public function loadContentListByContentInfo(array $contentInfoList, array $languages = [], $useAlwaysAvailable = true)
     {
         return $this->service->loadContentListByContentInfo($contentInfoList, $languages, $useAlwaysAvailable);
+    }
+
+    public function hideContent(ContentInfo $contentInfo): void
+    {
+        $this->service->hideContent($contentInfo);
+    }
+
+    public function revealContent(ContentInfo $contentInfo): void
+    {
+        $this->service->revealContent($contentInfo);
     }
 
     public function newContentCreateStruct(ContentType $contentType, $mainLanguageCode)

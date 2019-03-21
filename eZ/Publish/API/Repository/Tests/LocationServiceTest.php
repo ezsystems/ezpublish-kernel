@@ -8,15 +8,17 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use Exception;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationList;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use Exception;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Query;
+use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 
 /**
  * Test case for operations in the LocationService using in memory storage.
@@ -478,11 +480,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
 
         // Add a language
-        $languageService = $repository->getContentLanguageService();
-        $languageStruct = $languageService->newLanguageCreateStruct();
-        $languageStruct->name = 'Norsk';
-        $languageStruct->languageCode = 'nor-NO';
-        $languageService->createLanguage($languageStruct);
+        $this->createLanguage('nor-NO', 'Norsk');
 
         $locationService = $repository->getLocationService();
         $contentService = $repository->getContentService();
@@ -495,7 +493,7 @@ class LocationServiceTest extends BaseTest
         $draft = $contentService->updateContent($draft->getVersionInfo(), $struct);
         $contentService->publishVersion($draft->getVersionInfo());
 
-        // Load with prioritc language (fallback will be the old one)
+        // Load with priority language (fallback will be the old one)
         $location = $locationService->loadLocation(5, ['nor-NO']);
 
         $this->assertInstanceOf(
@@ -511,6 +509,24 @@ class LocationServiceTest extends BaseTest
 
         $this->assertEquals($content->getVersionInfo()->getName(), 'Brukere');
         $this->assertEquals($content->getVersionInfo()->getName('eng-US'), 'Users');
+    }
+
+    /**
+     * Test that accessing lazy-loaded Content without a translation in the specific
+     * not available language throws NotFoundException.
+     */
+    public function testLoadLocationThrowsNotFoundExceptionForNotAvailableContent(): void
+    {
+        $repository = $this->getRepository();
+
+        $locationService = $repository->getLocationService();
+
+        $this->createLanguage('pol-PL', 'Polski');
+
+        $this->expectException(NotFoundException::class);
+
+        // Note: relying on existing database fixtures to make test case more readable
+        $locationService->loadLocation(60, ['pol-PL']);
     }
 
     /**
@@ -532,6 +548,69 @@ class LocationServiceTest extends BaseTest
         // exist
         $location = $locationService->loadLocation($nonExistentLocationId);
         /* END: Use Case */
+    }
+
+    /**
+     * Test for the loadLocationList() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     */
+    public function testLoadLocationList(): void
+    {
+        $repository = $this->getRepository();
+
+        // 5 is the ID of an existing location, 442 is a non-existing id
+        $locationService = $repository->getLocationService();
+        $locations = $locationService->loadLocationList([5, 442]);
+
+        self::assertInternalType('iterable', $locations);
+        self::assertCount(1, $locations);
+        self::assertEquals([5], array_keys($locations));
+        self::assertInstanceOf(Location::class, $locations[5]);
+        self::assertEquals(5, $locations[5]->id);
+    }
+
+    /**
+     * Test for the loadLocationList() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     * @depends testLoadLocationList
+     */
+    public function testLoadLocationListPrioritizedLanguagesFallback(): void
+    {
+        $repository = $this->getRepository();
+
+        $this->createLanguage('pol-PL', 'Polski');
+
+        // 5 is the ID of an existing location, 442 is a non-existing id
+        $locationService = $repository->getLocationService();
+        $locations = $locationService->loadLocationList([5, 442], ['pol-PL'], false);
+
+        self::assertInternalType('iterable', $locations);
+        self::assertCount(0, $locations);
+    }
+
+    /**
+     * Test for the loadLocationList() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     * @depends testLoadLocationListPrioritizedLanguagesFallback
+     */
+    public function testLoadLocationListPrioritizedLanguagesFallbackAndAlwaysAvailable(): void
+    {
+        $repository = $this->getRepository();
+
+        $this->createLanguage('pol-PL', 'Polski');
+
+        // 5 is the ID of an existing location, 442 is a non-existing id
+        $locationService = $repository->getLocationService();
+        $locations = $locationService->loadLocationList([5, 442], ['pol-PL'], true);
+
+        self::assertInternalType('iterable', $locations);
+        self::assertCount(1, $locations);
+        self::assertEquals([5], array_keys($locations));
+        self::assertInstanceOf(Location::class, $locations[5]);
+        self::assertEquals(5, $locations[5]->id);
     }
 
     /**
@@ -1325,6 +1404,218 @@ class LocationServiceTest extends BaseTest
         $this->assertEquals(
             $demoDesignLocation->id,
             $repository->getURLAliasService()->lookup('/eZ-Publish-Demo-Design-without-demo-content')->destination
+        );
+    }
+
+    /**
+     * Test swapping secondary Location with main Location.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::swapLocation
+     *
+     * @see https://jira.ez.no/browse/EZP-28663
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     *
+     * @return int[]
+     */
+    public function testSwapLocationForMainAndSecondaryLocation(): array
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        $folder1 = $this->createFolder(['eng-GB' => 'Folder1'], 2);
+        $folder2 = $this->createFolder(['eng-GB' => 'Folder2'], 2);
+        $folder3 = $this->createFolder(['eng-GB' => 'Folder3'], 2);
+
+        $primaryLocation = $locationService->loadLocation($folder1->contentInfo->mainLocationId);
+        $parentLocation = $locationService->loadLocation($folder2->contentInfo->mainLocationId);
+        $secondaryLocation = $locationService->createLocation(
+            $folder1->contentInfo,
+            $locationService->newLocationCreateStruct($parentLocation->id)
+        );
+
+        $targetLocation = $locationService->loadLocation($folder3->contentInfo->mainLocationId);
+
+        // perform sanity checks
+        $this->assertContentHasExpectedLocations([$primaryLocation, $secondaryLocation], $folder1);
+
+        // begin use case
+        $locationService->swapLocation($secondaryLocation, $targetLocation);
+
+        // test results
+        $primaryLocation = $locationService->loadLocation($primaryLocation->id);
+        $secondaryLocation = $locationService->loadLocation($secondaryLocation->id);
+        $targetLocation = $locationService->loadLocation($targetLocation->id);
+
+        self::assertEquals($folder1->id, $primaryLocation->contentInfo->id);
+        self::assertEquals($folder1->id, $targetLocation->contentInfo->id);
+        self::assertEquals($folder3->id, $secondaryLocation->contentInfo->id);
+
+        $this->assertContentHasExpectedLocations([$primaryLocation, $targetLocation], $folder1);
+
+        self::assertEquals(
+            $folder1,
+            $contentService->loadContent($folder1->id)
+        );
+
+        self::assertEquals(
+            $folder2,
+            $contentService->loadContent($folder2->id)
+        );
+
+        // only in case of Folder 3, main location id changed due to swap
+        self::assertEquals(
+            $secondaryLocation->id,
+            $contentService->loadContent($folder3->id)->contentInfo->mainLocationId
+        );
+
+        return [$folder1, $folder2, $folder3];
+    }
+
+    /**
+     * Compare Ids of expected and loaded Locations for the given Content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $expectedLocations
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    private function assertContentHasExpectedLocations(array $expectedLocations, Content $content)
+    {
+        $repository = $this->getRepository(false);
+        $locationService = $repository->getLocationService();
+
+        $expectedLocationIds = array_map(
+            function (Location $location) {
+                return (int)$location->id;
+            },
+            $expectedLocations
+        );
+
+        $actualLocationsIds = array_map(
+            function (Location $location) {
+                return $location->id;
+            },
+            $locationService->loadLocations($content->contentInfo)
+        );
+        self::assertCount(count($expectedLocations), $actualLocationsIds);
+
+        // perform unordered equality assertion
+        self::assertEquals(
+            $expectedLocationIds,
+            $actualLocationsIds,
+            sprintf(
+                'Content %d contains Locations %s, but expected: %s',
+                $content->id,
+                implode(', ', $actualLocationsIds),
+                implode(', ', $expectedLocationIds)
+            ),
+            0.0,
+            10,
+            true
+        );
+    }
+
+    /**
+     * @depends testSwapLocationForMainAndSecondaryLocation
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content[] $contentItems Content items created by testSwapLocationForSecondaryLocation
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function testSwapLocationDoesNotCorruptSearchResults(array $contentItems)
+    {
+        $repository = $this->getRepository(false);
+        $searchService = $repository->getSearchService();
+
+        $this->refreshSearch($repository);
+
+        $contentIds = array_map(
+            function (Content $content) {
+                return $content->id;
+            },
+            $contentItems
+        );
+
+        $query = new Query();
+        $query->filter = new Query\Criterion\ContentId($contentIds);
+
+        $searchResult = $searchService->findContent($query);
+
+        self::assertEquals(count($contentItems), $searchResult->totalCount);
+        self::assertEquals(
+            $searchResult->totalCount,
+            count($searchResult->searchHits),
+            'Total count of search result hits does not match the actual number of found results'
+        );
+        $foundContentIds = array_map(
+            function (SearchHit $searchHit) {
+                return $searchHit->valueObject->id;
+            },
+            $searchResult->searchHits
+        );
+        sort($contentIds);
+        sort($foundContentIds);
+        self::assertSame(
+            $contentIds,
+            $foundContentIds,
+            'Got different than expected Content item Ids'
+        );
+    }
+
+    /**
+     * Test swapping two secondary (non-main) Locations.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::swapLocation
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testSwapLocationForSecondaryLocations()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
+
+        $folder1 = $this->createFolder(['eng-GB' => 'Folder1'], 2);
+        $folder2 = $this->createFolder(['eng-GB' => 'Folder2'], 2);
+        $parentFolder1 = $this->createFolder(['eng-GB' => 'Parent1'], 2);
+        $parentFolder2 = $this->createFolder(['eng-GB' => 'Parent2'], 2);
+
+        $parentLocation1 = $locationService->loadLocation($parentFolder1->contentInfo->mainLocationId);
+        $parentLocation2 = $locationService->loadLocation($parentFolder2->contentInfo->mainLocationId);
+        $secondaryLocation1 = $locationService->createLocation(
+            $folder1->contentInfo,
+            $locationService->newLocationCreateStruct($parentLocation1->id)
+        );
+        $secondaryLocation2 = $locationService->createLocation(
+            $folder2->contentInfo,
+            $locationService->newLocationCreateStruct($parentLocation2->id)
+        );
+
+        // begin use case
+        $locationService->swapLocation($secondaryLocation1, $secondaryLocation2);
+
+        // test results
+        $secondaryLocation1 = $locationService->loadLocation($secondaryLocation1->id);
+        $secondaryLocation2 = $locationService->loadLocation($secondaryLocation2->id);
+
+        self::assertEquals($folder2->id, $secondaryLocation1->contentInfo->id);
+        self::assertEquals($folder1->id, $secondaryLocation2->contentInfo->id);
+
+        self::assertEquals(
+            $folder1,
+            $contentService->loadContent($folder1->id)
+        );
+
+        self::assertEquals(
+            $folder2,
+            $contentService->loadContent($folder2->id)
         );
     }
 

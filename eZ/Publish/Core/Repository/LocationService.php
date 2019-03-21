@@ -202,10 +202,10 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocation($locationId, array $prioritizedLanguages = null)
+    public function loadLocation($locationId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
-        $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId);
-        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: []);
+        $spiLocation = $this->persistenceHandler->locationHandler()->load($locationId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
+        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
             throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
         }
@@ -216,14 +216,60 @@ class LocationService implements LocationServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null)
+    public function loadLocationList(array $locationIds, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null): iterable
+    {
+        $spiLocations = $this->persistenceHandler->locationHandler()->loadList(
+            $locationIds,
+            $prioritizedLanguages,
+            $useAlwaysAvailable ?? true
+        );
+        if (empty($spiLocations)) {
+            return [];
+        }
+
+        // Get content id's
+        $contentIds = [];
+        foreach ($spiLocations as $spiLocation) {
+            $contentIds[] = $spiLocation->contentId;
+        }
+
+        // Load content info and Get content proxy
+        $spiContentInfoList = $this->persistenceHandler->contentHandler()->loadContentInfoList($contentIds);
+        $contentProxyList = $this->domainMapper->buildContentProxyList(
+            $spiContentInfoList,
+            $prioritizedLanguages ?? [],
+            $useAlwaysAvailable ?? true
+        );
+
+        // Build locations using the bulk retrieved content info and bulk lazy loaded content proxies.
+        $locations = [];
+        $permissionResolver = $this->repository->getPermissionResolver();
+        foreach ($spiLocations as $spiLocation) {
+            $location = $this->domainMapper->buildLocationWithContent(
+                $spiLocation,
+                $contentProxyList[$spiLocation->contentId],
+                $spiContentInfoList[$spiLocation->contentId]
+            );
+
+            if ($permissionResolver->canUser('content', 'read', $location->getContentInfo(), [$location])) {
+                $locations[$spiLocation->id] = $location;
+            }
+        }
+
+        return $locations;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadLocationByRemoteId($remoteId, array $prioritizedLanguages = null, bool $useAlwaysAvailable = null)
     {
         if (!is_string($remoteId)) {
             throw new InvalidArgumentValue('remoteId', $remoteId);
         }
 
-        $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
-        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: []);
+        $spiLocation = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable ?? true);
+        $location = $this->domainMapper->buildLocation($spiLocation, $prioritizedLanguages ?: [], $useAlwaysAvailable ?? true);
         if (!$this->repository->canUser('content', 'read', $location->getContentInfo(), $location)) {
             throw new UnauthorizedException('content', 'read', ['locationId' => $location->id]);
         }

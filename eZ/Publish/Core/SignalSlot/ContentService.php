@@ -21,7 +21,9 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteTranslationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\HideContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\RemoveTranslationSignal;
+use eZ\Publish\Core\SignalSlot\Signal\ContentService\RevealContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentDraftSignal;
@@ -83,6 +85,14 @@ class ContentService implements ContentServiceInterface
     public function loadContentInfo($contentId)
     {
         return $this->service->loadContentInfo($contentId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadContentInfoList(array $contentIds): iterable
+    {
+        return $this->service->loadContentInfoList($contentIds);
     }
 
     /**
@@ -721,6 +731,44 @@ class ContentService implements ContentServiceInterface
             $contentInfoList,
             $languages,
             $useAlwaysAvailable
+        );
+    }
+
+    /**
+     * Hides Content by making all the Locations appear hidden.
+     * It does not persist hidden state on Location object itself.
+     *
+     * Content hidden by this API can be revealed by revealContent API.
+     *
+     * @see revealContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function hideContent(ContentInfo $contentInfo): void
+    {
+        $this->service->hideContent($contentInfo);
+        $this->signalDispatcher->emit(
+            new HideContentSignal([
+                'contentId' => $contentInfo->id,
+            ])
+        );
+    }
+
+    /**
+     * Reveals Content hidden by hideContent API.
+     * Locations which were hidden before hiding Content will remain hidden.
+     *
+     * @see hideContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function revealContent(ContentInfo $contentInfo): void
+    {
+        $this->service->revealContent($contentInfo);
+        $this->signalDispatcher->emit(
+            new RevealContentSignal([
+                'contentId' => $contentInfo->id,
+            ])
         );
     }
 

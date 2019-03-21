@@ -114,7 +114,7 @@ class UrlAliasGenerator extends Generator
             if ($rootLocationId !== null) {
                 $pathPrefix = $this->getPathPrefixByRootLocationId($rootLocationId, $languages, $siteaccess);
                 // "/" cannot be considered as a path prefix since it's root, so we ignore it.
-                if ($pathPrefix !== '/' && mb_stripos($path, $pathPrefix) === 0) {
+                if ($pathPrefix !== '/' && ($path === $pathPrefix || mb_stripos($path, $pathPrefix . '/') === 0)) {
                     $path = mb_substr($path, mb_strlen($pathPrefix));
                 } elseif ($pathPrefix !== '/' && !$this->isUriPrefixExcluded($path) && $this->logger !== null) {
                     // Location path is outside configured content tree and doesn't have an excluded prefix.

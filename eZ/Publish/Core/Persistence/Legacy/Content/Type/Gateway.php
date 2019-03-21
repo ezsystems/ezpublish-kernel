@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
 
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
-use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
@@ -181,9 +180,9 @@ abstract class Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $type
      */
-    abstract public function updateType($typeId, $status, UpdateStruct $updateStruct);
+    abstract public function updateType($typeId, $status, Type $type);
 
     /**
      * Loads an array with data about several Types in defined status.
@@ -285,4 +284,17 @@ abstract class Gateway
      * @return array
      */
     abstract public function getSearchableFieldMapData();
+
+    /**
+     * Removes fieldDefinition data from multilingual table.
+     *
+     * @param int $fieldDefinitionId
+     * @param string $languageCode
+     * @param int $status
+     */
+    abstract public function removeFieldDefinitionTranslation(
+        int $fieldDefinitionId,
+        string $languageCode,
+        int $status
+    ): void;
 }

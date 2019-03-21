@@ -212,6 +212,7 @@ CREATE TABLE ezcontentobject (
   remote_id varchar(100) DEFAULT NULL,
   section_id int(11) NOT NULL DEFAULT 0,
   status int(11) DEFAULT 0,
+  is_hidden tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (id),
   KEY ezcontentobject_classid (contentclass_id),
   KEY ezcontentobject_currentversion (current_version),
@@ -654,3 +655,22 @@ CREATE TABLE `ezpreferences` (
   KEY `ezpreferences_name` (`name`),
   KEY `ezpreferences_user_id_idx` (`user_id`,`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
+
+DROP TABLE IF EXISTS `ezcontentclass_attribute_ml`;
+CREATE TABLE `ezcontentclass_attribute_ml` (
+  `contentclass_attribute_id` INT NOT NULL,
+  `version` INT NOT NULL,
+  `language_id` BIGINT NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `description` TEXT NULL,
+  `data_text` TEXT NULL,
+  `data_json` TEXT NULL,
+  PRIMARY KEY (`contentclass_attribute_id`, `version`, `language_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE `ezcontentclass_attribute_ml`
+ADD CONSTRAINT `ezcontentclass_attribute_ml_lang_fk`
+  FOREIGN KEY (`language_id`)
+  REFERENCES `ezcontent_language` (`id`)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;

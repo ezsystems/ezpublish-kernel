@@ -29,6 +29,7 @@
           <xsd:element name="mainLanguageCode" type="xsd:string" />
           <xsd:element name="currentVersionNo" type="xsd:int" />
           <xsd:element name="alwaysAvailable" type="xsd:boolean" />
+          <xsd:element name="status" type="xsd:string" />
           <xsd:element name="ObjectStates" type="ref" />
         </xsd:all>
         <xsd:attribute name="id" type="xsd:int" />

@@ -36,7 +36,31 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns test data for {@link testGenerateLanguageMask()}.
+     * @param array $languages
+     * @param int $expectedMask
+     *
+     * @covers       \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::generateLanguageMaskFromLanguageCodes
+     * @dataProvider getLanguageMaskData
+     */
+    public function testGenerateLanguageMaskFromLanguagesCodes(array $languages, $expectedMask)
+    {
+        $generator = $this->getMaskGenerator();
+
+        if (isset($languages['always-available'])) {
+            $isAlwaysAvailable = true;
+            unset($languages['always-available']);
+        } else {
+            $isAlwaysAvailable = false;
+        }
+
+        $this->assertSame(
+            $expectedMask,
+            $generator->generateLanguageMaskFromLanguageCodes(array_keys($languages), $isAlwaysAvailable)
+        );
+    }
+
+    /**
+     * Returns test data for {@link testGenerateLanguageMask()} and {@link testGenerateLanguageMaskFromLanguagesCodes()}.
      *
      * @return array
      */
@@ -271,28 +295,37 @@ class MaskGeneratorTest extends LanguageAwareTestCase
         if (!isset($this->languageHandler)) {
             $this->languageHandler = $this->createMock(LanguageHandler::class);
             $this->languageHandler->expects($this->any())
-                                  ->method('loadByLanguageCode')
+                                  ->method($this->anything())// loadByLanguageCode && loadListByLanguageCodes
                                   ->will(
                                       $this->returnCallback(
-                                          function ($languageCode) {
-                                              switch ($languageCode) {
-                                                  case 'eng-US':
-                                                      return new Language(
-                                                          array(
-                                                              'id' => 2,
-                                                              'languageCode' => 'eng-US',
-                                                              'name' => 'US english',
-                                                          )
-                                                      );
-                                                  case 'eng-GB':
-                                                      return new Language(
-                                                          array(
-                                                              'id' => 4,
-                                                              'languageCode' => 'eng-GB',
-                                                              'name' => 'British english',
-                                                          )
-                                                      );
+                                          function ($languageCodes) {
+                                              if (is_string($languageCodes)) {
+                                                  $language = $languageCodes;
+                                                  $languageCodes = [$language];
                                               }
+
+                                              $languages = [];
+                                              if (in_array('eng-US', $languageCodes, true)) {
+                                                  $languages['eng-US'] = new Language(
+                                                      [
+                                                          'id' => 2,
+                                                          'languageCode' => 'eng-US',
+                                                          'name' => 'US english',
+                                                      ]
+                                                  );
+                                              }
+
+                                              if (in_array('eng-GB', $languageCodes, true)) {
+                                                  $languages['eng-GB'] = new Language(
+                                                       [
+                                                           'id' => 4,
+                                                           'languageCode' => 'eng-GB',
+                                                           'name' => 'British english',
+                                                       ]
+                                                   );
+                                              }
+
+                                              return isset($language) ? $languages[$language] : $languages;
                                           }
                                       )
                                   );

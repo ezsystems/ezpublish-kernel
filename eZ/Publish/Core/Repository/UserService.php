@@ -9,7 +9,11 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
+use eZ\Publish\API\Repository\Values\ContentType\ContentType;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
+use eZ\Publish\Core\Base\Exceptions\UserPasswordValidationException;
+use eZ\Publish\Core\Repository\Validator\UserPasswordValidator;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -412,8 +416,14 @@ class UserService implements UserServiceInterface
         $contentTypeService = $this->repository->getContentTypeService();
 
         if ($userCreateStruct->contentType === null) {
-            $userContentType = $contentTypeService->loadContentType($this->settings['userClassID']);
-            $userCreateStruct->contentType = $userContentType;
+            $userCreateStruct->contentType = $contentTypeService->loadContentType($this->settings['userClassID']);
+        }
+
+        $errors = $this->validatePassword($userCreateStruct->password, new PasswordValidationContext([
+            'contentType' => $userCreateStruct->contentType,
+        ]));
+        if (!empty($errors)) {
+            throw new UserPasswordValidationException('password', $errors);
         }
 
         $locationCreateStructs = array();
@@ -771,16 +781,31 @@ class UserService implements UserServiceInterface
             }
         }
 
-        if ($userUpdateStruct->password !== null && (!is_string($userUpdateStruct->password) || empty($userUpdateStruct->password))) {
-            throw new InvalidArgumentValue('password', $userUpdateStruct->password, 'UserUpdateStruct');
-        }
-
         if ($userUpdateStruct->enabled !== null && !is_bool($userUpdateStruct->enabled)) {
             throw new InvalidArgumentValue('enabled', $userUpdateStruct->enabled, 'UserUpdateStruct');
         }
 
         if ($userUpdateStruct->maxLogin !== null && !is_int($userUpdateStruct->maxLogin)) {
             throw new InvalidArgumentValue('maxLogin', $userUpdateStruct->maxLogin, 'UserUpdateStruct');
+        }
+
+        if ($userUpdateStruct->password !== null) {
+            if (!is_string($userUpdateStruct->password) || empty($userUpdateStruct->password)) {
+                throw new InvalidArgumentValue('password', $userUpdateStruct->password, 'UserUpdateStruct');
+            }
+
+            $userContentType = $this->repository->getContentTypeService()->loadContentType(
+                $user->contentInfo->contentTypeId
+            );
+
+            $errors = $this->validatePassword($userUpdateStruct->password, new PasswordValidationContext([
+                'contentType' => $userContentType,
+                'user' => $user,
+            ]));
+
+            if (!empty($errors)) {
+                throw new UserPasswordValidationException('password', $errors);
+            }
         }
 
         $contentService = $this->repository->getContentService();
@@ -1124,6 +1149,35 @@ class UserService implements UserServiceInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isUser(APIContent $content): bool
+    {
+        // First check against config for fast check
+        if ($this->settings['userClassID'] == $content->getVersionInfo()->getContentInfo()->contentTypeId) {
+            return true;
+        }
+
+        // For users we ultimately need to look for ezuser type as content type id could be several for users.
+        // And config might be different from one SA to the next, which we don't care about here.
+        foreach ($content->getFields() as $field) {
+            if ($field->fieldTypeIdentifier === 'ezuser') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUserGroup(APIContent $content): bool
+    {
+        return $this->settings['userGroupClassID'] == $content->getVersionInfo()->getContentInfo()->contentTypeId;
+    }
+
+    /**
      * Instantiate a user create class.
      *
      * @param string $login the login of the new user
@@ -1198,6 +1252,42 @@ class UserService implements UserServiceInterface
     public function newUserGroupUpdateStruct()
     {
         return new UserGroupUpdateStruct();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validatePassword(string $password, PasswordValidationContext $context = null): array
+    {
+        if ($context === null) {
+            $contentType = $this->repository->getContentTypeService()->loadContentType(
+                $this->settings['userClassID']
+            );
+
+            $context = new PasswordValidationContext([
+                'contentType' => $contentType,
+            ]);
+        }
+
+        // Search for the first ezuser field type in content type
+        $userFieldDefinition = null;
+        foreach ($context->contentType->getFieldDefinitions() as $fieldDefinition) {
+            if ($fieldDefinition->fieldTypeIdentifier === 'ezuser') {
+                $userFieldDefinition = $fieldDefinition;
+                break;
+            }
+        }
+
+        if ($userFieldDefinition === null) {
+            throw new ContentValidationException('Provided content type does not contain ezuser field type');
+        }
+
+        $configuration = $userFieldDefinition->getValidatorConfiguration();
+        if (!isset($configuration['PasswordValueValidator'])) {
+            return [];
+        }
+
+        return (new UserPasswordValidator($configuration['PasswordValueValidator']))->validate($password);
     }
 
     /**

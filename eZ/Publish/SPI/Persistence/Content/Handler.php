@@ -51,21 +51,21 @@ interface Handler
     /**
      * Returns the raw data of a content object identified by $id, in a struct.
      *
-     * A version to load must be specified. If you want to load the current
-     * version of a content object use SearchHandler::findSingle() with the
-     * ContentId criterion.
+     * If you want to load current version, $version number can be omitted to make sure
+     * you don't need to rely on search index (async) or having to load in two steps
+     * (first content info then content, risking changes in between to current version).
      *
      * Optionally a translation filter may be specified. If specified only the
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
      * @param int|string $id
-     * @param int|string $version
+     * @param int|null $version
      * @param string[]|null $translations
      *
      * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
-    public function load($id, $version, array $translations = null);
+    public function load($id, $version = null, array $translations = null);
 
     /**
      * Return list of unique Content, with content id as key.

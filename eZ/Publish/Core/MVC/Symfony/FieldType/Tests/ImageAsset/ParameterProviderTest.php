@@ -8,29 +8,53 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\FieldType\Tests\ImageAsset;
 
-use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\FieldType;
+use eZ\Publish\API\Repository\FieldTypeService;
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
 use eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider;
+use eZ\Publish\Core\Repository\SiteAccessAware\Repository;
 use PHPUnit\Framework\TestCase;
 
 class ParameterProviderTest extends TestCase
 {
-    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
-    private $contentServiceMock;
+    /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Repository|\PHPUnit\Framework\MockObject\MockObject */
+    private $repository;
+
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
+    private $permissionsResolver;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider */
     private $parameterProvider;
 
+    /** @var \eZ\Publish\API\Repository\FieldType||\PHPUnit\Framework\MockObject\MockObject */
+    private $fieldType;
+
     protected function setUp(): void
     {
-        $this->contentServiceMock = $this->createMock(ContentService::class);
-        $this->parameterProvider = new ParameterProvider(
-            $this->contentServiceMock
-        );
+        $this->repository = $this->createMock(Repository::class);
+        $this->permissionsResolver = $this->createMock(PermissionResolver::class);
+        $this->fieldType = $this->createMock(FieldType::class);
+
+        $this->repository
+            ->method('getPermissionResolver')
+            ->willReturn($this->permissionsResolver);
+
+        $fieldTypeService = $this->createMock(FieldTypeService::class);
+
+        $this->repository
+            ->method('getFieldTypeService')
+            ->willReturn($fieldTypeService);
+
+        $fieldTypeService
+            ->method('getFieldType')
+            ->with('ezimageasset')
+            ->willReturn($this->fieldType);
+
+        $this->parameterProvider = new ParameterProvider($this->repository);
     }
 
     public function dataProviderForTestGetViewParameters(): array
@@ -48,16 +72,26 @@ class ParameterProviderTest extends TestCase
     {
         $destinationContentId = 1;
 
-        $this->contentServiceMock
-            ->method('loadContentInfo')
-            ->with($destinationContentId)
+        $this->fieldType
+            ->method('isEmptyValue')
+            ->willReturn(false);
+
+        $closure = function (Repository $repository) use ($destinationContentId) {
+            return $repository->getContentService()->loadContentInfo($destinationContentId);
+        };
+
+        $this->repository
+            ->method('sudo')
+            ->with($closure)
             ->willReturn(new ContentInfo([
                 'status' => $status,
             ]));
 
-        $actual = $this->parameterProvider->getViewParameters(new Field([
-            'value' => new ImageAssetValue($destinationContentId),
-        ]));
+        $this->permissionsResolver
+            ->method('canUser')
+            ->willReturn(true);
+
+        $actual = $this->parameterProvider->getViewParameters($this->createField($destinationContentId));
 
         $this->assertEquals($expected, $actual);
     }
@@ -66,37 +100,101 @@ class ParameterProviderTest extends TestCase
     {
         $destinationContentId = 1;
 
-        $this->contentServiceMock
+        $this->fieldType
+            ->method('isEmptyValue')
+            ->willReturn(false);
+
+        $closure = function (Repository $repository) use ($destinationContentId) {
+            return $repository->getContentService()->loadContentInfo($destinationContentId);
+        };
+
+        $this->repository
             ->expects($this->once())
-            ->method('loadContentInfo')
-            ->with($destinationContentId)
+            ->method('sudo')
+            ->with($closure)
             ->willThrowException($this->createMock(NotFoundException::class));
 
-        $actual = $this->parameterProvider->getViewParameters(new Field([
-            'value' => new ImageAssetValue($destinationContentId),
-        ]));
+        $actual = $this->parameterProvider->getViewParameters(
+            $this->createField($destinationContentId)
+        );
 
         $this->assertEquals([
             'available' => false,
         ], $actual);
     }
 
-    public function testGetViewParametersHandleUnauthorizedException(): void
+    public function testGetViewParametersHandleUnauthorizedAccess(): void
     {
         $destinationContentId = 1;
 
-        $this->contentServiceMock
-            ->expects($this->once())
-            ->method('loadContentInfo')
-            ->with($destinationContentId)
-            ->willThrowException($this->createMock(UnauthorizedException::class));
+        $this->fieldType
+            ->method('isEmptyValue')
+            ->willReturn(false);
 
-        $actual = $this->parameterProvider->getViewParameters(new Field([
-            'value' => new ImageAssetValue($destinationContentId),
-        ]));
+        $contentInfo = $this->createMock(ContentInfo::class);
+
+        $this->repository
+            ->method('sudo')
+            ->willReturn($contentInfo)
+        ;
+
+        $this->permissionsResolver
+            ->expects($this->at(0))
+            ->method('canUser')
+            ->with('content', 'read', $contentInfo)
+            ->willReturn(false)
+        ;
+
+        $this->permissionsResolver
+            ->expects($this->at(1))
+            ->method('canUser')
+            ->with('content', 'view_embed', $contentInfo)
+            ->willReturn(false)
+        ;
+
+        $actual = $this->parameterProvider->getViewParameters(
+            $this->createField($destinationContentId)
+        );
 
         $this->assertEquals([
             'available' => false,
         ], $actual);
+    }
+
+    public function testGetViewParametersHandleEmptyValue(): void
+    {
+        $destinationContentId = 1;
+
+        $this->fieldType
+            ->method('isEmptyValue')
+            ->willReturn(true);
+
+        $contentInfo = $this->createMock(ContentInfo::class);
+
+        $this->repository
+            ->method('sudo')
+            ->willReturn($contentInfo)
+        ;
+
+        $actual = $this->parameterProvider->getViewParameters(
+            $this->createField($destinationContentId)
+        );
+
+        $this->assertEquals([
+            'available' => null,
+        ], $actual);
+    }
+
+    /**
+     * @param int $destinationContentId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Field
+     */
+    private function createField(int $destinationContentId): Field
+    {
+        return new Field([
+            'value' => new ImageAssetValue($destinationContentId),
+            'fieldTypeIdentifier' => 'ezimageasset',
+        ]);
     }
 }

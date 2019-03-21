@@ -31,16 +31,17 @@ class Simple extends Handler
      */
     public function handle(SelectQuery $query, Criterion $criterion, $column)
     {
-        switch ($criterion->operator) {
-            case Criterion\Operator::CONTAINS:
-                $filter = $query->expr->eq(
-                    $this->dbHandler->quoteColumn($column),
-                    $query->bindValue($this->lowerCase($criterion->value))
-                );
-                break;
-
-            default:
-                $filter = parent::handle($query, $criterion, $column);
+        // For "Simple" FieldTypes, handle the following as equal:
+        // - Contains
+        // - LIKE when against int column
+        if ($criterion->operator === Criterion\Operator::CONTAINS ||
+            ($criterion->operator === Criterion\Operator::LIKE && $column === 'sort_key_int')) {
+            $filter = $query->expr->eq(
+                $this->dbHandler->quoteColumn($column),
+                $query->bindValue($this->lowerCase($criterion->value))
+            );
+        } else {
+            $filter = parent::handle($query, $criterion, $column);
         }
 
         return $filter;

@@ -1,8 +1,6 @@
 {% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
 
 {% block toolbar %}
-    {# {% set status = (collector.hits/collector.calls) < 0.33 ? 'red' : (collector.hits/collector.calls) < 0.66 ? 'yellow' : '' %} #}
-
     {% set icon %}
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 1200 1200" enable-background="new 0 0 1200 1200" xml:space="preserve">
             <g>
@@ -25,7 +23,12 @@
 
     {% endset %}
 
-    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url, status: status|default('') }) }}
+    {# Set to red if over 100 uncached, and to yellow if either over 15 uncached or over 100 cache hits lookups #}
+    {% set stats = collector.getCollector('ezpublish.debug.persistence').stats %}
+    {% set total_uncached = stats.uncached + stats.miss %}
+    {% set status_logo = total_uncached > 100 ? 'red' : (total_uncached > 15 ? 'yellow' : (stats.hit > 100 ? 'yellow' : '')) %}
+
+    {{ include('@WebProfiler/Profiler/toolbar_item.html.twig', { link: profiler_url, status: status_logo|default('') }) }}
 {% endblock %}
 
 {% block menu %}

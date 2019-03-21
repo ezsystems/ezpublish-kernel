@@ -114,6 +114,14 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadContentInfoList(array $contentIds): iterable
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
      * Loads a content info object for the given remoteId.
      *
      * To load fields use loadContent
@@ -742,6 +750,34 @@ class ContentService implements APIContentService, Sessionable
      * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
      */
     public function newTranslationValues()
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Hides Content by making all the Locations appear hidden.
+     * It does not persist hidden state on Location object itself.
+     *
+     * Content hidden by this API can be revealed by revealContent API.
+     *
+     * @see revealContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function hideContent(ContentInfo $contentInfo): void
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * Reveals Content hidden by hideContent API.
+     * Locations which were hidden before hiding Content will remain hidden.
+     *
+     * @see hideContent
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     */
+    public function revealContent(ContentInfo $contentInfo): void
     {
         throw new \Exception('@todo: Implement.');
     }

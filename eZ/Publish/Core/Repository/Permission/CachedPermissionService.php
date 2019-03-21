@@ -11,7 +11,6 @@ use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriter
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
-use Closure;
 use Exception;
 
 /**
@@ -104,12 +103,12 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
         return $this->permissionResolver->canUser($module, $function, $object, $targets);
     }
 
-    public function getPermissionsCriterion($module = 'content', $function = 'read')
+    public function getPermissionsCriterion($module = 'content', $function = 'read', ?array $targets = null)
     {
         // We only cache content/read lookup as those are the once frequently done, and it's only one we can safely
         // do that won't harm the system if it becomes stale (but user might experience permissions exceptions if it do)
         if ($module !== 'content' || $function !== 'read' || $this->sudoNestingLevel > 0) {
-            return $this->permissionCriterionResolver->getPermissionsCriterion($module, $function);
+            return $this->permissionCriterionResolver->getPermissionsCriterion($module, $function, $targets);
         }
 
         if ($this->permissionCriterion !== null) {
@@ -120,7 +119,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
         }
 
         $this->permissionCriterionTs = time();
-        $this->permissionCriterion = $this->permissionCriterionResolver->getPermissionsCriterion($module, $function);
+        $this->permissionCriterion = $this->permissionCriterionResolver->getPermissionsCriterion($module, $function, $targets);
 
         return $this->permissionCriterion;
     }
@@ -128,7 +127,7 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
     /**
      * @internal For internal use only, do not depend on this method.
      */
-    public function sudo(Closure $callback, RepositoryInterface $outerRepository)
+    public function sudo(callable $callback, RepositoryInterface $outerRepository)
     {
         ++$this->sudoNestingLevel;
         try {

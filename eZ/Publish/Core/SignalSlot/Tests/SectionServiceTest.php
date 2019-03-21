@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\SectionService as APISectionService;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\SignalSlot\SignalDispatcher;
 use eZ\Publish\Core\SignalSlot\SectionService;
 use eZ\Publish\Core\SignalSlot\Signal\SectionService as SectionServiceSignal;
@@ -33,6 +34,7 @@ class SectionServiceTest extends ServiceTest
         $sectionId = 1;
         $sectionIdentifier = 'mordor';
         $sectionName = 'Mordor';
+        $locationId = 46;
         $contentId = 42;
 
         $section = new Section(
@@ -42,6 +44,11 @@ class SectionServiceTest extends ServiceTest
                 'name' => $sectionName,
             )
         );
+
+        $location = new Location([
+            'id' => $locationId,
+        ]);
+
         $contentInfo = $this->getContentInfo($contentId, md5('Osgiliath'));
 
         $sectionCreateStruct = new SectionCreateStruct();
@@ -102,6 +109,17 @@ class SectionServiceTest extends ServiceTest
                 SectionServiceSignal\AssignSectionSignal::class,
                 array(
                     'contentId' => $contentId,
+                    'sectionId' => $sectionId,
+                ),
+            ),
+            array(
+                'assignSectionToSubtree',
+                array($location, $section),
+                null,
+                1,
+                SectionServiceSignal\AssignSectionToSubtreeSignal::class,
+                array(
+                    'locationId' => $locationId,
                     'sectionId' => $sectionId,
                 ),
             ),

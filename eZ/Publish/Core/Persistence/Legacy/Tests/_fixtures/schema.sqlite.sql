@@ -183,7 +183,8 @@ CREATE TABLE ezcontentobject (
   published integer NOT NULL DEFAULT 0,
   remote_id text(100),
   section_id integer NOT NULL DEFAULT 0,
-  status integer DEFAULT 0
+  status integer DEFAULT 0,
+  is_hidden integer DEFAULT 0
 );
 CREATE UNIQUE INDEX ezcontentobject_remote_id ON ezcontentobject (remote_id);
 CREATE INDEX ezcontentobject_classid ON ezcontentobject (contentclass_id);
@@ -559,7 +560,7 @@ CREATE TABLE eznotification (
   is_pending integer NOT NULL DEFAULT 1,
   type text(255) NOT NULL DEFAULT '',
   created integer NOT NULL DEFAULT 0,
-  data blob
+  data text
 );
 
 CREATE INDEX eznotification_owner ON eznotification(owner_id);
@@ -574,3 +575,16 @@ CREATE TABLE ezpreferences (
 
 CREATE INDEX ezpreferences_name ON ezpreferences (name);
 CREATE INDEX ezpreferences_user_id_idx ON ezpreferences (user_id, name);
+
+CREATE TABLE ezcontentclass_attribute_ml (
+  contentclass_attribute_id integer NOT NULL,
+  version integer NOT NULL,
+  language_id integer NOT NULL,
+  name text(255) NOT NULL,
+  description text DEFAULT NULL,
+  data_text text DEFAULT NULL,
+  data_json text DEFAULT NULL
+);
+
+CREATE INDEX ezcontentclass_attribute_ml_language_id ON ezcontentclass_attribute_ml (language_id);
+CREATE INDEX ezcontentclass_attribute_ml_id ON ezcontentclass_attribute_ml (contentclass_attribute_id, version, language_id);

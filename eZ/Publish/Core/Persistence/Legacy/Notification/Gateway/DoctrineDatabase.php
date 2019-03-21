@@ -51,7 +51,7 @@ class DoctrineDatabase extends Gateway
                 self::COLUMN_TYPE => ':type',
                 self::COLUMN_DATA => ':data',
             ])
-            ->setParameter(':is_pending', $createStruct->isPending, PDO::PARAM_INT)
+            ->setParameter(':is_pending', $createStruct->isPending, PDO::PARAM_BOOL)
             ->setParameter(':user_id', $createStruct->ownerId, PDO::PARAM_INT)
             ->setParameter(':created', $createStruct->created, PDO::PARAM_INT)
             ->setParameter(':type', $createStruct->type, PDO::PARAM_STR)
@@ -93,7 +93,7 @@ class DoctrineDatabase extends Gateway
             ->update(self::TABLE_NOTIFICATION)
             ->set(self::COLUMN_IS_PENDING, ':is_pending')
             ->where($query->expr()->eq(self::COLUMN_ID, ':id'))
-            ->setParameter(':is_pending', $notification->isPending, PDO::PARAM_INT)
+            ->setParameter(':is_pending', $notification->isPending, PDO::PARAM_BOOL)
             ->setParameter(':id', $notification->id, PDO::PARAM_INT);
 
         $query->execute();
@@ -120,11 +120,13 @@ class DoctrineDatabase extends Gateway
     public function countUserPendingNotifications(int $userId): int
     {
         $query = $this->connection->createQueryBuilder();
+        $expr = $query->expr();
         $query
             ->select('COUNT(' . self::COLUMN_ID . ')')
             ->from(self::TABLE_NOTIFICATION)
-            ->where($query->expr()->eq(self::COLUMN_OWNER_ID, ':user_id'))
-            ->andWhere($query->expr()->eq(self::COLUMN_IS_PENDING, true))
+            ->where($expr->eq(self::COLUMN_OWNER_ID, ':user_id'))
+            ->andWhere($expr->eq(self::COLUMN_IS_PENDING, ':is_pending'))
+            ->setParameter(':is_pending', true, PDO::PARAM_BOOL)
             ->setParameter(':user_id', $userId, PDO::PARAM_INT);
 
         return (int)$query->execute()->fetchColumn();

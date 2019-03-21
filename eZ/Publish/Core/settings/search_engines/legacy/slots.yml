@@ -12,6 +12,7 @@ parameters:
     ezpublish.search.legacy.slot.assign_section.class: eZ\Publish\Core\Search\Common\Slot\AssignSection
     ezpublish.search.legacy.slot.create_user.class: eZ\Publish\Core\Search\Common\Slot\CreateUser
     ezpublish.search.legacy.slot.delete_user.class: eZ\Publish\Core\Search\Common\Slot\DeleteUser
+    ezpublish.search.legacy.slot.update_user.class: eZ\Publish\Core\Search\Common\Slot\UpdateUser
     ezpublish.search.legacy.slot.create_user_group.class: eZ\Publish\Core\Search\Common\Slot\CreateUserGroup
     ezpublish.search.legacy.slot.delete_user_group.class: eZ\Publish\Core\Search\Common\Slot\DeleteUserGroup
 
@@ -96,6 +97,12 @@ services:
         tags:
             - {name: ezpublish.search.legacy.slot, signal: UserService\DeleteUserSignal}
 
+    ezpublish.search.legacy.slot.update_user:
+        parent: ezpublish.search.legacy.slot
+        class: "%ezpublish.search.legacy.slot.update_user.class%"
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: UserService\UpdateUserSignal}
+
     ezpublish.search.legacy.slot.create_user_group:
         parent: ezpublish.search.legacy.slot
         class: "%ezpublish.search.legacy.slot.create_user_group.class%"
@@ -107,3 +114,13 @@ services:
         class: "%ezpublish.search.legacy.slot.delete_user_group.class%"
         tags:
             - {name: ezpublish.search.legacy.slot, signal: UserService\DeleteUserGroupSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\HideContent:
+        parent: ezpublish.search.legacy.slot
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\HideContentSignal}
+
+    eZ\Publish\Core\Search\Common\Slot\RevealContent:
+        parent: ezpublish.search.legacy.slot
+        tags:
+            - {name: ezpublish.search.legacy.slot, signal: ContentService\RevealContentSignal}

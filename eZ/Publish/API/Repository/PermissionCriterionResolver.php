@@ -21,8 +21,9 @@ interface PermissionCriterionResolver
      *
      * @param string $module
      * @param string $function
+     * @param array|null $targets
      *
      * @return bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    public function getPermissionsCriterion($module, $function);
+    public function getPermissionsCriterion($module, $function, ?array $targets = null);
 }

@@ -342,8 +342,11 @@ class Handler implements BaseContentTypeHandler
      *
      * @return Type
      */
-    public function update($typeId, $status, UpdateStruct $contentType)
+    public function update($typeId, $status, UpdateStruct $updateStruct)
     {
+        $contentType = $this->mapper->createTypeFromUpdateStruct(
+            $updateStruct
+        );
         $this->contentTypeGateway->updateType($typeId, $status, $contentType);
 
         return $this->load($typeId, $status);
@@ -486,9 +489,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function getFieldDefinition($id, $status)
     {
-        $row = $this->contentTypeGateway->loadFieldDefinition($id, $status);
+        $rows = $this->contentTypeGateway->loadFieldDefinition($id, $status);
 
-        if ($row === false) {
+        if ($rows === false) {
             throw new NotFoundException(
                 'FieldDefinition',
                 array(
@@ -498,7 +501,9 @@ class Handler implements BaseContentTypeHandler
             );
         }
 
-        return $this->mapper->extractFieldFromRow($row);
+        $multilingualData = $this->mapper->extractMultilingualData($rows);
+
+        return $this->mapper->extractFieldFromRow(reset($rows), $multilingualData);
     }
 
     /**
@@ -616,5 +621,47 @@ class Handler implements BaseContentTypeHandler
         }
 
         return $fieldMap;
+    }
+
+    /**
+     * @param int $contentTypeId
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    public function removeContentTypeTranslation(int $contentTypeId, string $languageCode): Type
+    {
+        $type = $this->load($contentTypeId, Type::STATUS_DRAFT);
+
+        unset($type->name[$languageCode]);
+        unset($type->description[$languageCode]);
+
+        foreach ($type->fieldDefinitions as $fieldDefinition) {
+            $this->contentTypeGateway->removeFieldDefinitionTranslation(
+                $fieldDefinition->id,
+                $languageCode,
+                Type::STATUS_DRAFT
+            );
+
+            //Refresh FieldDefinition object after removing translation data.
+            $fieldDefinition = $this->getFieldDefinition(
+                $fieldDefinition->id,
+                Type::STATUS_DRAFT
+            );
+            unset($fieldDefinition->name[$languageCode]);
+            unset($fieldDefinition->description[$languageCode]);
+            $storageFieldDefinition = new StorageFieldDefinition();
+            $this->mapper->toStorageFieldDefinition($fieldDefinition, $storageFieldDefinition);
+            $this->contentTypeGateway->updateFieldDefinition(
+                $contentTypeId,
+                Type::STATUS_DRAFT,
+                $fieldDefinition,
+                $storageFieldDefinition
+            );
+        }
+
+        $updateStruct = $this->mapper->createUpdateStructFromType($type);
+
+        return $this->update($type->id, Type::STATUS_DRAFT, $updateStruct);
     }
 }

@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -305,6 +307,28 @@ interface UserService
     public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = []);
 
     /**
+     * Checks if Content is a user.
+     *
+     *  @since 7.4
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return bool
+     */
+    public function isUser(Content $content): bool;
+
+    /**
+     * Checks if Content is a user group.
+     *
+     * @since 7.4
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     *
+     * @return bool
+     */
+    public function isUserGroup(Content $content): bool;
+
+    /**
      * Instantiate a user create class.
      *
      * @param string $login the login of the new user
@@ -340,4 +364,16 @@ interface UserService
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
      */
     public function newUserGroupUpdateStruct();
+
+    /**
+     * Validates given password.
+     *
+     * @param string $password
+     * @param \eZ\Publish\API\Repository\Values\User\PasswordValidationContext|null $context
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     *
+     * @return \eZ\Publish\SPI\FieldType\ValidationError[]
+     */
+    public function validatePassword(string $password, PasswordValidationContext $context = null): array;
 }

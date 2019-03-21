@@ -11,7 +11,16 @@ use SimpleXMLElement;
 
 class SortClauseTest extends RESTFunctionalTestCase
 {
-    public function testFieldSortClause()
+    /**
+     * @dataProvider sortingClauseDataProvider
+     *
+     * @param array $foldersNameToCreate
+     * @param string $sortClauseXML
+     * @param array $foldersInExpectedOrder
+     *
+     * @throws \Psr\Http\Client\ClientException
+     */
+    public function testFieldSortClause(array $foldersNameToCreate, string $sortClauseXML, array $foldersInExpectedOrder)
     {
         $string = $this->addTestSuffix(__FUNCTION__);
         $mainTestFolderContent = $this->createFolder($string, '/api/ezp/v2/content/locations/1/2');
@@ -33,17 +42,15 @@ class SortClauseTest extends RESTFunctionalTestCase
         $locationArray = explode('/', $mainFolderLocationHref);
         $mainFolderLocationId = array_pop($locationArray);
 
-        $foldersForSorting = [
-            'AAA',
-            'BBB',
-            'CCC',
-        ];
-
         $foldersNames = [];
-
-        foreach ($foldersForSorting as $folder) {
+        foreach ($foldersNameToCreate as $folder) {
             $folderContent = $this->createFolder($folder, $mainFolderLocationHref);
             $foldersNames[$folder] = $folderContent['Name'];
+        }
+
+        $sortedFoldersNames = [];
+        foreach ($foldersInExpectedOrder as $name) {
+            $sortedFoldersNames[] = $foldersNames[$name];
         }
 
         $body = <<< XML
@@ -57,7 +64,7 @@ class SortClauseTest extends RESTFunctionalTestCase
     <limit>10</limit>
     <offset>0</offset>
     <SortClauses>
-      <Field identifier="folder/name">descending</Field>
+        $sortClauseXML
     </SortClauses>
   </LocationQuery>
 </ViewInput>
@@ -82,9 +89,43 @@ XML;
             $searchHits[] = (string) $searchHit[0];
         }
 
-        self::assertCount(3, $searchHits);
-        self::assertEquals($foldersNames['CCC'], $searchHits[0]);
-        self::assertEquals($foldersNames['BBB'], $searchHits[1]);
-        self::assertEquals($foldersNames['AAA'], $searchHits[2]);
+        $expectedCount = count($foldersInExpectedOrder);
+        self::assertCount($expectedCount, $searchHits);
+
+        for ($i = 0; $i <= $expectedCount - 1; ++$i) {
+            self::assertEquals($sortedFoldersNames[$i], $searchHits[$i]);
+        }
+    }
+
+    public function sortingClauseDataProvider()
+    {
+        return [
+            [
+                [
+                    'AAA',
+                    'BBB',
+                    'CCC',
+                ],
+                '<Field identifier="folder/name">descending</Field>',
+                [
+                    'CCC',
+                    'BBB',
+                    'AAA',
+                ],
+            ],
+            [
+                [
+                    'This',
+                    'Is Not',
+                    'Alphabetical',
+                ],
+                '<LocationId>descending</LocationId>',
+                [
+                    'Alphabetical',
+                    'Is Not',
+                    'This',
+                ],
+            ],
+        ];
     }
 }

@@ -30,6 +30,18 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     }
 
     /**
+     * {@inheritdoc}
+     *
+     * If Selection is improved to be able to index + search for string also with LegacySearch, then adapt this too.
+     */
+    protected function supportsLikeWildcard($value)
+    {
+        parent::supportsLikeWildcard($value);
+
+        return false;
+    }
+
+    /**
      * Get expected settings schema.
      *
      * @return array
@@ -45,6 +57,10 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
                 'type' => 'hash',
                 'default' => array(),
             ),
+            'multilingualOptions' => array(
+                'type' => 'hash',
+                'default' => array(),
+            ),
         );
     }
 
@@ -55,16 +71,25 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'isMultiple' => true,
-            'options' => array(
+            'options' => [
                 0 => 'A first',
                 1 => 'Bielefeld',
                 2 => 'Sindelfingen',
                 3 => 'Turtles',
                 4 => 'Zombies',
-            ),
-        );
+            ],
+            'multilingualOptions' => [
+                'eng-GB' => [
+                    0 => 'A first',
+                    1 => 'Bielefeld',
+                    2 => 'Sindelfingen',
+                    3 => 'Turtles',
+                    4 => 'Zombies',
+                ],
+            ],
+        ];
     }
 
     /**

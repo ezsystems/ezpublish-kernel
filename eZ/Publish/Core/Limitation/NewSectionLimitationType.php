@@ -9,6 +9,9 @@
 namespace eZ\Publish\Core\Limitation;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchAll;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion\MatchNone;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\Content\Content;
@@ -26,7 +29,7 @@ use eZ\Publish\SPI\Persistence\Content\Section as SPISection;
 /**
  * NewSectionLimitation is a Content Limitation used on 'section' 'assign' function.
  */
-class NewSectionLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface
+class NewSectionLimitationType extends AbstractPersistenceLimitationType implements SPILimitationTypeInterface, TargetOnlyLimitationType
 {
     /**
      * Accepts a Limitation value and checks for structural validity.
@@ -116,7 +119,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
         }
 
         if (!$object instanceof ContentInfo && !$object instanceof Content && !$object instanceof VersionInfo) {
-            throw new InvalidArgumentException('$object', 'Must be of type: Content, VersionInfo or ContentInfo');
+            throw new InvalidArgumentException('$object', 'Must be of type: Content, VersionInfo, ContentInfo');
         }
 
         if (empty($targets)) {
@@ -127,17 +130,7 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
             return false;
         }
 
-        foreach ($targets as $target) {
-            if (!$target instanceof Section && !$target instanceof SPISection) {
-                throw new InvalidArgumentException('$targets', 'Must contain objects of type: Section');
-            }
-
-            if (!in_array($target->id, $value->limitationValues)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->doEvaluate($value, $targets);
     }
 
     /**
@@ -164,5 +157,46 @@ class NewSectionLimitationType extends AbstractPersistenceLimitationType impleme
     public function valueSchema()
     {
         throw new \eZ\Publish\API\Repository\Exceptions\NotImplementedException(__METHOD__);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCriterionByTarget(APILimitationValue $value, APIUserReference $currentUser, ?array $targets): CriterionInterface
+    {
+        if (empty($targets)) {
+            throw new InvalidArgumentException('$targets', 'Must contain objects of type: Section');
+        }
+
+        if ($this->doEvaluate($value, $targets)) {
+            return new MatchAll();
+        } else {
+            return new MatchNone();
+        }
+    }
+
+    /**
+     * Returns true if given limitation value allows all given sections.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $value
+     * @param array|null $targets
+     *
+     * @return bool
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
+    private function doEvaluate(APILimitationValue $value, array $targets): bool
+    {
+        foreach ($targets as $target) {
+            if (!$target instanceof Section && !$target instanceof SPISection) {
+                throw new InvalidArgumentException('$targets', 'Must contain objects of type: Section');
+            }
+
+            if (!in_array($target->id, $value->limitationValues)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

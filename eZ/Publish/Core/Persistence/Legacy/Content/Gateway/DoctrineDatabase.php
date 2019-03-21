@@ -192,15 +192,15 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Generates a language mask for $version.
+     * Generates a language mask for $fields.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param string $initialLanguageCode
-     * @param bool $alwaysAvailable
+     * @param bool $isAlwaysAvailable
      *
      * @return int
      */
-    protected function generateLanguageMask(array $fields, $initialLanguageCode, $alwaysAvailable)
+    protected function generateLanguageMask(array $fields, string $initialLanguageCode, bool $isAlwaysAvailable): int
     {
         $languages = array($initialLanguageCode => true);
         foreach ($fields as $field) {
@@ -211,11 +211,7 @@ class DoctrineDatabase extends Gateway
             $languages[$field->languageCode] = true;
         }
 
-        if ($alwaysAvailable) {
-            $languages['always-available'] = true;
-        }
-
-        return $this->languageMaskGenerator->generateLanguageMask($languages);
+        return $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(array_keys($languages), $isAlwaysAvailable);
     }
 
     /**
@@ -333,21 +329,20 @@ class DoctrineDatabase extends Gateway
             );
         }
         if ($prePublishVersionInfo !== null) {
-            $languages = [];
-            foreach ($prePublishVersionInfo->languageCodes as $languageCodes) {
-                if (!isset($languages[$languageCodes])) {
-                    $languages[$languageCodes] = true;
-                }
-            }
-
-            $languages['always-available'] = isset($struct->alwaysAvailable) ? $struct->alwaysAvailable :
-                $prePublishVersionInfo->contentInfo->alwaysAvailable;
-
-            $mask = $this->languageMaskGenerator->generateLanguageMask($languages);
+            $mask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                $prePublishVersionInfo->languageCodes,
+                $struct->alwaysAvailable ?? $prePublishVersionInfo->contentInfo->alwaysAvailable
+            );
 
             $q->set(
                 $this->dbHandler->quoteColumn('language_mask'),
                 $q->bindValue($mask, null, \PDO::PARAM_INT)
+            );
+        }
+        if (isset($struct->isHidden)) {
+            $q->set(
+                $this->dbHandler->quoteColumn('is_hidden'),
+                $q->bindValue($struct->isHidden, null, \PDO::PARAM_BOOL)
             );
         }
         $q->where(
@@ -826,11 +821,9 @@ class DoctrineDatabase extends Gateway
     /**
      * {@inheritdoc}
      */
-    public function load($contentId, $version, array $translations = null)
+    public function load($contentId, $version = null, array $translations = null)
     {
-        $results = $this->internalLoadContent([$contentId], $version, $translations);
-
-        return $results;
+        return $this->internalLoadContent([$contentId], $version, $translations);
     }
 
     /**
@@ -845,7 +838,7 @@ class DoctrineDatabase extends Gateway
      * @see load(), loadContentList()
      *
      * @param array $contentIds
-     * @param int $version
+     * @param int|null $version
      * @param string[]|null $translations
      *
      * @return array
@@ -868,6 +861,7 @@ class DoctrineDatabase extends Gateway
                 'c.status AS ezcontentobject_status',
                 'c.name AS ezcontentobject_name',
                 'c.language_mask AS ezcontentobject_language_mask',
+                'c.is_hidden AS ezcontentobject_is_hidden',
                 'v.id AS ezcontentobject_version_id',
                 'v.version AS ezcontentobject_version_version',
                 'v.modified AS ezcontentobject_version_modified',
@@ -941,12 +935,24 @@ class DoctrineDatabase extends Gateway
      *
      * @see loadContentInfo(), loadContentInfoByRemoteId(), loadContentInfoList(), loadContentInfoByLocationId()
      *
+     * @param bool $joinMainLocation
+     *
      * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function createLoadContentInfoQueryBuilder(): DoctrineQueryBuilder
+    private function createLoadContentInfoQueryBuilder(bool $joinMainLocation = true): DoctrineQueryBuilder
     {
         $queryBuilder = $this->connection->createQueryBuilder();
         $expr = $queryBuilder->expr();
+
+        $joinCondition = $expr->eq('c.id', 't.contentobject_id');
+        if ($joinMainLocation) {
+            // wrap join condition with AND operator and join by a Main Location
+            $joinCondition = $expr->andX(
+                $joinCondition,
+                $expr->eq('t.node_id', 't.main_node_id')
+            );
+        }
+
         $queryBuilder
             ->select('c.*', 't.main_node_id AS ezcontentobject_tree_main_node_id')
             ->from('ezcontentobject', 'c')
@@ -954,10 +960,7 @@ class DoctrineDatabase extends Gateway
                 'c',
                 'ezcontentobject_tree',
                 't',
-                $expr->andX(
-                    $expr->eq('c.id', 't.contentobject_id'),
-                    $expr->eq('t.node_id', 't.main_node_id')
-                )
+                $joinCondition
             );
 
         return $queryBuilder;
@@ -1039,14 +1042,14 @@ class DoctrineDatabase extends Gateway
      */
     public function loadContentInfoByLocationId($locationId)
     {
-        $queryBuilder = $this->createLoadContentInfoQueryBuilder();
+        $queryBuilder = $this->createLoadContentInfoQueryBuilder(false);
         $queryBuilder
-            ->where('t.main_node_id = :id')
+            ->where('t.node_id = :id')
             ->setParameter('id', $locationId, ParameterType::INTEGER);
 
         $results = $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
         if (empty($results)) {
-            throw new NotFound('content', "main_node_id: $locationId");
+            throw new NotFound('content', "node_id: $locationId");
         }
 
         return $results[0];

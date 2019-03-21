@@ -1351,6 +1351,7 @@ INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `ro
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('login',331,'user',0,1);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('*',332,'*',0,2);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('read',333,'content',0,4);
+INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('view_embed',334,'content',0,1);
 INSERT INTO `ezpolicy` (`function_name`, `id`, `module_name`, `original_id`, `role_id`) VALUES ('*',340,'url',0,3);
 
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (251,'Section',328);
@@ -1358,12 +1359,15 @@ INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (252,
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (253,'SiteAccess',331);
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (254,'Class',333);
 INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (255,'Owner',333);
+INSERT INTO `ezpolicy_limitation` (`id`, `identifier`, `policy_id`) VALUES (256,'Class',334);
 
 INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (477,251,'1');
 INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (478,252,'1');
 INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (479,253,'1766001124');
 INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (480,254,'4');
 INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (481,255,'1');
+INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (482,256,'5');
+INSERT INTO `ezpolicy_limitation_value` (`id`, `limitation_id`, `value`) VALUES (483,256,'12');
 
 INSERT INTO `ezrole` (`id`, `is_new`, `name`, `value`, `version`) VALUES (1,0,'Anonymous','',0);
 INSERT INTO `ezrole` (`id`, `is_new`, `name`, `value`, `version`) VALUES (2,0,'Administrator','0',0);

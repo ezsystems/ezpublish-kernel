@@ -85,7 +85,7 @@
 {% block ezdate_field %}
 {% spaceless %}
     {% if not ez_is_field_empty( content, field ) %}
-        {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale ) %}
+        {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale, false ) %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
 {% endspaceless %}
@@ -162,15 +162,24 @@
 
 {% block ezselection_field %}
 {% spaceless %}
+
+    {% set options = fieldSettings.options %}
+
+    {% if fieldSettings.multilingualOptions[field.languageCode] is defined %}
+        {% set options = fieldSettings.multilingualOptions[field.languageCode] %}
+    {% elseif fieldSettings.multilingualOptions[contentInfo.mainLanguageCode] is defined %}
+        {% set options = fieldSettings.multilingualOptions[contentInfo.mainLanguageCode] %}
+    {% endif %}
+
     {% if field.value.selection|length() <= 0 %}
     {% elseif fieldSettings.isMultiple %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for selectedIndex in field.value.selection %}
-            <li>{{ fieldSettings.options[selectedIndex] }}</li>
+            <li>{{ options[selectedIndex] }}</li>
         {% endfor %}
         </ul>
     {% else %}
-        {% set field_value = fieldSettings.options[field.value.selection.0] %}
+        {% set field_value = options[field.value.selection.0] %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
 {% endspaceless %}
@@ -448,7 +457,7 @@
         {% if not ez_is_field_empty(content, field) and parameters.available %}
             {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}
             <div {{ block('field_attributes') }}>
-                {{ render(controller('ez_content:viewAction', {
+                {{ render(controller('ez_content:embedAction', {
                     contentId: field.value.destinationContentId,
                     viewType: 'asset_image',
                     noLayout: true,

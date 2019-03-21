@@ -17,10 +17,11 @@
     </php>
     <testsuites>
         <testsuite name="eZ\Publish\API\Repository">
+            <directory>eZ/Publish/API/Repository/Tests/Values/Content</directory>
             <directory>eZ/Publish/API/Repository/Tests/Values/User/Limitation</directory>
             <directory>eZ/Publish/API/Repository/Tests/FieldType/</directory>
             <file>eZ/Publish/API/Repository/Tests/RepositoryTest.php</file>
-            <file>eZ/Publish/API/Repository/Tests/PermissionServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/PermissionResolverTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SectionServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/LanguageServiceMaximumSupportedLanguagesTest.php</file>
@@ -52,11 +53,10 @@
             <file>eZ/Publish/API/Repository/Tests/SearchServiceLocationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchServiceAuthorizationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/SearchEngineIndexingTest.php</file>
-            <file>eZ/Publish/API/Repository/Tests/LimitationTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/FieldTypeServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/BookmarkServiceTest.php</file>
             <file>eZ/Publish/API/Repository/Tests/NotificationServiceTest.php</file>
-            <file>eZ/Publish/API/Repository/Tests/UserPreferencesServiceTest.php</file>
+            <file>eZ/Publish/API/Repository/Tests/UserPreferenceServiceTest.php</file>
         </testsuite>
         <testsuite name="eZ\Publish\API\Repository\Tests\Regression">
             <directory>eZ/Publish/API/Repository/Tests/Regression/</directory>

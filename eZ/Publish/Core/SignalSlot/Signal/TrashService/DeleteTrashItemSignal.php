@@ -19,6 +19,13 @@ class DeleteTrashItemSignal extends Signal
      * TrashItemId.
      *
      * @var mixed
+     *
+     * @deprecated Use <code>$trashItemDeleteResult->trashItemId</code> instead.
      */
     public $trashItemId;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult
+     */
+    public $trashItemDeleteResult;
 }

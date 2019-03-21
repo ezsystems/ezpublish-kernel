@@ -43,7 +43,6 @@ class TranslationCollectorPass implements CompilerPassInterface
             return;
         }
 
-        $definition = $container->getDefinition('translator.default');
         $collector = new GlobCollector($container->getParameterBag()->get('kernel.root_dir'));
 
         $availableTranslations = [self::ORIGINAL_TRANSLATION];
@@ -53,11 +52,6 @@ class TranslationCollectorPass implements CompilerPassInterface
                 $file['locale'] = self::LOCALES_MAP[$file['locale']];
             }
             $availableTranslations[] = $file['locale'];
-
-            $definition->addMethodCall(
-                'addResource',
-                array($file['format'], $file['file'], $file['locale'], $file['domain'])
-            );
         }
 
         $container->setParameter('available_translations', array_values(array_unique($availableTranslations)));

@@ -1038,6 +1038,102 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
+     * Test for the findLocations() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     */
+    public function testVisibilityCriterionWithHiddenContent()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+        $searchService = $repository->getSearchService();
+
+        $testRootContentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $testRootContentCreate->setField('name', 'Root for test');
+
+        $rootContent = $contentService->createContent(
+            $testRootContentCreate,
+            [
+                $locationService->newLocationCreateStruct(
+                    $this->generateId('location', 2)
+                ),
+            ]
+        );
+
+        $publishedRootContent = $contentService->publishVersion($rootContent->versionInfo);
+
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'To Hide');
+
+        $content = $contentService->createContent(
+            $contentCreate,
+            [
+                $locationService->newLocationCreateStruct(
+                    $publishedRootContent->contentInfo->mainLocationId
+                ),
+            ]
+        );
+        $publishedContent = $contentService->publishVersion($content->versionInfo);
+
+        $childContentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $childContentCreate->setField('name', 'Invisible Child');
+
+        $childContent = $contentService->createContent(
+            $childContentCreate,
+            [
+                $locationService->newLocationCreateStruct(
+                    $publishedContent->contentInfo->mainLocationId
+                ),
+            ]
+        );
+        $rootLocation = $locationService->loadLocation($publishedRootContent->contentInfo->mainLocationId);
+
+        $contentService->publishVersion($childContent->versionInfo);
+        $this->refreshSearch($repository);
+
+        $query = new LocationQuery([
+            'query' => new Criterion\LogicalAnd([
+                new Criterion\Visibility(
+                    Criterion\Visibility::VISIBLE
+                ),
+                new Criterion\Subtree(
+                    $rootLocation->pathString
+                ),
+            ]),
+        ]);
+
+        //Sanity check for visible locations
+        $result = $searchService->findLocations($query);
+        $this->assertEquals(3, $result->totalCount);
+
+        //Hide main content
+        $contentService->hideContent($publishedContent->contentInfo);
+        $this->refreshSearch($repository);
+
+        $result = $searchService->findLocations($query);
+        $this->assertEquals(1, $result->totalCount);
+
+        //Query for invisible content
+        $hiddenQuery = new LocationQuery([
+            'query' => new Criterion\LogicalAnd([
+                new Criterion\Visibility(
+                    Criterion\Visibility::HIDDEN
+                ),
+                new Criterion\Subtree(
+                    $rootLocation->pathString
+                ),
+            ]),
+        ]);
+
+        $result = $searchService->findLocations($hiddenQuery);
+        $this->assertEquals(2, $result->totalCount);
+    }
+
+    /**
      * Assert that query result matches the given fixture.
      *
      * @param LocationQuery $query

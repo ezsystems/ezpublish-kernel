@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
 
-use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase;
 use eZ\Publish\SPI\Persistence\Content\Location;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase;
@@ -17,7 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 /**
  * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase.
  */
-class DoctrineDatabaseTest extends TestCase
+class DoctrineDatabaseTest extends LanguageAwareTestCase
 {
     protected function getLocationGateway()
     {
@@ -25,67 +25,70 @@ class DoctrineDatabaseTest extends TestCase
 
         return new DoctrineDatabase(
             $dbHandler,
-            $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\CriteriaConverter')
-                ->disableOriginalConstructor()
-                ->getMock(),
-            $this
-                ->getMockBuilder('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway\\SortClauseConverter')
-                ->disableOriginalConstructor()
-                ->getMock()
+            $this->getLanguageMaskGenerator()
         );
     }
 
-    public static function getLoadLocationValues()
+    private static function getLoadLocationValues(): array
     {
-        return array(
-            array('node_id', 77),
-            array('priority', 0),
-            array('is_hidden', 0),
-            array('is_invisible', 0),
-            array('remote_id', 'dbc2f3c8716c12f32c379dbf0b1cb133'),
-            array('contentobject_id', 75),
-            array('parent_node_id', 2),
-            array('path_identification_string', 'solutions'),
-            array('path_string', '/1/2/77/'),
-            array('modified_subnode', 1311065017),
-            array('main_node_id', 77),
-            array('depth', 2),
-            array('sort_field', 2),
-            array('sort_order', 1),
-        );
+        return [
+            'node_id' => 77,
+            'priority' => 0,
+            'is_hidden' => 0,
+            'is_invisible' => 0,
+            'remote_id' => 'dbc2f3c8716c12f32c379dbf0b1cb133',
+            'contentobject_id' => 75,
+            'parent_node_id' => 2,
+            'path_identification_string' => 'solutions',
+            'path_string' => '/1/2/77/',
+            'modified_subnode' => 1311065017,
+            'main_node_id' => 77,
+            'depth' => 2,
+            'sort_field' => 2,
+            'sort_order' => 1,
+        ];
     }
 
-    /**
-     * @dataProvider getLoadLocationValues
-     */
-    public function testLoadLocationByRemoteId($field, $value)
+    private function assertLoadLocationProperties(array $locationData): void
+    {
+        foreach (self::getLoadLocationValues() as $field => $expectedValue) {
+            self::assertEquals(
+                $expectedValue,
+                $locationData[$field],
+                "Value in property $field not as expected."
+            );
+        }
+    }
+
+    public function testLoadLocationByRemoteId()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         $handler = $this->getLocationGateway();
         $data = $handler->getBasicNodeDataByRemoteId('dbc2f3c8716c12f32c379dbf0b1cb133');
 
-        $this->assertEquals(
-            $value,
-            $data[$field],
-            "Value in property $field not as expected."
-        );
+        self::assertLoadLocationProperties($data);
     }
 
-    /**
-     * @dataProvider getLoadLocationValues
-     */
-    public function testLoadLocation($field, $value)
+    public function testLoadLocation()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         $handler = $this->getLocationGateway();
         $data = $handler->getBasicNodeData(77);
 
-        $this->assertEquals(
-            $value,
-            $data[$field],
-            "Value in property $field not as expected."
-        );
+        self::assertLoadLocationProperties($data);
+    }
+
+    public function testLoadLocationList()
+    {
+        $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
+        $handler = $this->getLocationGateway();
+        $locationsData = $handler->getNodeDataList([77]);
+
+        self::assertCount(1, $locationsData);
+
+        $locationRow = reset($locationsData);
+
+        self::assertLoadLocationProperties($locationRow);
     }
 
     /**
@@ -95,13 +98,10 @@ class DoctrineDatabaseTest extends TestCase
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         $handler = $this->getLocationGateway();
-        $data = $handler->getBasicNodeData(1337);
+        $handler->getBasicNodeData(1337);
     }
 
-    /**
-     * @dataProvider getLoadLocationValues
-     */
-    public function testLoadLocationDataByContent($field, $value)
+    public function testLoadLocationDataByContent()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
 
@@ -109,17 +109,14 @@ class DoctrineDatabaseTest extends TestCase
 
         $locationsData = $gateway->loadLocationDataByContent(75);
 
-        $this->assertCount(1, $locationsData);
+        self::assertCount(1, $locationsData);
 
         $locationRow = reset($locationsData);
 
-        $this->assertEquals($value, $locationRow[$field]);
+        self::assertLoadLocationProperties($locationRow);
     }
 
-    /**
-     * @dataProvider getLoadLocationValues
-     */
-    public function testLoadParentLocationDataForDraftContentAll($field, $value)
+    public function testLoadParentLocationDataForDraftContentAll()
     {
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
 
@@ -131,7 +128,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $locationRow = reset($locationsData);
 
-        $this->assertEquals($value, $locationRow[$field]);
+        self::assertLoadLocationProperties($locationRow);
     }
 
     public function testLoadLocationDataByContentLimitSubtree()

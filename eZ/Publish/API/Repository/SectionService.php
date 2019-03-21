@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Section;
@@ -110,6 +111,15 @@ interface SectionService
      * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
     public function assignSection(ContentInfo $contentInfo, Section $section);
+
+    /**
+     * Assigns the subtree to the given section
+     * this method overrides the current assigned section.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     */
+    public function assignSectionToSubtree(Location $location, Section $section): void;
 
     /**
      * Deletes $section from content repository.

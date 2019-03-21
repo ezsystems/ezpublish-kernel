@@ -39,11 +39,12 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     {
         $fieldType = new FieldType\Selection\Type();
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
+        $languageService = self::$container->get('ezpublish.api.service.language');
 
         return $this->getHandler(
             'ezselection',
             $fieldType,
-            new Legacy\Content\FieldValue\Converter\SelectionConverter(),
+            new Legacy\Content\FieldValue\Converter\SelectionConverter($languageService),
             new FieldType\NullStorage()
         );
     }
@@ -66,6 +67,17 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                             1 => 'First',
                             2 => 'Second',
                             3 => 'Sindelfingen',
+                        ),
+                        'multilingualOptions' => array(
+                            'ger-DE' => array(
+                                1 => 'Zuerst',
+                                2 => 'Zweite',
+                            ),
+                            'eng-US' => array(
+                                1 => 'ML First',
+                                2 => 'ML Second',
+                                3 => 'ML Sindelfingen',
+                            ),
                         ),
                     )
                 ),
@@ -93,9 +105,20 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                             array(
                                 'isMultiple' => true,
                                 'options' => array(
-                                    1 => 'First',
-                                    2 => 'Second',
-                                    3 => 'Sindelfingen',
+                                    1 => 'ML First',
+                                    2 => 'ML Second',
+                                    3 => 'ML Sindelfingen',
+                                ),
+                                'multilingualOptions' => array(
+                                    'ger-DE' => array(
+                                        1 => 'Zuerst',
+                                        2 => 'Zweite',
+                                    ),
+                                    'eng-US' => array(
+                                        1 => 'ML First',
+                                        2 => 'ML Second',
+                                        3 => 'ML Sindelfingen',
+                                    ),
                                 ),
                             )
                         ),
@@ -137,5 +160,70 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                 'sortKey' => '2',
             )
         );
+    }
+
+    /**
+     * Performs the creation of the content type with a field of the field type
+     * under test.
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     */
+    protected function createContentType()
+    {
+        $createStruct = new Content\Type\CreateStruct(
+            [
+                'name' => [
+                    'eng-US' => 'Test',
+                    'ger-DE' => 'Test NOR',
+                ],
+                'identifier' => 'test-' . $this->getTypeName(),
+                'status' => 0,
+                'creatorId' => 14,
+                'created' => time(),
+                'modifierId' => 14,
+                'modified' => time(),
+                'initialLanguageId' => 2,
+                'remoteId' => 'abcdef',
+            ]
+        );
+
+        $createStruct->fieldDefinitions = array(
+            new Content\Type\FieldDefinition(
+                [
+                    'name' => [
+                        'eng-US' => 'Name',
+                        'ger-DE' => 'Name NOR',
+                    ],
+                    'identifier' => 'name',
+                    'fieldGroup' => 'main',
+                    'position' => 1,
+                    'fieldType' => 'ezstring',
+                    'isTranslatable' => false,
+                    'isRequired' => true,
+                    'mainLanguageCode' => 'eng-US',
+                ]
+            ),
+            new Content\Type\FieldDefinition(
+                [
+                    'name' => [
+                        'eng-US' => 'Data',
+                        'ger-DE' => 'Data NOR',
+                    ],
+                    'identifier' => 'data',
+                    'fieldGroup' => 'main',
+                    'position' => 2,
+                    'fieldType' => $this->getTypeName(),
+                    'isTranslatable' => false,
+                    'isRequired' => true,
+                    'fieldTypeConstraints' => $this->getTypeConstraints(),
+                    'mainLanguageCode' => 'eng-US',
+                ]
+            ),
+        );
+
+        $handler = $this->getCustomHandler();
+        $contentTypeHandler = $handler->contentTypeHandler();
+
+        return $contentTypeHandler->create($createStruct);
     }
 }

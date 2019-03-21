@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\UserService as APIUserService;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
@@ -345,6 +347,29 @@ class UserService implements APIUserService, Sessionable
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function isUser(Content $content): bool
+    {
+        foreach ($content->getFields() as $field) {
+            if ($field->fieldTypeIdentifier === 'ezuser') {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isUserGroup(Content $content): bool
+    {
+        // TODO: Need a way to identify user groups her. Config is an option, lookup another but not an ideal solution.
+        return false;
+    }
+
+    /**
      * Instantiate a user create class.
      *
      * @param string $login the login of the new user
@@ -389,6 +414,14 @@ class UserService implements APIUserService, Sessionable
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
      */
     public function newUserGroupUpdateStruct()
+    {
+        throw new \Exception('@todo: Implement.');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validatePassword(string $password, PasswordValidationContext $context = null): array
     {
         throw new \Exception('@todo: Implement.');
     }

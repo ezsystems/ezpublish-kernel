@@ -30,6 +30,7 @@ use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
  * @property-read bool $isContainer This flag hints to UIs if type may have children or not.
  * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
  * @property-read bool $defaultAlwaysAvailable if an instance of a content type is created the always available flag is set by default this this value.
+ * @property-read string[] $languageCodes array of language codes used by content type translations.
  *
  * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
  * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
@@ -162,6 +163,13 @@ abstract class ContentType extends ValueObject implements MultiLanguageName, Mul
      * @var int
      */
     protected $defaultSortOrder;
+
+    /**
+     * List of language codes used by translations.
+     *
+     * @var string[]
+     */
+    protected $languageCodes;
 
     /**
      * This method returns the content type groups this content type is assigned to.

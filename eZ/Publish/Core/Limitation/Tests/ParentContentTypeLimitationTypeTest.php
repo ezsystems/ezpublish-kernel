@@ -312,23 +312,27 @@ class ParentContentTypeLimitationTypeTest extends Base
             ),
             // ContentInfo, no targets, with access
             array(
-                'limitation' => new ParentContentTypeLimitation(array('limitationValues' => array(42))),
-                'object' => new ContentInfo(array('published' => true)),
+                'limitation' => new ParentContentTypeLimitation(array('limitationValues' => array(43))),
+                'object' => new ContentInfo(array('published' => true, 'id' => 40)),
                 'targets' => array(),
                 'persistence' => array(
-                    'locations' => array(new SPILocation(array('contentId' => '24'))),
+                    'locations' => array(new SPILocation(array('id' => 40, 'contentId' => '24', 'parentId' => 43, 'depth' => 1))),
+                    'parentLocations' => array(43 => new SPILocation(array('id' => 43, 'contentId' => 24))),
+                    'parentContents' => array(24 => new SPIContentInfo(array('id' => 24, 'contentTypeId' => 43))),
                     'contentInfos' => array(new SPIContentInfo(array('contentTypeId' => '42'))),
                 ),
                 'expected' => true,
             ),
             // ContentInfo, no targets, no access
             array(
-                'limitation' => new ParentContentTypeLimitation(array('limitationValues' => array(42))),
-                'object' => new ContentInfo(array('published' => true)),
+                'limitation' => new ParentContentTypeLimitation(array('limitationValues' => array(40))),
+                'object' => new ContentInfo(array('published' => true, 'id' => 40)),
                 'targets' => array(),
                 'persistence' => array(
-                    'locations' => array(new SPILocation(array('contentId' => '24'))),
-                    'contentInfos' => array(new SPIContentInfo(array('contentTypeId' => '4200'))),
+                    'locations' => array(new SPILocation(array('id' => 40, 'contentId' => '24', 'parentId' => 43, 'depth' => 1))),
+                    'parentLocations' => array(43 => new SPILocation(array('id' => 43, 'contentId' => 24))),
+                    'parentContents' => array(24 => new SPIContentInfo(array('id' => 24, 'contentTypeId' => 39))),
+                    'contentInfos' => array(new SPIContentInfo(array('contentTypeId' => '42'))),
                 ),
                 'expected' => false,
             ),
@@ -516,17 +520,35 @@ class ParentContentTypeLimitationTypeTest extends Base
             }
         } else {
             $this->getPersistenceMock()
-                ->expects($this->at(0))
                 ->method('locationHandler')
                 ->will($this->returnValue($this->locationHandlerMock));
 
+            $this->getPersistenceMock()
+                ->method('contentHandler')
+                ->will($this->returnValue($this->contentHandlerMock));
+
             $this->locationHandlerMock
-                ->expects($this->once())
                 ->method(
                     $object instanceof ContentInfo && $object->published ? 'loadLocationsByContent' : 'loadParentLocationsForDraftContent'
                 )
                 ->with($object->id)
                 ->will($this->returnValue($persistence['locations']));
+
+            foreach ($persistence['locations'] as $location) {
+                if (!empty($persistence['parentLocations'][$location->parentId])) {
+                    $this->locationHandlerMock
+                            ->method('load')
+                            ->with($location->parentId)
+                            ->will($this->returnValue($persistence['parentLocations'][$location->parentId]));
+                }
+
+                if (!empty($persistence['parentLocations'][$location->parentId])) {
+                    $this->contentHandlerMock
+                            ->method('loadContentInfo')
+                            ->with($location->contentId)
+                            ->willReturn($persistence['parentContents'][$location->contentId]);
+                }
+            }
 
             foreach ($persistence['locations'] as $index => $location) {
                 $this->assertContentHandlerExpectations(

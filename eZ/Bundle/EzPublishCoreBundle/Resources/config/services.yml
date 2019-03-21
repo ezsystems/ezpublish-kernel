@@ -250,6 +250,15 @@ services:
         tags:
             - { name: console.command }
 
+    ezplatform.core.command.cleanup_versions:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\CleanupVersionsCommand
+        arguments:
+            - "@ezpublish.signalslot.repository"
+            - "@ezpublish.api.repository_configuration_provider"
+            - "@ezpublish.persistence.connection"
+        tags:
+            - { name: console.command }
+
     ezplatform.core.session.handler.native_redis:
         class: eZ\Bundle\EzPublishCoreBundle\Session\Handler\NativeSessionHandler
         arguments:

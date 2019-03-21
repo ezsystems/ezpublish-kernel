@@ -1839,13 +1839,16 @@ class RoleServiceTest extends BaseTest
 
         /* BEGIN: Use Case */
         $roleService = $repository->getRoleService();
+        $user = $repository->getUserService()->loadUser(14);
+
+        // Check inital empty assigments (also warms up potential cache to validate it is correct below)
+        $this->assertCount(0, $roleService->getRoleAssignmentsForUser($user));
 
         // Assignment to user group
         $groupRoleAssignment = $roleService->loadRoleAssignment(25);
 
         // Assignment to user
         $role = $roleService->loadRole(2);
-        $user = $repository->getUserService()->loadUser(14);
         $roleService->assignRoleToUser($role, $user);
         $userRoleAssignments = $roleService->getRoleAssignmentsForUser($user);
 
@@ -1953,7 +1956,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         // Administrator + Example User
-        $this->assertEquals(2, count($roleAssignments));
+        $this->assertCount(2, $roleAssignments);
     }
 
     /**
@@ -2281,6 +2284,10 @@ class RoleServiceTest extends BaseTest
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
+        // Check inital empty assigments (also warms up potential cache to validate it is correct below)
+        $this->assertCount(0, $roleService->getRoleAssignmentsForUser($user));
+        $this->assertCount(0, $roleService->getRoleAssignments($role));
+
         // Assign role to new user
         $roleService->assignRoleToUser($role, $user);
 
@@ -2288,11 +2295,12 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignmentsForUser($user);
         /* END: Use Case */
 
-        $this->assertEquals(1, count($roleAssignments));
+        $this->assertCount(1, $roleAssignments);
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserRoleAssignment',
             reset($roleAssignments)
         );
+        $this->assertCount(1, $roleService->getRoleAssignments($role));
     }
 
     /**

@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\Core\Base\Exceptions\BadStateException as CoreBadStateException;
 use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Common\Output\Generator;
 use eZ\Publish\Core\REST\Common\Output\Visitor;
@@ -177,6 +179,12 @@ class RestContent extends ValueObjectVisitor
         );
         $generator->endValueElement('alwaysAvailable');
 
+        $generator->startValueElement(
+            'status',
+            $this->getStatusString($contentInfo->status)
+        );
+        $generator->endValueElement('status');
+
         $generator->startObjectElement('ObjectStates', 'ContentObjectStates');
         $generator->startAttribute(
             'href',
@@ -189,5 +197,30 @@ class RestContent extends ValueObjectVisitor
         $generator->endObjectElement('ObjectStates');
 
         $generator->endObjectElement('Content');
+    }
+
+    /**
+     * Maps the given content $status to a representative string.
+     *
+     * @param int $status
+     *
+     * @throws \eZ\Publish\Core\Base\Exceptions\BadStateException
+     *
+     * @return string
+     */
+    protected function getStatusString($status)
+    {
+        switch ($status) {
+            case ContentInfo::STATUS_DRAFT:
+                return 'DRAFT';
+
+            case ContentInfo::STATUS_PUBLISHED:
+                return 'PUBLISHED';
+
+            case ContentInfo::STATUS_TRASHED:
+                return 'TRASHED';
+        }
+
+        throw new CoreBadStateException('status', $status);
     }
 }

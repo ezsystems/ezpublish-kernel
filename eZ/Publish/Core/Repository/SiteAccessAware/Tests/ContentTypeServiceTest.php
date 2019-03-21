@@ -91,6 +91,8 @@ class ContentTypeServiceTest extends AbstractServiceTest
             ['newFieldDefinitionUpdateStruct', []],
 
             ['isContentTypeUsed', [$contentType]],
+
+            ['removeContentTypeTranslation', [$contentTypeDraft, 'ger-DE'], $contentTypeDraft],
         ];
     }
 

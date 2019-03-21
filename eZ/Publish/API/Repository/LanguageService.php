@@ -92,6 +92,28 @@ interface LanguageService
     public function loadLanguageById($languageId);
 
     /**
+     * Bulk-load Languages by language codes.
+     *
+     * Note: it does not throw exceptions on load, just ignores erroneous Languages.
+     *
+     * @param string[] $languageCodes
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[] list of Languages with language-code as keys
+     */
+    public function loadLanguageListByCode(array $languageCodes): iterable;
+
+    /**
+     * Bulk-load Languages by ids.
+     *
+     * Note: it does not throw exceptions on load, just ignores erroneous Languages.
+     *
+     * @param int[] $languageIds
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Language[] list of Languages with id as keys
+     */
+    public function loadLanguageListById(array $languageIds): iterable;
+
+    /**
      * Deletes  a language from content repository.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException

@@ -27,6 +27,32 @@ class Type extends FieldType
     /** @var \eZ\Publish\Core\Persistence\Cache\UserHandler */
     protected $userHandler;
 
+    /** @var array */
+    protected $validatorConfigurationSchema = [
+        'PasswordValueValidator' => [
+            'requireAtLeastOneUpperCaseCharacter' => [
+                'type' => 'int',
+                'default' => null,
+            ],
+            'requireAtLeastOneLowerCaseCharacter' => [
+                'type' => 'int',
+                'default' => null,
+            ],
+            'requireAtLeastOneNumericCharacter' => [
+                'type' => 'int',
+                'default' => null,
+            ],
+            'requireAtLeastOneNonAlphanumericCharacter' => [
+                'type' => 'int',
+                'default' => null,
+            ],
+            'minLength' => [
+                'type' => 'int',
+                'default' => null,
+            ],
+        ],
+    ];
+
     /**
      * @param \eZ\Publish\Core\Persistence\Cache\UserHandler $userHandler
      */
@@ -120,7 +146,7 @@ class Type extends FieldType
     }
 
     /**
-     * Returns information for FieldValue->$sortKey relevant to the field type.
+     * {@inheritdoc}
      */
     protected function getSortInfo(BaseValue $value)
     {
@@ -244,5 +270,28 @@ class Type extends FieldType
         }
 
         return $errors;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateValidatorConfiguration($validatorConfiguration)
+    {
+        $validationErrors = [];
+
+        foreach ((array)$validatorConfiguration as $validatorIdentifier => $constraints) {
+            if ($validatorIdentifier !== 'PasswordValueValidator') {
+                $validationErrors[] = new ValidationError(
+                    "Validator '%validator%' is unknown",
+                    null,
+                    [
+                        'validator' => $validatorIdentifier,
+                    ],
+                    "[$validatorIdentifier]"
+                );
+            }
+        }
+
+        return $validationErrors;
     }
 }

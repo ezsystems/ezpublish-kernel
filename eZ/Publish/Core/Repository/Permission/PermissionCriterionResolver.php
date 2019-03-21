@@ -9,9 +9,12 @@ namespace eZ\Publish\Core\Repository\Permission;
 use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriterionResolver;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOr;
+use eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation;
 use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
+use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
+use eZ\Publish\Core\Limitation\TargetOnlyLimitationType;
 use RuntimeException;
 
 /**
@@ -44,19 +47,18 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
     }
 
     /**
-     * Get content-read Permission criteria if needed and return false if no access at all.
+     * Get permission criteria if needed and return false if no access at all.
      *
      * @uses \eZ\Publish\API\Repository\PermissionResolver::getCurrentUserReference()
      * @uses \eZ\Publish\API\Repository\PermissionResolver::hasAccess()
      *
-     * @throws \RuntimeException If empty array of limitations are provided from hasAccess()
-     *
      * @param string $module
      * @param string $function
+     * @param array $targets
      *
      * @return bool|\eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
-    public function getPermissionsCriterion($module = 'content', $function = 'read')
+    public function getPermissionsCriterion($module = 'content', $function = 'read', ?array $targets = null)
     {
         $permissionSets = $this->permissionResolver->hasAccess($module, $function);
         if (is_bool($permissionSets)) {
@@ -92,8 +94,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
 
                 $limitationsAndCriteria = [];
                 foreach ($limitations as $limitation) {
-                    $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
-                    $limitationsAndCriteria[] = $type->getCriterion($limitation, $currentUserRef);
+                    $limitationsAndCriteria[] = $this->getCriterionForLimitation($limitation, $currentUserRef, $targets);
                 }
 
                 $policyOrCriteria[] = isset($limitationsAndCriteria[1]) ?
@@ -108,16 +109,18 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
              */
             if ($permissionSet['limitation'] instanceof Limitation) {
                 // We need to match both the limitation AND *one* of the policies, aka; roleLimit AND policies(OR)
-                $type = $this->limitationService->getLimitationType($permissionSet['limitation']->getIdentifier());
                 if (!empty($policyOrCriteria)) {
+                    $criterion = $this->getCriterionForLimitation($permissionSet['limitation'], $currentUserRef, $targets);
                     $roleAssignmentOrCriteria[] = new LogicalAnd(
                         [
-                            $type->getCriterion($permissionSet['limitation'], $currentUserRef),
+                            $criterion,
                             isset($policyOrCriteria[1]) ? new LogicalOr($policyOrCriteria) : $policyOrCriteria[0],
                         ]
                     );
                 } else {
-                    $roleAssignmentOrCriteria[] = $type->getCriterion($permissionSet['limitation'], $currentUserRef);
+                    $roleAssignmentOrCriteria[] = $this->getCriterionForLimitation(
+                        $permissionSet['limitation'], $currentUserRef, $targets
+                    );
                 }
             } elseif (!empty($policyOrCriteria)) {
                 // Otherwise merge $policyOrCriteria into $roleAssignmentOrCriteria
@@ -135,5 +138,22 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
         return isset($roleAssignmentOrCriteria[1]) ?
             new LogicalOr($roleAssignmentOrCriteria) :
             $roleAssignmentOrCriteria[0];
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUserRef
+     * @param array|null $targets
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\CriterionInterface|\eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator
+     */
+    private function getCriterionForLimitation(Limitation $limitation, UserReference $currentUserRef, ?array $targets): CriterionInterface
+    {
+        $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
+        if ($type instanceof TargetOnlyLimitationType) {
+            return $type->getCriterionByTarget($limitation, $currentUserRef, $targets);
+        }
+
+        return $type->getCriterion($limitation, $currentUserRef);
     }
 }

@@ -87,13 +87,19 @@ class LocationServiceTest extends ServiceTest
             ),
             array(
                 'loadLocation',
-                array($rootId, []),
+                array($rootId, [], true),
                 $root,
                 0,
             ),
             array(
+                'loadLocationList',
+                array([$rootId], [], true),
+                [$root],
+                0,
+            ),
+            array(
                 'loadLocationByRemoteId',
-                array($rootRemoteId, []),
+                array($rootRemoteId, [], true),
                 $root,
                 0,
             ),

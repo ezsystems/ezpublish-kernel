@@ -3,6 +3,7 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware\Tests;
 
 use eZ\Publish\API\Repository\UserService as APIService;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
@@ -35,6 +36,8 @@ class UserServiceTest extends AbstractServiceTest
         $userTokenUpdateStruct = new UserTokenUpdateStruct();
         $user = new User();
 
+        $passwordValidationContext = new PasswordValidationContext();
+
         // string $method, array $arguments, bool $return = true
         return [
             ['createUserGroup', [$userGroupCreateStruct, $userGroup]],
@@ -57,6 +60,11 @@ class UserServiceTest extends AbstractServiceTest
             ['newUserGroupCreateStruct', ['eng-AU', 7]],
             ['newUserUpdateStruct', []],
             ['newUserGroupUpdateStruct', []],
+
+            ['isUser', [$userGroup]],
+            ['isUserGroup', [$userGroup]],
+
+            ['validatePassword', ['H@xi0r!', $passwordValidationContext], []],
         ];
     }
 

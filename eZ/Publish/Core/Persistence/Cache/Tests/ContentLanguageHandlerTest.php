@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\Handler;
 /**
  * Test case for Persistence\Cache\ContentLanguageHandler.
  */
-class ContentLanguageHandlerTest extends AbstractCacheHandlerTest
+class ContentLanguageHandlerTest extends AbstractInMemoryCacheHandlerTest
 {
     public function getHandlerMethodName(): string
     {
@@ -29,23 +29,27 @@ class ContentLanguageHandlerTest extends AbstractCacheHandlerTest
 
     public function providerForUnCachedMethods(): array
     {
-        // string $method, array $arguments, array? $tags, string? $key
+        $language = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
+
+        // string $method, array $arguments, array? $tags, array? $key
         return [
-            ['create', [new SPILanguageCreateStruct()]],
-            ['update', [new SPILanguage(['id' => 5])], ['language-5']],
-            ['loadAll', []],
+            ['create', [new SPILanguageCreateStruct()], null, ['ez-language-list']],
+            ['update', [$language], null, ['ez-language-list', 'ez-language-5', 'ez-language-code-eng-GB']],
             ['delete', [5], ['language-5']],
         ];
     }
 
     public function providerForCachedLoadMethods(): array
     {
-        $object = new SPILanguage(['id' => 5]);
+        $object = new SPILanguage(['id' => 5, 'languageCode' => 'eng-GB']);
 
-        // string $method, array $arguments, string $key, mixed? $data
+        // string $method, array $arguments, string $key, mixed? $data, bool $multi
         return [
             ['load', [5], 'ez-language-5', $object],
-            ['loadByLanguageCode', ['eng-GB'], 'ez-language-eng-GB-by-code', $object],
+            ['loadList', [[5]], 'ez-language-5', [5 => $object], true],
+            ['loadAll', [], 'ez-language-list', [5 => $object], false],
+            ['loadByLanguageCode', ['eng-GB'], 'ez-language-code-eng-GB', $object],
+            ['loadListByLanguageCodes', [['eng-GB']], 'ez-language-code-eng-GB', ['eng-GB' => $object], true],
         ];
     }
 }

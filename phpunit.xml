@@ -43,12 +43,6 @@
     <testsuite name="eZ\Publish\Core\Search">
       <directory>eZ/Publish/Core/Search/Tests</directory>
     </testsuite>
-    <testsuite name="eZ\Publish\Core\Search\Solr">
-      <directory>eZ/Publish/Core/Search/Solr/Tests</directory>
-    </testsuite>
-    <testsuite name="eZ\Publish\Core\Search\Elasticsearch">
-      <directory>eZ/Publish/Core/Search/Elasticsearch/Tests</directory>
-    </testsuite>
     <testsuite name="eZ\Publish\Core\IO">
       <directory>eZ/Publish/Core/IO/Tests</directory>
     </testsuite>
@@ -56,9 +50,6 @@
       <directory>eZ/Publish/Core/MVC/Symfony</directory>
       <directory>eZ/Bundle</directory>
       <exclude>eZ/Bundle/EzPublishRestBundle/Tests/Functional</exclude>
-    </testsuite>
-    <testsuite name="eZ Publish legacy test suite">
-        <directory>eZ/Publish/Core/MVC/Legacy</directory>
     </testsuite>
     <testsuite name="eZ Publish REST test suite">
         <directory>eZ/Publish/Core/REST</directory>

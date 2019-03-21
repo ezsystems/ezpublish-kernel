@@ -9,6 +9,8 @@
 namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\User\PasswordValidationContext;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -169,6 +171,16 @@ class UserService implements UserServiceInterface
         return $this->service->expireUserToken($hash);
     }
 
+    public function isUser(Content $content): bool
+    {
+        return $this->service->isUser($content);
+    }
+
+    public function isUserGroup(Content $content): bool
+    {
+        return $this->service->isUserGroup($content);
+    }
+
     public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null)
     {
         return $this->service->newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType);
@@ -187,5 +199,10 @@ class UserService implements UserServiceInterface
     public function newUserGroupUpdateStruct()
     {
         return $this->service->newUserGroupUpdateStruct();
+    }
+
+    public function validatePassword(string $password, PasswordValidationContext $context = null): array
+    {
+        return $this->service->validatePassword($password, $context);
     }
 }

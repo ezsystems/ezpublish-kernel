@@ -33,27 +33,39 @@ abstract class Gateway
     /**
      * Returns an array with basic node data.
      *
-     * We might want to cache this, since this method is used by about every
-     * method in the location handler.
-     *
-     * @todo optimize
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @param mixed $nodeId
+     * @param string[]|null $translations
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return array
      */
-    abstract public function getBasicNodeData($nodeId);
+    abstract public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true);
+
+    /**
+     * Returns an array with node data for several locations.
+     *
+     * @param array $locationIds
+     * @param string[]|null $translations
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
+     *
+     * @return array
+     */
+    abstract public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable;
 
     /**
      * Returns an array with basic node data for the node with $remoteId.
      *
-     * @todo optimize
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @param mixed $remoteId
+     * @param string[]|null $translations
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
      *
      * @return array
      */
-    abstract public function getBasicNodeDataByRemoteId($remoteId);
+    abstract public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true);
 
     /**
      * Loads data for all Locations for $contentId, optionally only in the
@@ -159,17 +171,37 @@ abstract class Gateway
     abstract public function unHideSubtree($pathString);
 
     /**
+     * @param string $pathString
+     **/
+    abstract public function setNodeWithChildrenInvisible(string $pathString): void;
+
+    /**
+     * @param string $pathString
+     **/
+    abstract public function setNodeWithChildrenVisible(string $pathString): void;
+
+    /**
+     * @param string $pathString
+     **/
+    abstract public function setNodeHidden(string $pathString): void;
+
+    /**
+     * @param string $pathString
+     **/
+    abstract public function setNodeUnhidden(string $pathString): void;
+
+    /**
      * Swaps the content object being pointed to by a location object.
      *
      * Make the location identified by $locationId1 refer to the Content
      * referred to by $locationId2 and vice versa.
      *
-     * @param mixed $locationId1
-     * @param mixed $locationId2
+     * @param int $locationId1
+     * @param int $locationId2
      *
      * @return bool
      */
-    abstract public function swap($locationId1, $locationId2);
+    abstract public function swap(int $locationId1, int $locationId2): bool;
 
     /**
      * Creates a new location in given $parentNode.

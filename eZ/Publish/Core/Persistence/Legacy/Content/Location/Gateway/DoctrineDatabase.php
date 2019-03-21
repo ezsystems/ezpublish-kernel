@@ -8,6 +8,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\FetchMode;
+use Doctrine\DBAL\Query\QueryBuilder;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\Core\Persistence\Database\SelectQuery;
@@ -46,44 +50,36 @@ class DoctrineDatabase extends Gateway
     protected $connection;
 
     /**
+     * Language mask generator.
+     *
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
+
+    /**
      * Construct from database handler.
      *
      * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $handler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
-    public function __construct(DatabaseHandler $handler)
+    public function __construct(DatabaseHandler $handler, MaskGenerator $languageMaskGenerator)
     {
         $this->handler = $handler;
         $this->connection = $handler->getConnection();
+        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**
-     * Returns an array with basic node data.
-     *
-     * We might want to cache this, since this method is used by about every
-     * method in the location handler.
-     *
-     * @todo optimize
-     *
-     * @param mixed $nodeId
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBasicNodeData($nodeId)
+    public function getBasicNodeData($nodeId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $query = $this->handler->createSelectQuery();
-        $query
-            ->select('*')
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('node_id'),
-                    $query->bindValue($nodeId)
-                )
-            );
-        $statement = $query->prepare();
-        $statement->execute();
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $q->where(
+            $q->expr()->eq('t.node_id', $q->createNamedParameter($nodeId, PDO::PARAM_INT))
+        );
 
-        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        if ($row = $q->execute()->fetch(FetchMode::ASSOCIATIVE)) {
             return $row;
         }
 
@@ -91,30 +87,32 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Returns an array with basic node data.
-     *
-     * @todo optimize
-     *
-     * @param mixed $remoteId
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getBasicNodeDataByRemoteId($remoteId)
+    public function getNodeDataList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
     {
-        $query = $this->handler->createSelectQuery();
-        $query
-            ->select('*')
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('remote_id'),
-                    $query->bindValue($remoteId)
-                )
-            );
-        $statement = $query->prepare();
-        $statement->execute();
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $q->where(
+            $q->expr()->in(
+                't.node_id',
+                $q->createNamedParameter($locationIds, Connection::PARAM_INT_ARRAY)
+            )
+        );
 
-        if ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
+        return $q->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getBasicNodeDataByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
+    {
+        $q = $this->createNodeQueryBuilder($translations, $useAlwaysAvailable);
+        $q->where(
+            $q->expr()->eq('t.remote_id', $q->createNamedParameter($remoteId, PDO::PARAM_STR))
+        );
+
+        if ($row = $q->execute()->fetch(FetchMode::ASSOCIATIVE)) {
             return $row;
         }
 
@@ -423,6 +421,15 @@ class DoctrineDatabase extends Gateway
      */
     public function hideSubtree($pathString)
     {
+        $this->setNodeWithChildrenInvisible($pathString);
+        $this->setNodeHidden($pathString);
+    }
+
+    /**
+     * @param string $pathString
+     **/
+    public function setNodeWithChildrenInvisible(string $pathString): void
+    {
         $query = $this->handler->createUpdateQuery();
         $query
             ->update($this->handler->quoteTable('ezcontentobject_tree'))
@@ -440,14 +447,30 @@ class DoctrineDatabase extends Gateway
                     $query->bindValue($pathString . '%')
                 )
             );
-        $query->prepare()->execute();
 
+        $query->prepare()->execute();
+    }
+
+    /**
+     * @param string $pathString
+     **/
+    public function setNodeHidden(string $pathString): void
+    {
+        $this->setNodeHiddenStatus($pathString, true);
+    }
+
+    /**
+     * @param string $pathString
+     * @param bool $isHidden
+     */
+    private function setNodeHiddenStatus(string $pathString, bool $isHidden): void
+    {
         $query = $this->handler->createUpdateQuery();
         $query
             ->update($this->handler->quoteTable('ezcontentobject_tree'))
             ->set(
                 $this->handler->quoteColumn('is_hidden'),
-                $query->bindValue(1)
+                $query->bindValue((int) $isHidden)
             )
             ->where(
                 $query->expr->eq(
@@ -455,6 +478,7 @@ class DoctrineDatabase extends Gateway
                     $query->bindValue($pathString)
                 )
             );
+
         $query->prepare()->execute();
     }
 
@@ -466,32 +490,34 @@ class DoctrineDatabase extends Gateway
      */
     public function unHideSubtree($pathString)
     {
-        // Unhide the requested node
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set(
-                $this->handler->quoteColumn('is_hidden'),
-                $query->bindValue(0)
-            )
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('path_string'),
-                    $query->bindValue($pathString)
-                )
-            );
-        $query->prepare()->execute();
+        $this->setNodeUnhidden($pathString);
+        $this->setNodeWithChildrenVisible($pathString);
+    }
 
+    /**
+     * Sets a location + children to visible unless a parent is hiding the tree.
+     *
+     * @param string $pathString
+     **/
+    public function setNodeWithChildrenVisible(string $pathString): void
+    {
         // Check if any parent nodes are explicitly hidden
         $query = $this->handler->createSelectQuery();
         $query
             ->select($this->handler->quoteColumn('path_string'))
             ->from($this->handler->quoteTable('ezcontentobject_tree'))
+            ->leftJoin('ezcontentobject', 'ezcontentobject_tree.contentobject_id', 'ezcontentobject.id')
             ->where(
                 $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn('is_hidden'),
-                        $query->bindValue(1)
+                    $query->expr->lOr(
+                        $query->expr->eq(
+                            $this->handler->quoteColumn('is_hidden', 'ezcontentobject_tree'),
+                            $query->bindValue(1)
+                        ),
+                        $query->expr->eq(
+                            $this->handler->quoteColumn('is_hidden', 'ezcontentobject'),
+                            $query->bindValue(1)
+                        )
                     ),
                     $query->expr->in(
                         $this->handler->quoteColumn('node_id'),
@@ -499,6 +525,7 @@ class DoctrineDatabase extends Gateway
                     )
                 )
             );
+
         $statement = $query->prepare();
         $statement->execute();
         if (count($statement->fetchAll(\PDO::FETCH_COLUMN))) {
@@ -513,11 +540,18 @@ class DoctrineDatabase extends Gateway
         $query
             ->select($this->handler->quoteColumn('path_string'))
             ->from($this->handler->quoteTable('ezcontentobject_tree'))
+            ->leftJoin('ezcontentobject', 'ezcontentobject_tree.contentobject_id', 'ezcontentobject.id')
             ->where(
                 $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn('is_hidden'),
-                        $query->bindValue(1)
+                    $query->expr->lOr(
+                        $query->expr->eq(
+                            $this->handler->quoteColumn('is_hidden', 'ezcontentobject_tree'),
+                            $query->bindValue(1)
+                        ),
+                        $query->expr->eq(
+                            $this->handler->quoteColumn('is_hidden', 'ezcontentobject'),
+                            $query->bindValue(1)
+                        )
                     ),
                     $query->expr->like(
                         $this->handler->quoteColumn('path_string'),
@@ -567,7 +601,17 @@ class DoctrineDatabase extends Gateway
             );
         }
         $query->where($where);
-        $statement = $query->prepare()->execute();
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Sets location to be unhidden.
+     *
+     * @param string $pathString
+     **/
+    public function setNodeUnhidden(string $pathString): void
+    {
+        $this->setNodeHiddenStatus($pathString, false);
     }
 
     /**
@@ -576,70 +620,87 @@ class DoctrineDatabase extends Gateway
      * Make the location identified by $locationId1 refer to the Content
      * referred to by $locationId2 and vice versa.
      *
-     * @param mixed $locationId1
-     * @param mixed $locationId2
+     * @param int $locationId1
+     * @param int $locationId2
      *
      * @return bool
      */
-    public function swap($locationId1, $locationId2)
+    public function swap(int $locationId1, int $locationId2): bool
     {
-        $query = $this->handler->createSelectQuery();
-        $query
-            ->select(
-                $this->handler->quoteColumn('node_id'),
-                $this->handler->quoteColumn('contentobject_id'),
-                $this->handler->quoteColumn('contentobject_version')
-            )
-            ->from($this->handler->quoteTable('ezcontentobject_tree'))
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder
+            ->select('node_id', 'main_node_id', 'contentobject_id', 'contentobject_version')
+            ->from('ezcontentobject_tree')
             ->where(
-                $query->expr->in(
-                    $this->handler->quoteColumn('node_id'),
-                    array($locationId1, $locationId2)
+                $expr->in(
+                    'node_id',
+                    ':locationIds'
                 )
-            );
-        $statement = $query->prepare();
-        $statement->execute();
-        foreach ($statement->fetchAll() as $row) {
+            )
+            ->setParameter('locationIds', [$locationId1, $locationId2], Connection::PARAM_INT_ARRAY)
+        ;
+        $statement = $queryBuilder->execute();
+        $contentObjects = [];
+        foreach ($statement->fetchAll(FetchMode::ASSOCIATIVE) as $row) {
+            $row['is_main_node'] = (int)$row['main_node_id'] === (int)$row['node_id'];
             $contentObjects[$row['node_id']] = $row;
         }
 
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set(
-                $this->handler->quoteColumn('contentobject_id'),
-                $query->bindValue($contentObjects[$locationId2]['contentobject_id'])
-            )
-            ->set(
-                $this->handler->quoteColumn('contentobject_version'),
-                $query->bindValue($contentObjects[$locationId2]['contentobject_version'])
-            )
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('node_id'),
-                    $query->bindValue($locationId1)
+        if (!isset($contentObjects[$locationId1], $contentObjects[$locationId2])) {
+            throw new RuntimeException(
+                sprintf(
+                    '%s: failed to fetch either Location %d or Location %d',
+                    __METHOD__,
+                    $locationId1,
+                    $locationId2
                 )
             );
-        $query->prepare()->execute();
+        }
+        $content1data = $contentObjects[$locationId1];
+        $content2data = $contentObjects[$locationId2];
 
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update($this->handler->quoteTable('ezcontentobject_tree'))
-            ->set(
-                $this->handler->quoteColumn('contentobject_id'),
-                $query->bindValue($contentObjects[$locationId1]['contentobject_id'])
-            )
-            ->set(
-                $this->handler->quoteColumn('contentobject_version'),
-                $query->bindValue($contentObjects[$locationId1]['contentobject_version'])
-            )
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder
+            ->update('ezcontentobject_tree')
+            ->set('contentobject_id', ':contentId')
+            ->set('contentobject_version', ':versionNo')
+            ->set('main_node_id', ':mainNodeId')
             ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn('node_id'),
-                    $query->bindValue($locationId2)
-                )
+                $expr->eq('node_id', ':locationId')
             );
-        $query->prepare()->execute();
+
+        $queryBuilder
+            ->setParameter(':contentId', $content2data['contentobject_id'])
+            ->setParameter(':versionNo', $content2data['contentobject_version'])
+            ->setParameter(
+                ':mainNodeId',
+                // make main Location main again, preserve main Location id of non-main one
+                $content2data['is_main_node']
+                    ? $content1data['node_id']
+                    : $content2data['main_node_id']
+            )
+            ->setParameter('locationId', $locationId1);
+
+        // update Location 1 entry
+        $queryBuilder->execute();
+
+        $queryBuilder
+            ->setParameter(':contentId', $content1data['contentobject_id'])
+            ->setParameter(':versionNo', $content1data['contentobject_version'])
+            ->setParameter(
+                ':mainNodeId',
+                $content1data['is_main_node']
+                    // make main Location main again, preserve main Location id of non-main one
+                    ? $content2data['node_id']
+                    : $content1data['main_node_id']
+            )
+            ->setParameter('locationId', $locationId2);
+
+        // update Location 2 entry
+        $queryBuilder->execute();
+
+        return true;
     }
 
     /**
@@ -1547,6 +1608,8 @@ class DoctrineDatabase extends Gateway
     /**
      * Get Query Builder for fetching data of all Locations except the Root node.
      *
+     * @todo Align with createNodeQueryBuilder, removing the need for both(?)
+     *
      * @param array $columns list of columns to fetch
      *
      * @return \Doctrine\DBAL\Query\QueryBuilder
@@ -1561,5 +1624,45 @@ class DoctrineDatabase extends Gateway
         ;
 
         return $query;
+    }
+
+    /**
+     * Create QueryBuilder for selecting node data.
+     *
+     * @param array|null $translations Filters on language mask of content if provided.
+     * @param bool $useAlwaysAvailable Respect always available flag on content when filtering on $translations.
+     *
+     * @return \Doctrine\DBAL\Query\QueryBuilder
+     */
+    private function createNodeQueryBuilder(array $translations = null, bool $useAlwaysAvailable = true): QueryBuilder
+    {
+        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder
+            ->select('t.*')
+            ->from('ezcontentobject_tree', 't');
+
+        if (!empty($translations)) {
+            $dbPlatform = $this->connection->getDatabasePlatform();
+            $expr = $queryBuilder->expr();
+            $mask = $this->languageMaskGenerator->generateLanguageMaskFromLanguageCodes(
+                $translations,
+                $useAlwaysAvailable
+            );
+
+            $queryBuilder->innerJoin(
+                't',
+                'ezcontentobject',
+                'c',
+                $expr->andX(
+                    $expr->eq('t.contentobject_id', 'c.id'),
+                    $expr->gt(
+                        $dbPlatform->getBitAndComparisonExpression('c.language_mask', $mask),
+                        0
+                    )
+                )
+            );
+        }
+
+        return $queryBuilder;
     }
 }

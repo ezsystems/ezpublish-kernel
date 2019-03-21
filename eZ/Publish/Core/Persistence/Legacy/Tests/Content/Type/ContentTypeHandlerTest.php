@@ -586,7 +586,7 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(23),
                 $this->equalTo(1),
                 $this->isInstanceOf(
-                    UpdateStruct::class
+                    Type::class
                 )
             );
 
@@ -900,7 +900,10 @@ class ContentTypeHandlerTest extends TestCase
     public function testGetFieldDefinition()
     {
         $mapperMock = $this->getMapperMock(
-            array('extractFieldFromRow')
+            array(
+                'extractFieldFromRow',
+                'extractMultilingualData',
+            )
         );
         $mapperMock->expects($this->once())
             ->method('extractFieldFromRow')
@@ -910,6 +913,16 @@ class ContentTypeHandlerTest extends TestCase
                 $this->returnValue(new FieldDefinition())
             );
 
+        $mapperMock->expects($this->once())
+            ->method('extractMultilingualData')
+            ->with(
+                $this->equalTo(array(
+                    array(),
+                ))
+            )->will(
+                $this->returnValue(array())
+            );
+
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects($this->once())
             ->method('loadFieldDefinition')
@@ -917,7 +930,9 @@ class ContentTypeHandlerTest extends TestCase
                 $this->equalTo(42),
                 $this->equalTo(Type::STATUS_DEFINED)
             )->will(
-                $this->returnValue(array())
+                $this->returnValue(array(
+                    array(),
+                ))
             );
 
         $handler = $this->getHandler();
@@ -1235,6 +1250,9 @@ class ContentTypeHandlerTest extends TestCase
         $struct->groupIds = array(
             42,
         );
+        $struct->name = [
+            'eng-GB' => 'test name',
+        ];
 
         $fieldDefName = new FieldDefinition(array('position' => 1));
         $fieldDefShortDescription = new FieldDefinition(array('position' => 2));
@@ -1245,5 +1263,54 @@ class ContentTypeHandlerTest extends TestCase
         );
 
         return $struct;
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::removeContentTypeTranslation
+     */
+    public function testRemoveContentTypeTranslation()
+    {
+        $mapperMock = $this->getMapperMock();
+        $mapperMock->expects($this->once())
+            ->method('createUpdateStructFromType')
+            ->with(
+                $this->isInstanceOf(
+                    Type::class
+                )
+            )
+            ->will(
+                $this->returnValue(new UpdateStruct())
+            );
+
+        $handlerMock = $this->getMockBuilder(Handler::class)
+            ->setMethods(['load', 'update'])
+            ->setConstructorArgs([$this->getGatewayMock(), $mapperMock, $this->getUpdateHandlerMock()])
+            ->getMock();
+
+        $handlerMock->expects($this->once())
+            ->method('load')
+            ->with(
+                $this->equalTo(23),
+                $this->equalTo(1)
+            )
+            ->will($this->returnValue(new Type(['id' => 23])));
+
+        $handlerMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $this->equalTo(23),
+                $this->equalTo(1),
+                $this->isInstanceOf(
+                    UpdateStruct::class
+                )
+            )
+            ->will($this->returnValue(new Type()));
+
+        $res = $handlerMock->removeContentTypeTranslation(23, 'eng-GB');
+
+        $this->assertInstanceOf(
+            Type::class,
+            $res
+        );
     }
 }

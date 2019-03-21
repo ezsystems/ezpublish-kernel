@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\Type\CreateStruct;
@@ -15,6 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * ContentType cache.
@@ -23,14 +26,53 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStr
  *
  * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
  */
-class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerInterface
+class ContentTypeHandler extends AbstractInMemoryHandler implements ContentTypeHandlerInterface
 {
+    /** @var callable */
+    private $getGroupTags;
+
+    /** @var callable */
+    private $getGroupKeys;
+
+    /** @var callable */
+    private $getTypeTags;
+
+    /** @var callable */
+    private $getTypeKeys;
+
+    public function __construct(
+        TagAwareAdapterInterface $cache,
+        PersistenceHandler $persistenceHandler,
+        PersistenceLogger $logger,
+        InMemoryCache $inMemory
+    ) {
+        parent::__construct($cache, $persistenceHandler, $logger, $inMemory);
+
+        $this->getGroupTags = static function (Type\Group $group) { return ['type-group-' . $group->id]; };
+        $this->getGroupKeys = static function (Type\Group $group) {
+            return [
+                'ez-content-type-group-' . $group->id,
+                'ez-content-type-group-' . $group->identifier . '-by-identifier',
+            ];
+        };
+
+        $this->getTypeTags = static function (Type $type) { return ['type-' . $type->id]; };
+        $this->getTypeKeys = static function (Type $type, int $status = Type::STATUS_DEFINED) {
+            return [
+                'ez-content-type-' . $type->id . '-' . $status,
+                'ez-content-type-' . $type->identifier . '-by-identifier',
+                'ez-content-type-' . $type->remoteId . '-by-remote',
+            ];
+        };
+    }
+
     /**
      * {@inheritdoc}
      */
     public function createGroup(GroupCreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->deleteCache(['ez-content-type-group-list']);
 
         return $this->persistenceHandler->contentTypeHandler()->createGroup($struct);
     }
@@ -43,7 +85,11 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
         $group = $this->persistenceHandler->contentTypeHandler()->updateGroup($struct);
 
-        $this->cache->invalidateTags(['type-group-' . $struct->id]);
+        $this->deleteCache([
+            'ez-content-type-group-list',
+            'ez-content-type-group-' . $struct->id,
+            'ez-content-type-group-' . $struct->identifier . '-by-identifier',
+        ]);
 
         return $group;
     }
@@ -56,7 +102,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $this->logger->logCall(__METHOD__, array('group' => $groupId));
         $return = $this->persistenceHandler->contentTypeHandler()->deleteGroup($groupId);
 
-        $this->cache->invalidateTags(['type-group-' . $groupId]);
+        $this->invalidateCache(['type-group-' . $groupId]);
 
         return $return;
     }
@@ -66,19 +112,15 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function loadGroup($groupId)
     {
-        $cacheItem = $this->cache->getItem('ez-content-type-group-' . $groupId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, array('group' => $groupId));
-        $group = $this->persistenceHandler->contentTypeHandler()->loadGroup($groupId);
-
-        $cacheItem->set($group);
-        $cacheItem->tag('type-group-' . $group->id);
-        $this->cache->save($cacheItem);
-
-        return $group;
+        return $this->getCacheValue(
+            $groupId,
+            'ez-content-type-group-',
+            function ($groupId) {
+                return $this->persistenceHandler->contentTypeHandler()->loadGroup($groupId);
+            },
+            $this->getGroupTags,
+            $this->getGroupKeys
+        );
     }
 
     /**
@@ -86,17 +128,14 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function loadGroups(array $groupIds)
     {
-        return $this->getMultipleCacheItems(
+        return $this->getMultipleCacheValues(
             $groupIds,
             'ez-content-type-group-',
-            function (array $cacheMissIds) {
-                $this->logger->logCall(__CLASS__ . '::loadGroups', ['groups' => $cacheMissIds]);
-
-                return $this->persistenceHandler->contentTypeHandler()->loadGroups($cacheMissIds);
+            function (array $groupIds) {
+                return $this->persistenceHandler->contentTypeHandler()->loadGroups($groupIds);
             },
-            function (Type\Group $group) {
-                return ['type-group-' . $group->id];
-            }
+            $this->getGroupTags,
+            $this->getGroupKeys
         );
     }
 
@@ -105,19 +144,16 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function loadGroupByIdentifier($identifier)
     {
-        $cacheItem = $this->cache->getItem('ez-content-type-group-' . $identifier . '-by-identifier');
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, array('group' => $identifier));
-        $group = $this->persistenceHandler->contentTypeHandler()->loadGroupByIdentifier($identifier);
-
-        $cacheItem->set($group);
-        $cacheItem->tag('type-group-' . $group->id);
-        $this->cache->save($cacheItem);
-
-        return $group;
+        return $this->getCacheValue(
+            $identifier,
+            'ez-content-type-group-',
+            function (string $identifier) {
+                return $this->persistenceHandler->contentTypeHandler()->loadGroupByIdentifier($identifier);
+            },
+            $this->getGroupTags,
+            $this->getGroupKeys,
+            '-by-identifier'
+        );
     }
 
     /**
@@ -125,9 +161,14 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function loadAllGroups()
     {
-        $this->logger->logCall(__METHOD__);
-
-        return $this->persistenceHandler->contentTypeHandler()->loadAllGroups();
+        return $this->getListCacheValue(
+            'ez-content-type-group-list',
+            function () {
+                return $this->persistenceHandler->contentTypeHandler()->loadAllGroups();
+            },
+            $this->getGroupTags,
+            $this->getGroupKeys
+        );
     }
 
     /**
@@ -141,40 +182,30 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
             return $this->persistenceHandler->contentTypeHandler()->loadContentTypes($groupId, $status);
         }
 
-        $cacheItem = $this->cache->getItem('ez-content-type-list-by-group-' . $groupId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, array('group' => $groupId, 'status' => $status));
-        $types = $this->persistenceHandler->contentTypeHandler()->loadContentTypes($groupId, $status);
-
-        $cacheTags = ['type-group-' . $groupId];
-        foreach ($types as $type) {
-            $cacheTags[] = 'type-' . $type->id;
-        }
-
-        $cacheItem->set($types);
-        $cacheItem->tag($cacheTags);
-        $this->cache->save($cacheItem);
-
-        return $types;
+        return $this->getListCacheValue(
+            'ez-content-type-list-by-group-' . $groupId,
+            function () use ($groupId, $status) {
+                return $this->persistenceHandler->contentTypeHandler()->loadContentTypes($groupId, $status);
+            },
+            $this->getTypeTags,
+            $this->getTypeKeys,
+            // Add tag in case of empty list
+            static function () use ($groupId) { return ['type-group-' . $groupId]; },
+            [$groupId]
+        );
     }
 
     public function loadContentTypeList(array $contentTypeIds): array
     {
-        return $this->getMultipleCacheItems(
+        return $this->getMultipleCacheValues(
             $contentTypeIds,
             'ez-content-type-',
-            function (array $cacheMissIds) {
-                $this->logger->logCall(__CLASS__ . '::loadContentTypeList', ['type' => $cacheMissIds]);
-
-                return $this->persistenceHandler->contentTypeHandler()->loadContentTypeList($cacheMissIds);
+            function (array $contentTypeIds) {
+                return $this->persistenceHandler->contentTypeHandler()->loadContentTypeList($contentTypeIds);
             },
-            function (Type $type) {
-                return ['type-' . $type->id];
-            },
-            array_fill_keys($contentTypeIds, '-' . Type::STATUS_DEFINED)
+            $this->getTypeTags,
+            $this->getTypeKeys,
+            '-' . Type::STATUS_DEFINED
         );
     }
 
@@ -183,19 +214,20 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function load($typeId, $status = Type::STATUS_DEFINED)
     {
-        $cacheItem = $this->cache->getItem('ez-content-type-' . $typeId . '-' . $status);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        $getTypeKeysFn = $this->getTypeKeys;
 
-        $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status));
-        $type = $this->persistenceHandler->contentTypeHandler()->load($typeId, $status);
-
-        $cacheItem->set($type);
-        $cacheItem->tag(['type-' . $type->id]);
-        $this->cache->save($cacheItem);
-
-        return $type;
+        return $this->getCacheValue(
+            $typeId,
+            'ez-content-type-',
+            function ($typeId) use ($status) {
+                return $this->persistenceHandler->contentTypeHandler()->load($typeId, $status);
+            },
+            $this->getTypeTags,
+            static function (Type $type) use ($status, $getTypeKeysFn) {
+                return $getTypeKeysFn($type, $status);
+            },
+            '-' . $status
+        );
     }
 
     /**
@@ -203,19 +235,16 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function loadByIdentifier($identifier)
     {
-        $cacheItem = $this->cache->getItem('ez-content-type-' . $identifier . '-by-identifier');
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, array('type' => $identifier));
-        $type = $this->persistenceHandler->contentTypeHandler()->loadByIdentifier($identifier);
-
-        $cacheItem->set($type);
-        $cacheItem->tag(['type-' . $type->id]);
-        $this->cache->save($cacheItem);
-
-        return $type;
+        return $this->getCacheValue(
+            $identifier,
+            'ez-content-type-',
+            function ($identifier) {
+                return $this->persistenceHandler->contentTypeHandler()->loadByIdentifier($identifier);
+            },
+            $this->getTypeTags,
+            $this->getTypeKeys,
+            '-by-identifier'
+        );
     }
 
     /**
@@ -223,19 +252,16 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function loadByRemoteId($remoteId)
     {
-        $cacheItem = $this->cache->getItem('ez-content-type-' . $remoteId . '-by-remote');
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
-        $this->logger->logCall(__METHOD__, array('type' => $remoteId));
-        $type = $this->persistenceHandler->contentTypeHandler()->loadByRemoteId($remoteId);
-
-        $cacheItem->set($type);
-        $cacheItem->tag(['type-' . $type->id]);
-        $this->cache->save($cacheItem);
-
-        return $type;
+        return $this->getCacheValue(
+            $remoteId,
+            'ez-content-type-',
+            function ($remoteId) {
+                return $this->persistenceHandler->contentTypeHandler()->loadByRemoteId($remoteId);
+            },
+            $this->getTypeTags,
+            $this->getTypeKeys,
+            '-by-remote'
+        );
     }
 
     /**
@@ -248,9 +274,12 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $type = $this->persistenceHandler->contentTypeHandler()->create($struct);
 
         // Clear loadContentTypes() cache as we effetely add an item to it's collection here.
-        foreach ($struct->groupIds as $groupId) {
-            $this->cache->deleteItem('ez-content-type-list-by-group-' . $groupId);
-        }
+        $this->deleteCache(array_map(
+            function ($groupId) {
+                return 'ez-content-type-list-by-group-' . $groupId;
+            },
+            $struct->groupIds
+        ));
 
         return $type;
     }
@@ -264,9 +293,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $type = $this->persistenceHandler->contentTypeHandler()->update($typeId, $status, $struct);
 
         if ($status === Type::STATUS_DEFINED) {
-            $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
+            $this->invalidateCache(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
         } else {
-            $this->cache->deleteItem('ez-content-type-' . $typeId . '-' . $status);
+            $this->deleteCache(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $type;
@@ -281,9 +310,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $return = $this->persistenceHandler->contentTypeHandler()->delete($typeId, $status);
 
         if ($status === Type::STATUS_DEFINED) {
-            $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
+            $this->invalidateCache(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
         } else {
-            $this->cache->deleteItem('ez-content-type-' . $typeId . '-' . $status);
+            $this->deleteCache(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $return;
@@ -297,7 +326,7 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $this->logger->logCall(__METHOD__, array('modifier' => $modifierId, 'type' => $typeId));
         $draft = $this->persistenceHandler->contentTypeHandler()->createDraft($modifierId, $typeId);
 
-        $this->cache->deleteItem('ez-content-type-' . $typeId . '-' . Type::STATUS_DRAFT);
+        $this->deleteCache(['ez-content-type-' . $typeId . '-' . Type::STATUS_DRAFT]);
 
         return $draft;
     }
@@ -321,9 +350,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $return = $this->persistenceHandler->contentTypeHandler()->unlink($groupId, $typeId, $status);
 
         if ($status === Type::STATUS_DEFINED) {
-            $this->cache->invalidateTags(['type-' . $typeId]);
+            $this->invalidateCache(['type-' . $typeId]);
         } else {
-            $this->cache->deleteItem('ez-content-type-' . $typeId . '-' . $status);
+            $this->deleteCache(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $return;
@@ -338,11 +367,11 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $return = $this->persistenceHandler->contentTypeHandler()->link($groupId, $typeId, $status);
 
         if ($status === Type::STATUS_DEFINED) {
-            $this->cache->invalidateTags(['type-' . $typeId]);
+            $this->invalidateCache(['type-' . $typeId]);
             // Clear loadContentTypes() cache as we effetely add an item to it's collection here.
-            $this->cache->deleteItem('ez-content-type-list-by-group-' . $groupId);
+            $this->deleteCache(['ez-content-type-list-by-group-' . $groupId]);
         } else {
-            $this->cache->deleteItem('ez-content-type-' . $typeId . '-' . $status);
+            $this->deleteCache(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $return;
@@ -381,9 +410,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         );
 
         if ($status === Type::STATUS_DEFINED) {
-            $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
+            $this->invalidateCache(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
         } else {
-            $this->cache->deleteItem('ez-content-type-' . $typeId . '-' . $status);
+            $this->deleteCache(['ez-content-type-' . $typeId . '-' . $status]);
         }
 
         return $return;
@@ -402,9 +431,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         );
 
         if ($status === Type::STATUS_DEFINED) {
-            $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
+            $this->invalidateCache(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
         } else {
-            $this->cache->deleteItem('ez-content-type-' . $typeId . '-' . $status);
+            $this->deleteCache(['ez-content-type-' . $typeId . '-' . $status]);
         }
     }
 
@@ -421,9 +450,9 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         );
 
         if ($status === Type::STATUS_DEFINED) {
-            $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
+            $this->invalidateCache(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
         } else {
-            $this->cache->deleteItem('ez-content-type-' . $typeId . '-' . $status);
+            $this->deleteCache(['ez-content-type-' . $typeId . '-' . $status]);
         }
     }
 
@@ -436,11 +465,11 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
         $this->persistenceHandler->contentTypeHandler()->publish($typeId);
 
         // Clear type cache, map cache, and content cache which contains fields.
-        $this->cache->invalidateTags(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
+        $this->invalidateCache(['type-' . $typeId, 'type-map', 'content-fields-type-' . $typeId]);
 
         // Clear Content Type Groups list cache
-        $contentType = $this->load($typeId, Type::STATUS_DEFINED);
-        $this->cache->deleteItems(
+        $contentType = $this->load($typeId);
+        $this->deleteCache(
             array_map(
                 function ($groupId) {
                     return 'ez-content-type-list-by-group-' . $groupId;
@@ -455,18 +484,35 @@ class ContentTypeHandler extends AbstractHandler implements ContentTypeHandlerIn
      */
     public function getSearchableFieldMap()
     {
-        $cacheItem = $this->cache->getItem('ez-content-type-field-map');
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        return $this->getListCacheValue(
+            'ez-content-type-field-map',
+            function () {
+                return $this->persistenceHandler->contentTypeHandler()->getSearchableFieldMap();
+            },
+            static function () {return [];},
+            static function () {return [];},
+            static function () { return ['type-map']; }
+        );
+    }
 
-        $this->logger->logCall(__METHOD__);
-        $fieldMap = $this->persistenceHandler->contentTypeHandler()->getSearchableFieldMap();
+    /**
+     * @param int $contentTypeId
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
+     *
+     * @throws \Psr\Cache\InvalidArgumentException
+     */
+    public function removeContentTypeTranslation(int $contentTypeId, string $languageCode): Type
+    {
+        $this->logger->logCall(__METHOD__, ['id' => $contentTypeId, 'languageCode' => $languageCode]);
+        $return = $this->persistenceHandler->contentTypeHandler()->removeContentTypeTranslation(
+            $contentTypeId,
+            $languageCode
+        );
 
-        $cacheItem->set($fieldMap);
-        $cacheItem->tag(['type-map']);
-        $this->cache->save($cacheItem);
+        $this->invalidateCache(['type-' . $contentTypeId, 'type-map', 'content-fields-type-' . $contentTypeId]);
 
-        return $fieldMap;
+        return $return;
     }
 }

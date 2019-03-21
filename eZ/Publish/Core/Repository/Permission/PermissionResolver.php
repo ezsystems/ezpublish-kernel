@@ -266,7 +266,7 @@ class PermissionResolver implements PermissionResolverInterface
      *
      * @return mixed
      */
-    public function sudo(Closure $callback, RepositoryInterface $outerRepository)
+    public function sudo(callable $callback, RepositoryInterface $outerRepository)
     {
         ++$this->sudoNestingLevel;
         try {

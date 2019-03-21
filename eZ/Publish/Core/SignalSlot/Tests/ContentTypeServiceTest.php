@@ -314,6 +314,12 @@ class ContentTypeServiceTest extends ServiceTest
                 true,
                 0,
             ),
+            array(
+                'removeContentTypeTranslation',
+                array($contentTypeDraft, 'eng-GB'),
+                $contentTypeDraft,
+                1,
+            ),
         );
     }
 }

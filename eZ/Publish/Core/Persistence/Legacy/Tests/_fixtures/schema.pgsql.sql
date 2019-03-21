@@ -192,7 +192,8 @@ CREATE TABLE ezcontentobject (
     published integer DEFAULT 0 NOT NULL,
     remote_id character varying(100),
     section_id integer DEFAULT 0 NOT NULL,
-    status integer DEFAULT 0
+    status integer DEFAULT 0,
+    is_hidden boolean DEFAULT FALSE NOT NULL
 );
 
 DROP TABLE IF EXISTS ezcontentobject_attribute;
@@ -487,7 +488,7 @@ DROP TABLE IF EXISTS eznotification;
 CREATE TABLE eznotification (
     id SERIAL,
     owner_id integer DEFAULT 0 NOT NULL ,
-    is_pending integer DEFAULT 1 NOT NULL,
+    is_pending boolean DEFAULT true NOT NULL,
     type character varying(128) NOT NULL,
     created integer DEFAULT 0 NOT NULL,
     data text
@@ -499,6 +500,17 @@ CREATE TABLE ezpreferences (
     name character varying(100) DEFAULT NULL,
     user_id integer DEFAULT 0 NOT NULL,
     value text DEFAULT NULL
+);
+
+DROP TABLE IF EXISTS ezcontentclass_attribute_ml;
+CREATE TABLE ezcontentclass_attribute_ml (
+    contentclass_attribute_id INT NOT NULL,
+    version integer NOT NULL,
+    language_id SERIAL NOT NULL,
+    name character varying(255) NOT NULL,
+    description text DEFAULT NULL,
+    data_text text DEFAULT NULL,
+    data_json text DEFAULT NULL
 );
 
 CREATE INDEX ezimagefile_coid ON ezimagefile USING btree (contentobject_attribute_id);
@@ -695,6 +707,8 @@ CREATE INDEX ezpreferences_name ON ezpreferences USING btree (name);
 
 CREATE INDEX ezpreferences_user_id_idx ON ezpreferences USING btree (user_id,name);
 
+CREATE INDEX contentclass_attribute_id ON ezcontentclass_attribute_ml USING btree (contentclass_attribute_id, version, language_id);
+
 ALTER TABLE ONLY ezcobj_state
     ADD CONSTRAINT ezcobj_state_pkey PRIMARY KEY (id);
 
@@ -843,3 +857,10 @@ ADD CONSTRAINT ezcontentbrowsebookmark_user_fk
   REFERENCES ezuser (contentobject_id)
   ON DELETE CASCADE
   ON UPDATE NO ACTION;
+
+ALTER TABLE ezcontentclass_attribute_ml
+ADD CONSTRAINT ezcontentclass_attribute_ml_lang_fk
+  FOREIGN KEY (language_id)
+  REFERENCES ezcontent_language (id)
+  ON DELETE CASCADE
+  ON UPDATE CASCADE;
