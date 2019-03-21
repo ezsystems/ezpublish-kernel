@@ -24,7 +24,6 @@ use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateSt
 class ContentHandler extends AbstractHandler implements ContentHandlerInterface
 {
     const ALL_TRANSLATIONS_KEY = '0';
-    const DEFAULT_LIST_VERSIONS_LIMIT = -1;
 
     /**
      * {@inheritdoc}
@@ -277,7 +276,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function listVersions($contentId, $status = null, $limit = self::DEFAULT_LIST_VERSIONS_LIMIT)
+    public function listVersions($contentId, $status = null, $limit = -1)
     {
         $cacheItem = $this->cache->getItem("ez-content-${contentId}-version-list" . ($status ? "-byStatus-${status}" : '') . "-limit-{$limit}");
         if ($cacheItem->isHit()) {
@@ -287,7 +286,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
         $this->logger->logCall(__METHOD__, array('content' => $contentId, 'status' => $status));
         $versions = $this->persistenceHandler->contentHandler()->listVersions($contentId, $status, $limit);
         $cacheItem->set($versions);
-        $tags = ["content-{$contentId}", "content-{$contentId}-version-list", "content-{$contentId}-version-list-{$limit}"];
+        $tags = ["content-{$contentId}", "content-{$contentId}-version-list"];
         foreach ($versions as $version) {
             $tags = $this->getCacheTagsForVersion($version, $tags);
         }
