@@ -311,14 +311,14 @@ class PermissionResolver implements PermissionResolverInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUserReference
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param array $targets
+     * @param array|null $targets
      *
      * @return bool
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    private function grantedByLimitation(Limitation $limitation, APIUserReference $currentUserReference, ValueObject $object, ?array $targets): bool
+    private function isGrantedByLimitation(Limitation $limitation, APIUserReference $currentUserReference, ValueObject $object, ?array $targets): bool
     {
         $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
         $accessVote = $type->evaluate($limitation, $currentUserReference, $object, $targets);
@@ -330,14 +330,14 @@ class PermissionResolver implements PermissionResolverInterface
      * @param \eZ\Publish\API\Repository\Values\User\Limitation|null $limitation
      * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUserReference
      * @param \eZ\Publish\API\Repository\Values\ValueObject $object
-     * @param array $targets
+     * @param array|null $targets
      *
      * @return bool
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
-    private function deniedByRoleLimitation(?Limitation $limitation, APIUserReference $currentUserReference, ValueObject $object, ?array $targets): bool
+    private function isDeniedByRoleLimitation(?Limitation $limitation, APIUserReference $currentUserReference, ValueObject $object, ?array $targets): bool
     {
         if ($limitation instanceof Limitation) {
             $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
