@@ -270,7 +270,7 @@ class PermissionResolver implements PermissionResolverInterface
                 continue;
             }
 
-            /** @var $policy \eZ\Publish\API\Repository\Values\User\Policy */
+            /** @var \eZ\Publish\API\Repository\Values\User\Policy $policy */
             foreach ($permissionSet['policies'] as $policy) {
                 $policyLimitations = $policy->getLimitations();
 
