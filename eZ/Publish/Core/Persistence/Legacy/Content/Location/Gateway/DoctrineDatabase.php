@@ -274,7 +274,8 @@ class DoctrineDatabase extends Gateway
                 $this->handler->quoteColumn('node_id'),
                 $this->handler->quoteColumn('parent_node_id'),
                 $this->handler->quoteColumn('path_string'),
-                $this->handler->quoteColumn('path_identification_string')
+                $this->handler->quoteColumn('path_identification_string'),
+                $this->handler->quoteColumn('is_hidden')
             )
             ->from($this->handler->quoteTable('ezcontentobject_tree'))
             ->where(

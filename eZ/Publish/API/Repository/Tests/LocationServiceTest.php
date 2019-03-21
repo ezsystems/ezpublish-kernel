@@ -2588,6 +2588,47 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test moving invisible (hidden by parent) subtree.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::moveSubtree
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testMoveInvisibleSubtree()
+    {
+        $repository = $this->getRepository();
+        $locationService = $repository->getLocationService();
+
+        $rootLocationId = 2;
+
+        $folder = $this->createFolder(['eng-GB' => 'Folder'], $rootLocationId);
+        $child = $this->createFolder(['eng-GB' => 'Child'], $folder->contentInfo->mainLocationId);
+        $locationService->hideLocation(
+            $locationService->loadLocation($folder->contentInfo->mainLocationId)
+        );
+        // sanity check
+        $childLocation = $locationService->loadLocation($child->contentInfo->mainLocationId);
+        self::assertFalse($childLocation->hidden);
+        self::assertTrue($childLocation->invisible);
+        self::assertEquals($folder->contentInfo->mainLocationId, $childLocation->parentLocationId);
+
+        $destination = $this->createFolder(['eng-GB' => 'Destination'], $rootLocationId);
+        $destinationLocation = $locationService->loadLocation(
+            $destination->contentInfo->mainLocationId
+        );
+
+        $locationService->moveSubtree($childLocation, $destinationLocation);
+
+        $childLocation = $locationService->loadLocation($child->contentInfo->mainLocationId);
+        // Business logic - Location moved to visible parent becomes visible
+        self::assertFalse($childLocation->hidden);
+        self::assertFalse($childLocation->invisible);
+        self::assertEquals($destinationLocation->id, $childLocation->parentLocationId);
+    }
+
+    /**
      * Test for the moveSubtree() method.
      *
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
