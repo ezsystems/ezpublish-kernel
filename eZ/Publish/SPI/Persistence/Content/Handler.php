@@ -223,10 +223,12 @@ interface Handler
      *
      * @param mixed $contentId
      * @param mixed|null $versionNo Copy all versions if left null
+     * @param int|null $newOwnerId By default owner is same content we copy, for other cases set owner here to change it.
+     *        E.g. In order to give person copying access to edit (if owner limitation), use this to set copier as owner.
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function copy($contentId, $versionNo = null);
+    public function copy($contentId, $versionNo = null, $newOwnerId = null);
 
     /**
      * Creates a relation between $sourceContentId in $sourceContentVersionNo
