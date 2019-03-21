@@ -86,7 +86,7 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
         $cacheItem = $this->getCacheItem($key, $multi ? reset($data) : $data);
         $handlerMethodName = $this->getHandlerMethodName();
 
-        If ($logHitMiss) {
+        if ($logHitMiss) {
             $this->loggerMock->expects($this->once())->method('logCacheHit');
             $this->loggerMock->expects($this->never())->method('logCall');
             $this->loggerMock->expects($this->never())->method('logCacheMiss');
@@ -140,7 +140,7 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
         $cacheItem = $this->getCacheItem($key, null);
         $handlerMethodName = $this->getHandlerMethodName();
 
-        If ($logHitMiss) {
+        if ($logHitMiss) {
             $this->loggerMock->expects($this->once())->method('logCacheMiss');
             $this->loggerMock->expects($this->never())->method('logCall');
             $this->loggerMock->expects($this->never())->method('logCacheHit');
