@@ -79,13 +79,20 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      * @param mixed $data
      * @param bool $multi Default false, set to true if method will lookup several cache items.
      * @param array $additionalCalls Sets of additional calls being made to handlers, with 4 values (0: handler name, 1: handler class, 2: method, 3: return data)
+     * @param bool $logHitMiss To opt in to specify method uses the newer logHit / logMiss logic for call logging.
      */
-    final public function testLoadMethodsCacheHit(string $method, array $arguments, string $key, $data = null, bool $multi = false, array $additionalCalls = [])
+    final public function testLoadMethodsCacheHit(string $method, array $arguments, string $key, $data = null, bool $multi = false, array $additionalCalls = [], bool $logHitMiss = false)
     {
         $cacheItem = $this->getCacheItem($key, $multi ? reset($data) : $data);
         $handlerMethodName = $this->getHandlerMethodName();
 
-        $this->loggerMock->expects($this->never())->method('logCall');
+        If ($logHitMiss) {
+            $this->loggerMock->expects($this->once())->method('logCacheHit');
+            $this->loggerMock->expects($this->never())->method('logCall');
+            $this->loggerMock->expects($this->never())->method('logCacheMiss');
+        } else {
+            $this->loggerMock->expects($this->never())->method('logCall');
+        }
 
         if ($multi) {
             $this->cacheMock
@@ -126,13 +133,20 @@ abstract class AbstractCacheHandlerTest extends AbstractBaseHandlerTest
      * @param object $data
      * @param bool $multi Default false, set to true if method will lookup several cache items.
      * @param array $additionalCalls Sets of additional calls being made to handlers, with 4 values (0: handler name, 1: handler class, 2: method, 3: return data)
+     * @param bool $logHitMiss To opt in to specify method uses the newer logHit / logMiss logic for call logging.
      */
-    final public function testLoadMethodsCacheMiss(string $method, array $arguments, string $key, $data = null, bool $multi = false, array $additionalCalls = [])
+    final public function testLoadMethodsCacheMiss(string $method, array $arguments, string $key, $data = null, bool $multi = false, array $additionalCalls = [], bool $logHitMiss = false)
     {
         $cacheItem = $this->getCacheItem($key, null);
         $handlerMethodName = $this->getHandlerMethodName();
 
-        $this->loggerMock->expects($this->once())->method('logCall');
+        If ($logHitMiss) {
+            $this->loggerMock->expects($this->once())->method('logCacheMiss');
+            $this->loggerMock->expects($this->never())->method('logCall');
+            $this->loggerMock->expects($this->never())->method('logCacheHit');
+        } else {
+            $this->loggerMock->expects($this->once())->method('logCall');
+        }
 
         if ($multi) {
             $this->cacheMock
