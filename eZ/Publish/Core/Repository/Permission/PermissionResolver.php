@@ -9,6 +9,8 @@ namespace eZ\Publish\Core\Repository\Permission;
 use eZ\Publish\API\Repository\PermissionResolver as PermissionResolverInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\LookupLimitationResult;
+use eZ\Publish\API\Repository\Values\User\LookupPolicyLimitations;
 use eZ\Publish\API\Repository\Values\User\UserReference as APIUserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
@@ -16,7 +18,6 @@ use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
-use Closure;
 use Exception;
 
 /**
@@ -239,6 +240,113 @@ class PermissionResolver implements PermissionResolverInterface
         }
 
         return false; // None of the limitation sets wanted to let you in, sorry!
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lookupLimitations(
+        string $module,
+        string $function,
+        ValueObject $object,
+        array $targets = [],
+        array $limitationsIdentifiers = []
+    ): LookupLimitationResult {
+        $permissionSets = $this->hasAccess($module, $function);
+
+        if ($permissionSets === false || $permissionSets === true) {
+            return new LookupLimitationResult($permissionSets);
+        }
+
+        if (empty($targets)) {
+            $targets = null;
+        }
+
+        $currentUserReference = $this->getCurrentUserReference();
+
+        $passedLimitations = [];
+        foreach ($permissionSets as $permissionSet) {
+            if ($this->deniedByRoleLimitation($permissionSet['limitation'], $currentUserReference, $object, $targets)) {
+                continue;
+            }
+
+            /** @var $policy \eZ\Publish\API\Repository\Values\User\Policy */
+            foreach ($permissionSet['policies'] as $policy) {
+                $policyLimitations = $policy->getLimitations();
+
+                /** Return empty array if policy gives full access (aka no limitations) */
+                if ($policyLimitations === '*') {
+                    return new LookupLimitationResult(true);
+                }
+
+                $limitationsPass = true;
+                $possibleLimitations = [];
+                foreach ($policyLimitations as $limitation) {
+                    $limitationsPass = $this->grantedByLimitation($limitation, $currentUserReference, $object, $targets);
+                    if (!$limitationsPass) {
+                        break;
+                    }
+
+                    $possibleLimitations[] = $limitation;
+                }
+
+                $limitationFilter = function (Limitation $limitation) use ($limitationsIdentifiers) {
+                    return \in_array($limitation->getIdentifier(), $limitationsIdentifiers, true);
+                };
+
+                if (!empty($limitationsIdentifiers)) {
+                    $possibleLimitations = array_filter($possibleLimitations, $limitationFilter);
+                }
+
+                if ($limitationsPass && !empty($possibleLimitations)) {
+                    $passedLimitations[] = new LookupPolicyLimitations($policy, $possibleLimitations);
+                }
+            }
+        }
+
+        return new LookupLimitationResult(!empty($passedLimitations), $passedLimitations);
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUserReference
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
+     * @param array $targets
+     *
+     * @return bool
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function grantedByLimitation(Limitation $limitation, APIUserReference $currentUserReference, ValueObject $object, ?array $targets): bool
+    {
+        $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
+        $accessVote = $type->evaluate($limitation, $currentUserReference, $object, $targets);
+
+        return $accessVote === LimitationType::ACCESS_GRANTED;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation|null $limitation
+     * @param \eZ\Publish\API\Repository\Values\User\UserReference $currentUserReference
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object
+     * @param array $targets
+     *
+     * @return bool
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    private function deniedByRoleLimitation(?Limitation $limitation, APIUserReference $currentUserReference, ValueObject $object, ?array $targets): bool
+    {
+        if ($limitation instanceof Limitation) {
+            $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
+            $accessVote = $type->evaluate($limitation, $currentUserReference, $object, $targets);
+
+            return $accessVote === LimitationType::ACCESS_DENIED;
+        }
+
+        return false;
     }
 
     /**

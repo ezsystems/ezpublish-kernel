@@ -9,6 +9,7 @@ namespace eZ\Publish\Core\Repository\Permission;
 use eZ\Publish\API\Repository\PermissionResolver as APIPermissionResolver;
 use eZ\Publish\API\Repository\PermissionCriterionResolver as APIPermissionCriterionResolver;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Values\User\LookupLimitationResult;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use Exception;
@@ -101,6 +102,19 @@ class CachedPermissionService implements APIPermissionResolver, APIPermissionCri
     public function canUser($module, $function, ValueObject $object, array $targets = [])
     {
         return $this->permissionResolver->canUser($module, $function, $object, $targets);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lookupLimitations(
+        string $module,
+        string $function,
+        ValueObject $object,
+        array $targets = [],
+        array $limitations = []
+    ): LookupLimitationResult {
+        return $this->permissionResolver->lookupLimitations($module, $function, $object, $targets, $limitations);
     }
 
     public function getPermissionsCriterion($module = 'content', $function = 'read', ?array $targets = null)

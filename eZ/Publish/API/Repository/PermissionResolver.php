@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\API\Repository;
 
+use eZ\Publish\API\Repository\Values\User\LookupLimitationResult;
 use eZ\Publish\API\Repository\Values\User\UserReference;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
@@ -70,4 +71,24 @@ interface PermissionResolver
      * @return bool
      */
     public function canUser($module, $function, ValueObject $object, array $targets = []);
+
+    /**
+     * @param string $module The module, aka controller identifier to check permissions on
+     * @param string $function The function, aka the controller action to check permissions on
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $object The object to check if the user has access to
+     * @param \eZ\Publish\API\Repository\Values\ValueObject[] $targets An array of location, parent or "assignment" value objects
+     * @param string[] $limitationsIdentifiers An array of Limitations identifiers to filter from all which will pass
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\LookupLimitationResult
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     */
+    public function lookupLimitations(
+        string $module,
+        string $function,
+        ValueObject $object,
+        array $targets = [],
+        array $limitationsIdentifiers = []
+    ): LookupLimitationResult;
 }
