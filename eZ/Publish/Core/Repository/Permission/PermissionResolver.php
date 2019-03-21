@@ -266,7 +266,7 @@ class PermissionResolver implements PermissionResolverInterface
 
         $passedLimitations = [];
         foreach ($permissionSets as $permissionSet) {
-            if ($this->deniedByRoleLimitation($permissionSet['limitation'], $currentUserReference, $object, $targets)) {
+            if ($this->isDeniedByRoleLimitation($permissionSet['limitation'], $currentUserReference, $object, $targets)) {
                 continue;
             }
 
@@ -282,7 +282,7 @@ class PermissionResolver implements PermissionResolverInterface
                 $limitationsPass = true;
                 $possibleLimitations = [];
                 foreach ($policyLimitations as $limitation) {
-                    $limitationsPass = $this->grantedByLimitation($limitation, $currentUserReference, $object, $targets);
+                    $limitationsPass = $this->isGrantedByLimitation($limitation, $currentUserReference, $object, $targets);
                     if (!$limitationsPass) {
                         break;
                     }
