@@ -197,36 +197,28 @@ class InMemoryCache
     /**
      * Call to reduce cache items when $limit has been reached.
      *
-     * Deletes expired first, then oldest(or least used?).
+     * Deletes items using LFU approach where the least frequently used items are evicted from bottom and up.
+     * Within groups of cache used equal amount of times, the oldest keys will be deleted first (FIFO).
      */
     private function vacuum(): void
     {
         // To not having to call this too often, we aim to clear 33% of cache values in bulk
         $deleteTarget = (int) ($this->limit / 3);
 
-        // First delete items which has not been read after initial store (oldest first)
+        // First we flip the cacheAccessCount and sort so order is first by access (LFU) then secondly by order (FIFO)
+        $groupedAccessCount = [];
         foreach ($this->cacheAccessCount as $key => $accessCount) {
-            if ($accessCount > 0) {
-                continue;
-            }
+            $groupedAccessCount[$accessCount][] = $key;
+        }
+        \ksort($groupedAccessCount, SORT_NUMERIC);
 
+        // Merge the resulting sorted array of arrays to flatten the result
+        foreach (\array_merge(...$groupedAccessCount) as $key) {
             unset($this->cache[$key], $this->cacheExpiryTime[$key], $this->cacheAccessCount[$key]);
             --$deleteTarget;
 
             if ($deleteTarget <= 0) {
                 break;
-            }
-        }
-
-        // Secondly if still items to be deleted, vacuuming remaining cache in bulk from the start of the array
-        if ($deleteTarget) {
-            $this->cache = \array_slice($this->cache, $deleteTarget);
-
-            // Cleanup cacheExpiryTime & cacheAccessCount for sanity here
-            foreach ($this->cacheExpiryTime as $key => $time) {
-                if (!isset($this->cache[$key])) {
-                    unset($this->cacheExpiryTime[$key], $this->cacheAccessCount[$key]);
-                }
             }
         }
 
