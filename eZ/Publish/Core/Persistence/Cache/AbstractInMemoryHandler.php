@@ -65,9 +65,12 @@ abstract class AbstractInMemoryHandler
     }
 
     /**
-     * Function to initialize handler without having to overload __construct().
+     * Optional dunction to initialize handler without having to overload __construct().
      */
-    abstract protected function init(): void;
+    protected function init(): void
+    {
+        // overload to add init logic if needed in handler
+    }
 
     /**
      * Load one cache item from cache and loggs the hits / misses.
