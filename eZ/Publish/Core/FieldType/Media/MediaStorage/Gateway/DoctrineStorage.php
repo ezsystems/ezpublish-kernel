@@ -111,4 +111,35 @@ class DoctrineStorage extends BaseDoctrineStorage
             ->setParameter(':width', $field->value->externalData['width'], PDO::PARAM_INT)
         ;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUpdateColumns(QueryBuilder $queryBuilder, VersionInfo $versionInfo, Field $field)
+    {
+        parent::setUpdateColumns($queryBuilder, $versionInfo, $field);
+
+        $queryBuilder
+            ->set('controls', ':controls')
+            ->set('has_controller', ':hasController')
+            ->set('height', ':height')
+            ->set('is_autoplay', ':isAutoplay')
+            ->set('is_loop', ':isLoop')
+            ->set('pluginspage', ':pluginsPage')
+            ->set('quality', ':quality')
+            ->set('width', ':width')
+            ->setParameter(':controls', '')
+            ->setParameter(
+                ':hasController',
+                $field->value->externalData['hasController'],
+                PDO::PARAM_INT
+            )
+            ->setParameter(':height', $field->value->externalData['height'], PDO::PARAM_INT)
+            ->setParameter(':isAutoplay', $field->value->externalData['autoplay'], PDO::PARAM_INT)
+            ->setParameter(':isLoop', $field->value->externalData['loop'], PDO::PARAM_INT)
+            ->setParameter(':pluginsPage', '')
+            ->setParameter(':quality', 'high')
+            ->setParameter(':width', $field->value->externalData['width'], PDO::PARAM_INT)
+        ;
+    }
 }
