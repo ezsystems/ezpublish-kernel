@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\UserPreference\UserPreference;
  *
  * @see \eZ\Publish\SPI\Persistence\UserPreference\Handler
  */
-class UserPreferenceHandler extends AbstractHandler implements Handler
+class UserPreferenceHandler extends AbstractInMemoryHandler implements Handler
 {
     /**
      * Constant used for storing not found results for getUserPreferenceByUserIdAndName().
@@ -35,7 +35,7 @@ class UserPreferenceHandler extends AbstractHandler implements Handler
             'setStruct' => $setStruct,
         ]);
 
-        $this->cache->deleteItems([
+        $this->deleteCache([
             'ez-user-preference-count-' . $setStruct->userId,
             'ez-user-preference-' . $setStruct->userId . '-' . $setStruct->name,
         ]);
@@ -48,21 +48,11 @@ class UserPreferenceHandler extends AbstractHandler implements Handler
      */
     public function countUserPreferences(int $userId): int
     {
-        $cacheItem = $this->cache->getItem('ez-user-preference-count-' . $userId);
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
-
         $this->logger->logCall(__METHOD__, [
             'userId' => $userId,
         ]);
 
-        $count = $this->persistenceHandler->userPreferenceHandler()->countUserPreferences($userId);
-        $cacheItem->set($count);
-        $cacheItem->tag(['user-preference-' . $userId]);
-        $this->cache->save($cacheItem);
-
-        return $count;
+        return $this->persistenceHandler->userPreferenceHandler()->countUserPreferences($userId);
     }
 
     /**
@@ -72,35 +62,31 @@ class UserPreferenceHandler extends AbstractHandler implements Handler
      */
     public function getUserPreferenceByUserIdAndName(int $userId, string $name): UserPreference
     {
-        $cacheItem = $this->cache->getItem('ez-user-preference-' . $userId . '-' . $name);
-        if ($cacheItem->isHit()) {
-            $userPreference = $cacheItem->get();
-            if ($userPreference === self::NOT_FOUND) {
-                throw new NotFoundException('User Preference', $userId . ',' . $name);
-            }
+        $userPreference = $this->getCacheValue(
+            $userId,
+            'ez-user-preference-',
+            function ($userId) use ($name) {
+                try {
+                    return $this->persistenceHandler->userPreferenceHandler()->getUserPreferenceByUserIdAndName(
+                        $userId,
+                        $name
+                    );
+                } catch (APINotFoundException $e) {
+                    return self::NOT_FOUND;
+                }
+            },
+            static function () use ($userId) {
+                return ['user-preference-' . $userId];
+            },
+            static function () use ($userId, $name) {
+                return ['ez-user-preference-' . $userId . '-' . $name];
+            },
+            '-' . $name
+        );
 
-            return $userPreference;
+        if ($userPreference === self::NOT_FOUND) {
+            throw new NotFoundException('User Preference', $userId . ',' . $name);
         }
-
-        $this->logger->logCall(__METHOD__, [
-            'userId' => $userId,
-            'name' => $name,
-        ]);
-        $cacheItem->tag(['user-preference-' . $userId]);
-
-        try {
-            $userPreference = $this->persistenceHandler->userPreferenceHandler()->getUserPreferenceByUserIdAndName(
-                $userId,
-                $name
-            );
-        } catch (APINotFoundException $e) {
-            $cacheItem->set(self::NOT_FOUND);
-            $this->cache->save($cacheItem);
-            throw new NotFoundException('User Preference', $userId . ',' . $name, $e);
-        }
-
-        $cacheItem->set($userPreference);
-        $this->cache->save($cacheItem);
 
         return $userPreference;
     }

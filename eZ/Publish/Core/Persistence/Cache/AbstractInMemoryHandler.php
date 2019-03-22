@@ -139,7 +139,7 @@ abstract class AbstractInMemoryHandler
      * @param callable $listTags Optional, global tags for the list cache.
      * @param array $arguments Optional, arguments when parnt method takes arguments that key varies on.
      *
-     * @return object
+     * @return array
      */
     final protected function getListCacheValue(
         string $key,

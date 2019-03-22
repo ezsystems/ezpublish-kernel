@@ -124,7 +124,7 @@ services:
 
     ezpublish.spi.persistence.cache.userPreferenceHandler:
         class: "%ezpublish.spi.persistence.cache.userPreferenceHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler
 
     ezpublish.spi.persistence.cache:
         class: "%ezpublish.spi.persistence.cache.class%"
