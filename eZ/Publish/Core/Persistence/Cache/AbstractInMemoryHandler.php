@@ -247,7 +247,7 @@ abstract class AbstractInMemoryHandler
 
         // No cache pool misses, cache loaded items in-memory and return
         if (empty($cacheMisses)) {
-            $this->logger->logCacheHit($ids, 3, true);
+            $this->logger->logCacheHit($ids, 3);
             $this->inMemory->setMulti($loaded, $cacheIndexes);
 
             return $list;
