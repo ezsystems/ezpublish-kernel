@@ -11,6 +11,7 @@ namespace eZ\Publish\API\Repository\Tests;
 use Doctrine\DBAL\Connection;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
@@ -715,6 +716,36 @@ abstract class BaseTest extends TestCase
         );
 
         return $contentService->publishVersion($contentDraft->versionInfo);
+    }
+
+    /**
+     * Update 'folder' Content.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     * @param array $names Folder names in the form of <code>['&lt;language_code&gt;' => '&lt;name&gt;']</code>
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function updateFolder(Content $content, array $names)
+    {
+        $repository = $this->getRepository(false);
+        $contentService = $repository->getContentService();
+
+        $draft = $contentService->createContentDraft($content->contentInfo);
+        $struct = $contentService->newContentUpdateStruct();
+        $struct->initialLanguageCode = array_keys($names)[0];
+
+        foreach ($names as $languageCode => $translatedName) {
+            $struct->setField('name', $translatedName, $languageCode);
+        }
+
+        return $contentService->updateContent($draft->versionInfo, $struct);
     }
 
     /**

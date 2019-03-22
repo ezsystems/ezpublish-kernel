@@ -5884,6 +5884,44 @@ XML
     }
 
     /**
+     * Test loading content versions after removing exactly two drafts.
+     *
+     * @see https://jira.ez.no/browse/EZP-30271
+     *
+     * @covers \eZ\Publish\Core\Repository\ContentService::deleteVersion
+     */
+    public function testLoadVersionsAfterDeletingTwoDrafts()
+    {
+        $repository = $this->getRepository();
+        $contentService = $repository->getContentService();
+
+        $content = $this->createFolder(['eng-GB' => 'Foo'], 2);
+
+        // First update and publish
+        $modifiedContent = $this->updateFolder($content, ['eng-GB' => 'Foo1']);
+        $content = $contentService->publishVersion($modifiedContent->versionInfo);
+
+        // Second update and publish
+        $modifiedContent = $this->updateFolder($content, ['eng-GB' => 'Foo2']);
+        $content = $contentService->publishVersion($modifiedContent->versionInfo);
+
+        // Create drafts
+        $this->updateFolder($content, ['eng-GB' => 'Foo3']);
+        $this->updateFolder($content, ['eng-GB' => 'Foo4']);
+
+        $versions = $contentService->loadVersions($content->contentInfo);
+
+        foreach ($versions as $key => $version) {
+            if ($version->isDraft()) {
+                $contentService->deleteVersion($version);
+                unset($versions[$key]);
+            }
+        }
+
+        $this->assertEquals($versions, $contentService->loadVersions($content->contentInfo));
+    }
+
+    /**
      * Asserts that all aliases defined in $expectedAliasProperties with the
      * given properties are available in $actualAliases and not more.
      *
