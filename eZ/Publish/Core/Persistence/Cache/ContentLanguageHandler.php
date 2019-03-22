@@ -8,12 +8,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Persistence\Content\Language\Handler as ContentLanguageHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Language;
 use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler
@@ -26,14 +23,11 @@ class ContentLanguageHandler extends AbstractInMemoryHandler implements ContentL
     /** @var callable */
     private $getKeys;
 
-    public function __construct(
-        TagAwareAdapterInterface $cache,
-        PersistenceHandler $persistenceHandler,
-        PersistenceLogger $logger,
-        InMemoryCache $inMemory
-    ) {
-        parent::__construct($cache, $persistenceHandler, $logger, $inMemory);
-
+    /**
+     * Set callback functions for use in cache retrival.
+     */
+    protected function init(): void
+    {
         $this->getTags = static function (Language $language) { return ['language-' . $language->id]; };
         $this->getKeys = static function (Language $language) {
             return [
