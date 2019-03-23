@@ -1,6 +1,4 @@
-# Use trusty for better performance (and avoiding mysql/postgres/solr gone issues on precise and container infra)
-dist: trusty
-sudo: required
+dist: xenial
 
 language: php
 
@@ -8,14 +6,6 @@ services:
   - mysql
   - postgresql
   - redis-server
-
-# Mysql isn't installed on trusty (only client is), so we need to specifically install it
-addons:
-  apt:
-    packages:
-    - mysql-server-5.6
-    - mysql-client-core-5.6
-    - mysql-client-5.6
 
 cache:
   directories:
@@ -48,8 +38,13 @@ matrix:
 #    - php: 7.1
 #      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb" REPOSITORY_SERVICE_ID="ezpublish.siteaccessaware.repository"
 # 7.2
-    - php: 7.2
-      env: TEST_CONFIG="phpunit.xml"
+    - name: Legacy Storage engine tests with MySQL 8.0
+      php: 7.2
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
+      addons:
+        snaps:
+        - name: mysql
+          channel: 8.0/beta
     - php: 7.2
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # 7.3
