@@ -142,7 +142,7 @@ abstract class DoctrineStorage extends Gateway
 
         if ($referencedData === null) {
             $this->storeNewFieldData($versionInfo, $field);
-        } elseif (is_array($referencedData) && !empty(array_diff($referencedData, $field->value->externalData))) {
+        } elseif (is_array($referencedData) && !empty(array_diff_assoc($referencedData, $field->value->externalData))) {
             $this->updateFieldData($versionInfo, $field);
         }
 
