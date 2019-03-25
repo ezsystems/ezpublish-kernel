@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway;
 
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -109,6 +110,37 @@ class DoctrineStorage extends BaseDoctrineStorage
             ->setParameter(':pluginsPage', '')
             ->setParameter(':quality', 'high')
             ->setParameter(':width', $field->value->externalData['width'], PDO::PARAM_INT)
+        ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function setUpdateColumns(QueryBuilder $queryBuilder, VersionInfo $versionInfo, Field $field)
+    {
+        parent::setUpdateColumns($queryBuilder, $versionInfo, $field);
+
+        $queryBuilder
+            ->set('controls', ':controls')
+            ->set('has_controller', ':hasController')
+            ->set('height', ':height')
+            ->set('is_autoplay', ':isAutoplay')
+            ->set('is_loop', ':isLoop')
+            ->set('pluginspage', ':pluginsPage')
+            ->set('quality', ':quality')
+            ->set('width', ':width')
+            ->setParameter(':controls', '')
+            ->setParameter(
+                ':hasController',
+                $field->value->externalData['hasController'],
+                ParameterType::INTEGER
+            )
+            ->setParameter(':height', $field->value->externalData['height'], ParameterType::INTEGER)
+            ->setParameter(':isAutoplay', $field->value->externalData['autoplay'], ParameterType::INTEGER)
+            ->setParameter(':isLoop', $field->value->externalData['loop'], ParameterType::INTEGER)
+            ->setParameter(':pluginsPage', '')
+            ->setParameter(':quality', 'high')
+            ->setParameter(':width', $field->value->externalData['width'], ParameterType::INTEGER)
         ;
     }
 }

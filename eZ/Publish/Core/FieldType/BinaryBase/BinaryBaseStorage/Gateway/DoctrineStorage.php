@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -108,6 +109,27 @@ abstract class DoctrineStorage extends Gateway
     }
 
     /**
+     * @param \Doctrine\DBAL\Query\QueryBuilder $queryBuilder
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     */
+    protected function setUpdateColumns(QueryBuilder $queryBuilder, VersionInfo $versionInfo, Field $field)
+    {
+        $queryBuilder
+            ->set('contentobject_attribute_id', ':fieldId')
+            ->set('filename', ':filename')
+            ->set('mime_type', ':mimeType')
+            ->set('original_filename', ':originalFilename')
+            ->set('version', ':versionNo')
+            ->setParameter(':fieldId', $field->id, ParameterType::INTEGER)
+            ->setParameter(':filename', $this->removeMimeFromPath($field->value->externalData['id']))
+            ->setParameter(':mimeType', $field->value->externalData['mimeType'])
+            ->setParameter(':originalFilename', $field->value->externalData['fileName'])
+            ->setParameter(':versionNo', $versionInfo->versionNo, ParameterType::INTEGER)
+        ;
+    }
+
+    /**
      * Store the file reference in $field for $versionNo.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
@@ -115,6 +137,55 @@ abstract class DoctrineStorage extends Gateway
      * @return bool
      */
     public function storeFileReference(VersionInfo $versionInfo, Field $field)
+    {
+        $referencedData = $this->getFileReferenceData($field->id, $versionInfo->versionNo);
+
+        if ($referencedData === null) {
+            $this->storeNewFieldData($versionInfo, $field);
+        } elseif (is_array($referencedData) && !empty(array_diff_assoc($referencedData, $field->value->externalData))) {
+            $this->updateFieldData($versionInfo, $field);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     */
+    protected function updateFieldData(VersionInfo $versionInfo, Field $field)
+    {
+        $updateQuery = $this->connection->createQueryBuilder();
+        $updateQuery->update(
+            $this->connection->quoteIdentifier($this->getStorageTable())
+        );
+
+        $this->setUpdateColumns($updateQuery, $versionInfo, $field);
+        $updateQuery
+            ->where(
+                $updateQuery->expr()->andX(
+                    $updateQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('contentobject_attribute_id'),
+                        ':fieldId'
+                    ),
+                    $updateQuery->expr()->eq(
+                        $this->connection->quoteIdentifier('version'),
+                        ':versionNo'
+                    )
+                )
+            )
+            ->setParameter(':fieldId', $field->id, ParameterType::INTEGER)
+            ->setParameter(':versionNo', $versionInfo->versionNo, ParameterType::INTEGER)
+        ;
+
+        $updateQuery->execute();
+    }
+
+    /**
+     * @param \eZ\Publish\SPI\Persistence\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     */
+    protected function storeNewFieldData(VersionInfo $versionInfo, Field $field)
     {
         $insertQuery = $this->connection->createQueryBuilder();
         $insertQuery->insert(
@@ -124,8 +195,6 @@ abstract class DoctrineStorage extends Gateway
         $this->setInsertColumns($insertQuery, $versionInfo, $field);
 
         $insertQuery->execute();
-
-        return false;
     }
 
     /**
