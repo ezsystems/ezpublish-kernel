@@ -1,7 +1,4 @@
 parameters:
-    ezpublish.cache_pool.class: Symfony\Component\Cache\Adapter\TagAwareAdapter
-    ezpublish.cache_pool.driver.class: Symfony\Component\Cache\Adapter\FilesystemAdapter
-
     ezpublish.spi.persistence.cache.class: eZ\Publish\Core\Persistence\Cache\Handler
     ezpublish.spi.persistence.cache.abstractHandler.class: eZ\Publish\Core\Persistence\Cache\AbstractHandler
     ezpublish.spi.persistence.cache.sectionHandler.class: eZ\Publish\Core\Persistence\Cache\SectionHandler
@@ -27,14 +24,20 @@ parameters:
     ezpublish.spi.persistence.cache.inmemory.enable: true
 
 services:
+    # Setup cache pool, with InMemoryCacheAdapter as decorator
     ezpublish.cache_pool:
-        class: "%ezpublish.cache_pool.class%"
+        class: eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter
+        arguments: ["@ezpublish.cache_pool.inner", "@ezpublish.spi.persistence.cache.inmemory"]
+
+    ezpublish.cache_pool.inner:
+        public: false
+        class: Symfony\Component\Cache\Adapter\TagAwareAdapter
         arguments: ["@ezpublish.cache_pool.driver"]
 
     # Note for tests: Default changed to in-memory Array cache in tests/common.yml by default, and opt in for redis
     # testing is defined in containerBuilder.php
     ezpublish.cache_pool.driver:
-        class: "%ezpublish.cache_pool.driver.class%"
+        class: Symfony\Component\Cache\Adapter\FilesystemAdapter
         arguments: ["", 120]
 
     # Logger which logs info when in dev for Symfony web toolbar
@@ -45,11 +48,11 @@ services:
 
     # In-Memory cache pools
     ezpublish.spi.persistence.cache.inmemory:
-      class: eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
-      arguments:
-        - "%ezpublish.spi.persistence.cache.inmemory.ttl%"
-        - "%ezpublish.spi.persistence.cache.inmemory.limit%"
-        - "%ezpublish.spi.persistence.cache.inmemory.enable%"
+        class: eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
+        arguments:
+            - "%ezpublish.spi.persistence.cache.inmemory.ttl%"
+            - "%ezpublish.spi.persistence.cache.inmemory.limit%"
+            - "%ezpublish.spi.persistence.cache.inmemory.enable%"
 
 
     # SPI Persistence Cache Handlers, incl abstracts
@@ -62,13 +65,13 @@ services:
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
 
     ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler:
-      class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
-      abstract:  true
-      arguments:
-        - "@ezpublish.api.storage_engine"
-        - "@ezpublish.cache_pool"
-        - "@ezpublish.spi.persistence.cache.persistenceLogger"
-        - "@ezpublish.spi.persistence.cache.inmemory"
+        class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
+        abstract:  true
+        arguments:
+            - "@ezpublish.api.storage_engine"
+            - "@ezpublish.cache_pool"
+            - "@ezpublish.spi.persistence.cache.persistenceLogger"
+            - "@ezpublish.spi.persistence.cache.inmemory"
 
     ezpublish.spi.persistence.cache.sectionHandler:
         class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"

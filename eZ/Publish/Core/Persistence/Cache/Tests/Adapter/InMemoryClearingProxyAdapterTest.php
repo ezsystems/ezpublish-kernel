@@ -181,7 +181,6 @@ class InMemoryClearingProxyAdapterTest extends TestCase
         ];
     }
 
-
     /**
      * Test for clear and invalidateTags as both expects a clear to in-memory as it on purpose does not track tags.
      *
@@ -201,7 +200,6 @@ class InMemoryClearingProxyAdapterTest extends TestCase
                 ->method($method)
                 ->willReturn(true);
         }
-
 
         $this->inMemory
             ->expects($this->once())
