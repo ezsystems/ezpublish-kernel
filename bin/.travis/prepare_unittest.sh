@@ -23,6 +23,16 @@ fi
 
 # Setup DB
 if [ "$DB" = "mysql" ] || [ "$DB" = "mariadb" ] ; then
+    if [ "$MYSQL8" = "true" ]; then
+        echo "Install Mysql8"
+        wget https://repo.mysql.com//mysql-apt-config_0.8.12-1_all.deb
+        sudo dpkg -i mysql-apt-config_0.8.12-1_all.deb
+        sudo apt-get update -q
+        sudo apt-get install -q -y --allow-unauthenticated -o Dpkg::Options::=--force-confnew mysql-server
+        sudo systemctl restart mysql
+        sudo mysql_upgrade
+        mysql --version
+    fi
     # https://github.com/travis-ci/travis-ci/issues/3049
     # make sure we don't run out of entropy apparently (see link above)
     sudo apt-get -y install haveged
