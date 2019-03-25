@@ -111,6 +111,10 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
             foreach ($reverseRelations as $relation) {
                 $tags[] = 'content-fields-' . $relation->sourceContentId;
             }
+            $tags[] = 'content-' . $trashedItem->contentId;
+            $tags[] = 'content-fields-' . $trashedItem->contentId;
+            $tags[] = 'location-' . $trashedItem->id;
+            $tags[] = 'location-path-' . $trashedItem->id;
         }
 
         $return = $this->persistenceHandler->trashHandler()->emptyTrash();
@@ -134,15 +138,19 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         $trashed = $this->persistenceHandler->trashHandler()->loadTrashItem($trashedId);
 
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations($trashed->contentId);
+
         $tags = array_map(function (Relation $relation) {
             return 'content-fields-' . $relation->sourceContentId;
         }, $reverseRelations);
 
         $return = $this->persistenceHandler->trashHandler()->deleteTrashItem($trashedId);
 
-        if (!empty($tags)) {
-            $this->cache->invalidateTags($tags);
-        }
+        $this->cache->invalidateTags([
+            'content-' . $return->contentId,
+            'content-fields-' . $return->contentId,
+            'location-' . $trashedId,
+            'location-path-' . $trashedId,
+        ] + $tags);
 
         return $return;
     }
