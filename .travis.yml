@@ -44,6 +44,8 @@ matrix:
 # 7.2
     - name: Legacy Storage engine tests with MySQL 8.0
       php: 7.2
+      # Mysql8 package only exists for 16.04 (xenial) and up
+      dist: xenial
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb" MYSQL8="true"
     - php: 7.2
       env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
