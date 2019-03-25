@@ -120,7 +120,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
         $return = $this->persistenceHandler->trashHandler()->emptyTrash();
 
         if (!empty($tags)) {
-            $this->cache->invalidateTags(array_unique($tags));
+            $this->cache->invalidateTags(array_values(array_unique($tags)));
         }
 
         return $return;
