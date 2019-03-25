@@ -65,8 +65,8 @@ services:
       class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
       abstract:  true
       arguments:
-        - "@ezpublish.cache_pool"
         - "@ezpublish.api.storage_engine"
+        - "@ezpublish.cache_pool"
         - "@ezpublish.spi.persistence.cache.persistenceLogger"
         - "@ezpublish.spi.persistence.cache.inmemory"
 

@@ -43,27 +43,49 @@ abstract class AbstractInMemoryHandler
     /**
      * Setups current handler with everything needed.
      *
-     * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
+     * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      */
     public function __construct(
-        TagAwareAdapterInterface $cache,
         PersistenceHandler $persistenceHandler,
+        TagAwareAdapterInterface $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory
     ) {
-        $this->cache = $cache;
         $this->persistenceHandler = $persistenceHandler;
-        $this->logger = $logger;
-        $this->inMemory = $inMemory;
-
+        $this->setCacheDependencies($cache, $logger, $inMemory);
         $this->init();
     }
 
     /**
-     * Optional dunction to initialize handler without having to overload __construct().
+     * @api May be used from handlers that needs to inject something else then PersistenceHandler to __construct(), to
+     *      avoid having to have intimate knowledge of internal classes used by AbstractInMemoryHandler in signature.
+     *
+     * E.g:
+     *    public function __construct(MyHandler $myHandler, ...$params) {
+     *        $this->myHandler = $myHandler;
+     *        $this->setCacheDependencies(...$params);
+     *        $this->init();
+     *    }
+     *
+     * @param TagAwareAdapterInterface $cache
+     * @param PersistenceLogger $logger
+     * @param InMemoryCache $inMemory
+     */
+    protected function setCacheDependencies(
+        TagAwareAdapterInterface $cache,
+        PersistenceLogger $logger,
+        InMemoryCache $inMemory
+    ) {
+        $this->cache = $cache;
+        $this->logger = $logger;
+        $this->inMemory = $inMemory;
+    }
+
+    /**
+     * Optional function to initialize handler without having to overload __construct().
      */
     protected function init(): void
     {
