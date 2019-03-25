@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\BinaryBase\BinaryBaseStorage\Gateway;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -120,11 +121,11 @@ abstract class DoctrineStorage extends Gateway
             ->set('mime_type', ':mimeType')
             ->set('original_filename', ':originalFilename')
             ->set('version', ':versionNo')
-            ->setParameter(':fieldId', $field->id, PDO::PARAM_INT)
+            ->setParameter(':fieldId', $field->id, ParameterType::INTEGER)
             ->setParameter(':filename', $this->removeMimeFromPath($field->value->externalData['id']))
             ->setParameter(':mimeType', $field->value->externalData['mimeType'])
             ->setParameter(':originalFilename', $field->value->externalData['fileName'])
-            ->setParameter(':versionNo', $versionInfo->versionNo, PDO::PARAM_INT)
+            ->setParameter(':versionNo', $versionInfo->versionNo, ParameterType::INTEGER)
         ;
     }
 
@@ -173,8 +174,8 @@ abstract class DoctrineStorage extends Gateway
                     )
                 )
             )
-            ->setParameter(':fieldId', $field->id, PDO::PARAM_INT)
-            ->setParameter(':versionNo', $versionInfo->versionNo, PDO::PARAM_INT)
+            ->setParameter(':fieldId', $field->id, ParameterType::INTEGER)
+            ->setParameter(':versionNo', $versionInfo->versionNo, ParameterType::INTEGER)
         ;
 
         $updateQuery->execute();
