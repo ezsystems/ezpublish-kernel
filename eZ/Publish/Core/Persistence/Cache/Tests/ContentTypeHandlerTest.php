@@ -46,7 +46,7 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
             ['updateGroup', [$groupUpdate], null, ['ez-content-type-group-list', 'ez-content-type-group-3', 'ez-content-type-group-media-by-identifier']],
             ['deleteGroup', [3], ['type-group-3']],
             ['loadContentTypes', [3, 1]], // also listed for cached cases in providerForCachedLoadMethods
-            ['create', [new SPITypeCreateStruct()]],
+            ['create', [new SPITypeCreateStruct(['groupIds' => [2, 3]])], null, ['ez-content-type-list-by-group-2', 'ez-content-type-list-by-group-3']],
             ['update', [5, 0, $typeUpdate], ['type-5', 'type-map', 'content-fields-type-5']],
             ['update', [5, 1, $typeUpdate], null, ['ez-content-type-5-1']],
             ['delete', [5, 0], ['type-5', 'type-map', 'content-fields-type-5']],

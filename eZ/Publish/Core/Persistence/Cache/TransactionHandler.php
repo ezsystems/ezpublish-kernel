@@ -45,7 +45,7 @@ class TransactionHandler extends AbstractInMemoryHandler implements TransactionH
     public function rollback()
     {
         $this->logger->logCall(__METHOD__);
-        $this->clearCache(); // TIMBER!! @see beginTransaction()
+        $this->cache->clear(); // TIMBER!! @see beginTransaction()
         $this->persistenceHandler->transactionHandler()->rollback();
     }
 }

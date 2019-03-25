@@ -6,9 +6,9 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
+use eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 
 /**
  * Class AbstractInMemoryHandler.
@@ -18,12 +18,11 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 abstract class AbstractInMemoryHandler
 {
     /**
-     * NOTE: $cache and $inMemory is private in order to abstract interactions across both,
-     *       and be able to optimize this later without affecting all classes extending this.
+     * NOTE: Instance of this must be InMemoryClearingProxyAdapter in order for cache clearing to affect in-memory cache.
      *
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
+     * @var \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter
      */
-    private $cache;
+    protected $cache;
 
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler
@@ -44,13 +43,13 @@ abstract class AbstractInMemoryHandler
      * Setups current handler with everything needed.
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
-     * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $cache
+     * @param \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter $cache
      * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
      * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      */
     public function __construct(
         PersistenceHandler $persistenceHandler,
-        TagAwareAdapterInterface $cache,
+        InMemoryClearingProxyAdapter $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory
     ) {
@@ -67,15 +66,14 @@ abstract class AbstractInMemoryHandler
      *    public function __construct(MyHandler $myHandler, ...$params) {
      *        $this->myHandler = $myHandler;
      *        $this->setCacheDependencies(...$params);
-     *        $this->init();
      *    }
      *
-     * @param TagAwareAdapterInterface $cache
-     * @param PersistenceLogger $logger
-     * @param InMemoryCache $inMemory
+     * @param \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter $cache
+     * @param \eZ\Publish\Core\Persistence\Cache\PersistenceLogger $logger
+     * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache $inMemory
      */
     protected function setCacheDependencies(
-        TagAwareAdapterInterface $cache,
+        InMemoryClearingProxyAdapter $cache,
         PersistenceLogger $logger,
         InMemoryCache $inMemory
     ) {
@@ -305,46 +303,5 @@ abstract class AbstractInMemoryHandler
         $this->logger->logCacheMiss($cacheMisses, 3);
 
         return $list;
-    }
-
-    /**
-     * Delete cache by keys.
-     *
-     * @param array $keys
-     */
-    final protected function deleteCache(array $keys): void
-    {
-        if (empty($keys)) {
-            return;
-        }
-
-        $this->inMemory->deleteMulti($keys);
-        $this->cache->deleteItems($keys);
-    }
-
-    /**
-     * Invalidate cache by tags.
-     *
-     * @param array $tags
-     */
-    final protected function invalidateCache(array $tags): void
-    {
-        if (empty($tags)) {
-            return;
-        }
-
-        $this->inMemory->clear();
-        $this->cache->invalidateTags($tags);
-    }
-
-    /**
-     * Clear ALL cache.
-     *
-     * Only use this in extname situations, or for isolation in tests.
-     */
-    final protected function clearCache(): void
-    {
-        $this->inMemory->clear();
-        $this->cache->clear();
     }
 }

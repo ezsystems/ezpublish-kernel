@@ -16,8 +16,10 @@ use Psr\Cache\CacheItemInterface;
 
 /**
  * Proxy adapter to make sure to clear in-memory cache when needed.
+ *
+ * @intenral Only for type hinting inside eZ\Publish\Core\Persistence\Cache namespace, for external type hint on TagAwareAdapterInterface.
  */
-final class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
+class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
 {
     /**
      * @var TagAwareAdapterInterface
@@ -28,11 +30,6 @@ final class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
      * @var InMemoryCache
      */
     private $inMemory;
-
-    /**
-     * @var int
-     */
-    private $ttl;
 
     public function __construct(TagAwareAdapterInterface $pool, InMemoryCache $inMemory)
     {
