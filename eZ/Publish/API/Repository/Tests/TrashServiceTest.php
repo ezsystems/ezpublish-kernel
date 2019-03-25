@@ -734,12 +734,17 @@ class TrashServiceTest extends BaseTrashServiceTest
     {
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
+        $contentService = $repository->getContentService();
 
         /* BEGIN: Use Case */
-        $this->createTrashItem();
+        $trashItem = $this->createTrashItem();
 
         // Empty the trash
         $trashService->emptyTrash();
+
+        // Try to load content
+        $this->expectException(NotFoundException::class);
+        $contentService->loadContent($trashItem->contentId);
 
         // Create a search query for all trashed items
         $query = new Query();
@@ -748,7 +753,6 @@ class TrashServiceTest extends BaseTrashServiceTest
                 new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
             )
         );
-
         // Load all trashed locations, search result should be empty
         $searchResult = $trashService->findTrashItems($query);
         /* END: Use Case */
@@ -767,6 +771,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
+        $contentService = $repository->getContentService();
 
         $demoDesignLocationId = $this->generateId('location', 56);
         /* BEGIN: Use Case */
@@ -782,6 +787,10 @@ class TrashServiceTest extends BaseTrashServiceTest
 
         // Empty the trash
         $trashService->deleteTrashItem($trashItem);
+
+        // Try to load Content
+        $this->expectException(NotFoundException::class);
+        $contentService->loadContent($trashItem->contentId);
 
         // Create a search query for all trashed items
         $query = new Query();
