@@ -614,6 +614,26 @@ class LocationServiceTest extends BaseTest
     }
 
     /**
+     * Test for the loadLocationList() method.
+     *
+     * @covers \eZ\Publish\API\Repository\LocationService::loadLocationList
+     */
+    public function testLoadLocationListWithRootLocationId()
+    {
+        $repository = $this->getRepository();
+
+        // 1 is the ID of an root location
+        $locationService = $repository->getLocationService();
+        $locations = $locationService->loadLocationList([1]);
+
+        self::assertInternalType('iterable', $locations);
+        self::assertCount(1, $locations);
+        self::assertEquals([1], array_keys($locations));
+        self::assertInstanceOf(Location::class, $locations[1]);
+        self::assertEquals(1, $locations[1]->id);
+    }
+
+    /**
      * Test for the loadLocationByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
