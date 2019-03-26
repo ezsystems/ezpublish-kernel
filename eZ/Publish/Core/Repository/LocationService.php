@@ -247,8 +247,8 @@ class LocationService implements LocationServiceInterface
         foreach ($spiLocations as $spiLocation) {
             $location = $this->domainMapper->buildLocationWithContent(
                 $spiLocation,
-                $contentProxyList[$spiLocation->contentId],
-                $spiContentInfoList[$spiLocation->contentId]
+                $contentProxyList[$spiLocation->contentId] ?? null,
+                $spiContentInfoList[$spiLocation->contentId] ?? null
             );
 
             if ($permissionResolver->canUser('content', 'read', $location->getContentInfo(), [$location])) {
