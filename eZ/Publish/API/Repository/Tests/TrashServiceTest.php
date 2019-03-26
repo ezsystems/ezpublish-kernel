@@ -742,10 +742,6 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Empty the trash
         $trashService->emptyTrash();
 
-        // Try to load content
-        $this->expectException(NotFoundException::class);
-        $contentService->loadContent($trashItem->contentId);
-
         // Create a search query for all trashed items
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
@@ -758,6 +754,10 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertEquals(0, $searchResult->count);
+
+        // Try to load content
+        $this->expectException(NotFoundException::class);
+        $contentService->loadContent($trashItem->contentId);
     }
 
     /**
@@ -788,10 +788,6 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Empty the trash
         $trashService->deleteTrashItem($trashItem);
 
-        // Try to load Content
-        $this->expectException(NotFoundException::class);
-        $contentService->loadContent($trashItem->contentId);
-
         // Create a search query for all trashed items
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
@@ -815,6 +811,10 @@ class TrashServiceTest extends BaseTrashServiceTest
         $this->assertTrue(
             in_array($demoDesignLocationId, $foundIds)
         );
+
+        // Try to load Content
+        $this->expectException(NotFoundException::class);
+        $contentService->loadContent($trashItem->contentId);
     }
 
     /**
