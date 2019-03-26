@@ -38,10 +38,14 @@ class ContentTypeHandler extends AbstractInMemoryHandler implements ContentTypeH
     private $getTypeKeys;
 
     /**
-     * Set callback functions for use in cache retrival.
+     * Set callback functions for use in cache retrieval.
+     *
+     * {@inheritdoc}
      */
-    protected function init(): void
+    public function __construct(...$params)
     {
+        parent::__construct(...$params);
+
         $this->getGroupTags = static function (Type\Group $group) { return ['type-group-' . $group->id]; };
         $this->getGroupKeys = static function (Type\Group $group) {
             return [

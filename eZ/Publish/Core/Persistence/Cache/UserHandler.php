@@ -41,10 +41,14 @@ class UserHandler extends AbstractInMemoryHandler implements UserHandlerInterfac
     private $getRoleAssignmentKeys;
 
     /**
-     * Set callback functions for use in cache retrival.
+     * Set callback functions for use in cache retrieval.
+     *
+     * {@inheritdoc}
      */
-    public function init(): void
+    public function __construct(...$params)
     {
+        parent::__construct(...$params);
+
         $this->getUserTags = static function (User $user) {
             return ['content-' . $user->id, 'user-' . $user->id];
         };
