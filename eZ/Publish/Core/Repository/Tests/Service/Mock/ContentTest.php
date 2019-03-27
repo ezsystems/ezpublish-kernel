@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Content as APIContent;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
@@ -2859,7 +2860,7 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
-        $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
         $contentUpdateStruct = new ContentUpdateStruct();
         $versionInfo = new VersionInfo(
@@ -2886,12 +2887,13 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $repositoryMock->expects($this->once())
+        $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('edit'),
-                $this->equalTo($content)
+                $this->equalTo($content),
+                $this->isType('array')
             )->will($this->returnValue(false));
 
         $mockedService->updateContent($versionInfo, $contentUpdateStruct);
@@ -3049,6 +3051,7 @@ class ContentTest extends BaseServiceMockTest
         $execute = true
     ) {
         $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent', 'loadRelations'));
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
@@ -3116,12 +3119,13 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock->expects($this->once())->method('beginTransaction');
 
-        $repositoryMock->expects($this->once())
+        $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('edit'),
-                $this->equalTo($content)
+                $this->equalTo($content),
+                $this->isType('array')
             )->will($this->returnValue(true));
 
         $contentTypeServiceMock->expects($this->once())
@@ -4556,6 +4560,7 @@ class ContentTest extends BaseServiceMockTest
     public function testUpdateContentWithInvalidLanguage($initialLanguageCode, $structFields)
     {
         $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
@@ -4605,12 +4610,13 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $repositoryMock->expects($this->once())
+        $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('edit'),
-                $this->equalTo($content)
+                $this->equalTo($content),
+                $this->isType('array')
             )->will($this->returnValue(true));
 
         $contentUpdateStruct = new ContentUpdateStruct(
@@ -4629,6 +4635,7 @@ class ContentTest extends BaseServiceMockTest
         $fieldDefinitions = array()
     ) {
         $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
@@ -4680,12 +4687,13 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $repositoryMock->expects($this->once())
+        $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('edit'),
-                $this->equalTo($content)
+                $this->equalTo($content),
+                $this->isType('array')
             )->will($this->returnValue(true));
 
         $contentTypeServiceMock->expects($this->once())
@@ -4801,6 +4809,7 @@ class ContentTest extends BaseServiceMockTest
         $fieldDefinitions
     ) {
         $repositoryMock = $this->getRepositoryMock();
+        $permissionResolver = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
@@ -4856,12 +4865,13 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $repositoryMock->expects($this->once())
+        $permissionResolver->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('edit'),
-                $this->equalTo($content)
+                $this->equalTo($content),
+                $this->isType('array')
             )->will($this->returnValue(true));
 
         $contentTypeServiceMock->expects($this->once())
@@ -4999,6 +5009,7 @@ class ContentTest extends BaseServiceMockTest
         $fieldDefinitions
     ) {
         $repositoryMock = $this->getRepositoryMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
@@ -5058,12 +5069,13 @@ class ContentTest extends BaseServiceMockTest
                 $this->returnValue($content)
             );
 
-        $repositoryMock->expects($this->once())
+        $permissionResolverMock->expects($this->once())
             ->method('canUser')
             ->with(
                 $this->equalTo('content'),
                 $this->equalTo('edit'),
-                $this->equalTo($content)
+                $this->equalTo($content),
+                $this->isType('array')
             )->will($this->returnValue(true));
 
         $contentTypeServiceMock->expects($this->once())
@@ -5407,10 +5419,7 @@ class ContentTest extends BaseServiceMockTest
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $user = $this->getStubbedUser(14);
 
-        $permissionResolverMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
 
         $permissionResolverMock
             ->method('getCurrentUserReference')
@@ -5536,10 +5545,7 @@ class ContentTest extends BaseServiceMockTest
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
         $user = $this->getStubbedUser(14);
 
-        $permissionResolverMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
 
         $permissionResolverMock
             ->method('getCurrentUserReference')
@@ -5662,10 +5668,7 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock = $this->getLocationServiceMock();
         $user = $this->getStubbedUser(14);
 
-        $permissionResolverMock = $this
-            ->getMockBuilder('eZ\\Publish\\API\\Repository\\PermissionResolver')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $permissionResolverMock = $this->getPermissionResolverMock();
 
         $permissionResolverMock
             ->method('getCurrentUserReference')
@@ -6053,5 +6056,19 @@ class ContentTest extends BaseServiceMockTest
         }
 
         return $this->partlyMockedContentService;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getRepositoryMock(): Repository
+    {
+        $repositoryMock = parent::getRepositoryMock();
+        $repositoryMock
+            ->expects($this->any())
+            ->method('getPermissionResolver')
+            ->willReturn($this->getPermissionResolverMock());
+
+        return $repositoryMock;
     }
 }
