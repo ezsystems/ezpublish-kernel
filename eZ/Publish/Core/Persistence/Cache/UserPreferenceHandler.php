@@ -35,7 +35,7 @@ class UserPreferenceHandler extends AbstractInMemoryHandler implements Handler
             'setStruct' => $setStruct,
         ]);
 
-        $this->deleteCache(['ez-user-preference-' . $setStruct->userId . '-' . $setStruct->name]);
+        $this->cache->deleteItems(['ez-user-preference-' . $setStruct->userId . '-' . $setStruct->name]);
 
         return $this->persistenceHandler->userPreferenceHandler()->setUserPreference($setStruct);
     }
