@@ -24,14 +24,10 @@ class ContentLanguageHandler extends AbstractInMemoryHandler implements ContentL
     private $getKeys;
 
     /**
-     * Set callback functions for use in cache retrieval.
-     *
-     * {@inheritdoc}
+     * Set callback functions for use in cache retrival.
      */
-    public function __construct(...$params)
+    protected function init(): void
     {
-        parent::__construct(...$params);
-
         $this->getTags = static function (Language $language) { return ['language-' . $language->id]; };
         $this->getKeys = static function (Language $language) {
             return [
