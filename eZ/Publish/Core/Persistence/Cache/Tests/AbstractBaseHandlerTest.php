@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
+use eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter;
 use eZ\Publish\Core\Persistence\Cache\Handler as CacheHandler;
 use eZ\Publish\Core\Persistence\Cache\SectionHandler as CacheSectionHandler;
 use eZ\Publish\Core\Persistence\Cache\LocationHandler as CacheLocationHandler;
@@ -26,7 +27,6 @@ use eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler as CacheUserPreferen
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use eZ\Publish\Core\Persistence\Cache\PersistenceLogger;
 use eZ\Publish\SPI\Persistence\Handler;
-use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Cache\CacheItem;
 use PHPUnit\Framework\TestCase;
 
@@ -36,7 +36,7 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractBaseHandlerTest extends TestCase
 {
     /**
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @var \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $cacheMock;
 
@@ -73,7 +73,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
         parent::setUp();
 
         $this->persistenceHandlerMock = $this->createMock(Handler::class);
-        $this->cacheMock = $this->createMock(TagAwareAdapterInterface::class);
+        $this->cacheMock = $this->createMock(InMemoryClearingProxyAdapter::class);
         $this->loggerMock = $this->createMock(PersistenceLogger::class);
         $this->inMemoryMock = $this->createMock(InMemoryCache::class);
 
@@ -82,17 +82,17 @@ abstract class AbstractBaseHandlerTest extends TestCase
             new CacheSectionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheLocationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheContentHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
-            new CacheContentLanguageHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->inMemoryMock),
-            new CacheContentTypeHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->inMemoryMock),
-            new CacheUserHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->inMemoryMock),
-            new CacheTransactionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->inMemoryMock),
+            new CacheContentLanguageHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
+            new CacheContentTypeHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
+            new CacheUserHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
+            new CacheTransactionHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
             new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheUrlAliasHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheObjectStateHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheUrlHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheBookmarkHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheNotificationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
-            new CacheUserPreferenceHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock, $this->inMemoryMock),
+            new CacheUserPreferenceHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
             $this->loggerMock
         );
 

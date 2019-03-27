@@ -1,6 +1,8 @@
-# In Memory cache classes
+# Internal In-Memory cache class
 
 
-Classes for specific in-memory usage, at this level only in-frequently updated metadata is meant to be cached like this.
-Examples: Languages, ContentTypes, ObjectStates, Sections
+Class for specific in-memory usage, at this level only in-frequently updated metadata is
+meant to be cached like this.
 
+Mainly: Languages, ContentTypes, ObjectStates, Sections, Roles, Tags
+_Optionally also ContentInfo and Locations, but should not be used for Content._

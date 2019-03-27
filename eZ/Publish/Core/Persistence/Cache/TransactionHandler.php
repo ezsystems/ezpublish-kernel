@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface
 /**
  * Persistence Transaction Cache Handler class.
  */
-class TransactionHandler extends AbstractInMemoryHandler implements TransactionHandlerInterface
+class TransactionHandler extends AbstractInMemoryPersistenceHandler implements TransactionHandlerInterface
 {
     /**
      * @todo Maybe this can be solved by contributing to Symfony, as in for instance using a layered cache with memory
@@ -45,7 +45,7 @@ class TransactionHandler extends AbstractInMemoryHandler implements TransactionH
     public function rollback()
     {
         $this->logger->logCall(__METHOD__);
-        $this->clearCache(); // TIMBER!! @see beginTransaction()
+        $this->cache->clear(); // TIMBER!! @see beginTransaction()
         $this->persistenceHandler->transactionHandler()->rollback();
     }
 }

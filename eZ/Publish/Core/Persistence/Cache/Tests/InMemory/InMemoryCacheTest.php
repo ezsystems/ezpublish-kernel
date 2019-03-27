@@ -12,7 +12,7 @@ use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Abstract test case for spi cache impl.
+ * Test case for internal in-memory cache.
  */
 class InMemoryCacheTest extends TestCase
 {

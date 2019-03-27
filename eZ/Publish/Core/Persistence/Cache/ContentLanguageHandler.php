@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler
  */
-class ContentLanguageHandler extends AbstractInMemoryHandler implements ContentLanguageHandlerInterface
+class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implements ContentLanguageHandlerInterface
 {
     /** @var callable */
     private $getTags;
@@ -43,7 +43,7 @@ class ContentLanguageHandler extends AbstractInMemoryHandler implements ContentL
     public function create(CreateStruct $struct)
     {
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
-        $this->deleteCache(['ez-language-list']);
+        $this->cache->deleteItems(['ez-language-list']);
 
         return $this->persistenceHandler->contentLanguageHandler()->create($struct);
     }
@@ -56,7 +56,7 @@ class ContentLanguageHandler extends AbstractInMemoryHandler implements ContentL
         $this->logger->logCall(__METHOD__, array('struct' => $struct));
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
-        $this->deleteCache([
+        $this->cache->deleteItems([
             'ez-language-list',
             'ez-language-' . $struct->id,
             'ez-language-code-' . $struct->languageCode,
@@ -153,7 +153,7 @@ class ContentLanguageHandler extends AbstractInMemoryHandler implements ContentL
         $return = $this->persistenceHandler->contentLanguageHandler()->delete($id);
 
         // As we don't have locale we clear cache by tag invalidation
-        $this->invalidateCache(['language-' . $id]);
+        $this->cache->invalidateTags(['language-' . $id]);
 
         return $return;
     }

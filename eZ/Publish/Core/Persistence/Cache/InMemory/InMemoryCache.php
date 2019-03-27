@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing MetadataCachePool class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -11,9 +9,9 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Persistence\Cache\InMemory;
 
 /**
- * Simple In-Memory Cache Pool.
+ * Simple internal In-Memory Cache Pool.
  *
- * @internal Only for use in eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler, may change depending on needs there.
+ * @internal Only for use in ..\AbstractInMemoryHandler & ..\Adapter\InMemoryClearingProxyAdapter, may change depending on needs there.
  *
  * Goal:
  * By nature caches stale objects in memory to avoid round-trips to cache backend over network.

@@ -19,7 +19,7 @@ use eZ\Publish\SPI\Persistence\UserPreference\UserPreference;
  *
  * @see \eZ\Publish\SPI\Persistence\UserPreference\Handler
  */
-class UserPreferenceHandler extends AbstractInMemoryHandler implements Handler
+class UserPreferenceHandler extends AbstractInMemoryPersistenceHandler implements Handler
 {
     /**
      * Constant used for storing not found results for getUserPreferenceByUserIdAndName().
@@ -35,7 +35,7 @@ class UserPreferenceHandler extends AbstractInMemoryHandler implements Handler
             'setStruct' => $setStruct,
         ]);
 
-        $this->deleteCache(['ez-user-preference-' . $setStruct->userId . '-' . $setStruct->name]);
+        $this->cache->deleteItems(['ez-user-preference-' . $setStruct->userId . '-' . $setStruct->name]);
 
         return $this->persistenceHandler->userPreferenceHandler()->setUserPreference($setStruct);
     }
