@@ -54,7 +54,6 @@ class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
                 ],
                 null,
                 [
-                    'ez-user-preference-count-' . $userId,
                     'ez-user-preference-' . $userId . '-' . $name,
                 ],
                 new SPIUserPreference(),
