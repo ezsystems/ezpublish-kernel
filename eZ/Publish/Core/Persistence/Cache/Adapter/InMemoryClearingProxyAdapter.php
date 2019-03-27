@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the ContentHandler implementation.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -15,9 +13,9 @@ use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use Psr\Cache\CacheItemInterface;
 
 /**
- * Proxy adapter to make sure to clear in-memory cache when needed.
+ * Internal proxy adapter to make sure to clear in-memory cache when needed.
  *
- * @intenral Only for type hinting inside eZ\Publish\Core\Persistence\Cache namespace, for external type hint on TagAwareAdapterInterface.
+ * @intenral For type hinting inside eZ\Publish\Core\Persistence\Cache\*. For external, type hint on TagAwareAdapterInterface.
  */
 class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
 {

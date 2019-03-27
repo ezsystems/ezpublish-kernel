@@ -15,7 +15,7 @@ use Symfony\Component\Cache\CacheItem;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Abstract test case for spi cache impl.
+ * Test case for Adapter decorator.
  */
 class InMemoryClearingProxyAdapterTest extends TestCase
 {
@@ -219,11 +219,11 @@ class InMemoryClearingProxyAdapterTest extends TestCase
     }
 
     /**
-     * @param $key
-     * @param null $value If null the cache item will be assumed to be a cache miss here.
-     * @param int $defaultLifetime
+     * @param string $key
+     * @param array $tags Optional.
+     * @param mixed $value Optional, if value evaluates to false the cache item will be assumed to be a cache miss here.
      *
-     * @return CacheItem
+     * @return \Symfony\Component\Cache\CacheItem
      */
     private function createCacheItem($key, $tags = [], $value = true)
     {
@@ -232,6 +232,11 @@ class InMemoryClearingProxyAdapterTest extends TestCase
         return $cacheItemsClosure($key, $value, (bool) $value, 0, $tags);
     }
 
+    /**
+     * @param array $array
+     *
+     * @return \Generator
+     */
     private function arrayAsGenerator(array $array)
     {
         foreach ($array as $key => $item) {

@@ -10,11 +10,10 @@ use eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter;
 use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 
 /**
- * Class AbstractInMemoryHandler.
- *
  * Abstract handler for use in other SPI Handlers.
  *
- * @internal
+ * @internal Can be used in external handlers, but be aware this should be regarded as experimental feature.
+ *           As in, method signatures and behaviour might change in the future.
  */
 abstract class AbstractInMemoryHandler
 {

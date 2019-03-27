@@ -11,11 +11,9 @@ use eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache;
 use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 
 /**
- * Class AbstractInMemoryHandler.
+ * Internal abstract handler for use in other SPI Persistence Cache Handlers.
  *
- * Abstract handler for use in other SPI Persistence Cache Handlers.
- *
- * @internal
+ * @internal Only for use as abstract in eZ\Publish\Core\Persistence\Cache\*Handlers.
  */
 abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandler
 {
