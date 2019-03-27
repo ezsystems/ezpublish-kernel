@@ -90,7 +90,7 @@ services:
 
     ezpublish.spi.persistence.cache.contentHandler:
         class: "%ezpublish.spi.persistence.cache.contentHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.contentLanguageHandler:
         class: "%ezpublish.spi.persistence.cache.contentLanguageHandler.class%"
