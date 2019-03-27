@@ -6,9 +6,8 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Tests\Core\Persistence\Cache;
+namespace eZ\Publish\Core\Persistence\Cache\Tests;
 
-use eZ\Publish\Core\Persistence\Cache\Tests\AbstractCacheHandlerTest;
 use eZ\Publish\SPI\Persistence\UserPreference\UserPreferenceSetStruct;
 use eZ\Publish\SPI\Persistence\UserPreference\Handler as SPIUserPreferenceHandler;
 use eZ\Publish\SPI\Persistence\UserPreference\UserPreference as SPIUserPreference;
@@ -16,7 +15,7 @@ use eZ\Publish\SPI\Persistence\UserPreference\UserPreference as SPIUserPreferenc
 /**
  * Test case for Persistence\Cache\UserPreferenceHandler.
  */
-class UserPreferenceHandlerTest extends AbstractCacheHandlerTest
+class UserPreferenceHandlerTest extends AbstractInMemoryCacheHandlerTest
 {
     /**
      * {@inheritdoc}
@@ -41,6 +40,7 @@ class UserPreferenceHandlerTest extends AbstractCacheHandlerTest
     {
         $userId = 7;
         $name = 'setting';
+        $userPreferenceCount = 10;
 
         // string $method, array $arguments, array? $tags, string? $key, mixed? $returnValue
         return [
@@ -52,15 +52,23 @@ class UserPreferenceHandlerTest extends AbstractCacheHandlerTest
                         'name' => $name,
                     ]),
                 ],
-                [
-                    'user-preference-count-' . $userId,
-                    'user-preference-' . $userId . '-' . $name,
-                ],
                 null,
+                [
+                    'ez-user-preference-' . $userId . '-' . $name,
+                ],
                 new SPIUserPreference(),
             ],
             [
                 'loadUserPreferences', [$userId, 0, 25], null, null, [],
+            ],
+            [
+                'countUserPreferences',
+                [
+                    $userId,
+                ],
+                null,
+                null,
+                $userPreferenceCount,
             ],
         ];
     }
@@ -72,18 +80,9 @@ class UserPreferenceHandlerTest extends AbstractCacheHandlerTest
     {
         $userId = 7;
         $name = 'setting';
-        $userPreferenceCount = 10;
 
         // string $method, array $arguments, string $key, mixed? $data
         return [
-            [
-                'countUserPreferences',
-                [
-                    $userId,
-                ],
-                'ez-user-preference-count-' . $userId,
-                $userPreferenceCount,
-            ],
             [
                 'getUserPreferenceByUserIdAndName',
                 [
