@@ -13,7 +13,7 @@ use eZ\Publish\SPI\Persistence\TransactionHandler as TransactionHandlerInterface
 /**
  * Persistence Transaction Cache Handler class.
  */
-class TransactionHandler extends AbstractInMemoryHandler implements TransactionHandlerInterface
+class TransactionHandler extends AbstractInMemoryPersistenceHandler implements TransactionHandlerInterface
 {
     /**
      * @todo Maybe this can be solved by contributing to Symfony, as in for instance using a layered cache with memory

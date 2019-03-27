@@ -23,7 +23,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStr
  *
  * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
  */
-class ContentTypeHandler extends AbstractInMemoryHandler implements ContentTypeHandlerInterface
+class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements ContentTypeHandlerInterface
 {
     /** @var callable */
     private $getGroupTags;

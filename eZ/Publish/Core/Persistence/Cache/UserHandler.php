@@ -20,7 +20,7 @@ use eZ\Publish\SPI\Persistence\User\Policy;
 /**
  * Cache handler for user module.
  */
-class UserHandler extends AbstractInMemoryHandler implements UserHandlerInterface
+class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHandlerInterface
 {
     /** @var callable */
     private $getUserTags;

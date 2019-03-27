@@ -82,17 +82,17 @@ abstract class AbstractBaseHandlerTest extends TestCase
             new CacheSectionHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheLocationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheContentHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
-            new CacheContentLanguageHandler($this->persistenceHandlerMock, $this->cacheMock, $this->loggerMock, $this->inMemoryMock),
-            new CacheContentTypeHandler($this->persistenceHandlerMock, $this->cacheMock, $this->loggerMock, $this->inMemoryMock),
-            new CacheUserHandler($this->persistenceHandlerMock, $this->cacheMock, $this->loggerMock, $this->inMemoryMock),
-            new CacheTransactionHandler($this->persistenceHandlerMock, $this->cacheMock, $this->loggerMock, $this->inMemoryMock),
+            new CacheContentLanguageHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
+            new CacheContentTypeHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
+            new CacheUserHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
+            new CacheTransactionHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
             new CacheTrashHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheUrlAliasHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheObjectStateHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheUrlHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheBookmarkHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
             new CacheNotificationHandler($this->cacheMock, $this->persistenceHandlerMock, $this->loggerMock),
-            new CacheUserPreferenceHandler($this->persistenceHandlerMock, $this->cacheMock, $this->loggerMock, $this->inMemoryMock),
+            new CacheUserPreferenceHandler($this->cacheMock, $this->loggerMock, $this->inMemoryMock, $this->persistenceHandlerMock),
             $this->loggerMock
         );
 

@@ -15,7 +15,7 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Language\Handler
  */
-class ContentLanguageHandler extends AbstractInMemoryHandler implements ContentLanguageHandlerInterface
+class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implements ContentLanguageHandlerInterface
 {
     /** @var callable */
     private $getTags;

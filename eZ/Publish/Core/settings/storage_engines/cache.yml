@@ -37,6 +37,7 @@ services:
     # Note for tests: Default changed to in-memory Array cache in tests/common.yml by default, and opt in for redis
     # testing is defined in containerBuilder.php
     ezpublish.cache_pool.driver:
+        public: false
         class: Symfony\Component\Cache\Adapter\FilesystemAdapter
         arguments: ["", 120]
 
@@ -48,6 +49,7 @@ services:
 
     # In-Memory cache pools
     ezpublish.spi.persistence.cache.inmemory:
+        public: false
         class: eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
         arguments:
             - "%ezpublish.spi.persistence.cache.inmemory.ttl%"
@@ -64,14 +66,19 @@ services:
             - "@ezpublish.api.storage_engine"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
 
-    ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler:
+    ezpublish.spi.persistence.cache.abstractInMemoryHandler:
         class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryHandler
         abstract:  true
         arguments:
-            - "@ezpublish.api.storage_engine"
             - "@ezpublish.cache_pool"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"
             - "@ezpublish.spi.persistence.cache.inmemory"
+
+    ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler:
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryHandler
+        class: eZ\Publish\Core\Persistence\Cache\AbstractInMemoryPersistenceHandler
+        abstract:  true
+        arguments: ["@ezpublish.api.storage_engine"]
 
     ezpublish.spi.persistence.cache.sectionHandler:
         class: "%ezpublish.spi.persistence.cache.sectionHandler.class%"
@@ -87,19 +94,19 @@ services:
 
     ezpublish.spi.persistence.cache.contentLanguageHandler:
         class: "%ezpublish.spi.persistence.cache.contentLanguageHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.contentTypeHandler:
         class: "%ezpublish.spi.persistence.cache.contentTypeHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.userHandler:
         class: "%ezpublish.spi.persistence.cache.userHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.transactionhandler:
         class: "%ezpublish.spi.persistence.cache.transactionhandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache.trashHandler:
         class: "%ezpublish.spi.persistence.cache.trashHandler.class%"
@@ -127,7 +134,7 @@ services:
 
     ezpublish.spi.persistence.cache.userPreferenceHandler:
         class: "%ezpublish.spi.persistence.cache.userPreferenceHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractInMemoryCacheHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
     ezpublish.spi.persistence.cache:
         class: "%ezpublish.spi.persistence.cache.class%"
