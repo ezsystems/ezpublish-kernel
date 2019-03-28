@@ -84,10 +84,10 @@ class ContentViewBuilder implements ViewBuilder
             $view->setViewType(EmbedView::DEFAULT_VIEW_TYPE);
         }
 
-        if (isset($parameters['locationId'])) {
-            $location = $this->loadLocation($parameters['locationId']);
-        } elseif (isset($parameters['location'])) {
+        if (isset($parameters['location']) && $parameters['location'] instanceof Location) {
             $location = $parameters['location'];
+        } elseif (isset($parameters['locationId'])) {
+            $location = $this->loadLocation($parameters['locationId']);
         } else {
             $location = null;
         }
