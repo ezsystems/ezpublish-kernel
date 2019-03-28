@@ -2031,7 +2031,7 @@ XML Example
 
     <?xml version="1.0" encoding="UTF-8"?>
     <LocationCreate>
-      <ParentLocation href="/content/locations/1/5/73" />
+      <ParentLocation href="/api/ezp/v2/content/locations/1/5/73" />
       <priority>0</priority>
       <hidden>false</hidden>
       <sortField>PATH</sortField>
