@@ -179,7 +179,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     public function lookup($url)
     {
         $cacheItem = $this->cache->getItem(
-            'ez-urlAlias-url-' . str_replace(['/', ':', '(', ')', '@', '\\', '{', '}'], ['_S', '_C', '_B', '_B', '_A', '_BS', '_CB', '_CB'], $url)
+            'ez-urlAlias-url-' . str_replace(['/', ':', '(', ')', '@', '\\', '{', '}'], ['__S', '__C', '__B', '__B', '__A', '__BS', '__CB', '__CB'], $url)
         );
         if ($cacheItem->isHit()) {
             if (($return = $cacheItem->get()) === self::NOT_FOUND) {
