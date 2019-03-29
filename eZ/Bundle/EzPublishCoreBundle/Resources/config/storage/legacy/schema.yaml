@@ -985,7 +985,7 @@ tables:
         indexes:
             authcode_client_id: { fields: [client_id], options: { lengths: ['191'] } }
         id:
-            id: { type: string, nullable: false, length: 200, options: { default: '', lengths: ['191'] } }
+            id: { type: string, nullable: false, length: 191, options: { default: '', lengths: ['191'] } }
         fields:
             client_id: { type: string, nullable: false, length: 200, options: { default: '' } }
             expirytime: { type: bigint, nullable: false, options: { default: '0' } }
@@ -1019,7 +1019,7 @@ tables:
         indexes:
             token_client_id: { fields: [client_id], options: { lengths: ['191'] } }
         id:
-            id: { type: string, nullable: false, length: 200, options: { default: '', lengths: ['191'] } }
+            id: { type: string, nullable: false, length: 191, options: { default: '', lengths: ['191'] } }
         fields:
             client_id: { type: string, nullable: false, length: 200, options: { default: '' } }
             expirytime: { type: bigint, nullable: false, options: { default: '0' } }
