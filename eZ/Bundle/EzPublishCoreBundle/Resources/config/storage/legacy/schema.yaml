@@ -247,7 +247,7 @@ tables:
         indexes:
             ezcontentobject_tree_p_node_id: { fields: [parent_node_id] }
             ezcontentobject_tree_path_ident: { fields: [path_identification_string], options: { lengths: ['50'] } }
-            ezcontentobject_tree_contentobject_id_path_string: { fields: [path_string, contentobject_id] }
+            ezcontentobject_tree_contentobject_id_path_string: { fields: [path_string, contentobject_id], options: { lengths: ['191', null] } }
             ezcontentobject_tree_co_id: { fields: [contentobject_id] }
             ezcontentobject_tree_depth: { fields: [depth] }
             ezcontentobject_tree_path: { fields: [path_string], options: { lengths: ['191'] } }

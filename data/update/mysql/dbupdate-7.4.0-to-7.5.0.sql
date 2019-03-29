@@ -36,3 +36,11 @@ ALTER TABLE `eznotification` MODIFY COLUMN `data` TEXT;
 --
 
 ALTER TABLE `ezcontentobject` ADD COLUMN `is_hidden` tinyint(1) NOT NULL DEFAULT '0';
+
+--
+-- EZP-29324: ezcontentobject_tree_contentobject_id_path_string index column size is too large
+-- This shortens indexes so that 4-byte content can fit.
+--
+
+ALTER TABLE `ezcontentobject_tree` DROP KEY `ezcontentobject_tree_contentobject_id_path_string`;
+ALTER TABLE `ezcontentobject_tree` ADD UNIQUE KEY `ezcontentobject_tree_contentobject_id_path_string` (`path_string` (191), `contentobject_id`);
