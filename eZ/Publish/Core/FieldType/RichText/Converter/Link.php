@@ -19,6 +19,9 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorize
 use DOMDocument;
 use DOMXPath;
 
+/**
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Converter\Link from EzPlatformRichTextBundle.
+ */
 class Link implements Converter
 {
     /**

@@ -22,6 +22,8 @@ use RuntimeException;
 
 /**
  * RichText field type.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\FieldType\RichText\Type from EzPlatformRichTextBundle.
  */
 class Type extends FieldType
 {

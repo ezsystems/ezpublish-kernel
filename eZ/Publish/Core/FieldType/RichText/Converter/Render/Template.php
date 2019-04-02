@@ -20,6 +20,8 @@ use Psr\Log\NullLogger;
 
 /**
  * RichText Template converter injects rendered template payloads into template elements.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Converter\Render\Template from EzPlatformRichTextBundle.
  */
 class Template extends Render implements Converter
 {

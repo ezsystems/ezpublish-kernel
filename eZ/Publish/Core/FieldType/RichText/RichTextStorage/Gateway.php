@@ -14,6 +14,8 @@ use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway as UrlGateway;
 /**
  * Abstract gateway class for RichText type.
  * Handles data that is not directly included in raw XML value from the field (i.e. URLs).
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\FieldType\RichText\RichTextStorage\Gateway from EzPlatformRichTextBundle.
  */
 abstract class Gateway extends StorageGateway
 {

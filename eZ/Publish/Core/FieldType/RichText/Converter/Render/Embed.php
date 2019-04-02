@@ -17,6 +17,8 @@ use DOMElement;
 
 /**
  * RichText Embed converter injects rendered embed payloads into embed elements.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Converter\Render\Embed from EzPlatformRichTextBundle.
  */
 class Embed extends Render implements Converter
 {

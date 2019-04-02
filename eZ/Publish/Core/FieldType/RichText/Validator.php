@@ -16,6 +16,8 @@ use RuntimeException;
 
 /**
  * Validates XML document using ISO Schematron (as XSLT stylesheet), XSD and RELAX NG schemas.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Validator\Validator from EzPlatformRichTextBundle.
  */
 class Validator extends XmlBase
 {
