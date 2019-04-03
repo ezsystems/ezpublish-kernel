@@ -35,6 +35,7 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\SPI\Limitation\Target;
 use eZ\Publish\SPI\Persistence\Content\MetadataUpdateStruct as SPIMetadataUpdateStruct;
 use eZ\Publish\SPI\Persistence\Content\CreateStruct as SPIContentCreateStruct;
 use eZ\Publish\SPI\Persistence\Content\UpdateStruct as SPIContentUpdateStruct;
@@ -1074,13 +1075,15 @@ class ContentService implements ContentServiceInterface
      * 4.x: The draft is created with the initialLanguage code of the source version or if not present with the main language.
      * It can be changed on updating the version.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to create the draft
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      * @param \eZ\Publish\API\Repository\Values\User\User $creator if set given user is used to create the draft - otherwise the current-user is used
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the current-user is not allowed to create the draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the current-user is not allowed to create the draft
      */
     public function createContentDraft(ContentInfo $contentInfo, APIVersionInfo $versionInfo = null, User $creator = null)
     {
@@ -1125,8 +1128,21 @@ class ContentService implements ContentServiceInterface
             $creator = $this->repository->getCurrentUserReference();
         }
 
-        if (!$this->repository->canUser('content', 'edit', $contentInfo)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $contentInfo->id));
+        if (!$this->repository->getPermissionResolver()->canUser(
+            'content',
+            'edit',
+            $contentInfo,
+            [
+                (new Target\Builder\VersionBuilder())
+                    ->changeStatusTo(APIVersionInfo::STATUS_DRAFT)
+                    ->build(),
+            ]
+        )) {
+            throw new UnauthorizedException(
+                'content',
+                'edit',
+                array('contentId' => $contentInfo->id)
+            );
         }
 
         $this->repository->beginTransaction();
@@ -1190,19 +1206,21 @@ class ContentService implements ContentServiceInterface
     /**
      * Updates the fields of a draft.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a property on the struct is invalid.
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the updated fields
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid,
      *                                                                               or if a required field is missing / set to an empty value.
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException If field definition does not exist in the ContentType,
      *                                                                          or value is set for non-translatable field in language
      *                                                                          other than main.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct $contentUpdateStruct
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the updated fields
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if a property on the struct is invalid.
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function updateContent(APIVersionInfo $versionInfo, APIContentUpdateStruct $contentUpdateStruct)
     {
@@ -1221,7 +1239,19 @@ class ContentService implements ContentServiceInterface
             );
         }
 
-        if (!$this->repository->canUser('content', 'edit', $content)) {
+        if (!$this->repository->getPermissionResolver()->canUser(
+            'content',
+            'edit',
+            $content,
+            [
+                (new Target\Builder\VersionBuilder())
+                    ->updateFieldsTo(
+                        $contentUpdateStruct->initialLanguageCode,
+                        $contentUpdateStruct->fields
+                    )
+                    ->build(),
+            ]
+        )) {
             throw new UnauthorizedException('content', 'edit', array('contentId' => $content->id));
         }
 
@@ -1485,12 +1515,14 @@ class ContentService implements ContentServiceInterface
      * Publishes a content version and deletes archive versions if they overflow max archive versions.
      * Max archive versions are currently a configuration, but might be moved to be a param of ContentType in the future.
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to publish this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
-     *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function publishVersion(APIVersionInfo $versionInfo)
     {
@@ -1500,8 +1532,27 @@ class ContentService implements ContentServiceInterface
             $versionInfo->versionNo
         );
 
-        if (!$this->repository->canUser('content', 'publish', $content)) {
-            throw new UnauthorizedException('content', 'publish', array('contentId' => $content->id));
+        $fromContent = null;
+        if ($content->contentInfo->currentVersionNo !== $versionInfo->versionNo) {
+            $fromContent = $this->internalLoadContent(
+                $content->contentInfo->id,
+                null,
+                $content->contentInfo->currentVersionNo
+            );
+            // should not occur now, might occur in case of un-publish
+            if (!$fromContent->contentInfo->isPublished()) {
+                $fromContent = null;
+            }
+        }
+
+        if (!$this->repository->getPermissionResolver()->canUser(
+            'content',
+            'publish',
+            $content
+        )) {
+            throw new UnauthorizedException(
+                'content', 'publish', array('contentId' => $content->id)
+            );
         }
 
         $this->repository->beginTransaction();
