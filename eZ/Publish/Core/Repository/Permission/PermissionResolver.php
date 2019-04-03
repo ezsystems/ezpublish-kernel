@@ -14,6 +14,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use eZ\Publish\Core\Repository\Helper\LimitationService;
 use eZ\Publish\Core\Repository\Helper\RoleDomainMapper;
+use eZ\Publish\SPI\Limitation\Target;
+use eZ\Publish\SPI\Limitation\TargetAwareType;
 use eZ\Publish\SPI\Limitation\Type as LimitationType;
 use eZ\Publish\SPI\Persistence\User\Handler as UserHandler;
 use Closure;
@@ -216,7 +218,12 @@ class PermissionResolver implements PermissionResolverInterface
                 $limitationsPass = true;
                 foreach ($limitations as $limitation) {
                     $type = $this->limitationService->getLimitationType($limitation->getIdentifier());
-                    $accessVote = $type->evaluate($limitation, $currentUserRef, $object, $targets);
+                    $accessVote = $type->evaluate(
+                        $limitation,
+                        $currentUserRef,
+                        $object,
+                        $this->prepareTargetsForType($targets, $type)
+                    );
                     /*
                      * For policy limitation atm only support ACCESS_GRANTED
                      *
@@ -279,5 +286,40 @@ class PermissionResolver implements PermissionResolverInterface
         --$this->sudoNestingLevel;
 
         return $returnValue;
+    }
+
+    /**
+     * Prepare list of targets for the given Type keeping BC.
+     *
+     * @param array|null $targets
+     * @param \eZ\Publish\SPI\Limitation\Type $type
+     *
+     * @return array|null
+     */
+    private function prepareTargetsForType(?array $targets, LimitationType $type): ?array
+    {
+        $isTargetAware = $type instanceof TargetAwareType;
+
+        // BC: null for empty targets is still expected by some Limitations, so needs to be preserved
+        if (null === $targets) {
+            return $isTargetAware ? [] : null;
+        }
+
+        // BC: for TargetAware Limitations return only instances of Target, for others return only non-Target instances
+        $targets = array_filter(
+            $targets,
+            function ($target) use ($isTargetAware) {
+                $isTarget = $target instanceof Target;
+
+                return $isTargetAware ? $isTarget : !$isTarget;
+            }
+        );
+
+        // BC: treat empty targets after filtering as if they were empty the whole time
+        if (!$isTargetAware && empty($targets)) {
+            return null;
+        }
+
+        return $targets;
     }
 }
