@@ -244,6 +244,7 @@ EOT
         }
 
         $progress = new ProgressBar($output);
+        $progress->setOverwrite(true);
         $progress->start($iterations);
 
         if ($processCount > 1) {
@@ -256,7 +257,12 @@ EOT
             }
         }
 
+        $progress->clear();
         $progress->finish();
+        $progress->display();
+
+        // go to the next line after ProgressBar::finish
+        $output->writeln('');
     }
 
     private function runParallelProcess(ProgressBar $progress, Statement $stmt, $processCount, $iterationCount, $commit)

@@ -67,6 +67,7 @@ class CoreInstaller extends DbBasedInstaller implements Installer
             )
         );
         $progressBar = new ProgressBar($this->output);
+        $progressBar->setOverwrite(true);
         $progressBar->start($queriesCount);
 
         try {
@@ -81,7 +82,10 @@ class CoreInstaller extends DbBasedInstaller implements Installer
             throw $e;
         }
 
+        $progressBar->clear();
         $progressBar->finish();
+        $progressBar->display();
+
         // go to the next line after ProgressBar::finish
         $this->output->writeln('');
     }
