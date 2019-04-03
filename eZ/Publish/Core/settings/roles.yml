@@ -29,7 +29,9 @@ services:
 
     ezpublish.api.role.limitation_type.language:
         class: "%ezpublish.api.role.limitation_type.language.class%"
-        arguments: ["@ezpublish.api.persistence_handler"]
+        arguments:
+            - "@ezpublish.spi.persistence.language_handler"
+            - "@ezpublish.spi.persistence.content_handler"
         tags:
             - {name: ezpublish.limitationType, alias: Language}
 
