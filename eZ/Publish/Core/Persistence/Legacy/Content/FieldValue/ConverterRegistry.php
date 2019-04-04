@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound;
 
-class ConverterRegistry
+class ConverterRegistry implements ConverterRegistryInterface
 {
     /**
      * Map of converters.

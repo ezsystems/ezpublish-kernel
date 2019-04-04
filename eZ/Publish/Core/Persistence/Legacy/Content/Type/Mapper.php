@@ -17,7 +17,7 @@ use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 use eZ\Publish\SPI\Persistence\Content\Type\Group;
 use eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface;
 
 /**
  * Mapper for Content Type Handler.
@@ -29,7 +29,7 @@ class Mapper
     /**
      * Converter registry.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface
      */
     protected $converterRegistry;
 
@@ -41,10 +41,10 @@ class Mapper
     /**
      * Creates a new content type mapper.
      *
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface $converterRegistry
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $maskGenerator
      */
-    public function __construct(ConverterRegistry $converterRegistry, MaskGenerator $maskGenerator)
+    public function __construct(ConverterRegistryInterface $converterRegistry, MaskGenerator $maskGenerator)
     {
         $this->converterRegistry = $converterRegistry;
         $this->maskGenerator = $maskGenerator;
