@@ -1,6 +1,8 @@
 parameters:
     ezpublish.locale.conversion_map:
+        alb-AL: sq_AL
         ara-SA: ar_SA
+        bos-BA: bs_BA
         cat-ES: ca_ES
         chi-CN: zh_CN
         chi-HK: zh_HK
@@ -21,15 +23,19 @@ parameters:
         fin-FI: fi_FI
         fre-BE: fr_BE
         fre-CA: fr_CA
+        fre-CH: fr_CH
         fre-FR: fr_FR
+        ger-CH: de_CH
         ger-DE: de_DE
         heb-IL: he_IL
         hin-IN: hi_IN
         hun-HU: hu_HU
         ind-ID: id_ID
+        ita-CH: it_CH
         ita-IT: it_IT
         jpn-JP: ja_JP
         kor-KR: ko_KR
+        mkd-MK: mk_MK
         nno-NO: nn_NO
         nor-NO: no_NO
         pol-PL: pl_PL
@@ -39,10 +45,13 @@ parameters:
         rus-RU: ru_RU
         ser-SR: sr_RS
         slk-SK: sk_SK
+        slo-SI: sl_SI
+        sqi-AL: sq_AL
         srp-RS: sr_RS
         swe-SE: sv_SE
         tur-TR: tr_TR
         ukr-UA: uk_UA
+        vie-VN: vi_VN
 
     ezpublish.locale.browser_map:
         au: ['eng-AU']
