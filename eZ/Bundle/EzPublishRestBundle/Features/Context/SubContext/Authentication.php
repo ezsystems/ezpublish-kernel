@@ -8,6 +8,8 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
+use eZ\Publish\API\Repository\Repository;
+
 trait Authentication
 {
     /**
@@ -115,5 +117,29 @@ trait Authentication
             $this->sendRequest();
             $this->userSession = null;
         }
+    }
+
+    private function getCredentialsFor($roleIdentifier)
+    {
+        $roleIdentifier = ucfirst($roleIdentifier);
+
+        /** @var Repository $repository */
+        $repository = $this->getRepository();
+
+        $currentUser = $repository->getCurrentUser();
+
+        $userService = $repository->getUserService();
+        $repository->setCurrentUser($userService->loadUserByLogin('admin'));
+
+        $username = substr(uniqid('User#', true), 0, 15);
+        $this->userFacade->createUser($username);
+        $this->userFacade->assignUserToRole($username, $roleIdentifier);
+
+        $repository->setCurrentUser($currentUser);
+
+        return [
+            'login' => $username,
+            'password' => $this->userFacade->getDefaultPassword(),
+        ];
     }
 }

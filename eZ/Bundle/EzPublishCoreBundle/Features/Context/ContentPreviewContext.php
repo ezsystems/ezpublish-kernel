@@ -4,16 +4,13 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 
-use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use eZ\Publish\API\Repository\Values\Content\Content;
+use Behat\MinkExtension\Context\RawMinkContext;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use EzSystems\BehatBundle\Context\Browser\Context as BrowserContext;
 use EzSystems\PlatformBehatBundle\Context\SubContext\DeprecationNoticeSupressor;
 use PHPUnit\Framework\Assert as Assertion;
 
-class ContentPreviewContext extends BrowserContext implements Context, SnippetAcceptingContext
+class ContentPreviewContext extends RawMinkContext
 {
     use DeprecationNoticeSupressor;
 
@@ -47,7 +44,7 @@ class ContentPreviewContext extends BrowserContext implements Context, SnippetAc
      */
     public function iPreviewThisDraft()
     {
-        $this->visit($this->mapToVersionViewUri($this->contentContext->getCurrentDraft()->versionInfo));
+        $this->getSession()->getDriver()->visit($this->mapToVersionViewUri($this->contentContext->getCurrentDraft()->versionInfo));
     }
 
     /**

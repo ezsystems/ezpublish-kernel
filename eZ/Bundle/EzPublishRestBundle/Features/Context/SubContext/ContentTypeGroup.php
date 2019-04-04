@@ -8,7 +8,6 @@
  */
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
-use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert as Assertion;
 
@@ -92,7 +91,8 @@ trait ContentTypeGroup
     public function responseHasFollowingContentTypeGroups(TableNode $table)
     {
         // get groups
-        $groups = GherkinHelper::convertTableToArrayOfData($table);
+        $groups = $table->getRows();
+        array_shift($groups);
 
         // verify if the expects objects are in the list
         foreach ($this->getResponseObject() as $ContentTypeGroup) {
