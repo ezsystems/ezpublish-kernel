@@ -19,7 +19,6 @@
         "ext-curl": "*",
         "symfony/symfony": "^3.4.17",
         "symfony-cmf/routing": "^2.1",
-        "kriswallsmith/buzz": "^0.17.2",
         "sensio/distribution-bundle": "^5.0.22",
         "nelmio/cors-bundle": "^1.5.0",
         "hautelook/templated-uri-bundle": "^2.1",
@@ -34,6 +33,7 @@
         "twig/twig": "^2.5"
     },
     "require-dev": {
+        "kriswallsmith/buzz": "^0.17.2",
         "brianium/paratest": "^2.2",
         "friendsofphp/php-cs-fixer": "~2.7.5",
         "phpunit/phpunit": "^7.0",
