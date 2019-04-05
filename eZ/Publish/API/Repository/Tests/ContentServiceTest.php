@@ -12,8 +12,8 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
+use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
@@ -24,6 +24,8 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use DOMDocument;
 use Exception;
+use eZ\Publish\Core\FieldType\TextLine\Value;
+use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -569,44 +571,6 @@ class ContentServiceTest extends BaseContentServiceTest
         // This call will fail with a NotFoundException
         $contentService->loadContentInfo($nonExistentContentId);
         /* END: Use Case */
-    }
-
-    /**
-     * Test for the loadContentInfoList() method.
-     *
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoList()
-     */
-    public function testLoadContentInfoList()
-    {
-        $repository = $this->getRepository();
-
-        $mediaFolderId = $this->generateId('object', 41);
-        $contentService = $repository->getContentService();
-        $list = $contentService->loadContentInfoList([$mediaFolderId]);
-
-        $this->assertCount(1, $list);
-        $this->assertEquals([$mediaFolderId], array_keys($list), 'Array key was not content id');
-        $this->assertInstanceOf(
-            ContentInfo::class,
-            $list[$mediaFolderId]
-        );
-    }
-
-    /**
-     * Test for the loadContentInfoList() method.
-     *
-     * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoList()
-     * @depends testLoadContentInfoList
-     */
-    public function testLoadContentInfoListSkipsNotFoundItems()
-    {
-        $repository = $this->getRepository();
-
-        $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
-        $contentService = $repository->getContentService();
-        $list = $contentService->loadContentInfoList([$nonExistentContentId]);
-
-        $this->assertCount(0, $list);
     }
 
     /**
@@ -6225,365 +6189,113 @@ XML
         ];
     }
 
-    /**
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToHide
-     *
-     * @dataProvider provideLocationsToHideAndReveal
-     */
-    public function testHideContent(array $locationsToHide)
+    public function testCopyTranslationsFromPublishedToDraft()
     {
         $repository = $this->getRepository();
 
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
         $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
-        $contentCreate->setField('name', 'Folder to hide');
-
-        $content = $contentService->createContent(
-            $contentCreate,
-            $locationsToHide
-        );
-
-        $publishedContent = $contentService->publishVersion($content->versionInfo);
-        $locations = $locationService->loadLocations($publishedContent->contentInfo);
-
-        // Sanity check
-        $this->assertCount(3, $locations);
-        $this->assertEquals(
-            [
-                false,
-                false,
-                false,
-            ],
-            array_column($locations, 'hidden')
-        );
-
-        /* BEGIN: Use Case */
-        $contentService->hideContent($publishedContent->contentInfo);
-        /* END: Use Case */
-
-        $hiddenLocations = $locationService->loadLocations($publishedContent->contentInfo);
-        $this->assertEquals(
-            [
-                true,
-                true,
-                true,
-            ],
-            array_column($hiddenLocations, 'hidden')
-        );
-    }
-
-    /**
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToReveal
-     *
-     * @dataProvider provideLocationsToHideAndReveal
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testRevealContent(array $locationsToReveal)
-    {
-        $repository = $this->getRepository();
-
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
-        $contentCreate->setField('name', 'Folder to hide');
-
-        $locationsToReveal[0]->hidden = true;
-
-        $content = $contentService->createContent(
-            $contentCreate,
-            $locationsToReveal
-        );
-
-        $publishedContent = $contentService->publishVersion($content->versionInfo);
-        $locations = $locationService->loadLocations($publishedContent->contentInfo);
-        // sort the Locations putting hidden one on top, as the order in which they're returned is not deterministic
-        usort(
-            $locations,
-            function (Location $location) {
-                return $location->hidden ? -1 : 1;
-            }
-        );
-
-        // Sanity check
-        $this->assertCount(3, $locations);
-        $this->assertEquals(
-            [
-                true,
-                false,
-                false,
-            ],
-            array_column($locations, 'hidden')
-        );
-
-        /* BEGIN: Use Case */
-        $contentService->hideContent($publishedContent->contentInfo);
-
-        $this->assertEquals(
-            [
-                true,
-                true,
-                true,
-            ],
-            array_column($locationService->loadLocations($publishedContent->contentInfo), 'hidden')
-        );
-
-        $contentService->revealContent($publishedContent->contentInfo);
-        /* END: Use Case */
-
-        $this->assertEquals(
-            [
-                true,
-                false,
-                false,
-            ],
-            array_column($locationService->loadLocations($publishedContent->contentInfo), 'hidden')
-        );
-    }
-
-    public function provideLocationsToHideAndReveal()
-    {
-        $locationService = $this->getRepository()->getLocationService();
-
-        return [
-            [
+        $languageService = $repository->getContentLanguageService();
+        $languageService->createLanguage(
+            new LanguageCreateStruct(
                 [
-                    $mainLocationCreateStruct = $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 2)
-                    ),
-                    $otherCreateStruct = $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 5)
-                    ),
-                    $thirdCreateStruct = $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 43)
-                    ),
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @depends testRevealContent
-     */
-    public function testRevealContentWithHiddenParent()
-    {
-        $repository = $this->getRepository();
-
-        $contentTypeService = $repository->getContentTypeService();
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
-        $contentNames = [
-            'Parent Content',
-            'Child (Nesting 1)',
-            'Child (Nesting 2)',
-            'Child (Nesting 3)',
-            'Child (Nesting 4)',
-        ];
-
-        $parentLocation = $locationService->newLocationCreateStruct(
-            $this->generateId('location', 2)
+                    'languageCode' => 'fre-FR',
+                    'name' => 'French',
+                    'enabled' => true
+                ]
+            )
         );
 
-        /** @var Content[] $contents */
-        $contents = [];
-
-        foreach ($contentNames as $contentName) {
-            $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
-            $contentCreate->setField('name', $contentName);
-
-            $content = $contentService->createContent($contentCreate, [$parentLocation]);
-            $contents[] = $publishedContent = $contentService->publishVersion($content->versionInfo);
-
-            $parentLocation = $locationService->newLocationCreateStruct(
-                $this->generateId('location', $publishedContent->contentInfo->mainLocationId)
-            );
-        }
-
-        $contentService->hideContent($contents[0]->contentInfo);
-        $contentService->hideContent($contents[2]->contentInfo);
-        $contentService->revealContent($contents[2]->contentInfo);
-
-        $parentContent = $contentService->loadContent($contents[0]->id);
-        $parentLocation = $locationService->loadLocation($parentContent->contentInfo->mainLocationId);
-        $parentSublocations = $locationService->loadLocationList([
-            $contents[1]->contentInfo->mainLocationId,
-            $contents[2]->contentInfo->mainLocationId,
-            $contents[3]->contentInfo->mainLocationId,
-            $contents[4]->contentInfo->mainLocationId,
-        ]);
-
-        // Parent remains invisible
-        self::assertTrue($parentLocation->invisible);
-
-        // All parent sublocations remain invisible as well
-        foreach ($parentSublocations as $parentSublocation) {
-            self::assertTrue($parentSublocation->invisible);
-        }
-    }
-
-    /**
-     * @depends testRevealContent
-     */
-    public function testRevealContentWithHiddenChildren()
-    {
-        $repository = $this->getRepository();
-
-        $contentTypeService = $repository->getContentTypeService();
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
-        $contentNames = [
-            'Parent Content',
-            'Child (Nesting 1)',
-            'Child (Nesting 2)',
-            'Child (Nesting 3)',
-            'Child (Nesting 4)',
-        ];
-
-        $parentLocation = $locationService->newLocationCreateStruct(
-            $this->generateId('location', 2)
-        );
-
-        /** @var Content[] $contents */
-        $contents = [];
-
-        foreach ($contentNames as $contentName) {
-            $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
-            $contentCreate->setField('name', $contentName);
-
-            $content = $contentService->createContent($contentCreate, [$parentLocation]);
-            $contents[] = $publishedContent = $contentService->publishVersion($content->versionInfo);
-
-            $parentLocation = $locationService->newLocationCreateStruct(
-                $this->generateId('location', $publishedContent->contentInfo->mainLocationId)
-            );
-        }
-
-        $contentService->hideContent($contents[0]->contentInfo);
-        $contentService->hideContent($contents[2]->contentInfo);
-        $contentService->revealContent($contents[0]->contentInfo);
-
-        $directChildContent = $contentService->loadContent($contents[1]->id);
-        $directChildLocation = $locationService->loadLocation($directChildContent->contentInfo->mainLocationId);
-
-        $childContent = $contentService->loadContent($contents[2]->id);
-        $childLocation = $locationService->loadLocation($childContent->contentInfo->mainLocationId);
-        $childSublocations = $locationService->loadLocationList([
-            $contents[3]->contentInfo->mainLocationId,
-            $contents[4]->contentInfo->mainLocationId,
-        ]);
-
-        // Direct child content is not hidden
-        self::assertFalse($directChildContent->contentInfo->isHidden);
-
-        // Direct child content location is still invisible
-        self::assertFalse($directChildLocation->invisible);
-
-        // Child content is still hidden
-        self::assertTrue($childContent->contentInfo->isHidden);
-
-        // Child content location is still invisible
-        self::assertTrue($childLocation->invisible);
-
-        // All childs sublocations remain invisible as well
-        foreach ($childSublocations as $childSublocation) {
-            self::assertTrue($childSublocation->invisible);
-        }
-    }
-
-    public function testHideContentWithParentLocation()
-    {
-        $repository = $this->getRepository();
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
-        $contentCreate->setField('name', 'Parent');
-
-        $content = $contentService->createContent(
-            $contentCreate,
-            [
-                $locationService->newLocationCreateStruct(
-                    $this->generateId('location', 2)
-                ),
-            ]
-        );
-
-        $publishedContent = $contentService->publishVersion($content->versionInfo);
-
-        /* BEGIN: Use Case */
-        $contentService->hideContent($publishedContent->contentInfo);
-        /* END: Use Case */
-
-        $locations = $locationService->loadLocations($publishedContent->contentInfo);
-
-        $childContentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
-        $childContentCreate->setField('name', 'Child');
-
-        $childContent = $contentService->createContent(
-            $childContentCreate,
-            [
-                $locationService->newLocationCreateStruct(
-                    $locations[0]->id
-                ),
-            ]
-        );
-
-        $publishedChildContent = $contentService->publishVersion($childContent->versionInfo);
-
-        $childLocations = $locationService->loadLocations($publishedChildContent->contentInfo);
-
-        $this->assertTrue($locations[0]->hidden);
-        $this->assertTrue($locations[0]->invisible);
-
-        $this->assertFalse($childLocations[0]->hidden);
-        $this->assertTrue($childLocations[0]->invisible);
-    }
-
-    public function testChangeContentName()
-    {
-        $repository = $this->getRepository();
-
-        $contentService = $repository->getContentService();
         $contentDraft = $this->createContentDraft(
             'folder',
             $this->generateId('location', 2),
             [
-                'name' => 'Marco',
+                'name' => 'Folder US',
             ]
         );
 
         $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
-        $contentMetadataUpdateStruct = new ContentMetadataUpdateStruct([
-            'name' => 'Polo',
+
+        $deDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+
+        $contentUpdateData = $this->translateField(
+            $deDraft,
+            'name',
+            new Value('Folder GER'),
+            'ger-DE'
+        );
+
+        $gerContent = $contentService->updateContent($deDraft->versionInfo, $contentUpdateData);
+
+        $updatedContent = $contentService->loadContent($gerContent->id, null, $gerContent->versionInfo->versionNo);
+        $this->assertEquals(
+            [
+                'eng-US' => 'Folder US',
+                'ger-DE' => 'Folder GER'
+            ],
+            $updatedContent->fields['name']
+        );
+
+        $frDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+
+        $contentUpdateData = $this->translateField(
+            $frDraft,
+            'name',
+            new Value('Folder FR'),
+            'fre-FR'
+        );
+        $frContent = $contentService->updateContent($frDraft->versionInfo, $contentUpdateData);
+        $contentService->publishVersion($frDraft->versionInfo);
+        $updatedContent = $contentService->loadContent($frContent->id, null, $frContent->versionInfo->versionNo);
+        $this->assertEquals(
+            [
+                'eng-US' => 'Folder US',
+                'fre-FR' => 'Folder FR'
+            ],
+            $updatedContent->fields['name']
+        );
+
+        $dePublished = $contentService->publishVersion($deDraft->versionInfo);
+        $this->assertEquals(
+            [
+                'eng-US' => 'Folder US',
+                'ger-DE' => 'Folder GER',
+                'fre-FR' => 'Folder FR',
+            ],
+            $dePublished->fields['name']
+        );
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $newDraft
+     * @param string $identifier
+     * @param \eZ\Publish\Core\FieldType\TextLine\Value $newValue
+     * @param string $languageCode
+     *
+     * @return \eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct
+     */
+    protected function translateField(Content $newDraft, string $identifier, Value $newValue, string $languageCode): ContentUpdateStruct
+    {
+        $contentUpdateData = new ContentUpdateStruct([
+            'initialLanguageCode' => $languageCode,
+            'fields' => $newDraft->getFields(),
         ]);
-        $contentService->updateContentMetadata($publishedContent->contentInfo, $contentMetadataUpdateStruct);
 
-        $updatedContent = $contentService->loadContent($publishedContent->id);
+        $nameFieldDefinition = array_filter(
+            $contentUpdateData->fields,
+            function (Field $field) use ($identifier) {
+                return $identifier === $field->fieldDefIdentifier;
+            }
+        );
 
-        $this->assertEquals('Marco', $publishedContent->contentInfo->name);
-        $this->assertEquals('Polo', $updatedContent->contentInfo->name);
+        $contentUpdateData->fields[key($nameFieldDefinition)] = new Field(
+            [
+                'id' => $nameFieldDefinition[0]->id,
+                'fieldDefIdentifier' => $nameFieldDefinition[0]->fieldDefIdentifier,
+                'languageCode' => $languageCode,
+                'fieldTypeIdentifier' => $nameFieldDefinition[0]->fieldTypeIdentifier,
+                'value' => $newValue,
+            ]
+        );
+        return $contentUpdateData;
     }
 }

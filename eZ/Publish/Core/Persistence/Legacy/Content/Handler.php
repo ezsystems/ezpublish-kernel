@@ -10,7 +10,9 @@ namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
 use Exception;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway;
+use eZ\Publish\SPI\Persistence\Content\Field;
 use eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway as UrlAliasGateway;
@@ -91,6 +93,11 @@ class Handler implements BaseContentHandler
     private $logger;
 
     /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
+     */
+    private $languageHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
@@ -101,6 +108,7 @@ class Handler implements BaseContentHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway $urlAliasGateway
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
      * @param \eZ\Publish\Core\Persistence\Legacy\Content\TreeHandler $treeHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param \Psr\Log\LoggerInterface|null $logger
      */
     public function __construct(
@@ -112,6 +120,7 @@ class Handler implements BaseContentHandler
         UrlAliasGateway $urlAliasGateway,
         ContentTypeHandler $contentTypeHandler,
         TreeHandler $treeHandler,
+        LanguageHandler $languageHandler,
         LoggerInterface $logger = null
     ) {
         $this->contentGateway = $contentGateway;
@@ -123,6 +132,7 @@ class Handler implements BaseContentHandler
         $this->contentTypeHandler = $contentTypeHandler;
         $this->treeHandler = $treeHandler;
         $this->logger = null !== $logger ? $logger : new NullLogger();
+        $this->languageHandler = $languageHandler;
     }
 
     /**
@@ -223,6 +233,7 @@ class Handler implements BaseContentHandler
                 $versionInfo->contentInfo->currentVersionNo
             );
         }
+        $this->copyTranslations($contentId, $versionInfo);
 
         // Set always available name for the content
         $metaDataUpdateStruct->name = $versionInfo->names[$versionInfo->contentInfo->mainLanguageCode];
@@ -237,6 +248,46 @@ class Handler implements BaseContentHandler
         $this->setStatus($contentId, VersionInfo::STATUS_PUBLISHED, $versionNo);
 
         return $this->load($contentId, $versionNo);
+    }
+
+    protected function copyTranslations(int $contendId, VersionInfo $versionInfo): void
+    {
+        $draft = $this->load($contendId, $versionInfo->versionNo);
+        $publishedContent = $this->load($contendId);
+        $publishedVersionInfo = $publishedContent->versionInfo;
+
+        if ($versionInfo->versionNo >= $publishedVersionInfo->versionNo) {
+            return;
+        }
+        $draftLanguages = $versionInfo->languageCodes;
+        $languagesToCopy = array_filter(
+            $publishedVersionInfo->languageCodes,
+            function (string $languageCode) use ($draftLanguages) {
+                return !in_array($languageCode, $draftLanguages);
+            }
+        );
+
+        if (empty($languagesToCopy)) {
+            return;
+        }
+
+        $fieldsToCopy = array_filter(
+            $publishedContent->fields,
+            function (Field $field) use ($languagesToCopy) {
+                return in_array($field->languageCode, $languagesToCopy);
+            }
+        );
+        $namesToCopy = array_intersect_key($publishedContent->versionInfo->names, array_flip($languagesToCopy));
+
+        $updateStruct = new UpdateStruct([
+            'name' => array_merge($namesToCopy, $draft->versionInfo->names),
+            'fields' => array_merge($fieldsToCopy, $draft->fields),
+            'initialLanguageId' => $this->languageHandler->loadByLanguageCode($publishedContent->versionInfo->contentInfo->mainLanguageCode)->id,
+            'creatorId' => $draft->versionInfo->creatorId,
+            'modificationDate' => $draft->versionInfo->modificationDate,
+        ]);
+
+        $this->updateContent($contendId, $versionInfo->versionNo, $updateStruct);
     }
 
     /**
