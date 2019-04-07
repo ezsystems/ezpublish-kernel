@@ -132,7 +132,9 @@ services:
 
     ezpublish.spi.persistence.cache.urlAliasHandler:
         class: "%ezpublish.spi.persistence.cache.urlAliasHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
+        arguments: # Overload argument to use content in-memory service
+          index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
 
     ezpublish.spi.persistence.cache.objectStateHandler:
         class: "%ezpublish.spi.persistence.cache.objectStateHandler.class%"
