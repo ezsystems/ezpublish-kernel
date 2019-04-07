@@ -23,8 +23,9 @@ parameters:
     ezpublish.spi.persistence.cache.inmemory.limit: 100
     ezpublish.spi.persistence.cache.inmemory.enable: true
     # Global in-memory settings, for content in-memory cache
-    ezpublish.spi.persistence.cache.inmemory.content.ttl: 300
-    ezpublish.spi.persistence.cache.inmemory.content.limit: 50
+    ## TTL on purpose low to avoid getting outdated data in prod, in dev it will be x2 to account for debug overhead
+    ezpublish.spi.persistence.cache.inmemory.content.ttl: 400
+    ezpublish.spi.persistence.cache.inmemory.content.limit: 100
     ezpublish.spi.persistence.cache.inmemory.content.enable: true
 
 services:
@@ -66,7 +67,7 @@ services:
         public: false
         class: eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
         arguments:
-            - "%ezpublish.spi.persistence.cache.inmemory.content.ttl%"
+            - "@=container.getParameter('kernel.debug') ? parameter('ezpublish.spi.persistence.cache.inmemory.content.ttl')  *2 : parameter('ezpublish.spi.persistence.cache.inmemory.content.ttl')"
             - "%ezpublish.spi.persistence.cache.inmemory.content.limit%"
             - "%ezpublish.spi.persistence.cache.inmemory.content.enable%"
 
