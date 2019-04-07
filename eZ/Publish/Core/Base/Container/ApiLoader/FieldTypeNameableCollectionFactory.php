@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\Base\Container\ApiLoader;
 
-use eZ\Publish\Core\FieldType\NameableFieldTypeFallback;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
@@ -35,21 +34,6 @@ class FieldTypeNameableCollectionFactory implements ContainerAwareInterface
         $container = $this->container;
         $this->nameableFieldTypeClosures[$fieldTypeAlias] = function () use ($container, $nameableFieldTypeServiceId) {
             return $container->get($nameableFieldTypeServiceId);
-        };
-    }
-
-    /**
-     * Registers an eZ Publish field type.
-     * Field types are being registered as a closure so that they will be lazy loaded.
-     *
-     * @param string $nameableFieldTypeServiceId The field type nameable service Id
-     * @param string $fieldTypeAlias The field type alias (e.g. "ezstring")
-     */
-    public function registerNonNameableFieldType($fieldTypeServiceId, $fieldTypeAlias)
-    {
-        $container = $this->container;
-        $this->nameableFieldTypeClosures[$fieldTypeAlias] = function () use ($container, $fieldTypeServiceId) {
-            return new NameableFieldTypeFallback($container->get($fieldTypeServiceId));
         };
     }
 

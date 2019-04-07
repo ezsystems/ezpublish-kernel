@@ -202,14 +202,6 @@ class Type extends FieldType
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function getSortInfo(BaseValue $value)
-    {
-        return false;
-    }
-
-    /**
      * Returns the name of the given field value.
      *
      * It will be used to generate content name and url alias if current field is designated
@@ -222,6 +214,14 @@ class Type extends FieldType
     public function getName(SPIValue $value)
     {
         return (string)$value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getSortInfo(BaseValue $value)
+    {
+        return false;
     }
 
     /**

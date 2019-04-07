@@ -44,21 +44,6 @@ interface FieldType
     public function getFieldTypeIdentifier();
 
     /**
-     * Returns a human readable string representation from the given $value.
-     *
-     * It will be used to generate content name and url alias if current field
-     * is designated to be used in the content name/urlAlias pattern.
-     *
-     * The used $value can be assumed to be already accepted by {@link * acceptValue()}.
-     *
-     * @deprecated Since 6.3/5.4.7, use \eZ\Publish\SPI\FieldType\Nameable
-     * @param \eZ\Publish\SPI\FieldType\Value $value
-     *
-     * @return string
-     */
-    public function getName(Value $value);
-
-    /**
      * Returns a schema for the settings expected by the FieldType.
      *
      * Returns an arbitrary value, representing a schema for the settings of
