@@ -81,4 +81,9 @@ class ConverterRegistry implements ConverterRegistryInterface
 
         return $this->converterMap[$typeName];
     }
+
+    public function hasConverter(string $typeName): bool
+    {
+        return isset($this->converterMap[$typeName]);
+    }
 }

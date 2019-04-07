@@ -20,7 +20,7 @@ class FieldValueConverterRegistryTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::register
      */
-    public function testRegister()
+    public function testRegister(): void
     {
         $converter = $this->getFieldValueConverterMock();
         $registry = new Registry(array('some-type' => $converter));
@@ -37,7 +37,7 @@ class FieldValueConverterRegistryTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
      */
-    public function testGetStorage()
+    public function testGetStorage(): void
     {
         $converter = $this->getFieldValueConverterMock();
         $registry = new Registry(array('some-type' => $converter));
@@ -55,7 +55,7 @@ class FieldValueConverterRegistryTest extends TestCase
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      * @expectedException \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
-    public function testGetNotFound()
+    public function testGetNotFound(): void
     {
         $registry = new Registry(array());
 
@@ -63,9 +63,33 @@ class FieldValueConverterRegistryTest extends TestCase
     }
 
     /**
-     * Returns a mock for Storage.
-     *
-     * @return Storage
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::hasConverter
+     */
+    public function testHasStorage(): void
+    {
+        $converter = $this->getFieldValueConverterMock();
+        $registry = new Registry(array('some-type' => $converter));
+
+        $this->assertTrue(
+            $registry->hasConverter('some-type')
+        );
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::hasConverter
+     */
+    public function testHasNoStorage(): void
+    {
+        $converter = $this->getFieldValueConverterMock();
+        $registry = new Registry(array('some-type' => $converter));
+
+        $this->assertFalse(
+            $registry->hasConverter('some-other-type')
+        );
+    }
+
+    /**
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldValueConverterMock()
     {

@@ -27,4 +27,13 @@ interface ConverterRegistryInterface
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
      */
     public function getConverter($typeName);
+
+    /**
+     * Returns true if converter is defined for given type name.
+     *
+     * @param string $typeName
+     *
+     * @return bool
+     */
+    public function hasConverter(string $typeName): bool;
 }
