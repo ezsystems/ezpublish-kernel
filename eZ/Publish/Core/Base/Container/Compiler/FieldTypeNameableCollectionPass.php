@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Base\Container\Compiler;
 
+use eZ\Publish\SPI\FieldType\Nameable;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use LogicException;
@@ -69,14 +70,33 @@ class FieldTypeNameableCollectionPass implements CompilerPassInterface
                 }
 
                 $fieldTypeCollectionFactoryDef->addMethodCall(
-                    'registerNonNameableFieldType',
-                    array(
+                    $this->isImplementNameable($container, $id) ? 'registerNameableFieldType' : 'registerNonNameableFieldType',
+                    [
                         // Only pass the service Id since field types will be lazy loaded via the service container
                         $id,
                         $attribute['alias'],
-                    )
+                    ]
                 );
             }
         }
+    }
+
+    /**
+     * Returns true if the given service implements Nameable.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $serviceId
+     *
+     * @return bool
+     *
+     * @throws \ReflectionException
+     */
+    private function isImplementNameable(ContainerBuilder $container, string $serviceId): bool
+    {
+        $class = $container->getReflectionClass(
+            $container->getDefinition($serviceId)->getClass()
+        );
+
+        return $class->implementsInterface(Nameable::class);
     }
 }
