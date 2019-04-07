@@ -26,13 +26,50 @@ parameters:
     ezpublish.fieldType.ezuser.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UserConverter
     ezpublish.fieldType.ezpage.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\PageConverter
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullConverter
+    ezpublish.fieldType.generic.converter.class: eZ\Publish\Core\FieldType\Generic\Converter
+    ezpublish.fieldType.generic.converter.provider.class: eZ\Publish\Core\FieldType\Generic\ConverterProvider
 
 services:
     # Note: converter services tagged with 'ezpublish.storageEngine.legacy.converter' are
     # registered to this one using compilation pass and factory
-    ezpublish.persistence.legacy.field_value_converter.registry:
+    ezpublish.persistence.legacy.field_value_converter.registry.inner:
         class: "%ezpublish.persistence.legacy.field_value_converter.registry.class%"
         lazy: true
+
+    ezpublish.fieldType.generic.serializer.normalizer:
+        class: 'Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer'
+        public: false
+
+    ezpublish.fieldType.generic.serializer.encoder:
+        class: 'Symfony\Component\Serializer\Encoder\JsonEncoder'
+        public: false
+
+    ezpublish.fieldType.generic.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            - [ '@ezpublish.fieldType.generic.serializer.normalizer' ]
+            - [ '@ezpublish.fieldType.generic.serializer.encoder' ]
+
+    ezpublish.fieldType.generic.converter.factory:
+        class: eZ\Publish\Core\FieldType\Generic\ConverterFactory
+        arguments:
+            - '@ezpublish.fieldType.generic.serializer'
+
+#    ezpublish.fieldType.generic.converter:
+#        class: "%ezpublish.fieldType.generic.converter.class%"
+#        arguments:
+#            - '@ezpublish.fieldType.generic.serializer'
+
+    ezpublish.fieldType.generic.converter.provider:
+        class: '%ezpublish.fieldType.generic.converter.provider.class%'
+        arguments:
+            - '@ezpublish.persistence.legacy.field_value_converter.registry.inner'
+            - '@ezpublish.persistence.field_type_registry'
+            - '@ezpublish.fieldType.generic.converter.factory'
+        lazy: true
+
+    ezpublish.persistence.legacy.field_value_converter.registry:
+        alias: ezpublish.fieldType.generic.converter.provider
 
     ezpublish.fieldType.ezauthor.converter:
         class: "%ezpublish.fieldType.ezauthor.converter.class%"
