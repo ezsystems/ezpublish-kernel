@@ -202,11 +202,6 @@ services:
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezpackage}
 
-    ezpublish.fieldType.ezprice.converter:
-        class: "%ezpublish.fieldType.eznull.converter.class%"
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezprice}
-
     ezpublish.fieldType.ezproductcategory.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:

@@ -1378,14 +1378,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilterBetween()
     {
         $this->assertSearchResults(
-            array(71, 73, 74),
+            array(188, 189),
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
                         'filter' => new Criterion\Field(
-                            'price',
+                            'publication_date',
                             Criterion\Operator::BETWEEN,
-                            array(10000, 1000000)
+                            array(1190000000, 1200000000)
                         ),
                         'limit' => 10,
                     )
@@ -1397,7 +1397,7 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilterOr()
     {
         $this->assertSearchResults(
-            array(12, 71, 73, 74),
+            array(12, 188, 189),
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
                     array(
@@ -1409,9 +1409,9 @@ class HandlerLocationTest extends AbstractTestCase
                                     'members'
                                 ),
                                 new Criterion\Field(
-                                    'price',
+                                    'publication_date',
                                     Criterion\Operator::BETWEEN,
-                                    array(10000, 1000000)
+                                    array(1190000000, 1200000000)
                                 ),
                             )
                         ),

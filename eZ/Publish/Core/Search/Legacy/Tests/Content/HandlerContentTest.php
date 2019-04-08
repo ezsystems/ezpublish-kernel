@@ -897,14 +897,14 @@ class HandlerContentTest extends AbstractTestCase
     public function testFieldFilterBetween()
     {
         $this->assertSearchResults(
-            array(69, 71, 72),
+            array(186, 187),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
                         'filter' => new Criterion\Field(
-                            'price',
+                            'publication_date',
                             Criterion\Operator::BETWEEN,
-                            array(10000, 1000000)
+                            array(1190000000, 1200000000)
                         ),
                         'limit' => 10,
                     )
@@ -916,7 +916,7 @@ class HandlerContentTest extends AbstractTestCase
     public function testFieldFilterOr()
     {
         $this->assertSearchResults(
-            array(11, 69, 71, 72),
+            array(11, 186, 187),
             $this->getContentSearchHandler()->findContent(
                 new Query(
                     array(
@@ -928,9 +928,9 @@ class HandlerContentTest extends AbstractTestCase
                                     'members'
                                 ),
                                 new Criterion\Field(
-                                    'price',
+                                    'publication_date',
                                     Criterion\Operator::BETWEEN,
-                                    array(10000, 1000000)
+                                    array(1190000000, 1200000000)
                                 ),
                             )
                         ),

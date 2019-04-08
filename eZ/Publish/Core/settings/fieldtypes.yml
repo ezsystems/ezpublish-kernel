@@ -494,13 +494,6 @@ services:
         tags:
             - {name: ezpublish.fieldType, alias: ezpackage}
 
-    ezpublish.fieldType.ezprice:
-        class: "%ezpublish.fieldType.eznull.class%"
-        parent: ezpublish.fieldType
-        arguments: [ "ezprice" ]
-        tags:
-            - {name: ezpublish.fieldType, alias: ezprice}
-
     ezpublish.fieldType.ezproductcategory:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType

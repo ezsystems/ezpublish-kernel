@@ -8,3 +8,6 @@ Changes affecting version compatibility with former or future versions.
   while the latest Elasticsearch release is 7.0.
 
   The support for this search engine will be provided once again as a separate bundle.
+  
+* The following field type are not supported any more and have been removed:
+    * ezprice 
