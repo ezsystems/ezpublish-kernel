@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
-use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Relation;
@@ -24,7 +23,6 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use DOMDocument;
 use Exception;
-use eZ\Publish\Core\FieldType\TextLine\Value;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 
 /**
@@ -6194,16 +6192,7 @@ XML
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
-        $languageService = $repository->getContentLanguageService();
-        $languageService->createLanguage(
-            new LanguageCreateStruct(
-                [
-                    'languageCode' => 'fre-FR',
-                    'name' => 'French',
-                    'enabled' => true,
-                ]
-            )
-        );
+        $this->createLanguage('fre-FR', 'French');
 
         $contentDraft = $this->createContentDraft(
             'folder',
@@ -6217,14 +6206,14 @@ XML
 
         $deDraft = $contentService->createContentDraft($publishedContent->contentInfo);
 
-        $contentUpdateData = $this->translateField(
-            $deDraft,
-            'name',
-            new Value('Folder GER'),
-            'ger-DE'
-        );
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'ger-DE',
+            'fields' => $contentDraft->getFields(),
+        ]);
 
-        $gerContent = $contentService->updateContent($deDraft->versionInfo, $contentUpdateData);
+        $contentUpdateStruct->setField('name', 'Folder GER', 'ger-DE');
+
+        $gerContent = $contentService->updateContent($deDraft->versionInfo, $contentUpdateStruct);
 
         $updatedContent = $contentService->loadContent($gerContent->id, null, $gerContent->versionInfo->versionNo);
         $this->assertEquals(
@@ -6237,13 +6226,14 @@ XML
 
         $frDraft = $contentService->createContentDraft($publishedContent->contentInfo);
 
-        $contentUpdateData = $this->translateField(
-            $frDraft,
-            'name',
-            new Value('Folder FR'),
-            'fre-FR'
-        );
-        $frContent = $contentService->updateContent($frDraft->versionInfo, $contentUpdateData);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'fre-FR',
+            'fields' => $contentDraft->getFields(),
+        ]);
+
+        $contentUpdateStruct->setField('name', 'Folder FR', 'fre-FR');
+
+        $frContent = $contentService->updateContent($frDraft->versionInfo, $contentUpdateStruct);
         $contentService->publishVersion($frDraft->versionInfo);
         $updatedContent = $contentService->loadContent($frContent->id, null, $frContent->versionInfo->versionNo);
         $this->assertEquals(
@@ -6263,40 +6253,5 @@ XML
             ],
             $dePublished->fields['name']
         );
-    }
-
-    /**
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $newDraft
-     * @param string $identifier
-     * @param \eZ\Publish\Core\FieldType\TextLine\Value $newValue
-     * @param string $languageCode
-     *
-     * @return \eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct
-     */
-    protected function translateField(Content $newDraft, string $identifier, Value $newValue, string $languageCode): ContentUpdateStruct
-    {
-        $contentUpdateData = new ContentUpdateStruct([
-            'initialLanguageCode' => $languageCode,
-            'fields' => $newDraft->getFields(),
-        ]);
-
-        $nameFieldDefinition = array_filter(
-            $contentUpdateData->fields,
-            function (Field $field) use ($identifier) {
-                return $identifier === $field->fieldDefIdentifier;
-            }
-        );
-
-        $contentUpdateData->fields[key($nameFieldDefinition)] = new Field(
-            [
-                'id' => $nameFieldDefinition[0]->id,
-                'fieldDefIdentifier' => $nameFieldDefinition[0]->fieldDefIdentifier,
-                'languageCode' => $languageCode,
-                'fieldTypeIdentifier' => $nameFieldDefinition[0]->fieldTypeIdentifier,
-                'value' => $newValue,
-            ]
-        );
-
-        return $contentUpdateData;
     }
 }

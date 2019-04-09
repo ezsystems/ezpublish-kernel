@@ -259,12 +259,10 @@ class Handler implements BaseContentHandler
         if ($versionInfo->versionNo >= $publishedVersionInfo->versionNo) {
             return;
         }
-        $draftLanguages = $versionInfo->languageCodes;
-        $languagesToCopy = array_filter(
+
+        $languagesToCopy = array_diff(
             $publishedVersionInfo->languageCodes,
-            function (string $languageCode) use ($draftLanguages) {
-                return !in_array($languageCode, $draftLanguages);
-            }
+            $versionInfo->languageCodes
         );
 
         if (empty($languagesToCopy)) {
@@ -282,7 +280,7 @@ class Handler implements BaseContentHandler
         $updateStruct = new UpdateStruct([
             'name' => array_merge($namesToCopy, $draft->versionInfo->names),
             'fields' => array_merge($fieldsToCopy, $draft->fields),
-            'initialLanguageId' => $this->languageHandler->loadByLanguageCode($publishedContent->versionInfo->contentInfo->mainLanguageCode)->id,
+            'initialLanguageId' => $this->languageHandler->loadByLanguageCode($versionInfo->initialLanguageCode)->id,
             'creatorId' => $draft->versionInfo->creatorId,
             'modificationDate' => $draft->versionInfo->modificationDate,
         ]);
