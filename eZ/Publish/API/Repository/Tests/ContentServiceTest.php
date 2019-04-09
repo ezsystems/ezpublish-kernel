@@ -6200,7 +6200,7 @@ XML
                 [
                     'languageCode' => 'fre-FR',
                     'name' => 'French',
-                    'enabled' => true
+                    'enabled' => true,
                 ]
             )
         );
@@ -6230,7 +6230,7 @@ XML
         $this->assertEquals(
             [
                 'eng-US' => 'Folder US',
-                'ger-DE' => 'Folder GER'
+                'ger-DE' => 'Folder GER',
             ],
             $updatedContent->fields['name']
         );
@@ -6249,7 +6249,7 @@ XML
         $this->assertEquals(
             [
                 'eng-US' => 'Folder US',
-                'fre-FR' => 'Folder FR'
+                'fre-FR' => 'Folder FR',
             ],
             $updatedContent->fields['name']
         );
@@ -6296,6 +6296,7 @@ XML
                 'value' => $newValue,
             ]
         );
+
         return $contentUpdateData;
     }
 }

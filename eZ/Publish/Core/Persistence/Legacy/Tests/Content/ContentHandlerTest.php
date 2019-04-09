@@ -1541,7 +1541,7 @@ class ContentHandlerTest extends TestCase
                     $this->getUrlAliasGatewayMock(),
                     $this->getContentTypeHandlerMock(),
                     $this->getTreeHandlerMock(),
-                    $this->getLanguageHandlerMock()
+                    $this->getLanguageHandlerMock(),
                 )
             )
             ->getMock();
