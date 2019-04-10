@@ -264,12 +264,12 @@ class ContentHandlerTest extends TestCase
             ->withConsecutive(
                 [
                     $this->equalTo(23),
-                    $this->equalTo(1),
+                    $this->equalTo(null),
                     $this->equalTo(null),
                 ],
                 [
                     $this->equalTo(23),
-                    $this->equalTo(null),
+                    $this->equalTo(1),
                     $this->equalTo(null),
                 ],
                 [
@@ -348,14 +348,9 @@ class ContentHandlerTest extends TestCase
 
         $contentRows = [['ezcontentobject_version_version' => 2]];
 
-        $gatewayMock->expects($this->exactly(3))
+        $gatewayMock->expects($this->exactly(2))
             ->method('load')
             ->withConsecutive(
-                [
-                    $this->equalTo(23),
-                    $this->equalTo(2),
-                    $this->equalTo(null),
-                ],
                 [
                     $this->equalTo(23),
                     $this->equalTo(null),
@@ -368,7 +363,7 @@ class ContentHandlerTest extends TestCase
                 ]
             )->willReturn($contentRows);
 
-        $gatewayMock->expects($this->exactly(3))
+        $gatewayMock->expects($this->exactly(2))
             ->method('loadVersionedNameData')
             ->with(
                 $this->equalTo(array(array('id' => 23, 'version' => 2)))
@@ -376,12 +371,12 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue(array(22))
             );
 
-        $mapperMock->expects($this->exactly(3))
+        $mapperMock->expects($this->exactly(2))
             ->method('extractContentFromRows')
             ->with($this->equalTo($contentRows), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
-        $fieldHandlerMock->expects($this->exactly(3))
+        $fieldHandlerMock->expects($this->exactly(2))
             ->method('loadExternalFieldData')
             ->with($this->isInstanceOf(Content::class));
 
