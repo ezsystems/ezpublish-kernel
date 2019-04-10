@@ -55,7 +55,7 @@ class FieldRegistry
     public function getType($name)
     {
         if (!isset($this->types[$name])) {
-            throw new \OutOfBoundsException("No type registered for $name.");
+            throw new \OutOfBoundsException('Field type "' . $name . '" is not indexable. Please provide \eZ\Publish\SPI\FieldType\Indexable implementation and register it with "ezpublish.fieldType.indexable" tag.');
         }
 
         return $this->types[$name];
