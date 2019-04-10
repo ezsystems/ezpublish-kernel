@@ -252,13 +252,15 @@ class Handler implements BaseContentHandler
 
     protected function copyTranslations(int $contendId, VersionInfo $versionInfo): void
     {
-        $draft = $this->load($contendId, $versionInfo->versionNo);
         $publishedContent = $this->load($contendId);
         $publishedVersionInfo = $publishedContent->versionInfo;
 
+        // Copying occurs only if Version being published is older than the currently published one.
         if ($versionInfo->versionNo >= $publishedVersionInfo->versionNo) {
             return;
         }
+
+        $draft = $this->load($contendId, $versionInfo->versionNo);
 
         $languagesToCopy = array_diff(
             $publishedVersionInfo->languageCodes,
