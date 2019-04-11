@@ -29,6 +29,11 @@ abstract class AbstractRandom extends SortClauseHandler
         return $sortClause instanceof SortClause\Random;
     }
 
+    public function supportedClass(): string
+    {
+        return SortClause\Random::class;
+    }
+
     /**
      * Apply selects to the query.
      *
@@ -50,9 +55,10 @@ abstract class AbstractRandom extends SortClauseHandler
                 )
             );
 
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\RandomTarget $sortClause->targetData */
         return $column;
     }
 
-    abstract public function getRandomFunctionName();
+    abstract public function getRandomFunctionName(): string;
+
+    abstract public function getDriverName(): string;
 }

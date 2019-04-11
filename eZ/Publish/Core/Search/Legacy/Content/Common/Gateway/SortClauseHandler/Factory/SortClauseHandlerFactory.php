@@ -9,6 +9,9 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory;
 
 use Doctrine\DBAL\Connection;
+use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use ReflectionClass;
 
 class SortClauseHandlerFactory
 {
@@ -18,7 +21,7 @@ class SortClauseHandlerFactory
     private $gateways = [];
 
     /**
-     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler[]
+     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler[][]
      */
     private $gatewaysForDriver = [];
 
@@ -33,17 +36,40 @@ class SortClauseHandlerFactory
         $this->gateways = $gateways;
     }
 
-    public function getGateway(\eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause)
+    public function getGateway(string $sortClauseClass)
     {
-        $driverName = $this->connection->getDatabasePlatform()->getName();
+        $gateways = $this->getGatewaysForDriver($this->connection->getDatabasePlatform()->getName());
 
-        // @todo prepare cached gatewaysForDriver
-
-        foreach ($this->gatewaysForDriver[$driverName] as $sortClauseHandlerGateway) {
+        foreach ($gateways as $sortClauseHandlerGateway) {
             /** @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler $sortClauseHandlerGateway */
-            if ($sortClauseHandlerGateway->accept($sortClause)) {
+            $refClass = (new ReflectionClass($sortClauseClass))->newInstanceWithoutConstructor();
+
+            if (!$refClass instanceof SortClause) {
+                throw new InvalidArgumentException('$sortClauseClass', 'Must implement ' . SortClause::class);
+            }
+            if ($sortClauseHandlerGateway->supportedClass() === $sortClauseClass) {
                 return $sortClauseHandlerGateway;
             }
+//            if ($sortClauseHandlerGateway->accept($refClass)) {
+//                return $sortClauseHandlerGateway;
+//            }
         }
+
+        throw new InvalidArgumentException('$sortClauseClass', 'No sort clause handler found for ' . $sortClauseClass);
+    }
+
+    private function getGatewaysForDriver(string $driverName): array
+    {
+        if (empty($this->gatewaysForDriver) && !empty($this->gateways)) {
+            foreach ($this->gateways as $gateway) {
+                $this->gatewaysForDriver[$gateway->getDriverName()][] = $gateway;
+            }
+        }
+
+        if (!isset($this->gatewaysForDriver[$driverName])) {
+            throw new InvalidArgumentException('$this->gatewaysForDriver', 'No gateways for driver ' . $driverName);
+        }
+
+        return $this->gatewaysForDriver[$driverName];
     }
 }
