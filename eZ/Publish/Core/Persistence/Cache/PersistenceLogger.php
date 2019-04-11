@@ -160,8 +160,6 @@ class PersistenceLogger
         }
         ++$this->calls[$callHash]['stats'][$type];
 
-        // @todo If we want/need to save more memory we can consider making an value object holding "trace", and share
-        // the object across all calls having same trace (quite often the case).
         $trace = $this->getSimpleCallTrace($trimmedBacktrace);
         $traceHash = \hash('adler32', \implode($trace));
         if (empty($this->calls[$callHash]['traces'][$traceHash])) {

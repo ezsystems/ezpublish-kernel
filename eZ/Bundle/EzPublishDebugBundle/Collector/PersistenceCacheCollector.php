@@ -100,13 +100,22 @@ class PersistenceCacheCollector extends DataCollector
                 'class' => $class,
                 'method' => $method,
                 'arguments' => $call['arguments'],
-                'traces' => $call['traces'],
                 'stats' => $call['stats'],
             ];
             // Weight in-memory lookups lower for sorting
             $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'] + $call['stats']['memory'] * 0.001;
+
+            // Order traces to have the most called first
+            $traces = $call['traces'];
+            $traceCount = [];
+            foreach ($traces as $key => $traceData) {
+                $traceCount[$key] = $traceData['count'];
+            }
+            array_multisort($traceCount, SORT_DESC, $traces);
+            $calls[$hash]['traces'] = $traces;
         }
 
+        // Order calls
         array_multisort($count, SORT_DESC, $calls);
 
         return $calls;
