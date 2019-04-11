@@ -8,6 +8,7 @@ parameters:
     ezpublish.search.legacy.gateway.sort_clause_handler.common.map_location_distance.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\MapLocationDistance
     ezpublish.search.legacy.gateway.sort_clause_handler.common.section_identifier.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\SectionIdentifier
     ezpublish.search.legacy.gateway.sort_clause_handler.common.section_name.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\SectionName
+    ezpublish.search.legacy.gateway.sort_clause_handler.common.random.class: eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Random
 
 services:
     ezpublish.search.legacy.gateway.sort_clause_handler.base:
@@ -75,3 +76,11 @@ services:
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+
+    ezpublish.search.legacy.gateway.sort_clause_handler.common.random:
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.random.class%"
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content.sqlite }
