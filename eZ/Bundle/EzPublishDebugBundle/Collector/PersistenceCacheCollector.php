@@ -104,7 +104,7 @@ class PersistenceCacheCollector extends DataCollector
                 'stats' => $call['stats'],
             ];
             // Weight in-memory lookups lower for sorting
-            $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'] + $call['stats']['memory']*0.001;
+            $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'] + $call['stats']['memory'] * 0.001;
         }
 
         array_multisort($count, SORT_DESC, $calls);
