@@ -15,7 +15,7 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
 /**
  * Content locator gateway implementation using the DoctrineDatabase.
  */
-class Random extends SortClauseHandler
+abstract class AbstractRandom extends SortClauseHandler
 {
     /**
      * Check if this sort clause handler accepts to handle the given sort clause.
@@ -45,7 +45,7 @@ class Random extends SortClauseHandler
     {
         $query
             ->select(
-                $query->alias('random()',
+                $query->alias($this->getRandomFunctionName(),
                     $column = $this->getSortColumnName($number)
                 )
             );
@@ -53,4 +53,6 @@ class Random extends SortClauseHandler
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\RandomTarget $sortClause->targetData */
         return $column;
     }
+
+    abstract public function getRandomFunctionName();
 }

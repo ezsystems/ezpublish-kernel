@@ -77,10 +77,18 @@ services:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
+    eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\SortClauseHandlerFactory:
+        arguments: [!tagged ezpublish.search.legacy.gateway.sort_clause_handler.gateway]
+
     ezpublish.search.legacy.gateway.sort_clause_handler.common.random:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
-        class: "%ezpublish.search.legacy.gateway.sort_clause_handler.common.random.class%"
+        factory: '\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\SortClauseHandlerFactory::getGateway'
+        arguments:
+            $sortClause: ''
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content.sqlite }
+
+    eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Random\MySQLRandom:
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.gateway}
