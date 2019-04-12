@@ -92,9 +92,9 @@ class PersistenceCacheCollector extends DataCollector
 
         $calls = $count = [];
         foreach ($this->data['calls'] as $hash => $call) {
-            list($class, $method) = explode('::', $call['method']);
-            $namespace = explode('\\', $class);
-            $class = array_pop($namespace);
+            list($class, $method) = \explode('::', $call['method']);
+            $namespace = \explode('\\', $class);
+            $class = \array_pop($namespace);
             $calls[$hash] = [
                 'namespace' => $namespace,
                 'class' => $class,
@@ -102,21 +102,21 @@ class PersistenceCacheCollector extends DataCollector
                 'arguments' => $call['arguments'],
                 'stats' => $call['stats'],
             ];
-            // Weight in-memory lookups lower for sorting
-            $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'] + $call['stats']['memory'] * 0.001;
-
-            // Order traces to have the most called first
-            $traces = $call['traces'];
+            // Get traces, and order them to have the most called first
+            $calls[$hash]['traces'] = $call['traces'];
             $traceCount = [];
             foreach ($traces as $key => $traceData) {
                 $traceCount[$key] = $traceData['count'];
             }
-            array_multisort($traceCount, SORT_DESC, $traces);
-            $calls[$hash]['traces'] = $traces;
+            \array_multisort($traceCount, SORT_DESC, SORT_NUMERIC, $calls[$hash]['traces']);
+            
+            // For call sorting count all calls, but weight in-memory lookups lower
+            $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'] + ($call['stats']['memory'] * 0.001);
+
         }
 
         // Order calls
-        array_multisort($count, SORT_DESC, $calls);
+        \array_multisort($count, SORT_DESC, SORT_NUMERIC, $calls);
 
         return $calls;
     }
