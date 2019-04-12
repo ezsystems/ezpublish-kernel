@@ -10,15 +10,15 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler
 
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\AbstractRandom;
 
-class MySQLRandom extends AbstractRandom
+class MySqlRandom extends AbstractRandom
 {
     public function getDriverName(): string
     {
         return 'mysql';
     }
 
-    public function getRandomFunctionName(): string
+    public function getRandomFunctionName($seed): string
     {
-        return 'RAND()';
+        return 'RAND(' . $seed . ')';
     }
 }

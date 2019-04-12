@@ -4522,4 +4522,82 @@ class SearchServiceTest extends BaseTest
 
         return $content;
     }
+
+    /**
+     * Test for the findContent() method.
+     *
+     * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     */
+    public function testRandomSortContent()
+    {
+        $query = new Query([
+            'filter' => new Criterion\SectionId([2]),
+            'offset' => 0,
+            'limit' => 10,
+            'sortClauses' => [
+                new SortClause\Random(mt_rand()),
+            ]
+        ]);
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+        $result = $searchService->findContent($query);
+        $this->simplifySearchResult($result);
+
+        if (!is_file($fixture)) {
+            if (isset($_ENV['ez_tests_record'])) {
+                file_put_contents(
+                    $record = $fixture . '.recording',
+                    "<?php\n\nreturn " . var_export($result, true) . ";\n\n"
+                );
+                $this->markTestIncomplete("No fixture available. Result recorded at $record. Result: \n" . $this->printResult($result));
+            } else {
+                $this->markTestIncomplete("No fixture available. Set \$_ENV['ez_tests_record'] to generate:\n " . $fixture);
+            }
+        }
+
+        $fixture = include $fixture;
+
+        if ($closure !== null) {
+            $closure($fixture);
+            $closure($result);
+        }
+
+        if ($ignoreScore) {
+            foreach (array($fixture, $result) as $set) {
+                $property = new \ReflectionProperty(get_class($set), 'maxScore');
+                $property->setAccessible(true);
+                $property->setValue($set, 0.0);
+
+                foreach ($set->searchHits as $hit) {
+                    $property = new \ReflectionProperty(get_class($hit), 'score');
+                    $property->setAccessible(true);
+                    $property->setValue($hit, 0.0);
+                }
+            }
+        }
+
+        foreach (array($fixture, $result) as $set) {
+            foreach ($set->searchHits as $hit) {
+                $property = new \ReflectionProperty(get_class($hit), 'index');
+                $property->setAccessible(true);
+                $property->setValue($hit, null);
+
+                $property = new \ReflectionProperty(get_class($hit), 'matchedTranslation');
+                $property->setAccessible(true);
+                $property->setValue($hit, null);
+
+                if (!$id) {
+                    $hit->valueObject['id'] = null;
+                }
+            }
+        }
+
+        $this->assertEquals(
+            $fixture,
+            $result,
+            'Search results do not match.',
+            .99 // Be quite generous regarding delay -- most important for scores
+        );
+    }
 }

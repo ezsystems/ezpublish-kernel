@@ -77,27 +77,30 @@ services:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
-    eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\SortClauseHandlerFactory:
+    eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\RandomSortClauseHandlerFactory:
         arguments:
             - '@ezpublish.persistence.connection'
-            - !tagged ezpublish.search.legacy.gateway.sort_clause_handler.gateway
+            - !tagged ezpublish.search.legacy.gateway.sort_clause_handler.gateway.random
 
     ezpublish.search.legacy.gateway.sort_clause_handler.common.random:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         class: '%ezpublish.search.legacy.gateway.sort_clause_handler.common.random.class%'
-        factory: 'eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\SortClauseHandlerFactory:getGateway'
-        arguments:
-            $sortClauseClass: eZ\Publish\API\Repository\Values\Content\Query\SortClause\Random
+        factory: 'eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Factory\RandomSortClauseHandlerFactory:getGateway'
         tags:
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.content}
             - {name: ezpublish.search.legacy.gateway.sort_clause_handler.location}
 
-    eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Random\MySQLRandom:
+    eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Random\MySqlRandom:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         tags:
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.gateway}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.gateway.random}
 
     eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Random\SqlLiteRandom:
         parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
         tags:
-            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.gateway}
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.gateway.random}
+
+    eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Random\PgSqlRandom:
+        parent: ezpublish.search.legacy.gateway.sort_clause_handler.base
+        tags:
+            - {name: ezpublish.search.legacy.gateway.sort_clause_handler.gateway.random}

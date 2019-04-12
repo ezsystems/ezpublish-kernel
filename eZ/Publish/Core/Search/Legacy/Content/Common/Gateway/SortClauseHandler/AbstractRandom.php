@@ -41,16 +41,18 @@ abstract class AbstractRandom extends SortClauseHandler
      * used for sorting.
      *
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Random $sortClause
+     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      *
      * @return string
      */
     public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
     {
+        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\RandomTarget $sortClause->targetData */
+
         $query
             ->select(
-                $query->alias($this->getRandomFunctionName(),
+                $query->alias($this->getRandomFunctionName($sortClause->targetData->seed),
                     $column = $this->getSortColumnName($number)
                 )
             );
@@ -58,7 +60,7 @@ abstract class AbstractRandom extends SortClauseHandler
         return $column;
     }
 
-    abstract public function getRandomFunctionName(): string;
+    abstract public function getRandomFunctionName($seed): string;
 
     abstract public function getDriverName(): string;
 }
