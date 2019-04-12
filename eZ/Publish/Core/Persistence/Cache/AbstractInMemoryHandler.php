@@ -271,6 +271,15 @@ abstract class AbstractInMemoryHandler
         return $list;
     }
 
+    /**
+     * Escape an argument for use in cache keys when needed.
+     *
+     * WARNING: Only use the result of this in cache keys, it won't work to use loading the item from backend on miss.
+     *
+     * @param string $identifier
+     *
+     * @return string
+     */
     final protected function escapeForCacheKey(string $identifier)
     {
         return \str_replace(

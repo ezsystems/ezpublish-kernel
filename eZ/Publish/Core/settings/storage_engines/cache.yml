@@ -23,8 +23,8 @@ parameters:
     ezpublish.spi.persistence.cache.inmemory.limit: 100
     ezpublish.spi.persistence.cache.inmemory.enable: true
     # Global in-memory settings, for content in-memory cache
-    ## TTL on purpose low to avoid getting outdated data in prod, in dev it will be x2 to account for debug overhead
-    ezpublish.spi.persistence.cache.inmemory.content.ttl: 400
+    ## WARNING: TTL on purpose low to avoid getting outdated data in prod! For dev config you can safely increase by x3
+    ezpublish.spi.persistence.cache.inmemory.content.ttl: 300
     ezpublish.spi.persistence.cache.inmemory.content.limit: 100
     ezpublish.spi.persistence.cache.inmemory.content.enable: true
 
@@ -34,7 +34,7 @@ services:
         class: eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter
         arguments:
           - "@ezpublish.cache_pool.inner"
-          - [ "@ezpublish.spi.persistence.cache.inmemory", "@ezpublish.spi.persistence.cache.inmemory.content" ]
+          - !tagged ez.spi.persistence.cache.inmemory
 
     ezpublish.cache_pool.inner:
         public: false
@@ -62,14 +62,16 @@ services:
             - "%ezpublish.spi.persistence.cache.inmemory.ttl%"
             - "%ezpublish.spi.persistence.cache.inmemory.limit%"
             - "%ezpublish.spi.persistence.cache.inmemory.enable%"
+        tags: ['ez.spi.persistence.cache.inmemory']
 
     ezpublish.spi.persistence.cache.inmemory.content:
         public: false
         class: eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
         arguments:
-            - "@=container.getParameter('kernel.debug') ? parameter('ezpublish.spi.persistence.cache.inmemory.content.ttl')  *2 : parameter('ezpublish.spi.persistence.cache.inmemory.content.ttl')"
+            - "%ezpublish.spi.persistence.cache.inmemory.content.ttl%"
             - "%ezpublish.spi.persistence.cache.inmemory.content.limit%"
             - "%ezpublish.spi.persistence.cache.inmemory.content.enable%"
+        tags: ['ez.spi.persistence.cache.inmemory']
 
     # SPI Persistence Cache Handlers, incl abstracts
     ezpublish.spi.persistence.cache.abstractHandler:

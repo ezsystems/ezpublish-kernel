@@ -24,20 +24,18 @@ class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
     private $pool;
 
     /**
-     * @var \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache[]
+     * @var \eZ\Publish\Core\Persistence\Cache\inMemory\InMemoryCache[]
      */
-    private $inMemory;
+    private $inMemoryPools;
 
     /**
-     * InMemoryClearingProxyAdapter constructor.
-     *
      * @param \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface $pool
-     * @param \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache[] $inMemory
+     * @param \eZ\Publish\Core\Persistence\Cache\inMemory\InMemoryCache[] $inMemoryPools
      */
-    public function __construct(TagAwareAdapterInterface $pool, array $inMemory)
+    public function __construct(TagAwareAdapterInterface $pool, iterable $inMemoryPools)
     {
         $this->pool = $pool;
-        $this->inMemory = $inMemory;
+        $this->inMemoryPools = $inMemoryPools;
     }
 
     /**
@@ -69,7 +67,7 @@ class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
      */
     public function deleteItem($key)
     {
-        foreach ($this->inMemory as $inMemory) {
+        foreach ($this->inMemoryPools as $inMemory) {
             $inMemory->deleteMulti([$key]);
         }
 
@@ -81,7 +79,7 @@ class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
      */
     public function deleteItems(array $keys)
     {
-        foreach ($this->inMemory as $inMemory) {
+        foreach ($this->inMemoryPools as $inMemory) {
             $inMemory->deleteMulti($keys);
         }
 
@@ -94,7 +92,7 @@ class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
     public function invalidateTags(array $tags)
     {
         // No tracking of tags in in-memory, as it's anyway meant to only optimize for reads (GETs) and not writes.
-        foreach ($this->inMemory as $inMemory) {
+        foreach ($this->inMemoryPools as $inMemory) {
             $inMemory->clear();
         }
 
@@ -106,7 +104,7 @@ class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
      */
     public function clear()
     {
-        foreach ($this->inMemory as $inMemory) {
+        foreach ($this->inMemoryPools as $inMemory) {
             $inMemory->clear();
         }
 

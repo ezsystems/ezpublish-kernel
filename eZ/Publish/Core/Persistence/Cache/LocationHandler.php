@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\Core\Persistence\Cache;
 
-use eZ\Publish\SPI\Persistence\Content;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface;
 use eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 use eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
@@ -19,10 +18,14 @@ use eZ\Publish\SPI\Persistence\Content\Location;
  */
 class LocationHandler extends AbstractInMemoryPersistenceHandler implements LocationHandlerInterface
 {
-    /** @var callable */
+    /**
+     * @var callable
+     */
     private $getLocationTags;
 
-    /** @var callable */
+    /**
+     * @var callable
+     */
     private $getLocationKeys;
 
     protected function init(): void

@@ -25,13 +25,19 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
 {
     const ALL_TRANSLATIONS_KEY = '0';
 
-    /** @var callable */
+    /**
+     * @var callable
+     */
     private $getContentInfoTags;
 
-    /** @var callable */
+    /**
+     * @var callable
+     */
     private $getContentInfoKeys;
 
-    /** @var callable */
+    /**
+     * @var callable
+     */
     private $getContentTags;
 
     protected function init(): void
