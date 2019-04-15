@@ -19,6 +19,10 @@ class MySqlRandom extends AbstractRandom
 
     public function getRandomFunctionName($seed): string
     {
+        if (!is_int($seed)) {
+            return 'RAND()';
+        }
+
         return 'RAND(' . $seed . ')';
     }
 }

@@ -52,7 +52,8 @@ abstract class AbstractRandom extends SortClauseHandler
 
         $query
             ->select(
-                $query->alias($this->getRandomFunctionName($sortClause->targetData->seed),
+                $query->alias(
+                    $this->getRandomFunctionName($sortClause->targetData->seed),
                     $column = $this->getSortColumnName($number)
                 )
             );
