@@ -268,4 +268,13 @@ abstract class AbstractInMemoryHandler
 
         return $list;
     }
+
+    final protected function escapeForCacheKey(string $identifier)
+    {
+        return \str_replace(
+            ['_', '/', ':', '(', ')', '@', '\\', '{', '}'],
+            ['__', '_S', '_C', '_BO', '_BC', '_A', '_BS', '_CBO', '_CBC'],
+            $identifier
+        );
+    }
 }

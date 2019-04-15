@@ -43,8 +43,8 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         return [
             ['create', [$user], ['content-fields-14'], [
                 'ez-user-14',
-                'ez-user-' . str_replace('@', '§', $user->login) . '-by-login',
-                'ez-user-' . str_replace('@', '§', $user->email) . '-by-email',
+                'ez-user-' . str_replace('@', '_A', $user->login) . '-by-login',
+                'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
             ]],
             ['update', [$user], ['content-fields-14', 'user-14']],
             ['updateUserToken', [$userToken], ['user-14-account-key'], ['ez-user-4irj8t43r-by-account-key']],
@@ -80,7 +80,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
         return [
             ['load', [14], 'ez-user-14', $user],
             ['loadByLogin', ['admin'], 'ez-user-admin-by-login', $user],
-            ['loadByEmail', ['nospam@ez.no'], 'ez-user-nospam§ez.no-by-email', [$user]],
+            ['loadByEmail', ['nospam@ez.no'], 'ez-user-nospam_Aez.no-by-email', [$user]],
             ['loadUserByToken', ['hash'], 'ez-user-hash-by-account-key', $user],
             ['loadRole', [9], 'ez-role-9', $role],
             ['loadRoleByIdentifier', ['member'], 'ez-role-member-by-identifier', $role],

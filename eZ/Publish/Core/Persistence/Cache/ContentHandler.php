@@ -146,7 +146,7 @@ class ContentHandler extends AbstractHandler implements ContentHandlerInterface
      */
     public function loadContentInfoByRemoteId($remoteId)
     {
-        $cacheItem = $this->cache->getItem("ez-content-info-byRemoteId-${remoteId}");
+        $cacheItem = $this->cache->getItem('ez-content-info-byRemoteId-' . $this->escapeForCacheKey($remoteId));
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }

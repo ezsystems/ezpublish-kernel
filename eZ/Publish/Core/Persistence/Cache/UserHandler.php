@@ -48,10 +48,10 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->getUserTags = static function (User $user) {
             return ['content-' . $user->id, 'user-' . $user->id];
         };
-        $this->getUserKeys = static function (User $user) {
+        $this->getUserKeys = function (User $user) {
             return [
                 'ez-user-' . $user->id,
-                'ez-user-' . \str_replace('@', '§', $user->login) . '-by-login',
+                'ez-user-' . $this->escapeForCacheKey($user->login) . '-by-login',
                 //'ez-user-' . $hash . '-by-account-key',
             ];
         };
@@ -90,8 +90,8 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
         $this->cache->invalidateTags(['content-fields-' . $user->id]);
         $this->cache->deleteItems([
             'ez-user-' . $user->id,
-            'ez-user-' . str_replace('@', '§', $user->login) . '-by-login',
-            'ez-user-' . str_replace('@', '§', $user->email) . '-by-email',
+            'ez-user-' . $this->escapeForCacheKey($user->login) . '-by-login',
+            'ez-user-' . $this->escapeForCacheKey($user->email) . '-by-email',
         ]);
 
         return $return;
@@ -119,7 +119,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     public function loadByLogin($login)
     {
         return $this->getCacheValue(
-            str_replace('@', '§', $login),
+            $this->escapeForCacheKey($login),
             'ez-user-',
             function ($escapedLogin) use ($login) {
                 return $this->persistenceHandler->userHandler()->loadByLogin($login);
@@ -137,7 +137,7 @@ class UserHandler extends AbstractInMemoryPersistenceHandler implements UserHand
     {
         // As load by email can return several items we threat it like a list here.
         return $this->getListCacheValue(
-            'ez-user-' . str_replace('@', '§', $email) . '-by-email',
+            'ez-user-' . $this->escapeForCacheKey($email) . '-by-email',
             function () use ($email) {
                 return $this->persistenceHandler->userHandler()->loadByEmail($email);
             },
