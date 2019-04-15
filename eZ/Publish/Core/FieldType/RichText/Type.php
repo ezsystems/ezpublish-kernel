@@ -73,6 +73,14 @@ class Type extends FieldType
         InternalLinkValidator $internalLinkValidator = null,
         CustomTagsValidator $customTagsValidator = null
     ) {
+        @trigger_error(
+            sprintf(
+                '%s is deprecated since eZ Platform v2.4, enable RichTextBundle instead',
+                __CLASS__
+            ),
+            E_USER_DEPRECATED
+        );
+
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
         $this->inputNormalizer = $inputNormalizer;
