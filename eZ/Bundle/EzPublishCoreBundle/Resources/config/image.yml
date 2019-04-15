@@ -4,7 +4,7 @@ parameters:
     ezpublish.image_alias.imagine.binary_loader.class: eZ\Bundle\EzPublishCoreBundle\Imagine\BinaryLoader
     ezpublish.image_alias.imagine.cache_resolver_decorator_factory.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\ResolverFactory
     ezpublish.image_alias.imagine.cache_resolver_decorator_relative.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\Resolver\RelativeResolver
-    ezpublish.image_alias.imagine.cache_resolver_decorator_proxy.class: Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
+    ezpublish.image_alias.imagine.cache_resolver_decorator_proxy.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\Resolver\ProxyResolver
     ezpublish.image_alias.imagine.cache_resolver.class: eZ\Bundle\EzPublishCoreBundle\Imagine\IORepositoryResolver
     ezpublish.image_alias.imagine.cache.alias_generator_decorator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Cache\AliasGeneratorDecorator
     ezpublish.image_alias.imagine.variation.imagine_alias_generator.class: eZ\Bundle\EzPublishCoreBundle\Imagine\Variation\ImagineAwareAliasGenerator
