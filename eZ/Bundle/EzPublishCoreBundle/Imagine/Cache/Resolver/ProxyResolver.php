@@ -13,7 +13,10 @@ class ProxyResolver extends ImagineProxyResolver
     /**
      * Replaces host with given proxy host.
      *
-     * @param $url
+     * The original method from Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver:rewriteUrl()
+     * doesn't behave correctly when working with domain and port or with host which contains trailing slash.
+     *
+     * @param string $url
      * @return string
      */
     protected function rewriteUrl($url)
