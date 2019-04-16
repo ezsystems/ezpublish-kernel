@@ -124,6 +124,11 @@ class URLWildcardService implements URLWildcardServiceInterface
      */
     protected function cleanUrl($url): string
     {
+        // if given $url is an absolute URL, then we don't want to prepend it with /
+        if (parse_url($url, PHP_URL_SCHEME)) {
+            return trim($url);
+        }
+
         return '/' . trim($url, '/ ');
     }
 
