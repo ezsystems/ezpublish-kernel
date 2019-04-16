@@ -162,7 +162,7 @@ EOT
         $this->dryRun = $input->getOption('dry-run');
         $this->mode = $input->getOption('mode');
 
-        if (!isset(self::MODES[$this->mode])) {
+        if (!array_key_exists($this->mode, self::MODES)) {
             $output->writeln(
                 sprintf('Selected mode is not supported, please use one of: %s', implode(', ', array_keys(self::MODES)))
             );
