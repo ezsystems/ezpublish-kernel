@@ -47,7 +47,7 @@ class UserHandlerTest extends AbstractInMemoryCacheHandlerTest
                 'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
             ]],
             ['update', [$user], ['content-fields-14', 'user-14'], [
-                'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email'
+                'ez-user-' . str_replace('@', '_A', $user->email) . '-by-email',
             ]],
             ['updateUserToken', [$userToken], ['user-14-account-key'], ['ez-user-4irj8t43r-by-account-key']],
             ['expireUserToken', ['4irj8t43r'], null, ['ez-user-4irj8t43r-by-account-key']],

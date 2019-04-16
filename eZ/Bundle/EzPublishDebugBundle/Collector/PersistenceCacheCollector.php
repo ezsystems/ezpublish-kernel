@@ -109,10 +109,9 @@ class PersistenceCacheCollector extends DataCollector
                 $traceCount[$traceHash] = $traceData['count'];
             }
             \array_multisort($traceCount, SORT_DESC, SORT_NUMERIC, $calls[$hash]['traces']);
-            
+
             // For call sorting count all calls, but weight in-memory lookups lower
             $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'] + ($call['stats']['memory'] * 0.001);
-
         }
 
         // Order calls
