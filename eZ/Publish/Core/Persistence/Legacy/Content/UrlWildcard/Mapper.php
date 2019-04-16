@@ -61,6 +61,12 @@ class Mapper
      */
     protected function cleanUrl($url)
     {
+        $parsedUrl = parse_url($url);
+        // if URL contains scheme, then it's an absolute URL, therefore, there is nothing to clean
+        if (isset($parsedUrl['scheme'])) {
+            return $url;
+        }
+
         return '/' . trim($url, '/ ');
     }
 

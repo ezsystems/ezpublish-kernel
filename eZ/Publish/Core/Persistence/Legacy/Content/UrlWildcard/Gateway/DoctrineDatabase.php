@@ -162,4 +162,30 @@ class DoctrineDatabase extends Gateway
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Loads the UrlWildcard with given $url.
+     *
+     * @param string $url
+     *
+     * @return array
+     */
+    public function loadUrlWildcardByUrl($url)
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            '*'
+        )->from(
+            $this->dbHandler->quoteTable('ezurlwildcard')
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn('source_url'),
+                $query->bindValue($url, null, \PDO::PARAM_STR)
+            )
+        );
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
 }

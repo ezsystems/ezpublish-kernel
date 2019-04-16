@@ -56,4 +56,15 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard[]
      */
     public function loadAll($offset = 0, $limit = -1);
+
+    /**
+     * Performs lookup for given URL.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
+     *
+     * @param string $url
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
+     */
+    public function lookup($url);
 }
