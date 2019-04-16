@@ -186,12 +186,6 @@ class Legacy extends SetupFactory
         $dbPlatform = $connection->getDatabasePlatform();
         $this->cleanupVarDir($this->getInitialVarDir());
 
-        // @todo FIXME: Needs to be in fixture
-        $data['ezcontentobject_trash'] = array();
-        $data['ezurlwildcard'] = array();
-        $data['ezmedia'] = array();
-        $data['ezkeyword'] = array();
-
         foreach (array_reverse(array_keys($data)) as $table) {
             try {
                 // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
@@ -311,7 +305,6 @@ class Legacy extends SetupFactory
     {
         if (!isset(self::$initialData)) {
             self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
-            // self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Legacy/_fixtures/full_dump.php';
         }
 
         return self::$initialData;
