@@ -837,6 +837,19 @@ class UserServiceTest extends BaseTest
     }
 
     /**
+     * Test for creating user with Active Directory login name.
+     */
+    public function testNewUserWithDomainName()
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+        $createdUser = $this->createUserVersion1('ez-user-Domain\username-by-login');
+        $loadedUser = $userService->loadUserByLogin('ez-user-Domain\username-by-login');
+
+        $this->assertEquals($createdUser, $loadedUser);
+    }
+
+    /**
      * Test for the createUser() method.
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
