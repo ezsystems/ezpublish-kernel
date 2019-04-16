@@ -4548,10 +4548,16 @@ class SearchServiceTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $this->assertNotEquals(
-            $searchService->findContent($firstQuery),
-            $searchService->findContent($secondQuery)
-        );
+        try {
+            $this->assertNotEquals(
+                $searchService->findContent($firstQuery),
+                $searchService->findContent($secondQuery)
+            );
+        } catch (NotImplementedException $e) {
+            $this->markTestSkipped(
+                'This feature is not supported by the current search backend: ' . $e->getMessage()
+            );
+        }
     }
 
     /**
@@ -4576,9 +4582,15 @@ class SearchServiceTest extends BaseTest
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
-        $this->assertNotEquals(
-            $searchService->findLocations($firstQuery),
-            $searchService->findLocations($secondQuery)
-        );
+        try {
+            $this->assertNotEquals(
+                $searchService->findLocations($firstQuery),
+                $searchService->findLocations($secondQuery)
+            );
+        } catch (NotImplementedException $e) {
+            $this->markTestSkipped(
+                'This feature is not supported by the current search backend: ' . $e->getMessage()
+            );
+        }
     }
 }
