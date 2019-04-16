@@ -1599,9 +1599,9 @@ class UserServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updateUser() method when others have same email.
+     * Test for the updateUser() and loadUsersByEmail() method on change to email.
      */
-    public function testUpdateUserEmailClash(): void
+    public function testUpdateUserEmail(): void
     {
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
