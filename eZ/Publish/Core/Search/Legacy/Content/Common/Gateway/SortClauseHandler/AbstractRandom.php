@@ -29,19 +29,7 @@ abstract class AbstractRandom extends SortClauseHandler
         return $sortClause instanceof SortClause\Random;
     }
 
-    public function supportedClass(): string
-    {
-        return SortClause\Random::class;
-    }
-
     /**
-     * Apply selects to the query.
-     *
-     * Returns the name of the (aliased) column, which information should be
-     * used for sorting.
-     *
-     * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
-     * @param \eZ\Publish\API\Repository\Values\Content\Query\SortClause $sortClause
      * @param int $number
      *
      * @return string
@@ -49,7 +37,6 @@ abstract class AbstractRandom extends SortClauseHandler
     public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
     {
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\RandomTarget $sortClause->targetData */
-
         $query
             ->select(
                 $query->alias(
@@ -61,6 +48,9 @@ abstract class AbstractRandom extends SortClauseHandler
         return $column;
     }
 
+    /**
+     * @param mixed $seed as it depends on storage implementation.
+     */
     abstract public function getRandomFunctionName($seed): string;
 
     abstract public function getDriverName(): string;

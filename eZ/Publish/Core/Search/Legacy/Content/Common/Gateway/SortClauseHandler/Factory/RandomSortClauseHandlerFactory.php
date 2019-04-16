@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler
 
 use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\AbstractRandom;
 
 class RandomSortClauseHandlerFactory
 {
@@ -29,7 +30,11 @@ class RandomSortClauseHandlerFactory
         $this->randomSortClauseGateways = $randomSortClauseGateways;
     }
 
-    public function getGateway()
+    /**
+     * @throws \Doctrine\DBAL\DBALException
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
+     */
+    public function getGateway(): AbstractRandom
     {
         $driverName = $this->connection->getDatabasePlatform()->getName();
 

@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the eZ\Publish\API\Repository\Values\Content\Query\SortClause\Random class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -18,11 +16,9 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 class Random extends SortClause
 {
     /**
-     * Constructs a new Random SortClause.
-     *
-     * @param string $sortDirection
+     * @param mixed $seed as this depends on storage implementation.
      */
-    public function __construct($seed, $sortDirection = Query::SORT_ASC)
+    public function __construct($seed, string $sortDirection = Query::SORT_ASC)
     {
         parent::__construct('random', $sortDirection, new RandomTarget($seed));
     }
