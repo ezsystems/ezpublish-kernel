@@ -1,3 +1,6 @@
+imports:
+    - { resource: integration_legacy.yml }
+
 parameters:
     # Redefining default field type classes with the implementation that defines the type
     # as searchable. Needed in order to test searching with Solr and Elasticsearch engines.
@@ -5,22 +8,9 @@ parameters:
     ezpublish.fieldType.ezimage.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableImage
     ezpublish.fieldType.ezmedia.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableMedia
     ezpublish.fieldType.ezurl.class: eZ\Publish\API\Repository\Tests\FieldType\SearchableUrl
-    languages:
-        - eng-US
-        - eng-GB
-    ignored_storage_files:
-        -
-            var/ezdemo_site/storage/images/design/plain-site/172-2-eng-US/eZ-Publish-Demo-Design-without-demo-content1.png
 
     # SignalDispatcher factory
     ezpublish.signalslot.signal_dispatcher.factory.class: eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot\SignalDispatcherFactory
-
-    # Image Asset mappings
-    ezsettings.default.fieldtypes.ezimageasset.mappings:
-        content_type_identifier: image
-        content_field_identifier: image
-        name_field_identifier: name
-        parent_location_id: 51
 
 services:
     ezpublish.spi.search_engine:
@@ -31,11 +21,3 @@ services:
         arguments:
             - "%ezpublish.signalslot.signal_dispatcher.class%"
             - "elasticsearch"
-
-    eZ\Publish\Core\FieldType\ImageAsset\AssetMapper:
-        arguments:
-            $contentService: '@ezpublish.api.service.content'
-            $locationService: '@ezpublish.api.service.location'
-            $contentTypeService: '@ezpublish.api.service.content_type'
-            # Siteaccess aware configuration is not available in the integration tests
-            $mappings: '%ezsettings.default.fieldtypes.ezimageasset.mappings%'
