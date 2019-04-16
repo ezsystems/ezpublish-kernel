@@ -71,7 +71,7 @@ class PersistenceLogger
             $method,
             $arguments,
             \array_slice(
-                \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7),
+                \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 9),
                 2
             ),
             'uncached'
@@ -93,7 +93,7 @@ class PersistenceLogger
             return;
         }
 
-        $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7 + $traceOffset);
+        $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8 + $traceOffset);
         $this->collectCacheCallData(
             $trace[$traceOffset - 1]['class'] . '::' . $trace[$traceOffset - 1]['function'],
             $arguments,
@@ -124,7 +124,7 @@ class PersistenceLogger
             return;
         }
 
-        $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 7 + $traceOffset);
+        $trace = \debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8 + $traceOffset);
         $this->collectCacheCallData(
             $trace[$traceOffset - 1]['class'] . '::' . $trace[$traceOffset - 1]['function'],
             $arguments,
@@ -160,8 +160,6 @@ class PersistenceLogger
         }
         ++$this->calls[$callHash]['stats'][$type];
 
-        // @todo If we want/need to save more memory we can consider making an value object holding "trace", and share
-        // the object across all calls having same trace (quite often the case).
         $trace = $this->getSimpleCallTrace($trimmedBacktrace);
         $traceHash = \hash('adler32', \implode($trace));
         if (empty($this->calls[$callHash]['traces'][$traceHash])) {
@@ -187,6 +185,7 @@ class PersistenceLogger
     private function getSimpleCallTrace(array $backtrace): array
     {
         $calls = [];
+        $exitOnNext = false;
         foreach ($backtrace as $call) {
             if (!isset($call['class'][2]) || ($call['class'][2] !== '\\' && \strpos($call['class'], '\\') === false)) {
                 // skip if class has no namespace (Symfony lazy proxy or plain function)
@@ -195,9 +194,13 @@ class PersistenceLogger
 
             $calls[] = $call['class'] . $call['type'] . $call['function'] . '()';
 
-            // Break out as soon as we have listed 1 class outside of kernel
-            if ($call['class'][0] !== 'e' && \strpos($call['class'], 'eZ\\Publish\\Core\\') !== 0) {
+            if ($exitOnNext) {
                 break;
+            }
+
+            // Break out as soon as we have listed 2 classes outside of kernel
+            if ($call['class'][0] !== 'e' && \strpos($call['class'], 'eZ\\Publish\\Core\\') !== 0) {
+                $exitOnNext = true;
             }
         }
 

@@ -92,22 +92,31 @@ class PersistenceCacheCollector extends DataCollector
 
         $calls = $count = [];
         foreach ($this->data['calls'] as $hash => $call) {
-            list($class, $method) = explode('::', $call['method']);
-            $namespace = explode('\\', $class);
-            $class = array_pop($namespace);
+            list($class, $method) = \explode('::', $call['method']);
+            $namespace = \explode('\\', $class);
+            $class = \array_pop($namespace);
             $calls[$hash] = [
                 'namespace' => $namespace,
                 'class' => $class,
                 'method' => $method,
                 'arguments' => $call['arguments'],
-                'traces' => $call['traces'],
                 'stats' => $call['stats'],
             ];
-            // Leave out in-memory lookups from sorting
-            $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'];
+            // Get traces, and order them to have the most called first
+            $calls[$hash]['traces'] = $call['traces'];
+            $traceCount = [];
+            foreach ($traces as $traceHash => $traceData) {
+                $traceCount[$traceHash] = $traceData['count'];
+            }
+            \array_multisort($traceCount, SORT_DESC, SORT_NUMERIC, $calls[$hash]['traces']);
+            
+            // For call sorting count all calls, but weight in-memory lookups lower
+            $count[$hash] = $call['stats']['uncached'] + $call['stats']['miss'] + $call['stats']['hit'] + ($call['stats']['memory'] * 0.001);
+
         }
 
-        array_multisort($count, SORT_DESC, $calls);
+        // Order calls
+        \array_multisort($count, SORT_DESC, SORT_NUMERIC, $calls);
 
         return $calls;
     }
