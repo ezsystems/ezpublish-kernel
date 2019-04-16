@@ -1593,12 +1593,36 @@ class UserServiceTest extends BaseTest
         $userVersion2 = $userService->updateUser($user, $userUpdate);
         /* END: Use Case */
 
-        $this->assertInstanceOf(
-            '\\eZ\\Publish\\API\\Repository\\Values\\User\\User',
-            $user
-        );
+        $this->assertInstanceOf(User::class, $userVersion2);
 
         return $userVersion2;
+    }
+
+    /**
+     * Test for the updateUser() and loadUsersByEmail() method on change to email.
+     */
+    public function testUpdateUserEmail(): void
+    {
+        $repository = $this->getRepository();
+        $userService = $repository->getUserService();
+
+        // Create a user
+        $user = $this->createUserVersion1();
+
+        // Check we get what we expect (and implicit warmup any kind of cache)
+        $users = $userService->loadUsersByEmail('user2@example.com');
+        $this->assertCount(0, $users);
+
+        // Update user with the given email address
+        $userUpdate = $userService->newUserUpdateStruct();
+        $userUpdate->email = 'user2@example.com';
+        $updatedUser = $userService->updateUser($user, $userUpdate);
+        $this->assertInstanceOf(User::class, $updatedUser);
+
+        // Check that we can load user by email
+        $users = $userService->loadUsersByEmail('user2@example.com');
+        $this->assertCount(1, $users);
+        $this->assertInstanceOf(User::class, $users[0]);
     }
 
     /**
