@@ -147,7 +147,8 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     public function loadByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
         $translationsKey = $this->getCacheTranslationKey($translations, $useAlwaysAvailable);
-        $cacheItem = $this->cache->getItem("ez-location-remoteid-${remoteId}-${translationsKey}");
+        $keyRemoteId = $this->escapeForCacheKey($remoteId);
+        $cacheItem = $this->cache->getItem("ez-location-remoteid-${keyRemoteId}-${translationsKey}");
         if ($cacheItem->isHit()) {
             return $cacheItem->get();
         }
