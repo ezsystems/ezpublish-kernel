@@ -1609,17 +1609,17 @@ class UserServiceTest extends BaseTest
         // Create a user
         $user = $this->createUserVersion1();
 
-        // Warmup cache and check we get what we expect
+        // Check we get what we expect (and implicit warmup any kind of cache)
         $users = $userService->loadUsersByEmail('user2@example.com');
         $this->assertCount(0, $users);
 
-        // Update user with warmed up email
+        // Update user with the given email address
         $userUpdate = $userService->newUserUpdateStruct();
         $userUpdate->email = 'user2@example.com';
         $updatedUser = $userService->updateUser($user, $userUpdate);
         $this->assertInstanceOf(User::class, $updatedUser);
 
-        // Check that we can user by email
+        // Check that we can load user by email
         $users = $userService->loadUsersByEmail('user2@example.com');
         $this->assertCount(1, $users);
         $this->assertInstanceOf(User::class, $users[0]);
