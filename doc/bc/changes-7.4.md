@@ -12,3 +12,9 @@ Changes affecting version compatibility with former or future versions.
     Passing translations in all languages is no longer needed, all you have to do is pass language version 
     you wish to modify.
 * New method `\eZ\Publish\API\Repository\ContentTypeService::removeContentTypeTranslation` is introduced.
+
+## Deprecations
+
+* `eZ\Publish\Core\FieldType\RichText` namespace has been deprecated and will be removed in 8.0.
+
+  Enable [eZ Platform RichText Bundle](https://github.com/ezsystems/ezplatform-richtext) instead.
