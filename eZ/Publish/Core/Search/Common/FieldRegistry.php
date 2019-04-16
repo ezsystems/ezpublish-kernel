@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\Search\Common;
 
 use eZ\Publish\SPI\FieldType\Indexable;
+use OutOfBoundsException;
 
 /**
  * Registry for field type's Indexable interface implementations available to Search Engines.
@@ -16,46 +17,29 @@ use eZ\Publish\SPI\FieldType\Indexable;
 class FieldRegistry
 {
     /**
-     * Registered field types.
-     *
-     * @var array(string => Indexable)
+     * @var \eZ\Publish\SPI\FieldType\Indexable[]
      */
-    protected $types = array();
+    protected $types;
 
     /**
-     * Construct from optional Indexable type array.
-     *
      * @param \eZ\Publish\SPI\FieldType\Indexable[] $types
      */
-    public function __construct(array $types = array())
+    public function __construct(array $types = [])
     {
         foreach ($types as $name => $type) {
             $this->registerType($name, $type);
         }
     }
 
-    /**
-     * Register another indexable type.
-     *
-     * @param string $name
-     * @param \eZ\Publish\SPI\FieldType\Indexable $type
-     */
-    public function registerType($name, Indexable $type)
+    public function registerType(string $name, Indexable $type): void
     {
         $this->types[$name] = $type;
     }
 
-    /**
-     * Get Indexable type.
-     *
-     * @param string $name
-     *
-     * @return \eZ\Publish\SPI\FieldType\Indexable
-     */
-    public function getType($name)
+    public function getType(string $name): Indexable
     {
         if (!isset($this->types[$name])) {
-            throw new \OutOfBoundsException('Field type "' . $name . '" is not indexable. Please provide \eZ\Publish\SPI\FieldType\Indexable implementation and register it with "ezpublish.fieldType.indexable" tag.');
+            throw new OutOfBoundsException('Field type "' . $name . '" is not indexable. Please provide \eZ\Publish\SPI\FieldType\Indexable implementation and register it with "ezpublish.fieldType.indexable" tag.');
         }
 
         return $this->types[$name];
