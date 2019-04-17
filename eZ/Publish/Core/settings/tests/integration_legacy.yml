@@ -20,3 +20,24 @@ services:
             $contentTypeService: '@ezpublish.api.service.content_type'
             # Siteaccess aware configuration is not available in the integration tests
             $mappings: '%ezsettings.default.fieldtypes.ezimageasset.mappings%'
+
+    # repeat part of DIC setup to avoid loading DoctrineSchemaBundle
+    _instanceof:
+        EzSystems\DoctrineSchema\Database\DbPlatform\DbPlatform:
+            tags: ['doctrine.dbplatform']
+
+    Doctrine\Common\EventManager: ~
+
+    EzSystems\DoctrineSchema\Database\DbPlatform\SqliteDbPlatform:
+        autowire: true
+
+    eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory:
+        autowire: true
+        arguments:
+            $databasePlatforms: !tagged 'doctrine.dbplatform'
+
+    # build ezpublish.api.storage_engine.legacy.connection for test purposes
+    ezpublish.api.storage_engine.legacy.connection:
+        factory: 'eZ\Publish\Core\Persistence\Tests\DatabaseConnectionFactory:createConnection'
+        arguments:
+            $databaseURL: '%legacy_dsn%'

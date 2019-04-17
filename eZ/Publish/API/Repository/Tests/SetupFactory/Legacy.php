@@ -8,9 +8,14 @@
  */
 namespace eZ\Publish\API\Repository\Tests\SetupFactory;
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\PDOException;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Schema\Schema;
 use eZ\Publish\Core\Base\ServiceContainer;
+use EzSystems\DoctrineSchema\API\Exception\InvalidConfigurationException;
+use EzSystems\DoctrineSchema\Importer\SchemaImporter;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use eZ\Publish\API\Repository\Tests\SetupFactory;
 use eZ\Publish\API\Repository\Tests\IdManager;
@@ -181,12 +186,6 @@ class Legacy extends SetupFactory
         $dbPlatform = $connection->getDatabasePlatform();
         $this->cleanupVarDir($this->getInitialVarDir());
 
-        // @todo FIXME: Needs to be in fixture
-        $data['ezcontentobject_trash'] = array();
-        $data['ezurlwildcard'] = array();
-        $data['ezmedia'] = array();
-        $data['ezkeyword'] = array();
-
         foreach (array_reverse(array_keys($data)) as $table) {
             try {
                 // Cleanup before inserting (using TRUNCATE for speed, however not possible to rollback)
@@ -306,7 +305,6 @@ class Legacy extends SetupFactory
     {
         if (!isset(self::$initialData)) {
             self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
-            // self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Legacy/_fixtures/full_dump.php';
         }
 
         return self::$initialData;
@@ -318,12 +316,79 @@ class Legacy extends SetupFactory
     protected function initializeSchema()
     {
         if (!self::$schemaInitialized) {
-            $statements = $this->getSchemaStatements();
-
-            $this->applyStatements($statements);
+            $this->createSchema(
+                dirname(__DIR__, 5) .
+                '/Bundle/EzPublishCoreBundle/Resources/config/storage/legacy/schema.yaml'
+            );
 
             self::$schemaInitialized = true;
         }
+    }
+
+    /**
+     * Import database schema from Doctrine Schema Yaml configuration file.
+     *
+     * @param string $schemaFilePath Yaml schema configuration file path
+     *
+     * @throws \Doctrine\DBAL\ConnectionException
+     */
+    private function createSchema(string $schemaFilePath)
+    {
+        if (!file_exists($schemaFilePath)) {
+            throw new \RuntimeException("The schema file path {$schemaFilePath} does not exist");
+        }
+
+        $connection = $this->getDatabaseConnection();
+        $connection->beginTransaction();
+        $importer = new SchemaImporter();
+        try {
+            $databasePlatform = $connection->getDatabasePlatform();
+            $schema = $importer->importFromFile($schemaFilePath);
+            $statements = array_merge(
+                $this->getDropSqlStatementsForExistingSchema(
+                    $schema,
+                    $databasePlatform,
+                    $connection
+                ),
+                // generate schema DDL queries
+                $schema->toSql($databasePlatform)
+            );
+
+            foreach ($statements as $statement) {
+                $connection->exec($statement);
+            }
+
+            $connection->commit();
+        } catch (InvalidConfigurationException | DBALException $e) {
+            $connection->rollBack();
+            throw new \RuntimeException($e->getMessage(), 1, $e);
+        }
+    }
+
+    /**
+     * @param \Doctrine\DBAL\Schema\Schema $newSchema
+     * @param \Doctrine\DBAL\Platforms\AbstractPlatform $databasePlatform
+     * @param \Doctrine\DBAL\Connection $connection
+     *
+     * @return string[]
+     */
+    protected function getDropSqlStatementsForExistingSchema(
+        Schema $newSchema,
+        AbstractPlatform $databasePlatform,
+        Connection $connection
+    ): array {
+        $existingSchema = $connection->getSchemaManager()->createSchema();
+        $statements = [];
+        // reverse table order for clean-up (due to FKs)
+        $tables = array_reverse($newSchema->getTables());
+        // cleanup pre-existing database
+        foreach ($tables as $table) {
+            if ($existingSchema->hasTable($table->getName())) {
+                $statements[] = $databasePlatform->getDropTableSQL($table);
+            }
+        }
+
+        return $statements;
     }
 
     /**
@@ -360,6 +425,16 @@ class Legacy extends SetupFactory
     protected function getDatabaseHandler()
     {
         return $this->getServiceContainer()->get('ezpublish.api.storage_engine.legacy.dbhandler');
+    }
+
+    /**
+     * Returns the raw database connection from the service container.
+     *
+     * @return \Doctrine\DBAL\Connection
+     */
+    private function getDatabaseConnection(): Connection
+    {
+        return $this->getServiceContainer()->get('ezpublish.persistence.connection');
     }
 
     /**
