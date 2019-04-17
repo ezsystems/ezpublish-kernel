@@ -13,6 +13,8 @@ use DOMDocument;
 
 /**
  * Dispatcher for various validators depending on the XML document namespace.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Validator\ValidatorDispatcher from EzPlatformRichTextBundle.
  */
 class ValidatorDispatcher
 {

@@ -14,6 +14,8 @@ use DOMNode;
 
 /**
  * Base class for Render converters.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Converter\Render from EzPlatformRichTextBundle.
  */
 abstract class Render
 {

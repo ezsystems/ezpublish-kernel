@@ -12,6 +12,8 @@ use DOMDocument;
 
 /**
  * Interface for rich text conversion.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Converter from EzPlatformRichTextBundle.
  */
 interface Converter
 {

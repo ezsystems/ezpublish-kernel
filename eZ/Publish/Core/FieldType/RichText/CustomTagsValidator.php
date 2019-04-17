@@ -16,6 +16,8 @@ use DOMXPath;
  *
  * The Validator checks if the given XML reflects proper Custom Tags configuration,
  * mostly existence of specific Custom Tag and its required attributes.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Validator\CustomTagsValidator from EzPlatformRichTextBundle.
  */
 class CustomTagsValidator
 {

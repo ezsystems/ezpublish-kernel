@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\FieldType\RichText;
 
 /**
  * RichText field type renderer interface, to be implemented in MVC layer.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\RendererInterface from EzPlatformRichTextBundle.
  */
 interface RendererInterface
 {

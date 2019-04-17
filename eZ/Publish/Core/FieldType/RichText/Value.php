@@ -13,6 +13,8 @@ use DOMDocument;
 
 /**
  * Value for RichText field type.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\FieldType\RichText\Value from EzPlatformRichTextBundle.
  */
 class Value extends BaseValue
 {

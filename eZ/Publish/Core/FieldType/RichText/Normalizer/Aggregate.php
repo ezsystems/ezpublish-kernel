@@ -12,6 +12,8 @@ use eZ\Publish\Core\FieldType\RichText\Normalizer;
 
 /**
  * Aggregate normalizer converts using configured normalizers in prioritized order.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Normalizer\Aggregate from EzPlatformRichTextBundle.
  */
 class Aggregate extends Normalizer
 {
