@@ -61,6 +61,8 @@ class DatabaseConnectionFactory
         $driverName = 'pdo_' . $scheme;
         if (isset($this->databasePlatforms[$driverName])) {
             $params['platform'] = $this->databasePlatforms[$driverName];
+            // add predefined event subscribers only for the relevant connection
+            $params['platform']->addEventSubscribers($this->eventManager);
         }
 
         return DriverManager::getConnection($params, null, $this->eventManager);
