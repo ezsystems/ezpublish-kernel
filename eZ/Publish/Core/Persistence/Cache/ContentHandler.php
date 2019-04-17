@@ -197,7 +197,7 @@ class ContentHandler extends AbstractInMemoryPersistenceHandler implements Conte
         return $this->getCacheValue(
             $this->escapeForCacheKey($remoteId),
             'ez-content-info-byRemoteId-',
-            function () use ($remoteId)  {
+            function () use ($remoteId) {
                 return $this->persistenceHandler->contentHandler()->loadContentInfoByRemoteId($remoteId);
             },
             $this->getContentInfoTags,
