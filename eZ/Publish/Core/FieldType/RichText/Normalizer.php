@@ -10,6 +10,8 @@ namespace eZ\Publish\Core\FieldType\RichText;
 
 /**
  * Abstract class for XML normalization of string input.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Normalizer from EzPlatformRichTextBundle.
  */
 abstract class Normalizer
 {

@@ -13,6 +13,8 @@ use DOMDocument;
 
 /**
  * Aggregate converter converts using configured converters in prioritized order.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Converter\Aggregate from EzPlatformRichTextBundle.
  */
 class Aggregate implements Converter
 {

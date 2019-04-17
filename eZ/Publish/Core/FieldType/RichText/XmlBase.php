@@ -14,6 +14,8 @@ use RuntimeException;
 
 /**
  * A base class for XML document handlers.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\XmlBase from EzPlatformRichTextBundle.
  */
 abstract class XmlBase
 {

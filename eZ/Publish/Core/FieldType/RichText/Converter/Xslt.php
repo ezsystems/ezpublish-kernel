@@ -17,6 +17,8 @@ use RuntimeException;
 
 /**
  * Converts DOMDocument objects using XSLT stylesheets.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Converter\Xslt from EzPlatformRichTextBundle.
  */
 class Xslt extends XmlBase implements Converter
 {

@@ -22,6 +22,8 @@ use RuntimeException;
 
 /**
  * RichText field type.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\FieldType\RichText\Type from EzPlatformRichTextBundle.
  */
 class Type extends FieldType
 {
@@ -71,6 +73,14 @@ class Type extends FieldType
         InternalLinkValidator $internalLinkValidator = null,
         CustomTagsValidator $customTagsValidator = null
     ) {
+        @trigger_error(
+            sprintf(
+                '%s is deprecated since eZ Platform v2.4, enable RichTextBundle instead',
+                __CLASS__
+            ),
+            E_USER_DEPRECATED
+        );
+
         $this->internalFormatValidator = $internalFormatValidator;
         $this->inputConverterDispatcher = $inputConverterDispatcher;
         $this->inputNormalizer = $inputNormalizer;

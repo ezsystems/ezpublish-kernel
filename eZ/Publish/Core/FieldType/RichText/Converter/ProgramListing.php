@@ -16,6 +16,8 @@ use DOMXPath;
  * Class ProgramListing.
  *
  * Processes <code>programlisting</code> DocBook tag.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Converter\ProgramListing from EzPlatformRichTextBundle.
  */
 class ProgramListing implements Converter
 {

@@ -13,6 +13,8 @@ use DOMDocument;
 
 /**
  * Dispatcher for various converters depending on the XML document namespace.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\ConverterDispatcher from EzPlatformRichTextBundle.
  */
 class ConverterDispatcher
 {

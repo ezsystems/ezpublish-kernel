@@ -17,6 +17,8 @@ use DOMNode;
 
 /**
  * Indexable definition for RichText field type.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\FieldType\RichText\SearchField from EzPlatformRichTextBundle.
  */
 class SearchField implements Indexable
 {

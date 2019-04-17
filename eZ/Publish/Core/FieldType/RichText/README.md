@@ -1,5 +1,13 @@
 # RichText field type for eZ Platform
 
+***
+**NOTE**: As of eZ Platform v2.4 the entire `eZ\Publish\Core\FieldType\RichText` namespace
+is deprecated.
+
+Use `\EzSystems\EzPlatformRichTextBundle\EzPlatformRichTextBundle` provided by the
+[`ezsystems/ezplatform-richtext`](https://github.com/ezsystems/ezplatform-richtext) package instead.
+***
+
 This is the RichText field type for eZ Platform, it's a field type for supporting
 rich formatted text stored in a structured xml format.
 

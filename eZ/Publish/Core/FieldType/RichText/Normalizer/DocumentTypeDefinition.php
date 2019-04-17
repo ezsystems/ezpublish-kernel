@@ -16,6 +16,8 @@ use eZ\Publish\Core\FieldType\RichText\Normalizer;
  * namespace.
  *
  * Note: if input already contains DTD it won't be accepted for normalization.
+ *
+ * @deprecated since 7.4, use \EzSystems\EzPlatformRichText\eZ\RichText\Normalizer\DocumentTypeDefinition from EzPlatformRichTextBundle.
  */
 class DocumentTypeDefinition extends Normalizer
 {
