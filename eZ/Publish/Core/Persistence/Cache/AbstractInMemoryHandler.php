@@ -76,12 +76,13 @@ abstract class AbstractInMemoryHandler
         callable $backendLoader,
         callable $cacheTagger,
         callable $cacheIndexes,
-        string $keySuffix = ''
+        string $keySuffix = '',
+        array $arguments = []
     ) {
         $key = $keyPrefix . $id . $keySuffix;
         // In-memory
         if ($object = $this->inMemory->get($key)) {
-            $this->logger->logCacheHit([$id], 3, true);
+            $this->logger->logCacheHit($arguments ?: [$id], 3, true);
 
             return $object;
         }
@@ -89,7 +90,7 @@ abstract class AbstractInMemoryHandler
         // Cache pool
         $cacheItem = $this->cache->getItem($key);
         if ($cacheItem->isHit()) {
-            $this->logger->logCacheHit([$id], 3);
+            $this->logger->logCacheHit($arguments ?: [$id], 3);
             $this->inMemory->setMulti([$object = $cacheItem->get()], $cacheIndexes);
 
             return $object;
@@ -98,7 +99,7 @@ abstract class AbstractInMemoryHandler
         // Backend
         $object = $backendLoader($id);
         $this->inMemory->setMulti([$object], $cacheIndexes);
-        $this->logger->logCacheMiss([$id], 3);
+        $this->logger->logCacheMiss($arguments ?: [$id], 3);
         $this->cache->save(
             $cacheItem
                 ->set($object)
@@ -196,7 +197,8 @@ abstract class AbstractInMemoryHandler
         callable $backendLoader,
         callable $cacheTagger,
         callable $cacheIndexes,
-        string $keySuffix = ''
+        string $keySuffix = '',
+        array $arguments = []
     ): array {
         if (empty($ids)) {
             return [];
@@ -218,7 +220,7 @@ abstract class AbstractInMemoryHandler
 
         // No in-memory misses
         if (empty($cacheKeys)) {
-            $this->logger->logCacheHit($ids, 3, true);
+            $this->logger->logCacheHit($arguments ?: $ids, 3, true);
 
             return $list;
         }
@@ -239,7 +241,7 @@ abstract class AbstractInMemoryHandler
 
         // No cache pool misses, cache loaded items in-memory and return
         if (empty($cacheMisses)) {
-            $this->logger->logCacheHit($ids, 3);
+            $this->logger->logCacheHit($arguments ?: $ids, 3);
             $this->inMemory->setMulti($loaded, $cacheIndexes);
 
             return $list;
@@ -264,11 +266,20 @@ abstract class AbstractInMemoryHandler
 
         $this->inMemory->setMulti($loaded, $cacheIndexes);
         unset($loaded, $backendLoadedList);
-        $this->logger->logCacheMiss($cacheMisses, 3);
+        $this->logger->logCacheMiss($arguments ?: $cacheMisses, 3);
 
         return $list;
     }
 
+    /**
+     * Escape an argument for use in cache keys when needed.
+     *
+     * WARNING: Only use the result of this in cache keys, it won't work to use loading the item from backend on miss.
+     *
+     * @param string $identifier
+     *
+     * @return string
+     */
     final protected function escapeForCacheKey(string $identifier)
     {
         return \str_replace(

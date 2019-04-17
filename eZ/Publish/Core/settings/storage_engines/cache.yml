@@ -18,16 +18,23 @@ parameters:
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: "%kernel.debug%"
-    # Global in-memory settings
+    # Global in-memory settings, for meta data
     ezpublish.spi.persistence.cache.inmemory.ttl: 3000
     ezpublish.spi.persistence.cache.inmemory.limit: 100
     ezpublish.spi.persistence.cache.inmemory.enable: true
+    # Global in-memory settings, for content in-memory cache
+    ## WARNING: TTL on purpose low to avoid getting outdated data in prod! For dev config you can safely increase by x3
+    ezpublish.spi.persistence.cache.inmemory.content.ttl: 300
+    ezpublish.spi.persistence.cache.inmemory.content.limit: 100
+    ezpublish.spi.persistence.cache.inmemory.content.enable: true
 
 services:
     # Setup cache pool, with InMemoryCacheAdapter as decorator
     ezpublish.cache_pool:
         class: eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter
-        arguments: ["@ezpublish.cache_pool.inner", "@ezpublish.spi.persistence.cache.inmemory"]
+        arguments:
+          - "@ezpublish.cache_pool.inner"
+          - !tagged ez.spi.persistence.cache.inmemory
 
     ezpublish.cache_pool.inner:
         public: false
@@ -55,7 +62,16 @@ services:
             - "%ezpublish.spi.persistence.cache.inmemory.ttl%"
             - "%ezpublish.spi.persistence.cache.inmemory.limit%"
             - "%ezpublish.spi.persistence.cache.inmemory.enable%"
+        tags: ['ez.spi.persistence.cache.inmemory']
 
+    ezpublish.spi.persistence.cache.inmemory.content:
+        public: false
+        class: eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache
+        arguments:
+            - "%ezpublish.spi.persistence.cache.inmemory.content.ttl%"
+            - "%ezpublish.spi.persistence.cache.inmemory.content.limit%"
+            - "%ezpublish.spi.persistence.cache.inmemory.content.enable%"
+        tags: ['ez.spi.persistence.cache.inmemory']
 
     # SPI Persistence Cache Handlers, incl abstracts
     ezpublish.spi.persistence.cache.abstractHandler:
@@ -86,11 +102,15 @@ services:
 
     ezpublish.spi.persistence.cache.locationHandler:
         class: "%ezpublish.spi.persistence.cache.locationHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
+        arguments: # Overload argument to use content in-memory service
+            index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
 
     ezpublish.spi.persistence.cache.contentHandler:
         class: "%ezpublish.spi.persistence.cache.contentHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
+        arguments: # Overload argument to use content in-memory service
+            index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
 
     ezpublish.spi.persistence.cache.contentLanguageHandler:
         class: "%ezpublish.spi.persistence.cache.contentLanguageHandler.class%"
@@ -114,7 +134,9 @@ services:
 
     ezpublish.spi.persistence.cache.urlAliasHandler:
         class: "%ezpublish.spi.persistence.cache.urlAliasHandler.class%"
-        parent: ezpublish.spi.persistence.cache.abstractHandler
+        parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
+        arguments: # Overload argument to use content in-memory service
+          index_2: '@ezpublish.spi.persistence.cache.inmemory.content'
 
     ezpublish.spi.persistence.cache.objectStateHandler:
         class: "%ezpublish.spi.persistence.cache.objectStateHandler.class%"

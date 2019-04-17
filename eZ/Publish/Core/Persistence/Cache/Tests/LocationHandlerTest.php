@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\Location\Handler as SPILocationHandler;
 /**
  * Test case for Persistence\Cache\LocationHandler.
  */
-class LocationHandlerTest extends AbstractCacheHandlerTest
+class LocationHandlerTest extends AbstractInMemoryCacheHandlerTest
 {
     public function getHandlerMethodName(): string
     {

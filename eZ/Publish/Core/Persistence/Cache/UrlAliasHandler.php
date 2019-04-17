@@ -16,7 +16,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias;
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
  */
-class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterface
+class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlAliasHandlerInterface
 {
     /**
      * Constant used for storing not found results for lookup().
@@ -130,23 +130,31 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
      */
     public function listURLAliasesForLocation($locationId, $custom = false)
     {
-        $cacheItem = $this->cache->getItem('ez-urlAlias-location-list-' . $locationId . ($custom ? '-custom' : ''));
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        $persistenceHandler = $this->persistenceHandler;
 
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'custom' => $custom));
-        $urlAliases = $this->persistenceHandler->urlAliasHandler()->listURLAliasesForLocation($locationId, $custom);
+        return $this->getListCacheValue(
+            'ez-urlAlias-location-list-' . $locationId . ($custom ? '-custom' : ''),
+            static function () use ($locationId, $custom, $persistenceHandler) {
+                return $persistenceHandler->urlAliasHandler()->listURLAliasesForLocation($locationId, $custom);
+            },
+            static function (UrlAlias $alias) use ($persistenceHandler) {
+                $tags = ['urlAlias-' . $alias->id];
 
-        $cacheItem->set($urlAliases);
-        $cacheTags = ['urlAlias-location-' . $locationId];
-        foreach ($urlAliases as $urlAlias) {
-            $cacheTags = $this->getCacheTags($urlAlias, $cacheTags);
-        }
-        $cacheItem->tag($cacheTags);
-        $this->cache->save($cacheItem);
+                if ($alias->type === UrlAlias::LOCATION) {
+                    $tags[] = 'urlAlias-location-' . $alias->destination;
 
-        return $urlAliases;
+                    $location = $persistenceHandler->locationHandler()->load($alias->destination);
+                    foreach (\explode('/', trim($location->pathString, '/')) as $pathId) {
+                        $tags[] = 'urlAlias-location-path-' . $pathId;
+                    }
+                }
+
+                return $tags;
+            },
+            static function () { return []; },
+            static function () use ($locationId) { return ['urlAlias-location-' . $locationId]; },
+            ['location' => $locationId, 'custom' => $custom]
+        );
     }
 
     /**
@@ -182,6 +190,8 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             'ez-urlAlias-url-' . $this->escapeForCacheKey($url)
         );
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(['url' => $url]);
+
             if (($return = $cacheItem->get()) === self::NOT_FOUND) {
                 throw new NotFoundException('UrlAlias', $url);
             }
@@ -189,7 +199,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             return $return;
         }
 
-        $this->logger->logCall(__METHOD__, array('url' => $url));
+        $this->logger->logCacheMiss(['url' => $url]);
         try {
             $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
         } catch (APINotFoundException $e) {
@@ -214,10 +224,12 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     {
         $cacheItem = $this->cache->getItem('ez-urlAlias-' . $id);
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(['alias' => $id]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('alias' => $id));
+        $this->logger->logCacheMiss(['alias' => $id]);
         $urlAlias = $this->persistenceHandler->urlAliasHandler()->loadUrlAlias($id);
 
         $cacheItem->set($urlAlias);
@@ -378,7 +390,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $tags[] = 'urlAlias-' . $urlAlias->id;
 
         if ($urlAlias->type === UrlAlias::LOCATION) {
-            $cacheTags[] = 'urlAlias-location-' . $urlAlias->destination;
+            $tags[] = 'urlAlias-location-' . $urlAlias->destination;
             $location = $this->persistenceHandler->locationHandler()->load($urlAlias->destination);
             foreach (explode('/', trim($location->pathString, '/')) as $pathId) {
                 $tags[] = 'urlAlias-location-path-' . $pathId;
@@ -399,7 +411,9 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
 
         $deletedCount = $this->persistenceHandler->urlAliasHandler()->deleteCorruptedUrlAliases();
 
-        $this->cache->clear('urlAlias');
+        if ($deletedCount) {
+            $this->cache->clear();//!TIMBER!: Deletes all cache
+        }
 
         return $deletedCount;
     }

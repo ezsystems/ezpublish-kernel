@@ -51,7 +51,7 @@ class InMemoryClearingProxyAdapterTest extends TestCase
 
         $this->cache = new InMemoryClearingProxyAdapter(
             $this->innerPool,
-            $this->inMemory
+            [$this->inMemory]
         );
 
         $this->cacheItemsClosure = \Closure::bind(

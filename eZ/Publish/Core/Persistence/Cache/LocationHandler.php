@@ -16,49 +16,81 @@ use eZ\Publish\SPI\Persistence\Content\Location;
 /**
  * @see \eZ\Publish\SPI\Persistence\Content\Location\Handler
  */
-class LocationHandler extends AbstractHandler implements LocationHandlerInterface
+class LocationHandler extends AbstractInMemoryPersistenceHandler implements LocationHandlerInterface
 {
+    /**
+     * @var callable
+     */
+    private $getLocationTags;
+
+    /**
+     * @var callable
+     */
+    private $getLocationKeys;
+
+    protected function init(): void
+    {
+        $this->getLocationTags = static function (Location $location) {
+            $tags = [
+                 'content-' . $location->contentId,
+                 'location-' . $location->id,
+                 'location-data-' . $location->id,
+             ];
+            foreach (\explode('/', \trim($location->pathString, '/')) as $pathId) {
+                $tags[] = 'location-path-' . $pathId;
+                $tags[] = 'location-path-data-' . $pathId;
+            }
+
+            return $tags;
+        };
+        $this->getLocationKeys = function (Location $location, $keySuffix = '-1') {
+            return [
+                 'ez-location-' . $location->id . $keySuffix,
+                 'ez-location-remoteid-' . $this->escapeForCacheKey($location->remoteId) . $keySuffix,
+             ];
+        };
+    }
+
     /**
      * {@inheritdoc}
      */
     public function load($locationId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $translationsKey = $this->getCacheTranslationKey($translations, $useAlwaysAvailable);
-        $cacheItem = $this->cache->getItem("ez-location-${locationId}-${translationsKey}");
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        $keySuffix = '-' . $this->getCacheTranslationKey($translations, $useAlwaysAvailable);
+        $getLocationKeysFn = $this->getLocationKeys;
 
-        $this->logger->logCall(
-            __METHOD__,
-            ['location' => $locationId, 'translations' => $translations, 'always-available' => $useAlwaysAvailable]
+        return $this->getCacheValue(
+            (int) $locationId,
+            'ez-location-',
+            function ($id) use ($translations, $useAlwaysAvailable) {
+                return $this->persistenceHandler->locationHandler()->load($id, $translations, $useAlwaysAvailable);
+            },
+            $this->getLocationTags,
+            static function (Location $location) use ($keySuffix, $getLocationKeysFn) {
+                return $getLocationKeysFn($location, $keySuffix);
+            },
+            $keySuffix,
+            ['location' => $locationId, 'translations' => $translations, 'alwaysAvailable' => $useAlwaysAvailable]
         );
-        $location = $this->persistenceHandler->locationHandler()->load($locationId, $translations, $useAlwaysAvailable);
-
-        $cacheItem->set($location);
-        $cacheItem->tag($this->getCacheTags($location));
-        $this->cache->save($cacheItem);
-
-        return $location;
     }
 
     public function loadList(array $locationIds, array $translations = null, bool $useAlwaysAvailable = true): iterable
     {
-        return $this->getMultipleCacheItems(
+        $keySuffix = '-' . $this->getCacheTranslationKey($translations, $useAlwaysAvailable);
+        $getLocationKeysFn = $this->getLocationKeys;
+
+        return $this->getMultipleCacheValues(
             $locationIds,
             'ez-location-',
-            function (array $cacheMissIds) use ($translations, $useAlwaysAvailable) {
-                $this->logger->logCall(
-                    __CLASS__ . '::loadList',
-                    ['location' => $cacheMissIds, 'translations' => $translations, 'always-available' => $useAlwaysAvailable]
-                );
-
-                return $this->persistenceHandler->locationHandler()->loadList($cacheMissIds, $translations, $useAlwaysAvailable);
+            function (array $ids) use ($translations, $useAlwaysAvailable) {
+                return $this->persistenceHandler->locationHandler()->loadList($ids, $translations, $useAlwaysAvailable);
             },
-            function (Location $location) {
-                return $this->getCacheTags($location);
+            $this->getLocationTags,
+            static function (Location $location) use ($keySuffix, $getLocationKeysFn) {
+                return $getLocationKeysFn($location, $keySuffix);
             },
-            array_fill_keys($locationIds, '-' . $this->getCacheTranslationKey($translations, $useAlwaysAvailable))
+            $keySuffix,
+            ['location' => $locationIds, 'translations' => $translations, 'alwaysAvailable' => $useAlwaysAvailable]
         );
     }
 
@@ -69,10 +101,12 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $cacheItem = $this->cache->getItem("ez-location-subtree-${locationId}");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(['location' => $locationId]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCacheMiss(['location' => $locationId]);
         $locationIds = $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId);
 
         $cacheItem->set($locationIds);
@@ -101,10 +135,12 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         }
 
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(['content' => $contentId, 'root' => $rootLocationId]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('content' => $contentId, 'root' => $rootLocationId));
+        $this->logger->logCacheMiss(['content' => $contentId, 'root' => $rootLocationId]);
         $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
 
         $cacheItem->set($locations);
@@ -124,10 +160,12 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
     {
         $cacheItem = $this->cache->getItem("ez-content-locations-${contentId}-parentForDraft");
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(['content' => $contentId]);
+
             return $cacheItem->get();
         }
 
-        $this->logger->logCall(__METHOD__, array('content' => $contentId));
+        $this->logger->logCacheMiss(['content' => $contentId]);
         $locations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
 
         $cacheItem->set($locations);
@@ -146,24 +184,22 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadByRemoteId($remoteId, array $translations = null, bool $useAlwaysAvailable = true)
     {
-        $translationsKey = $this->getCacheTranslationKey($translations, $useAlwaysAvailable);
-        $keyRemoteId = $this->escapeForCacheKey($remoteId);
-        $cacheItem = $this->cache->getItem("ez-location-remoteid-${keyRemoteId}-${translationsKey}");
-        if ($cacheItem->isHit()) {
-            return $cacheItem->get();
-        }
+        $keySuffix = '-' . $this->getCacheTranslationKey($translations, $useAlwaysAvailable);
+        $getLocationKeysFn = $this->getLocationKeys;
 
-        $this->logger->logCall(
-            __METHOD__,
-            ['location' => $remoteId, 'translations' => $translations, 'always-available' => $useAlwaysAvailable]
+        return $this->getCacheValue(
+            $this->escapeForCacheKey($remoteId),
+            'ez-location-remoteid-',
+            function () use ($remoteId, $translations, $useAlwaysAvailable) {
+                return $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $translations, $useAlwaysAvailable);
+            },
+            $this->getLocationTags,
+            static function (Location $location) use ($keySuffix, $getLocationKeysFn) {
+                return $getLocationKeysFn($location, $keySuffix);
+            },
+            $keySuffix,
+            ['location' => $remoteId, 'translations' => $translations, 'alwaysAvailable' => $useAlwaysAvailable]
         );
-        $location = $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId, $translations, $useAlwaysAvailable);
-
-        $cacheItem->set($location);
-        $cacheItem->tag($this->getCacheTags($location));
-        $this->cache->save($cacheItem);
-
-        return $location;
     }
 
     /**

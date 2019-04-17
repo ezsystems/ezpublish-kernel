@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler as SPIUrlAliasHandler;
 /**
  * Test case for Persistence\Cache\UrlAliasHandler.
  */
-class UrlAliasHandlerTest extends AbstractCacheHandlerTest
+class UrlAliasHandlerTest extends AbstractInMemoryCacheHandlerTest
 {
     public function getHandlerMethodName(): string
     {

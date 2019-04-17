@@ -23,7 +23,7 @@ use eZ\Publish\SPI\Persistence\Content\Handler as SPIContentHandler;
 /**
  * Test case for Persistence\Cache\ContentHandler.
  */
-class ContentHandlerTest extends AbstractCacheHandlerTest
+class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
 {
     public function getHandlerMethodName(): string
     {
@@ -122,14 +122,9 @@ class ContentHandlerTest extends AbstractCacheHandlerTest
             ->method('deleteItem');
 
         $this->cacheMock
-            ->expects($this->at(0))
+            ->expects($this->once())
             ->method('invalidateTags')
-            ->with(['content-2']);
-
-        $this->cacheMock
-            ->expects($this->at(1))
-            ->method('invalidateTags')
-            ->with(['content-fields-42']);
+            ->with(['content-fields-42', 'content-2']);
 
         $handler = $this->persistenceCacheHandler->contentHandler();
         $handler->deleteContent(2);
