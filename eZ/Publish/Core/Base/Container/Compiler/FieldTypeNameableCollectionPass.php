@@ -1,8 +1,6 @@
 <?php
 
 /**
- * File containing the FieldTypeCollectionPass class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
@@ -22,6 +20,7 @@ class FieldTypeNameableCollectionPass implements CompilerPassInterface
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
      * @throws \LogicException
+     * @throws \ReflectionException
      */
     public function process(ContainerBuilder $container)
     {
@@ -83,11 +82,6 @@ class FieldTypeNameableCollectionPass implements CompilerPassInterface
 
     /**
      * Returns true if the given service implements Nameable.
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $serviceId
-     *
-     * @return bool
      *
      * @throws \ReflectionException
      */
