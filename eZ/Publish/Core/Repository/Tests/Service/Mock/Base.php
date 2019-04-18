@@ -6,6 +6,7 @@
  */
 namespace eZ\Publish\Core\Repository\Tests\Service\Mock;
 
+use eZ\Publish\API\Repository\PermissionResolver;
 use eZ\Publish\Core\Repository\Helper\RelationProcessor;
 use eZ\Publish\Core\Search\Common\BackgroundIndexer\NullIndexer;
 use PHPUnit\Framework\TestCase;
@@ -35,6 +36,11 @@ abstract class Base extends TestCase
      * @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
      */
     private $repositoryMock;
+
+    /**
+     * @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $permissionResolverMock;
 
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
@@ -136,6 +142,18 @@ abstract class Base extends TestCase
         }
 
         return $this->repositoryMock;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getPermissionResolverMock()
+    {
+        if (!isset($this->permissionResolverMock)) {
+            $this->permissionResolverMock = $this->createMock(PermissionResolver::class);
+        }
+
+        return $this->permissionResolverMock;
     }
 
     /**

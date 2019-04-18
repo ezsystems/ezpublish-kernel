@@ -18,3 +18,10 @@ Changes affecting version compatibility with former or future versions.
 
   Similarly, the default password of the Admin user is not changed. But you must of course change it
   before going live with a new project, and when you do, the new rules come into effect.
+
+* Language Limitation supports now properly multilingual Content items allowing to modify translation
+  which is not main for users with limitation to that translation only.
+
+  Creating draft from existing Versions is no longer disallowed, even if a source Version does not
+  contain any of the translations that are within the scope of the Language Limitations.
+  This is due to the fact that when creating a Draft, an intent of translating is not known yet.
