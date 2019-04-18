@@ -12,7 +12,6 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
@@ -24,6 +23,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use DOMDocument;
 use Exception;
+use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
 
 /**
  * Test case for operations in the ContentService using in memory storage.
@@ -6585,5 +6585,73 @@ XML
 
         $this->assertEquals('Marco', $publishedContent->contentInfo->name);
         $this->assertEquals('Polo', $updatedContent->contentInfo->name);
+    }
+
+    public function testCopyTranslationsFromPublishedToDraft()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+        $this->createLanguage('fre-FR', 'French');
+
+        $contentDraft = $this->createContentDraft(
+            'folder',
+            $this->generateId('location', 2),
+            [
+                'name' => 'Folder US',
+            ]
+        );
+
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $deDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'ger-DE',
+            'fields' => $contentDraft->getFields(),
+        ]);
+
+        $contentUpdateStruct->setField('name', 'Folder GER', 'ger-DE');
+
+        $gerContent = $contentService->updateContent($deDraft->versionInfo, $contentUpdateStruct);
+
+        $updatedContent = $contentService->loadContent($gerContent->id, null, $gerContent->versionInfo->versionNo);
+        $this->assertEquals(
+            [
+                'eng-US' => 'Folder US',
+                'ger-DE' => 'Folder GER',
+            ],
+            $updatedContent->fields['name']
+        );
+
+        $frDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'fre-FR',
+            'fields' => $contentDraft->getFields(),
+        ]);
+
+        $contentUpdateStruct->setField('name', 'Folder FR', 'fre-FR');
+
+        $frContent = $contentService->updateContent($frDraft->versionInfo, $contentUpdateStruct);
+        $contentService->publishVersion($frDraft->versionInfo);
+        $updatedContent = $contentService->loadContent($frContent->id, null, $frContent->versionInfo->versionNo);
+        $this->assertEquals(
+            [
+                'eng-US' => 'Folder US',
+                'fre-FR' => 'Folder FR',
+            ],
+            $updatedContent->fields['name']
+        );
+
+        $dePublished = $contentService->publishVersion($deDraft->versionInfo);
+        $this->assertEquals(
+            [
+                'eng-US' => 'Folder US',
+                'ger-DE' => 'Folder GER',
+                'fre-FR' => 'Folder FR',
+            ],
+            $dePublished->fields['name']
+        );
     }
 }
