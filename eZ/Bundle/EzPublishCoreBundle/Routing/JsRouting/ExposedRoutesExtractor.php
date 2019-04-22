@@ -25,7 +25,7 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
      */
     private $masterRequest;
 
-    public function __construct(ExposedRoutesExtractorInterface $innerExtractor, Request $masterRequest)
+    public function __construct(ExposedRoutesExtractorInterface $innerExtractor, Request $masterRequest = null)
     {
         $this->innerExtractor = $innerExtractor;
         $this->masterRequest = $masterRequest;
@@ -46,6 +46,11 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
     public function getBaseUrl()
     {
         $baseUrl = $this->innerExtractor->getBaseUrl();
+
+        if (null === $this->masterRequest) {
+            return $baseUrl;
+        }
+
         $siteAccess = $this->masterRequest->attributes->get('siteaccess');
         if ($siteAccess instanceof SiteAccess && $siteAccess->matcher instanceof SiteAccess\URILexer) {
             $baseUrl .= $siteAccess->matcher->analyseLink('');
