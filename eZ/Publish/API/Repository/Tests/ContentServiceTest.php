@@ -6653,4 +6653,67 @@ XML
             )
         );
     }
+
+    public function testCopyTranslationsWithSelectedLanguages()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $contentDraft = $this->createContentDraft(
+            'folder',
+            $this->generateId('location', 2),
+            [
+                'name' => 'Published US',
+            ]
+        );
+
+        $publishedContent = $contentService->publishVersion($contentDraft->versionInfo);
+
+        $usDraft1 = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'eng-US',
+            'fields' => $contentDraft->getFields(),
+        ]);
+        $contentUpdateStruct->setField('name', 'Draft 1 US', 'eng-US');
+        $contentService->updateContent($usDraft1->versionInfo, $contentUpdateStruct);
+
+
+        $deDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'ger-DE',
+            'fields' => $contentDraft->getFields(),
+        ]);
+        $contentUpdateStruct->setField('name', 'Published GER', 'ger-DE');
+        $gerContent = $contentService->updateContent($deDraft->versionInfo, $contentUpdateStruct);
+        $contentService->publishVersion($gerContent->versionInfo);
+
+        $publishedContent = $contentService->publishVersion($usDraft1->versionInfo);
+
+        $usDraft2 = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'eng-US',
+            'fields' => $contentDraft->getFields(),
+        ]);
+        $contentUpdateStruct->setField('name', 'Draft 2 US', 'eng-US');
+        $contentService->updateContent($usDraft2->versionInfo, $contentUpdateStruct);
+
+        $deDraft1 = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'ger-DE',
+            'fields' => $contentDraft->getFields(),
+        ]);
+        $contentUpdateStruct->setField('name', 'Draft 1 DE', 'ger-DE');
+        $contentService->updateContent($deDraft1->versionInfo, $contentUpdateStruct);
+
+        $contentService->publishVersion($usDraft2->versionInfo);
+        $dePublished = $contentService->publishVersion($deDraft1->versionInfo, ['ger-DE']);
+        $this->assertEquals(
+            [
+                'eng-US' => 'Draft 2 US',
+                'ger-DE' => 'Draft 1 DE',
+            ],
+            $dePublished->fields['name']
+        );
+    }
 }

@@ -141,9 +141,9 @@ class ContentService implements ContentServiceInterface
         return $this->service->updateContent($versionInfo, $contentUpdateStruct);
     }
 
-    public function publishVersion(VersionInfo $versionInfo)
+    public function publishVersion(VersionInfo $versionInfo, array $translations = [])
     {
-        return $this->service->publishVersion($versionInfo);
+        return $this->service->publishVersion($versionInfo, $translations);
     }
 
     public function deleteVersion(VersionInfo $versionInfo)

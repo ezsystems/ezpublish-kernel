@@ -285,10 +285,14 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     *
+     * @param string[] $translations - Array of language codes in which version is going to be published.
+     *                                 If empty - all translations from current version will be published
+     *                                          and missing one will be copied from published Version.
+     *                                 If some provided - those will be published from provided version
+     *                                          and rest will be copied from published version overriding those in version.
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion(VersionInfo $versionInfo);
+    public function publishVersion(VersionInfo $versionInfo, array $translations = []);
 
     /**
      * Removes the given version.
@@ -421,6 +425,9 @@ interface ContentService
 
     /**
      * Delete specified Translation from a Content Draft.
+     *
+     * When using together with ContentService::publishVersion() method, make sure to not provide deleted translation
+     * in translations array, as it is going to be copied again from published version.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the specified Translation
      *         is the only one the Content Draft has or it is the main Translation of a Content Object.

@@ -68,6 +68,5 @@ services:
             - "@ezpublish.persistence.legacy.url_alias.gateway"
             - "@ezpublish.spi.persistence.legacy.content_type.handler"
             - "@ezpublish.persistence.legacy.tree_handler"
-            - '@ezpublish.spi.persistence.legacy.language.handler'
             - "@logger"
         lazy: true

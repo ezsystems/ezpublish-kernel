@@ -192,7 +192,7 @@ class ContentServiceTest extends ServiceTest
             ),
             array(
                 'publishVersion',
-                array($versionInfo),
+                array($versionInfo, []),
                 $content,
                 1,
                 ContentServiceSignals\PublishVersionSignal::class,

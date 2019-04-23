@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -1516,6 +1517,7 @@ class ContentService implements ContentServiceInterface
      * Max archive versions are currently a configuration, but might be moved to be a param of ContentType in the future.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param string[] $translations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      *
@@ -1524,7 +1526,7 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function publishVersion(APIVersionInfo $versionInfo)
+    public function publishVersion(APIVersionInfo $versionInfo, array $translations = [])
     {
         $content = $this->internalLoadContent(
             $versionInfo->contentInfo->id,
@@ -1557,7 +1559,8 @@ class ContentService implements ContentServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $content = $this->internalPublishVersion($content->getVersionInfo());
+            $this->copyTranslationsFromPublishedVersion($content->versionInfo, $translations);
+            $content = $this->internalPublishVersion($content->getVersionInfo(), null);
             $this->repository->commit();
         } catch (Exception $e) {
             $this->repository->rollback();
@@ -1565,6 +1568,72 @@ class ContentService implements ContentServiceInterface
         }
 
         return $content;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param array $translations
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    protected function copyTranslationsFromPublishedVersion(APIVersionInfo $versionInfo, array $translations = []): void
+    {
+        $contendId = $versionInfo->contentInfo->id;
+
+        $publishedContent = $this->internalLoadContent($contendId);
+        $publishedVersionInfo = $publishedContent->versionInfo;
+
+        // Copying occurs only if Version being published is older than the currently published one unless specific translations are provided.
+        if ($versionInfo->versionNo >= $publishedVersionInfo->versionNo && empty($translations)) {
+            return;
+        }
+
+        if (empty($translations)) {
+            $languagesToCopy = array_diff(
+                $publishedVersionInfo->languageCodes,
+                $versionInfo->languageCodes
+            );
+        } else {
+            $languagesToCopy = array_diff(
+                $publishedVersionInfo->languageCodes,
+                $translations
+            );
+        }
+
+        if (empty($languagesToCopy)) {
+            return;
+        }
+
+        $contentType = $this->persistenceHandler->contentTypeHandler()->load($publishedVersionInfo->contentInfo->contentTypeId);
+        $fieldDefs = $contentType->fieldDefinitions;
+
+        // Find only translatable fields to update with selected languages
+        $fieldsToCopy = array_filter(
+            $publishedContent->getFields(),
+            function (Field $field) use ($languagesToCopy, $fieldDefs) {
+                $fieldDef = array_filter(
+                    $fieldDefs,
+                    function (Type\FieldDefinition $fieldDefinition) use ($field) {
+                        return $fieldDefinition->identifier === $field->fieldDefIdentifier;
+                    }
+                );
+                $fieldDef = reset($fieldDef);
+
+                return in_array($field->languageCode, $languagesToCopy) && $fieldDef->isTranslatable;
+            }
+        );
+
+        $updateStruct = $this->newContentUpdateStruct();
+        array_map(function (Field $field) use ($updateStruct) {
+            $updateStruct->setField($field->fieldDefIdentifier, $field->value, $field->languageCode);
+        }, $fieldsToCopy);
+
+        $this->updateContent($versionInfo, $updateStruct);
     }
 
     /**
