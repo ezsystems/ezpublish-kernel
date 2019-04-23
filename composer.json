@@ -17,7 +17,7 @@
         "ext-SPL": "*",
         "ext-xsl": "*",
         "zetacomponents/mail": "^1.8.3",
-        "symfony/symfony": "^2.8.46 | ^3.4.17",
+        "symfony/symfony": "^2.8.50 | ^3.4.26",
         "symfony-cmf/routing": "~1.4",
         "qafoo/rmf": "1.0.*",
         "kriswallsmith/buzz": "~0.16.1",
