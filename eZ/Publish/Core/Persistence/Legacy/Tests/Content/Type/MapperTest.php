@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper;
@@ -462,11 +463,11 @@ class MapperTest extends TestCase
     /**
      * Returns a converter registry mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface
      */
     protected function getConverterRegistryMock()
     {
-        return $this->createMock(ConverterRegistry::class);
+        return $this->createMock(ConverterRegistryInterface::class);
     }
 
     /**

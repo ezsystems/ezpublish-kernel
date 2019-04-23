@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface as RegistryInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
@@ -32,7 +33,7 @@ class MapperTest extends LanguageAwareTestCase
     /**
      * Value converter registry mock.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface
      */
     protected $valueConverterRegistryMock;
 
@@ -556,7 +557,7 @@ class MapperTest extends LanguageAwareTestCase
      *
      * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
-    protected function getMapper($valueConverter = null)
+    protected function getMapper()
     {
         return new Mapper(
             $this->getValueConverterRegistryMock(),
@@ -567,12 +568,12 @@ class MapperTest extends LanguageAwareTestCase
     /**
      * Returns a FieldValue converter registry mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface
      */
     protected function getValueConverterRegistryMock()
     {
-        if (!isset($this->valueConverterRegistryMock)) {
-            $this->valueConverterRegistryMock = $this->getMockBuilder(Registry::class)
+        if ($this->valueConverterRegistryMock === null) {
+            $this->valueConverterRegistryMock = $this->getMockBuilder(RegistryInterface::class)
                 ->setMethods(array())
                 ->setConstructorArgs(array(array()))
                 ->getMock();

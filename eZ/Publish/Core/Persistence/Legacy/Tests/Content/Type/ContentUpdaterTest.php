@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
@@ -218,7 +218,7 @@ class ContentUpdaterTest extends TestCase
      */
     protected function getContentGatewayMock()
     {
-        if (!isset($this->contentGatewayMock)) {
+        if ($this->contentGatewayMock === null) {
             $this->contentGatewayMock = $this->createMock(Gateway::class);
         }
 
@@ -228,12 +228,12 @@ class ContentUpdaterTest extends TestCase
     /**
      * Returns a FieldValue Converter registry mock.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface
      */
     protected function getConverterRegistryMock()
     {
-        if (!isset($this->converterRegistryMock)) {
-            $this->converterRegistryMock = $this->createMock(ConverterRegistry::class);
+        if ($this->converterRegistryMock === null) {
+            $this->converterRegistryMock = $this->createMock(ConverterRegistryInterface::class);
         }
 
         return $this->converterRegistryMock;

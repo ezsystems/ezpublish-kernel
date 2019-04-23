@@ -8,12 +8,12 @@
  */
 namespace eZ\Publish\Core\Search\Legacy\Tests\Content;
 
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface;
 use eZ\Publish\Core\Search\Legacy\Content;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Query;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry;
 use eZ\Publish\Core\Search\Legacy\Content\Location\Gateway as LocationGateway;
 use eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper;
@@ -27,7 +27,7 @@ class HandlerContentSortTest extends AbstractTestCase
     /**
      * Field registry mock.
      *
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface
      */
     protected $fieldRegistry;
 
@@ -132,12 +132,12 @@ class HandlerContentSortTest extends AbstractTestCase
     /**
      * Returns a field registry mock object.
      *
-     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface
      */
     protected function getFieldRegistry()
     {
-        if (!isset($this->fieldRegistry)) {
-            $this->fieldRegistry = $this->getMockBuilder(ConverterRegistry::class)
+        if ($this->fieldRegistry === null) {
+            $this->fieldRegistry = $this->getMockBuilder(ConverterRegistryInterface::class)
                 ->setConstructorArgs(array())
                 ->setMethods(array())
                 ->getMock();
