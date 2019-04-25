@@ -8,10 +8,12 @@
  */
 namespace eZ\Publish\Core\Persistence\Tests;
 
+use eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\SPI\Persistence\FieldType as SPIPersistenceFieldType;
+use RuntimeException;
 
 /**
  * Test case for FieldTypeRegistry.
@@ -128,9 +130,59 @@ class FieldTypeRegistryTest extends TestCase
     }
 
     /**
+     * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getCoreFieldType
+     */
+    public function testGetCoreFieldTypeInstance(): void
+    {
+        $instance = $this->getFieldTypeMock();
+        $registry = new FieldTypeRegistry(array('some-type' => $instance));
+
+        $result = $registry->getCoreFieldType('some-type');
+
+        $this->assertInstanceOf(SPIFieldType::class, $result);
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getCoreFieldType
+     */
+    public function testGetCoreFieldTypeCallable(): void
+    {
+        $instance = $this->getFieldTypeMock();
+        $closure = function () use ($instance) {
+            return $instance;
+        };
+        $registry = new FieldTypeRegistry(array('some-type' => $closure));
+
+        $result = $registry->getCoreFieldType('some-type');
+
+        $this->assertInstanceOf(SPIFieldType::class, $result);
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getCoreFieldType
+     */
+    public function testGetCoreFieldTypeNotFound(): void
+    {
+        $registry = new FieldTypeRegistry([]);
+
+        $this->expectException(FieldTypeNotFoundException::class);
+        $registry->getCoreFieldType('not-found');
+    }
+
+    /**
+     * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getCoreFieldType
+     */
+    public function testGetCoreFieldTypeNotCallableOrInstance(): void
+    {
+        $registry = new FieldTypeRegistry(array('some-type' => new \DateTime()));
+        $this->expectException(RuntimeException::class);
+        $registry->getCoreFieldType('some-type');
+    }
+
+    /**
      * Returns a mock for persistence field type.
      *
-     * @return \eZ\Publish\SPI\Persistence\FieldType
+     * @return \eZ\Publish\SPI\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getFieldTypeMock()
     {

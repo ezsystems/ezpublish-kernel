@@ -91,7 +91,7 @@ class FieldTypeRegistry
      *
      * @return \eZ\Publish\SPI\FieldType\FieldType
      */
-    public function getCoreFieldType($identifier)
+    public function getCoreFieldType($identifier): FieldTypeInterface
     {
         if (!isset($this->coreFieldTypeMap[$identifier])) {
             throw new FieldTypeNotFoundException($identifier);

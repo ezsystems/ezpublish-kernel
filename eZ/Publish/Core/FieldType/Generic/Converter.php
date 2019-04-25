@@ -30,7 +30,7 @@ class Converter implements ConverterInterface
         $this->settingsClass = $settingsClass;
     }
 
-    public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue)
+    public function toStorageValue(FieldValue $value, StorageFieldValue $storageFieldValue): void
     {
         $data = $value->data;
         if ($data !== null) {
@@ -40,7 +40,7 @@ class Converter implements ConverterInterface
         $storageFieldValue->dataText = $data;
     }
 
-    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
+    public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue): void
     {
         $data = $value->dataText;
         if ($data !== null) {
@@ -50,10 +50,10 @@ class Converter implements ConverterInterface
         $fieldValue->data = $data;
     }
 
-    public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef)
+    public function toStorageFieldDefinition(FieldDefinition $fieldDef, StorageFieldDefinition $storageDef): void
     {
         if ($this->settingsClass === null) {
-            return ;
+            return;
         }
 
         $settings = $fieldDef->fieldTypeConstraints->fieldSettings;
@@ -64,16 +64,16 @@ class Converter implements ConverterInterface
         $storageDef->dataText5 = $settings;
     }
 
-    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
+    public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef): void
     {
         if ($this->settingsClass === null) {
-            return ;
+            return;
         }
 
         $settings = $storageDef->dataText5;
         if ($settings !== null) {
             $settings = new FieldSettings([
-                'settings' => $this->serializer->deserialize($settings, $this->settingsClass, 'json')
+                'settings' => $this->serializer->deserialize($settings, $this->settingsClass, 'json'),
             ]);
         }
 

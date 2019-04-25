@@ -12,31 +12,19 @@ use eZ\Publish\Core\Persistence\FieldTypeRegistry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface;
 use eZ\Publish\Core\FieldType\Generic\Type as GenericType;
-use eZ\Publish\Core\FieldType\Generic\Converter as GenericConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 class ConverterProvider implements ConverterRegistryInterface
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface */
     private $innerRegistry;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\FieldTypeRegistry
-     */
+    /** @var \eZ\Publish\Core\Persistence\FieldTypeRegistry */
     private $fieldTypeRegistry;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Generic\ConverterFactory
-     */
+    /** @var \eZ\Publish\Core\FieldType\Generic\ConverterFactory */
     private $converterFactory;
 
-    /**
-     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistryInterface $innerRegistry
-     * @param \eZ\Publish\Core\Persistence\FieldTypeRegistry $fieldTypeRegistry
-     * @param \eZ\Publish\Core\FieldType\Generic\ConverterFactory $converterFactory
-     */
     public function __construct(
         ConverterRegistryInterface $innerRegistry,
         FieldTypeRegistry $fieldTypeRegistry,
@@ -65,6 +53,7 @@ class ConverterProvider implements ConverterRegistryInterface
 
         $fieldType = $this->fieldTypeRegistry->getCoreFieldType($typeName);
         if ($this->isGenericFieldType($typeName)) {
+            /** @var \eZ\Publish\Core\FieldType\Generic\Type $fieldType */
             $converter = $this->converterFactory->createForFieldType(
                 $fieldType->getSettingsClass()
             );

@@ -13,5 +13,4 @@ use eZ\Publish\Core\FieldType\Generic\Value as ValueInterface;
 
 abstract class BaseValue extends Value implements ValueInterface
 {
-
 }

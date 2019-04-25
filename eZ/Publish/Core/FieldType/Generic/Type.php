@@ -63,14 +63,14 @@ abstract class Type extends FieldType implements Nameable
         return $this->serializer->normalize($value, 'json');
     }
 
-    public function validate(FieldDefinition $fieldDefinition, SPIValue $value)
+    public function validate(FieldDefinition $fieldDefinition, SPIValue $value): array
     {
         return $this->mapConstraintViolationList(
             $this->validator->validate($value, $this->getFieldValueConstraints($fieldDefinition))
         );
     }
 
-    public function validateFieldSettings($fieldSettings)
+    public function validateFieldSettings($fieldSettings): array
     {
         if (empty($this->settingsSchema) && !empty($fieldSettings)) {
             return [
@@ -138,7 +138,7 @@ abstract class Type extends FieldType implements Nameable
      */
     protected function getValueClass(): string
     {
-        $typeFQN  = static::class;
+        $typeFQN = static::class;
 
         return substr_replace($typeFQN, 'Value', strrpos($typeFQN, '\\') + 1);
     }
@@ -152,9 +152,8 @@ abstract class Type extends FieldType implements Nameable
         return $inputValue;
     }
 
-    protected function checkValueStructure(BaseValue $value)
+    protected function checkValueStructure(BaseValue $value): void
     {
         // Value is self-contained and strong typed
-        return null;
     }
 }
