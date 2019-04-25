@@ -12,11 +12,14 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\Nameable;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-abstract class Type extends FieldType
+abstract class Type extends FieldType implements Nameable
 {
     /** @var \Symfony\Component\Serializer\SerializerInterface */
     protected $serializer;
@@ -28,20 +31,11 @@ abstract class Type extends FieldType
     {
         $this->serializer = $serializer;
         $this->validator = $validator;
-
-        if (($settingsClass = $this->getSettingsClass()) !== null) {
-            $this->settingsSchema = [
-                'settings' => [
-                    'type' => $settingsClass,
-                    'default' => new $settingsClass,
-                ]
-            ];
-        }
     }
 
-    public function getName(SPIValue $value): string
+    public function getFieldName(SPIValue $value, FieldDefinition $fieldDefinition, $languageCode): string
     {
-        throw new \RuntimeException('Name generation provided via NameableField set via "ezpublish.fieldType.nameable" service tag');
+        return (string)$value;
     }
 
     public function getEmptyValue()
@@ -71,30 +65,14 @@ abstract class Type extends FieldType
 
     public function validate(FieldDefinition $fieldDefinition, SPIValue $value)
     {
-        $validationErrors = [];
-
-        $errors = $this->validator->validate($value);
-        /** @var \Symfony\Component\Validator\ConstraintViolationInterface $error */
-        foreach ($errors as $error) {
-            $validationErrors[] = new ValidationError(
-                $error->getMessageTemplate(),
-                null,
-                $error->getParameters(),
-                $error->getPropertyPath()
-            );
-        }
-
-        return $validationErrors;
-    }
-
-    public function getSettingsClass(): ?string
-    {
-        return null;
+        return $this->mapConstraintViolationList(
+            $this->validator->validate($value, $this->getFieldValueConstraints($fieldDefinition))
+        );
     }
 
     public function validateFieldSettings($fieldSettings)
     {
-        if ($this->getSettingsClass() === null) {
+        if (empty($this->settingsSchema) && !empty($fieldSettings)) {
             return [
                 new ValidationError(
                     "FieldType '%fieldType%' does not accept settings",
@@ -107,32 +85,67 @@ abstract class Type extends FieldType
             ];
         }
 
-        $validationErrors = [];
+        if (!\is_array($fieldSettings)) {
+            return [];
+        }
 
-        /** @var \Symfony\Component\Validator\ConstraintViolationInterface $error */
-        foreach ($this->validator->validate($fieldSettings['settings']) as $error) {
-            $validationErrors[] = new ValidationError(
-                $error->getMessageTemplate(),
+        return $this->mapConstraintViolationList(
+            $this->validator->validate($fieldSettings, $this->getFieldSettingsConstraints())
+        );
+    }
+
+    /**
+     * @see https://symfony.com/doc/current/validation/raw_values.html
+     *
+     * @return \Symfony\Component\Validator\Constraints\Collection|null
+     */
+    protected function getFieldSettingsConstraints(): ?Assert\Collection
+    {
+        return null;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     *
+     * @return \Symfony\Component\Validator\Constraints\Collection|null
+     */
+    protected function getFieldValueConstraints(FieldDefinition $fieldDefinition): ?Assert\Collection
+    {
+        return null;
+    }
+
+    protected function mapConstraintViolationList(ConstraintViolationListInterface $constraintViolationList): array
+    {
+        $errors = [];
+
+        /** @var \Symfony\Component\Validator\ConstraintViolationInterface $constraintViolation */
+        foreach ($constraintViolationList as $constraintViolation) {
+            $errors[] = new ValidationError(
+                $constraintViolation->getMessageTemplate(),
                 null,
-                $error->getParameters(),
-                $error->getPropertyPath()
+                $constraintViolation->getParameters(),
+                $constraintViolation->getPropertyPath()
             );
         }
 
-        return $validationErrors;
+        return $errors;
     }
 
+    /**
+     * Returns FQN of class representing Field Type Value.
+     *
+     * @return string
+     */
     protected function getValueClass(): string
     {
-        $typeFQN  = get_called_class();
-        $valueFQN = substr_replace($typeFQN, 'Value', strrpos($typeFQN, '\\') + 1);
+        $typeFQN  = static::class;
 
-        return $valueFQN;
+        return substr_replace($typeFQN, 'Value', strrpos($typeFQN, '\\') + 1);
     }
 
     protected function createValueFromInput($inputValue)
     {
-        if (is_string($inputValue)) {
+        if (\is_string($inputValue)) {
             $inputValue = $this->serializer->deserialize($inputValue, $this->getValueClass(), 'json');
         }
 
@@ -142,6 +155,6 @@ abstract class Type extends FieldType
     protected function checkValueStructure(BaseValue $value)
     {
         // Value is self-contained and strong typed
-        return ;
+        return null;
     }
 }
