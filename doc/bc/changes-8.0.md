@@ -11,3 +11,4 @@ Changes affecting version compatibility with former or future versions.
   
 * The following Field Types are not supported any more and have been removed:
     * ezprice 
+    * ezpage

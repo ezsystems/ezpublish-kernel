@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File containing the BlockViewPassTest class.
+ * File containing the ViewProvidersPassTest class.
  *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.

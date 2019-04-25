@@ -10,7 +10,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\View\View;
@@ -37,10 +36,6 @@ class ViewManager implements ViewManagerInterface, SiteAccessAware
         $viewType = ViewManagerInterface::VIEW_TYPE_FULL,
         $parameters = array()
     ) {
-    }
-
-    public function renderBlock(Block $block, $parameters = array())
-    {
     }
 
     public function renderContentView(View $view, array $defaultParams = array())

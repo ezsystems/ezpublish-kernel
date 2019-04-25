@@ -98,30 +98,6 @@ system:
                     match:
                         Identifier\ContentType: [blog_post]
 
-        block_view:
-            campaign:
-                template: eZDemoBundle:block:campaign.html.twig
-                match:
-                    Type: Campaign
-
-            content_grid_2cols_2_rows:
-                template: eZDemoBundle:block:content_grid_2cols_2rows.html.twig
-                match:
-                    Type: ContentGrid
-                    View: 2_columns_2_rows
-
-            content_grid_1col_2rows:
-                template: eZDemoBundle:block:content_grid_1col_2rows.html.twig
-                match:
-                    Type: ContentGrid
-                    View: default
-
-            content_grid_1col_4rows:
-                template: eZDemoBundle:block:content_grid_1col_4rows.html.twig
-                match:
-                    Type: ContentGrid
-                    View: 1_column_4_rows
-
 imagemagick:
     enabled: false
 

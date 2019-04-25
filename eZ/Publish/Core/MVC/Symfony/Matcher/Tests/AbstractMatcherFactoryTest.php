@@ -9,8 +9,6 @@
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\Core\FieldType\Page\Parts\Block;
-use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\Repository\Repository;
 use eZ\Publish\Core\Repository\Values\Content\Content;
@@ -188,20 +186,6 @@ abstract class AbstractMatcherFactoryTest extends TestCase
             )
         );
         $view->setLocation(new Location($locationProperties));
-
-        return $view;
-    }
-
-    /**
-     * @param array $blockProperties
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\BlockView
-     */
-    protected function getBlockView(array $blockProperties = array())
-    {
-        $view = new BlockView();
-        $view->setViewType('full');
-        $view->setBlock(new Block($blockProperties));
 
         return $view;
     }

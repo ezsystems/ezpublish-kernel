@@ -57,7 +57,7 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
     public function __construct(Repository $repository, array $matchConfig = [])
     {
         @trigger_error(
-            "BlockMatcherFactory is deprecated, and will be removed in ezpublish-kernel 6.1.\n" .
+            "AbstractMatcherFactory is deprecated, and will be removed in ezpublish-kernel 6.1.\n" .
             'Use the ServiceAwareMatcherFactory with the relative namespace as a constructor argument instead.',
             E_USER_DEPRECATED
         );

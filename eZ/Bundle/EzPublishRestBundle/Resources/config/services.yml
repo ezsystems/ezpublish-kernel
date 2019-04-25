@@ -45,7 +45,6 @@ parameters:
     ezpublish_rest.field_type_processor.eztime.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\TimeProcessor
     ezpublish_rest.field_type_processor.ezrichtext.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\RichTextProcessor
     ezpublish_rest.field_type_processor.ezbinaryfile.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\BinaryProcessor
-    ezpublish_rest.field_type_processor.ezpage.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\PageProcessor
     ezpublish_rest.field_type_processor.ezfloat.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\FloatProcessor
     ezpublish_rest.field_type_processor.ezstring.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\StringProcessor
     ezpublish_rest.field_type_processor.ezuser.class: eZ\Publish\Core\REST\Common\FieldTypeProcessor\UserProcessor
@@ -334,11 +333,6 @@ services:
             - "@ezpublish.core.io.default_url_decorator"
         tags:
             - { name: ezpublish_rest.field_type_processor, alias: ezbinaryfile }
-
-    ezpublish_rest.field_type_processor.ezpage:
-        class: "%ezpublish_rest.field_type_processor.ezpage.class%"
-        tags:
-            - { name: ezpublish_rest.field_type_processor, alias: ezpage }
 
     ezpublish_rest.field_type_processor.ezfloat:
         class: "%ezpublish_rest.field_type_processor.ezfloat.class%"

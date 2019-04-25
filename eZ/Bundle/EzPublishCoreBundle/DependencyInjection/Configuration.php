@@ -59,7 +59,6 @@ class Configuration extends SiteAccessConfiguration
         $this->addSiteaccessSection($rootNode);
         $this->addImageMagickSection($rootNode);
         $this->addHttpCacheSection($rootNode);
-        $this->addPageSection($rootNode);
         $this->addRouterSection($rootNode);
         $this->addRichTextSection($rootNode);
         $this->addUrlAliasSection($rootNode);
@@ -393,53 +392,6 @@ EOT;
                             ->end()
                         ->end()
                         ->scalarNode('timeout')->info('DEPRECATED')->end()
-                    ->end()
-                ->end()
-            ->end();
-    }
-
-    private function addPageSection(ArrayNodeDefinition $rootNode)
-    {
-        $pageInfo = <<<EOT
-List of globally registered layouts and blocks used by the Page fieldtype
-EOT;
-
-        $rootNode
-            ->children()
-                ->arrayNode('ezpage')
-                    ->info($pageInfo)
-                    ->children()
-                        ->arrayNode('layouts')
-                            ->info('List of registered layouts, the key is the identifier of the layout')
-                            ->useAttributeAsKey('key')
-                            ->normalizeKeys(false)
-                            ->prototype('array')
-                                ->children()
-                                    ->scalarNode('name')->isRequired()->info('Name of the layout')->end()
-                                    ->scalarNode('template')->isRequired()->info('Template to use to render this layout')->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('blocks')
-                            ->info('List of registered blocks, the key is the identifier of the block')
-                            ->useAttributeAsKey('key')
-                            ->normalizeKeys(false)
-                            ->prototype('array')
-                                ->children()
-                                    ->scalarNode('name')->isRequired()->info('Name of the block')->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('enabledBlocks')
-                            ->prototype('scalar')
-                            ->end()
-                            ->info('List of enabled blocks by default')
-                        ->end()
-                        ->arrayNode('enabledLayouts')
-                            ->prototype('scalar')
-                            ->end()
-                            ->info('List of enabled layouts by default')
-                        ->end()
                     ->end()
                 ->end()
             ->end();

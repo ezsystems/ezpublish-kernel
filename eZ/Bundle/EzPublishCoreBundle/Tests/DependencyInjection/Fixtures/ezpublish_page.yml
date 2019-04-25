@@ -18,14 +18,6 @@ siteaccess:
             the_front: ezdemo_site
             the_back: ezdemo_site_admin
 
-ezpage:
-    layouts:
-        FooBarLayout: { name: 'Foo Layout', template: 'foolayout.html.twig' }
-    blocks:
-        FooBarBlock: { name: 'Foo Block' }
-    enabledLayouts: ['FooBarLayout', 'GlobalZoneLayout']
-    enabledBlocks: ['FooBarBlock', 'DemoBlock']
-
 imagemagick:
     enabled: false
 
