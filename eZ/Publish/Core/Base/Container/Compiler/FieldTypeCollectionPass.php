@@ -32,7 +32,13 @@ class FieldTypeCollectionPass implements CompilerPassInterface
 
         // Field types.
         // Alias attribute is the field type string.
-        foreach ($container->findTaggedServiceIds('ezpublish.fieldType') as $id => $attributes) {
+        $ezpublishFieldTypeTags = $container->findTaggedServiceIds('ezpublish.fieldType');
+        foreach ($ezpublishFieldTypeTags as $ezpublishFieldTypeTag) {
+            @trigger_error('`ezpublish.fieldType` service tag is deprecated and will be removed in version 9. Please use `ezplatform.field_type`. instead.', E_USER_DEPRECATED);
+        }
+        $ezplatformFieldTypeTags = $container->findTaggedServiceIds('ezplatform.field_type');
+        $fieldTypesTags = array_merge($ezpublishFieldTypeTags, $ezplatformFieldTypeTags);
+        foreach ($fieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(

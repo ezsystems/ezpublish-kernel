@@ -14,5 +14,5 @@ services:
             - '@ezpublish.fieldType.ezrichtext.validator.internal_link'
             - '@eZ\Publish\Core\FieldType\RichText\CustomTagsValidator'
         tags:
-            - {name: ezpublish.fieldType, alias: ezrichtext}
+            - {name: ezplatform.field_type, alias: ezrichtext}
 
