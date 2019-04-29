@@ -1035,6 +1035,19 @@ class SearchServiceTest extends BaseTest
         );
     }
 
+    /**
+     * @expectedException \ez\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testFindSingleNumericRemoteId()
+    {
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findSingle(
+            new Criterion\RemoteId(123)
+        );
+    }
+
     public function testFindNoPerformCount()
     {
         $repository = $this->getRepository();
@@ -4532,6 +4545,34 @@ class SearchServiceTest extends BaseTest
         $result = $searchService->findContent($query);
 
         $this->assertTrue(($result->totalCount === 1 || $result->totalCount === 2));
+    }
+
+    /**
+     * Test fix for EZP-30502.
+     */
+    public function testFindContentNumericRemoteId()
+    {
+        $query = new Query();
+        $query->filter = new Criterion\RemoteId(123);
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent($query);
+    }
+
+    /**
+     * Test fix for EZP-30502.
+     */
+    public function testFindContentNumericRemoteIdArray()
+    {
+        $query = new Query();
+        $query->filter = new Criterion\RemoteId([123, 456]);
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        $searchService->findContent($query);
     }
 
     private function createContentWithFieldType(

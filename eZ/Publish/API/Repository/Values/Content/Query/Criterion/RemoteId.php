@@ -23,13 +23,20 @@ class RemoteId extends Criterion
     /**
      * Creates a new remoteId criterion.
      *
-     * @param int|int[] $value One or more remoteId that must be matched
+     * @param int|int[]|string|string[] $value One or more remoteId that must be matched
      *
      * @throws \InvalidArgumentException if a non numeric id is given
      * @throws \InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct($value)
     {
+        // EZP-30502 Convert int to string to avoid database errors
+        if (\is_int($value)) {
+            $value = (string) $value;
+        }
+        if (\is_array($value)) {
+            $value = \array_map('strval', $value);
+        }
         parent::__construct(null, null, $value);
     }
 
