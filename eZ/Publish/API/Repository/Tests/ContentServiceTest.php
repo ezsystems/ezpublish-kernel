@@ -6592,7 +6592,6 @@ XML
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
-        $this->createLanguage('fre-FR', 'French');
 
         $contentDraft = $this->createContentDraft(
             'folder',
@@ -6613,9 +6612,9 @@ XML
 
         $contentUpdateStruct->setField('name', 'Folder GER', 'ger-DE');
 
-        $gerContent = $contentService->updateContent($deDraft->versionInfo, $contentUpdateStruct);
+        $deContent = $contentService->updateContent($deDraft->versionInfo, $contentUpdateStruct);
 
-        $updatedContent = $contentService->loadContent($gerContent->id, null, $gerContent->versionInfo->versionNo);
+        $updatedContent = $contentService->loadContent($deContent->id, null, $deContent->versionInfo->versionNo);
         $this->assertEquals(
             [
                 'eng-US' => 'Folder US',
@@ -6624,22 +6623,22 @@ XML
             $updatedContent->fields['name']
         );
 
-        $frDraft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $gbDraft = $contentService->createContentDraft($publishedContent->contentInfo);
 
         $contentUpdateStruct = new ContentUpdateStruct([
-            'initialLanguageCode' => 'fre-FR',
+            'initialLanguageCode' => 'eng-GB',
             'fields' => $contentDraft->getFields(),
         ]);
 
-        $contentUpdateStruct->setField('name', 'Folder FR', 'fre-FR');
+        $contentUpdateStruct->setField('name', 'Folder GB', 'eng-GB');
 
-        $frContent = $contentService->updateContent($frDraft->versionInfo, $contentUpdateStruct);
-        $contentService->publishVersion($frDraft->versionInfo);
-        $updatedContent = $contentService->loadContent($frContent->id, null, $frContent->versionInfo->versionNo);
+        $gbContent = $contentService->updateContent($gbDraft->versionInfo, $contentUpdateStruct);
+        $contentService->publishVersion($gbDraft->versionInfo);
+        $updatedContent = $contentService->loadContent($gbContent->id, null, $gbContent->versionInfo->versionNo);
         $this->assertEquals(
             [
                 'eng-US' => 'Folder US',
-                'fre-FR' => 'Folder FR',
+                'eng-GB' => 'Folder GB',
             ],
             $updatedContent->fields['name']
         );
@@ -6649,7 +6648,7 @@ XML
             [
                 'eng-US' => 'Folder US',
                 'ger-DE' => 'Folder GER',
-                'fre-FR' => 'Folder FR',
+                'eng-GB' => 'Folder GB',
             ],
             $dePublished->fields['name']
         );
