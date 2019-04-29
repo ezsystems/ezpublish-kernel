@@ -443,7 +443,7 @@
             {% if parameters.ezlink.target is defined %} target="{{ parameters.ezlink.target|e('html_attr') }}"{% endif %}
         >
     {% endif %}
-            <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs if attrvalue %}{{ attrname }}="{{ attrvalue }} " {% endfor %}/>
+            <img src="{{ src }}" alt="{{ parameters.alternativeText|default(field.value.alternativeText) }}" {% for attrname, attrvalue in attrs if attrvalue %}{{ attrname }}="{{ attrvalue }}" {% endfor %}/>
     {% if parameters.ezlink|default({}) is not empty %}
         </a>
     {% endif %}
