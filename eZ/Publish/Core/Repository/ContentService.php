@@ -1609,29 +1609,19 @@ class ContentService implements ContentServiceInterface
             return;
         }
 
-        $contentType = $this->persistenceHandler->contentTypeHandler()->load($publishedVersionInfo->contentInfo->contentTypeId);
-        $fieldDefs = $contentType->fieldDefinitions;
-
-        // Find only translatable fields to update with selected languages
-        $fieldsToCopy = array_filter(
-            $publishedContent->getFields(),
-            function (Field $field) use ($languagesToCopy, $fieldDefs) {
-                $fieldDef = array_filter(
-                    $fieldDefs,
-                    function (Type\FieldDefinition $fieldDefinition) use ($field) {
-                        return $fieldDefinition->identifier === $field->fieldDefIdentifier;
-                    }
-                );
-                $fieldDef = reset($fieldDef);
-
-                return in_array($field->languageCode, $languagesToCopy) && $fieldDef->isTranslatable;
-            }
+        $contentType = $this->repository->getContentTypeService()->loadContentType(
+            $publishedVersionInfo->contentInfo->contentTypeId
         );
 
+        // Find only translatable fields to update with selected languages
         $updateStruct = $this->newContentUpdateStruct();
-        array_map(function (Field $field) use ($updateStruct) {
-            $updateStruct->setField($field->fieldDefIdentifier, $field->value, $field->languageCode);
-        }, $fieldsToCopy);
+        foreach ($publishedContent->getFields() as $field) {
+            $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
+
+            if ($fieldDefinition->isTranslatable && in_array($field->languageCode, $languagesToCopy)) {
+                $updateStruct->setField($field->fieldDefIdentifier, $field->value, $field->languageCode);
+            }
+        }
 
         $this->updateContent($versionInfo, $updateStruct);
     }
