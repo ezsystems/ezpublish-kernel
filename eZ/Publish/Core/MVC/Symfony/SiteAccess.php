@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\MVC\Symfony;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface;
 
 /**
  * Base struct for a siteaccess representation.
@@ -21,6 +22,11 @@ class SiteAccess extends ValueObject
      * @var string
      */
     public $name;
+
+    /**
+     * @var SiteAccessGroup[]
+     */
+    public $groups;
 
     /**
      * The matching type that has been used to discover the siteaccess.

@@ -62,6 +62,11 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     private $tooEarlyLoadedList = [];
 
     /**
+     * @var SiteAccess\SiteAccessProviderInterface
+     */
+    private $siteAccessProvider;
+
+    /**
      * @param array $groupsBySiteAccess SiteAccess groups, indexed by siteaccess.
      * @param string $defaultNamespace The default namespace
      * @param int $undefinedStrategy Strategy to use when encountering undefined parameters.
@@ -70,6 +75,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
      *                                  - ConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
      */
     public function __construct(
+        SiteAccess\SiteAccessProviderInterface $siteAccessProvider,
         array $groupsBySiteAccess,
         $defaultNamespace,
         $undefinedStrategy = self::UNDEFINED_STRATEGY_EXCEPTION
@@ -77,6 +83,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
         $this->groupsBySiteAccess = $groupsBySiteAccess;
         $this->defaultNamespace = $defaultNamespace;
         $this->undefinedStrategy = $undefinedStrategy;
+        $this->siteAccessProvider = $siteAccessProvider;
     }
 
     public function setSiteAccess(SiteAccess $siteAccess = null)
@@ -128,9 +135,10 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
 
         // Relative scope, siteaccess group wise
         $groupScopeHasParam = false;
-        if (isset($this->groupsBySiteAccess[$scope])) {
-            foreach ($this->groupsBySiteAccess[$scope] as $groupName) {
-                $groupScopeParamName = "$namespace.$groupName.$paramName";
+        if ($this->siteAccessProvider->isDefined($scope)) {
+            $groups = $this->siteAccessProvider->getSiteAccess($scope)->groups;
+            foreach ($groups as $group) {
+                $groupScopeParamName = "$namespace.{$group->getName()}.$paramName";
                 if ($this->container->hasParameter($groupScopeParamName)) {
                     $groupScopeHasParam = true;
                     break;
@@ -182,9 +190,10 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
         unset($relativeScopeParamName);
 
         // Relative scope, siteaccess group wise
-        if (isset($this->groupsBySiteAccess[$scope])) {
-            foreach ($this->groupsBySiteAccess[$scope] as $groupName) {
-                $relativeScopeParamName = "$namespace.$groupName.$paramName";
+        if ($this->siteAccessProvider->isDefined($scope)) {
+            $groups = $this->siteAccessProvider->getSiteAccess($scope)->groups;
+            foreach ($groups as $group) {
+                $relativeScopeParamName = "$namespace.{$group->getName()}.$paramName";
                 if ($this->container->hasParameter($relativeScopeParamName)) {
                     return $this->container->getParameter($relativeScopeParamName);
                 }

@@ -62,6 +62,11 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
      */
     protected $siteAccessList;
 
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface
+     */
+    protected $siteAccessProvider;
+
     /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     protected $siteAccess;
 
@@ -90,13 +95,14 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
      * @param string|null $siteAccessClass
      * @param bool $debug
      */
-    public function __construct(MatcherBuilderInterface $matcherBuilder, LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, $siteAccessClass = null, $debug = false)
+    public function __construct(MatcherBuilderInterface $matcherBuilder, LoggerInterface $logger, $defaultSiteAccess, array $siteAccessesConfiguration, array $siteAccessList, SiteAccessProviderInterface $siteAccessProvider, $siteAccessClass = null, $debug = false)
     {
         $this->matcherBuilder = $matcherBuilder;
         $this->logger = $logger;
         $this->defaultSiteAccess = $defaultSiteAccess;
         $this->siteAccessesConfiguration = $siteAccessesConfiguration;
         $this->siteAccessList = array_fill_keys($siteAccessList, true);
+        $this->siteAccessProvider = $siteAccessProvider;
         $this->siteAccessClass = $siteAccessClass ?: 'eZ\\Publish\\Core\\MVC\\Symfony\\SiteAccess';
         $this->request = new SimplifiedRequest();
         $this->debug = $debug;
@@ -134,12 +140,12 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
         // Note: request headers are always in lower cased.
         if (!empty($request->headers['x-siteaccess'])) {
             $siteaccessName = $request->headers['x-siteaccess'][0];
-            if (!isset($this->siteAccessList[$siteaccessName])) {
+            if (!$this->siteAccessProvider->isDefined($siteaccessName)) {
                 unset($this->siteAccess);
                 throw new InvalidSiteAccessException($siteaccessName, array_keys($this->siteAccessList), 'X-Siteaccess request header', $this->debug);
             }
 
-            $this->siteAccess->name = $siteaccessName;
+            $this->siteAccess = $this->siteAccessProvider->getSiteAccess($siteaccessName);
             $this->siteAccess->matchingType = 'header';
 
             return $this->siteAccess;
@@ -148,12 +154,12 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
         // Then check environment variable
         $siteaccessEnvName = getenv('EZPUBLISH_SITEACCESS');
         if ($siteaccessEnvName !== false) {
-            if (!isset($this->siteAccessList[$siteaccessEnvName])) {
+            if (!$this->siteAccessProvider->isDefined($siteaccessEnvName)) {
                 unset($this->siteAccess);
                 throw new InvalidSiteAccessException($siteaccessEnvName, array_keys($this->siteAccessList), 'EZPUBLISH_SITEACCESS Environment variable', $this->debug);
             }
 
-            $this->siteAccess->name = $siteaccessEnvName;
+            $this->siteAccess = $this->siteAccessProvider->getSiteAccess($siteaccessName);
             $this->siteAccess->matchingType = 'env';
 
             return $this->siteAccess;
@@ -179,8 +185,8 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
             }
 
             if (($siteaccessName = $matcher->match()) !== false) {
-                if (isset($this->siteAccessList[$siteaccessName])) {
-                    $this->siteAccess->name = $siteaccessName;
+                if ($this->siteAccessProvider->isDefined($siteaccessName)) {
+                    $this->siteAccess = $this->siteAccessProvider->getSiteAccess($siteaccessName);
                     $this->siteAccess->matchingType = $matcher->getName();
                     $this->siteAccess->matcher = $matcher;
 
@@ -209,7 +215,7 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
      */
     public function matchByName($siteAccessName)
     {
-        if (!isset($this->siteAccessList[$siteAccessName])) {
+        if (!$this->siteAccessProvider->isDefined($siteAccessName)) {
             throw new InvalidArgumentException("Invalid SiteAccess name provided for reverse matching: $siteAccessName");
         }
 
