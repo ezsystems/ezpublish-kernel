@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccessList;
+use Symfony\Component\HttpFoundation\ParameterBag;
 
 interface SiteAccessProviderInterface
 {
