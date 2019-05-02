@@ -105,7 +105,7 @@ class PersistenceCacheCollector extends DataCollector
             // Get traces, and order them to have the most called first
             $calls[$hash]['traces'] = $call['traces'];
             $traceCount = [];
-            foreach ($traces as $traceHash => $traceData) {
+            foreach ($call['traces'] as $traceHash => $traceData) {
                 $traceCount[$traceHash] = $traceData['count'];
             }
             \array_multisort($traceCount, SORT_DESC, SORT_NUMERIC, $calls[$hash]['traces']);
