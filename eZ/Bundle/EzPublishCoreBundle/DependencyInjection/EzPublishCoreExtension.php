@@ -135,7 +135,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
             throw new InvalidArgumentException($message);
         }
 
-        $this->handleSiteAccessesRelation($container);
+        //$this->handleSiteAccessesRelation($container);
         $this->buildPolicyMap($container);
     }
 
@@ -477,7 +477,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      */
     private function handleSiteAccessesRelation(ContainerBuilder $container)
     {
-        $configResolver = $container->get('ezpublish.config.resolver.core');
+        $configResolver = $container->get('ezpublish.config.resolver');
         $configResolver->setContainer($container);
 
         $saRelationMap = [];

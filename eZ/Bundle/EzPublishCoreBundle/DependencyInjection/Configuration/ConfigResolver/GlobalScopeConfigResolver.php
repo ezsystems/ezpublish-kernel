@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
-final class GlobalScopeConfigResolver  extends ContainerBasedConfigResolver
+class GlobalScopeConfigResolver extends ContainerBasedConfigResolver
 {
-    private const SCOPE_GLOBAL = 'global';
+    private const SCOPE_NAME = 'global';
 
-    protected function resolveScope(string $scope = null): string
+    public function __construct(string $defaultNamespace)
     {
-        return self::SCOPE_GLOBAL;
+        parent::__construct(self::SCOPE_NAME, $defaultNamespace);
     }
 }

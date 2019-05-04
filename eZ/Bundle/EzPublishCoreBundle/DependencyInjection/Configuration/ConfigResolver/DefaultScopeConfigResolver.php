@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
 
-final class DefaultScopeConfigResolver  extends ContainerBasedConfigResolver
+class DefaultScopeConfigResolver extends ContainerBasedConfigResolver
 {
-    private const SCOPE_DEFAULT = 'default';
+    private const SCOPE_NAME = 'default';
 
-    protected function resolveScope(string $scope = null): string
+    public function __construct(string $defaultNamespace)
     {
-        return self::SCOPE_DEFAULT;
+        parent::__construct(self::SCOPE_NAME, $defaultNamespace);
     }
 }

@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
@@ -17,8 +18,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ConfigScopeListener implements EventSubscriberInterface
 {
-    /** @var \eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface */
-    private $configResolver;
+    /**
+     * @var ConfigResolverInterface[]
+     */
+    private $configResolvers;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface|\eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware */
     private $viewManager;
@@ -27,10 +30,10 @@ class ConfigScopeListener implements EventSubscriberInterface
     private $viewProviders;
 
     public function __construct(
-        VersatileScopeInterface $configResolver,
+        iterable $configResolvers,
         ViewManagerInterface $viewManager
     ) {
-        $this->configResolver = $configResolver;
+        $this->configResolvers = $configResolvers;
         $this->viewManager = $viewManager;
     }
 
@@ -45,7 +48,13 @@ class ConfigScopeListener implements EventSubscriberInterface
     public function onConfigScopeChange(ScopeChangeEvent $event)
     {
         $siteAccess = $event->getSiteAccess();
-        $this->configResolver->setDefaultScope($siteAccess->name);
+
+        foreach ($this->configResolvers as $configResolver) {
+            if ($configResolver instanceof VersatileScopeInterface) {
+                $configResolver->setDefaultScope($siteAccess->name);
+            }
+        }
+
         if ($this->viewManager instanceof SiteAccessAware) {
             $this->viewManager->setSiteAccess($siteAccess);
         }

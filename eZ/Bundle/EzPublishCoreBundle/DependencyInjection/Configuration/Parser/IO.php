@@ -162,7 +162,7 @@ class IO extends AbstractParser
 
     private function postProcessComplexSetting($setting, $sa, ContainerBuilder $container)
     {
-        $configResolver = $container->get('ezpublish.config.resolver.core');
+        $configResolver = $container->get('ezpublish.config.resolver');
 
         if (!$configResolver->hasParameter($setting, null, $sa)) {
             return false;

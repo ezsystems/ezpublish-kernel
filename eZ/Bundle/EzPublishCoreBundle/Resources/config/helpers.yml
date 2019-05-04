@@ -32,8 +32,8 @@ services:
     ezpublish.config_scope_listener:
         class: "%ezpublish.config_scope_listener.class%"
         arguments:
-            - "@ezpublish.config.resolver.core"
-            - "@ezpublish.view_manager"
+            $configResolvers: !tagged ezpublish.config.resolver
+            $viewManager: "@ezpublish.view_manager"
         tags:
             - { name: kernel.event_subscriber }
 

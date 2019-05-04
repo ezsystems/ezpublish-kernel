@@ -41,7 +41,7 @@ final class StaticSiteAccessProvider implements SiteAccessProviderInterface
 
     public function getSiteAccess(string $name): SiteAccess
     {
-        $siteaccess = new SiteAccess($name);
+        $siteaccess = new SiteAccess($name, null, null, self::class);
         $siteaccess->groups = array_map(function($group) {
             return new SiteAccessGroup($group);
         }, $this->groupsBySiteAccess[$name]);

@@ -43,11 +43,17 @@ class SiteAccess extends ValueObject
      */
     public $matcher;
 
-    public function __construct($name = null, $matchingType = null, $matcher = null)
+    /**
+     * @var string
+     */
+    public $provider;
+
+    public function __construct($name = null, $matchingType = null, $matcher = null, string $provider = null)
     {
         $this->name = $name;
         $this->matchingType = $matchingType;
         $this->matcher = $matcher;
+        $this->provider = $provider;
     }
 
     public function __toString()
