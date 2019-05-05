@@ -33,6 +33,11 @@ class ConfigurationProcessor
     protected static $groupsBySiteAccess = [];
 
     /**
+     * @var array
+     */
+    protected static $availableSiteAccessGroups = [];
+
+    /**
      * Name of the node under which scope based (semantic) configuration takes place.
      *
      * @var string
@@ -58,6 +63,11 @@ class ConfigurationProcessor
     public static function setAvailableSiteAccesses(array $availableSiteAccesses)
     {
         static::$availableSiteAccesses = $availableSiteAccesses;
+    }
+
+    public static function setAvailableSiteAccessGroups(array $availableSiteAccessGroups)
+    {
+        static::$availableSiteAccessGroups = $availableSiteAccessGroups;
     }
 
     /**
@@ -153,7 +163,7 @@ class ConfigurationProcessor
      */
     protected function buildContextualizer(ContainerInterface $containerBuilder, $namespace, $siteAccessNodeName)
     {
-        return new Contextualizer($containerBuilder, $namespace, $siteAccessNodeName, static::$availableSiteAccesses, static::$groupsBySiteAccess);
+        return new Contextualizer($containerBuilder, $namespace, $siteAccessNodeName, static::$availableSiteAccesses, static::$availableSiteAccessGroups, static::$groupsBySiteAccess);
     }
 
     /**

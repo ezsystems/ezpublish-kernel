@@ -32,17 +32,24 @@ class Contextualizer implements ContextualizerInterface
     /** @var array */
     private $groupsBySiteAccess;
 
+    /**
+     * @var array
+     */
+    private $availableSiteAccessGroups;
+
     public function __construct(
         ContainerInterface $containerBuilder,
         $namespace,
         $siteAccessNodeName,
         array $availableSiteAccesses,
+        array $availableSiteAccessGroups,
         array $groupsBySiteAccess
     ) {
         $this->container = $containerBuilder;
         $this->namespace = $namespace;
         $this->siteAccessNodeName = $siteAccessNodeName;
         $this->availableSiteAccesses = $availableSiteAccesses;
+        $this->availableSiteAccessGroups = $availableSiteAccessGroups;
         $this->groupsBySiteAccess = $groupsBySiteAccess;
     }
 
@@ -72,6 +79,68 @@ class Contextualizer implements ContextualizerInterface
             $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $id,
             []
         );
+
+        // (!) Keep siteaccess group settings
+        foreach (array_keys($this->availableSiteAccessGroups) as $scope) {
+            $scopeSettings = array();
+            if (isset($config[$this->siteAccessNodeName][$scope][$id])) {
+                $scopeSettings = $config[$this->siteAccessNodeName][$scope][$id];
+            }
+
+            if (empty($scopeSettings)) {
+                continue;
+            }
+
+            if ($options & static::MERGE_FROM_SECOND_LEVEL) {
+                // array_merge() has to be used because we don't
+                // know whether we have a hash or a plain array
+                $keys1 = array_unique(
+                    array_merge(
+                        array_keys($defaultSettings),
+                        array_keys($scopeSettings),
+                        array_keys($globalSettings)
+                    )
+                );
+                $mergedSettings = array();
+                foreach ($keys1 as $key) {
+                    // Only merge if actual setting is an array.
+                    // We assume default setting to be a clear reference for this.
+                    // If the setting is not an array, we copy the right value, in respect to the precedence:
+                    // 1. global
+                    // 3. Group
+                    // 4. default
+                    if (array_key_exists($key, $defaultSettings) && !is_array($defaultSettings[$key])) {
+                        if (array_key_exists($key, $globalSettings)) {
+                            $mergedSettings[$key] = $globalSettings[$key];
+                        } elseif (array_key_exists($key, $scopeSettings)) {
+                            $mergedSettings[$key] = $scopeSettings[$key];
+                        } else {
+                            $mergedSettings[$key] = $defaultSettings[$key];
+                        }
+                    } else {
+                        $mergedSettings[$key] = array_merge(
+                            isset($defaultSettings[$key]) ? $defaultSettings[$key] : array(),
+                            isset($scopeSettings[$key]) ? $scopeSettings[$key] : array(),
+                            isset($globalSettings[$key]) ? $globalSettings[$key] : array()
+                        );
+                    }
+                }
+            } else {
+                $mergedSettings = array_merge(
+                    $defaultSettings,
+                    $scopeSettings,
+                    $globalSettings
+                );
+            }
+
+            if ($options & static::UNIQUE) {
+                $mergedSettings = array_values(
+                    array_unique($mergedSettings)
+                );
+            }
+
+            $this->container->setParameter("$this->namespace.$scope.$id", $mergedSettings);
+        }
 
         foreach ($this->availableSiteAccesses as $scope) {
             // for a siteaccess, we have to merge the default value,

@@ -215,7 +215,7 @@ class Configuration extends SiteAccessConfiguration
                             ->info('SiteAccess groups. Useful to share settings between Siteaccess')
                             ->example(['ezdemo_group' => ['ezdemo_site', 'ezdemo_site_admin']])
                             ->prototype('array')
-                                ->requiresAtLeastOneElement()
+                                //->requiresAtLeastOneElement()
                                 ->prototype('scalar')->end()
                             ->end()
                         ->end()
