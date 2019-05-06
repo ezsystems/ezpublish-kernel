@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -6226,31 +6227,34 @@ XML
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToHide
-     *
-     * @dataProvider provideLocationsToHideAndReveal
+     * @covers \eZ\Publish\API\Repository\ContentService::hideContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testHideContent(array $locationsToHide)
+    public function testHideContent(): void
     {
         $repository = $this->getRepository();
-
         $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
+
+        $locationCreateStructs = array_map(
+            function (Location $parentLocation) use ($locationService) {
+                return $locationService->newLocationCreateStruct($parentLocation->id);
+            },
+            $this->createParentLocationsForHideReveal($locationService, 2)
+        );
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
         $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
         $contentCreate->setField('name', 'Folder to hide');
 
         $content = $contentService->createContent(
             $contentCreate,
-            $locationsToHide
+            $locationCreateStructs
         );
 
         $publishedContent = $contentService->publishVersion($content->versionInfo);
@@ -6270,33 +6274,36 @@ XML
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToReveal
-     *
-     * @dataProvider provideLocationsToHideAndReveal
+     * @covers \eZ\Publish\API\Repository\ContentService::revealContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testRevealContent(array $locationsToReveal)
+    public function testRevealContent()
     {
         $repository = $this->getRepository();
-
         $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
+
+        $locationCreateStructs = array_map(
+            function (Location $parentLocation) use ($locationService) {
+                return $locationService->newLocationCreateStruct($parentLocation->id);
+            },
+            $this->createParentLocationsForHideReveal($locationService, 2)
+        );
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
         $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
         $contentCreate->setField('name', 'Folder to hide');
 
-        $locationsToReveal[0]->hidden = true;
+        $locationCreateStructs[0]->hidden = true;
 
         $content = $contentService->createContent(
             $contentCreate,
-            $locationsToReveal
+            $locationCreateStructs
         );
 
         $publishedContent = $contentService->publishVersion($content->versionInfo);
@@ -6324,27 +6331,6 @@ XML
         $this->assertCount(3, $locations);
         $this->assertCount(1, $hiddenLocationsAfterReveal);
         $this->assertEquals($hiddenLocations, $hiddenLocationsAfterReveal);
-    }
-
-    public function provideLocationsToHideAndReveal()
-    {
-        $locationService = $this->getRepository()->getLocationService();
-
-        return [
-            [
-                [
-                    $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 2)
-                    ),
-                    $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 5)
-                    ),
-                    $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 43)
-                    ),
-                ],
-            ],
-        ];
     }
 
     /**
@@ -6624,6 +6610,29 @@ XML
             ],
             $dePublished->fields['name']
         );
+    }
+
+    /**
+     * Create structure of parent folders with Locations to be used for Content hide/reveal tests.
+     *
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param int $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] A list of Locations aimed to be parents
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function createParentLocationsForHideReveal(LocationService $locationService, int $parentLocationId): array
+    {
+        $parentFoldersLocationsIds = [
+            $this->createFolder(['eng-US' => 'P1'], $parentLocationId)->contentInfo->mainLocationId,
+            $this->createFolder(['eng-US' => 'P2'], $parentLocationId)->contentInfo->mainLocationId,
+            $this->createFolder(['eng-US' => 'P3'], $parentLocationId)->contentInfo->mainLocationId,
+        ];
+
+        return array_values($locationService->loadLocationList($parentFoldersLocationsIds));
     }
 
     /**
