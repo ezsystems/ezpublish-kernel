@@ -474,13 +474,11 @@
 
 {# pageService is exposed under parameters.pageService thanks to Page\ParameterProvider #}
 {% block ezpage_field %}
-{% spaceless %}
-{% if not ez_is_field_empty( content, field ) %}
-    {% set layout = field.value.page.layout %}
-    {% set template = parameters.pageService.getLayoutTemplate( layout ) %}
-    {% include template with { 'zones': field.value.page.zones, 'zone_layout': layout, 'pageService': parameters.pageService } %}
-{% endif %}
-{% endspaceless %}
+{%- if not ez_is_field_empty( content, field ) -%}
+    {%- set layout = field.value.page.layout -%}
+    {%- set template = parameters.pageService.getLayoutTemplate( layout ) -%}
+    {%- include template with { 'zones': field.value.page.zones, 'zone_layout': layout, 'pageService': parameters.pageService } -%}
+{%- endif -%}
 {% endblock %}
 
 
