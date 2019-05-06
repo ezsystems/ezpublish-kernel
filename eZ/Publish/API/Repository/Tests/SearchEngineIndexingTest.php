@@ -8,11 +8,9 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch as LegacyElasticsearchSetupFactory;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\SearchService;
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -62,13 +60,6 @@ class SearchEngineIndexingTest extends BaseTest
      */
     public function testFindLocationsFullTextIsSearchable(ContentInfo $contentInfo)
     {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacyElasticsearchSetupFactory) {
-            $this->markTestSkipped(
-                'Elasticsearch Search Engine is missing full text Location search implementation'
-            );
-        }
-
         $searchTerm = 'pamplemousse';
 
         $repository = $this->getRepository(false);
@@ -826,17 +817,8 @@ class SearchEngineIndexingTest extends BaseTest
      * @param array $ignoreForSetupFactories list of SetupFactories to be ignored
      * @dataProvider getSpecialFullTextCases
      */
-    public function testIndexingSpecialFullTextCases($text, $searchForText, array $ignoreForSetupFactories = [])
+    public function testIndexingSpecialFullTextCases($text, $searchForText)
     {
-        // check if provided data should be ignored for the current Search Engine (via SetupFactory)
-        if (!empty($ignoreForSetupFactories) && in_array(get_class($this->getSetupFactory()), $ignoreForSetupFactories)) {
-            $this->markTestIncomplete(sprintf(
-                'Handling FullText Searching for the phrase {%s} is incomplete for %s',
-                $searchForText,
-                get_class($this->getSetupFactory())
-            ));
-        }
-
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
@@ -873,8 +855,7 @@ class SearchEngineIndexingTest extends BaseTest
             ['with boundary.', 'with boundary'],
             ['Folder1.', 'Folder1.'],
             ['whitespaces', "     whitespaces  \n \t "],
-            // @todo: Remove as soon as elastic is updated to later version not affected
-            ["it's", "it's", [LegacyElasticsearch::class]],
+            ["it's", "it's"],
             ['with_underscore', 'with_underscore'],
         ];
     }
@@ -1120,16 +1101,14 @@ class SearchEngineIndexingTest extends BaseTest
         $result = $searchService->findContent($query);
         self::assertEquals(0, $result->totalCount);
 
-        if (!$this->getSetupFactory() instanceof LegacyElasticsearchSetupFactory) {
-            // Test Location Search returns Content without removed Translation
-            $query = new LocationQuery(
-                [
-                    'query' => new Criterion\FullText('BrE'),
-                ]
-            );
-            $result = $searchService->findLocations($query);
-            self::assertEquals(0, $result->totalCount);
-        }
+        // Test Location Search returns Content without removed Translation
+        $query = new LocationQuery(
+            [
+                'query' => new Criterion\FullText('BrE'),
+            ]
+        );
+        $result = $searchService->findLocations($query);
+        self::assertEquals(0, $result->totalCount);
     }
 
     /**
