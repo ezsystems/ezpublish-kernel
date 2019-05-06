@@ -24,6 +24,7 @@ use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\VersionInfo;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
+use Symfony\Component\HttpFoundation\RequestStack;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -77,6 +78,7 @@ class ContentViewBuilderTest extends TestCase
             $this->repository,
             $this->viewConfigurator,
             $this->parametersInjector,
+            new RequestStack(),
             $this->contentInfoLocationLoader
         );
     }
