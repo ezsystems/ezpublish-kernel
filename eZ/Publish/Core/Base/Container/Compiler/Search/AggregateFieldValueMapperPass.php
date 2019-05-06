@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * This compiler pass will register Elasticsearch Search Engine field value mappers.
+ * This compiler pass will register Search Engine field value mappers.
  */
 class AggregateFieldValueMapperPass implements CompilerPassInterface
 {
