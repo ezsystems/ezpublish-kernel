@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\MVC\Symfony\SiteAccess\Provider;
 
+use AppendIterator;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccessList;
@@ -22,9 +23,13 @@ final class ChainSiteAccessProvider implements SiteAccessProviderInterface
         $this->providers = $providers;
     }
 
-    public function getSiteAccesses(): SiteAccessList
+    public function getSiteAccesses(): \Iterator
     {
-        return new SiteAccessList([]);
+        $iterator = new AppendIterator();
+        foreach($this->providers as $provider) {
+            $iterator->append($provider->getSiteAccesses());
+        }
+        return $iterator;
     }
 
     public function isDefined(string $name): bool

@@ -12,6 +12,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessProviderInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccessGroup;
 use eZ\Publish\Core\MVC\Symfony\SiteAccessList;
+use Iterator;
 
 final class StaticSiteAccessProvider implements SiteAccessProviderInterface
 {
@@ -29,9 +30,9 @@ final class StaticSiteAccessProvider implements SiteAccessProviderInterface
         $this->groupsBySiteAccess = $groupsBySiteAccess;
     }
 
-    public function getSiteAccesses(): SiteAccessList
+    public function getSiteAccesses(): Iterator
     {
-        return new SiteAccessList($this->siteAccessList);
+        return new \IteratorIterator(new SiteAccessList([]));
     }
 
     public function isDefined(string $name): bool
@@ -41,11 +42,11 @@ final class StaticSiteAccessProvider implements SiteAccessProviderInterface
 
     public function getSiteAccess(string $name): SiteAccess
     {
-        $siteaccess = new SiteAccess($name, null, null, self::class);
-        $siteaccess->groups = array_map(function($group) {
+        $siteAccess = new SiteAccess($name, null, null, self::class);
+        $siteAccess->groups = array_map(function($group) {
             return new SiteAccessGroup($group);
         }, $this->groupsBySiteAccess[$name]);
 
-        return $siteaccess;
+        return $siteAccess;
     }
 }
