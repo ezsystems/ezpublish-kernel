@@ -6229,6 +6229,10 @@ XML
      * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToHide
      *
      * @dataProvider provideLocationsToHideAndReveal
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testHideContent(array $locationsToHide)
     {
@@ -6254,28 +6258,15 @@ XML
 
         // Sanity check
         $this->assertCount(3, $locations);
-        $this->assertEquals(
-            [
-                false,
-                false,
-                false,
-            ],
-            array_column($locations, 'hidden')
-        );
+        $this->assertCount(0, $this->filterHiddenLocations($locations));
 
         /* BEGIN: Use Case */
         $contentService->hideContent($publishedContent->contentInfo);
         /* END: Use Case */
 
-        $hiddenLocations = $locationService->loadLocations($publishedContent->contentInfo);
-        $this->assertEquals(
-            [
-                true,
-                true,
-                true,
-            ],
-            array_column($hiddenLocations, 'hidden')
-        );
+        $locations = $locationService->loadLocations($publishedContent->contentInfo);
+        $this->assertCount(3, $locations);
+        $this->assertCount(3, $this->filterHiddenLocations($locations));
     }
 
     /**
@@ -6310,48 +6301,29 @@ XML
 
         $publishedContent = $contentService->publishVersion($content->versionInfo);
         $locations = $locationService->loadLocations($publishedContent->contentInfo);
-        // sort the Locations putting hidden one on top, as the order in which they're returned is not deterministic
-        usort(
-            $locations,
-            function (Location $location) {
-                return $location->hidden ? -1 : 1;
-            }
-        );
 
         // Sanity check
+        $hiddenLocations = $this->filterHiddenLocations($locations);
         $this->assertCount(3, $locations);
-        $this->assertEquals(
-            [
-                true,
-                false,
-                false,
-            ],
-            array_column($locations, 'hidden')
-        );
+        $this->assertCount(1, $hiddenLocations);
 
-        /* BEGIN: Use Case */
+        // BEGIN: Use Case
         $contentService->hideContent($publishedContent->contentInfo);
-
-        $this->assertEquals(
-            [
-                true,
-                true,
-                true,
-            ],
-            array_column($locationService->loadLocations($publishedContent->contentInfo), 'hidden')
+        $this->assertCount(
+            3,
+            $this->filterHiddenLocations(
+                $locationService->loadLocations($publishedContent->contentInfo)
+            )
         );
 
         $contentService->revealContent($publishedContent->contentInfo);
-        /* END: Use Case */
+        // END: Use Case
 
-        $this->assertEquals(
-            [
-                true,
-                false,
-                false,
-            ],
-            array_column($locationService->loadLocations($publishedContent->contentInfo), 'hidden')
-        );
+        $locations = $locationService->loadLocations($publishedContent->contentInfo);
+        $hiddenLocationsAfterReveal = $this->filterHiddenLocations($locations);
+        $this->assertCount(3, $locations);
+        $this->assertCount(1, $hiddenLocationsAfterReveal);
+        $this->assertEquals($hiddenLocations, $hiddenLocationsAfterReveal);
     }
 
     public function provideLocationsToHideAndReveal()
@@ -6361,13 +6333,13 @@ XML
         return [
             [
                 [
-                    $mainLocationCreateStruct = $locationService->newLocationCreateStruct(
+                    $locationService->newLocationCreateStruct(
                         $this->generateId('location', 2)
                     ),
-                    $otherCreateStruct = $locationService->newLocationCreateStruct(
+                    $locationService->newLocationCreateStruct(
                         $this->generateId('location', 5)
                     ),
-                    $thirdCreateStruct = $locationService->newLocationCreateStruct(
+                    $locationService->newLocationCreateStruct(
                         $this->generateId('location', 43)
                     ),
                 ],
@@ -6651,6 +6623,25 @@ XML
                 'eng-GB' => 'Folder GB',
             ],
             $dePublished->fields['name']
+        );
+    }
+
+    /**
+     * Filter Locations list by hidden only.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
+     *
+     * @return array
+     */
+    private function filterHiddenLocations(array $locations): array
+    {
+        return array_values(
+            array_filter(
+                $locations,
+                function (Location $location) {
+                    return $location->hidden;
+                }
+            )
         );
     }
 }
