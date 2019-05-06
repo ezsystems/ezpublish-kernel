@@ -192,20 +192,24 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
             return false;
         }
 
+        $hasMandatoryTarget = false;
         foreach ($targets as $target) {
-            if (!$target instanceof LocationCreateStruct) {
-                throw new InvalidArgumentException(
-                    '$targets',
-                    'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
-                );
-            }
+            if ($target instanceof LocationCreateStruct) {
+                $hasMandatoryTarget = true;
+                $location = $this->persistence->locationHandler()->load($target->parentLocationId);
+                $contentTypeId = $this->persistence->contentHandler()->loadContentInfo($location->contentId)->contentTypeId;
 
-            $location = $this->persistence->locationHandler()->load($target->parentLocationId);
-            $contentTypeId = $this->persistence->contentHandler()->loadContentInfo($location->contentId)->contentTypeId;
-
-            if (!in_array($contentTypeId, $value->limitationValues)) {
-                return false;
+                if (!in_array($contentTypeId, $value->limitationValues)) {
+                    return false;
+                }
             }
+        }
+
+        if (false === $hasMandatoryTarget) {
+            throw new InvalidArgumentException(
+                '$targets',
+                'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+            );
         }
 
         return true;

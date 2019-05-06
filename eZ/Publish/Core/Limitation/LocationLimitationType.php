@@ -174,18 +174,23 @@ class LocationLimitationType extends AbstractPersistenceLimitationType implement
             return false;
         }
 
+        $hasMandatoryTarget = false;
         foreach ($targets as $target) {
-            if (!$target instanceof LocationCreateStruct) {
-                throw new InvalidArgumentException(
-                    '$targets',
-                    'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
-                );
-            }
+            if ($target instanceof LocationCreateStruct) {
+                $hasMandatoryTarget = true;
 
-            // For ContentCreateStruct all placements must match
-            if (!in_array($target->parentLocationId, $value->limitationValues)) {
-                return false;
+                // For ContentCreateStruct all placements must match
+                if (!in_array($target->parentLocationId, $value->limitationValues)) {
+                    return false;
+                }
             }
+        }
+
+        if (false === $hasMandatoryTarget) {
+            throw new InvalidArgumentException(
+                '$targets',
+                'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+            );
         }
 
         return true;

@@ -19,8 +19,6 @@ class ContentLimitationsMixIntegrationTest extends BaseLimitationIntegrationTest
     const LIMITATION_VALUES = 'limitationValues';
 
     /**
-     * {@inheritdoc}
-     *
      * Provides lists of:
      *
      * <code>[string $module, string $function, array $limitations, bool $expectedResult]</code>

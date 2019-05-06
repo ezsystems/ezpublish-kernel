@@ -17,6 +17,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 use eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation as APIParentUserGroupLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation as APILimitationValue;
+use eZ\Publish\SPI\Limitation\Target;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
 use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\Persistence\Content\Location as SPILocation;
@@ -135,23 +136,28 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
             return false;
         }
 
+        $hasMandatoryTarget = false;
         foreach ($targets as $target) {
+            if ($target instanceof Target\Version) {
+                continue;
+            }
+
             if ($target instanceof LocationCreateStruct) {
+                $hasMandatoryTarget = true;
                 $target = $locationHandler->load($target->parentLocationId);
             }
 
             if ($target instanceof Location) {
+                $hasMandatoryTarget = true;
                 // $target is assumed to be parent in this case
                 $parentOwnerId = $target->getContentInfo()->ownerId;
             } elseif ($target instanceof SPILocation) {
+                $hasMandatoryTarget = true;
                 // $target is assumed to be parent in this case
                 $spiContentInfo = $this->persistence->contentHandler()->loadContentInfo($target->contentId);
                 $parentOwnerId = $spiContentInfo->ownerId;
             } else {
-                throw new InvalidArgumentException(
-                    '$targets',
-                    'Must contain objects of type: Location or LocationCreateStruct'
-                );
+                continue;
             }
 
             if ($parentOwnerId === $currentUser->getUserId()) {
@@ -176,6 +182,13 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
             }
 
             return false;
+        }
+
+        if (false === $hasMandatoryTarget) {
+            throw new InvalidArgumentException(
+                '$targets',
+                'Must contain objects of type: Location or LocationCreateStruct'
+            );
         }
 
         return true;

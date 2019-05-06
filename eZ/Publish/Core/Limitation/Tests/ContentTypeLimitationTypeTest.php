@@ -21,6 +21,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 use eZ\Publish\Core\Limitation\ContentTypeLimitationType;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
+use eZ\Publish\SPI\Limitation\Target\Builder\VersionBuilder;
 use eZ\Publish\SPI\Persistence\Content\Type\Handler as SPIHandler;
 
 /**
@@ -234,6 +235,10 @@ class ContentTypeLimitationTypeTest extends Base
             ->method('getContentInfo')
             ->will($this->returnValue(new ContentInfo(array('contentTypeId' => 66))));
 
+        $versionBuilder = new VersionBuilder();
+        $versionBuilder->createFromAnyContentTypeOf(['43']);
+        $target = $versionBuilder->build();
+
         return array(
             // ContentInfo, no access
             array(
@@ -283,6 +288,20 @@ class ContentTypeLimitationTypeTest extends Base
                 'object' => new ContentCreateStruct(array('contentType' => ((object)array('id' => 43)))),
                 'targets' => array(),
                 'expected' => true,
+            ),
+            // ContentType intention test, with access
+            array(
+                'limitation' => new ContentTypeLimitation(array('limitationValues' => array(2, 43))),
+                'object' => new ContentCreateStruct(array('contentType' => (object)array('id' => 22))),
+                'targets' => [(new VersionBuilder())->createFromAnyContentTypeOf(['43'])->build()],
+                'expected' => true,
+            ),
+            // ContentType intention test, no access
+            array(
+                'limitation' => new ContentTypeLimitation(array('limitationValues' => array(2, 43))),
+                'object' => new ContentCreateStruct(array('contentType' => (object)array('id' => 22))),
+                'targets' => [(new VersionBuilder())->createFromAnyContentTypeOf(['23'])->build()],
+                'expected' => false,
             ),
         );
     }
