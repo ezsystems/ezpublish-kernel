@@ -399,7 +399,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
     {
         // Using different values for Legacy Search Engine, in order to demonstrate that sort will
         // depend on how search engine stores field type's value. Legacy stores it as integer, while
-        // other engines (Solr and Elasticsearch) store it as string.
+        // other engines store it as string.
         if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
             return 4;
         }
@@ -411,7 +411,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
     {
         // Using different values for Legacy Search Engine, in order to demonstrate that sort will
         // depend on how search engine stores field type's value. Legacy stores it as integer, while
-        // other engines (Solr and Elasticsearch) store it as string.
+        // other engines store it as string.
         if (ltrim(get_class($this->getSetupFactory()), '\\') === 'eZ\Publish\API\Repository\Tests\SetupFactory\Legacy') {
             return 49;
         }

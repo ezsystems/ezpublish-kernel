@@ -182,7 +182,7 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
-     * EZP-26186: Make sure index is NOT deleted on removal of version draft (affected Solr & content index on Elastic).
+     * EZP-26186: Make sure index is NOT deleted on removal of version draft (affected Solr).
      */
     public function testDeleteVersion()
     {
@@ -210,7 +210,7 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
-     * EZP-26186: Make sure affected child locations are deleted on content deletion (affected Solr & Elastic).
+     * EZP-26186: Make sure affected child locations are deleted on content deletion (affected Solr).
      */
     public function testDeleteContent()
     {
@@ -233,7 +233,7 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
-     * EZP-26186: Make sure index is deleted on removal of Users  (affected Solr & Elastic).
+     * EZP-26186: Make sure index is deleted on removal of Users  (affected Solr).
      */
     public function testDeleteUser()
     {
@@ -256,7 +256,7 @@ class SearchEngineIndexingTest extends BaseTest
     }
 
     /**
-     * EZP-26186: Make sure index is deleted on removal of UserGroups  (affected Solr & Elastic).
+     * EZP-26186: Make sure index is deleted on removal of UserGroups  (affected Solr).
      */
     public function testDeleteUserGroup()
     {
