@@ -111,7 +111,7 @@ class ContentTypeUpdateTest extends BaseTest
     /**
      * Test ContentTypeUpdate parser throwing exception on invalid names.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'names' element for ContentTypeUpdate.
      */
     public function testParseExceptionOnInvalidNames()
@@ -126,7 +126,7 @@ class ContentTypeUpdateTest extends BaseTest
     /**
      * Test ContentTypeUpdate parser throwing exception on invalid descriptions.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'descriptions' element for ContentTypeUpdate.
      */
     public function testParseExceptionOnInvalidDescriptions()
@@ -141,7 +141,7 @@ class ContentTypeUpdateTest extends BaseTest
     /**
      * Test ContentTypeUpdate parser throwing exception on invalid User.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for User element in ContentTypeUpdate.
      */
     public function testParseExceptionOnInvalidUser()

@@ -37,7 +37,7 @@ class SectionInputTest extends BaseTest
     /**
      * Test SectionInput parser throwing exception on missing identifier.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' attribute for SectionInput.
      */
     public function testParseExceptionOnMissingIdentifier()
@@ -53,7 +53,7 @@ class SectionInputTest extends BaseTest
     /**
      * Test SectionInput parser throwing exception on missing name.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'name' attribute for SectionInput.
      */
     public function testParseExceptionOnMissingName()

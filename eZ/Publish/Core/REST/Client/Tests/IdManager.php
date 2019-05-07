@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests;
 
-use eZ\Publish\Core\REST\Common;
+use EzSystems\EzPlatformRestCommon;
 
 /**
  * Base class for ID manager used in the tests suite.
@@ -19,14 +19,14 @@ class IdManager
     /**
      * URL handler.
      *
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     * @var \EzSystems\EzPlatformRestCommon\RequestParser
      */
     protected $requestParser;
 
     /**
      * Creates a new ID manager based on $requestParser.
      *
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
+     * @param \EzSystems\EzPlatformRestCommon\RequestParser $requestParser
      */
     public function __construct(Common\RequestParser $requestParser)
     {

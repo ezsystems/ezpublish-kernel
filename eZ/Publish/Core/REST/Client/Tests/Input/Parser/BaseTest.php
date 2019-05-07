@@ -10,21 +10,21 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Server\Tests;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
 
 abstract class BaseTest extends Tests\BaseTest
 {
     /**
      * Mock for parsing dispatcher.
      *
-     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
+     * @var \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher
      */
     protected $parsingDispatcherMock;
 
     /**
      * Returns the parsing dispatcher mock.
      *
-     * @return \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
+     * @return \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
     {

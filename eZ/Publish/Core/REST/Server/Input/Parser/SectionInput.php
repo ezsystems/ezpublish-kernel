@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
 use eZ\Publish\API\Repository\SectionService;
-use eZ\Publish\Core\REST\Common\Exceptions;
+use EzSystems\EzPlatformRestCommon\Exceptions;
 
 /**
  * Parser for SectionInput.
@@ -39,7 +39,7 @@ class SectionInput extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */

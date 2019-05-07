@@ -5,9 +5,9 @@
  */
 namespace eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor\Criterion;
 
-use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\Output\Generator;
+use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
 
 class ContentTypeIdentifier extends ValueObjectVisitor
 {

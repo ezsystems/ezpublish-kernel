@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
+use EzSystems\EzPlatformRestCommon\Input\ParserTools;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Client\Values;
 
 /**
@@ -23,18 +23,18 @@ use eZ\Publish\Core\REST\Client\Values;
 class FieldDefinition extends BaseParser
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
      */
     protected $parserTools;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     * @var \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser
      */
     protected $fieldTypeParser;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
-     * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParserTools $parserTools
+     * @param \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser $fieldTypeParser
      */
     public function __construct(ParserTools $parserTools, FieldTypeParser $fieldTypeParser)
     {
@@ -46,7 +46,7 @@ class FieldDefinition extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
      * @todo Error handling
      *

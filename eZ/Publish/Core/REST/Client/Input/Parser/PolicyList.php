@@ -9,8 +9,8 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
 
 /**
  * Parser for PolicyList.
@@ -21,7 +21,7 @@ class PolicyList extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
      * @todo Error handling
      *

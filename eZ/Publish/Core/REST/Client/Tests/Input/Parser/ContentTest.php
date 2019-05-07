@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
-use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\ParserTools;
+use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo;
 use eZ\Publish\Core\REST\Client\ContentService;
 use eZ\Publish\API\Repository\Values;
@@ -30,7 +30,7 @@ class ContentTest extends BaseTest
     protected $contentServiceMock;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     * @var \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser
      */
     protected $fieldTypeParserMock;
 
@@ -180,7 +180,7 @@ class ContentTest extends BaseTest
     }
 
     /**
-     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     * @return \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser
      */
     protected function getFieldTypeParserMock()
     {

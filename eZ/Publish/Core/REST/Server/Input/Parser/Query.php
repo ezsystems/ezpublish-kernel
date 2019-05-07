@@ -6,7 +6,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion as CriterionValue;
 
@@ -19,9 +19,9 @@ abstract class Query extends CriterionParser
      * Parses input structure to a Query.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query
      */
@@ -110,7 +110,7 @@ abstract class Query extends CriterionParser
      * Handles SortClause data.
      *
      * @param array $sortClausesArray
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return array
      */

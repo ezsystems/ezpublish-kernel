@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRestCommon\Output\Generator;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
 use eZ\Publish\SPI\Variation\Values\ImageVariation as ImageVariationValue;
 
 class ImageVariation extends ValueObjectVisitor

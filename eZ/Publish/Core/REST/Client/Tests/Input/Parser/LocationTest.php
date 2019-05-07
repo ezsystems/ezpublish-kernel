@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input\Parser;
-use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use EzSystems\EzPlatformRestCommon\Input\ParserTools;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 class LocationTest extends BaseTest

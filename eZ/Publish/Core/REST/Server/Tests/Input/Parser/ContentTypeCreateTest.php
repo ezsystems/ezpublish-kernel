@@ -121,7 +121,7 @@ class ContentTypeCreateTest extends BaseTest
     /**
      * Test ContentTypeCreate parser throwing exception on missing identifier.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' element for ContentTypeCreate.
      */
     public function testParseExceptionOnMissingIdentifier()
@@ -136,7 +136,7 @@ class ContentTypeCreateTest extends BaseTest
     /**
      * Test ContentTypeCreate parser throwing exception on missing mainLanguageCode.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'mainLanguageCode' element for ContentTypeCreate.
      */
     public function testParseExceptionOnMissingMainLanguageCode()
@@ -151,7 +151,7 @@ class ContentTypeCreateTest extends BaseTest
     /**
      * Test ContentTypeCreate parser throwing exception on invalid names.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'names' element for ContentTypeCreate.
      */
     public function testParseExceptionOnInvalidNames()
@@ -166,7 +166,7 @@ class ContentTypeCreateTest extends BaseTest
     /**
      * Test ContentTypeCreate parser throwing exception on invalid descriptions.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'descriptions' element for ContentTypeCreate.
      */
     public function testParseExceptionOnInvalidDescriptions()
@@ -181,7 +181,7 @@ class ContentTypeCreateTest extends BaseTest
     /**
      * Test ContentTypeCreate parser throwing exception on invalid User.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for User element in ContentTypeCreate.
      */
     public function testParseExceptionOnInvalidUser()
@@ -196,7 +196,7 @@ class ContentTypeCreateTest extends BaseTest
     /**
      * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'FieldDefinitions' element for ContentTypeCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinitions()
@@ -211,7 +211,7 @@ class ContentTypeCreateTest extends BaseTest
     /**
      * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage ContentTypeCreate should provide at least one field definition.
      */
     public function testParseExceptionOnMissingFieldDefinitions()
@@ -228,7 +228,7 @@ class ContentTypeCreateTest extends BaseTest
     /**
      * Test ContentTypeCreate parser throwing exception on invalid FieldDefinitions.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'FieldDefinition' element for ContentTypeCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinition()

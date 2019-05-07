@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
-use eZ\Publish\Core\REST\Common\Value as RestValue;
+use EzSystems\EzPlatformRestCommon\Value as RestValue;
 
 /**
  * RoleAssignment view model.

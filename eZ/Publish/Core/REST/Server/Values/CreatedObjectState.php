@@ -18,7 +18,7 @@ class CreatedObjectState extends ValueObject
     /**
      * The created object state.
      *
-     * @var \eZ\Publish\Core\REST\Common\Values\RestObjectState
+     * @var \EzSystems\EzPlatformRestCommon\Values\RestObjectState
      */
     public $objectState;
 }

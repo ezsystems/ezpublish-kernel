@@ -12,9 +12,9 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\LanguageService as APILanguageService;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
-use eZ\Publish\Core\REST\Common\RequestParser;
-use eZ\Publish\Core\REST\Common\Input\Dispatcher;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\RequestParser;
+use EzSystems\EzPlatformRestCommon\Input\Dispatcher;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
@@ -40,25 +40,25 @@ class LanguageService implements APILanguageService, Sessionable
     private $client;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
+     * @var \EzSystems\EzPlatformRestCommon\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
+     * @var \EzSystems\EzPlatformRestCommon\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     * @var \EzSystems\EzPlatformRestCommon\RequestParser
      */
     private $requestParser;
 
     /**
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
+     * @param \EzSystems\EzPlatformRestCommon\Input\Dispatcher $inputDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $outputVisitor
+     * @param \EzSystems\EzPlatformRestCommon\RequestParser $requestParser
      */
     public function __construct(ContentService $contentService, $defaultLanguageCode, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser)
     {

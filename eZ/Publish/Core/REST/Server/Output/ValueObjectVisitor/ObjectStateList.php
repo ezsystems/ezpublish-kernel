@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Common\Values\RestObjectState as RestObjectStateValue;
+use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRestCommon\Output\Generator;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\Values\RestObjectState as RestObjectStateValue;
 
 /**
  * ObjectStateList value object visitor.
@@ -21,8 +21,8 @@ class ObjectStateList extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers.
      *
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $visitor
+     * @param \EzSystems\EzPlatformRestCommon\Output\Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\ObjectStateList $data
      */
     public function visit(Visitor $visitor, Generator $generator, $data)

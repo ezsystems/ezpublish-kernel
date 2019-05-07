@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Values;
 
-use eZ\Publish\Core\REST\Common\Value as RestValue;
+use EzSystems\EzPlatformRestCommon\Value as RestValue;
 
 class Conflict extends RestValue
 {

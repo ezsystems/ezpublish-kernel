@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
+use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRestCommon\Output\Generator;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer;
 use eZ\Publish\Core\REST\Server\Values\RelationList as RelationListValue;
 use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
@@ -23,12 +23,12 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 class Version extends ValueObjectVisitor
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
+     * @var \EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer
      */
     protected $fieldTypeSerializer;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
+     * @param \EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer $fieldTypeSerializer
      */
     public function __construct(FieldTypeSerializer $fieldTypeSerializer)
     {
@@ -38,8 +38,8 @@ class Version extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers.
      *
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $visitor
+     * @param \EzSystems\EzPlatformRestCommon\Output\Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\Version $data
      */
     public function visit(Visitor $visitor, Generator $generator, $data)
@@ -55,7 +55,7 @@ class Version extends ValueObjectVisitor
     /**
      * Visits a single content field and generates its content.
      *
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \EzSystems\EzPlatformRestCommon\Output\Generator $generator
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      */

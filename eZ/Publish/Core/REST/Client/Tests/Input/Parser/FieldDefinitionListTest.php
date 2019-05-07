@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
-use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use EzSystems\EzPlatformRestCommon\Input\ParserTools;
 use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 class FieldDefinitionListTest extends BaseTest

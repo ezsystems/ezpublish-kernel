@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\Output\Generator;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
 use eZ\Publish\Core\REST\Server\Values\RestFieldDefinition as ValuesRestFieldDefinition;
 
 /**
@@ -20,8 +20,8 @@ class FieldDefinitionList extends RestContentTypeBase
     /**
      * Visit struct returned by controllers.
      *
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $visitor
+     * @param \EzSystems\EzPlatformRestCommon\Output\Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList $data
      */
     public function visit(Visitor $visitor, Generator $generator, $data)

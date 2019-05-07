@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use eZ\Publish\Core\REST\Common\Exceptions;
+use EzSystems\EzPlatformRestCommon\Exceptions;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\Core\REST\Server\Values\CachedValue;
 use eZ\Publish\SPI\Variation\VariationHandler;
@@ -44,7 +44,7 @@ class BinaryContent extends RestController
      *                        If the version number isn't specified, the default one is used.
      * @param string $variationIdentifier
      *
-     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\SPI\Variation\Values\Variation
      */
@@ -95,7 +95,7 @@ class BinaryContent extends RestController
      * @return array An array with 3 keys: contentId, fieldId and versionNumber.
      *               If the versionNumber wasn't set, it is returned as null.
      *
-     * @throws \eZ\Publish\Core\REST\Common\Exceptions\NotFoundException If the imageId format is invalid
+     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException If the imageId format is invalid
      */
     private function parseImageId($imageId)
     {

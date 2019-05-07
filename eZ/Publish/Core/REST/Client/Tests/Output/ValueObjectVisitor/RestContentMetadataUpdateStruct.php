@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\REST\Client\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Values;
+use EzSystems\EzPlatformRestCommon\Values;
 
 class RestContentMetadataUpdateStruct extends ValueObjectVisitorBaseTest
 {

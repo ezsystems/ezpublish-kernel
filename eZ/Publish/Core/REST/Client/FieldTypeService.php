@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\FieldTypeService as APIFieldTypeService;
-use eZ\Publish\Core\REST\Common\Exceptions;
+use EzSystems\EzPlatformRestCommon\Exceptions;
 
 class FieldTypeService implements APIFieldTypeService
 {

@@ -18,6 +18,7 @@
         "ext-xsl": "*",
         "ext-curl": "*",
         "ezsystems/doctrine-dbal-schema": "^1.0@dev",
+        "ezsystems/ezplatform-rest-common": "^1.0@dev",
         "symfony/symfony": "^3.4.17",
         "symfony-cmf/routing": "^2.1",
         "kriswallsmith/buzz": "^0.17.2",

@@ -16,7 +16,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate;
 use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
+use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
 
 class UserGroupCreateTest extends BaseTest
 {
@@ -95,7 +95,7 @@ class UserGroupCreateTest extends BaseTest
     /**
      * Test UserGroupCreate parser throwing exception on invalid ContentType.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for ContentType element in UserGroupCreate.
      */
     public function testParseExceptionOnInvalidContentType()
@@ -124,7 +124,7 @@ class UserGroupCreateTest extends BaseTest
     /**
      * Test UserGroupCreate parser throwing exception on missing mainLanguageCode.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'mainLanguageCode' element for UserGroupCreate.
      */
     public function testParseExceptionOnMissingMainLanguageCode()
@@ -154,7 +154,7 @@ class UserGroupCreateTest extends BaseTest
     /**
      * Test UserGroupCreate parser throwing exception on invalid Section.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for Section element in UserGroupCreate.
      */
     public function testParseExceptionOnInvalidSection()
@@ -183,7 +183,7 @@ class UserGroupCreateTest extends BaseTest
     /**
      * Test UserGroupCreate parser throwing exception on invalid fields data.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'fields' element for UserGroupCreate.
      */
     public function testParseExceptionOnInvalidFields()
@@ -206,7 +206,7 @@ class UserGroupCreateTest extends BaseTest
     /**
      * Test UserGroupCreate parser throwing exception on missing field definition identifier.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for UserGroupCreate.
      */
     public function testParseExceptionOnMissingFieldDefinitionIdentifier()
@@ -240,7 +240,7 @@ class UserGroupCreateTest extends BaseTest
     /**
      * Test UserGroupCreate parser throwing exception on invalid field definition identifier.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'some_class' content type in UserGroupCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinitionIdentifier()
@@ -271,7 +271,7 @@ class UserGroupCreateTest extends BaseTest
     /**
      * Test UserGroupCreate parser throwing exception on missing field value.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'name' identifier in UserGroupCreate.
      */
     public function testParseExceptionOnMissingFieldValue()
@@ -315,7 +315,7 @@ class UserGroupCreateTest extends BaseTest
     /**
      * Get the field type parser mock object.
      *
-     * @return \eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
+     * @return \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
      */
     private function getFieldTypeParserMock()
     {

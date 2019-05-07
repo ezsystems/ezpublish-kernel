@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
-use eZ\Publish\Core\REST\Common\Input\ParserTools;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\ParserTools;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\API\Repository\UserService;
 
@@ -21,7 +21,7 @@ use eZ\Publish\API\Repository\UserService;
 class Session extends BaseParser
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
      */
     protected $parserTools;
 
@@ -33,7 +33,7 @@ class Session extends BaseParser
     protected $userService;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParserTools $parserTools
      * @param \eZ\Publish\API\Repository\UserService $userService
      */
     public function __construct(ParserTools $parserTools, UserService $userService)
@@ -46,7 +46,7 @@ class Session extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
      * @todo Error handling
      *

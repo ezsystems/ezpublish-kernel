@@ -102,7 +102,7 @@ class PolicyCreateTest extends BaseTest
     /**
      * Test PolicyCreate parser throwing exception on missing module.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'module' attribute for PolicyCreate.
      */
     public function testParseExceptionOnMissingModule()
@@ -138,7 +138,7 @@ class PolicyCreateTest extends BaseTest
     /**
      * Test PolicyCreate parser throwing exception on missing function.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'function' attribute for PolicyCreate.
      */
     public function testParseExceptionOnMissingFunction()
@@ -174,7 +174,7 @@ class PolicyCreateTest extends BaseTest
     /**
      * Test PolicyCreate parser throwing exception on missing identifier.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing '_identifier' attribute for Limitation.
      */
     public function testParseExceptionOnMissingLimitationIdentifier()
@@ -210,7 +210,7 @@ class PolicyCreateTest extends BaseTest
     /**
      * Test PolicyCreate parser throwing exception on missing values.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid format for limitation values in Limitation.
      */
     public function testParseExceptionOnMissingLimitationValues()

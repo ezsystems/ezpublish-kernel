@@ -37,7 +37,7 @@ class DataKeyValueObjectClassTest extends BaseTest
     /**
      * Test DataKeyValueObjectClass parser throwing exception on missing sort clause.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage The <DatePublished> sort clause doesn't exist in the input structure
      */
     public function testParseExceptionOnMissingSortClause()
@@ -53,7 +53,7 @@ class DataKeyValueObjectClassTest extends BaseTest
     /**
      * Test DataKeyValueObjectClass parser throwing exception on invalid direction format.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid direction format in <DatePublished> sort clause
      */
     public function testParseExceptionOnInvalidDirectionFormat()
@@ -69,7 +69,7 @@ class DataKeyValueObjectClassTest extends BaseTest
     /**
      * Test DataKeyValueObjectClass parser throwing exception on nonexisting value object class.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Value object class <eC\Pubish\APl\Repudiatory\BadValues\Discontent\Queezy\SantaClause\ThisClassIsExistentiallyChallenged> is not defined
      */
     public function testParseExceptionOnNonexistingValueObjectClass()

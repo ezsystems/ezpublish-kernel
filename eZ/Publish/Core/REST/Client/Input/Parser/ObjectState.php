@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\ParserTools;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState;
 
 /**
@@ -20,7 +20,7 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState as CoreObjectState
 class ObjectState extends BaseParser
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
      */
     protected $parserTools;
 
@@ -33,7 +33,7 @@ class ObjectState extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
      * @todo Error handling
      *

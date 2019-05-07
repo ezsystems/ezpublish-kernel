@@ -9,9 +9,9 @@
 namespace eZ\Publish\Core\REST\Client\Input\Parser;
 
 use eZ\Publish\API\Repository\ContentTypeService;
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\ParserTools;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 
@@ -21,7 +21,7 @@ use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
 class Version extends BaseParser
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
+     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
      */
     protected $parserTools;
 
@@ -38,7 +38,7 @@ class Version extends BaseParser
     private $contentTypeService;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\Input\ParserTools $parserTools
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParserTools $parserTools
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
      */
@@ -53,7 +53,7 @@ class Version extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\Core\REST\Server\Values\Version
      */

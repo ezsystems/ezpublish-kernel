@@ -12,9 +12,9 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\IOService as APIIOService;
 use eZ\Publish\Core\IO\Values\BinaryFile;
 use eZ\Publish\Core\IO\Values\BinaryFileCreateStruct;
-use eZ\Publish\Core\REST\Common\RequestParser;
-use eZ\Publish\Core\REST\Common\Input\Dispatcher;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\RequestParser;
+use EzSystems\EzPlatformRestCommon\Input\Dispatcher;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
 
 /**
  * Service used to handle io operations.
@@ -27,25 +27,25 @@ class IOService implements APIIOService, Sessionable
     private $client;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
+     * @var \EzSystems\EzPlatformRestCommon\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
+     * @var \EzSystems\EzPlatformRestCommon\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     * @var \EzSystems\EzPlatformRestCommon\RequestParser
      */
     private $requestParser;
 
     /**
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
+     * @param \EzSystems\EzPlatformRestCommon\Input\Dispatcher $inputDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $outputVisitor
+     * @param \EzSystems\EzPlatformRestCommon\RequestParser $requestParser
      */
     public function __construct(HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser)
     {

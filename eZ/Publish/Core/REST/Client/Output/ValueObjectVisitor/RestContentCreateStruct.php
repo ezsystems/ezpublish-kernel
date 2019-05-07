@@ -11,10 +11,10 @@ namespace eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer;
+use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRestCommon\Output\Generator;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
 
 /**
  * ContentCreateStruct value object visitor.
@@ -27,8 +27,8 @@ class RestContentCreateStruct extends ValueObjectVisitor
     }
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $visitor
+     * @param \EzSystems\EzPlatformRestCommon\Output\Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct $restContentCreateStruct
      */
     public function visit(Visitor $visitor, Generator $generator, $restContentCreateStruct)
@@ -89,7 +89,7 @@ class RestContentCreateStruct extends ValueObjectVisitor
     /**
      * Visits a single content field and generates its content.
      *
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \EzSystems\EzPlatformRestCommon\Output\Generator $generator
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\Content\Field $field
      */

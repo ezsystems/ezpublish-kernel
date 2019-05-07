@@ -9,21 +9,21 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests\Output;
 
-use eZ\Publish\Core\REST\Common\Tests\AssertXmlTagTrait;
-use eZ\Publish\Core\REST\Common\RequestParser\EzPublish as EzPublishRequestParser;
-use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest as CommonValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRestCommon\Tests\AssertXmlTagTrait;
+use EzSystems\EzPlatformRestCommon\RequestParser\EzPublish as EzPublishRequestParser;
+use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest as CommonValueObjectVisitorBaseTest;
 
 abstract class ValueObjectVisitorBaseTest extends CommonValueObjectVisitorBaseTest
 {
     use AssertXmlTagTrait;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser\EzPublish
+     * @var \EzSystems\EzPlatformRestCommon\RequestParser\EzPublish
      */
     protected $requestParser;
 
     /**
-     * @return \eZ\Publish\Core\REST\Common\RequestParser\EzPublish
+     * @return \EzSystems\EzPlatformRestCommon\RequestParser\EzPublish
      */
     protected function getRequestParser()
     {

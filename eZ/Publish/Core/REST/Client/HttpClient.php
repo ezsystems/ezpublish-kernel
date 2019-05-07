@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client;
 
-use eZ\Publish\Core\REST\Common\Message;
+use EzSystems\EzPlatformRestCommon\Message;
 
 /**
  * Interface for Http Client implementations.

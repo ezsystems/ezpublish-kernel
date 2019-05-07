@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRestCommon\Values\RestContentMetadataUpdateStruct;
 use DateTime;
 use Exception;
 
@@ -26,11 +26,11 @@ class ContentUpdate extends BaseParser
      * @todo use url handler instead of hardcoded URL matching
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @return \eZ\Publish\Core\REST\Common\Values\RestContentMetadataUpdateStruct
+     * @return \EzSystems\EzPlatformRestCommon\Values\RestContentMetadataUpdateStruct
      *
-     * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser if $data is invalid
+     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\Parser if $data is invalid
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {

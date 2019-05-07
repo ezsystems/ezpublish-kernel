@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;
-use eZ\Publish\Core\REST\Common\Values;
+use EzSystems\EzPlatformRestCommon\Values;
 
 class RestObjectStateTest extends ValueObjectVisitorBaseTest
 {

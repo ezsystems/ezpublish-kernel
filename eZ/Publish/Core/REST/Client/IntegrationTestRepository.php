@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\REST\Client;
 
 use eZ\Publish\API\Repository\Values\User\UserReference;
-use eZ\Publish\Core\REST\Common\RequestParser;
-use eZ\Publish\Core\REST\Common\Input\Dispatcher;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\RequestParser;
+use EzSystems\EzPlatformRestCommon\Input\Dispatcher;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
 use eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthenticator;
 
 /**
@@ -49,8 +49,8 @@ class IntegrationTestRepository extends Repository implements Sessionable
      * Instantiates the REST Client repository.
      *
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
+     * @param \EzSystems\EzPlatformRestCommon\Input\Dispatcher $inputDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $outputVisitor
      * @param \eZ\Publish\SPI\FieldType\FieldType[] $fieldTypes
      * @param \eZ\Publish\Core\REST\Client\HttpClient\Authentication\IntegrationTestAuthentication $authenticator
      */

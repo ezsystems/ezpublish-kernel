@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\Base\Exceptions\ContentFieldValidationException as CoreContentFieldValidationException;
 use eZ\Publish\Core\FieldType\ValidationError;
-use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Exceptions;
 use Symfony\Component\Translation\Translator;

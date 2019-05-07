@@ -77,7 +77,7 @@ class ObjectStateGroupCreateTest extends BaseTest
     /**
      * Test ObjectStateGroupCreate parser throwing exception on missing identifier.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' attribute for ObjectStateGroupCreate.
      */
     public function testParseExceptionOnMissingIdentifier()
@@ -109,7 +109,7 @@ class ObjectStateGroupCreateTest extends BaseTest
     /**
      * Test ObjectStateGroupCreate parser throwing exception on missing defaultLanguageCode.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'defaultLanguageCode' attribute for ObjectStateGroupCreate.
      */
     public function testParseExceptionOnMissingDefaultLanguageCode()
@@ -141,7 +141,7 @@ class ObjectStateGroupCreateTest extends BaseTest
     /**
      * Test ObjectStateGroupCreate parser throwing exception on missing names.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateGroupCreate.
      */
     public function testParseExceptionOnMissingNames()
@@ -166,7 +166,7 @@ class ObjectStateGroupCreateTest extends BaseTest
     /**
      * Test ObjectStateGroupCreate parser throwing exception on invalid names structure.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateGroupCreate.
      */
     public function testParseExceptionOnInvalidNames()

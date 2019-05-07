@@ -63,7 +63,7 @@ class RoleAssignInputTest extends BaseTest
     /**
      * Test RoleAssignInput parser throwing exception on missing Role.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing 'Role' element for RoleAssignInput.
      */
     public function testParseExceptionOnMissingRole()
@@ -94,7 +94,7 @@ class RoleAssignInputTest extends BaseTest
     /**
      * Test RoleAssignInput parser throwing exception on invalid Role.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'Role' element for RoleAssignInput.
      */
     public function testParseExceptionOnInvalidRole()
@@ -126,7 +126,7 @@ class RoleAssignInputTest extends BaseTest
     /**
      * Test Limitation parser throwing exception on missing identifier.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing '_identifier' attribute for Limitation.
      */
     public function testParseExceptionOnMissingLimitationIdentifier()

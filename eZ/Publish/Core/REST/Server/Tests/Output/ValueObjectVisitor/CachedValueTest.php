@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\REST\Common\Tests\Output\ValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\CachedValue;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -141,7 +141,7 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
     /**
      * Must return an instance of the tested visitor object.
      *
-     * @return \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor
+     * @return \EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor
      */
     protected function internalGetVisitor()
     {

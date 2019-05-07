@@ -10,9 +10,9 @@
 namespace eZ\Publish\Core\REST\Client\Tests\Input\Parser;
 
 use eZ\Publish\Core\REST\Client\Input;
-use eZ\Publish\Core\REST\Common\Input\ParserTools;
+use EzSystems\EzPlatformRestCommon\Input\ParserTools;
 use eZ\Publish\API\Repository\Values;
-use eZ\Publish\Core\REST\Common\RequestParser;
+use EzSystems\EzPlatformRestCommon\RequestParser;
 use eZ\Publish\Core\REST\Client\ContentService;
 
 class VersionInfoTest extends BaseTest
@@ -211,7 +211,7 @@ class VersionInfoTest extends BaseTest
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\REST\Common\RequestParser
+     * @return \PHPUnit\Framework\MockObject\MockObject|\EzSystems\EzPlatformRestCommon\RequestParser
      */
     protected function getRequestParserMock()
     {

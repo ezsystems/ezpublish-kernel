@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\REST\Client\HttpClient;
 
 use eZ\Publish\Core\REST\Client\HttpClient;
-use eZ\Publish\Core\REST\Common\Message;
+use EzSystems\EzPlatformRestCommon\Message;
 
 /**
  * Simple PHP stream based HTTP client.
@@ -66,9 +66,9 @@ class Stream implements HttpClient
      *
      * @param string $method
      * @param string $path
-     * @param \eZ\Publish\Core\REST\Common\Message $message
+     * @param \EzSystems\EzPlatformRestCommon\Message $message
      *
-     * @return \eZ\Publish\Core\REST\Common\Message
+     * @return \EzSystems\EzPlatformRestCommon\Message
      */
     public function request($method, $path, Message $message = null)
     {

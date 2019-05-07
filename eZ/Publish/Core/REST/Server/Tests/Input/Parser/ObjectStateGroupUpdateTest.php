@@ -77,7 +77,7 @@ class ObjectStateGroupUpdateTest extends BaseTest
     /**
      * Test ObjectStateGroupUpdate parser throwing exception on invalid names structure.
      *
-     * @expectedException \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateGroupUpdate.
      */
     public function testParseExceptionOnInvalidNames()

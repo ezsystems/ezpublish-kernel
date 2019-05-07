@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\Input\FieldTypeParser;
-use eZ\Publish\Core\REST\Common\Exceptions;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+use EzSystems\EzPlatformRestCommon\Exceptions;
 use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
 
 /**
  * Parser for VersionUpdate.
@@ -29,7 +29,7 @@ class VersionUpdate extends BaseParser
     /**
      * FieldType parser.
      *
-     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
+     * @var \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser
      */
     protected $fieldTypeParser;
 
@@ -37,7 +37,7 @@ class VersionUpdate extends BaseParser
      * Construct from content service.
      *
      * @param \eZ\Publish\API\Repository\ContentService $contentService
-     * @param \eZ\Publish\Core\REST\Common\Input\FieldTypeParser $fieldTypeParser
+     * @param \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser $fieldTypeParser
      */
     public function __construct(ContentService $contentService, FieldTypeParser $fieldTypeParser)
     {
@@ -49,7 +49,7 @@ class VersionUpdate extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
      */

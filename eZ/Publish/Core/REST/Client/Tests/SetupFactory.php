@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\REST\Client\Tests;
 
-use eZ\Publish\Core\REST\Common;
+use EzSystems\EzPlatformRestCommon;
 use eZ\Publish\API\Repository;
 
 /**

@@ -9,10 +9,10 @@
 
 namespace eZ\Publish\Core\REST\Client\Output\ValueObjectVisitor;
 
-use eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer;
-use eZ\Publish\Core\REST\Common\Output\ValueObjectVisitor;
-use eZ\Publish\Core\REST\Common\Output\Generator;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer;
+use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRestCommon\Output\Generator;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
 
 /**
  * FieldDefinitionCreateStruct value object visitor.
@@ -20,13 +20,13 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
 class FieldDefinitionCreateStruct extends ValueObjectVisitor
 {
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
+     * @var \EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer
      */
     protected $fieldTypeSerializer;
 
     /**
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
-     * @param \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer $fieldTypeSerializer
+     * @param \EzSystems\EzPlatformRestCommon\RequestParser $requestParser
+     * @param \EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer $fieldTypeSerializer
      */
     public function __construct(FieldTypeSerializer $fieldTypeSerializer)
     {
@@ -36,8 +36,8 @@ class FieldDefinitionCreateStruct extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers.
      *
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $visitor
-     * @param \eZ\Publish\Core\REST\Common\Output\Generator $generator
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $visitor
+     * @param \EzSystems\EzPlatformRestCommon\Output\Generator $generator
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      */
     public function visit(Visitor $visitor, Generator $generator, $fieldDefinitionCreateStruct)

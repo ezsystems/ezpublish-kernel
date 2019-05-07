@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
-use eZ\Publish\Core\REST\Common\Exceptions;
+use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRestCommon\Exceptions;
 use eZ\Publish\Core\REST\Server\Values\RestViewInput;
-use eZ\Publish\Core\REST\Common\Input\BaseParser;
+use EzSystems\EzPlatformRestCommon\Input\BaseParser;
 
 /**
  * Parser for ViewInput.
@@ -22,9 +22,9 @@ class ViewInput extends BaseParser
      * Parses input structure to a RestViewInput struct.
      *
      * @param array $data
-     * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @throws \eZ\Publish\Core\REST\Common\Exceptions\Parser
+     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\Parser
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestViewInput
      */

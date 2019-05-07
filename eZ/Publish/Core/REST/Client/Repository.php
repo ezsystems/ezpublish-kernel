@@ -12,7 +12,7 @@ namespace eZ\Publish\Core\REST\Client;
 use eZ\Publish\API\Repository\Repository as APIRepository;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\UserReference;
-use eZ\Publish\Core\REST\Common;
+use EzSystems\EzPlatformRestCommon;
 
 /**
  * REST Client Repository.
@@ -91,17 +91,17 @@ class Repository implements APIRepository
     /**
      * Input parsing dispatcher.
      *
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
+     * @var \EzSystems\EzPlatformRestCommon\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
+     * @var \EzSystems\EzPlatformRestCommon\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     * @var \EzSystems\EzPlatformRestCommon\RequestParser
      */
     private $requestParser;
 
@@ -114,9 +114,9 @@ class Repository implements APIRepository
      * Instantiates the REST Client repository.
      *
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
+     * @param \EzSystems\EzPlatformRestCommon\Input\Dispatcher $inputDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $outputVisitor
+     * @param \EzSystems\EzPlatformRestCommon\RequestParser $requestParser
      * @param \eZ\Publish\SPI\FieldType\FieldType[] $fieldTypes
      */
     public function __construct(HttpClient $client, Common\Input\Dispatcher $inputDispatcher, Common\Output\Visitor $outputVisitor, Common\RequestParser $requestParser, array $fieldTypes)

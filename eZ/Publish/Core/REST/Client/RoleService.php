@@ -29,10 +29,10 @@ use eZ\Publish\Core\REST\Client\Values\User\PolicyUpdateStruct;
 use eZ\Publish\Core\REST\Client\Values\User\Role;
 use eZ\Publish\Core\REST\Client\Values\User\Policy;
 use eZ\Publish\Core\REST\Client\Values\User\RoleAssignment;
-use eZ\Publish\Core\REST\Common\RequestParser;
-use eZ\Publish\Core\REST\Common\Input\Dispatcher;
-use eZ\Publish\Core\REST\Common\Output\Visitor;
-use eZ\Publish\Core\REST\Common\Message;
+use EzSystems\EzPlatformRestCommon\RequestParser;
+use EzSystems\EzPlatformRestCommon\Input\Dispatcher;
+use EzSystems\EzPlatformRestCommon\Output\Visitor;
+use EzSystems\EzPlatformRestCommon\Message;
 
 /**
  * Implementation of the {@link \eZ\Publish\API\Repository\RoleService}
@@ -53,26 +53,26 @@ class RoleService implements APIRoleService, Sessionable
     private $client;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
+     * @var \EzSystems\EzPlatformRestCommon\Input\Dispatcher
      */
     private $inputDispatcher;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
+     * @var \EzSystems\EzPlatformRestCommon\Output\Visitor
      */
     private $outputVisitor;
 
     /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
+     * @var \EzSystems\EzPlatformRestCommon\RequestParser
      */
     private $requestParser;
 
     /**
      * @param \eZ\Publish\Core\REST\Client\UserService $userService
      * @param \eZ\Publish\Core\REST\Client\HttpClient $client
-     * @param \eZ\Publish\Core\REST\Common\Input\Dispatcher $inputDispatcher
-     * @param \eZ\Publish\Core\REST\Common\Output\Visitor $outputVisitor
-     * @param \eZ\Publish\Core\REST\Common\RequestParser $requestParser
+     * @param \EzSystems\EzPlatformRestCommon\Input\Dispatcher $inputDispatcher
+     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $outputVisitor
+     * @param \EzSystems\EzPlatformRestCommon\RequestParser $requestParser
      */
     public function __construct(UserService $userService, HttpClient $client, Dispatcher $inputDispatcher, Visitor $outputVisitor, RequestParser $requestParser)
     {
