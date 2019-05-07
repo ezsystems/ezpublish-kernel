@@ -145,7 +145,7 @@ class ViewManagerTest extends TestCase
             ->method('render')
             ->with(
                 $templateIdentifier,
-                $params + array('content' => $content, 'viewbaseLayout' => $this->viewBaseLayout))
+                $params + array('content' => $content, 'view_base_layout' => $this->viewBaseLayout))
             ->will($this->returnValue($expectedTemplateResult));
 
         self::assertSame($expectedTemplateResult, $this->viewManager->renderContent($content, 'customViewType', $params));
@@ -174,7 +174,7 @@ class ViewManagerTest extends TestCase
             );
 
         // Configuring template engine behaviour
-        $params += array('content' => $content, 'viewbaseLayout' => $this->viewBaseLayout);
+        $params += array('content' => $content, 'view_base_layout' => $this->viewBaseLayout);
         $expectedTemplateResult = array_keys($params);
         $this->templateEngineMock
             ->expects($this->never())
@@ -230,7 +230,7 @@ class ViewManagerTest extends TestCase
         $this->templateEngineMock
             ->expects($this->once())
             ->method('render')
-            ->with($templateIdentifier, $params + array('location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout))
+            ->with($templateIdentifier, $params + array('location' => $location, 'content' => $content, 'view_base_layout' => $this->viewBaseLayout))
             ->will($this->returnValue($expectedTemplateResult));
 
         self::assertSame($expectedTemplateResult, $this->viewManager->renderLocation($location, 'customViewType', $params));
@@ -280,7 +280,7 @@ class ViewManagerTest extends TestCase
             ->method('render')
             ->with(
                 $templateIdentifier,
-                $params + ['location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout])
+                $params + ['location' => $location, 'content' => $content, 'view_base_layout' => $this->viewBaseLayout])
             ->will($this->returnValue($expectedTemplateResult));
 
         self::assertSame($expectedTemplateResult, $this->viewManager->renderLocation($location, 'customViewType', $params));
@@ -326,7 +326,7 @@ class ViewManagerTest extends TestCase
             );
 
         // Configuring template engine behaviour
-        $params += array('location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout);
+        $params += array('location' => $location, 'content' => $content, 'view_base_layout' => $this->viewBaseLayout);
         $this->templateEngineMock
             ->expects($this->never())
             ->method('render');

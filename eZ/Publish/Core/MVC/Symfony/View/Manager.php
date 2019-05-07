@@ -257,7 +257,7 @@ class Manager implements ViewManagerInterface
      */
     public function renderContentView(View $view, array $defaultParams = array())
     {
-        $defaultParams['viewbaseLayout'] = $this->viewBaseLayout;
+        $defaultParams['view_base_layout'] = $this->viewBaseLayout;
         $view->addParameters($defaultParams);
         $this->eventDispatcher->dispatch(
             MVCEvents::PRE_CONTENT_VIEW,
