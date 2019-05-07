@@ -9,7 +9,6 @@
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 use eZ\Publish\Core\REST\Client\Values\ViewInput;
-use EzSystems\BehatBundle\Helper\ValueObject as ValueObjectHelper;
 use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\Core\REST\Server\Values\SessionInput;
 use eZ\Publish\Core\REST\Common\Message;
@@ -109,7 +108,7 @@ trait EzRest
         // normally fields are defined in lower camelCase
         $field = lcfirst($field);
 
-        ValueObjectHelper::setProperty($this->getRequestObject(), $field, $value);
+        $this->getRequestObject()->$field = $value;
     }
 
     /**

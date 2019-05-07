@@ -4,6 +4,7 @@ rest:
             paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
             contexts:
                 - eZ\Bundle\EzPublishRestBundle\Features\Context\RestContext:
+                    userFacade: '@ezbehatbundle.api.facade.userfacade'
                     driver: BuzzDriver
                     type: json
                 - eZ\Bundle\EzPublishRestBundle\Features\Context\UserContentContext:
@@ -14,6 +15,7 @@ rest:
             paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
             contexts:
                 - eZ\Bundle\EzPublishRestBundle\Features\Context\RestContext:
+                    userFacade: '@ezbehatbundle.api.facade.userfacade'
                     driver: BuzzDriver
                     type: xml
                 - eZ\Bundle\EzPublishRestBundle\Features\Context\UserContentContext:
@@ -25,6 +27,7 @@ rest:
             paths: [ vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Features ]
             contexts:
                 - eZ\Bundle\EzPublishRestBundle\Features\Context\RestContext:
+                    userFacade: '@ezbehatbundle.api.facade.userfacade'
                     driver: GuzzleDriver
                     type: json
                 - eZ\Bundle\EzPublishRestBundle\Features\Context\UserContentContext:

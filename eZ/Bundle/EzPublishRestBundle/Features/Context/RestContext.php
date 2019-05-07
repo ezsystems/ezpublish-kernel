@@ -9,12 +9,12 @@
 namespace eZ\Bundle\EzPublishRestBundle\Features\Context;
 
 use Behat\Mink\Mink;
-use Behat\MinkExtension\Context\MinkAwareContext;
+use Behat\MinkExtension\Context\RawMinkContext;
+use Behat\Symfony2Extension\Context\KernelDictionary;
+use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\Core\REST\Client\Values\ErrorMessage;
-use EzSystems\BehatBundle\Context\Api\Context;
-use EzSystems\BehatBundle\Helper\Gherkin as GherkinHelper;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use Behat\Gherkin\Node\TableNode;
+use EzSystems\Behat\API\Facade\UserFacade;
 use PHPUnit\Framework\Assert as Assertion;
 use Exception;
 
@@ -24,7 +24,7 @@ use Exception;
  *   Settings and client initializations is done here
  *   Also it contains all REST generic actions.
  */
-class RestContext extends Context implements MinkAwareContext
+class RestContext extends RawMinkContext
 {
     use SubContext\EzRest;
     use SubContext\Authentication;
@@ -32,6 +32,7 @@ class RestContext extends Context implements MinkAwareContext
     use SubContext\Exception;
     use SubContext\Views;
     use SubContext\User;
+    use KernelDictionary;
 
     const AUTHTYPE_BASICHTTP = 'http_basic';
     const AUTHTYPE_SESSION = 'session';
@@ -70,6 +71,16 @@ class RestContext extends Context implements MinkAwareContext
     private $minkParameters;
 
     /**
+     * @var \EzSystems\Behat\API\Facade\UserFacade
+     */
+    private $userFacade;
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
+
+    /**
      * Initialize class.
      *
      * @param string $url    Base URL for REST calls
@@ -77,10 +88,12 @@ class RestContext extends Context implements MinkAwareContext
      * @param string $json
      */
     public function __construct(
+        UserFacade $userFacade,
         $driver = self::DEFAULT_DRIVER,
         $type = self::DEFAULT_BODY_TYPE,
         $authType = self::DEFAULT_AUTH_TYPE
     ) {
+        $this->userFacade = $userFacade;
         $this->driver = $driver;
         $this->restBodyType = $type;
         $this->authType = $authType;
@@ -158,9 +171,7 @@ class RestContext extends Context implements MinkAwareContext
     public function createRequest($type, $resource)
     {
         $this->restDriver->setMethod($type);
-        $this->restDriver->setResource(
-            $this->changeMappedValuesOnUrl($resource)
-        );
+        $this->restDriver->setResource($resource);
         $this->responseObject = null;
     }
 
@@ -179,18 +190,6 @@ class RestContext extends Context implements MinkAwareContext
     public function setHeader($header, $value)
     {
         $this->restDriver->setHeader($header, $value);
-    }
-
-    /**
-     * @When I set headers:
-     */
-    public function setHeaders(TableNode $table)
-    {
-        $headers = GherkinHelper::convertTableToArrayOfData($table);
-
-        foreach ($headers as $header => $value) {
-            $this->iAddHeaderWithValue($header, $value);
-        }
     }
 
     /**
@@ -328,5 +327,14 @@ EOF;
             . "\nActual: "
             . print_r($this->restDriver->getBody(), true)
         );
+    }
+
+    private function getRepository()
+    {
+        if ($this->repository === null) {
+            $this->repository = $this->getContainer()->get('ezpublish.api.repository');
+        }
+
+        return $this->repository;
     }
 }
