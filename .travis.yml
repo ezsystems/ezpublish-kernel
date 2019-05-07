@@ -50,8 +50,6 @@ matrix:
 # 7.2
     - php: 7.2
       env: TEST_CONFIG="phpunit.xml"
-    - php: 7.2
-      env: ELASTICSEARCH_VERSION="1.4.2" TEST_CONFIG="phpunit-integration-legacy-elasticsearch.xml"
 # 7.3
     # Temp: Need to use --ignore-platform-reqs due to: https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3697
     - php: 7.3
@@ -87,8 +85,7 @@ before_install:
 
 install:
   -  if [ "$TEST_CONFIG" != "" ] ; then travis_retry composer install --no-progress --no-interaction --prefer-dist $COMPOSER_FLAGS; fi
-  # Setup Solr / Elastic search if asked for
-  - if [ "$TEST_CONFIG" = "phpunit-integration-legacy-elasticsearch.xml" ] ; then ./bin/.travis/init_elasticsearch.sh ; fi
+  # Setup Solr search if asked for
   - if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh; fi
 
 # execute phpunit or behat as the script command
