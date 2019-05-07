@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
+use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -6226,153 +6227,110 @@ XML
     }
 
     /**
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToHide
-     *
-     * @dataProvider provideLocationsToHideAndReveal
-     */
-    public function testHideContent(array $locationsToHide)
-    {
-        $repository = $this->getRepository();
-
-        $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
-        $contentService = $repository->getContentService();
-        $locationService = $repository->getLocationService();
-
-        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
-        $contentCreate->setField('name', 'Folder to hide');
-
-        $content = $contentService->createContent(
-            $contentCreate,
-            $locationsToHide
-        );
-
-        $publishedContent = $contentService->publishVersion($content->versionInfo);
-        $locations = $locationService->loadLocations($publishedContent->contentInfo);
-
-        // Sanity check
-        $this->assertCount(3, $locations);
-        $this->assertEquals(
-            [
-                false,
-                false,
-                false,
-            ],
-            array_column($locations, 'hidden')
-        );
-
-        /* BEGIN: Use Case */
-        $contentService->hideContent($publishedContent->contentInfo);
-        /* END: Use Case */
-
-        $hiddenLocations = $locationService->loadLocations($publishedContent->contentInfo);
-        $this->assertEquals(
-            [
-                true,
-                true,
-                true,
-            ],
-            array_column($hiddenLocations, 'hidden')
-        );
-    }
-
-    /**
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct[] $locationsToReveal
-     *
-     * @dataProvider provideLocationsToHideAndReveal
+     * @covers \eZ\Publish\API\Repository\ContentService::hideContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function testRevealContent(array $locationsToReveal)
+    public function testHideContent(): void
     {
         $repository = $this->getRepository();
-
         $contentTypeService = $repository->getContentTypeService();
-
-        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
-
         $contentService = $repository->getContentService();
         $locationService = $repository->getLocationService();
+
+        $locationCreateStructs = array_map(
+            function (Location $parentLocation) use ($locationService) {
+                return $locationService->newLocationCreateStruct($parentLocation->id);
+            },
+            $this->createParentLocationsForHideReveal($locationService, 2)
+        );
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
 
         $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
         $contentCreate->setField('name', 'Folder to hide');
 
-        $locationsToReveal[0]->hidden = true;
-
         $content = $contentService->createContent(
             $contentCreate,
-            $locationsToReveal
+            $locationCreateStructs
         );
 
         $publishedContent = $contentService->publishVersion($content->versionInfo);
         $locations = $locationService->loadLocations($publishedContent->contentInfo);
-        // sort the Locations putting hidden one on top, as the order in which they're returned is not deterministic
-        usort(
-            $locations,
-            function (Location $location) {
-                return $location->hidden ? -1 : 1;
-            }
-        );
 
         // Sanity check
         $this->assertCount(3, $locations);
-        $this->assertEquals(
-            [
-                true,
-                false,
-                false,
-            ],
-            array_column($locations, 'hidden')
-        );
+        $this->assertCount(0, $this->filterHiddenLocations($locations));
 
         /* BEGIN: Use Case */
         $contentService->hideContent($publishedContent->contentInfo);
+        /* END: Use Case */
 
-        $this->assertEquals(
-            [
-                true,
-                true,
-                true,
-            ],
-            array_column($locationService->loadLocations($publishedContent->contentInfo), 'hidden')
+        $locations = $locationService->loadLocations($publishedContent->contentInfo);
+        $this->assertCount(3, $locations);
+        $this->assertCount(3, $this->filterHiddenLocations($locations));
+    }
+
+    /**
+     * @covers \eZ\Publish\API\Repository\ContentService::revealContent
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testRevealContent()
+    {
+        $repository = $this->getRepository();
+        $contentTypeService = $repository->getContentTypeService();
+        $contentService = $repository->getContentService();
+        $locationService = $repository->getLocationService();
+
+        $locationCreateStructs = array_map(
+            function (Location $parentLocation) use ($locationService) {
+                return $locationService->newLocationCreateStruct($parentLocation->id);
+            },
+            $this->createParentLocationsForHideReveal($locationService, 2)
+        );
+
+        $contentType = $contentTypeService->loadContentTypeByIdentifier('folder');
+
+        $contentCreate = $contentService->newContentCreateStruct($contentType, 'eng-US');
+        $contentCreate->setField('name', 'Folder to hide');
+
+        $locationCreateStructs[0]->hidden = true;
+
+        $content = $contentService->createContent(
+            $contentCreate,
+            $locationCreateStructs
+        );
+
+        $publishedContent = $contentService->publishVersion($content->versionInfo);
+        $locations = $locationService->loadLocations($publishedContent->contentInfo);
+
+        // Sanity check
+        $hiddenLocations = $this->filterHiddenLocations($locations);
+        $this->assertCount(3, $locations);
+        $this->assertCount(1, $hiddenLocations);
+
+        // BEGIN: Use Case
+        $contentService->hideContent($publishedContent->contentInfo);
+        $this->assertCount(
+            3,
+            $this->filterHiddenLocations(
+                $locationService->loadLocations($publishedContent->contentInfo)
+            )
         );
 
         $contentService->revealContent($publishedContent->contentInfo);
-        /* END: Use Case */
+        // END: Use Case
 
-        $this->assertEquals(
-            [
-                true,
-                false,
-                false,
-            ],
-            array_column($locationService->loadLocations($publishedContent->contentInfo), 'hidden')
-        );
-    }
-
-    public function provideLocationsToHideAndReveal()
-    {
-        $locationService = $this->getRepository()->getLocationService();
-
-        return [
-            [
-                [
-                    $mainLocationCreateStruct = $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 2)
-                    ),
-                    $otherCreateStruct = $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 5)
-                    ),
-                    $thirdCreateStruct = $locationService->newLocationCreateStruct(
-                        $this->generateId('location', 43)
-                    ),
-                ],
-            ],
-        ];
+        $locations = $locationService->loadLocations($publishedContent->contentInfo);
+        $hiddenLocationsAfterReveal = $this->filterHiddenLocations($locations);
+        $this->assertCount(3, $locations);
+        $this->assertCount(1, $hiddenLocationsAfterReveal);
+        $this->assertEquals($hiddenLocations, $hiddenLocationsAfterReveal);
     }
 
     /**
@@ -6651,6 +6609,48 @@ XML
                 'eng-GB' => 'Folder GB',
             ],
             $dePublished->fields['name']
+        );
+    }
+
+    /**
+     * Create structure of parent folders with Locations to be used for Content hide/reveal tests.
+     *
+     * @param \eZ\Publish\API\Repository\LocationService $locationService
+     * @param int $parentLocationId
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Location[] A list of Locations aimed to be parents
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\ForbiddenException
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    private function createParentLocationsForHideReveal(LocationService $locationService, int $parentLocationId): array
+    {
+        $parentFoldersLocationsIds = [
+            $this->createFolder(['eng-US' => 'P1'], $parentLocationId)->contentInfo->mainLocationId,
+            $this->createFolder(['eng-US' => 'P2'], $parentLocationId)->contentInfo->mainLocationId,
+            $this->createFolder(['eng-US' => 'P3'], $parentLocationId)->contentInfo->mainLocationId,
+        ];
+
+        return array_values($locationService->loadLocationList($parentFoldersLocationsIds));
+    }
+
+    /**
+     * Filter Locations list by hidden only.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Location[] $locations
+     *
+     * @return array
+     */
+    private function filterHiddenLocations(array $locations): array
+    {
+        return array_values(
+            array_filter(
+                $locations,
+                function (Location $location) {
+                    return $location->hidden;
+                }
+            )
         );
     }
 }
