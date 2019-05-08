@@ -61,7 +61,7 @@ return eZ\Publish\API\Repository\Values\Content\Search\SearchResult::__set_state
        'index' => null,
        'highlight' => null,
     )),
-    // In ElasticSearch/Slor id is identifier (like API), hence "4" is after "14"
+    // In Slor id is identifier (like API), hence "4" is after "14"
     5 =>
     eZ\Publish\API\Repository\Values\Content\Search\SearchHit::__set_state(array(
        'valueObject' =>

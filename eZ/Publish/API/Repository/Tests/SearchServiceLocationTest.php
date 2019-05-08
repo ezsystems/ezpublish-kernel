@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
@@ -29,16 +28,6 @@ class SearchServiceLocationTest extends BaseTest
     const QUERY_CLASS = LocationQuery::class;
 
     use Common\FacetedSearchProvider;
-
-    protected function setUp()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestSkipped('Field Location search is not yet implemented Elasticsearch search engine');
-        }
-
-        parent::setUp();
-    }
 
     /**
      * Test for the findLocation() method.

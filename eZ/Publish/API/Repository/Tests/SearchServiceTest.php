@@ -8,7 +8,6 @@
  */
 namespace eZ\Publish\API\Repository\Tests;
 
-use eZ\Publish\API\Repository\Tests\SetupFactory\LegacyElasticsearch;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
@@ -1680,14 +1679,6 @@ class SearchServiceTest extends BaseTest
         return $content;
     }
 
-    protected function checkPrioritizedLanguagesSupport()
-    {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestIncomplete('Prioritized languages are not supported with Elasticsearch engine');
-        }
-    }
-
     public function providerForTestMultilingualFieldSort()
     {
         return array(
@@ -2059,7 +2050,6 @@ class SearchServiceTest extends BaseTest
         $expected,
         $contentSearch = true
     ) {
-        $this->checkPrioritizedLanguagesSupport();
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -2348,7 +2338,6 @@ class SearchServiceTest extends BaseTest
         $expected,
         $contentSearch = true
     ) {
-        $this->checkPrioritizedLanguagesSupport();
         $contentType = $this->createTestContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -3217,11 +3206,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testMapLocationDistanceWithCustomField()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestIncomplete("TODO: Some issues with 'copy_to' and 'geo_point'");
-        }
-
         $contentType = $this->createTestPlaceContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -3305,11 +3289,6 @@ class SearchServiceTest extends BaseTest
      */
     public function testMapLocationDistanceWithCustomFieldSort()
     {
-        $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestIncomplete("TODO: Some issues with 'copy_to' and 'geo_point'");
-        }
-
         $contentType = $this->createTestPlaceContentType();
 
         // Create a draft to account for behaviour with ContentType in different states
@@ -3723,7 +3702,7 @@ class SearchServiceTest extends BaseTest
 
         // Do not limit for LSE, as it does not not require reindexing.
         // See explanation below.
-        if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
+        if ($setupFactory instanceof LegacySolrSetupFactory) {
             $criteria[] = new Criterion\ContentTypeIdentifier('folder');
         }
 
@@ -3743,7 +3722,7 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
+        if ($setupFactory instanceof LegacySolrSetupFactory) {
             $result = $searchService->findContent($query);
 
             // Administrator User is owned by itself, when additional Locations are added
@@ -3812,7 +3791,7 @@ class SearchServiceTest extends BaseTest
 
         // Do not limit for LSE, as it does not not require reindexing.
         // See explanation below.
-        if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
+        if ($setupFactory instanceof LegacySolrSetupFactory) {
             $criteria[] = new Criterion\ContentTypeIdentifier('folder');
         }
 
@@ -3832,7 +3811,7 @@ class SearchServiceTest extends BaseTest
             )
         );
 
-        if ($setupFactory instanceof LegacySolrSetupFactory || $setupFactory instanceof LegacyElasticsearch) {
+        if ($setupFactory instanceof LegacySolrSetupFactory) {
             $result = $searchService->findLocations($query);
 
             // Administrator User is owned by itself, when additional Locations are added
@@ -3937,10 +3916,7 @@ class SearchServiceTest extends BaseTest
      */
     public function testLanguageAnalysisSeparateContent()
     {
-        $setupFactory = $this->getSetupFactory();
-        if (!$setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestSkipped('Language analysis is implemented only for Elasticsearch storage');
-        }
+        $this->markTestSkipped('Language analysis is currently not supported');
 
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -4004,10 +3980,7 @@ class SearchServiceTest extends BaseTest
      */
     public function testLanguageAnalysisSameContent()
     {
-        $setupFactory = $this->getSetupFactory();
-        if (!$setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestSkipped('Language analysis is implemented only for Elasticsearch storage');
-        }
+        $this->markTestSkipped('Language analysis is currently not supported');
 
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -4057,10 +4030,7 @@ class SearchServiceTest extends BaseTest
      */
     public function testLanguageAnalysisSameContentNotFound()
     {
-        $setupFactory = $this->getSetupFactory();
-        if (!$setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestSkipped('Language analysis is implemented only for Elasticsearch storage');
-        }
+        $this->markTestSkipped('Language analysis is currently not supported');
 
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
@@ -4263,12 +4233,6 @@ class SearchServiceTest extends BaseTest
     public function testFulltextLocationSearchComplex(array $data)
     {
         $setupFactory = $this->getSetupFactory();
-        if ($setupFactory instanceof LegacyElasticsearch) {
-            $this->markTestIncomplete(
-                'Fulltext criterion is not supported with Location search in Elasticsearch engine'
-            );
-        }
-
         if ($setupFactory instanceof LegacySolrSetupFactory && getenv('SOLR_VERSION') === '4.10.4') {
             $this->markTestSkipped('Skipping location search score test on Solr 4.10, you need Solr 6 for this!');
         }
@@ -4329,16 +4293,6 @@ class SearchServiceTest extends BaseTest
 
         try {
             if ($query instanceof LocationQuery) {
-                $setupFactory = $this->getSetupFactory();
-                if ($setupFactory instanceof LegacySolrSetupFactory) {
-                    // @todo When we want to test score again by default we will need fixtures for Solr
-                }
-
-                if ($setupFactory instanceof LegacyElasticsearch) {
-                    $position = strrpos($fixture, '/');
-                    $fixture = substr_replace($fixture, '/Location', $position, 0);
-                }
-
                 $result = $searchService->findLocations($query);
             } elseif ($query instanceof Query) {
                 if ($info) {

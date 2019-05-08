@@ -13,7 +13,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
 
 /**
  * Media field type is not searchable in Legacy search engine, but will
- * be searchable with Solr and Elasticsearch search engines.
+ * be searchable with Solr search engine.
  *
  * This is implementation simply extends the original implementation in order to
  * define the field type as searchable, so that it can be tested.

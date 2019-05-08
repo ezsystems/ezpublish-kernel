@@ -378,7 +378,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                     'connection' => 'default',
                 ),
                 'search' => array(
-                    'engine' => 'elasticsearch',
+                    'engine' => 'legacy',
                     'connection' => 'blabla',
                 ),
                 'fields_groups' => array(
@@ -677,7 +677,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
                 'engine' => 'legacy',
                 'connection' => 'default',
                 'search' => array(
-                    'engine' => 'elasticsearch',
+                    'engine' => 'legacy',
                     'connection' => 'blabla',
                 ),
             ),
@@ -693,7 +693,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $expectedRepositories = array(
             'main' => array(
                 'search' => array(
-                    'engine' => 'elasticsearch',
+                    'engine' => 'legacy',
                     'connection' => 'blabla',
                     'config' => array(),
                 ),
