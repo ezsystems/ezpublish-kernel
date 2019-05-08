@@ -16,10 +16,12 @@ use OutOfBoundsException;
  */
 class FieldRegistry
 {
+    private const INDEXABLE_FIELD_TYPE_TAG = 'ezpublish.fieldType.indexable';
+
     /**
      * @var \eZ\Publish\SPI\FieldType\Indexable[]
      */
-    protected $types;
+    protected $types = [];
 
     /**
      * @param \eZ\Publish\SPI\FieldType\Indexable[] $types
@@ -39,7 +41,14 @@ class FieldRegistry
     public function getType(string $name): Indexable
     {
         if (!isset($this->types[$name])) {
-            throw new OutOfBoundsException('Field type "' . $name . '" is not indexable. Please provide \eZ\Publish\SPI\FieldType\Indexable implementation and register it with "ezpublish.fieldType.indexable" tag.');
+            throw new OutOfBoundsException(
+                sprintf(
+                    'Field type "%s" is not indexable. Please provide %s implementation and register it with "%s" tag.',
+                    $name,
+                    Indexable::class,
+                    self::INDEXABLE_FIELD_TYPE_TAG
+                )
+            );
         }
 
         return $this->types[$name];
