@@ -96,11 +96,6 @@
         <target>Layout</target>
         <note>key: ezpage.name</note>
       </trans-unit>
-      <trans-unit id="3accdb01fd6ce79f38be1b4622659b61be77b608" resname="ezprice.name">
-        <source>Price</source>
-        <target>Price</target>
-        <note>key: ezprice.name</note>
-      </trans-unit>
       <trans-unit id="213da4efa5baa8b47c34dc4b645df7115d07d66e" resname="ezrichtext.name">
         <source>Rich text</source>
         <target>Rich text</target>

@@ -102,7 +102,7 @@ class AbstractTestCase extends LanguageAwareTestCase
                     'ezdatetime' => new Converter\DateAndTimeConverter(),
                     'ezinteger' => new Converter\IntegerConverter(),
                     'ezstring' => new Converter\TextLineConverter(),
-                    'ezprice' => new Converter\IntegerConverter(),
+                    'ezfloat' => new Converter\FloatConverter(),
                     'ezurl' => new Converter\UrlConverter(),
                     'ezrichtext' => new Converter\RichTextConverter(),
                     'ezboolean' => new Converter\CheckboxConverter(),

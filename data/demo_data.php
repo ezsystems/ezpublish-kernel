@@ -2863,7 +2863,7 @@ return array(
       'data_text3' => '',
       'data_text4' => '',
       'data_text5' => '',
-      'data_type_string' => 'ezprice',
+      'data_type_string' => 'ezfloat',
       'id' => '216',
       'identifier' => 'price',
       'is_information_collector' => '0',
