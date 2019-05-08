@@ -9,5 +9,5 @@ Changes affecting version compatibility with former or future versions.
 
   The support for this search engine will be provided once again as a separate bundle.
   
-* The following field type are not supported any more and have been removed:
+* The following Field Types are not supported any more and have been removed:
     * ezprice 
