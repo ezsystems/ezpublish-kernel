@@ -10,8 +10,8 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\Repository\ContentService;
 use eZ\Publish\Core\Repository\UserService;
-use eZ\Publish\Core\REST\Client\ContentTypeService;
-use eZ\Publish\Core\REST\Client\FieldTypeService;
+use eZ\Publish\API\Repository\ContentTypeService;
+use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;

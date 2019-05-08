@@ -10,8 +10,8 @@ namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
 use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\Repository\UserService;
-use eZ\Publish\Core\REST\Client\ContentService;
-use eZ\Publish\Core\REST\Client\FieldTypeService;
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\Core\REST\Server\Input\Parser\UserGroupCreate;
 use eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
