@@ -28,7 +28,7 @@ env:
     # In order to specify extra flags like ignoring platform reqs, using only stable packages and so on-
     - COMPOSER_FLAGS=""
     # By default test with Symfony 2.8, some test are done against 3.4 for forward compat testing.
-    - SYMFONY_VERSION="~2.8.46"
+    - SYMFONY_VERSION="~2.8.51"
 
 matrix:
   fast_finish: true
@@ -69,8 +69,8 @@ branches:
 
 # setup requirements for running unit/integration/behat tests
 before_install:
-  # Disable memory_limit for composer in PHP 5.6
-  - echo "memory_limit=-1" >> ~/.phpenv/versions/5.6/etc/conf.d/travis.ini
+  # Disable memory_limit for Composer
+  - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Install igbinary & lzf PHP extensions if necessary
   - if [ "$REDIS_ENABLE_IGBINARY" = true ] ; then pecl install igbinary ; fi
   - if [ "$REDIS_ENABLE_LZF" = true ] ; then printf "no\n" | pecl install lzf ; fi
