@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\FieldType\Date;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\SPI\FieldType\Nameable;
-use eZ\Publish\SPI\FieldType\Value;
+use eZ\Publish\SPI\FieldType\Value as SPIValue;
 
 class NameableField implements Nameable
 {
@@ -21,8 +21,12 @@ class NameableField implements Nameable
      *
      * @return string
      */
-    public function getFieldName(Value $value, FieldDefinition $fieldDefinition, $languageCode)
+    public function getFieldName(SPIValue $value, FieldDefinition $fieldDefinition, $languageCode)
     {
+        if ($value === null || $value == new Value()) {
+            return '';
+        }
+
         return $value->date->format('l d F Y');
     }
 }

@@ -265,6 +265,11 @@ services:
         tags:
             - { name: ezpublish.fieldType.nameable, alias: ezuser }
 
+    ezpublish.fieldType.ezinisetting.nameable_field:
+        class: eZ\Publish\Core\FieldType\Null\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezinisetting }
+
     # Symfony 3.4+ service definitions:
     eZ\Publish\Core\FieldType\ImageAsset\NameableField:
         arguments:

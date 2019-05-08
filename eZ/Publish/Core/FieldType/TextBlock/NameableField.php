@@ -23,6 +23,6 @@ class NameableField implements Nameable
      */
     public function getFieldName(Value $value, FieldDefinition $fieldDefinition, $languageCode)
     {
-        return (string)$value->value;
+        return (string)$value->text;
     }
 }

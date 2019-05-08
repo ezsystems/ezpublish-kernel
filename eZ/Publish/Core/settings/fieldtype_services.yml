@@ -81,6 +81,123 @@ services:
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezselection}
 
+    ezpublish.fieldType.ezstring.nameable_field:
+        class: eZ\Publish\Core\FieldType\TextLine\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezstring }
+
+    ezpublish.fieldType.ezauthor.nameable_field:
+        class: eZ\Publish\Core\FieldType\Author\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezauthor }
+
+    ezpublish.fieldType.ezbinaryfile.nameable_field:
+        class: eZ\Publish\Core\FieldType\BinaryBase\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezbinaryfile }
+
+    ezpublish.fieldType.ezboolean.nameable_field:
+        class: eZ\Publish\Core\FieldType\Checkbox\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezboolean }
+
+    ezpublish.fieldType.ezcountry.nameable_field:
+        class: eZ\Publish\Core\FieldType\Country\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezcountry }
+
+    ezpublish.fieldType.ezdatetime.nameable_field:
+        class: eZ\Publish\Core\FieldType\DateAndTime\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezdatetime }
+
+    ezpublish.fieldType.ezinteger.nameable_field:
+        class: eZ\Publish\Core\FieldType\Integer\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezinteger }
+
+    ezpublish.fieldType.ezgmaplocation.nameable_field:
+        class: eZ\Publish\Core\FieldType\MapLocation\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezgmaplocation }
+
+    ezpublish.fieldType.ezurl.nameable_field:
+        class: eZ\Publish\Core\FieldType\Url\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezurl }
+
+    ezpublish.fieldType.ezuser.nameable_field:
+        class: eZ\Publish\Core\FieldType\User\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezuser }
+
+    ezpublish.fieldType.ezemail.nameable_field:
+        class: eZ\Publish\Core\FieldType\EmailAddress\NameableField
+        arguments:
+            - '@ezpublish.api.storage_engine.transformation_processor'
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezemail }
+
+    ezpublish.fieldType.ezfloat.nameable_field:
+        class: eZ\Publish\Core\FieldType\Float\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezfloat }
+
+    ezpublish.fieldType.ezimage.nameable_field:
+        class: eZ\Publish\Core\FieldType\Image\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezimage }
+
+    ezpublish.fieldType.ezkeyword.nameable_field:
+        class: eZ\Publish\Core\FieldType\Keyword\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezkeyword }
+
+    ezpublish.fieldType.ezmedia.nameable_field:
+        class: eZ\Publish\Core\FieldType\BinaryBase\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezmedia }
+
+    ezpublish.fieldType.ezrichtext.nameable_field:
+        class: eZ\Publish\Core\FieldType\RichText\NameableField
+        tags:
+            - {name: ezpublish.fieldType.nameable, alias: ezrichtext}
+
+    ezpublish.fieldType.eztext.nameable_field:
+        class: eZ\Publish\Core\FieldType\TextBlock\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: eztext }
+
+    ezpublish.fieldType.ezdate.nameable_field:
+        class: eZ\Publish\Core\FieldType\Date\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezdate }
+
+    ezpublish.fieldType.ezisbn.nameable_field:
+        class: eZ\Publish\Core\FieldType\ISBN\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezisbn }
+
+    ezpublish.fieldType.ezpage.nameable_field:
+        class: eZ\Publish\Core\FieldType\Page\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezpage }
+
+    ezpublish.fieldType.eztime.nameable_field:
+        class: eZ\Publish\Core\FieldType\Time\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: eztime }
+
+    ezpublish.fieldType.eznull.nameable_field:
+        class: eZ\Publish\Core\FieldType\Null\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: eznull }
+
+    ezpublish.fieldType.ezinisetting.nameable_field:
+        class: eZ\Publish\Core\FieldType\Null\NameableField
+        tags:
+            - { name: ezpublish.fieldType.nameable, alias: ezinisetting }
+
     # Symfony 3.4+ service definitions:
     eZ\Publish\Core\FieldType\ImageAsset\NameableField:
         public: false
