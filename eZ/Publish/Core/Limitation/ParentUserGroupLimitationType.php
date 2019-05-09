@@ -138,10 +138,6 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
 
         $hasMandatoryTarget = false;
         foreach ($targets as $target) {
-            if ($target instanceof Target\Version) {
-                continue;
-            }
-
             if ($target instanceof LocationCreateStruct) {
                 $hasMandatoryTarget = true;
                 $target = $locationHandler->load($target->parentLocationId);

@@ -55,7 +55,7 @@ final class VersionBuilder
     /**
      * Set intent to create Content from unspecified (yet) content type, any from the given list.
      *
-     * @param array $contentTypeIds
+     * @param int[] $contentTypeIds
      *
      * @return self
      *
@@ -64,8 +64,8 @@ final class VersionBuilder
     public function createFromAnyContentTypeOf(array $contentTypeIds): self
     {
         foreach ($contentTypeIds as $contentTypeId) {
-            if (!\is_string($contentTypeId)) {
-                throw new InvalidArgumentException('$contentTypeIds', 'All contentType ids should be strings');
+            if (!\is_int($contentTypeId)) {
+                throw new InvalidArgumentException('$contentTypeIds', 'All contentType ids should be integers');
             }
         }
 

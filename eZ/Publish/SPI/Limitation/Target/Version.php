@@ -32,7 +32,7 @@ final class Version extends ValueObject implements Target
     /**
      * List of content types. At least one must match Limitation values.
      *
-     * @var string[]
+     * @var int[]
      */
     protected $allContentTypeIdsList = [];
 

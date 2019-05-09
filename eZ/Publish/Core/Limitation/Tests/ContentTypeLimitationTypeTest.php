@@ -235,10 +235,6 @@ class ContentTypeLimitationTypeTest extends Base
             ->method('getContentInfo')
             ->will($this->returnValue(new ContentInfo(array('contentTypeId' => 66))));
 
-        $versionBuilder = new VersionBuilder();
-        $versionBuilder->createFromAnyContentTypeOf(['43']);
-        $target = $versionBuilder->build();
-
         return array(
             // ContentInfo, no access
             array(
@@ -293,14 +289,14 @@ class ContentTypeLimitationTypeTest extends Base
             array(
                 'limitation' => new ContentTypeLimitation(array('limitationValues' => array(2, 43))),
                 'object' => new ContentCreateStruct(array('contentType' => (object)array('id' => 22))),
-                'targets' => [(new VersionBuilder())->createFromAnyContentTypeOf(['43'])->build()],
+                'targets' => [(new VersionBuilder())->createFromAnyContentTypeOf([43])->build()],
                 'expected' => true,
             ),
             // ContentType intention test, no access
             array(
                 'limitation' => new ContentTypeLimitation(array('limitationValues' => array(2, 43))),
                 'object' => new ContentCreateStruct(array('contentType' => (object)array('id' => 22))),
-                'targets' => [(new VersionBuilder())->createFromAnyContentTypeOf(['23'])->build()],
+                'targets' => [(new VersionBuilder())->createFromAnyContentTypeOf([23])->build()],
                 'expected' => false,
             ),
         );

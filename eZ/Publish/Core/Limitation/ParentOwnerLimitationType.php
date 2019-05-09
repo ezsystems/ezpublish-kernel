@@ -131,10 +131,6 @@ class ParentOwnerLimitationType extends AbstractPersistenceLimitationType implem
 
         $hasMandatoryTarget = false;
         foreach ($targets as $target) {
-            if ($target instanceof Target\Version) {
-                continue;
-            }
-
             if ($target instanceof LocationCreateStruct) {
                 $hasMandatoryTarget = true;
                 $target = $this->persistence->locationHandler()->load($target->parentLocationId);

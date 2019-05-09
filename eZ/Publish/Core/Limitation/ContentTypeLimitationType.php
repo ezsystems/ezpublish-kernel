@@ -220,7 +220,7 @@ class ContentTypeLimitationType extends AbstractPersistenceLimitationType implem
     /**
      * Allow access if any of the given ContentTypes matches any of the limitation values.
      *
-     * @param string[] $contentTypeIdsList
+     * @param int[] $contentTypeIdsList
      * @param string[] $limitationValues
      *
      * @return bool
@@ -229,7 +229,7 @@ class ContentTypeLimitationType extends AbstractPersistenceLimitationType implem
         array $contentTypeIdsList,
         array $limitationValues
     ): bool {
-        return empty(array_intersect($contentTypeIdsList, $limitationValues))
+        return empty(array_intersect(array_map('strval', $contentTypeIdsList), $limitationValues))
             ? self::ACCESS_DENIED
             : self::ACCESS_GRANTED;
     }

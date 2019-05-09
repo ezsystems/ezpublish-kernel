@@ -37,7 +37,7 @@ class VersionBuilderTest extends TestCase
         $data = [];
         foreach ($versionStatuses as $versionStatus) {
             $languagesList = ['ger-DE', 'eng-US', 'eng-GB'];
-            $contentTypeIdsList = ['1', '2'];
+            $contentTypeIdsList = [1, 2];
             $initialLanguageCode = 'eng-US';
             $fields = [
                 new Field(['languageCode' => 'ger-DE']),
@@ -95,7 +95,7 @@ class VersionBuilderTest extends TestCase
      * @param string $initialLanguageCode
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $newFields
      * @param string[] $languagesList
-     * @param string[] $contentTypeIdsList
+     * @param int[] $contentTypeIdsList
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
