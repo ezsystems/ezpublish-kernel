@@ -13,7 +13,6 @@ use eZ\Bundle\EzPublishCoreBundle\Routing\DefaultRouter;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
-use eZ\Publish\Core\MVC\Symfony\Security\HttpUtils;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,14 +41,17 @@ class SiteAccessListenerTest extends TestCase
      */
     private $listener;
 
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
+    private $defaultSiteaccess;
+
     protected function setUp()
     {
         parent::setUp();
+        $this->defaultSiteaccess = new SiteAccess('default');
         $this->container = $this->createMock(ContainerInterface::class);
         $this->router = $this->createMock(DefaultRouter::class);
         $this->generator = $this->createMock(UrlAliasGenerator::class);
-        $this->listener = new SiteAccessListener($this->router, $this->generator, new HttpUtils());
-        $this->listener->setContainer($this->container);
+        $this->listener = new SiteAccessListener($this->defaultSiteaccess);
     }
 
     public function testGetSubscribedEvents()
@@ -103,24 +105,17 @@ class SiteAccessListenerTest extends TestCase
             $matcher = $this->createMock(SiteAccess\Matcher::class);
         }
 
-        $defaultSiteAccess = new SiteAccess('default');
         $siteAccess = new SiteAccess('test', 'test', $matcher);
         $request = Request::create($uri);
         $event = new PostSiteAccessMatchEvent($siteAccess, $request, HttpKernelInterface::MASTER_REQUEST);
-
-        $this->container
-            ->expects($this->once())
-            ->method('get')
-            ->with('ezpublish.siteaccess')
-            ->willReturn($defaultSiteAccess);
 
         $this->listener->onSiteAccessMatch($event);
         $this->assertSame($expectedSemanticPathinfo, $request->attributes->get('semanticPathinfo'));
         $this->assertSame($expectedVPArray, $request->attributes->get('viewParameters'));
         $this->assertSame($expectedVPString, $request->attributes->get('viewParametersString'));
-        $this->assertSame($defaultSiteAccess->name, $siteAccess->name);
-        $this->assertSame($defaultSiteAccess->matchingType, $siteAccess->matchingType);
-        $this->assertSame($defaultSiteAccess->matcher, $siteAccess->matcher);
+        $this->assertSame($this->defaultSiteaccess->name, $siteAccess->name);
+        $this->assertSame($this->defaultSiteaccess->matchingType, $siteAccess->matchingType);
+        $this->assertSame($this->defaultSiteaccess->matcher, $siteAccess->matcher);
     }
 
     /**
@@ -128,7 +123,6 @@ class SiteAccessListenerTest extends TestCase
      */
     public function testOnSiteAccessMatchSubRequest($uri, $semanticPathinfo, $vpString, $expectedViewParameters)
     {
-        $defaultSiteAccess = new SiteAccess('default');
         $siteAccess = new SiteAccess('test', 'test', $this->createMock(SiteAccess\Matcher::class));
         $request = Request::create($uri);
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
@@ -137,18 +131,12 @@ class SiteAccessListenerTest extends TestCase
         }
         $event = new PostSiteAccessMatchEvent($siteAccess, $request, HttpKernelInterface::SUB_REQUEST);
 
-        $this->container
-            ->expects($this->once())
-            ->method('get')
-            ->with('ezpublish.siteaccess')
-            ->willReturn($defaultSiteAccess);
-
         $this->listener->onSiteAccessMatch($event);
         $this->assertSame($semanticPathinfo, $request->attributes->get('semanticPathinfo'));
         $this->assertSame($expectedViewParameters, $request->attributes->get('viewParameters'));
         $this->assertSame($vpString, $request->attributes->get('viewParametersString'));
-        $this->assertSame($defaultSiteAccess->name, $siteAccess->name);
-        $this->assertSame($defaultSiteAccess->matchingType, $siteAccess->matchingType);
-        $this->assertSame($defaultSiteAccess->matcher, $siteAccess->matcher);
+        $this->assertSame($this->defaultSiteaccess->name, $siteAccess->name);
+        $this->assertSame($this->defaultSiteaccess->matchingType, $siteAccess->matchingType);
+        $this->assertSame($this->defaultSiteaccess->matcher, $siteAccess->matcher);
     }
 }

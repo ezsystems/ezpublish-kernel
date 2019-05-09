@@ -10,56 +10,39 @@ namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\Event\PostSiteAccessMatchEvent;
-use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\URILexer;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * SiteAccess match listener.
  */
-class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInterface
+class SiteAccessListener implements EventSubscriberInterface
 {
-    use ContainerAwareTrait;
-
     /**
-     * @var \Symfony\Component\Routing\RouterInterface
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
      */
-    private $defaultRouter;
+    private $siteaccess;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
-     */
-    private $urlAliasGenerator;
-
-    /**
-     * @var \Symfony\Component\Security\Http\HttpUtils
-     */
-    private $httpUtils;
-
-    public function __construct(RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator, HttpUtils $httpUtils)
-    {
-        $this->defaultRouter = $defaultRouter;
-        $this->urlAliasGenerator = $urlAliasGenerator;
-        $this->httpUtils = $httpUtils;
+    public function __construct(
+        SiteAccess $siteaccess
+    ) {
+        $this->siteaccess = $siteaccess;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return array(
             MVCEvents::SITEACCESS => array('onSiteAccessMatch', 255),
         );
     }
 
-    public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)
+    public function onSiteAccessMatch(PostSiteAccessMatchEvent $event): void
     {
         $request = $event->getRequest();
         $matchedSiteAccess = $event->getSiteAccess();
 
-        $siteAccess = $this->container->get('ezpublish.siteaccess');
+        $siteAccess = $this->siteaccess;
         $siteAccess->name = $matchedSiteAccess->name;
         $siteAccess->matchingType = $matchedSiteAccess->matchingType;
         $siteAccess->matcher = $matchedSiteAccess->matcher;
@@ -108,7 +91,7 @@ class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInte
      *               Second element is the view parameters hash.
      *               Third element is the view parameters string (e.g. /(foo)/bar)
      */
-    private function getViewParameters($pathinfo)
+    private function getViewParameters($pathinfo): array
     {
         // No view parameters, get out of here.
         if (($vpStart = strpos($pathinfo, '/(')) === false) {
@@ -131,7 +114,7 @@ class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInte
      *
      * @return array
      */
-    private function generateViewParametersArray($vpString)
+    private function generateViewParametersArray($vpString): array
     {
         $vpString = trim($vpString, '/');
         $viewParameters = array();
