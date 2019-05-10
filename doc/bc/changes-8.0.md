@@ -11,3 +11,6 @@ Changes affecting version compatibility with former or future versions.
   
 * The following Field Types are not supported any more and have been removed:
     * ezprice 
+    
+* Deprecated method `getName` from the interface `eZ\Publish\SPI\FieldType\FieldType` has been removed. 
+  All implementations of this method are also removed. If you used it, please use `eZ\Publish\SPI\FieldType\Nameable` interface instead.
