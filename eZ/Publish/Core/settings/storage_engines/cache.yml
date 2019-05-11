@@ -32,6 +32,7 @@ services:
     # Setup cache pool, with InMemoryCacheAdapter as decorator
     ezpublish.cache_pool:
         class: eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter
+        lazy: true
         arguments:
           - "@ezpublish.cache_pool.inner"
           - !tagged ez.spi.persistence.cache.inmemory
