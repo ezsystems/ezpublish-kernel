@@ -14,6 +14,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\ContentInfoLocationLoader;
 use eZ\Publish\Core\MVC\Exception\HiddenLocationException;
+use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\EmbedView;
@@ -235,7 +236,7 @@ class ContentViewBuilder implements ViewBuilder
         if ($location->invisible) {
             $request = $this->requestStack->getCurrentRequest();
 
-            if (!$request || !$request->get('isPreview', false)) {
+            if (!$request || !$request->attributes->get(PreviewController::PREVIEW_PARAMETER_NAME, false)) {
                 throw new HiddenLocationException($location, 'Location cannot be displayed as it is flagged as invisible.');
             }
         }
