@@ -1,3 +1,7 @@
+os:
+  - linux
+  - windows
+
 # Use trusty for better performance (and avoiding mysql/postgres/solr gone issues on precise and container infra)
 dist: trusty
 sudo: required
