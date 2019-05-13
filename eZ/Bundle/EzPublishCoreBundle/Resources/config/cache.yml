@@ -5,7 +5,6 @@ services:
     ezpublish.cache_pool.inner:
         # As we support custom TagAware services, we set class as interface here so lazy class is "correct"
         class: Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
-        lazy: true
         factory: ["@ezpublish.cache_pool.factory", getCachePool]
         arguments: ["@ezpublish.config.resolver"]
 

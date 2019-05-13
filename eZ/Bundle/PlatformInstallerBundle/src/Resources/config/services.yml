@@ -30,4 +30,4 @@ services:
             - '@ezpublish.cache_pool'
             - "%kernel.environment%"
         tags:
-            - { name: console.command }
+            - { name: console.command, command: ezplatform:install }
