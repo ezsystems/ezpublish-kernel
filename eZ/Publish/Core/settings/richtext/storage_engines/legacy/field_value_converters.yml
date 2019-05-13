@@ -1,9 +1,0 @@
-parameters:
-    ezpublish.fieldType.ezrichtext.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter
-
-services:
-    ezpublish.fieldType.ezrichtext.converter:
-        class: "%ezpublish.fieldType.ezrichtext.converter.class%"
-        tags:
-            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezrichtext}
-
