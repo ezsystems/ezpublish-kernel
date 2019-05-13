@@ -14,6 +14,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * This class will help you get settings for a specific scope.
@@ -66,6 +67,11 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
      * @var int
      */
     protected $undefinedStrategy;
+
+    /**
+     * @var string[] List of param => [services] loaded while siteAccess->matchingType was 'uninitialized'
+     */
+    private $tooEarlyLoadedList = [];
 
     /**
      * @param array $groupsBySiteAccess SiteAccess groups, indexed by siteaccess.
@@ -165,6 +171,10 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
      */
     public function getParameter($paramName, $namespace = null, $scope = null)
     {
+        if (!$this->container instanceof ContainerBuilder && $this->siteAccess->matchingType === 'uninitialized') {
+            $this->tooEarlyLoadedList[$paramName][] = $this->extractServiceName();
+        }
+
         $namespace = $namespace ?: $this->defaultNamespace;
         $scope = $scope ?: $this->getDefaultScope();
         $triedScopes = array();
@@ -215,6 +225,33 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     }
 
     /**
+     * Try to extract service name that asked for a parameter using debug_backtrace().
+     *
+     * @return string
+     */
+    private function extractServiceName()
+    {
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10) as $t) {
+            if (!isset($t['function']) || $t['function'] === 'getParameter' || $t['function'] === __FUNCTION__) {
+                continue;
+            }
+
+            // Extract service name from first service matching getXXService pattern
+            // We can only reverse engineer traditional service name, namspace is stripped from class name based services
+            if (\strpos($t['function'], 'get') === 0 && \strpos($t['function'], 'Service') === \strlen($t['function']) -7) {
+                $serviceName = \strtolower(\preg_replace('/\B([A-Z])/', '_$1', \str_replace('_', '.', \substr($t['function'], 3, -7))));
+                if ($this->container->has($serviceName)) {
+                    return $serviceName;
+                }
+
+                return '->' . $t['function'] . '()';
+            }
+        }
+
+        return '??';
+    }
+
+    /**
      * Changes the default namespace to look parameter into.
      *
      * @param string $defaultNamespace
@@ -240,5 +277,33 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     public function setDefaultScope($scope)
     {
         $this->defaultScope = $scope;
+
+        // On scope change check if siteaccess has been updated so we can log warnings if there are any
+        if ($this->siteAccess->matchingType !== 'uninitialized') {
+            $this->logTooEarlyLoadedParams();
+        }
+    }
+
+    private function logTooEarlyLoadedParams()
+    {
+        if (empty($this->tooEarlyLoadedList)) {
+            return;
+        }
+
+        $logger = $this->container->get('logger');
+        foreach ($this->tooEarlyLoadedList as $param => $services) {
+            // Ideally we we would want to skip warnings for services that use dynamic settings on setters as that means
+            // paramter will get update on scope change, but we don't have a way to detect that here.
+            $logger->warning(sprintf(
+                'ConfigResolver was used to load parameter "%s" before SiteAccess was loaded by the following services: %s. This should be avoided; '
+                . 'first try to use ConfigResolver lazily in these services instead of "$dynamic_paramter$" injection, '
+                . (PHP_SAPI == 'cli' ? 'if not possible make sure your commands that rely on them are lazy loaded, ' : '')
+                . 'if nothing else helps try to mark service as lazy.',
+                $param,
+                '"' . implode($services, '", "') . '"'
+            ));
+        }
+
+        $this->tooEarlyLoadedList = [];
     }
 }
