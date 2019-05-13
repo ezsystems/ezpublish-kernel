@@ -274,6 +274,9 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
         return $this->defaultScope ?: $this->siteAccess->name;
     }
 
+    /**
+     * @param string $scope The default "scope" aka siteaccess name, as opposed to the self::SCOPE_DEFAULT.
+     */
     public function setDefaultScope($scope)
     {
         $this->defaultScope = $scope;
