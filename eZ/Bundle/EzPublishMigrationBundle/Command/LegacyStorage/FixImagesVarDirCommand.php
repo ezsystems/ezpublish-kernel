@@ -1,0 +1,416 @@
+<?php
+
+/**
+ * This file is part of the eZ Publish Kernel package.
+ *
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
+namespace eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage;
+
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use Symfony\Component\Process\Process;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Process\PhpExecutableFinder;
+use PDO;
+use DOMDocument;
+use Symfony\Component\Console\Exception\RuntimeException;
+
+set_error_handler(function ($errno, $errstr, $errfile, $errline, array $errcontext) {
+    if (0 === error_reporting()) {
+        return false;
+    }
+
+    throw new RuntimeException($errstr, 0);
+});
+
+class FixImagesVarDirCommand extends ContainerAwareCommand
+{
+    const DEFAULT_ITERATION_COUNT = 100;
+    const STORAGE_IMAGES_PATH = '/storage/images/';
+
+    /**
+     * @var int
+     */
+    protected $done = 0;
+
+    /**
+     * @var string
+     */
+    private $phpPath;
+
+    /**
+     * @var bool
+     */
+    private $dryRun;
+
+    /**
+     * @var bool
+     */
+    private $moveFiles;
+
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
+     * @var int
+     */
+    private $varDir;
+
+    /**
+     * @var array
+     */
+    private $imageAttributes = [];
+
+    protected function configure()
+    {
+        $this
+            ->setName('ezplatform:fix_images_var_dir')
+            ->setDescription(
+                'This update script will fix references to images that aren\'t part of the current var_dir.'
+            )
+            ->addOption(
+                'dry-run',
+                null,
+                InputOption::VALUE_NONE,
+                'Execute a dry run'
+            )
+            ->addOption(
+                'move-files',
+                null,
+                InputOption::VALUE_NONE,
+                'Move image files between var directories'
+            )
+            ->addOption(
+                'iteration-count',
+                null,
+                InputArgument::OPTIONAL,
+                'Limit how much records get updated by single process',
+                self::DEFAULT_ITERATION_COUNT
+            )
+            ->setHelp(
+                <<<EOT
+The command <info>%command.name%</info> fixes referefences to images that aren't part of the current var_dir.
+
+This may for instance occur when the var_dir setting is changed. This script will rename the files, and update the
+database references to the new path
+
+Since this script can potentially run for a very long time, to avoid memory exhaustion run it in
+production environment using <info>--env=prod</info> switch.
+
+EOT
+            );
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function initialize(InputInterface $input, OutputInterface $output)
+    {
+        /* @var \Doctrine\DBAL\Connection $databaseHandler */
+        $this->connection = $this->getContainer()->get('ezpublish.api.search_engine.legacy.connection');
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|void|null
+     */
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $iterationCount = (int) $input->getOption('iteration-count');
+        $this->dryRun = $input->getOption('dry-run');
+        $this->moveFiles = $input->getOption('move-files');
+        $consoleScript = $_SERVER['argv'][0];
+
+        $siteAccess = $this->getContainer()->get('ezpublish.siteaccess');
+
+        /** @var ConfigResolver $configResolver */
+        $configResolver = $this->getContainer()->get('ezpublish.config.resolver');
+        $this->varDir = $configResolver->getParameter(
+            'var_dir',
+            null,
+            $siteAccess->name
+        );
+
+        if (getenv('INNER_CALL')) {
+            $this->processImages($iterationCount, $output);
+            $output->writeln($this->done);
+        } else {
+            $output->writeln([
+                sprintf('Fixing image references using siteaccess %s (var_dir: %s)', $siteAccess->name, $this->varDir),
+                'Calculating number of Images to fix...',
+            ]);
+
+            $count = $this->countImagesToFix();
+            $output->writeln([
+                sprintf('Found total of Images for fixing: %d', $count),
+                '',
+            ]);
+
+            if ($count == 0) {
+                $output->writeln('Nothing to process, exiting.');
+
+                return;
+            }
+
+            $helper = $this->getHelper('question');
+            $question = new ConfirmationQuestion(
+                '<question>Are you sure you want to proceed?</question> ',
+                false
+            );
+
+            if (!$helper->ask($input, $output, $question)) {
+                $output->writeln('');
+
+                return;
+            }
+
+            $progressBar = $this->getProgressBar($count, $output);
+            $progressBar->start();
+
+            for ($fixed = 0; $fixed < $count; $fixed += $iterationCount) {
+                $processScriptFragments = [
+                    $this->getPhpPath(),
+                    $consoleScript,
+                    $this->getName(),
+                    '--iteration-count=' . $iterationCount,
+                ];
+
+                $process = new Process(
+                    implode(' ', $processScriptFragments)
+                );
+
+                $process->setEnv(['INNER_CALL' => 1]);
+                $process->run();
+
+                if (!$process->isSuccessful()) {
+                    throw new RuntimeException($process->getErrorOutput());
+                }
+
+                $doneInProcess = (int) $process->getOutput();
+                $this->done += $doneInProcess;
+                $progressBar->advance($doneInProcess);
+            }
+
+            $progressBar->finish();
+            $output->writeln([
+                '',
+                sprintf('Done: %d', $this->done),
+            ]);
+        }
+    }
+
+    /**
+     * @param int $limit
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    protected function processImages(int $limit, OutputInterface $output)
+    {
+        $images = $this->getImagesToFix($limit);
+
+        foreach ($images as $image) {
+            $filePath = $image['filepath'];
+            $relativePath = substr(
+                $filePath,
+                strpos($filePath, self::STORAGE_IMAGES_PATH)
+            );
+
+            $newFilePath = $this->varDir . $relativePath;
+
+            if (!$this->dryRun) {
+                $this->updateImage($image['id'], $image['contentobject_attribute_id'], $filePath, $newFilePath);
+
+                if ($this->moveFiles) {
+                    $this->moveFile($filePath, $newFilePath);
+                }
+            }
+
+            ++$this->done;
+        }
+
+        if (!$this->dryRun) {
+            $this->updateContentObjectAtributes();
+        }
+    }
+
+    /**
+     * @todo Implement this(?)
+     *
+     * @param string $oldFilePath
+     * @param string $newFilePath
+     */
+    protected function moveFile(string $oldFilePath, string $newFilePath)
+    {
+    }
+
+    /**
+     * @param int $imageId
+     * @param int $contentObjectAttributeId
+     * @param string $oldFilePath
+     * @param string $newFilePath
+     */
+    protected function updateImage(int $imageId, int $contentObjectAttributeId, string $oldFilePath, string $newFilePath)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update('ezimagefile', 'i')
+            ->set('i.filepath', $query->expr()->literal($newFilePath))
+            ->where('i.id = :id')
+            ->setParameter('id', $imageId);
+
+        $query->execute();
+
+        $this->imageAttributes[$contentObjectAttributeId][$oldFilePath] = $newFilePath;
+    }
+
+    protected function updateContentObjectAtributes()
+    {
+        foreach ($this->imageAttributes as $attributeId => $files) {
+            $attributeObjects = $this->getContentObjectAtrributesById($attributeId);
+
+            foreach ($attributeObjects as $attributeObject) {
+                $dom = new DOMDocument('1.0', 'utf-8');
+
+                try {
+                    $dom->loadXML($attributeObject['data_text']);
+                } catch (\RuntimeException $e) {
+                    continue;
+                }
+
+                foreach ($dom->getElementsByTagName('ezimage') as $ezimageNode) {
+                    $oldPath = $ezimageNode->getAttribute('url');
+
+                    if (isset($files[$oldPath])) {
+                        $ezimageNode->setAttribute('url', $files[$oldPath]);
+                        $ezimageNode->setAttribute('dirpath', \dirname($files[$oldPath]));
+                    }
+
+                    foreach ($ezimageNode->getElementsByTagName('alias') as $ezimageAlias) {
+                        $oldPath = $ezimageAlias->getAttribute('url');
+                        if (isset($files[$oldPath])) {
+                            $ezimageAlias->setAttribute('url', $files[$oldPath]);
+                            $ezimageAlias->setAttribute('dirpath', \dirname($files[$oldPath]));
+                        }
+                    }
+                }
+
+                $this->updateContentObjectAtribute($attributeObject['id'], $attributeObject['version'], $dom->saveXML());
+            }
+        }
+    }
+
+    /**
+     * @param int $id
+     * @param int $version
+     * @param string $dataText
+     */
+    protected function updateContentObjectAtribute(int $id, int $version, string $dataText)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->update('ezcontentobject_attribute', 'oa')
+            ->set('oa.data_text', $query->expr()->literal($dataText))
+            ->where('oa.id = ' . $id)
+            ->andWhere('oa.version = ' . $version);
+
+        $query->execute();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return array
+     */
+    protected function getContentObjectAtrributesById(int $id)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('oa.data_text, oa.id, oa.version')
+            ->from('ezcontentobject_attribute', 'oa')
+            ->where('oa.id = :id')
+            ->setParameter('id', $id);
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param int $limit
+     *
+     * @return array
+     */
+    protected function getImagesToFix(int $limit)
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('i.id, i.contentobject_attribute_id, i.filepath')
+            ->from('ezimagefile', 'i')
+            ->where('i.filepath not like :var_dir')
+            ->setParameter('var_dir', $this->varDir . '%')
+            ->setMaxResults($limit);
+        $statement = $query->execute();
+
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @return int
+     */
+    protected function countImagesToFix()
+    {
+        $query = $this->connection->createQueryBuilder();
+        $query
+            ->select('count(*) as count')
+            ->from('ezimagefile', 'i')
+            ->where('i.filepath not like :var_dir')
+            ->setParameter('var_dir', $this->varDir . '%');
+        $statement = $query->execute();
+
+        return (int) $statement->fetchColumn();
+    }
+
+    /**
+     * @param int $maxSteps
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return \Symfony\Component\Console\Helper\ProgressBar
+     */
+    protected function getProgressBar(int $maxSteps, OutputInterface $output)
+    {
+        $progressBar = new ProgressBar($output, $maxSteps);
+        $progressBar->setFormat(
+            ' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%'
+        );
+
+        return $progressBar;
+    }
+
+    /**
+     * @return string
+     */
+    private function getPhpPath()
+    {
+        if ($this->phpPath) {
+            return $this->phpPath;
+        }
+        $phpFinder = new PhpExecutableFinder();
+        $this->phpPath = $phpFinder->find();
+        if (!$this->phpPath) {
+            throw new RuntimeException(
+                'The php executable could not be found, it\'s needed for executing parable sub processes, so add it to your PATH environment variable and try again'
+            );
+        }
+
+        return $this->phpPath;
+    }
+}
