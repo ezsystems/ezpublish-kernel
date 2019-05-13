@@ -11,9 +11,6 @@ namespace eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use Iterator;
 
-/**
- * 
- */
 interface SiteAccessProviderInterface
 {
     public function isDefined(string $name): bool;

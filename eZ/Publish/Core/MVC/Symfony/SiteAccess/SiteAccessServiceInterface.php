@@ -48,4 +48,11 @@ interface SiteAccessServiceInterface
      * @return \eZ\Publish\Core\MVC\Symfony\SiteAccessGroup[]
      */
     public function getAvailableGroups(): iterable;
+
+    /**
+     * Returns current Site Access
+     *
+     * @return \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    public function getCurrent(): SiteAccess;
 }

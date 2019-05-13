@@ -70,4 +70,10 @@ class SiteAccessService implements SiteAccessServiceInterface
     {
         return $this->siteAccessGroups;
     }
+
+    public function getCurrent(): SiteAccess
+    {
+        // TODO: Implement getCurrent() method.
+        return null;
+    }
 }
