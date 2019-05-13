@@ -1,13 +1,12 @@
 <?php
 
 /**
- * File containing the PreviewRequestListener class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
+use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
@@ -26,11 +25,11 @@ class PreviewRequestListener implements EventSubscriberInterface
         $this->requestStack = $requestStack;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
-        return array(
+        return [
             KernelEvents::REQUEST => array('onKernelRequest', 200),
-        );
+        ];
     }
 
     /**
@@ -43,8 +42,8 @@ class PreviewRequestListener implements EventSubscriberInterface
         }
 
         $parentRequest = $this->requestStack->getParentRequest();
-        if ($parentRequest->get('isPreview', false)) {
-            $this->requestStack->getCurrentRequest()->attributes->set('isPreview', true);
+        if ($parentRequest->attributes->get(PreviewController::PREVIEW_PARAMETER_NAME, false)) {
+            $this->requestStack->getCurrentRequest()->attributes->set(PreviewController::PREVIEW_PARAMETER_NAME, true);
         }
     }
 }

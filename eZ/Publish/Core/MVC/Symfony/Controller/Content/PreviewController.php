@@ -29,6 +29,7 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class PreviewController
 {
+    const PREVIEW_PARAMETER_NAME = 'isPreview';
     const INTERNAL_LOCATION_VIEW_ROUTE = '_ezpublishLocation';
 
     /**
@@ -159,7 +160,7 @@ EOF;
             'params' => array(
                 'content' => $content,
                 'location' => $location,
-                'isPreview' => true,
+                self::PREVIEW_PARAMETER_NAME => true,
                 'language' => $language,
             ),
             'siteaccess' => $previewSiteAccess,
