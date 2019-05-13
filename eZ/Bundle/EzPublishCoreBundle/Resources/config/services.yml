@@ -248,7 +248,7 @@ services:
         arguments:
             - '@ezpublish.api.repository'
         tags:
-            - { name: console.command }
+            - { name: console.command, command: ezplatform:delete-content-translation }
 
     ezplatform.core.command.cleanup_versions:
         class: eZ\Bundle\EzPublishCoreBundle\Command\CleanupVersionsCommand
@@ -257,7 +257,7 @@ services:
             - "@ezpublish.api.repository_configuration_provider"
             - "@ezpublish.persistence.connection"
         tags:
-            - { name: console.command }
+            - { name: console.command, command: ezplatform:content:cleanup-versions }
 
     ezplatform.core.session.handler.native_redis:
         class: eZ\Bundle\EzPublishCoreBundle\Session\Handler\NativeSessionHandler
@@ -269,6 +269,8 @@ services:
         class: eZ\Bundle\EzPublishCoreBundle\Command\CopySubtreeCommand
         autowire: true
         autoconfigure: true
+        tags:
+            - { name: console.command, command: ezplatform:copy-subtree }
 
     ezplatform.core.command.resize_original_images:
         class: eZ\Bundle\EzPublishCoreBundle\Command\ResizeOriginalImagesCommand
@@ -277,3 +279,5 @@ services:
         arguments:
             $ioService: '@ezpublish.fieldType.ezimage.io_service.published'
             $imagine: '@liip_imagine'
+        tags:
+            - { name: console.command, command: ezplatform:images:resize-original }
