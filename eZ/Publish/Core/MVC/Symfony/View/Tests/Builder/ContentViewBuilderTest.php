@@ -62,6 +62,11 @@ class ContentViewBuilderTest extends TestCase
      */
     private $permissionResolver;
 
+    /**
+     * @var \Symfony\Component\HttpFoundation\RequestStack|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $requestStack;
+
     public function setUp(): void
     {
         $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->setMethods(['sudo', 'getPermissionResolver'])->getMock();
@@ -69,6 +74,7 @@ class ContentViewBuilderTest extends TestCase
         $this->parametersInjector = $this->getMockBuilder(ParametersInjector::class)->getMock();
         $this->contentInfoLocationLoader = $this->getMockBuilder(ContentInfoLocationLoader::class)->getMock();
         $this->permissionResolver = $this->getMockBuilder(PermissionResolver::class)->getMock();
+        $this->requestStack = $this->getMockBuilder(RequestStack::class)->getMock();
         $this->repository
             ->expects($this->any())
             ->method('getPermissionResolver')
@@ -78,7 +84,7 @@ class ContentViewBuilderTest extends TestCase
             $this->repository,
             $this->viewConfigurator,
             $this->parametersInjector,
-            new RequestStack(),
+            $this->requestStack,
             $this->contentInfoLocationLoader
         );
     }

@@ -28,16 +28,16 @@ class PreviewRequestListener implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::REQUEST => array('onKernelRequest', 200),
+            KernelEvents::REQUEST => ['onKernelRequest', 200],
         ];
     }
 
     /**
      * @param \Symfony\Component\HttpKernel\Event\GetResponseEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(GetResponseEvent $event): void
     {
-        if ($event->getRequestType() == HttpKernelInterface::MASTER_REQUEST) {
+        if ($event->getRequestType() === HttpKernelInterface::MASTER_REQUEST) {
             return;
         }
 
