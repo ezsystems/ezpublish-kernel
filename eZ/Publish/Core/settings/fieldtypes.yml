@@ -424,13 +424,6 @@ services:
     # Not implemented fieldtypes
     # Configured to use the Null type to not throw exception
 
-    ezpublish.fieldType.ezpage:
-        class: "%ezpublish.fieldType.eznull.class%"
-        parent: ezpublish.fieldType
-        arguments: [ "ezpage" ]
-        tags:
-            - {name: ezpublish.fieldType, alias: ezpage}
-
     ezpublish.fieldType.ezenum:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
