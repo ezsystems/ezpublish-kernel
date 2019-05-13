@@ -29,9 +29,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterf
 
 class EzPublishCoreExtension extends Extension implements PrependExtensionInterface
 {
-    const RICHTEXT_CUSTOM_STYLES_PARAMETER = 'ezplatform.ezrichtext.custom_styles';
-    const RICHTEXT_CUSTOM_TAGS_PARAMETER = 'ezplatform.ezrichtext.custom_tags';
-
     /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector */
     private $suggestionCollector;
 
@@ -103,7 +100,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->registerRepositoriesConfiguration($config, $container);
         $this->registerSiteAccessConfiguration($config, $container);
         $this->registerImageMagickConfiguration($config, $container);
-        $this->registerRichTextConfiguration($config, $container);
         $this->registerUrlAliasConfiguration($config, $container);
         $this->registerUrlWildcardsConfiguration($config, $container);
 
@@ -190,10 +186,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     {
         $loader->load('default_settings.yml');
 
-        if (!$this->isRichTextBundleEnabled($container)) {
-            $loader->load('ezrichtext_default_settings.yml');
-        }
-
         foreach ($this->defaultSettingsCollection as $fileLocation => $files) {
             $externalLoader = new Loader\YamlFileLoader($container, new FileLocator($fileLocation));
             foreach ($files as $file) {
@@ -264,38 +256,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     }
 
     /**
-     * Register parameters of global RichText configuration.
-     *
-     * @param array $config
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     */
-    private function registerRichTextConfiguration(array $config, ContainerBuilder $container)
-    {
-        if (isset($config['ezrichtext']['custom_tags'])) {
-            $container->setParameter(
-                static::RICHTEXT_CUSTOM_TAGS_PARAMETER,
-                $config['ezrichtext']['custom_tags']
-            );
-        }
-        if (isset($config['ezrichtext']['custom_styles'])) {
-            $container->setParameter(
-                static::RICHTEXT_CUSTOM_STYLES_PARAMETER,
-                $config['ezrichtext']['custom_styles']
-            );
-        }
-        // keep BC
-        if (!empty($config['ezrichtext']) && $this->isRichTextBundleEnabled($container)) {
-            $container->prependExtensionConfig('ezrichtext', $config['ezrichtext']);
-            if (!empty($config['ezrichtext']['custom_tags']) || !empty($config['ezrichtext']['custom_styles'])) {
-                @trigger_error(
-                    'ezpublish.ezrichtext configuration is deprecated since v7.4, move entire configuration node to ezrichtext extension',
-                    E_USER_DEPRECATED
-                );
-            }
-        }
-    }
-
-    /**
      * Handle routing parameters.
      *
      * @param array $config
@@ -351,11 +311,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $coreLoader->load('notification.yml');
         $coreLoader->load('user_preference.yml');
 
-        // Load Core RichText settings
-        if (!$this->isRichTextBundleEnabled($container)) {
-            $coreLoader->load('richtext.yml');
-        }
-
         // Public API services
         $loader->load('papi.yml');
 
@@ -364,11 +319,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         // Storage engine
         $loader->load('storage_engines.yml');
-
-        // Load CoreBundle RichText settings
-        if (!$this->isRichTextBundleEnabled($container)) {
-            $loader->load('richtext.yml');
-        }
     }
 
     /**
@@ -598,15 +548,6 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
 
         $container->setParameter('ezpublish.url_alias.slug_converter', $config['url_alias']['slug_converter']);
-    }
-
-    private function isRichTextBundleEnabled(ContainerBuilder $container)
-    {
-        return $container->hasParameter('kernel.bundles')
-            && array_key_exists(
-                'EzPlatformRichTextBundle',
-                $container->getParameter('kernel.bundles')
-            );
     }
 
     /**
