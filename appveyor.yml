@@ -17,7 +17,7 @@ init:
     - REG ADD "HKEY_CURRENT_USER\Software\Microsoft\Command Processor" /v DelayedExpansion /t REG_DWORD /d 1 /f
 
 install:
-    - cinst php -y -i --version 7.1.15
+    - cinst php -y -i --version 7.1.29
     - cinst composer -y -i
     - refreshenv
     - cd c:\Tools\php71
@@ -33,7 +33,7 @@ install:
     - echo extension=php_openssl.dll >> php.ini
     - echo extension=php_fileinfo.dll >> php.ini
     - echo extension=php_curl.dll >> php.ini
-    - echo memory_limit=512M >> php.ini
+    - echo memory_limit=3G >> php.ini
     - echo default_charset="utf-8" >> php.ini
     - cd c:\projects\ezpublish-kernel
     - composer install --no-suggest --no-progress --ansi
