@@ -9,8 +9,8 @@
 namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\API\Repository\URLAliasService;
-use EzSystems\EzPlatformRestCommon\Message;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Message;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\API\Repository\LocationService;

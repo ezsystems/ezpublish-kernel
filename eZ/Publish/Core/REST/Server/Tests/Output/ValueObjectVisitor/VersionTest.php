@@ -9,14 +9,14 @@
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
-use EzSystems\EzPlatformRestCommon\Output\Generator;
-use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRest\Output\Generator;
+use EzSystems\EzPlatformRest\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values;
 use eZ\Publish\Core\REST\Server\Values\Version;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer;
+use EzSystems\EzPlatformRest\Output\FieldTypeSerializer;
 
 class VersionTest extends ValueObjectVisitorBaseTest
 {

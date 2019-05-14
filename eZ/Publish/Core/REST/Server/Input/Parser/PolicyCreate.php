@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use EzSystems\EzPlatformRestCommon\Input\BaseParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Input\ParserTools;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\BaseParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Input\ParserTools;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\API\Repository\RoleService;
 
 /**
@@ -29,7 +29,7 @@ class PolicyCreate extends BaseParser
     /**
      * Parser tools.
      *
-     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
+     * @var \EzSystems\EzPlatformRest\Input\ParserTools
      */
     protected $parserTools;
 
@@ -37,7 +37,7 @@ class PolicyCreate extends BaseParser
      * Construct.
      *
      * @param \eZ\Publish\API\Repository\RoleService $roleService
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParserTools $parserTools
+     * @param \EzSystems\EzPlatformRest\Input\ParserTools $parserTools
      */
     public function __construct(RoleService $roleService, ParserTools $parserTools)
     {
@@ -49,7 +49,7 @@ class PolicyCreate extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
      */

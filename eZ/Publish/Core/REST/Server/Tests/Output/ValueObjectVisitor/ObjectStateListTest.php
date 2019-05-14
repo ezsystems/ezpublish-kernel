@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
-use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest;
-use EzSystems\EzPlatformRestCommon\Values\RestObjectState;
+use EzSystems\EzPlatformRest\Tests\Output\ValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRest\Values\RestObjectState;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\REST\Server\Values\ObjectStateList;
 use eZ\Publish\Core\Repository\Values\ObjectState\ObjectState;

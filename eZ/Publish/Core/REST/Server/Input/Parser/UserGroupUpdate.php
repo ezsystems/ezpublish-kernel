@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use EzSystems\EzPlatformRestCommon\Input\BaseParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\BaseParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Input\FieldTypeParser;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\Core\REST\Server\Values\RestUserGroupUpdateStruct;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\ContentService;
@@ -46,7 +46,7 @@ class UserGroupUpdate extends BaseParser
     /**
      * FieldType parser.
      *
-     * @var \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser
+     * @var \EzSystems\EzPlatformRest\Input\FieldTypeParser
      */
     protected $fieldTypeParser;
 
@@ -56,7 +56,7 @@ class UserGroupUpdate extends BaseParser
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\LocationService $locationService
-     * @param \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser $fieldTypeParser
+     * @param \EzSystems\EzPlatformRest\Input\FieldTypeParser $fieldTypeParser
      */
     public function __construct(UserService $userService, ContentService $contentService, LocationService $locationService, FieldTypeParser $fieldTypeParser)
     {
@@ -70,7 +70,7 @@ class UserGroupUpdate extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroupUpdateStruct
      */

@@ -9,8 +9,8 @@
 namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
-use EzSystems\EzPlatformRestCommon\Message;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Message;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\API\Repository\Values\Content\Relation;
@@ -615,7 +615,7 @@ class Content extends RestController
      * @param int $versionNumber
      * @param mixed $relationId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestRelation
      */
@@ -652,7 +652,7 @@ class Content extends RestController
      * @param mixed $relationId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */

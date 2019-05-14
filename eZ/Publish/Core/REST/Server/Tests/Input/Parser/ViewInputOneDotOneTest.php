@@ -70,7 +70,7 @@ class ViewInputOneDotOneTest extends BaseTest
     }
 
     /**
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      */
     public function testThrowsExceptionOnMissingIdentifier()
     {
@@ -79,7 +79,7 @@ class ViewInputOneDotOneTest extends BaseTest
     }
 
     /**
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      */
     public function testThrowsExceptionOnMissingQuery()
     {

@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchHit;
 use eZ\Publish\API\Repository\Values\Content\Search\SearchResult;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
-use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRest\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 use eZ\Publish\Core\Repository\Values\Content;
 use eZ\Publish\Core\REST\Server\Values\RestExecutedView;

@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use EzSystems\EzPlatformRestCommon\Input\BaseParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\BaseParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Exceptions;
 
 /**
  * Parser for ViewInput.
@@ -31,9 +31,9 @@ abstract class Criterion extends BaseParser
      *
      * @param string $criterionName
      * @param mixed $criterionData
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @throws \EzSystems\EzPlatformRest\Exceptions\Parser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */
@@ -52,9 +52,9 @@ abstract class Criterion extends BaseParser
      *
      * @param string $facetBuilderName
      * @param mixed $facetBuilderData
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @throws \EzSystems\EzPlatformRest\Exceptions\Parser
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */
@@ -74,9 +74,9 @@ abstract class Criterion extends BaseParser
      *
      * @param string $sortClauseName
      * @param string $direction
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @throws \EzSystems\EzPlatformRest\Exceptions\Parser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion
      */

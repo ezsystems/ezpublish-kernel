@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException;
+use EzSystems\EzPlatformRest\Exceptions\NotFoundException;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\Core\REST\Server\Service\RootResourceBuilderInterface;
 
@@ -30,7 +30,7 @@ class Root extends RestController
     /**
      * List the root resources of the eZ Publish installation.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Values\Root
+     * @return \EzSystems\EzPlatformRest\Values\Root
      */
     public function loadRootResource()
     {
@@ -40,7 +40,7 @@ class Root extends RestController
     /**
      * Catch-all for REST requests.
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      */
     public function catchAll()
     {

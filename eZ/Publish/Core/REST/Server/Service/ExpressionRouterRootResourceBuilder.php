@@ -8,8 +8,8 @@
  */
 namespace eZ\Publish\Core\REST\Server\Service;
 
-use EzSystems\EzPlatformRestCommon\Values;
-use EzSystems\EzPlatformRestCommon\Values\Root;
+use EzSystems\EzPlatformRest\Values;
+use EzSystems\EzPlatformRest\Values\Root;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -66,7 +66,7 @@ class ExpressionRouterRootResourceBuilder implements RootResourceBuilderInterfac
     /**
      * Build root resource.
      *
-     * @return array|\EzSystems\EzPlatformRestCommon\Values\Root
+     * @return array|\EzSystems\EzPlatformRest\Values\Root
      */
     public function buildRootResource()
     {

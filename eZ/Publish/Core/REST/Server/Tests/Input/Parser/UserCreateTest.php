@@ -16,7 +16,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\UserCreate;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\User\UserCreateStruct;
-use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+use EzSystems\EzPlatformRest\Input\FieldTypeParser;
 
 class UserCreateTest extends BaseTest
 {
@@ -99,7 +99,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on invalid ContentType.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for ContentType element in UserCreate.
      */
     public function testParseExceptionOnInvalidContentType()
@@ -132,7 +132,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on missing mainLanguageCode.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'mainLanguageCode' element for UserCreate.
      */
     public function testParseExceptionOnMissingMainLanguageCode()
@@ -166,7 +166,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on missing login.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'login' element for UserCreate.
      */
     public function testParseExceptionOnMissingLogin()
@@ -200,7 +200,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on missing email.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'email' element for UserCreate.
      */
     public function testParseExceptionOnMissingEmail()
@@ -234,7 +234,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on missing password.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'password' element for UserCreate.
      */
     public function testParseExceptionOnMissingPassword()
@@ -268,7 +268,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on invalid Section.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for Section element in UserCreate.
      */
     public function testParseExceptionOnInvalidSection()
@@ -301,7 +301,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on invalid fields data.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'fields' element for UserCreate.
      */
     public function testParseExceptionOnInvalidFields()
@@ -328,7 +328,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on missing field definition identifier.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for UserCreate.
      */
     public function testParseExceptionOnMissingFieldDefinitionIdentifier()
@@ -366,7 +366,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on invalid field definition identifier.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'some_class' content type in UserCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinitionIdentifier()
@@ -401,7 +401,7 @@ class UserCreateTest extends BaseTest
     /**
      * Test UserCreate parser throwing exception on missing field value.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'name' identifier in UserCreate.
      */
     public function testParseExceptionOnMissingFieldValue()
@@ -450,7 +450,7 @@ class UserCreateTest extends BaseTest
     /**
      * Get the field type parser mock object.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+     * @return \EzSystems\EzPlatformRest\Input\FieldTypeParser;
      */
     private function getFieldTypeParserMock()
     {

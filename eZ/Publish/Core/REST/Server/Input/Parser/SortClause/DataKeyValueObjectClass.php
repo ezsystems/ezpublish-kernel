@@ -3,9 +3,9 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser\SortClause;
 
 use eZ\Publish\API\Repository\Values\Content\Query;
-use EzSystems\EzPlatformRestCommon\Input\BaseParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\BaseParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Exceptions;
 
 class DataKeyValueObjectClass extends BaseParser
 {
@@ -39,7 +39,7 @@ class DataKeyValueObjectClass extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\API\Repository\Values\ValueObject
      */

@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use EzSystems\EzPlatformRestCommon\Value as RestValue;
+use EzSystems\EzPlatformRest\Value as RestValue;
 
 /**
  * RestLocationUpdateStruct view model.

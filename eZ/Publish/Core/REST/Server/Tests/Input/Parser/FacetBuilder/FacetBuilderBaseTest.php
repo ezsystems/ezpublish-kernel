@@ -2,7 +2,7 @@
 
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser\FacetBuilder;
 
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentQuery as QueryParser;
 use eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\ContentTypeParser;
 use eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder\CriterionParser;
@@ -18,7 +18,7 @@ use eZ\Publish\Core\REST\Server\Tests\Input\Parser\BaseTest;
 abstract class FacetBuilderBaseTest extends BaseTest
 {
     /**
-     * @return \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher
+     * @return \EzSystems\EzPlatformRest\Input\ParsingDispatcher
      */
     protected function getParsingDispatcher()
     {

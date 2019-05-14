@@ -9,13 +9,13 @@
 namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
-use EzSystems\EzPlatformRestCommon\Message;
+use EzSystems\EzPlatformRest\Message;
 use eZ\Publish\Core\REST\Server\Values;
-use EzSystems\EzPlatformRestCommon\Values\RestObjectState;
+use EzSystems\EzPlatformRest\Values\RestObjectState;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\API\Repository\ObjectStateService;
 use eZ\Publish\API\Repository\ContentService;
-use EzSystems\EzPlatformRestCommon\Values\ContentObjectStates;
+use EzSystems\EzPlatformRest\Values\ContentObjectStates;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
@@ -136,7 +136,7 @@ class ObjectState extends RestController
      * @param $objectStateGroupId
      * @param $objectStateId
      *
-     * @return \EzSystems\EzPlatformRestCommon\Values\RestObjectState
+     * @return \EzSystems\EzPlatformRest\Values\RestObjectState
      */
     public function loadObjectState($objectStateGroupId, $objectStateId)
     {
@@ -244,7 +244,7 @@ class ObjectState extends RestController
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      *
-     * @return \EzSystems\EzPlatformRestCommon\Values\RestObjectState
+     * @return \EzSystems\EzPlatformRest\Values\RestObjectState
      */
     public function updateObjectState($objectStateGroupId, $objectStateId, Request $request)
     {
@@ -271,7 +271,7 @@ class ObjectState extends RestController
      *
      * @param $contentId
      *
-     * @return \EzSystems\EzPlatformRestCommon\Values\ContentObjectStates
+     * @return \EzSystems\EzPlatformRest\Values\ContentObjectStates
      */
     public function getObjectStatesForContent($contentId)
     {
@@ -300,7 +300,7 @@ class ObjectState extends RestController
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
      *
-     * @return \EzSystems\EzPlatformRestCommon\Values\ContentObjectStates
+     * @return \EzSystems\EzPlatformRest\Values\ContentObjectStates
      */
     public function setObjectStatesForContent($contentId, Request $request)
     {

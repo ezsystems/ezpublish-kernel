@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\REST\Server\Values;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use EzSystems\EzPlatformRestCommon\Value as RestValue;
+use EzSystems\EzPlatformRest\Value as RestValue;
 
 class CachedValue extends RestValue
 {

@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use EzSystems\EzPlatformRestCommon\Input\BaseParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Input\ParserTools;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\BaseParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Input\ParserTools;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\API\Repository\ContentTypeService;
 use DateTime;
 
@@ -30,7 +30,7 @@ class ContentTypeUpdate extends BaseParser
     /**
      * Parser tools.
      *
-     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
+     * @var \EzSystems\EzPlatformRest\Input\ParserTools
      */
     protected $parserTools;
 
@@ -38,7 +38,7 @@ class ContentTypeUpdate extends BaseParser
      * Construct.
      *
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParserTools $parserTools
+     * @param \EzSystems\EzPlatformRest\Input\ParserTools $parserTools
      */
     public function __construct(ContentTypeService $contentTypeService, ParserTools $parserTools)
     {
@@ -50,7 +50,7 @@ class ContentTypeUpdate extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */

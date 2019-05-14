@@ -16,7 +16,7 @@ use eZ\Publish\Core\REST\Server\Input\Parser\UserUpdate;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
-use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+use EzSystems\EzPlatformRest\Input\FieldTypeParser;
 use eZ\Publish\Core\REST\Server\Values\RestUserUpdateStruct;
 
 class UserUpdateTest extends BaseTest
@@ -114,7 +114,7 @@ class UserUpdateTest extends BaseTest
     /**
      * Test UserUpdate parser throwing exception on missing Section href.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for Section element in UserUpdate.
      */
     public function testParseExceptionOnMissingSectionHref()
@@ -144,7 +144,7 @@ class UserUpdateTest extends BaseTest
     /**
      * Test UserUpdate parser throwing exception on invalid fields data.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'fields' element for UserUpdate.
      */
     public function testParseExceptionOnInvalidFields()
@@ -169,7 +169,7 @@ class UserUpdateTest extends BaseTest
     /**
      * Test UserUpdate parser throwing exception on missing field definition identifier.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for UserUpdate.
      */
     public function testParseExceptionOnMissingFieldDefinitionIdentifier()
@@ -200,7 +200,7 @@ class UserUpdateTest extends BaseTest
     /**
      * Test UserUpdate parser throwing exception on missing field value.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'first_name' identifier in UserUpdate.
      */
     public function testParseExceptionOnMissingFieldValue()
@@ -246,7 +246,7 @@ class UserUpdateTest extends BaseTest
     /**
      * Get the field type parser mock object.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+     * @return \EzSystems\EzPlatformRest\Input\FieldTypeParser;
      */
     private function getFieldTypeParserMock()
     {

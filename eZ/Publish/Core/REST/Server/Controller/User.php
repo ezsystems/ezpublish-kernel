@@ -9,7 +9,7 @@
 namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
-use EzSystems\EzPlatformRestCommon\Message;
+use EzSystems\EzPlatformRest\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
@@ -25,7 +25,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\User as RepositoryUser;
 use eZ\Publish\API\Repository\Exceptions as ApiExceptions;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
-use EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException;
+use EzSystems\EzPlatformRest\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;

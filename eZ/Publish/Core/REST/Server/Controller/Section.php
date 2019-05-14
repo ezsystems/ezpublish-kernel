@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Controller;
 
-use EzSystems\EzPlatformRestCommon\Message;
+use EzSystems\EzPlatformRest\Message;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
 use eZ\Publish\API\Repository\SectionService;

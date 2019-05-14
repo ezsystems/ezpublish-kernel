@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\FacetBuilder;
 
-use EzSystems\EzPlatformRestCommon\Input\BaseParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\BaseParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Exceptions;
 
 /**
  * Parser for FieldRange facet builder.
@@ -21,9 +21,9 @@ class FieldRangeParser extends BaseParser
      * Parses input structure to a FacetBuilder object.
      *
      * @param array $data
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @throws \EzSystems\EzPlatformRest\Exceptions\Parser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder\FieldRangeFacetBuilder
      */

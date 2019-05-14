@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use EzSystems\EzPlatformRestCommon\Input;
+use EzSystems\EzPlatformRest\Input;
 use eZ\Publish\Core\REST\Server\Tests\BaseTest as ParentBaseTest;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\RequestParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\RequestParser;
 
 /**
  * Base test for input parsers.
@@ -19,24 +19,24 @@ use EzSystems\EzPlatformRestCommon\RequestParser;
 abstract class BaseTest extends ParentBaseTest
 {
     /**
-     * @var \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher|\PHPUnit\Framework\MockObject\MockObject
+     * @var \EzSystems\EzPlatformRest\Input\ParsingDispatcher|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $parsingDispatcherMock;
 
     /**
-     * @var \EzSystems\EzPlatformRestCommon\RequestParser|\PHPUnit\Framework\MockObject\MockObject
+     * @var \EzSystems\EzPlatformRest\RequestParser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $requestParserMock;
 
     /**
-     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
+     * @var \EzSystems\EzPlatformRest\Input\ParserTools
      */
     protected $parserTools;
 
     /**
      * Get the parsing dispatcher.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher
+     * @return \EzSystems\EzPlatformRest\Input\ParsingDispatcher
      */
     protected function getParsingDispatcherMock()
     {
@@ -63,7 +63,7 @@ abstract class BaseTest extends ParentBaseTest
     /**
      * Get the Request parser.
      *
-     * @return \EzSystems\EzPlatformRestCommon\RequestParser|\PHPUnit\Framework\MockObject\MockObject
+     * @return \EzSystems\EzPlatformRest\RequestParser|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function getRequestParserMock()
     {
@@ -98,7 +98,7 @@ abstract class BaseTest extends ParentBaseTest
     /**
      * Get the parser tools.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Input\ParserTools
+     * @return \EzSystems\EzPlatformRest\Input\ParserTools
      */
     protected function getParserTools()
     {

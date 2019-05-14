@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use EzSystems\EzPlatformRestCommon\Input\BaseParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
-use EzSystems\EzPlatformRestCommon\Input\ParserTools;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\BaseParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Input\FieldTypeParser;
+use EzSystems\EzPlatformRest\Input\ParserTools;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\Core\REST\Server\Values\RestUserUpdateStruct;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\ContentService;
@@ -39,14 +39,14 @@ class UserUpdate extends BaseParser
     /**
      * FieldType parser.
      *
-     * @var \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser
+     * @var \EzSystems\EzPlatformRest\Input\FieldTypeParser
      */
     protected $fieldTypeParser;
 
     /**
      * Parser tools.
      *
-     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
+     * @var \EzSystems\EzPlatformRest\Input\ParserTools
      */
     protected $parserTools;
 
@@ -55,8 +55,8 @@ class UserUpdate extends BaseParser
      *
      * @param \eZ\Publish\API\Repository\UserService $userService
      * @param \eZ\Publish\API\Repository\ContentService $contentService
-     * @param \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser $fieldTypeParser
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParserTools $parserTools
+     * @param \EzSystems\EzPlatformRest\Input\FieldTypeParser $fieldTypeParser
+     * @param \EzSystems\EzPlatformRest\Input\ParserTools $parserTools
      */
     public function __construct(UserService $userService, ContentService $contentService, FieldTypeParser $fieldTypeParser, ParserTools $parserTools)
     {
@@ -70,7 +70,7 @@ class UserUpdate extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserUpdateStruct
      */

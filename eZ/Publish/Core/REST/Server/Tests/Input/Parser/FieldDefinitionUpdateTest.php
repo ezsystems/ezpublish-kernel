@@ -13,7 +13,7 @@ use eZ\Publish\Core\Repository\ContentTypeService;
 use eZ\Publish\Core\REST\Server\Input\Parser\FieldDefinitionUpdate;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\ContentType\FieldDefinition;
-use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+use EzSystems\EzPlatformRest\Input\FieldTypeParser;
 
 /**
  * @todo Test with fieldSettings and validatorConfiguration when specified
@@ -113,7 +113,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     /**
      * Test FieldDefinitionUpdate parser throwing exception on invalid names.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'names' element for FieldDefinitionUpdate.
      */
     public function testParseExceptionOnInvalidNames()
@@ -128,7 +128,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     /**
      * Test FieldDefinitionUpdate parser throwing exception on invalid descriptions.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'descriptions' element for FieldDefinitionUpdate.
      */
     public function testParseExceptionOnInvalidDescriptions()
@@ -157,7 +157,7 @@ class FieldDefinitionUpdateTest extends BaseTest
     /**
      * Get the FieldTypeParser mock object.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser
+     * @return \EzSystems\EzPlatformRest\Input\FieldTypeParser
      */
     protected function getFieldTypeParserMock()
     {

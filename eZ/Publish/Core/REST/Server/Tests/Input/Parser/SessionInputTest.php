@@ -36,7 +36,7 @@ class SessionInputTest extends BaseTest
     /**
      * Test SessionInput parser throwing exception on missing password.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'password' attribute for SessionInput.
      */
     public function testParseExceptionOnMissingIdentifier()
@@ -52,7 +52,7 @@ class SessionInputTest extends BaseTest
     /**
      * Test SessionInput parser throwing exception on missing login.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'login' attribute for SessionInput.
      */
     public function testParseExceptionOnMissingName()

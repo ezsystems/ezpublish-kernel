@@ -77,7 +77,7 @@ class LocationUpdateTest extends BaseTest
     /**
      * Test LocationUpdate parser throwing exception on missing sort field.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortField' element for LocationUpdate.
      */
     public function testParseExceptionOnMissingSortField()
@@ -95,7 +95,7 @@ class LocationUpdateTest extends BaseTest
     /**
      * Test LocationUpdate parser throwing exception on missing sort order.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sortOrder' element for LocationUpdate.
      */
     public function testParseExceptionOnMissingSortOrder()

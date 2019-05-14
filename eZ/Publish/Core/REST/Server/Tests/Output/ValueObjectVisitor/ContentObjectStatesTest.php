@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
-use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest;
-use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
-use EzSystems\EzPlatformRestCommon\Values\ContentObjectStates;
+use EzSystems\EzPlatformRest\Tests\Output\ValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRest\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRest\Values\ContentObjectStates;
 
 class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
 {

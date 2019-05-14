@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\REST\Server\Values;
 
-use EzSystems\EzPlatformRestCommon\Value as RestValue;
+use EzSystems\EzPlatformRest\Value as RestValue;
 
 class BookmarkList extends RestValue
 {

@@ -42,7 +42,7 @@ class ViewInputTest extends BaseTest
     }
 
     /**
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      */
     public function testThrowsExceptionOnMissingIdentifier()
     {
@@ -51,7 +51,7 @@ class ViewInputTest extends BaseTest
     }
 
     /**
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      */
     public function testThrowsExceptionOnMissingQuery()
     {

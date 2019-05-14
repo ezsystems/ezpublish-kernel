@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser;
 
-use EzSystems\EzPlatformRestCommon\Input\BaseParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Input\ParserTools;
-use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\BaseParser;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Input\ParserTools;
+use EzSystems\EzPlatformRest\Input\FieldTypeParser;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct;
@@ -40,7 +40,7 @@ class ContentCreate extends BaseParser
     /**
      * FieldType parser.
      *
-     * @var \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser
+     * @var \EzSystems\EzPlatformRest\Input\FieldTypeParser
      */
     protected $fieldTypeParser;
 
@@ -54,7 +54,7 @@ class ContentCreate extends BaseParser
     /**
      * Parser tools.
      *
-     * @var \EzSystems\EzPlatformRestCommon\Input\ParserTools
+     * @var \EzSystems\EzPlatformRest\Input\ParserTools
      */
     protected $parserTools;
 
@@ -63,9 +63,9 @@ class ContentCreate extends BaseParser
      *
      * @param \eZ\Publish\API\Repository\ContentService $contentService
      * @param \eZ\Publish\API\Repository\ContentTypeService $contentTypeService
-     * @param \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser $fieldTypeParser
+     * @param \EzSystems\EzPlatformRest\Input\FieldTypeParser $fieldTypeParser
      * @param \eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate $locationCreateParser
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParserTools $parserTools
+     * @param \EzSystems\EzPlatformRest\Input\ParserTools $parserTools
      */
     public function __construct(
         ContentService $contentService,
@@ -85,7 +85,7 @@ class ContentCreate extends BaseParser
      * Parse input structure.
      *
      * @param array $data
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestContentCreateStruct
      */

@@ -40,7 +40,7 @@ class URLWildcardCreateTest extends BaseTest
     /**
      * Test URLWildcardCreate parser throwing exception on missing sourceUrl.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'sourceUrl' value for URLWildcardCreate.
      */
     public function testParseExceptionOnMissingSourceUrl()
@@ -57,7 +57,7 @@ class URLWildcardCreateTest extends BaseTest
     /**
      * Test URLWildcardCreate parser throwing exception on missing destinationUrl.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'destinationUrl' value for URLWildcardCreate.
      */
     public function testParseExceptionOnMissingDestinationUrl()
@@ -74,7 +74,7 @@ class URLWildcardCreateTest extends BaseTest
     /**
      * Test URLWildcardCreate parser throwing exception on missing forward.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'forward' value for URLWildcardCreate.
      */
     public function testParseExceptionOnMissingForward()

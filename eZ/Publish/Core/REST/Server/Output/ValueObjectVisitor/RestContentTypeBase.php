@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRest\Output\ValueObjectVisitor;
 use eZ\Publish\API\Repository\Values;
 
 /**

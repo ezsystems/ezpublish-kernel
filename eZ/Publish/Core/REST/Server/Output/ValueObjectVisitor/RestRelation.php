@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
 
-use EzSystems\EzPlatformRestCommon\Output\ValueObjectVisitor;
-use EzSystems\EzPlatformRestCommon\Output\Generator;
-use EzSystems\EzPlatformRestCommon\Output\Visitor;
+use EzSystems\EzPlatformRest\Output\ValueObjectVisitor;
+use EzSystems\EzPlatformRest\Output\Generator;
+use EzSystems\EzPlatformRest\Output\Visitor;
 use eZ\Publish\API\Repository\Values\Content\Relation as RelationValue;
 
 /**
@@ -21,8 +21,8 @@ class RestRelation extends ValueObjectVisitor
     /**
      * Visit struct returned by controllers.
      *
-     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $visitor
-     * @param \EzSystems\EzPlatformRestCommon\Output\Generator $generator
+     * @param \EzSystems\EzPlatformRest\Output\Visitor $visitor
+     * @param \EzSystems\EzPlatformRest\Output\Generator $generator
      * @param \eZ\Publish\Core\REST\Server\Values\RestRelation $data
      */
     public function visit(Visitor $visitor, Generator $generator, $data)

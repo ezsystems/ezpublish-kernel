@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\Core\REST\Server\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use EzSystems\EzPlatformRestCommon\Message;
+use EzSystems\EzPlatformRest\Message;
 use eZ\Publish\Core\REST\Server\Values;
 
 /**

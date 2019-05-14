@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\API\Repository\Exceptions\BadStateException;
-use EzSystems\EzPlatformRestCommon\Message;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Message;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException;
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException;
 use eZ\Publish\API\Repository\Exceptions\ContentTypeValidationException;
@@ -474,7 +474,7 @@ class ContentType extends RestController
      * @param $contentTypeId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\CreatedFieldDefinition
      */
@@ -542,7 +542,7 @@ class ContentType extends RestController
      * @param $contentTypeId
      * @param $fieldDefinitionId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
      */
@@ -585,7 +585,7 @@ class ContentType extends RestController
      * @param $contentTypeId
      * @param $fieldDefinitionId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestFieldDefinition
      */
@@ -612,7 +612,7 @@ class ContentType extends RestController
      * @param $fieldDefinitionId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\FieldDefinitionList
      */
@@ -667,7 +667,7 @@ class ContentType extends RestController
      * @param $contentTypeId
      * @param $fieldDefinitionId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
@@ -835,7 +835,7 @@ class ContentType extends RestController
      * @param $contentTypeGroupId
      *
      * @throws \eZ\Publish\Core\REST\Server\Exceptions\ForbiddenException
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\ContentTypeGroupRefList
      */

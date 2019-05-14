@@ -8,10 +8,10 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Input\Parser;
 
-use EzSystems\EzPlatformRestCommon\Exceptions\InvalidArgumentException;
+use EzSystems\EzPlatformRest\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentUpdate as ContentUpdateParser;
-use EzSystems\EzPlatformRestCommon\Values\RestContentMetadataUpdateStruct;
-use EzSystems\EzPlatformRestCommon\Exceptions\Parser;
+use EzSystems\EzPlatformRest\Values\RestContentMetadataUpdateStruct;
+use EzSystems\EzPlatformRest\Exceptions\Parser;
 use DateTime;
 
 class ContentUpdateTest extends BaseTest
@@ -19,7 +19,7 @@ class ContentUpdateTest extends BaseTest
     /**
      * Tests the ContentUpdate parser.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Values\RestContentMetadataUpdateStruct
+     * @return \EzSystems\EzPlatformRest\Values\RestContentMetadataUpdateStruct
      */
     public function testParseValid()
     {
@@ -42,7 +42,7 @@ class ContentUpdateTest extends BaseTest
     /**
      * Test for valid owner ID value in result.
      *
-     * @param \EzSystems\EzPlatformRestCommon\Values\RestContentMetadataUpdateStruct $result
+     * @param \EzSystems\EzPlatformRest\Values\RestContentMetadataUpdateStruct $result
      *
      * @depends testParseValid
      */
@@ -142,7 +142,7 @@ class ContentUpdateTest extends BaseTest
     /**
      * Returns a valid RestContentMetadataUpdateStruct that matches the structure from getValidInputData().
      *
-     * @return \EzSystems\EzPlatformRestCommon\Values\RestContentMetadataUpdateStruct
+     * @return \EzSystems\EzPlatformRest\Values\RestContentMetadataUpdateStruct
      */
     protected function getContentUpdateStruct()
     {

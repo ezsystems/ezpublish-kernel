@@ -88,7 +88,7 @@ class PolicyUpdateTest extends BaseTest
     /**
      * Test PolicyUpdate parser throwing exception on missing identifier.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing '_identifier' attribute for Limitation.
      */
     public function testParseExceptionOnMissingLimitationIdentifier()
@@ -122,7 +122,7 @@ class PolicyUpdateTest extends BaseTest
     /**
      * Test PolicyUpdate parser throwing exception on missing values.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Invalid format for limitation values in Limitation.
      */
     public function testParseExceptionOnMissingLimitationValues()

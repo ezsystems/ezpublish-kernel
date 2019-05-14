@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\FieldTypeService;
 use eZ\Publish\Core\REST\Server\Input\Parser\VersionUpdate;
 use eZ\Publish\Core\Repository\Values\Content\ContentUpdateStruct;
-use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+use EzSystems\EzPlatformRest\Input\FieldTypeParser;
 
 class VersionUpdateTest extends BaseTest
 {
@@ -62,7 +62,7 @@ class VersionUpdateTest extends BaseTest
     /**
      * Test VersionUpdate parser throwing exception on invalid fields data.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Invalid 'fields' element for VersionUpdate.
      */
     public function testParseExceptionOnInvalidFields()
@@ -80,7 +80,7 @@ class VersionUpdateTest extends BaseTest
     /**
      * Test VersionUpdate parser throwing exception on missing field definition identifier.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for VersionUpdate.
      */
     public function testParseExceptionOnMissingFieldDefinitionIdentifier()
@@ -104,7 +104,7 @@ class VersionUpdateTest extends BaseTest
     /**
      * Test VersionUpdate parser throwing exception on missing field value.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'subject' identifier in VersionUpdate.
      */
     public function testParseExceptionOnMissingFieldValue()
@@ -141,7 +141,7 @@ class VersionUpdateTest extends BaseTest
     /**
      * Get the field type parser mock object.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+     * @return \EzSystems\EzPlatformRest\Input\FieldTypeParser;
      */
     private function getFieldTypeParserMock()
     {

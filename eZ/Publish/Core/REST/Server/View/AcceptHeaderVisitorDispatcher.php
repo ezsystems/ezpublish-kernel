@@ -11,7 +11,7 @@
 namespace eZ\Publish\Core\REST\Server\View;
 
 use Symfony\Component\HttpFoundation\Request;
-use EzSystems\EzPlatformRestCommon\Output\Visitor as OutputVisitor;
+use EzSystems\EzPlatformRest\Output\Visitor as OutputVisitor;
 use Symfony\Component\HttpFoundation\Response;
 use RuntimeException;
 
@@ -32,7 +32,7 @@ class AcceptHeaderVisitorDispatcher
      * Adds view handler.
      *
      * @param string $regexp
-     * @param \EzSystems\EzPlatformRestCommon\Output\Visitor $visitor
+     * @param \EzSystems\EzPlatformRest\Output\Visitor $visitor
      */
     public function addVisitor($regexp, OutputVisitor $visitor)
     {
@@ -52,7 +52,7 @@ class AcceptHeaderVisitorDispatcher
     public function dispatch(Request $request, $result)
     {
         foreach ($request->getAcceptableContentTypes() as $mimeType) {
-            /** @var \EzSystems\EzPlatformRestCommon\Output\Visitor $visitor */
+            /** @var \EzSystems\EzPlatformRest\Output\Visitor $visitor */
             foreach ($this->mapping as $regexp => $visitor) {
                 if (preg_match($regexp, $mimeType)) {
                     return $visitor->visit($result);

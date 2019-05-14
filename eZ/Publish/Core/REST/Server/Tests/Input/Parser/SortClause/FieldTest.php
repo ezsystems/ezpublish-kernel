@@ -38,7 +38,7 @@ class FieldTest extends BaseTest
     /**
      * Test Field parser throwing exception on missing sort clause.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage The <Field> sort clause doesn't exist in the input structure
      */
     public function testParseExceptionOnMissingSortClause()
@@ -54,7 +54,7 @@ class FieldTest extends BaseTest
     /**
      * Test Field parser throwing exception on invalid direction format.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Invalid direction format in <Field> sort clause
      */
     public function testParseExceptionOnInvalidDirectionFormat()

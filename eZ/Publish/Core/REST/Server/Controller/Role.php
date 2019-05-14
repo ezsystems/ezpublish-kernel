@@ -13,8 +13,8 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\Core\Base\Exceptions\ForbiddenException;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
-use EzSystems\EzPlatformRestCommon\Message;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Message;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\Core\REST\Server\Exceptions\BadRequestException;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Controller as RestController;
@@ -360,7 +360,7 @@ class Role extends RestController
      * @param $roleId
      * @param $policyId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
@@ -480,7 +480,7 @@ class Role extends RestController
      * @param $roleId int ID of a role or a role draft
      * @param $policyId int ID of a policy
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
@@ -537,7 +537,7 @@ class Role extends RestController
      * @param $roleId
      * @param $policyId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
@@ -573,7 +573,7 @@ class Role extends RestController
      * @param $roleId int ID of a role or a role draft
      * @param $policyId int ID of a policy
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
@@ -627,7 +627,7 @@ class Role extends RestController
      * @param $roleId
      * @param $policyId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\NoContent
      */
@@ -797,7 +797,7 @@ class Role extends RestController
      * @param $userId
      * @param $roleId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserRoleAssignment
      */
@@ -821,7 +821,7 @@ class Role extends RestController
      * @param $groupPath
      * @param $roleId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\RestUserGroupRoleAssignment
      */

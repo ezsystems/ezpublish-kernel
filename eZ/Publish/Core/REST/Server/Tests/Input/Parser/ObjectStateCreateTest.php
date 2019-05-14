@@ -84,7 +84,7 @@ class ObjectStateCreateTest extends BaseTest
     /**
      * Test ObjectStateCreate parser throwing exception on missing identifier.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'identifier' attribute for ObjectStateCreate.
      */
     public function testParseExceptionOnMissingIdentifier()
@@ -117,7 +117,7 @@ class ObjectStateCreateTest extends BaseTest
     /**
      * Test ObjectStateCreate parser throwing exception on missing priority.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'priority' attribute for ObjectStateCreate.
      */
     public function testParseExceptionOnMissingPriority()
@@ -150,7 +150,7 @@ class ObjectStateCreateTest extends BaseTest
     /**
      * Test ObjectStateCreate parser throwing exception on missing defaultLanguageCode.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'defaultLanguageCode' attribute for ObjectStateCreate.
      */
     public function testParseExceptionOnMissingDefaultLanguageCode()
@@ -183,7 +183,7 @@ class ObjectStateCreateTest extends BaseTest
     /**
      * Test ObjectStateCreate parser throwing exception on missing names.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateCreate.
      */
     public function testParseExceptionOnMissingNames()
@@ -209,7 +209,7 @@ class ObjectStateCreateTest extends BaseTest
     /**
      * Test ObjectStateCreate parser throwing exception on invalid names structure.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateCreate.
      */
     public function testParseExceptionOnInvalidNames()

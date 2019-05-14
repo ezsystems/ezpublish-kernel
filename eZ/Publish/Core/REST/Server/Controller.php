@@ -12,16 +12,16 @@ use eZ\Publish\API\Repository\Repository;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Routing\RouterInterface;
-use EzSystems\EzPlatformRestCommon\Input\Dispatcher as InputDispatcher;
+use EzSystems\EzPlatformRest\Input\Dispatcher as InputDispatcher;
 use Symfony\Component\HttpFoundation\Request;
-use EzSystems\EzPlatformRestCommon\RequestParser;
+use EzSystems\EzPlatformRest\RequestParser;
 
 abstract class Controller implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
     /**
-     * @var \EzSystems\EzPlatformRestCommon\Input\Dispatcher
+     * @var \EzSystems\EzPlatformRest\Input\Dispatcher
      */
     protected $inputDispatcher;
 
@@ -31,7 +31,7 @@ abstract class Controller implements ContainerAwareInterface
     protected $router;
 
     /**
-     * @var \EzSystems\EzPlatformRestCommon\RequestParser
+     * @var \EzSystems\EzPlatformRest\RequestParser
      */
     protected $requestParser;
 

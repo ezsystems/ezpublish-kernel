@@ -77,7 +77,7 @@ class ObjectStateUpdateTest extends BaseTest
     /**
      * Test ObjectStateUpdate parser throwing exception on invalid names structure.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'names' element for ObjectStateUpdate.
      */
     public function testParseExceptionOnInvalidNames()

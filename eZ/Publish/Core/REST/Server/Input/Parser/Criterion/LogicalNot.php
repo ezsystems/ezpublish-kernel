@@ -9,8 +9,8 @@
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
 use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
-use EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher;
-use EzSystems\EzPlatformRestCommon\Exceptions;
+use EzSystems\EzPlatformRest\Input\ParsingDispatcher;
+use EzSystems\EzPlatformRest\Exceptions;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot as LogicalNotCriterion;
 
 /**
@@ -22,9 +22,9 @@ class LogicalNot extends CriterionParser
      * Parses input structure to a Criterion object.
      *
      * @param array $data
-     * @param \EzSystems\EzPlatformRestCommon\Input\ParsingDispatcher $parsingDispatcher
+     * @param \EzSystems\EzPlatformRest\Input\ParsingDispatcher $parsingDispatcher
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @throws \EzSystems\EzPlatformRest\Exceptions\Parser
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalNot
      */

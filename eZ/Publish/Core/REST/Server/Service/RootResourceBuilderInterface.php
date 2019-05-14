@@ -13,7 +13,7 @@ interface RootResourceBuilderInterface
     /**
      * Build root resource.
      *
-     * @return array|\EzSystems\EzPlatformRestCommon\Values\Root
+     * @return array|\EzSystems\EzPlatformRest\Values\Root
      */
     public function buildRootResource();
 }

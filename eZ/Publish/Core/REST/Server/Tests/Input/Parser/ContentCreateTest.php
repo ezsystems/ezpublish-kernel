@@ -16,7 +16,7 @@ use eZ\Publish\Core\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\REST\Server\Input\Parser\ContentCreate;
 use eZ\Publish\Core\REST\Server\Input\Parser\LocationCreate;
-use EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+use EzSystems\EzPlatformRest\Input\FieldTypeParser;
 use eZ\Publish\API\Repository\FieldTypeService;
 
 class ContentCreateTest extends BaseTest
@@ -128,7 +128,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on missing LocationCreate.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'LocationCreate' element for ContentCreate.
      */
     public function testParseExceptionOnMissingLocationCreate()
@@ -167,7 +167,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on missing ContentType.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'ContentType' element for ContentCreate.
      */
     public function testParseExceptionOnMissingContentType()
@@ -204,7 +204,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on invalid ContentType.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for ContentType element in ContentCreate.
      */
     public function testParseExceptionOnInvalidContentType()
@@ -242,7 +242,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on missing mainLanguageCode.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'mainLanguageCode' element for ContentCreate.
      */
     public function testParseExceptionOnMissingMainLanguageCode()
@@ -281,7 +281,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on invalid Section.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for Section element in ContentCreate.
      */
     public function testParseExceptionOnInvalidSection()
@@ -319,7 +319,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on invalid User.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing '_href' attribute for User element in ContentCreate.
      */
     public function testParseExceptionOnInvalidUser()
@@ -357,7 +357,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on invalid fields data.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing or invalid 'fields' element for ContentCreate.
      */
     public function testParseExceptionOnInvalidFields()
@@ -385,7 +385,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on missing field definition identifier.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldDefinitionIdentifier' element in field data for ContentCreate.
      */
     public function testParseExceptionOnMissingFieldDefinitionIdentifier()
@@ -424,7 +424,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on invalid field definition identifier.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage 'unknown' is invalid field definition identifier for 'some_class' content type in ContentCreate.
      */
     public function testParseExceptionOnInvalidFieldDefinitionIdentifier()
@@ -464,7 +464,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Test ContentCreate parser throwing exception on missing field value.
      *
-     * @expectedException \EzSystems\EzPlatformRestCommon\Exceptions\Parser
+     * @expectedException \EzSystems\EzPlatformRest\Exceptions\Parser
      * @expectedExceptionMessage Missing 'fieldValue' element for 'subject' identifier in ContentCreate.
      */
     public function testParseExceptionOnMissingFieldValue()
@@ -519,7 +519,7 @@ class ContentCreateTest extends BaseTest
     /**
      * Get the field type parser mock object.
      *
-     * @return \EzSystems\EzPlatformRestCommon\Input\FieldTypeParser;
+     * @return \EzSystems\EzPlatformRest\Input\FieldTypeParser;
      */
     private function getFieldTypeParserMock()
     {

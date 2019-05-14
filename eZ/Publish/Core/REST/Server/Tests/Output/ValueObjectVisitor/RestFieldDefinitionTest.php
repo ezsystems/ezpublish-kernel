@@ -8,9 +8,9 @@
  */
 namespace eZ\Publish\Core\REST\Server\Tests\Output\ValueObjectVisitor;
 
-use EzSystems\EzPlatformRestCommon\Tests\Output\ValueObjectVisitorBaseTest;
+use EzSystems\EzPlatformRest\Tests\Output\ValueObjectVisitorBaseTest;
 use eZ\Publish\Core\REST\Server\Output\ValueObjectVisitor;
-use EzSystems\EzPlatformRestCommon\Output\FieldTypeSerializer;
+use EzSystems\EzPlatformRest\Output\FieldTypeSerializer;
 use eZ\Publish\Core\REST\Server;
 use eZ\Publish\Core\Repository\Values;
 

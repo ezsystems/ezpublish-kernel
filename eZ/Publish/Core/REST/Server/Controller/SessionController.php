@@ -7,8 +7,8 @@ namespace eZ\Publish\Core\REST\Server\Controller;
 
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\MVC\Symfony\Security\Authentication\AuthenticatorInterface;
-use EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException;
-use EzSystems\EzPlatformRestCommon\Message;
+use EzSystems\EzPlatformRest\Exceptions\NotFoundException;
+use EzSystems\EzPlatformRest\Message;
 use eZ\Publish\Core\REST\Server\Controller;
 use eZ\Publish\Core\REST\Server\Values;
 use eZ\Publish\Core\REST\Server\Exceptions;
@@ -99,7 +99,7 @@ class SessionController extends Controller
      *
      * @param string $sessionId
      *
-     * @throws \EzSystems\EzPlatformRestCommon\Exceptions\NotFoundException
+     * @throws \EzSystems\EzPlatformRest\Exceptions\NotFoundException
      *
      * @return \eZ\Publish\Core\REST\Server\Values\UserSession
      */
