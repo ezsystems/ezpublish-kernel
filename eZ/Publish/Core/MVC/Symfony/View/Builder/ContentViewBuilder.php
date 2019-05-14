@@ -233,10 +233,10 @@ class ContentViewBuilder implements ViewBuilder
                 return $repository->getLocationService()->loadLocation($locationId);
             }
         );
-        if ($location->invisible) {
-            $request = $this->requestStack->getCurrentRequest();
 
-            if (!$request || !$request->attributes->get(PreviewController::PREVIEW_PARAMETER_NAME, false)) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request || !$request->attributes->get(PreviewController::PREVIEW_PARAMETER_NAME, false)) {
+            if ($location->invisible) {
                 throw new HiddenLocationException($location, 'Location cannot be displayed as it is flagged as invisible.');
             }
         }
