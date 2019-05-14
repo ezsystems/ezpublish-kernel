@@ -42,7 +42,7 @@ class PreviewRequestListener implements EventSubscriberInterface
         }
 
         $parentRequest = $this->requestStack->getParentRequest();
-        if ($parentRequest->attributes->get(PreviewController::PREVIEW_PARAMETER_NAME, false)) {
+        if ($parentRequest !== null && $parentRequest->attributes->get(PreviewController::PREVIEW_PARAMETER_NAME, false)) {
             $this->requestStack->getCurrentRequest()->attributes->set(PreviewController::PREVIEW_PARAMETER_NAME, true);
         }
     }
