@@ -65,9 +65,9 @@ class LogicalOrTest extends BaseTest
             ],
         ];
 
-        $criterionMock = $this->getMock(Content\Query\Criterion::class, [], [], '', false);
+        $criterionMock = $this->createMock(Content\Query\Criterion::class, [], [], '', false);
 
-        $parserMock = $this->getMock(\eZ\Publish\Core\REST\Common\Input\Parser::class);
+        $parserMock = $this->createMock(\eZ\Publish\Core\REST\Common\Input\Parser::class);
         $parserMock->method('parse')->willReturn($criterionMock);
 
         $result = $this->internalGetParser()->parse($logicalOrParsedFromXml, new ParsingDispatcher([
