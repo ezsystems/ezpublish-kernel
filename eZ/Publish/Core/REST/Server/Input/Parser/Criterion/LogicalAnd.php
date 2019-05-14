@@ -8,16 +8,20 @@
  */
 namespace eZ\Publish\Core\REST\Server\Input\Parser\Criterion;
 
-use eZ\Publish\Core\REST\Server\Input\Parser\Criterion as CriterionParser;
 use eZ\Publish\Core\REST\Common\Input\ParsingDispatcher;
 use eZ\Publish\Core\REST\Common\Exceptions;
-use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalAnd as LogicalAndCriterion;
+use eZ\Publish\API\Repository\Values;
 
 /**
  * Parser for LogicalAnd Criterion.
  */
-class LogicalAnd extends CriterionParser
+class LogicalAnd extends LogicalOperator
 {
+    /**
+     * @var string
+     */
+    const TAG_NAME = 'AND';
+
     /**
      * Parses input structure to a LogicalAnd Criterion object.
      *
@@ -30,15 +34,21 @@ class LogicalAnd extends CriterionParser
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        if (!array_key_exists('AND', $data) && !is_array($data['AND'])) {
-            throw new Exceptions\Parser('Invalid <AND> format');
+        if (!array_key_exists(static::TAG_NAME, $data) || !is_array($data[static::TAG_NAME])) {
+            throw new Exceptions\Parser('Invalid <' . static::TAG_NAME . '> format');
         }
 
         $criteria = array();
-        foreach ($data['AND'] as $criterionName => $criterionData) {
-            $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
+
+        $flattenedCriteriaElements = $this->getFlattenedCriteriaData($data[static::TAG_NAME]);
+        foreach ($flattenedCriteriaElements as $criterionElement) {
+            $criteria[] = $this->dispatchCriterion(
+                $criterionElement['type'],
+                $criterionElement['data'],
+                $parsingDispatcher
+            );
         }
 
-        return new LogicalAndCriterion($criteria);
+        return new Values\Content\Query\Criterion\LogicalAnd($criteria);
     }
 }
