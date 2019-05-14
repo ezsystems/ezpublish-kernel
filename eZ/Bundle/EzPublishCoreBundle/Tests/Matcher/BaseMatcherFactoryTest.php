@@ -38,7 +38,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
                                 $matcherServiceIdentifier => 'someValue',
                             ),
                         ),
-                    )
+                    ),
                 )
             )
         );

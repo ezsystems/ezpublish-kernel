@@ -105,11 +105,6 @@ services:
         tags:
             - {name: ezpublish.storageEngine.legacy.converter, alias: ezurl}
 
-    ezpublish.fieldType.ezpage.converter:
-        class: "%ezpublish.fieldType.eznull.converter.class%"
-        tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezpage}
-
     ezpublish.fieldType.ezimage.converter:
         class: "%ezpublish.fieldType.ezimage.converter.class%"
         arguments:
