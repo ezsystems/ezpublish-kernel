@@ -283,15 +283,18 @@ EOF;
 
     /**
      * @param string $string The value of the folders name field
-     * @param string $parentLocationId The REST id of the parent location
-     * @param null $remoteId
+     * @param string $parentLocationId The REST resource id of the parent location
+     * @param string|null $remoteId
      *
      * @return array created Content, as an array
      */
-    protected function createFolder($string, $parentLocationId, $remoteId = null)
-    {
+    protected function createFolder(
+        string $string,
+        string $parentLocationId,
+        ?string $remoteId = null
+    ): array {
         $string = $this->addTestSuffix($string);
-        $remoteId = $remoteId ?: md5(uniqid($string, true));
+        $remoteId = $remoteId ?? md5(uniqid($string, true));
         $xml = <<< XML
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentCreate>
