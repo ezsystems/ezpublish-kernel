@@ -7,7 +7,6 @@ parameters:
     ezpublish.view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ServiceAwareMatcherFactory
     ezpublish.content_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\ContentMatcherFactory
     ezpublish.location_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\LocationMatcherFactory
-    ezpublish.block_view.matcher_factory.class: eZ\Bundle\EzPublishCoreBundle\Matcher\BlockMatcherFactory
 
     ezpublish.content_view.viewbase_layout: "EzPublishCoreBundle::viewbase_layout.html.twig"
     ezpublish.content_view.content_block_name: "content"
@@ -23,19 +22,15 @@ parameters:
     ezpublish.twig.extension.image.class: eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\ImageExtension
 
     ezpublish.view.cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\CacheViewResponseListener
-    ezpublish.view.block_cache_response_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\BlockCacheResponseListener
     ezpublish.view.view_parameters.injector.viewbase_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ViewbaseLayout
     ezpublish.view.view_parameters.injector.value_objects_ids.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\ValueObjectsIds
     ezpublish.view.view_parameters.injector.no_layout.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\NoLayout
     ezpublish.view.view_parameters.injector.embed_object_parameters.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EmbedObjectParameters
     ezpublish.view.view_parameters.injector.custom_parameters.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\CustomParameters
-    ezpublish.view.view_parameters.injector.block.valid_items.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\Block\ValidItems
-    ezpublish.view.view_parameters.injector.block.valid_content_info_items.class: eZ\Bundle\EzPublishCoreBundle\EventListener\BlockValidContentInfoItemsListener
     ezpublish.view.view_parameters.injector.dispatcher.class: eZ\Publish\Core\MVC\Symfony\View\ParametersInjector\EventDispatcherInjector
     ezpublish.view.renderer_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ViewRendererListener
     ezpublish.view.template_renderer.class: eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer
     ezpublish.view.builder_parameter_collector.request_attributes.class: eZ\Publish\Core\MVC\Symfony\View\Builder\ParametersFilter\RequestAttributes
-    ezpublish.view_builder.block.class: eZ\Publish\Core\MVC\Symfony\View\Builder\BlockViewBuilder
     ezpublish.view_builder.content.class: eZ\Publish\Core\MVC\Symfony\View\Builder\ContentViewBuilder
     ezpublish.view_builder.registry.class: eZ\Publish\Core\MVC\Symfony\View\Builder\Registry\ControllerMatch
     ezpublish.view.configurator.class: eZ\Publish\Core\MVC\Symfony\View\Configurator\ViewProvider
@@ -108,32 +103,6 @@ services:
             - [setContainer, ["@service_container"]]
             - [setMatchConfig, [$location_view$]]
 
-    ezpublish.block_view_provider.configured:
-        class: "%ezpublish.view_provider.configured.class%"
-        arguments: ["@ezpublish.block_view.matcher_factory"]
-        tags:
-            - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\BlockView', priority: 10}
-
-    ezpublish.block_view.matcher_factory:
-        class: "%ezpublish.view.matcher_factory.class%"
-        arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\Block']
-        calls:
-            - [setContainer, ["@service_container"]]
-            - [setMatchConfig, [$block_view$]]
-
-    ezpublish.block_view_provider.default_configured:
-        class: "%ezpublish.view_provider.configured.class%"
-        arguments: ["@ezpublish.block_view.default_matcher_factory"]
-        tags:
-            - {name: ezpublish.view_provider, type: 'eZ\Publish\Core\MVC\Symfony\View\BlockView', priority: -1}
-
-    ezpublish.block_view.default_matcher_factory:
-        class: "%ezpublish.view.matcher_factory.class%"
-        arguments: ["@ezpublish.api.repository"]
-        calls:
-            - [setContainer, ["@service_container"]]
-            - [setMatchConfig, [$block_view_defaults$]]
-
     ezpublish.templating.global_helper.core:
         class: "%ezpublish.templating.global_helper.core.class%"
         arguments: ["@ezpublish.config.resolver", "@ezpublish.siteaccessaware.service.location", "@router", "@ezpublish.translation_helper"]
@@ -205,7 +174,7 @@ services:
     ezpublish.view_builder.registry:
         class: "%ezpublish.view_builder.registry.class%"
         calls:
-            - [addToRegistry, [["@ezpublish.view_builder.content", "@ezpublish.view_builder.block"]]]
+            - [addToRegistry, [["@ezpublish.view_builder.content"]]]
 
     ezpublish.view_builder.content:
         class: "%ezpublish.view_builder.content.class%"
@@ -214,13 +183,6 @@ services:
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
             - "@ezpublish.content_info_location_loader.main"
-
-    ezpublish.view_builder.block:
-        class: "%ezpublish.view_builder.block.class%"
-        arguments:
-            - "@ezpublish.fieldType.ezpage.pageService"
-            - "@ezpublish.view.configurator"
-            - "@ezpublish.view.view_parameters.injector.dispatcher"
 
     ezpublish.view.builder_parameter_collector.request_attributes:
         class: "%ezpublish.view.builder_parameter_collector.request_attributes.class%"
@@ -269,30 +231,11 @@ services:
         tags:
             - { name: kernel.event_subscriber }
 
-    ezpublish.view.view_parameters.injector.block.valid_items:
-        class: "%ezpublish.view.view_parameters.injector.block.valid_items.class%"
-        arguments: ["@ezpublish.fieldType.ezpage.pageService"]
-        tags:
-            - { name: kernel.event_subscriber }
-
-    ezpublish.view.view_parameters.injector.block.valid_content_info_items:
-        class: "%ezpublish.view.view_parameters.injector.block.valid_content_info_items.class%"
-        arguments: ["@ezpublish.fieldType.ezpage.pageService"]
-        tags:
-            - { name: kernel.event_subscriber }
-
     ezpublish.view.cache_response_listener:
         class: "%ezpublish.view.cache_response_listener.class%"
         arguments:
             - $content.view_cache$
             - $content.ttl_cache$
             - $content.default_ttl$
-        tags:
-            - { name: kernel.event_subscriber }
-
-    ezpublish.view.block_cache_response_listener:
-        class: "%ezpublish.view.block_cache_response_listener.class%"
-        calls:
-            - [setEnableViewCache, [$content.view_cache$]]
         tags:
             - { name: kernel.event_subscriber }

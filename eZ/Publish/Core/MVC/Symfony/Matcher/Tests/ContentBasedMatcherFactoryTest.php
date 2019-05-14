@@ -8,8 +8,6 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 
-use eZ\Publish\Core\MVC\Symfony\Matcher\Block\Type;
-
 abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
 {
     /**
@@ -29,7 +27,7 @@ abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
                     'test' => array(
                         'template' => 'foo.html.twig',
                         'match' => array(
-                            Type::class => true,
+                            \stdClass::class => true,
                         ),
                     ),
                 ),

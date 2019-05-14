@@ -8,7 +8,6 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Configuration\Parser;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\BlockView;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\ContentView;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\LocationView;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
@@ -21,7 +20,7 @@ class ViewTest extends AbstractParserTestCase
     protected function getContainerExtensions()
     {
         return array(
-            new EzPublishCoreExtension(array(new LocationView(), new ContentView(), new BlockView())),
+            new EzPublishCoreExtension(array(new LocationView(), new ContentView())),
         );
     }
 
@@ -67,28 +66,5 @@ class ViewTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('content_view', $expectedContentView, 'ezdemo_site', false);
         $this->assertConfigResolverParameterValue('content_view', $expectedContentView, 'fre', false);
         $this->assertConfigResolverParameterValue('content_view', array(), 'ezdemo_site_admin', false);
-    }
-
-    public function testBlockView()
-    {
-        $this->load();
-        $this->assertConfigResolverParameterValue(
-            'block_view',
-            array('block' => $this->config['system']['ezdemo_frontend_group']['block_view']),
-            'ezdemo_site',
-            false
-        );
-        $this->assertConfigResolverParameterValue(
-            'block_view',
-            array('block' => $this->config['system']['ezdemo_frontend_group']['block_view']),
-            'fre',
-            false
-        );
-        $this->assertConfigResolverParameterValue(
-            'block_view',
-            array(),
-            'ezdemo_site_admin',
-            false
-        );
     }
 }

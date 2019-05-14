@@ -8,9 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Tests\Matcher;
 
-use eZ\Publish\Core\FieldType\Page\Parts\Block;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
-use eZ\Publish\Core\MVC\Symfony\View\BlockView;
 use eZ\Publish\Core\Repository\Values\Content\Content;
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
@@ -29,19 +27,11 @@ abstract class BaseMatcherFactoryTest extends TestCase
         $resolverMock
         ->expects($this->atLeastOnce())
         ->method('getParameter')
-        ->with($this->logicalOr('location_view', 'content_view', 'block_view'))
+        ->with($this->logicalOr('location_view', 'content_view'))
         ->will(
             $this->returnValue(
                 array(
                     'full' => array(
-                        'matchRule' => array(
-                            'template' => 'my_template.html.twig',
-                            'match' => array(
-                                $matcherServiceIdentifier => 'someValue',
-                            ),
-                        ),
-                    ),
-                    'block' => array(
                         'matchRule' => array(
                             'template' => 'my_template.html.twig',
                             'match' => array(
@@ -78,19 +68,6 @@ abstract class BaseMatcherFactoryTest extends TestCase
     {
         $view = new ContentView();
         $view->setContent(new Content($properties));
-
-        return $view;
-    }
-
-    /**
-     * @param array $properties
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    protected function getBlockMock(array $properties = array())
-    {
-        $view = new BlockView();
-        $view->setBlock(new Block($properties));
 
         return $view;
     }

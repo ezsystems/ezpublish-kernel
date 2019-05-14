@@ -8,7 +8,6 @@ parameters:
     ezpublish.fieldType.ezmedia.storage_gateway.class: eZ\Publish\Core\FieldType\Media\MediaStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezurl.storage_gateway.class: eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\DoctrineStorage
     ezpublish.fieldType.ezuser.storage_gateway.class: eZ\Publish\Core\FieldType\User\UserStorage\Gateway\DoctrineStorage
-    ezpublish.fieldType.ezpage.storage_gateway.class: eZ\Publish\Core\FieldType\Page\PageStorage\Gateway\DoctrineStorage
 
 services:
     ezpublish.persistence.legacy.external_storage_handler:
@@ -33,10 +32,6 @@ services:
 
     ezpublish.fieldType.ezurl.storage_gateway:
         class: "%ezpublish.fieldType.ezurl.storage_gateway.class%"
-        arguments: ["@ezpublish.api.storage_engine.legacy.connection"]
-
-    ezpublish.fieldType.ezpage.storage_gateway:
-        class: "%ezpublish.fieldType.ezpage.storage_gateway.class%"
         arguments: ["@ezpublish.api.storage_engine.legacy.connection"]
 
     ezpublish.fieldType.ezimage.storage_gateway:

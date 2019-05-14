@@ -257,15 +257,6 @@
 </ul>
 {% endblock %}
 
-{% block ezpage_settings %}
-<ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
-    <li class="ez-fielddefinition-setting default-layout">
-        <div class="ez-fielddefinition-setting-name">{{ 'fielddefinition.default-layout.label'|trans|desc("Default layout:")}}</div>
-        <div class="ez-fielddefinition-setting-value">{{ settings.defaultLayout ? settings.defaultLayout : 'fielddefinition.default-layout.none'|trans|desc("None") }}</div>
-    </li>
-</ul>
-{% endblock %}
-
 {% block ezauthor_settings %}
 <ul class="ez-fielddefinition-settings ez-fielddefinition-{{ fielddefinition.fieldTypeIdentifier }}-settings">
     {% if settings.defaultType == constant( 'eZ\\Publish\\Core\\FieldType\\Author\\Type::DEFAULT_EMPTY' ) %}

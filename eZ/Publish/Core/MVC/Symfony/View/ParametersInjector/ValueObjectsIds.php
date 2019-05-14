@@ -33,8 +33,5 @@ class ValueObjectsIds implements EventSubscriberInterface
         if ($view instanceof View\ContentValueView) {
             $parameterBag->set('contentId', $view->getContent()->id);
         }
-        if ($view instanceof View\BlockValueView) {
-            $parameterBag->set('blockId', $view->getBlock()->id);
-        }
     }
 }

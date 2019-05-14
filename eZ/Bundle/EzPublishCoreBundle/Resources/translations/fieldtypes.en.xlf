@@ -91,11 +91,6 @@
         <target>Content relations (multiple)</target>
         <note>key: ezobjectrelationlist.name</note>
       </trans-unit>
-      <trans-unit id="6ce4370c413c1a478e8e3c0a072a340584338b84" resname="ezpage.name">
-        <source>Layout</source>
-        <target>Layout</target>
-        <note>key: ezpage.name</note>
-      </trans-unit>
       <trans-unit id="213da4efa5baa8b47c34dc4b645df7115d07d66e" resname="ezrichtext.name">
         <source>Rich text</source>
         <target>Rich text</target>
