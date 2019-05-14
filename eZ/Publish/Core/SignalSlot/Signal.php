@@ -15,8 +15,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  *
  * A Signal must always be fully export and re-creatable. It must therefore not
  * depend on external object references, resources or similar.
- *
- * @internal
  */
 abstract class Signal extends ValueObject
 {
