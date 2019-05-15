@@ -302,7 +302,10 @@ class DomainMapper
         ksort($fields, SORT_NUMERIC);
 
         // Flatten array
-        return array_merge(...$fields);
+        if (count($fields) === 0) {
+            return [];
+        }
+        return array_merge(...$fields); //  Warning: array_merge() expects at least 1 parameter, 0 given
     }
 
     /**
