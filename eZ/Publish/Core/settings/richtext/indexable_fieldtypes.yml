@@ -6,4 +6,4 @@ services:
     ezpublish.fieldType.indexable.ezrichtext:
         class: "%ezpublish.fieldType.indexable.ezrichtext.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezrichtext}
+            - {name: ezplatform.field_type.indexable, alias: ezrichtext}

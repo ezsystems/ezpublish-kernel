@@ -31,11 +31,17 @@ class FieldRegistryPass implements CompilerPassInterface
 
         $fieldRegistryDefinition = $container->getDefinition('ezpublish.search.common.field_registry');
 
-        foreach ($container->findTaggedServiceIds('ezpublish.fieldType.indexable') as $id => $attributes) {
+        $ezpublishIndexableFieldTypeTags = $container->findTaggedServiceIds('ezpublish.fieldType.indexable');
+        foreach ($ezpublishIndexableFieldTypeTags as $ezpublishIndexableFieldTypeTag) {
+            @trigger_error('`ezpublish.fieldType.indexable` service tag is deprecated and will be removed in version 9. Please use `ezplatform.field_type.indexable`. instead.', E_USER_DEPRECATED);
+        }
+        $ezplatformIndexableFieldTypeTags = $container->findTaggedServiceIds('ezplatform.field_type.indexable');
+        $fieldTypesTags = array_merge($ezpublishIndexableFieldTypeTags, $ezplatformIndexableFieldTypeTags);
+        foreach ($fieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
-                        'ezpublish.fieldType.indexable service tag needs an "alias" attribute to ' .
+                        'ezpublish.fieldType.indexable or ezplatform.field_type.indexable service tag needs an "alias" attribute to ' .
                         'identify the indexable field type. None given.'
                     );
                 }
