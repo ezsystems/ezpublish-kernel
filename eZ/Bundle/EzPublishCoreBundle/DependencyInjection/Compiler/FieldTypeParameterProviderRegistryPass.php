@@ -30,11 +30,17 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
 
         $parameterProviderRegistryDef = $container->getDefinition('ezpublish.fieldType.parameterProviderRegistry');
 
-        foreach ($container->findTaggedServiceIds('ezpublish.fieldType.parameterProvider') as $id => $attributes) {
+        $ezpublishFieldTypeParameterProviderTags = $container->findTaggedServiceIds('ezpublish.fieldType.parameterProvider');
+        foreach ($ezpublishFieldTypeParameterProviderTags as $ezpublishFieldTypeParameterProviderTag) {
+            @trigger_error('`ezpublish.fieldType.parameterProvider` service tag is deprecated and will be removed in version 9. Please use `ezplatform.field_type.parameter_provider` instead.', E_USER_DEPRECATED);
+        }
+        $ezplatformFieldTypeParameterProviderTags = $container->findTaggedServiceIds('ezplatform.field_type.parameter_provider');
+        $parameterProviderFieldTypesTags = array_merge($ezpublishFieldTypeParameterProviderTags, $ezplatformFieldTypeParameterProviderTags);
+        foreach ($parameterProviderFieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new \LogicException(
-                        'ezpublish.fieldType.parameterProvider service tag needs an "alias" ' .
+                        'ezpublish.fieldType.parameterProvider or ezplatform.field_type.parameter_provider service tag needs an "alias" ' .
                         'attribute to identify the field type. None given.'
                     );
                 }
