@@ -10,8 +10,6 @@ namespace eZ\Publish\Core\SignalSlot;
 
 /**
  * A Slot can be assigned to receive a certain Signal.
- *
- * @internal
  */
 abstract class Slot
 {
