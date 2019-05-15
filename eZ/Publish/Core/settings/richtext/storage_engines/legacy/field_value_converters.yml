@@ -5,5 +5,5 @@ services:
     ezpublish.fieldType.ezrichtext.converter:
         class: "%ezpublish.fieldType.ezrichtext.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezrichtext}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezrichtext}
 
