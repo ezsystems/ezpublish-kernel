@@ -70,8 +70,8 @@ class ContentPreviewContext extends RawMinkContext
 
     protected function checkForExceptions()
     {
-        $exceptionElements = $this->getXpath()->findXpath("//div[@class='text-exception']/h1");
-        $exceptionStackTraceItems = $this->getXpath()->findXpath("//ol[@id='traces-0']/li");
+        $exceptionElements = $this->getSession()->getPage()->findAll('xpath', "//div[@class='text-exception']/h1");
+        $exceptionStackTraceItems = $this->getSession()->getPage()->findAll('xpath', "//ol[@id='traces-0']/li");
         if (count($exceptionElements) > 0) {
             $exceptionElement = $exceptionElements[0];
             $exceptionLines = [$exceptionElement->getText(), ''];
