@@ -103,6 +103,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
                 $item->value = $value;
                 $item->isHit = $isHit;
                 $item->defaultLifetime = $defaultLifetime;
+                $item->isTaggable = true;
 
                 return $item;
             },

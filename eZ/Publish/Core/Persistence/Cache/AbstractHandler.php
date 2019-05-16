@@ -87,6 +87,7 @@ abstract class AbstractHandler
         }
 
         // Load cache items by cache keys (will contain hits and misses)
+        /** @var \Symfony\Component\Cache\CacheItem[] $list */
         $list = [];
         $cacheMisses = [];
         foreach ($this->cache->getItems($cacheKeys) as $key => $cacheItem) {
