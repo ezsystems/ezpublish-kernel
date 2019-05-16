@@ -13,9 +13,9 @@ use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\RoutingExtension;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Twig_Test_IntegrationTestCase;
+use Twig\Test\IntegrationTestCase;
 
-class RoutingExtensionTest extends Twig_Test_IntegrationTestCase
+class RoutingExtensionTest extends IntegrationTestCase
 {
     protected function getExtensions()
     {

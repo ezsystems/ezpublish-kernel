@@ -8,11 +8,11 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
-use Twig_Extension;
+use Twig\Extension\AbstractExtension;
 use eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper;
-use Twig_Extension_GlobalsInterface;
+use Twig\Extension\GlobalsInterface;
 
-class CoreExtension extends Twig_Extension implements Twig_Extension_GlobalsInterface
+class CoreExtension extends AbstractExtension implements GlobalsInterface
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper

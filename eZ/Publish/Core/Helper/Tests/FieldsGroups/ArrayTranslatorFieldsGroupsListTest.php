@@ -5,8 +5,8 @@
 namespace eZ\Publish\Core\Helper\Tests\FieldsGroups;
 
 use eZ\Publish\Core\Helper\FieldsGroups\ArrayTranslatorFieldsGroupsList;
-use Symfony\Component\Translation\TranslatorInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ArrayTranslatorFieldsGroupsListTest extends TestCase
 {
@@ -76,7 +76,7 @@ class ArrayTranslatorFieldsGroupsListTest extends TestCase
     }
 
     /**
-     * @return \Symfony\Component\Translation\TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
+     * @return \Symfony\Contracts\Translation\TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getTranslatorMock()
     {

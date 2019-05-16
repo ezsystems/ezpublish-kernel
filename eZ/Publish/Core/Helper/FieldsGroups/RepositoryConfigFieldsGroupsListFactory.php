@@ -6,7 +6,7 @@
 namespace eZ\Publish\Core\Helper\FieldsGroups;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Builds a SettingsFieldGroupsList.

@@ -18,7 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\PhpExecutableFinder;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
 use RuntimeException;
 use DateTime;
 use PDO;
@@ -389,6 +389,7 @@ EOT
     {
         $consolePath = file_exists('bin/console') ? 'bin/console' : 'app/console';
         $subProcessArgs = [
+            $this->getPhpPath(),
             $consolePath,
             'ezplatform:reindex',
             '--content-ids=' . implode(',', $contentIds),
@@ -400,16 +401,14 @@ EOT
         if (!$this->isDebug) {
             $subProcessArgs[] = '--no-debug';
         }
-
-        $process = new ProcessBuilder($subProcessArgs);
-        $process->setTimeout(null);
-        $process->setPrefix($this->getPhpPath());
-
         if (!$commit) {
-            $process->add('--no-commit');
+            $subProcessArgs[] = '--no-commit';
         }
 
-        return $process->getProcess();
+        $process = new Process($subProcessArgs);
+        $process->setTimeout(null);
+
+        return $process;
     }
 
     /**

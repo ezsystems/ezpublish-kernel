@@ -91,7 +91,8 @@ class InstallPlatformCommand extends Command
 
     private function checkPermissions()
     {
-        if (!is_writable('web') && !is_writable('web/var')) {
+        // @todo should take var-dir etc. from composer config or fallback to flex directory scheme
+        if (!is_writable('public') && !is_writable('public/var')) {
             $this->output->writeln('[web/ | web/var] is not writable');
             exit(self::EXIT_MISSING_PERMISSIONS);
         }
@@ -99,6 +100,8 @@ class InstallPlatformCommand extends Command
 
     private function checkParameters()
     {
+        // @todo doesn't make sense to check for parameters.yml in sf4 and flex
+        return;
         $parametersFile = 'app/config/parameters.yml';
         if (!is_file($parametersFile)) {
             $this->output->writeln("Required configuration file '$parametersFile' not found");

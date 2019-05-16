@@ -146,4 +146,9 @@ class PersistenceCacheCollector extends DataCollector
     {
         return array_sum($this->data['handlers']);
     }
+
+    public function reset(): void
+    {
+        $this->data = [];
+    }
 }

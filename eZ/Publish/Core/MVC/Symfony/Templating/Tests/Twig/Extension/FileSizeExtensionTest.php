@@ -8,16 +8,16 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
-use Twig_Test_IntegrationTestCase;
 use eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\FileSizeExtension;
-use Symfony\Component\Translation\TranslatorInterface;
 use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Twig\Test\IntegrationTestCase;
 
 /**
  * Class FileSizeExtensionTest.
  */
-class FileSizeExtensionTest extends Twig_Test_IntegrationTestCase
+class FileSizeExtensionTest extends IntegrationTestCase
 {
     /**
      * @param string $locale

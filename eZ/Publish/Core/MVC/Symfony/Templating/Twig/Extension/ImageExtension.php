@@ -15,10 +15,10 @@ use eZ\Publish\Core\FieldType\ImageAsset\AssetMapper;
 use eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException;
 use eZ\Publish\SPI\Variation\VariationHandler;
 use InvalidArgumentException;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class ImageExtension extends Twig_Extension
+class ImageExtension extends AbstractExtension
 {
     /**
      * @var VariationHandler
@@ -44,12 +44,12 @@ class ImageExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_image_alias',
                 array($this, 'getImageVariation'),
                 array('is_safe' => array('html'))
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_image_asset_content_field_identifier',
                 array($this, 'getImageAssetContentFieldIdentifier'),
                 array('is_safe' => array('html'))

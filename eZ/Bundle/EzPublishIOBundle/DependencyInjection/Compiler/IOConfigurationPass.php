@@ -10,11 +10,11 @@ namespace eZ\Bundle\EzPublishIOBundle\DependencyInjection\Compiler;
 
 use ArrayObject;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 
 /**
  * This compiler pass will create the metadata and binarydata IO handlers depending on container configuration.
@@ -92,7 +92,7 @@ class IOConfigurationPass implements CompilerPassInterface
 
             $parentHandlerId = $configurationFactory->getParentServiceId();
             $handlerId = sprintf('%s.%s', $parentHandlerId, $name);
-            $definition = $container->setDefinition($handlerId, new DefinitionDecorator($parentHandlerId));
+            $definition = $container->setDefinition($handlerId, new ChildDefinition($parentHandlerId));
 
             $configurationFactory->configureHandler($definition, $config);
 

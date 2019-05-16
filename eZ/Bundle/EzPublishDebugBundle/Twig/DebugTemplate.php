@@ -9,7 +9,7 @@
 namespace eZ\Bundle\EzPublishDebugBundle\Twig;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Twig_Template;
+use Twig\Template;
 
 /**
  * Meant to be used as a Twig base template class.
@@ -17,7 +17,7 @@ use Twig_Template;
  * Wraps the display method to:
  * - Inject debug info into template to be able to see in the markup which one is used
  */
-class DebugTemplate extends Twig_Template
+class DebugTemplate extends Template
 {
     private $fileSystem;
 

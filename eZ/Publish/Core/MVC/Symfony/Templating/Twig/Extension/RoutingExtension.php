@@ -9,10 +9,10 @@
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGeneratorInterface;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
-class RoutingExtension extends Twig_Extension
+class RoutingExtension extends AbstractExtension
 {
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGeneratorInterface
@@ -27,7 +27,7 @@ class RoutingExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_route',
                 array($this, 'getRouteReference')
             ),

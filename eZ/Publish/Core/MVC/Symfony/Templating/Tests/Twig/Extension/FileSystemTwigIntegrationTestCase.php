@@ -8,22 +8,22 @@
  */
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Tests\Twig\Extension;
 
-use Twig_Loader_Chain;
-use Twig_Loader_Array;
-use Twig_Loader_Filesystem;
-use Twig_Environment;
+use PHPUnit\Framework\Constraint\Exception as PHPUnitException;
+use Twig\Environment;
+use Twig\Error\Error;
+use Twig\Error\SyntaxError;
+use Twig\Loader\ArrayLoader;
+use Twig\Loader\ChainLoader;
+use Twig\Loader\FilesystemLoader;
+use Twig\Test\IntegrationTestCase;
 use Exception;
-use Twig_Error_Syntax;
-use Twig_Error;
-use Twig_Test_IntegrationTestCase;
-use PHPUnit_Framework_Constraint_Exception;
 
 /**
  * Class FileSystemTwigIntegrationTestCase
  * This class adds a custom version of the doIntegrationTest from Twig_Test_IntegrationTestCase to
  * allow loading (custom) templates located in the FixturesDir.
  */
-abstract class FileSystemTwigIntegrationTestCase extends Twig_Test_IntegrationTestCase
+abstract class FileSystemTwigIntegrationTestCase extends IntegrationTestCase
 {
     /**
      * Overrides the default implementation to use the chain loader so that
@@ -39,10 +39,10 @@ abstract class FileSystemTwigIntegrationTestCase extends Twig_Test_IntegrationTe
         }
 
         // changes from the original is here, Twig_Loader_Filesystem has been added
-        $loader = new Twig_Loader_Chain(
+        $loader = new ChainLoader(
             array(
-                new Twig_Loader_Array($templates),
-                new Twig_Loader_Filesystem($this->getFixturesDir()),
+                new ArrayLoader($templates),
+                new FilesystemLoader($this->getFixturesDir()),
             )
         );
         // end changes
@@ -55,7 +55,7 @@ abstract class FileSystemTwigIntegrationTestCase extends Twig_Test_IntegrationTe
                 ),
                 $match[2] ? eval($match[2] . ';') : array()
             );
-            $twig = new Twig_Environment($loader, $config);
+            $twig = new Environment($loader, $config);
             $twig->addGlobal('global', 'global');
             foreach ($this->getExtensions() as $extension) {
                 $twig->addExtension($extension);
@@ -75,13 +75,13 @@ abstract class FileSystemTwigIntegrationTestCase extends Twig_Test_IntegrationTe
                     return;
                 }
 
-                if ($e instanceof Twig_Error_Syntax) {
+                if ($e instanceof SyntaxError) {
                     $e->setTemplateFile($file);
 
                     throw $e;
                 }
 
-                throw new Twig_Error(sprintf('%s: %s', get_class($e), $e->getMessage()), -1, $file, $e);
+                throw new Error(sprintf('%s: %s', get_class($e), $e->getMessage()), -1, $file, $e);
             }
 
             try {
@@ -98,10 +98,10 @@ abstract class FileSystemTwigIntegrationTestCase extends Twig_Test_IntegrationTe
                     return;
                 }
 
-                if ($e instanceof Twig_Error_Syntax) {
+                if ($e instanceof SyntaxError) {
                     $e->setTemplateFile($file);
                 } else {
-                    $e = new Twig_Error(sprintf('%s: %s', get_class($e), $e->getMessage()), -1, $file, $e);
+                    $e = new Error(sprintf('%s: %s', get_class($e), $e->getMessage()), -1, $file, $e);
                 }
 
                 $output = trim(
@@ -113,7 +113,7 @@ abstract class FileSystemTwigIntegrationTestCase extends Twig_Test_IntegrationTe
                 list($class) = explode(':', $exception);
                 $this->assertThat(
                     null,
-                    new PHPUnit_Framework_Constraint_Exception($class)
+                    new PHPUnitException($class)
                 );
             }
 
