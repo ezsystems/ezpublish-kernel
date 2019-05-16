@@ -11,6 +11,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Composer;
 use Sensio\Bundle\DistributionBundle\Composer\ScriptHandler as DistributionBundleScriptHandler;
 use Composer\Script\Event;
 
+/**
+ * @todo Do not rely on DistributionBundle since it's obsolete in Symfony4.
+ */
 class ScriptHandler extends DistributionBundleScriptHandler
 {
     /**
