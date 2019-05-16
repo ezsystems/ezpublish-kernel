@@ -99,11 +99,13 @@ services:
 
     # Will be added to binaryfile & mediafile external storage handlers by a compiler pass
     ezpublish.fieldType.ezbinarybase.download_url_generator:
+        public: true # @todo should be private
         class: "%ezpublish.fieldType.ezbinarybase.downloadUrlGenerator.class%"
         arguments: ["@router"]
 
     # Nameable services (for fieldtypes that need advance name handling)
     ezpublish.fieldType.ezobjectrelation.nameable_field:
+        public: true # @todo should be private
         class: "%ezpublish.fieldType.ezobjectrelation.nameable_field.class%"
         arguments:
           - "@ezpublish.spi.persistence.cache.contentHandler"
@@ -111,6 +113,7 @@ services:
             - {name: ezpublish.fieldType.nameable, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezobjectrelationlist.nameable_field:
+        public: true # @todo should be private
         class: "%ezpublish.fieldType.ezobjectrelationlist.nameable_field.class%"
         arguments:
           - "@ezpublish.spi.persistence.cache.contentHandler"
@@ -118,12 +121,14 @@ services:
             - {name: ezpublish.fieldType.nameable, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.ezselection.nameable_field:
+        public: true # @todo should be private
         class: "%ezpublish.fieldType.ezselection.nameable_field.class%"
         tags:
             - {name: ezpublish.fieldType.nameable, alias: ezselection}
 
     # Symfony 3.4+ service definitions:
     eZ\Publish\Core\FieldType\ImageAsset\NameableField:
+        public: true # @todo should be private
         arguments:
             $handler: '@ezpublish.spi.persistence.cache.contentHandler'
         tags:

@@ -39,6 +39,7 @@ services:
         arguments: ["%ezpublish.siteaccess.default.name%", 'uninitialized']
 
     ezpublish.config.resolver.core:
+        public: true # @todo should be private
         class: "%ezpublish.config.resolver.dynamic.class%"
         arguments: ["%ezpublish.siteaccess.groups_by_siteaccess%", "%ezpublish.config.default_scope%"]
         calls:
@@ -49,9 +50,11 @@ services:
             - { name: ezpublish.config.resolver, priority: 200 }
 
     ezpublish.config.resolver.chain:
+        public: true # @todo should be private
         class: "%ezpublish.config.resolver.chain.class%"
 
     ezpublish.config.resolver:
+        public: true # @todo should be private
         alias: ezpublish.config.resolver.chain
 
     ezpublish.config.dynamic_setting.parser:
@@ -84,6 +87,8 @@ services:
             - "@ezpublish.view_manager"
             - "@security.authorization_checker"
         parent: ezpublish.controller.base
+        tags:
+            - { name: controller.service_arguments }
 
     ezpublish.controller.content.preview.core:
         class: "%ezpublish.controller.content.preview.class%"
@@ -94,9 +99,12 @@ services:
             - "@security.authorization_checker"
             - "@ezpublish.content_preview.location_provider"
             - "@ezpublish.view.custom_location_controller_checker"
+        tags:
+            - { name: controller.service_arguments }
 
     ezpublish.controller.content.preview:
         alias: ezpublish.controller.content.preview.core
+        public: true
 
     ezpublish.controller.content.download:
         class: "%ezpublish.controller.content.download.class%"
@@ -107,6 +115,8 @@ services:
             - "@router"
             - "@ezpublish.route_reference.generator"
         parent: ezpublish.controller.base
+        tags:
+              - { name: controller.service_arguments }
 
     ezpublish.controller.content.download_redirection:
         class: "%ezpublish.controller.content.download_redirection.class%"
@@ -115,10 +125,13 @@ services:
             - "@router"
             - "@ezpublish.route_reference.generator"
         parent: ezpublish.controller.base
+        tags:
+              - { name: controller.service_arguments }
 
     # This alias allows easier management for subrequests
     # {{ render( controller( "ez_content:viewLocation", {"locationId": 123, "viewType": "line"} ) ) }
     ez_content:
+        public: true
         alias: ezpublish.controller.content.view
 
     ezpublish.view_controller_listener:
@@ -190,9 +203,12 @@ services:
         arguments:
             - "@ezpublish.query_type_content_view_mapper"
             - "@ezpublish.api.service.search"
+        tags:
+            - { name: controller.service_arguments }
 
     ez_query:
         alias: ezpublish.controller.query
+        public: true
 
     ezplatform.core.jms_translation.catalog_mapper_file_writer:
         class: eZ\Publish\Core\MVC\Symfony\Translation\CatalogueMapperFileWriter
@@ -258,15 +274,21 @@ services:
         class: eZ\Bundle\EzPublishCoreBundle\Command\CopySubtreeCommand
         autowire: true
         autoconfigure: true
+        arguments:
+            $locationService: '@ezpublish.api.service.location'
+            $permissionResolver: "@=service('ezpublish.api.repository').getPermissionResolver()"
+            $userService: '@ezpublish.api.service.user'
+            $contentTypeService: '@ezpublish.api.service.content_type'
+            $searchService: '@ezpublish.api.service.search'
         tags:
             - { name: console.command, command: ezplatform:copy-subtree }
 
     ezplatform.core.command.resize_original_images:
         class: eZ\Bundle\EzPublishCoreBundle\Command\ResizeOriginalImagesCommand
-        autowire: true
-        autoconfigure: true
         arguments:
             $ioService: '@ezpublish.fieldType.ezimage.io_service.published'
             $imagine: '@liip_imagine'
+            $permissionResolver: "@=service('ezpublish.api.repository').getPermissionResolver()"
+            $userService: '@ezpublish.api.service.user'
         tags:
             - { name: console.command, command: ezplatform:images:resize-original }

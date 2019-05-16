@@ -5,6 +5,7 @@ services:
     ezpublish.fieldType.ezrichtext:
         class: "%ezpublish.fieldType.ezrichtext.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments:
             - "@ezpublish.fieldType.ezrichtext.validator.docbook"
             - "@ezpublish.fieldType.ezrichtext.converter.input.dispatcher"

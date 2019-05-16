@@ -314,6 +314,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     {
         $loader->load('routing.yml');
         $container->setAlias('router', 'ezpublish.chain_router');
+        $container->getAlias('router')->setPublic(true);
 
         if (isset($config['router']['default_router']['non_siteaccess_aware_routes'])) {
             $container->setParameter(
