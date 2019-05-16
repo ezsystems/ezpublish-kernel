@@ -97,9 +97,11 @@ abstract class AbstractInMemoryHandler
         }
 
         // Backend
+        // (log misses first in case of $backendLoader ends up throwing NotFound)
+        $this->logger->logCacheMiss($arguments ?: [$id], 3);
+
         $object = $backendLoader($id);
         $this->inMemory->setMulti([$object], $cacheIndexes);
-        $this->logger->logCacheMiss($arguments ?: [$id], 3);
         $this->cache->save(
             $cacheItem
                 ->set($object)
@@ -149,10 +151,11 @@ abstract class AbstractInMemoryHandler
         }
 
         // Backend
-        $objects = $backendLoader();
-        $this->inMemory->setMulti($objects, $cacheIndexes, $key);
+        // (log misses first in case of $backendLoader ends up throwing NotFound)
         $this->logger->logCacheMiss($arguments, 3);
 
+        $objects = $backendLoader();
+        $this->inMemory->setMulti($objects, $cacheIndexes, $key);
         if ($listTags !== null) {
             $tagSet = [$listTags()];
         } else {
@@ -264,6 +267,7 @@ abstract class AbstractInMemoryHandler
             }
         }
 
+        // Save cache & log miss (this method expects multi backend loader to return empty array over throwing NotFound)
         $this->inMemory->setMulti($loaded, $cacheIndexes);
         unset($loaded, $backendLoadedList);
         $this->logger->logCacheMiss($arguments ?: $cacheMisses, 3);
