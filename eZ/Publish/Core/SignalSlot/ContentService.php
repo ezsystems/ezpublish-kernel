@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -436,7 +437,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion(VersionInfo $versionInfo, array $translations = [])
+    public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL)
     {
         $returnValue = $this->service->publishVersion($versionInfo, $translations);
         $this->signalDispatcher->emit(
@@ -444,6 +445,7 @@ class ContentService implements ContentServiceInterface
                 array(
                     'contentId' => $versionInfo->getContentInfo()->id,
                     'versionNo' => $versionInfo->versionNo,
+                    'affectedTranslations' => $translations,
                 )
             )
         );
