@@ -54,8 +54,7 @@
     },
     "autoload": {
         "psr-4": {
-            "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src",
-            "EzSystems\\PlatformBehatBundle\\": "eZ/Bundle/PlatformBehatBundle"
+            "EzSystems\\PlatformInstallerBundle\\": "eZ/Bundle/PlatformInstallerBundle/src"
         },
         "psr-0": {
             "eZ": ""

@@ -7,19 +7,15 @@ namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 
 use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
-use EzSystems\PlatformBehatBundle\Context\RepositoryContext;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\API\Repository\ContentService;
-use eZ\Publish\API\Repository\Repository;
 
 /**
  * Sentences for Fields.
  */
 class FieldTypeContext implements Context
 {
-    use RepositoryContext;
-
     /**
      * Defines the state of the Construction object, if it's not published, partialy or completely published.
      */
@@ -83,18 +79,15 @@ class FieldTypeContext implements Context
     private $locationService;
 
     /**
-     * @injectService $repository @ezpublish.api.repository
      * @injectService $contentTypeService @ezpublish.api.service.content_type
      * @injectService $contentService @ezpublish.api.service.content
      * @injectService $locationService @ezpublish.api.service.location
      */
     public function __construct(
-        Repository $repository,
         ContentTypeService $contentTypeService,
         ContentService $contentService,
         LocationService $locationService
     ) {
-        $this->setRepository($repository);
         $this->contentTypeService = $contentTypeService;
         $this->contentService = $contentService;
         $this->locationService = $locationService;
