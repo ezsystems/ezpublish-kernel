@@ -427,7 +427,7 @@ EOT
         } else {
             if (!\in_array($timezone, timezone_identifiers_list())) {
                 $output->writeln([
-                    sprintf('% is not correct Timezone.', $timezone),
+                    sprintf('%s is not correct Timezone.', $timezone),
                     '',
                 ]);
 
