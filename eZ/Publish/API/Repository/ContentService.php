@@ -9,6 +9,7 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
@@ -285,14 +286,16 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param string[] $translations - Array of language codes in which version is going to be published.
-     *                                 If empty - all translations from current version will be published
-     *                                          and missing one will be copied from published Version.
-     *                                 If some provided - those will be published from provided version
-     *                                          and rest will be copied from published version overriding those in version.
+     * @param string[] $translations List of language codes of translations which will be included
+     *                               in a published version.
+     *                               By default all translations from the current version will be published.
+     *                               If the list is provided but does not cover all currently published translations,
+     *                               the missing ones will be copied from the currently published version,
+     *                               overriding those in the current version.
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion(VersionInfo $versionInfo, array $translations = []);
+    public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL);
 
     /**
      * Removes the given version.

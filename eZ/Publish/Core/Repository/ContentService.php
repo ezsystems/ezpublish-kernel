@@ -1526,7 +1526,7 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
-    public function publishVersion(APIVersionInfo $versionInfo, array $translations = [])
+    public function publishVersion(APIVersionInfo $versionInfo, array $translations = Language::ALL)
     {
         $content = $this->internalLoadContent(
             $versionInfo->contentInfo->id,
@@ -1585,22 +1585,25 @@ class ContentService implements ContentServiceInterface
     {
         $contendId = $versionInfo->contentInfo->id;
 
-        $publishedContent = $this->internalLoadContent($contendId);
-        $publishedVersionInfo = $publishedContent->versionInfo;
+        $currentContent = $this->internalLoadContent($contendId);
+        $currentVersionInfo = $currentContent->versionInfo;
 
-        // Copying occurs only if Version being published is older than the currently published one unless specific translations are provided.
-        if ($versionInfo->versionNo >= $publishedVersionInfo->versionNo && empty($translations)) {
+        // Copying occurs only if:
+        // - There is published Version
+        // - Published version is older than the currently published one unless specific translations are provided.
+        if (!$currentVersionInfo->isPublished() ||
+            ($versionInfo->versionNo >= $currentVersionInfo->versionNo && empty($translations))) {
             return;
         }
 
         if (empty($translations)) {
             $languagesToCopy = array_diff(
-                $publishedVersionInfo->languageCodes,
+                $currentVersionInfo->languageCodes,
                 $versionInfo->languageCodes
             );
         } else {
             $languagesToCopy = array_diff(
-                $publishedVersionInfo->languageCodes,
+                $currentVersionInfo->languageCodes,
                 $translations
             );
         }
@@ -1610,12 +1613,12 @@ class ContentService implements ContentServiceInterface
         }
 
         $contentType = $this->repository->getContentTypeService()->loadContentType(
-            $publishedVersionInfo->contentInfo->contentTypeId
+            $currentVersionInfo->contentInfo->contentTypeId
         );
 
         // Find only translatable fields to update with selected languages
         $updateStruct = $this->newContentUpdateStruct();
-        foreach ($publishedContent->getFields() as $field) {
+        foreach ($currentContent->getFields() as $field) {
             $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
 
             if ($fieldDefinition->isTranslatable && in_array($field->languageCode, $languagesToCopy)) {
