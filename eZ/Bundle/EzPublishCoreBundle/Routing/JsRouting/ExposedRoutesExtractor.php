@@ -7,7 +7,8 @@ namespace eZ\Bundle\EzPublishCoreBundle\Routing\JsRouting;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use FOS\JsRoutingBundle\Extractor\ExposedRoutesExtractorInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Route;
 
 /**
  * Decorator of FOSJsRouting routes extractor.
@@ -21,14 +22,14 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
     private $innerExtractor;
 
     /**
-     * @var Request
+     * @var RequestStack
      */
-    private $masterRequest;
+    private $requestStack;
 
-    public function __construct(ExposedRoutesExtractorInterface $innerExtractor, Request $masterRequest)
+    public function __construct(ExposedRoutesExtractorInterface $innerExtractor, RequestStack $requestStack)
     {
         $this->innerExtractor = $innerExtractor;
-        $this->masterRequest = $masterRequest;
+        $this->requestStack = $requestStack;
     }
 
     public function getRoutes()
@@ -45,8 +46,9 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
      */
     public function getBaseUrl()
     {
+        $masterRequest = $this->requestStack->getMasterRequest();
         $baseUrl = $this->innerExtractor->getBaseUrl();
-        $siteAccess = $this->masterRequest->attributes->get('siteaccess');
+        $siteAccess = $masterRequest->attributes->get('siteaccess');
         if ($siteAccess instanceof SiteAccess && $siteAccess->matcher instanceof SiteAccess\URILexer) {
             $baseUrl .= $siteAccess->matcher->analyseLink('');
         }
@@ -82,5 +84,15 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
     public function getExposedRoutes()
     {
         return $this->innerExtractor->getExposedRoutes();
+    }
+
+    public function getPort()
+    {
+        return $this->innerExtractor->getPort();
+    }
+
+    public function isRouteExposed(Route $route, $name)
+    {
+        return $this->innerExtractor->isRouteExposed($route, $name);
     }
 }
