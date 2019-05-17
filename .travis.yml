@@ -38,6 +38,12 @@ matrix:
       env: REST_TEST_CONFIG="phpunit-functional-rest.xml" SYMFONY_ENV=behat SYMFONY_DEBUG=1 SF_CMD="ez:behat:create-language 'pol-PL' 'Polish (polski)'"
     - php: 7.1
       env: BEHAT_OPTS="--profile=rest --tags=~@broken --suite=fullJson" SYMFONY_ENV=behat
+    - name: "Kernel Behat Core tests"
+      env:
+        - COMPOSE_FILE="doc/docker/base-dev.yml:doc/docker/selenium.yml"
+        - BEHAT_OPTS="--profile=core --tags=~@broken"
+        - SYMFONY_ENV=behat
+        - SYMFONY_DEBUG=1
     - php: 7.1
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
     - php: 7.1
