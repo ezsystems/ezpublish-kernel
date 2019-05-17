@@ -113,3 +113,5 @@ services:
         arguments:
             $languageCodesMap: '%ezpublish.locale.browser_map%'
             $localeFallback: '%locale_fallback%'
+
+    eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProviderInterface: '@eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProvider'
