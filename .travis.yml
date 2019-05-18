@@ -70,6 +70,10 @@ branches:
 before_install:
   # Disable memory_limit for Composer
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  # Disable XDebug for all jobs as we don't generate test coverge on travis
+  - phpenv config-rm xdebug.ini
+  # make sure we use UTF-8 encoding
+  - echo "default_charset=UTF-8" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Install igbinary & lzf PHP extensions if necessary
   - if [ "$REDIS_ENABLE_IGBINARY" = true ] ; then pecl install igbinary ; fi
   - if [ "$REDIS_ENABLE_LZF" = true ] ; then printf "no\n" | pecl install lzf ; fi
