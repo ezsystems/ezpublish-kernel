@@ -8,10 +8,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
 use Doctrine\DBAL\Connection;
 use Exception;
-use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
 use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
 use PDO;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -40,24 +40,9 @@ class CleanupVersionsCommand extends Command
     private $repository;
 
     /**
-     * @var \eZ\Publish\API\Repository\UserService
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
-    private $userService;
-
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
-    private $contentService;
-
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver
-     */
-    private $permissionResolver;
-
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
-     */
-    private $repositoryConfigurationProvider;
+    private $configResolver;
 
     /**
      * @var \Doctrine\DBAL\Driver\Connection
@@ -66,33 +51,18 @@ class CleanupVersionsCommand extends Command
 
     public function __construct(
         Repository $repository,
-        RepositoryConfigurationProvider $repositoryConfigurationProvider,
+        ConfigResolverInterface $configResolver,
         Connection $connection
     ) {
         $this->repository = $repository;
-        $this->repositoryConfigurationProvider = $repositoryConfigurationProvider;
+        $this->configResolver = $configResolver;
         $this->connection = $connection;
 
         parent::__construct();
     }
 
-    protected function initialize(InputInterface $input, OutputInterface $output)
-    {
-        parent::initialize($input, $output);
-
-        $this->userService = $this->repository->getUserService();
-        $this->contentService = $this->repository->getContentService();
-        $this->permissionResolver = $this->repository->getPermissionResolver();
-
-        $this->permissionResolver->setCurrentUserReference(
-            $this->userService->loadUserByLogin($input->getOption('user'))
-        );
-    }
-
     protected function configure()
     {
-        $config = $this->repositoryConfigurationProvider->getRepositoryConfig();
-
         $this
             ->setName('ezplatform:content:cleanup-versions')
             ->setDescription('Remove unwanted content versions. It keeps published version untouched. By default, it keeps also the last archived/draft version.')
@@ -113,7 +83,7 @@ class CleanupVersionsCommand extends Command
                 'k',
                 InputOption::VALUE_OPTIONAL,
                 "Sets number of the most recent versions (both drafts and archived) which won't be removed.",
-                $config['options']['default_version_archive_limit']
+                'config_default'
             )
             ->addOption(
                 'user',
@@ -126,12 +96,26 @@ class CleanupVersionsCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (($keep = (int) $input->getOption('keep')) < 0) {
+        // We don't load repo services or config resolver before execute() to avoid loading before SiteAccess is set.
+        $keep = $input->getOption('keep');
+        if ($keep === 'config_default') {
+            $keep = $this->configResolver->getParameter('options.default_version_archive_limit');
+        }
+
+        if (($keep = (int) $keep) < 0) {
             throw new InvalidArgumentException(
-                'status',
+                'keep',
                 'Keep value can not be negative.'
             );
         }
+
+        $userService = $this->repository->getUserService();
+        $contentService = $this->repository->getContentService();
+        $permissionResolver = $this->repository->getPermissionResolver();
+
+        $permissionResolver->setCurrentUserReference(
+            $userService->loadUserByLogin($input->getOption('user'))
+        );
 
         $status = $input->getOption('status');
 
@@ -157,8 +141,8 @@ class CleanupVersionsCommand extends Command
 
         foreach ($contentIds as $contentId) {
             try {
-                $contentInfo = $this->contentService->loadContentInfo((int) $contentId);
-                $versions = $this->contentService->loadVersions($contentInfo);
+                $contentInfo = $contentService->loadContentInfo((int) $contentId);
+                $versions = $contentService->loadVersions($contentInfo);
                 $versionsCount = count($versions);
 
                 $output->writeln(sprintf(
@@ -189,7 +173,7 @@ class CleanupVersionsCommand extends Command
 
                 /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $version */
                 foreach ($versions as $version) {
-                    $this->contentService->deleteVersion($version);
+                    $contentService->deleteVersion($version);
                     ++$removedVersionsCounter;
                     $output->writeln(sprintf(
                         "Content's (%d) version (%d) has been deleted.",

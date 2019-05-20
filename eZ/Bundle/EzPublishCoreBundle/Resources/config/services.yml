@@ -242,7 +242,7 @@ services:
         class: eZ\Bundle\EzPublishCoreBundle\Command\CleanupVersionsCommand
         arguments:
             - "@ezpublish.signalslot.repository"
-            - "@ezpublish.api.repository_configuration_provider"
+            - "@ezpublish.config.resolver"
             - "@ezpublish.persistence.connection"
         tags:
             - { name: console.command }
