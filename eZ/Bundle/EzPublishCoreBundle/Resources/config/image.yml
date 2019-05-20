@@ -95,9 +95,10 @@ services:
             - '%ezpublish.image_alias.imagine.cache_resolver_decorator_relative.class%'
 
     ezpublish.image_alias.imagine.cache_resolver_decorator:
-        class: Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\ProxyResolver
         factory: 'ezpublish.image_alias.imagine.cache_resolver_decorator_factory:createCacheResolver'
         decorates: ezpublish.image_alias.imagine.cache_resolver
+        lazy: true
 
     ezpublish.image_alias.imagine.cache.alias_generator_decorator:
         class: '%ezpublish.image_alias.imagine.cache.alias_generator_decorator.class%'
@@ -128,7 +129,6 @@ services:
     ezpublish.image_alias.imagine.alias_cleaner:
         class: "%ezpublish.image_alias.imagine.alias_cleaner.class%"
         arguments: ["@ezpublish.image_alias.imagine.cache_resolver"]
-        lazy: true
 
     ezpublish.image_alias.imagine.filter.loader.scaledown.base:
         abstract: true
