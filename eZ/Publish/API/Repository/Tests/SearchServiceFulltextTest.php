@@ -100,89 +100,164 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function providerForTestFulltextSearch()
     {
-        return [
-            [
-                'fox',
-                [3, [6, 8, 10], [11, 13, 14, 15]],
-            ],
-            [
-                'quick fox',
-                $quickOrFox = [6, [11, 13, 15], [1, 3], [5, 7, 8, 10], [12, 14]],
-            ],
-            [
-                'quick OR fox',
-                $quickOrFox,
-            ],
-            [
-                'quick AND () OR AND fox',
-                $quickOrFox,
-            ],
-            [
-                '+quick +fox',
-                $quickAndFox = [6, [11, 13, 15]],
-            ],
-            [
-                'quick AND fox',
-                $quickAndFox,
-            ],
-            [
-                'brown +fox -news',
-                [8, 11, 3, 6],
-            ],
-            [
-                'quick +fox -news',
-                [6, 11, 3, 8],
-            ],
-            [
-                'quick brown +fox -news',
-                $notNewsFox = [11, [6, 8], 3],
-            ],
-            [
-                '((quick AND fox) OR (brown AND fox) OR fox) AND NOT news',
-                $notNewsFox,
-            ],
-            [
-                '"quick brown"',
-                [5, [11, 12, 15]],
-            ],
-            [
-                '"quick brown" AND fox',
-                [[11, 15]],
-            ],
-            [
-                'quick OR brown AND fox AND NOT news',
-                [11, 8],
-            ],
-            [
-                '(quick OR brown) AND fox AND NOT news',
-                [11, [6, 8]],
-            ],
-            [
-                '"fox brown"',
-                [],
-            ],
-            [
-                'qui*',
-                [[1, 5, 6, 7, 11, 12, 13, 15]],
-            ],
-            [
-                '+qui* +fox',
-                [6, [11, 13, 15]],
-            ],
-        ];
+        $solrVersion = getenv('SOLR_VERSION');
+
+        if ($solrVersion >= 7) {
+            return [
+                [
+                    'fox',
+                    [3, [6, 8, 10], [11, 13, 14], 15],
+                ],
+                [
+                    'quick fox',
+                    $quickOrFox = [6, [11, 13], 15, [1, 3], [5, 7, 8, 10], [12, 14]],
+                ],
+                [
+                    'quick OR fox',
+                    $quickOrFox,
+                ],
+                [
+                    'quick AND () OR AND fox',
+                    $quickOrFox,
+                ],
+                [
+                    '+quick +fox',
+                    $quickAndFox = [6, [11, 13], 15],
+                ],
+                [
+                    'quick AND fox',
+                    $quickAndFox,
+                ],
+                [
+                    'brown +fox -news',
+                    [8, 11, 3, 6],
+                ],
+                [
+                    'quick +fox -news',
+                    [6, 11, 3, 8],
+                ],
+                [
+                    'quick brown +fox -news',
+                    $notNewsFox = [11, [6, 8], 3],
+                ],
+                [
+                    '((quick AND fox) OR (brown AND fox) OR fox) AND NOT news',
+                    $notNewsFox,
+                ],
+                [
+                    '"quick brown"',
+                    [5, [11, 12], 15],
+                ],
+                [
+                    '"quick brown" AND fox',
+                    [11, 15],
+                ],
+                [
+                    'quick OR brown AND fox AND NOT news',
+                    [11, 8],
+                ],
+                [
+                    '(quick OR brown) AND fox AND NOT news',
+                    [11, [6, 8]],
+                ],
+                [
+                    '"fox brown"',
+                    [],
+                ],
+                [
+                    'qui*',
+                    [[1, 5, 6, 7, 11, 12, 13, 15]],
+                ],
+                [
+                    '+qui* +fox',
+                    [6, [11, 13], 15],
+                ],
+            ];
+        } else {
+            return [
+                [
+                    'fox',
+                    [3, [6, 8, 10], [11, 13, 14, 15]],
+                ],
+                [
+                    'quick fox',
+                    $quickOrFox = [6, [11, 13, 15], [1, 3], [5, 7, 8, 10], [12, 14]],
+                ],
+                [
+                    'quick OR fox',
+                    $quickOrFox,
+                ],
+                [
+                    'quick AND () OR AND fox',
+                    $quickOrFox,
+                ],
+                [
+                    '+quick +fox',
+                    $quickAndFox = [6, [11, 13, 15]],
+                ],
+                [
+                    'quick AND fox',
+                    $quickAndFox,
+                ],
+                [
+                    'brown +fox -news',
+                    [8, 11, 3, 6],
+                ],
+                [
+                    'quick +fox -news',
+                    [6, 11, 3, 8],
+                ],
+                [
+                    'quick brown +fox -news',
+                    $notNewsFox = [11, [6, 8], 3],
+                ],
+                [
+                    '((quick AND fox) OR (brown AND fox) OR fox) AND NOT news',
+                    $notNewsFox,
+                ],
+                [
+                    '"quick brown"',
+                    [5, [11, 12, 15]],
+                ],
+                [
+                    '"quick brown" AND fox',
+                    [[11, 15]],
+                ],
+                [
+                    'quick OR brown AND fox AND NOT news',
+                    [11, 8],
+                ],
+                [
+                    '(quick OR brown) AND fox AND NOT news',
+                    [11, [6, 8]],
+                ],
+                [
+                    '"fox brown"',
+                    [],
+                ],
+                [
+                    'qui*',
+                    [[1, 5, 6, 7, 11, 12, 13, 15]],
+                ],
+                [
+                    '+qui* +fox',
+                    [6, [11, 13, 15]],
+                ],
+            ];
+        }
     }
 
     /**
      * Test for the findContent() method.
      *
-     * @param $searchString
+     * @param string $searchString
      * @param array $expectedKeys
      * @param array $idMap
      *
      * @depends testPrepareContent
      * @dataProvider providerForTestFulltextSearch
      */
-    public function testFulltextContentSearch($searchString, array $expectedKeys, array $idMap)
+    public function testFulltextContentSearch(string $searchString, array $expectedKeys, array $idMap): void
     {
         $repository = $this->getRepository(false);
         $searchService = $repository->getSearchService();
@@ -205,10 +280,6 @@ class SearchServiceFulltextTest extends BaseTest
      */
     public function testFulltextLocationSearch($searchString, array $expectedKeys, array $idMap)
     {
-        if (($solrVersion = getenv('SOLR_VERSION')) && $solrVersion < 6) {
-            $this->markTestSkipped('Solr 4 detected, skipping as scoring won\'t match');
-        }
-
         $repository = $this->getRepository(false);
         $searchService = $repository->getSearchService();
 
