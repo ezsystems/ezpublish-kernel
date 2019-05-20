@@ -13,7 +13,6 @@ use eZ\Publish\API\Repository\LocationService;
 use eZ\Publish\Core\FieldType\RichText\Converter;
 use eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter;
 use Psr\Log\LoggerInterface;
-use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
 use eZ\Publish\API\Repository\Exceptions\UnauthorizedException as APIUnauthorizedException;
 use DOMDocument;
