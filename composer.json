@@ -37,7 +37,6 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "~2.7.5",
-        "mikey179/vfsStream": "1.1.0",
         "phpunit/phpunit": "^4.8.35",
         "matthiasnoback/symfony-dependency-injection-test": "~0.7.6",
         "mockery/mockery": "~0.9.10",
