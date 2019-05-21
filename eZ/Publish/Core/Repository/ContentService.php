@@ -1695,18 +1695,29 @@ class ContentService implements ContentServiceInterface
      * Loads all versions for the given content.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to list versions
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException if invalid status
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param int $status
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
      */
-    public function loadVersions(ContentInfo $contentInfo)
+    public function loadVersions(ContentInfo $contentInfo, $status = null)
     {
         if (!$this->repository->canUser('content', 'versionread', $contentInfo)) {
             throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentInfo->id));
         }
 
-        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->listVersions($contentInfo->id);
+        if ($status !== null && !in_array((int)$status, [VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED], true)) {
+            throw new InvalidArgumentException(
+                'status',
+                sprintf(
+                    'it can be one of %d (draft), %d (published), %d (archived), %d given',
+                    VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED, $status
+                ));
+        }
+
+        $spiVersionInfoList = $this->persistenceHandler->contentHandler()->listVersions($contentInfo->id, $status);
 
         $versions = array();
         foreach ($spiVersionInfoList as $spiVersionInfo) {

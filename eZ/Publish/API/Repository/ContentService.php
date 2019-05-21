@@ -305,12 +305,14 @@ interface ContentService
      * Loads all versions for the given content.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to list versions
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException if invalid status
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param int $status
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] an array of {@link \eZ\Publish\API\Repository\Values\Content\VersionInfo} sorted by creation date
      */
-    public function loadVersions(ContentInfo $contentInfo);
+    public function loadVersions(ContentInfo $contentInfo, $status = null);
 
     /**
      * Copies the content to a new location. If no version is given,

@@ -214,7 +214,7 @@ class ContentServiceTest extends ServiceTest
             ),
             array(
                 'loadVersions',
-                array($contentInfo),
+                array($contentInfo, null),
                 array($versionInfo),
                 0,
             ),
