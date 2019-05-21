@@ -39,13 +39,13 @@ class DebugConfigResolverCommand extends ContainerAwareCommand
             'scope',
             null,
             InputOption::VALUE_REQUIRED,
-            'Set another scope (siteaccess) to use, alternative to usiong the global --siteaccess[=SITEACCESS] option.'
+            'Set another scope (siteaccess) to use, alternative to using the global --siteaccess[=SITEACCESS] option.'
         );
         $this->addOption(
             'namespace',
             null,
             InputOption::VALUE_REQUIRED,
-            'Set another namespace then default "ezsettings" used by siteaccess settings.'
+            'Set another namespace than default "ezsettings" used by siteaccess settings.'
         );
         $this->setHelp(<<<EOM
 Outputs a given config resolver parameter, more commonly known as a SiteAccess setting.
