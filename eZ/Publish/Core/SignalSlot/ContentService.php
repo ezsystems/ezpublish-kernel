@@ -16,8 +16,6 @@ use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use eZ\Publish\API\Repository\Values\Content\TranslationInfo;
-use eZ\Publish\API\Repository\Values\Content\TranslationValues;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentSignal;
@@ -28,14 +26,12 @@ use eZ\Publish\Core\SignalSlot\Signal\ContentService\RevealContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentMetadataSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CreateContentDraftSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\TranslateVersionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\UpdateContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\PublishVersionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteVersionSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\CopyContentSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\AddRelationSignal;
 use eZ\Publish\Core\SignalSlot\Signal\ContentService\DeleteRelationSignal;
-use eZ\Publish\Core\SignalSlot\Signal\ContentService\AddTranslationInfoSignal;
 
 /**
  * ContentService class.
@@ -362,42 +358,6 @@ class ContentService implements ContentServiceInterface
     }
 
     /**
-     * Translate a version.
-     *
-     * updates the destination version given in $translationInfo with the provided translated fields in $translationValues
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the given destination version is not a draft
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationValues $translationValues
-     * @param \eZ\Publish\API\Repository\Values\User\User $user If set, this user is taken as modifier of the version
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\Content the content draft with the translated fields
-     *
-     * @since 5.0
-     */
-    public function translateVersion(TranslationInfo $translationInfo, TranslationValues $translationValues, User $user = null)
-    {
-        $returnValue = $this->service->translateVersion($translationInfo, $translationValues, $user);
-        $this->signalDispatcher->emit(
-            new TranslateVersionSignal(
-                [
-                    'contentId' => $translationInfo->srcVersionInfo->contentInfo->id,
-                    'versionNo' => $translationInfo->srcVersionInfo->versionNo,
-                    'userId' => ($user !== null ? $user->id : null),
-                ]
-            )
-        );
-
-        return $returnValue;
-    }
-
-    /**
      * Updates the fields of a draft.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to update this version
@@ -607,46 +567,6 @@ class ContentService implements ContentServiceInterface
         );
 
         return $returnValue;
-    }
-
-    /**
-     * Adds translation information to the content object.
-     *
-     * @example Examples/translation_5x.php
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed add a translation info
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\TranslationInfo $translationInfo
-     *
-     * @since 5.0
-     */
-    public function addTranslationInfo(TranslationInfo $translationInfo)
-    {
-        $returnValue = $this->service->addTranslationInfo($translationInfo);
-        $this->signalDispatcher->emit(
-            new AddTranslationInfoSignal([])
-        );
-
-        return $returnValue;
-    }
-
-    /**
-     * lists the translations done on this content object.
-     *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param array $filter
-     *
-     * @todo TBD - filter by source version, destination version and languages
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo[]
-     *
-     * @since 5.0
-     */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = [])
-    {
-        return $this->service->loadTranslationInfos($contentInfo, $filter);
     }
 
     /**
