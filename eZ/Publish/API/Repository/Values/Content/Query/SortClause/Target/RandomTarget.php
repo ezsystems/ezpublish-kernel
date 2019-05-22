@@ -14,11 +14,14 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target;
 class RandomTarget extends Target
 {
     /**
-     * @var mixed depends on storage implementation.
+     * @var int|null
+     *
+     * For storage which does not support seed in this type,
+     * it should be normalized to proper value inside storage implementation.
      */
     public $seed;
 
-    public function __construct($seed)
+    public function __construct(?int $seed)
     {
         $this->seed = $seed;
     }

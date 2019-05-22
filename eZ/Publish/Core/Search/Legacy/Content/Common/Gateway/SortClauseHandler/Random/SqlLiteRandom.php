@@ -17,7 +17,7 @@ class SqlLiteRandom extends AbstractRandom
         return 'sqlite';
     }
 
-    public function getRandomFunctionName($seed): string
+    public function getRandomFunctionName(?int $seed): string
     {
         return 'random()';
     }

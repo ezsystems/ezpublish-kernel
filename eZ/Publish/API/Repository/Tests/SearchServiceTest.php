@@ -4535,13 +4535,13 @@ class SearchServiceTest extends BaseTest
     {
         $firstQuery = new Query([
             'sortClauses' => [
-                new SortClause\Random(mt_rand()),
+                new SortClause\Random(),
             ],
         ]);
 
         $secondQuery = new Query([
             'sortClauses' => [
-                new SortClause\Random(mt_rand()),
+                new SortClause\Random(),
             ],
         ]);
 
@@ -4550,8 +4550,8 @@ class SearchServiceTest extends BaseTest
 
         try {
             $this->assertNotEquals(
-                $searchService->findContent($firstQuery),
-                $searchService->findContent($secondQuery)
+                $searchService->findContent($firstQuery)->searchHits,
+                $searchService->findContent($secondQuery)->searchHits
             );
         } catch (NotImplementedException $e) {
             $this->markTestSkipped(
@@ -4569,13 +4569,13 @@ class SearchServiceTest extends BaseTest
     {
         $firstQuery = new LocationQuery([
             'sortClauses' => [
-                new SortClause\Random(mt_rand()),
+                new SortClause\Random(),
             ],
         ]);
 
         $secondQuery = new LocationQuery([
             'sortClauses' => [
-                new SortClause\Random(mt_rand()),
+                new SortClause\Random(),
             ],
         ]);
 
@@ -4584,8 +4584,8 @@ class SearchServiceTest extends BaseTest
 
         try {
             $this->assertNotEquals(
-                $searchService->findLocations($firstQuery),
-                $searchService->findLocations($secondQuery)
+                $searchService->findLocations($firstQuery)->searchHits,
+                $searchService->findLocations($secondQuery)->searchHits
             );
         } catch (NotImplementedException $e) {
             $this->markTestSkipped(

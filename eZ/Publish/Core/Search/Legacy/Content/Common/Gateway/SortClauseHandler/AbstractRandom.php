@@ -48,10 +48,7 @@ abstract class AbstractRandom extends SortClauseHandler
         return $column;
     }
 
-    /**
-     * @param mixed $seed as it depends on storage implementation.
-     */
-    abstract public function getRandomFunctionName($seed): string;
+    abstract public function getRandomFunctionName(?int $seed): string;
 
     abstract public function getDriverName(): string;
 }

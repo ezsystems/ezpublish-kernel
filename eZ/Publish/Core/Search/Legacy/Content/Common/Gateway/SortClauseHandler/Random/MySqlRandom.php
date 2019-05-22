@@ -17,12 +17,8 @@ class MySqlRandom extends AbstractRandom
         return 'mysql';
     }
 
-    public function getRandomFunctionName($seed): string
+    public function getRandomFunctionName(?int $seed): string
     {
-        if (!is_int($seed)) {
-            return 'RAND()';
-        }
-
         return 'RAND(' . $seed . ')';
     }
 }
