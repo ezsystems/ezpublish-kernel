@@ -21,6 +21,7 @@ parameters:
     ezpublish.route_reference.generator.class: eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGenerator
     ezpublish.route_reference.listener.language_switch.class: eZ\Publish\Core\MVC\Symfony\EventListener\LanguageSwitchListener
     ezpublish.original_request_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\OriginalRequestListener
+    ezpublish.preview_request_listener.class: eZ\Bundle\EzPublishCoreBundle\EventListener\PreviewRequestListener
     ezpublish.route_reference.listener.content_download.class: eZ\Bundle\EzPublishCoreBundle\EventListener\ContentDownloadRouteReferenceListener
 
 services:
@@ -128,6 +129,12 @@ services:
 
     ezpublish.original_request_listener:
         class: "%ezpublish.original_request_listener.class%"
+        tags:
+            - { name: kernel.event_subscriber }
+
+    ezpublish.preview_request_listener:
+        class: "%ezpublish.preview_request_listener.class%"
+        arguments: ["@request_stack"]
         tags:
             - { name: kernel.event_subscriber }
 

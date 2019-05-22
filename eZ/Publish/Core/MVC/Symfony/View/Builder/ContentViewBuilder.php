@@ -14,10 +14,12 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\UnauthorizedException;
 use eZ\Publish\Core\Helper\ContentInfoLocationLoader;
 use eZ\Publish\Core\MVC\Exception\HiddenLocationException;
+use eZ\Publish\Core\MVC\Symfony\Controller\Content\PreviewController;
 use eZ\Publish\Core\MVC\Symfony\View\Configurator;
 use eZ\Publish\Core\MVC\Symfony\View\ContentView;
 use eZ\Publish\Core\MVC\Symfony\View\EmbedView;
 use eZ\Publish\Core\MVC\Symfony\View\ParametersInjector;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Controller\ControllerReference;
 
 /**
@@ -37,6 +39,9 @@ class ContentViewBuilder implements ViewBuilder
     /** @var \eZ\Publish\Core\MVC\Symfony\View\ParametersInjector */
     private $viewParametersInjector;
 
+    /** @var \Symfony\Component\HttpFoundation\RequestStack */
+    private $requestStack;
+
     /**
      * Default templates, indexed per viewType (full, line, ...).
      * @var array
@@ -52,6 +57,7 @@ class ContentViewBuilder implements ViewBuilder
         Repository $repository,
         Configurator $viewConfigurator,
         ParametersInjector $viewParametersInjector,
+        RequestStack $requestStack,
         ContentInfoLocationLoader $locationLoader = null
     ) {
         $this->repository = $repository;
@@ -59,6 +65,7 @@ class ContentViewBuilder implements ViewBuilder
         $this->viewParametersInjector = $viewParametersInjector;
         $this->locationLoader = $locationLoader;
         $this->permissionResolver = $this->repository->getPermissionResolver();
+        $this->requestStack = $requestStack;
     }
 
     public function matches($argument)
@@ -150,9 +157,9 @@ class ContentViewBuilder implements ViewBuilder
 
         // deprecated controller actions are replaced with their new equivalent, viewAction and embedAction
         if (!$view->getControllerReference() instanceof ControllerReference) {
-            if (in_array($parameters['_controller'], ['ez_content:viewLocation', 'ez_content:viewContent'])) {
+            if (\in_array($parameters['_controller'], ['ez_content:viewLocation', 'ez_content:viewContent'])) {
                 $view->setControllerReference(new ControllerReference('ez_content:viewAction'));
-            } elseif (in_array($parameters['_controller'], ['ez_content:embedLocation', 'ez_content:embedContent'])) {
+            } elseif (\in_array($parameters['_controller'], ['ez_content:embedLocation', 'ez_content:embedContent'])) {
                 $view->setControllerReference(new ControllerReference('ez_content:embedAction'));
             }
         }
@@ -226,8 +233,12 @@ class ContentViewBuilder implements ViewBuilder
                 return $repository->getLocationService()->loadLocation($locationId);
             }
         );
-        if ($location->invisible) {
-            throw new HiddenLocationException($location, 'Location cannot be displayed as it is flagged as invisible.');
+
+        $request = $this->requestStack->getCurrentRequest();
+        if (!$request || !$request->attributes->get(PreviewController::PREVIEW_PARAMETER_NAME, false)) {
+            if ($location->invisible) {
+                throw new HiddenLocationException($location, 'Location cannot be displayed as it is flagged as invisible.');
+            }
         }
 
         return $location;
@@ -264,7 +275,7 @@ class ContentViewBuilder implements ViewBuilder
         if ($parameters['_controller'] === 'ez_content:embedAction') {
             return true;
         }
-        if (in_array($parameters['viewType'], ['embed', 'embed-inline'])) {
+        if (\in_array($parameters['viewType'], ['embed', 'embed-inline'])) {
             return true;
         }
 
