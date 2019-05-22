@@ -182,6 +182,7 @@ services:
             - "@ezpublish.siteaccessaware.repository"
             - "@ezpublish.view.configurator"
             - "@ezpublish.view.view_parameters.injector.dispatcher"
+            - "@request_stack"
             - "@ezpublish.content_info_location_loader.main"
 
     ezpublish.view.builder_parameter_collector.request_attributes:
