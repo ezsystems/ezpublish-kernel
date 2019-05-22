@@ -1323,7 +1323,7 @@ class DoctrineDatabase extends Gateway
             ->select('*')
             ->from($this->handler->quoteTable('ezcontentobject_trash'));
 
-        $sort = $sort ?: array();
+        $sort = $sort ?: [new SortClause\Location\DateTrashed()];
         foreach ($sort as $condition) {
             $sortDirection = $condition->direction === Query::SORT_ASC ? SelectQuery::ASC : SelectQuery::DESC;
             switch (true) {
@@ -1337,6 +1337,10 @@ class DoctrineDatabase extends Gateway
 
                 case $condition instanceof SortClause\Location\Priority:
                     $query->orderBy('priority', $sortDirection);
+                    break;
+
+                case $condition instanceof SortClause\Location\DateTrashed:
+                    $query->orderBy('trashed', $sortDirection);
                     break;
 
                 default:
