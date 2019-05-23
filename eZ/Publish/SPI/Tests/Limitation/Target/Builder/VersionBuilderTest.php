@@ -37,6 +37,7 @@ class VersionBuilderTest extends TestCase
         $data = [];
         foreach ($versionStatuses as $versionStatus) {
             $languagesList = ['ger-DE', 'eng-US', 'eng-GB'];
+            $contentTypeIdsList = [1, 2];
             $initialLanguageCode = 'eng-US';
             $fields = [
                 new Field(['languageCode' => 'ger-DE']),
@@ -50,6 +51,7 @@ class VersionBuilderTest extends TestCase
                     [
                         'newStatus' => $versionStatus,
                         'allLanguageCodesList' => $languagesList,
+                        'allContentTypeIdsList' => $contentTypeIdsList,
                         'forUpdateLanguageCodesList' => $updateTranslationsLanguageCodes,
                         'forUpdateInitialLanguageCode' => $initialLanguageCode,
                     ]
@@ -58,6 +60,7 @@ class VersionBuilderTest extends TestCase
                 $initialLanguageCode,
                 $fields,
                 $languagesList,
+                $contentTypeIdsList,
             ];
 
             // no published content
@@ -66,6 +69,7 @@ class VersionBuilderTest extends TestCase
                     [
                         'newStatus' => $versionStatus,
                         'allLanguageCodesList' => $languagesList,
+                        'allContentTypeIdsList' => $contentTypeIdsList,
                         'forUpdateLanguageCodesList' => $updateTranslationsLanguageCodes,
                         'forUpdateInitialLanguageCode' => $initialLanguageCode,
                     ]
@@ -74,6 +78,7 @@ class VersionBuilderTest extends TestCase
                 $initialLanguageCode,
                 $fields,
                 $languagesList,
+                $contentTypeIdsList,
             ];
         }
 
@@ -90,6 +95,7 @@ class VersionBuilderTest extends TestCase
      * @param string $initialLanguageCode
      * @param \eZ\Publish\API\Repository\Values\Content\Field[] $newFields
      * @param string[] $languagesList
+     * @param int[] $contentTypeIdsList
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
@@ -98,13 +104,15 @@ class VersionBuilderTest extends TestCase
         int $newStatus,
         string $initialLanguageCode,
         array $newFields,
-        array $languagesList
+        array $languagesList,
+        array $contentTypeIdsList
     ): void {
         $versionBuilder = new VersionBuilder();
         $versionBuilder
             ->changeStatusTo($newStatus)
             ->updateFieldsTo($initialLanguageCode, $newFields)
-            ->translateToAnyLanguageOf($languagesList);
+            ->translateToAnyLanguageOf($languagesList)
+            ->createFromAnyContentTypeOf($contentTypeIdsList);
 
         self::assertInstanceOf(VersionBuilder::class, $versionBuilder);
         self::assertEquals($expectedTargetVersion, $versionBuilder->build());

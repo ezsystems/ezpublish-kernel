@@ -15,6 +15,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
  * Version Limitation target. Indicates an intent to create new Version.
  *
  * @property-read string[] $allLanguageCodesList
+ * @property-read int[] $allContentTypeIdsList
  * @property-read int $newStatus
  * @property-read string $forUpdateInitialLanguageCode
  * @property-read string[] $forUpdateLanguageCodesList
@@ -23,10 +24,17 @@ final class Version extends ValueObject implements Target
 {
     /**
      * List of language codes of translations. At least one must match Limitation values.
-
+     *
      * @var string[]
      */
     protected $allLanguageCodesList = [];
+
+    /**
+     * List of content types. At least one must match Limitation values.
+     *
+     * @var int[]
+     */
+    protected $allContentTypeIdsList = [];
 
     /**
      * Language code of a translation used when updated, can be null for e.g. multiple translations changed.

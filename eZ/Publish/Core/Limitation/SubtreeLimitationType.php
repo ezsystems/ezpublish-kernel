@@ -190,14 +190,13 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
             return false;
         }
 
+        $hasLocationCreateStruct = false;
         foreach ($targets as $target) {
             if (!$target instanceof LocationCreateStruct) {
-                throw new InvalidArgumentException(
-                    '$targets',
-                    'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
-                );
+                continue;
             }
 
+            $hasLocationCreateStruct = true;
             $target = $this->persistence->locationHandler()->load($target->parentLocationId);
 
             // For ContentCreateStruct all placements must match
@@ -211,6 +210,13 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
             }
 
             return false;
+        }
+
+        if (false === $hasLocationCreateStruct) {
+            throw new InvalidArgumentException(
+                '$targets',
+                'If $object is ContentCreateStruct must contain objects of type: LocationCreateStruct'
+            );
         }
 
         return true;
