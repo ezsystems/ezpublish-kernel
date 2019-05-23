@@ -53,6 +53,28 @@ final class VersionBuilder
     }
 
     /**
+     * Set intent to create Content from unspecified (yet) content type, any from the given list.
+     *
+     * @param int[] $contentTypeIds
+     *
+     * @return self
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
+     */
+    public function createFromAnyContentTypeOf(array $contentTypeIds): self
+    {
+        foreach ($contentTypeIds as $contentTypeId) {
+            if (!\is_int($contentTypeId)) {
+                throw new InvalidArgumentException('$contentTypeIds', 'All contentType ids should be integers');
+            }
+        }
+
+        $this->targetVersionProperties['allContentTypeIdsList'] = $contentTypeIds;
+
+        return $this;
+    }
+
+    /**
      * Set intent to change Version status.
      *
      * Supported: <code>VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED</code>
