@@ -14,23 +14,25 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Abstr
 
 class PgSqlRandom extends AbstractRandom
 {
-    /**
-     * @param int $number
-     *
-     * @return string
-     */
-    public function applySelect(SelectQuery $query, SortClause $sortClause, $number)
-    {
-        /** @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause\Target\RandomTarget $sortClause->targetData */
-        $query
-            ->select(
-                $query->alias(
-                    $this->getRandomFunctionName($sortClause->targetData->seed),
-                    $column = $this->getSortColumnName($number)
-                )
-            );
+    public function applyJoin(
+        SelectQuery $query,
+        SortClause $sortClause,
+        $number,
+        array $languageSettings
+    ) {
+        $seedAsInt = $sortClause->targetData->seed;
+        if (!$seedAsInt) {
+            return;
+        }
 
-        return $column;
+        $seed = $this->interpolateIntegerToFloatRange($seedAsInt);
+        $query
+            ->innerJoin(
+                '(select setseed(:seed)) as seed',
+                0,
+                0
+            )
+            ->bindParam($seed, ':seed');
     }
 
     public function getDriverName(): string
@@ -41,5 +43,16 @@ class PgSqlRandom extends AbstractRandom
     public function getRandomFunctionName(?int $seed): string
     {
         return 'random()';
+    }
+
+    /**
+     * Take into consideration that little seed variations can output basically that same number when interpolated to [-1,1] range.
+     */
+    private function interpolateIntegerToFloatRange(int $seedAsInt): float
+    {
+        $minFloat = -1;
+        $maxFloat = 1;
+
+        return $minFloat + ($seedAsInt - PHP_INT_MIN) * ($maxFloat - $minFloat) / (PHP_INT_MAX - PHP_INT_MIN);
     }
 }
