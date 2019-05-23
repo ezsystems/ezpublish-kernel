@@ -24,7 +24,7 @@ class NoLayout implements EventSubscriberInterface
 
         $event->getParameterBag()->set(
             'noLayout',
-            isset($parameters['layout']) ? !(bool) $parameters['layout'] : false
+            isset($parameters['layout']) ? !(bool) $parameters['layout'] : true
         );
     }
 }
