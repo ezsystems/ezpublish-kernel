@@ -19,7 +19,7 @@ class ContentLimitationsMixIntegrationTest extends BaseLimitationIntegrationTest
     const LIMITATION_VALUES = 'limitationValues';
 
     /**
-     * Provides lists of:
+     * Provides lists of:.
      *
      * <code>[string $module, string $function, array $limitations, bool $expectedResult]</code>
      *
