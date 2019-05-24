@@ -269,7 +269,6 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
             $logger->warning(sprintf(
                 'ConfigResolver was used to load parameter "%s" before SiteAccess was loaded by services: %s. This can cause issues. '
                 . 'Try to use ConfigResolver lazily, '
-                . (PHP_SAPI === 'cli' ? 'make commands that rely on them lazy, ' : '')
                 . 'or try to mark the service as lazy.',
                 $param,
                 '"' . implode($services, '", "') . '"'
