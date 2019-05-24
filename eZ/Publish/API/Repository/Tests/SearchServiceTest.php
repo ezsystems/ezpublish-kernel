@@ -4593,4 +4593,80 @@ class SearchServiceTest extends BaseTest
             );
         }
     }
+
+    public function testRandomSortContentWithSameSeed()
+    {
+        /** @var \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy $setupFactory */
+        $setupFactory = $this->getSetupFactory();
+
+        if ('sqlite' === $setupFactory->getDB()) {
+            $this->markTestSkipped(
+                'Seed function is not implemented in sqlite DB.'
+            );
+        }
+
+        $firstQuery = new Query([
+            'sortClauses' => [
+                new SortClause\Random(PHP_INT_MAX / 4),
+            ],
+        ]);
+
+        $secondQuery = new Query([
+            'sortClauses' => [
+                new SortClause\Random(PHP_INT_MAX / 4),
+            ],
+        ]);
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        try {
+            $this->assertEquals(
+                $searchService->findContent($firstQuery)->searchHits,
+                $searchService->findContent($secondQuery)->searchHits
+            );
+        } catch (NotImplementedException $e) {
+            $this->markTestSkipped(
+                'This feature is not supported by the current search backend: ' . $e->getMessage()
+            );
+        }
+    }
+
+    public function testRandomSortLocationWithSameSeed()
+    {
+        /** @var \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy $setupFactory */
+        $setupFactory = $this->getSetupFactory();
+
+        if ('sqlite' === $setupFactory->getDB()) {
+            $this->markTestSkipped(
+                'Seed function is not implemented in sqlite DB.'
+            );
+        }
+
+        $firstQuery = new LocationQuery([
+            'sortClauses' => [
+                new SortClause\Random(PHP_INT_MAX / 4),
+            ],
+        ]);
+
+        $secondQuery = new LocationQuery([
+            'sortClauses' => [
+                new SortClause\Random(PHP_INT_MAX / 4),
+            ],
+        ]);
+
+        $repository = $this->getRepository();
+        $searchService = $repository->getSearchService();
+
+        try {
+            $this->assertEquals(
+                $searchService->findLocations($firstQuery)->searchHits,
+                $searchService->findLocations($secondQuery)->searchHits
+            );
+        } catch (NotImplementedException $e) {
+            $this->markTestSkipped(
+                'This feature is not supported by the current search backend: ' . $e->getMessage()
+            );
+        }
+    }
 }
