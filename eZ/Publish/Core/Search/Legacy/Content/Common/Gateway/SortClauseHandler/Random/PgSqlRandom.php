@@ -14,6 +14,9 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Abstr
 
 class PgSqlRandom extends AbstractRandom
 {
+    private const MIN_SEED_VAL = -1.0;
+    private const MAX_SEED_VAL = 1.0;
+
     public function applyJoin(
         SelectQuery $query,
         SortClause $sortClause,
@@ -21,7 +24,7 @@ class PgSqlRandom extends AbstractRandom
         array $languageSettings
     ) {
         $seedAsInt = $sortClause->targetData->seed;
-        if (!$seedAsInt) {
+        if ($seedAsInt === null) {
             return;
         }
 
@@ -50,9 +53,6 @@ class PgSqlRandom extends AbstractRandom
      */
     private function interpolateIntegerToFloatRange(int $seedAsInt): float
     {
-        $minFloat = -1;
-        $maxFloat = 1;
-
-        return $minFloat + ($seedAsInt - PHP_INT_MIN) * ($maxFloat - $minFloat) / (PHP_INT_MAX - PHP_INT_MIN);
+        return self::MIN_SEED_VAL + ($seedAsInt - PHP_INT_MIN) * (self::MAX_SEED_VAL - self::MIN_SEED_VAL) / (PHP_INT_MAX - PHP_INT_MIN);
     }
 }
