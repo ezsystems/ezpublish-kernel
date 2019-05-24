@@ -14,6 +14,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * This class will help you get settings for a specific scope.
@@ -66,6 +67,11 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
      * @var int
      */
     protected $undefinedStrategy;
+
+    /**
+     * @var string[] List of param => [services] loaded while siteAccess->matchingType was 'uninitialized'
+     */
+    private $tooEarlyLoadedList = [];
 
     /**
      * @param array $groupsBySiteAccess SiteAccess groups, indexed by siteaccess.
@@ -165,6 +171,8 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
      */
     public function getParameter($paramName, $namespace = null, $scope = null)
     {
+        $this->logTooEarlyLoadedListIfNeeded($paramName);
+
         $namespace = $namespace ?: $this->defaultNamespace;
         $scope = $scope ?: $this->getDefaultScope();
         $triedScopes = array();
@@ -237,8 +245,95 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
         return $this->defaultScope ?: $this->siteAccess->name;
     }
 
+    /**
+     * @param string $scope The default "scope" aka siteaccess name, as opposed to the self::SCOPE_DEFAULT.
+     */
     public function setDefaultScope($scope)
     {
         $this->defaultScope = $scope;
+
+        // On scope change check if siteaccess has been updated so we can log warnings if there are any
+        if ($this->siteAccess->matchingType !== 'uninitialized') {
+            $this->warnAboutTooEarlyLoadedParams();
+        }
+    }
+
+    private function warnAboutTooEarlyLoadedParams()
+    {
+        if (empty($this->tooEarlyLoadedList)) {
+            return;
+        }
+
+        $logger = $this->container->get('logger');
+        foreach ($this->tooEarlyLoadedList as $param => $services) {
+            $logger->warning(sprintf(
+                'ConfigResolver was used to load parameter "%s" before SiteAccess was loaded by services: %s. This can cause issues. '
+                . 'Try to use ConfigResolver lazily, '
+                . (PHP_SAPI === 'cli' ? 'make commands that rely on them lazy, ' : '')
+                . 'or try to mark the service as lazy.',
+                $param,
+                '"' . implode($services, '", "') . '"'
+            ));
+        }
+
+        $this->tooEarlyLoadedList = [];
+    }
+
+    /**
+     * If in run-time debug mode, before SiteAccess is initialized, log getParameter() usages when considered "unsafe".
+     *
+     * @return string
+     */
+    private function logTooEarlyLoadedListIfNeeded($paramName)
+    {
+        if ($this->container instanceof ContainerBuilder) {
+            return;
+        }
+
+        if ($this->siteAccess->matchingType !== 'uninitialized') {
+            return;
+        }
+
+        // So we are in a state where we need to warn about unsafe use of config resolver parameters...
+        // .. it's a bit costly to do so, so we only do it in debug mode
+        $container = $this->container;
+        if (!$container->getParameter('kernel.debug')) {
+            return;
+        }
+
+        $serviceName = '??';
+        $resettableServiceIds = $container->getParameter('ezpublish.config_resolver.resettable_services');
+        $updatableServices = $container->getParameter('ezpublish.config_resolver.updateable_services');
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10) as $t) {
+            if (!isset($t['function']) || $t['function'] === 'getParameter' || $t['function'] === __FUNCTION__) {
+                continue;
+            }
+
+            // Extract service name from first service matching getXXService pattern
+            if (\strpos($t['function'], 'get') === 0 && \strpos($t['function'], 'Service') === \strlen($t['function']) -7) {
+                $serviceName = \strtolower(\preg_replace('/\B([A-Z])/', '_$1', \str_replace('_', '.', \substr($t['function'], 3, -7))));
+
+                // This (->setter('$dynamic_param$')) is safe as the system is able to update it on scope changes
+                if (isset($updatableServices[$serviceName])) {
+                    return;
+                }
+
+                // !! The remaining cases are not safe, typically:
+                // - ctor('$dynamic_param$') => this should be avoided, use setter or use config resolver instead
+                // - config resolver use in service factory => the service (or decorator, if any) should be marked lazy
+
+                // Exception are up-datable cases where we where unable to reverse engineer service name
+                // Which is the case for any class name based services, as namespace is omitted from compiled fn
+                if (!in_array($serviceName, $resettableServiceIds, true) && !$container->has($serviceName)) {
+                    // So in this case we are not sure if this is a warning or not, but we stay safe and warn about it
+                    // TODO: Might be possible to introspect the compiled container to extract class/service name
+                    $serviceName = '->' . $t['function'] . '()';
+                }
+
+                break;
+            }
+        }
+
+        $this->tooEarlyLoadedList[$paramName][] = $serviceName;
     }
 }
