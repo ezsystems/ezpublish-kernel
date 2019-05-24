@@ -6,10 +6,8 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 
 use Behat\Behat\Context\Context;
-use EzSystems\PlatformBehatBundle\Context\RepositoryContext;
 use eZ\Publish\API\Repository\ContentTypeService;
 use eZ\Publish\API\Repository\Exceptions as ApiExceptions;
-use eZ\Publish\API\Repository\Repository;
 use Behat\Gherkin\Node\TableNode;
 use PHPUnit\Framework\Assert as Assertion;
 
@@ -18,8 +16,6 @@ use PHPUnit\Framework\Assert as Assertion;
  */
 class ContentTypeContext implements Context
 {
-    use RepositoryContext;
-
     /**
      * Default ContentTypeGroup.
      */
@@ -41,12 +37,10 @@ class ContentTypeContext implements Context
     protected $contentTypeGroupContext;
 
     /**
-     * @injectService $repository @ezpublish.api.repository
      * @injectService $contentTypeService @ezpublish.api.service.content_type
      */
-    public function __construct(Repository $repository, ContentTypeService $contentTypeService)
+    public function __construct(ContentTypeService $contentTypeService)
     {
-        $this->setRepository($repository);
         $this->contentTypeService = $contentTypeService;
     }
 

@@ -7,13 +7,10 @@ namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\MinkExtension\Context\RawMinkContext;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
-use EzSystems\PlatformBehatBundle\Context\SubContext\DeprecationNoticeSupressor;
 use PHPUnit\Framework\Assert as Assertion;
 
 class ContentPreviewContext extends RawMinkContext
 {
-    use DeprecationNoticeSupressor;
-
     /** @var \eZ\Bundle\EzPublishCoreBundle\Features\Context\ContentContext */
     private $contentContext;
 

@@ -5,7 +5,6 @@ cd ../../..;
 echo '# Extract Kernel : EzPublishCoreBundle';
 ./bin/console translation:extract en -v \
   --dir=./vendor/ezsystems/ezpublish-kernel/eZ \
-  --exclude-dir=Bundle/PlatformBehatBundle \
   --exclude-dir=Tests \
   --exclude-dir=Features \
   --exclude-dir=Publish/Core/REST/Client \

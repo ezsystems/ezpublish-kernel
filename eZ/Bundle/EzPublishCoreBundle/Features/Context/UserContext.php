@@ -8,8 +8,6 @@ namespace eZ\Bundle\EzPublishCoreBundle\Features\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Behat\Context\Context;
 use PHPUnit\Framework\Assert as Assertion;
-use EzSystems\PlatformBehatBundle\Context\RepositoryContext;
-use eZ\Publish\API\Repository\Repository;
 use eZ\Publish\API\Repository\UserService;
 use eZ\Publish\API\Repository\SearchService;
 use eZ\Publish\API\Repository\Exceptions as ApiExceptions;
@@ -22,8 +20,6 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
  */
 class UserContext implements Context
 {
-    use RepositoryContext;
-
     const DEFAULT_LANGUAGE = 'eng-GB';
 
     /**
@@ -47,13 +43,11 @@ class UserContext implements Context
     protected $searchService;
 
     /**
-     * @injectService $repository @ezpublish.api.repository
      * @injectService $userService @ezpublish.api.service.user
      * @injectService $searchService @ezpublish.api.service.search
      */
-    public function __construct(Repository $repository, UserService $userService, SearchService $searchService)
+    public function __construct(UserService $userService, SearchService $searchService)
     {
-        $this->setRepository($repository);
         $this->userService = $userService;
         $this->searchService = $searchService;
     }

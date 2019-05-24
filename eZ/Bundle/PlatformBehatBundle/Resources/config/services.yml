@@ -1,7 +1,0 @@
-services:
-    platform_behat.controller.exception:
-        class: eZ\Bundle\PlatformBehatBundle\Controller\ExceptionController
-    platform_behat.context_argument_resolver:
-        class: EzSystems\PlatformBehatBundle\Context\Argument\AnnotationArgumentResolver
-        tags:
-            -  { name: context.argument_resolver, priority: 100 }
