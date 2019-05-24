@@ -17,4 +17,8 @@ Changes affecting version compatibility with former or future versions.
     * `ezpublish.<scope>.ezpage.*`
     * `ezpublish.<scope>.block_view.*`
         
+* REST Client has been dropped.
 
+* REST Server implementation and Common namespace have been removed in favor of
+  eZ Platform REST Bundle available via
+  [ezsystems/ezplatform-rest](https://github.com/ezsystems/ezplatform-rest) package.

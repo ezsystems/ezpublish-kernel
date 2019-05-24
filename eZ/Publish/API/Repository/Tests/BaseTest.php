@@ -24,7 +24,6 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
-use eZ\Publish\Core\REST\Client\Sessionable;
 use DateTime;
 use ArrayObject;
 use Exception;
@@ -56,14 +55,7 @@ abstract class BaseTest extends TestCase
 
         try {
             // Use setup factory instance here w/o clearing data in case test don't need to
-            $repository = $this->getSetupFactory()->getRepository(false);
-
-            // Set session if we are testing the REST backend to make it
-            // possible to persist data in the memory backend during multiple
-            // requests.
-            if ($repository instanceof Sessionable) {
-                $repository->setSession($id = md5(microtime()));
-            }
+            $this->getSetupFactory()->getRepository(false);
         } catch (PDOException $e) {
             $this->fail(
                 'The communication with the database cannot be established. ' .

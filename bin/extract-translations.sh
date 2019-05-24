@@ -7,7 +7,6 @@ echo '# Extract Kernel : EzPublishCoreBundle';
   --dir=./vendor/ezsystems/ezpublish-kernel/eZ \
   --exclude-dir=Tests \
   --exclude-dir=Features \
-  --exclude-dir=Publish/Core/REST/Client \
   --exclude-dir=tests \
   --output-dir=./vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishCoreBundle/Resources/translations \
   --enable-extractor=ez_fieldtypes \

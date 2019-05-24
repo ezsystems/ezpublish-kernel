@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Field>
- <fieldValue>
-  <value key="age">23</value>
-  <value key="married">true</value>
-  <value key="city">Sindelfingen</value>
-  <value key="cause"/>
- </fieldValue>
-</Field>

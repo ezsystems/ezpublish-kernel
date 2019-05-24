@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Version media-type="application/vnd.ez.api.Version+xml">
-    <Field>
-        <fieldValue>
-            <value key="first">Sindelfingen</value>
-            <value key="second">Bielefeld</value>
-        </fieldValue>
-    </Field>
-</Version>
