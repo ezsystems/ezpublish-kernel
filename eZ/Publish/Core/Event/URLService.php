@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
+declare(strict_types=1);
+
+namespace eZ\Publish\Core\Event;
+
+use eZ\Publish\SPI\Repository\Decorator\URLServiceDecorator;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use eZ\Publish\API\Repository\URLService as URLServiceInterface;
+use eZ\Publish\API\Repository\Values\URL\URL;
+use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
+use eZ\Publish\Core\Event\URL\BeforeUpdateUrlEvent;
+use eZ\Publish\Core\Event\URL\URLEvents;
+use eZ\Publish\Core\Event\URL\UpdateUrlEvent;
+
+class URLService extends URLServiceDecorator implements URLServiceInterface
+{
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    public function __construct(
+        URLServiceInterface $innerService,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        parent::__construct($innerService);
+
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function updateUrl(
+        URL $url,
+        URLUpdateStruct $struct
+    ) {
+        $eventData = [
+            $url,
+            $struct,
+        ];
+
+        $beforeEvent = new BeforeUpdateUrlEvent(...$eventData);
+        if ($this->eventDispatcher->dispatch(URLEvents::BEFORE_UPDATE_URL, $beforeEvent)->isPropagationStopped()) {
+            return $beforeEvent->getUpdatedUrl();
+        }
+
+        $updatedUrl = $beforeEvent->hasUpdatedUrl()
+            ? $beforeEvent->getUpdatedUrl()
+            : parent::updateUrl($url, $struct);
+
+        $this->eventDispatcher->dispatch(
+            URLEvents::UPDATE_URL,
+            new UpdateUrlEvent($updatedUrl, ...$eventData)
+        );
+
+        return $updatedUrl;
+    }
+}
