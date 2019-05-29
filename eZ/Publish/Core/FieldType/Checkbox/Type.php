@@ -31,6 +31,9 @@ class Type extends FieldType
         return 'ezboolean';
     }
 
+    /**
+     * @param \eZ\Publish\Core\FieldType\Checkbox\Value|\eZ\Publish\SPI\FieldType\Value $value
+     */
     public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
         return $value->bool ? '1' : '0';

@@ -42,6 +42,9 @@ abstract class Type extends FieldType
      */
     abstract protected function createValue(array $inputValue);
 
+    /**
+     * @param \eZ\Publish\Core\FieldType\BinaryBase\Value|\eZ\Publish\SPI\FieldType\Value $value
+     */
     public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
         return (string)$value->fileName;

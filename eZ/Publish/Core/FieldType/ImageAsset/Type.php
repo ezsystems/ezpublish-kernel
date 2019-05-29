@@ -123,11 +123,7 @@ class Type extends FieldType
             return '';
         }
 
-        if (isset($versionInfo->names[$languageCode])) {
-            return $versionInfo->names[$languageCode];
-        }
-
-        return $versionInfo->names[$contentInfo->mainLanguageCode];
+        return $versionInfo->names[$languageCode] ?? $versionInfo->names[$contentInfo->mainLanguageCode];
     }
 
     /**

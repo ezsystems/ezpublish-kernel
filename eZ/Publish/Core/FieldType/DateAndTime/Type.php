@@ -56,6 +56,9 @@ class Type extends FieldType
         return 'ezdatetime';
     }
 
+    /**
+     * @param \eZ\Publish\Core\FieldType\DateAndTime\Value|\eZ\Publish\SPI\FieldType\Value $value
+     */
     public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
         if ($this->isEmptyValue($value)) {
