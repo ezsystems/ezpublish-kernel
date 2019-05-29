@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -17,29 +21,36 @@ use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 
 abstract class UserServiceDecorator implements UserService
 {
-    /** @var eZ\Publish\API\Repository\UserService */
+    /**
+     * @var \eZ\Publish\API\Repository\UserService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\UserService
-     */
     public function __construct(UserService $innerService)
     {
         $this->innerService = $innerService;
     }
 
-    public function createUserGroup(UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup)
-    {
+    public function createUserGroup(
+        UserGroupCreateStruct $userGroupCreateStruct,
+        UserGroup $parentGroup
+    ) {
         $this->innerService->createUserGroup($userGroupCreateStruct, $parentGroup);
     }
 
-    public function loadUserGroup($id, array $prioritizedLanguages = [])
-    {
+    public function loadUserGroup(
+        $id,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadUserGroup($id, $prioritizedLanguages);
     }
 
-    public function loadSubUserGroups(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
-    {
+    public function loadSubUserGroups(
+        UserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadSubUserGroups($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
@@ -48,23 +59,31 @@ abstract class UserServiceDecorator implements UserService
         $this->innerService->deleteUserGroup($userGroup);
     }
 
-    public function moveUserGroup(UserGroup $userGroup, UserGroup $newParent)
-    {
+    public function moveUserGroup(
+        UserGroup $userGroup,
+        UserGroup $newParent
+    ) {
         $this->innerService->moveUserGroup($userGroup, $newParent);
     }
 
-    public function updateUserGroup(UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct)
-    {
+    public function updateUserGroup(
+        UserGroup $userGroup,
+        UserGroupUpdateStruct $userGroupUpdateStruct
+    ) {
         $this->innerService->updateUserGroup($userGroup, $userGroupUpdateStruct);
     }
 
-    public function createUser(UserCreateStruct $userCreateStruct, array $parentGroups)
-    {
+    public function createUser(
+        UserCreateStruct $userCreateStruct,
+        array $parentGroups
+    ) {
         $this->innerService->createUser($userCreateStruct, $parentGroups);
     }
 
-    public function loadUser($userId, array $prioritizedLanguages = [])
-    {
+    public function loadUser(
+        $userId,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadUser($userId, $prioritizedLanguages);
     }
 
@@ -73,23 +92,32 @@ abstract class UserServiceDecorator implements UserService
         $this->innerService->loadAnonymousUser();
     }
 
-    public function loadUserByCredentials($login, $password, array $prioritizedLanguages = [])
-    {
+    public function loadUserByCredentials(
+        $login,
+        $password,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadUserByCredentials($login, $password, $prioritizedLanguages);
     }
 
-    public function loadUserByLogin($login, array $prioritizedLanguages = [])
-    {
+    public function loadUserByLogin(
+        $login,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadUserByLogin($login, $prioritizedLanguages);
     }
 
-    public function loadUsersByEmail($email, array $prioritizedLanguages = [])
-    {
+    public function loadUsersByEmail(
+        $email,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadUsersByEmail($email, $prioritizedLanguages);
     }
 
-    public function loadUserByToken($hash, array $prioritizedLanguages = [])
-    {
+    public function loadUserByToken(
+        $hash,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadUserByToken($hash, $prioritizedLanguages);
     }
 
@@ -98,13 +126,17 @@ abstract class UserServiceDecorator implements UserService
         $this->innerService->deleteUser($user);
     }
 
-    public function updateUser(User $user, UserUpdateStruct $userUpdateStruct)
-    {
+    public function updateUser(
+        User $user,
+        UserUpdateStruct $userUpdateStruct
+    ) {
         $this->innerService->updateUser($user, $userUpdateStruct);
     }
 
-    public function updateUserToken(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)
-    {
+    public function updateUserToken(
+        User $user,
+        UserTokenUpdateStruct $userTokenUpdateStruct
+    ) {
         $this->innerService->updateUserToken($user, $userTokenUpdateStruct);
     }
 
@@ -113,23 +145,35 @@ abstract class UserServiceDecorator implements UserService
         $this->innerService->expireUserToken($hash);
     }
 
-    public function assignUserToUserGroup(User $user, UserGroup $userGroup)
-    {
+    public function assignUserToUserGroup(
+        User $user,
+        UserGroup $userGroup
+    ) {
         $this->innerService->assignUserToUserGroup($user, $userGroup);
     }
 
-    public function unAssignUserFromUserGroup(User $user, UserGroup $userGroup)
-    {
+    public function unAssignUserFromUserGroup(
+        User $user,
+        UserGroup $userGroup
+    ) {
         $this->innerService->unAssignUserFromUserGroup($user, $userGroup);
     }
 
-    public function loadUserGroupsOfUser(User $user, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
-    {
+    public function loadUserGroupsOfUser(
+        User $user,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadUserGroupsOfUser($user, $offset, $limit, $prioritizedLanguages);
     }
 
-    public function loadUsersOfUserGroup(UserGroup $userGroup, $offset = 0, $limit = 25, array $prioritizedLanguages = [])
-    {
+    public function loadUsersOfUserGroup(
+        UserGroup $userGroup,
+        $offset = 0,
+        $limit = 25,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadUsersOfUserGroup($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
@@ -143,13 +187,20 @@ abstract class UserServiceDecorator implements UserService
         return $this->innerService->isUserGroup($content);
     }
 
-    public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null)
-    {
+    public function newUserCreateStruct(
+        $login,
+        $email,
+        $password,
+        $mainLanguageCode,
+        $contentType = null
+    ) {
         $this->innerService->newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType);
     }
 
-    public function newUserGroupCreateStruct($mainLanguageCode, $contentType = null)
-    {
+    public function newUserGroupCreateStruct(
+        $mainLanguageCode,
+        $contentType = null
+    ) {
         $this->innerService->newUserGroupCreateStruct($mainLanguageCode, $contentType);
     }
 
@@ -163,8 +214,10 @@ abstract class UserServiceDecorator implements UserService
         $this->innerService->newUserGroupUpdateStruct();
     }
 
-    public function validatePassword(string $password, PasswordValidationContext $context = null): array
-    {
+    public function validatePassword(
+        string $password,
+        PasswordValidationContext $context = null
+    ): array {
         return $this->innerService->validatePassword($password, $context);
     }
 }

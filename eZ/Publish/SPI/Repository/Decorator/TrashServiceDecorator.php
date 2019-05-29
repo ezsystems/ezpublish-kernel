@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -11,12 +15,11 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem;
 
 abstract class TrashServiceDecorator implements TrashService
 {
-    /** @var eZ\Publish\API\Repository\TrashService */
+    /**
+     * @var \eZ\Publish\API\Repository\TrashService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\TrashService
-     */
     public function __construct(TrashService $innerService)
     {
         $this->innerService = $innerService;
@@ -32,8 +35,10 @@ abstract class TrashServiceDecorator implements TrashService
         $this->innerService->trash($location);
     }
 
-    public function recover(TrashItem $trashItem, Location $newParentLocation = null)
-    {
+    public function recover(
+        TrashItem $trashItem,
+        Location $newParentLocation = null
+    ) {
         $this->innerService->recover($trashItem, $newParentLocation);
     }
 

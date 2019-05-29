@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -11,12 +15,11 @@ use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
 
 abstract class URLServiceDecorator implements URLService
 {
-    /** @var eZ\Publish\API\Repository\URLService */
+    /**
+     * @var \eZ\Publish\API\Repository\URLService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\URLService
-     */
     public function __construct(URLService $innerService)
     {
         $this->innerService = $innerService;
@@ -32,8 +35,11 @@ abstract class URLServiceDecorator implements URLService
         $this->innerService->findUrls($query);
     }
 
-    public function findUsages(URL $url, $offset = 0, $limit = -1)
-    {
+    public function findUsages(
+        URL $url,
+        $offset = 0,
+        $limit = -1
+    ) {
         $this->innerService->findUsages($url, $offset, $limit);
     }
 
@@ -47,8 +53,10 @@ abstract class URLServiceDecorator implements URLService
         $this->innerService->loadByUrl($url);
     }
 
-    public function updateUrl(URL $url, URLUpdateStruct $struct)
-    {
+    public function updateUrl(
+        URL $url,
+        URLUpdateStruct $struct
+    ) {
         $this->innerService->updateUrl($url, $struct);
     }
 }

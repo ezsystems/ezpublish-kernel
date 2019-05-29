@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Tests\Decorator;
@@ -16,7 +20,7 @@ use eZ\Publish\SPI\Repository\Decorator\LocationServiceDecorator;
 
 class LocationServiceDecoratorTest extends TestCase
 {
-    protected function createDecorator(LocationService $service): LocationService
+    protected function createDecorator(MockObject $service): LocationService
     {
         return new class($service) extends LocationServiceDecorator {
         };

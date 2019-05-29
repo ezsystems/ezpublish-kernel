@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Tests\Decorator;
@@ -19,7 +23,7 @@ use eZ\Publish\SPI\Repository\Decorator\ContentServiceDecorator;
 
 class ContentServiceDecoratorTest extends TestCase
 {
-    protected function createDecorator(ContentService $service): ContentService
+    protected function createDecorator(MockObject $service): ContentService
     {
         return new class($service) extends ContentServiceDecorator {
         };

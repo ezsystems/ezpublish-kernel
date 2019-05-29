@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -20,12 +24,11 @@ use eZ\Publish\API\Repository\Values\User\UserGroup;
 
 abstract class RoleServiceDecorator implements RoleService
 {
-    /** @var eZ\Publish\API\Repository\RoleService */
+    /**
+     * @var \eZ\Publish\API\Repository\RoleService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\RoleService
-     */
     public function __construct(RoleService $innerService)
     {
         $this->innerService = $innerService;
@@ -51,23 +54,32 @@ abstract class RoleServiceDecorator implements RoleService
         $this->innerService->loadRoleDraftByRoleId($roleId);
     }
 
-    public function updateRoleDraft(RoleDraft $roleDraft, RoleUpdateStruct $roleUpdateStruct)
-    {
+    public function updateRoleDraft(
+        RoleDraft $roleDraft,
+        RoleUpdateStruct $roleUpdateStruct
+    ) {
         $this->innerService->updateRoleDraft($roleDraft, $roleUpdateStruct);
     }
 
-    public function addPolicyByRoleDraft(RoleDraft $roleDraft, PolicyCreateStruct $policyCreateStruct)
-    {
+    public function addPolicyByRoleDraft(
+        RoleDraft $roleDraft,
+        PolicyCreateStruct $policyCreateStruct
+    ) {
         $this->innerService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
     }
 
-    public function removePolicyByRoleDraft(RoleDraft $roleDraft, PolicyDraft $policyDraft)
-    {
+    public function removePolicyByRoleDraft(
+        RoleDraft $roleDraft,
+        PolicyDraft $policyDraft
+    ) {
         $this->innerService->removePolicyByRoleDraft($roleDraft, $policyDraft);
     }
 
-    public function updatePolicyByRoleDraft(RoleDraft $roleDraft, PolicyDraft $policy, PolicyUpdateStruct $policyUpdateStruct)
-    {
+    public function updatePolicyByRoleDraft(
+        RoleDraft $roleDraft,
+        PolicyDraft $policy,
+        PolicyUpdateStruct $policyUpdateStruct
+    ) {
         $this->innerService->updatePolicyByRoleDraft($roleDraft, $policy, $policyUpdateStruct);
     }
 
@@ -81,13 +93,17 @@ abstract class RoleServiceDecorator implements RoleService
         $this->innerService->publishRoleDraft($roleDraft);
     }
 
-    public function updateRole(Role $role, RoleUpdateStruct $roleUpdateStruct)
-    {
+    public function updateRole(
+        Role $role,
+        RoleUpdateStruct $roleUpdateStruct
+    ) {
         $this->innerService->updateRole($role, $roleUpdateStruct);
     }
 
-    public function addPolicy(Role $role, PolicyCreateStruct $policyCreateStruct)
-    {
+    public function addPolicy(
+        Role $role,
+        PolicyCreateStruct $policyCreateStruct
+    ) {
         $this->innerService->addPolicy($role, $policyCreateStruct);
     }
 
@@ -96,8 +112,10 @@ abstract class RoleServiceDecorator implements RoleService
         $this->innerService->deletePolicy($policy);
     }
 
-    public function updatePolicy(Policy $policy, PolicyUpdateStruct $policyUpdateStruct)
-    {
+    public function updatePolicy(
+        Policy $policy,
+        PolicyUpdateStruct $policyUpdateStruct
+    ) {
         $this->innerService->updatePolicy($policy, $policyUpdateStruct);
     }
 
@@ -126,23 +144,33 @@ abstract class RoleServiceDecorator implements RoleService
         $this->innerService->loadPoliciesByUserId($userId);
     }
 
-    public function assignRoleToUserGroup(Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null)
-    {
+    public function assignRoleToUserGroup(
+        Role $role,
+        UserGroup $userGroup,
+        RoleLimitation $roleLimitation = null
+    ) {
         $this->innerService->assignRoleToUserGroup($role, $userGroup, $roleLimitation);
     }
 
-    public function unassignRoleFromUserGroup(Role $role, UserGroup $userGroup)
-    {
+    public function unassignRoleFromUserGroup(
+        Role $role,
+        UserGroup $userGroup
+    ) {
         $this->innerService->unassignRoleFromUserGroup($role, $userGroup);
     }
 
-    public function assignRoleToUser(Role $role, User $user, RoleLimitation $roleLimitation = null)
-    {
+    public function assignRoleToUser(
+        Role $role,
+        User $user,
+        RoleLimitation $roleLimitation = null
+    ) {
         $this->innerService->assignRoleToUser($role, $user, $roleLimitation);
     }
 
-    public function unassignRoleFromUser(Role $role, User $user)
-    {
+    public function unassignRoleFromUser(
+        Role $role,
+        User $user
+    ) {
         $this->innerService->unassignRoleFromUser($role, $user);
     }
 
@@ -156,8 +184,10 @@ abstract class RoleServiceDecorator implements RoleService
         $this->innerService->getRoleAssignments($role);
     }
 
-    public function getRoleAssignmentsForUser(User $user, $inherited = false)
-    {
+    public function getRoleAssignmentsForUser(
+        User $user,
+        $inherited = false
+    ) {
         $this->innerService->getRoleAssignmentsForUser($user, $inherited);
     }
 
@@ -176,8 +206,10 @@ abstract class RoleServiceDecorator implements RoleService
         $this->innerService->newRoleCreateStruct($name);
     }
 
-    public function newPolicyCreateStruct($module, $function)
-    {
+    public function newPolicyCreateStruct(
+        $module,
+        $function
+    ) {
         $this->innerService->newPolicyCreateStruct($module, $function);
     }
 
@@ -196,8 +228,10 @@ abstract class RoleServiceDecorator implements RoleService
         $this->innerService->getLimitationType($identifier);
     }
 
-    public function getLimitationTypesByModuleFunction($module, $function)
-    {
+    public function getLimitationTypesByModuleFunction(
+        $module,
+        $function
+    ) {
         $this->innerService->getLimitationTypesByModuleFunction($module, $function);
     }
 }

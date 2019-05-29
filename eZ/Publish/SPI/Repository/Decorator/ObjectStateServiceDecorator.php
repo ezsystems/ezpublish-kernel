@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -15,12 +19,11 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 
 abstract class ObjectStateServiceDecorator implements ObjectStateService
 {
-    /** @var eZ\Publish\API\Repository\ObjectStateService */
+    /**
+     * @var \eZ\Publish\API\Repository\ObjectStateService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\ObjectStateService
-     */
     public function __construct(ObjectStateService $innerService)
     {
         $this->innerService = $innerService;
@@ -31,23 +34,32 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
         $this->innerService->createObjectStateGroup($objectStateGroupCreateStruct);
     }
 
-    public function loadObjectStateGroup($objectStateGroupId, array $prioritizedLanguages = [])
-    {
+    public function loadObjectStateGroup(
+        $objectStateGroupId,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
     }
 
-    public function loadObjectStateGroups($offset = 0, $limit = -1, array $prioritizedLanguages = [])
-    {
+    public function loadObjectStateGroups(
+        $offset = 0,
+        $limit = -1,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadObjectStateGroups($offset, $limit, $prioritizedLanguages);
     }
 
-    public function loadObjectStates(ObjectStateGroup $objectStateGroup, array $prioritizedLanguages = [])
-    {
+    public function loadObjectStates(
+        ObjectStateGroup $objectStateGroup,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadObjectStates($objectStateGroup, $prioritizedLanguages);
     }
 
-    public function updateObjectStateGroup(ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct)
-    {
+    public function updateObjectStateGroup(
+        ObjectStateGroup $objectStateGroup,
+        ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
+    ) {
         $this->innerService->updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
     }
 
@@ -56,23 +68,31 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
         $this->innerService->deleteObjectStateGroup($objectStateGroup);
     }
 
-    public function createObjectState(ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct)
-    {
+    public function createObjectState(
+        ObjectStateGroup $objectStateGroup,
+        ObjectStateCreateStruct $objectStateCreateStruct
+    ) {
         $this->innerService->createObjectState($objectStateGroup, $objectStateCreateStruct);
     }
 
-    public function loadObjectState($stateId, array $prioritizedLanguages = [])
-    {
+    public function loadObjectState(
+        $stateId,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadObjectState($stateId, $prioritizedLanguages);
     }
 
-    public function updateObjectState(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct)
-    {
+    public function updateObjectState(
+        ObjectState $objectState,
+        ObjectStateUpdateStruct $objectStateUpdateStruct
+    ) {
         $this->innerService->updateObjectState($objectState, $objectStateUpdateStruct);
     }
 
-    public function setPriorityOfObjectState(ObjectState $objectState, $priority)
-    {
+    public function setPriorityOfObjectState(
+        ObjectState $objectState,
+        $priority
+    ) {
         $this->innerService->setPriorityOfObjectState($objectState, $priority);
     }
 
@@ -81,13 +101,18 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
         $this->innerService->deleteObjectState($objectState);
     }
 
-    public function setContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup, ObjectState $objectState)
-    {
+    public function setContentState(
+        ContentInfo $contentInfo,
+        ObjectStateGroup $objectStateGroup,
+        ObjectState $objectState
+    ) {
         $this->innerService->setContentState($contentInfo, $objectStateGroup, $objectState);
     }
 
-    public function getContentState(ContentInfo $contentInfo, ObjectStateGroup $objectStateGroup)
-    {
+    public function getContentState(
+        ContentInfo $contentInfo,
+        ObjectStateGroup $objectStateGroup
+    ) {
         $this->innerService->getContentState($contentInfo, $objectStateGroup);
     }
 

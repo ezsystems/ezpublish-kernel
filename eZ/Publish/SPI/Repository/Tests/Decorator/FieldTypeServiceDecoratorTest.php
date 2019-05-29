@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Tests\Decorator;
@@ -11,7 +15,7 @@ use eZ\Publish\SPI\Repository\Decorator\FieldTypeServiceDecorator;
 
 class FieldTypeServiceDecoratorTest extends TestCase
 {
-    protected function createDecorator(FieldTypeService $service): FieldTypeService
+    protected function createDecorator(MockObject $service): FieldTypeService
     {
         return new class($service) extends FieldTypeServiceDecorator {
         };

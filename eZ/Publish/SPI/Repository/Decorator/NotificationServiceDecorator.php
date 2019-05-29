@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -11,19 +15,20 @@ use eZ\Publish\API\Repository\Values\Notification\NotificationList;
 
 abstract class NotificationServiceDecorator implements NotificationService
 {
-    /** @var eZ\Publish\API\Repository\NotificationService */
+    /**
+     * @var \eZ\Publish\API\Repository\NotificationService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\NotificationService
-     */
     public function __construct(NotificationService $innerService)
     {
         $this->innerService = $innerService;
     }
 
-    public function loadNotifications(int $offset, int $limit): NotificationList
-    {
+    public function loadNotifications(
+        int $offset,
+        int $limit
+    ): NotificationList {
         return $this->innerService->loadNotifications($offset, $limit);
     }
 

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -13,12 +17,11 @@ use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
 abstract class SectionServiceDecorator implements SectionService
 {
-    /** @var eZ\Publish\API\Repository\SectionService */
+    /**
+     * @var \eZ\Publish\API\Repository\SectionService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\SectionService
-     */
     public function __construct(SectionService $innerService)
     {
         $this->innerService = $innerService;
@@ -29,8 +32,10 @@ abstract class SectionServiceDecorator implements SectionService
         $this->innerService->createSection($sectionCreateStruct);
     }
 
-    public function updateSection(Section $section, SectionUpdateStruct $sectionUpdateStruct)
-    {
+    public function updateSection(
+        Section $section,
+        SectionUpdateStruct $sectionUpdateStruct
+    ) {
         $this->innerService->updateSection($section, $sectionUpdateStruct);
     }
 
@@ -59,13 +64,17 @@ abstract class SectionServiceDecorator implements SectionService
         $this->innerService->isSectionUsed($section);
     }
 
-    public function assignSection(ContentInfo $contentInfo, Section $section)
-    {
+    public function assignSection(
+        ContentInfo $contentInfo,
+        Section $section
+    ) {
         $this->innerService->assignSection($contentInfo, $section);
     }
 
-    public function assignSectionToSubtree(Location $location, Section $section): void
-    {
+    public function assignSectionToSubtree(
+        Location $location,
+        Section $section
+    ): void {
         $this->innerService->assignSectionToSubtree($location, $section);
     }
 

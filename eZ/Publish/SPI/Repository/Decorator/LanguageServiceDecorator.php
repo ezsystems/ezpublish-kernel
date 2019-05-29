@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -10,12 +14,11 @@ use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 abstract class LanguageServiceDecorator implements LanguageService
 {
-    /** @var eZ\Publish\API\Repository\LanguageService */
+    /**
+     * @var \eZ\Publish\API\Repository\LanguageService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\LanguageService
-     */
     public function __construct(LanguageService $innerService)
     {
         $this->innerService = $innerService;
@@ -26,8 +29,10 @@ abstract class LanguageServiceDecorator implements LanguageService
         $this->innerService->createLanguage($languageCreateStruct);
     }
 
-    public function updateLanguageName(Language $language, $newName)
-    {
+    public function updateLanguageName(
+        Language $language,
+        $newName
+    ) {
         $this->innerService->updateLanguageName($language, $newName);
     }
 

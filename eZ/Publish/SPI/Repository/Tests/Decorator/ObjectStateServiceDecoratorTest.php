@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Tests\Decorator;
@@ -18,7 +22,7 @@ use eZ\Publish\SPI\Repository\Decorator\ObjectStateServiceDecorator;
 
 class ObjectStateServiceDecoratorTest extends TestCase
 {
-    protected function createDecorator(ObjectStateService $service): ObjectStateService
+    protected function createDecorator(MockObject $service): ObjectStateService
     {
         return new class($service) extends ObjectStateServiceDecorator {
         };

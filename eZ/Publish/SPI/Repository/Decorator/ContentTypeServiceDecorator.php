@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 declare(strict_types=1);
 
 namespace eZ\Publish\SPI\Repository\Decorator;
@@ -19,12 +23,11 @@ use eZ\Publish\API\Repository\Values\User\User;
 
 abstract class ContentTypeServiceDecorator implements ContentTypeService
 {
-    /** @var eZ\Publish\API\Repository\ContentTypeService */
+    /**
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
     protected $innerService;
 
-    /**
-     * @param eZ\Publish\API\Repository\ContentTypeService
-     */
     public function __construct(ContentTypeService $innerService)
     {
         $this->innerService = $innerService;
@@ -35,13 +38,17 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService->createContentTypeGroup($contentTypeGroupCreateStruct);
     }
 
-    public function loadContentTypeGroup($contentTypeGroupId, array $prioritizedLanguages = [])
-    {
+    public function loadContentTypeGroup(
+        $contentTypeGroupId,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadContentTypeGroup($contentTypeGroupId, $prioritizedLanguages);
     }
 
-    public function loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, array $prioritizedLanguages = [])
-    {
+    public function loadContentTypeGroupByIdentifier(
+        $contentTypeGroupIdentifier,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadContentTypeGroupByIdentifier($contentTypeGroupIdentifier, $prioritizedLanguages);
     }
 
@@ -50,8 +57,10 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService->loadContentTypeGroups($prioritizedLanguages);
     }
 
-    public function updateContentTypeGroup(ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct)
-    {
+    public function updateContentTypeGroup(
+        ContentTypeGroup $contentTypeGroup,
+        ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
+    ) {
         $this->innerService->updateContentTypeGroup($contentTypeGroup, $contentTypeGroupUpdateStruct);
     }
 
@@ -60,23 +69,31 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService->deleteContentTypeGroup($contentTypeGroup);
     }
 
-    public function createContentType(ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups)
-    {
+    public function createContentType(
+        ContentTypeCreateStruct $contentTypeCreateStruct,
+        array $contentTypeGroups
+    ) {
         $this->innerService->createContentType($contentTypeCreateStruct, $contentTypeGroups);
     }
 
-    public function loadContentType($contentTypeId, array $prioritizedLanguages = [])
-    {
+    public function loadContentType(
+        $contentTypeId,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadContentType($contentTypeId, $prioritizedLanguages);
     }
 
-    public function loadContentTypeByIdentifier($identifier, array $prioritizedLanguages = [])
-    {
+    public function loadContentTypeByIdentifier(
+        $identifier,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadContentTypeByIdentifier($identifier, $prioritizedLanguages);
     }
 
-    public function loadContentTypeByRemoteId($remoteId, array $prioritizedLanguages = [])
-    {
+    public function loadContentTypeByRemoteId(
+        $remoteId,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadContentTypeByRemoteId($remoteId, $prioritizedLanguages);
     }
 
@@ -85,13 +102,17 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService->loadContentTypeDraft($contentTypeId);
     }
 
-    public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable
-    {
+    public function loadContentTypeList(
+        array $contentTypeIds,
+        array $prioritizedLanguages = []
+    ): iterable {
         return $this->innerService->loadContentTypeList($contentTypeIds, $prioritizedLanguages);
     }
 
-    public function loadContentTypes(ContentTypeGroup $contentTypeGroup, array $prioritizedLanguages = [])
-    {
+    public function loadContentTypes(
+        ContentTypeGroup $contentTypeGroup,
+        array $prioritizedLanguages = []
+    ) {
         $this->innerService->loadContentTypes($contentTypeGroup, $prioritizedLanguages);
     }
 
@@ -100,8 +121,10 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService->createContentTypeDraft($contentType);
     }
 
-    public function updateContentTypeDraft(ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct)
-    {
+    public function updateContentTypeDraft(
+        ContentTypeDraft $contentTypeDraft,
+        ContentTypeUpdateStruct $contentTypeUpdateStruct
+    ) {
         $this->innerService->updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
     }
 
@@ -110,28 +133,38 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService->deleteContentType($contentType);
     }
 
-    public function copyContentType(ContentType $contentType, User $creator = null)
-    {
+    public function copyContentType(
+        ContentType $contentType,
+        User $creator = null
+    ) {
         $this->innerService->copyContentType($contentType, $creator);
     }
 
-    public function assignContentTypeGroup(ContentType $contentType, ContentTypeGroup $contentTypeGroup)
-    {
+    public function assignContentTypeGroup(
+        ContentType $contentType,
+        ContentTypeGroup $contentTypeGroup
+    ) {
         $this->innerService->assignContentTypeGroup($contentType, $contentTypeGroup);
     }
 
-    public function unassignContentTypeGroup(ContentType $contentType, ContentTypeGroup $contentTypeGroup)
-    {
+    public function unassignContentTypeGroup(
+        ContentType $contentType,
+        ContentTypeGroup $contentTypeGroup
+    ) {
         $this->innerService->unassignContentTypeGroup($contentType, $contentTypeGroup);
     }
 
-    public function addFieldDefinition(ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct)
-    {
+    public function addFieldDefinition(
+        ContentTypeDraft $contentTypeDraft,
+        FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+    ) {
         $this->innerService->addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
     }
 
-    public function removeFieldDefinition(ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition)
-    {
+    public function removeFieldDefinition(
+        ContentTypeDraft $contentTypeDraft,
+        FieldDefinition $fieldDefinition
+    ) {
         $this->innerService->removeFieldDefinition($contentTypeDraft, $fieldDefinition);
     }
 
@@ -168,8 +201,10 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService->newContentTypeGroupUpdateStruct();
     }
 
-    public function newFieldDefinitionCreateStruct($identifier, $fieldTypeIdentifier)
-    {
+    public function newFieldDefinitionCreateStruct(
+        $identifier,
+        $fieldTypeIdentifier
+    ) {
         $this->innerService->newFieldDefinitionCreateStruct($identifier, $fieldTypeIdentifier);
     }
 
@@ -183,8 +218,10 @@ abstract class ContentTypeServiceDecorator implements ContentTypeService
         $this->innerService->isContentTypeUsed($contentType);
     }
 
-    public function removeContentTypeTranslation(ContentTypeDraft $contentTypeDraft, string $languageCode): ContentTypeDraft
-    {
+    public function removeContentTypeTranslation(
+        ContentTypeDraft $contentTypeDraft,
+        string $languageCode
+    ): ContentTypeDraft {
         return $this->innerService->removeContentTypeTranslation($contentTypeDraft, $languageCode);
     }
 }
