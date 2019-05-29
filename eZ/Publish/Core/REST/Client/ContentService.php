@@ -535,7 +535,7 @@ class ContentService implements APIContentService, Sessionable
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
      */
-    public function loadVersions(ContentInfo $contentInfo, $status = null)
+    public function loadVersions(ContentInfo $contentInfo, ?int $status = null)
     {
         throw new \Exception('@todo: Implement.');
     }

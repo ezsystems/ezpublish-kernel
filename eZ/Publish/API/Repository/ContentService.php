@@ -312,7 +312,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] an array of {@link \eZ\Publish\API\Repository\Values\Content\VersionInfo} sorted by creation date
      */
-    public function loadVersions(ContentInfo $contentInfo, $status = null);
+    public function loadVersions(ContentInfo $contentInfo, ?int $status = null);
 
     /**
      * Copies the content to a new location. If no version is given,

@@ -1702,7 +1702,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
      */
-    public function loadVersions(ContentInfo $contentInfo, $status = null)
+    public function loadVersions(ContentInfo $contentInfo, ?int $status = null)
     {
         if (!$this->repository->canUser('content', 'versionread', $contentInfo)) {
             throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentInfo->id));

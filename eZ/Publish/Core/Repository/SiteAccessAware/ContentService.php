@@ -151,7 +151,7 @@ class ContentService implements ContentServiceInterface
         return $this->service->deleteVersion($versionInfo);
     }
 
-    public function loadVersions(ContentInfo $contentInfo, $status = null)
+    public function loadVersions(ContentInfo $contentInfo, ?int $status = null)
     {
         return $this->service->loadVersions($contentInfo, $status);
     }
