@@ -48,11 +48,12 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     /**
      * Get handler with required custom field types registered.
      *
-     * @return Handler
+     * @return \eZ\Publish\SPI\Persistence\Handler
      */
     public function getCustomHandler()
     {
-        $fieldType = new FieldType\RelationList\Type();
+        $contentHandler = $this->createMock(Content\Handler::class);
+        $fieldType = new FieldType\RelationList\Type($contentHandler);
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
         return $this->getHandler(

@@ -468,11 +468,11 @@ class TextLineTest extends FieldTypeTest
         return 'ezstring';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
         return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new TextLineValue('This is a line of text'), 'This is a line of text'),
+            array($this->getEmptyValueExpectation(), [], 'en_GB', ''),
+            array(new TextLineValue('This is a line of text'), [], 'en_GB', 'This is a line of text'),
         );
     }
 

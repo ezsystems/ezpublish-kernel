@@ -595,6 +595,7 @@ services:
             - '@ezpublish.api.service.content'
             - '@ezpublish.api.service.content_type'
             - '@eZ\Publish\Core\FieldType\ImageAsset\AssetMapper'
+            - '@ezpublish.spi.persistence.cache.contentHandler'
         tags:
             - {name: ezpublish.fieldType, alias: ezimageasset}
 

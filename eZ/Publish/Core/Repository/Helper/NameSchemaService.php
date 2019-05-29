@@ -53,14 +53,14 @@ class NameSchemaService
     protected $contentTypeHandler;
 
     /**
-     * @var ContentTypeDomainMapper
+     * @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
      */
     protected $contentTypeDomainMapper;
 
     /**
-     * @var NameableFieldTypeRegistry
+     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
      */
-    protected $nameableFieldTypeRegistry;
+    protected $fieldTypeRegistry;
 
     /**
      * @var array
@@ -71,19 +71,19 @@ class NameSchemaService
      * Constructs a object to resolve $nameSchema with $contentVersion fields values.
      *
      * @param \eZ\Publish\SPI\Persistence\Content\Type\Handler $contentTypeHandler
-     * @param ContentTypeDomainMapper $contentTypeDomainMapper
-     * @param NameableFieldTypeRegistry $nameableFieldTypeRegistry
+     * @param \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper $contentTypeDomainMapper
+     * @param \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry $fieldTypeRegistry
      * @param array $settings
      */
     public function __construct(
         ContentTypeHandler $contentTypeHandler,
         ContentTypeDomainMapper $contentTypeDomainMapper,
-        NameableFieldTypeRegistry $nameableFieldTypeRegistry,
+        FieldTypeRegistry $fieldTypeRegistry,
         array $settings = array())
     {
         $this->contentTypeHandler = $contentTypeHandler;
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
-        $this->nameableFieldTypeRegistry = $nameableFieldTypeRegistry;
+        $this->fieldTypeRegistry = $fieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
         $this->settings = $settings + array(
             'limit' => 150,
@@ -255,11 +255,11 @@ class NameSchemaService
                     throw new InvalidArgumentType('$contentType', 'API or SPI variant of ContentType');
                 }
 
-                $nameableFieldTypeService = $this->nameableFieldTypeRegistry->getFieldType(
+                $fieldTypeService = $this->fieldTypeRegistry->getFieldType(
                     $fieldDefinition->fieldTypeIdentifier
                 );
 
-                $fieldTitles[$fieldDefinitionIdentifier] = $nameableFieldTypeService->getFieldName(
+                $fieldTitles[$fieldDefinitionIdentifier] = $fieldTypeService->getName(
                     $fieldMap[$fieldDefinitionIdentifier][$languageCode],
                     $fieldDefinition,
                     $languageCode

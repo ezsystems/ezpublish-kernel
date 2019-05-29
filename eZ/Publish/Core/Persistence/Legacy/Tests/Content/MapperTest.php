@@ -574,7 +574,6 @@ class MapperTest extends LanguageAwareTestCase
         if (!isset($this->valueConverterRegistryMock)) {
             $this->valueConverterRegistryMock = $this->getMockBuilder(Registry::class)
                 ->setMethods(array())
-                ->setConstructorArgs(array(array()))
                 ->getMock();
         }
 

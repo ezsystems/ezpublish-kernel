@@ -262,12 +262,12 @@ class ISBNTest extends FieldTypeTest
         return 'ezisbn';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new ISBNValue('9789722514095'), '9789722514095'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [new ISBNValue('9789722514095'), [], 'en_GB', '9789722514095'],
+        ];
     }
 
     /**

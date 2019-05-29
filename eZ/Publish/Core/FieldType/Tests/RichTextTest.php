@@ -9,6 +9,7 @@
 namespace eZ\Publish\Core\FieldType\Tests;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\RichText\Normalizer\Aggregate;
 use eZ\Publish\Core\FieldType\RichText\Type as RichTextType;
 use eZ\Publish\Core\FieldType\RichText\Value;
@@ -274,14 +275,15 @@ class RichTextTest extends TestCase
      * @covers \eZ\Publish\Core\FieldType\RichText\Type::getName
      * @dataProvider providerForTestGetName
      */
-    public function testGetName($xmlString, $expectedName)
+    public function testGetName($xmlString, array $fieldSettings = [], string $languageCode = 'en_GB', string $expectedName)
     {
+        $fieldDefinitionMock = $this->getFieldDefinitionMock($fieldSettings);
         $value = new Value($xmlString);
 
         $fieldType = $this->getFieldType();
         $this->assertEquals(
             $expectedName,
-            $fieldType->getName($value)
+            $fieldType->getName($value, $fieldDefinitionMock, $languageCode)
         );
     }
 
@@ -289,89 +291,107 @@ class RichTextTest extends TestCase
      * @todo format does not really matter for the method tested, but the fixtures here should be replaced
      * by valid docbook anyway
      */
-    public static function providerForTestGetName()
+    public static function providerForTestGetName(): array
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
+                [],
+                'en_GB',
                 'This is a piece of text',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of <emphasize>text</emphasize></header></section>',
+                [],
+                'en_GB',
                 /* @todo FIXME: should probably be "This is a piece of text" */
                 'This is a piece of',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong>This is a piece</strong> of text</header></section>',
+                [],
+                'en_GB',
                 /* @todo FIXME: should probably be "This is a piece of text" */
                 'This is a piece',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong><emphasize>This is</emphasize> a piece</strong> of text</header></section>',
+                [],
+                'en_GB',
                 /* @todo FIXME: should probably be "This is a piece of text" */
                 'This is',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><table class="default" border="0" width="100%" custom:summary="wai" custom:caption=""><tr><td><paragraph>First cell</paragraph></td><td><paragraph>Second cell</paragraph></td></tr><tr><td><paragraph>Third cell</paragraph></td><td><paragraph>Fourth cell</paragraph></td></tr></table></paragraph><paragraph>Text after table</paragraph></section>',
+                [],
+                'en_GB',
                 /* @todo FIXME: should probably be "First cell" */
                 'First cellSecond cell',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List item</paragraph></li></ul></paragraph></section>',
+                [],
+                'en_GB',
                 'List item',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List <emphasize>item</emphasize></paragraph></li></ul></paragraph></section>',
+                [],
+                'en_GB',
                 'List item',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
+                [],
+                'en_GB',
                 '',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><strong><emphasize>A simple</emphasize></strong> paragraph!</paragraph></section>',
+                [],
+                'en_GB',
                 'A simple',
-            ),
+            ],
 
-            array('<section><paragraph>test</paragraph></section>', 'test'),
+            ['<section><paragraph>test</paragraph></section>', [], 'en_GB', 'test'],
 
-            array('<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', 'test'),
-        );
+            ['<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', [], 'en_GB', 'test'],
+        ];
     }
 
     /**
@@ -441,5 +461,19 @@ EOT;
     public function provideDataForGetName()
     {
         return array();
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getFieldDefinitionMock(array $fieldSettings)
+    {
+        /** @var |\PHPUnit\Framework\MockObject\MockObject $fieldDefinitionMock */
+        $fieldDefinitionMock = $this->createMock(FieldDefinition::class);
+        $fieldDefinitionMock
+            ->method('getFieldSettings')
+            ->willReturn($fieldSettings);
+
+        return $fieldDefinitionMock;
     }
 }

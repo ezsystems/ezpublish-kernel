@@ -147,13 +147,6 @@ class Repository implements RepositoryInterface
     private $fieldTypeRegistry;
 
     /**
-     * Instance of NameableFieldTypeRegistry.
-     *
-     * @var \eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry
-     */
-    private $nameableFieldTypeRegistry;
-
-    /**
      * Instance of name schema resolver service.
      *
      * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
@@ -300,7 +293,6 @@ class Repository implements RepositoryInterface
             'objectState' => array(),
             'search' => array(),
             'fieldType' => array(),
-            'nameableFieldTypes' => array(),
             'urlAlias' => array(),
             'urlWildcard' => array(),
             'nameSchema' => array(),
@@ -847,20 +839,6 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @return Helper\NameableFieldTypeRegistry
-     */
-    protected function getNameableFieldTypeRegistry()
-    {
-        if ($this->nameableFieldTypeRegistry !== null) {
-            return $this->nameableFieldTypeRegistry;
-        }
-
-        $this->nameableFieldTypeRegistry = new Helper\NameableFieldTypeRegistry($this->serviceSettings['nameableFieldTypes']);
-
-        return $this->nameableFieldTypeRegistry;
-    }
-
-    /**
      * Get NameSchemaResolverService.
      *
      *
@@ -880,7 +858,7 @@ class Repository implements RepositoryInterface
         $this->nameSchemaService = new Helper\NameSchemaService(
             $this->persistenceHandler->contentTypeHandler(),
             $this->getContentTypeDomainMapper(),
-            $this->getNameableFieldTypeRegistry(),
+            $this->getFieldTypeRegistry(),
             $this->serviceSettings['nameSchema']
         );
 

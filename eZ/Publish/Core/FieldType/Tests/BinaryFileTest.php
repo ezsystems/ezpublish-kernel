@@ -455,17 +455,11 @@ class BinaryFileTest extends BinaryBaseTest
         return 'ezbinaryfile';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array(
-                new BinaryFileValue(),
-                '',
-            ),
-            array(
-                new BinaryFileValue(array('fileName' => 'sindelfingen.jpg')),
-                'sindelfingen.jpg',
-            ),
-        );
+        return [
+            [new BinaryFileValue(), [], 'en_GB', ''],
+            [new BinaryFileValue(['fileName' => 'sindelfingen.jpg']), [], 'en_GB', 'sindelfingen.jpg'],
+        ];
     }
 }

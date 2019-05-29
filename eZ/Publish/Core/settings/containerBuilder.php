@@ -72,7 +72,6 @@ if (getenv('CUSTOM_CACHE_POOL') === 'singleredis') {
 $containerBuilder->setParameter('ezpublish.kernel.root_dir', $installDir);
 
 $containerBuilder->addCompilerPass(new Compiler\FieldTypeCollectionPass());
-$containerBuilder->addCompilerPass(new Compiler\FieldTypeNameableCollectionPass());
 $containerBuilder->addCompilerPass(new Compiler\RegisterLimitationTypePass());
 
 $containerBuilder->addCompilerPass(new Compiler\Storage\ExternalStorageRegistryPass());

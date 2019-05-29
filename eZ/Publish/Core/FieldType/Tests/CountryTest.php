@@ -402,22 +402,18 @@ class CountryTest extends FieldTypeTest
         );
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array(
-                new CountryValue(),
-                '',
-            ),
-            array(
-                new CountryValue(array('FR' => array('Name' => 'France'))),
-                'France',
-            ),
-            array(
-                new CountryValue(array('FR' => array('Name' => 'France'), 'DE' => array('Name' => 'Deutschland'))),
+        return [
+            [new CountryValue(), [], 'en_GB', ''],
+            [new CountryValue(['FR' => ['Name' => 'France']]), [], 'en_GB', 'France'],
+            [
+                new CountryValue(['FR' => ['Name' => 'France'], 'DE' => ['Name' => 'Deutschland']]),
+                [],
+                'en_GB',
                 'France, Deutschland',
-            ),
-        );
+            ],
+        ];
     }
 
     /**

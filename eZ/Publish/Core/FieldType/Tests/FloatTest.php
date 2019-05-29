@@ -429,12 +429,12 @@ class FloatTest extends FieldTypeTest
         return 'ezfloat';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new FloatValue(23.42), '23.42'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [new FloatValue(23.42), [], 'en_GB', '23.42'],
+        ];
     }
 
     /**

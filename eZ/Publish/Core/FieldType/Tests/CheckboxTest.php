@@ -253,7 +253,7 @@ class CheckboxTest extends FieldTypeTest
         $ft = $this->createFieldTypeUnderTest();
         $fieldValue = $ft->toPersistenceValue(new CheckboxValue(true));
 
-        self::assertSame(true, $fieldValue->data);
+        self::assertTrue($fieldValue->data);
         self::assertSame(1, $fieldValue->sortKey);
     }
 
@@ -273,7 +273,7 @@ class CheckboxTest extends FieldTypeTest
     public function testBuildFieldValueWithoutParam()
     {
         $value = new CheckboxValue();
-        self::assertSame(false, $value->bool);
+        self::assertFalse($value->bool);
     }
 
     /**
@@ -292,17 +292,11 @@ class CheckboxTest extends FieldTypeTest
         return 'ezboolean';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array(
-                new CheckboxValue(true),
-                '1',
-            ),
-            array(
-                new CheckboxValue(false),
-                '0',
-            ),
-        );
+        return [
+            [new CheckboxValue(true), [], 'en_GB', '1'],
+            [new CheckboxValue(false), [], 'en_GB', '0'],
+        ];
     }
 }

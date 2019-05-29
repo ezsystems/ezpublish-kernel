@@ -272,11 +272,11 @@ class UrlTest extends FieldTypeTest
         return 'ezurl';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
         return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new UrlValue('', 'Url text'), 'Url text'),
+            array($this->getEmptyValueExpectation(), [], 'en_GB', ''),
+            array(new UrlValue('', 'Url text'), [], 'en_GB', 'Url text'),
         );
     }
 }

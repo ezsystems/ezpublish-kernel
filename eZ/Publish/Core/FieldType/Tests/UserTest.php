@@ -387,11 +387,11 @@ class UserTest extends FieldTypeTest
         return 'ezuser';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new UserValue(array('login' => 'johndoe')), 'johndoe'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [new UserValue(['login' => 'johndoe']), [], 'en_GB', 'johndoe'],
+        ];
     }
 }

@@ -256,11 +256,11 @@ class KeywordTest extends FieldTypeTest
         return 'ezkeyword';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new KeywordValue(array('foo', 'bar')), 'foo, bar'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [new KeywordValue(['foo', 'bar']), [], 'en_GB', 'foo, bar'],
+        ];
     }
 }
