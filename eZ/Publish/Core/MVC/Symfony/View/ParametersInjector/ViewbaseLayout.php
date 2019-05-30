@@ -41,6 +41,7 @@ class ViewbaseLayout implements EventSubscriberInterface
     public function injectViewbaseLayout(FilterViewParametersEvent $event)
     {
         $event->getParameterBag()->set('view_base_layout', $this->viewbaseLayout);
+        /** @deprecated the pagelayout is deprecated since 8.0 and will be replaced by page_layout in 9.0 */
         $event->getParameterBag()->set('pagelayout', $this->pageLayout);
     }
 }

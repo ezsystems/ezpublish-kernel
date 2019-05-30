@@ -22,3 +22,7 @@ Changes affecting version compatibility with former or future versions.
 * REST Server implementation and Common namespace have been removed in favor of
   eZ Platform REST Bundle available via
   [ezsystems/ezplatform-rest](https://github.com/ezsystems/ezplatform-rest) package.
+
+## Deprecated features
+
+* Twig variable `pagelayout` is deprecated since 8.0 in 9.0 will be replaced by `page_layout`.
