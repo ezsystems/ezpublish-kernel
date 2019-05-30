@@ -8,6 +8,8 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
+use eZ\Publish\Core\Search\Common\IndexerErrorCollector\LocalErrorCollector;
+use eZ\Publish\Core\Search\Common\IndexerErrorCollector\NullErrorCollector;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Search\Common\Indexer;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
@@ -46,6 +48,11 @@ class ReindexCommand extends ContainerAwareCommand
     private $logger;
 
     /**
+     * @var \eZ\Publish\Core\Search\Common\IndexerErrorCollector\LocalErrorCollector
+     */
+    private $errorCollector;
+
+    /**
      * @var string
      */
     private $siteaccess;
@@ -69,11 +76,22 @@ class ReindexCommand extends ContainerAwareCommand
     public function initialize(InputInterface $input, OutputInterface $output)
     {
         parent::initialize($input, $output);
-        $this->searchIndexer = $this->getContainer()->get('ezpublish.spi.search.indexer');
+
+        $searchIndexer = $this->getContainer()->get('ezpublish.spi.search.indexer');
+        // It's required to clone $searchIndexer, otherwise global service state will be changed due to setting errorCollector
+        $this->searchIndexer = clone $searchIndexer;
+        if ($this->searchIndexer instanceof IncrementalIndexer) {
+            $this->errorCollector = new LocalErrorCollector($input->getOption('continue-on-error'));
+            $this->searchIndexer->setErrorCollector($this->errorCollector);
+        } else {
+            $this->errorCollector = new NullErrorCollector();
+        }
+
         $this->connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.connection');
         $this->logger = $this->getContainer()->get('logger');
         $this->env = $this->getContainer()->getParameter('kernel.environment');
         $this->isDebug = $this->getContainer()->getParameter('kernel.debug');
+
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
@@ -127,8 +145,13 @@ class ReindexCommand extends ContainerAwareCommand
                 'processes',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Number of child processes to run in parallel for iterations, if set to "auto" it will set to number of CPU cores -1, set to "1" or "0" to disable',
+                'Number of child processes to run in parallel for iterations, if set to "auto" it will set to number of CPU cores -1, set to "1" or "0" to disable. This option will be automatically disabled if continue on error option is used.',
                 'auto'
+            )->addOption(
+                'continue-on-error',
+                null,
+                InputOption::VALUE_NONE,
+                'Continue indexing even if some content could not get properly indexed. Instead output info on items that could not be indexed at the end. This option automatically disables parallel processes and is meant for debug usage typically in combination with one of the filter options.'
             )->setHelp(
                 <<<EOT
 The command <info>%command.name%</info> indexes current configured database in configured search engine index.
@@ -176,6 +199,7 @@ Options that won't be taken into account:
 - subtree
 - processes
 - no-purge
+- continue-on-error
 EOT
             );
             $this->searchIndexer->createSearchIndex($output, (int) $iterationCount, !$commit);
@@ -194,6 +218,8 @@ EOT
 
     protected function indexIncrementally(InputInterface $input, OutputInterface $output, $iterationCount, $commit)
     {
+        $continueOnError = $input->getOption('continue-on-error');
+
         if ($contentIds = $input->getOption('content-ids')) {
             $contentIds = explode(',', $contentIds);
             $output->writeln(sprintf(
@@ -201,7 +227,9 @@ EOT
                 \count($contentIds)
             ));
 
-            return $this->searchIndexer->updateSearchIndex($contentIds, $commit);
+            $this->searchIndexer->updateSearchIndex($contentIds, $commit);
+
+            return $this->printUnindexableContentIds($output);
         }
 
         if ($since = $input->getOption('since')) {
@@ -225,7 +253,7 @@ EOT
         }
 
         $iterations = ceil($count / $iterationCount);
-        $processes = $input->getOption('processes');
+        $processes = $continueOnError ? 1 : $input->getOption('processes');
         $processCount = $processes === 'auto' ? $this->getNumberOfCPUCores() - 1 : (int) $processes;
         $processCount = min($iterations, $processCount);
         $processMessage = $processCount > 1 ? "using $processCount parallel child processes" : 'using single (current) process';
@@ -257,6 +285,8 @@ EOT
         }
 
         $progress->finish();
+
+        $this->printUnindexableContentIds($output);
     }
 
     private function runParallelProcess(ProgressBar $progress, Statement $stmt, $processCount, $iterationCount, $commit)
@@ -460,5 +490,19 @@ EOT
         }
 
         return $cores;
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     */
+    private function printUnindexableContentIds(OutputInterface $output)
+    {
+        if ($this->errorCollector->hasErrors()) {
+            $output->writeln('');
+            $output->writeln(sprintf(
+                '<error>Indexing failed on some content items, try running command with "--iteration-count=1 --content-ids=<ids>": %s</error>',
+                implode(', ', array_keys($this->errorCollector->getErrors()))
+            ));
+        }
     }
 }

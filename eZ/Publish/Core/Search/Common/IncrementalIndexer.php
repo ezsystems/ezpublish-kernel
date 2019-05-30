@@ -87,4 +87,12 @@ abstract class IncrementalIndexer extends Indexer
      * @return string
      */
     abstract public function getName();
+
+    /**
+     * @param \eZ\Publish\Core\Search\Common\IndexerErrorCollector $errorCollector
+     */
+    public function setErrorCollector(IndexerErrorCollector $errorCollector)
+    {
+        $this->errorCollector = $errorCollector;
+    }
 }

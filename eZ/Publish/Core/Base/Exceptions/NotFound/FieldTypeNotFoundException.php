@@ -30,7 +30,7 @@ class FieldTypeNotFoundException extends RuntimeException implements Httpable, T
     public function __construct($fieldType, Exception $previous = null)
     {
         $this->setMessageTemplate(
-            "FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%)"
+            "FieldType '%fieldType%' not found, needs to be implemented or configured to use FieldType\\Null\\Type (%ezpublish.fieldType.eznull.class%). Read more: https://doc.ezplatform.com/en/latest/api/field_type_reference/#null-field-type"
         );
         $this->setParameters(['%fieldType%' => $fieldType]);
 
