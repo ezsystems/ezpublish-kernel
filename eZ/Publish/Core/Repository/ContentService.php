@@ -1618,6 +1618,8 @@ class ContentService implements ContentServiceInterface
 
         // Find only translatable fields to update with selected languages
         $updateStruct = $this->newContentUpdateStruct();
+        $updateStruct->initialLanguageCode = $versionInfo->initialLanguageCode;
+
         foreach ($currentContent->getFields() as $field) {
             $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
 
