@@ -285,9 +285,12 @@ services:
 
     ezplatform.core.command.resize_original_images:
         class: eZ\Bundle\EzPublishCoreBundle\Command\ResizeOriginalImagesCommand
+        autowire: true
+        autoconfigure: true
         arguments:
             $ioService: '@ezpublish.fieldType.ezimage.io_service.published'
             $imagine: '@liip_imagine'
+            $filterManager: '@liip_imagine.filter.manager'
             $permissionResolver: "@=service('ezpublish.api.repository').getPermissionResolver()"
             $userService: '@ezpublish.api.service.user'
         tags:
