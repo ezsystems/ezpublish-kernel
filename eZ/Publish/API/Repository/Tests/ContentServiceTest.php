@@ -6653,4 +6653,38 @@ XML
             )
         );
     }
+
+    public function testPublishVersionWithSelectedLanguages()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $publishedContent = $this->createFolder(
+            [
+                'eng-US' => 'Published US',
+                'ger-DE' => 'Published DE',
+            ],
+            $this->generateId('location', 2)
+        );
+
+        $draft = $contentService->createContentDraft($publishedContent->contentInfo);
+        $contentUpdateStruct = new ContentUpdateStruct([
+            'initialLanguageCode' => 'eng-US',
+        ]);
+        $contentUpdateStruct->setField('name', 'Draft 1 US', 'eng-US');
+        $contentUpdateStruct->setField('name', 'Draft 1 DE', 'ger-DE');
+
+        $contentService->updateContent($draft->versionInfo, $contentUpdateStruct);
+
+        $contentService->publishVersion($draft->versionInfo, ['ger-DE']);
+        $content = $contentService->loadContent($draft->contentInfo->id);
+        $this->assertEquals(
+            [
+                'eng-US' => 'Published US',
+                'ger-DE' => 'Draft 1 DE',
+            ],
+            $content->fields['name']
+        );
+    }
 }

@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
@@ -141,9 +142,9 @@ class ContentService implements ContentServiceInterface
         return $this->service->updateContent($versionInfo, $contentUpdateStruct);
     }
 
-    public function publishVersion(VersionInfo $versionInfo)
+    public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL)
     {
-        return $this->service->publishVersion($versionInfo);
+        return $this->service->publishVersion($versionInfo, $translations);
     }
 
     public function deleteVersion(VersionInfo $versionInfo)
