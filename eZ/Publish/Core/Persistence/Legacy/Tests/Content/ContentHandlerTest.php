@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
 use eZ\Publish\SPI\Persistence\Content;
-use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandler;
 use eZ\Publish\SPI\Persistence\Content\Type;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\SPI\Persistence\Content\Field;
@@ -253,33 +252,21 @@ class ContentHandlerTest extends TestCase
             ->with(23, 1)
             ->will(
                 $this->returnValue(
-                    new VersionInfo(array('versionNo' => 1, 'contentInfo' => new ContentInfo(array('currentVersionNo' => 1))))
+                    new VersionInfo(array('contentInfo' => new ContentInfo(array('currentVersionNo' => 1))))
                 )
             );
 
         $contentRows = [['ezcontentobject_version_version' => 1]];
 
-        $gatewayMock->expects($this->exactly(3))
+        $gatewayMock->expects($this->once())
             ->method('load')
-            ->withConsecutive(
-                [
-                    $this->equalTo(23),
-                    $this->equalTo(null),
-                    $this->equalTo(null),
-                ],
-                [
-                    $this->equalTo(23),
-                    $this->equalTo(1),
-                    $this->equalTo(null),
-                ],
-                [
-                    $this->equalTo(23),
-                    $this->equalTo(1),
-                    $this->equalTo(null),
-                ]
+            ->with(
+                $this->equalTo(23),
+                $this->equalTo(1),
+                $this->equalTo(null)
             )->willReturn($contentRows);
 
-        $gatewayMock->expects($this->exactly(3))
+        $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
             ->with(
                 $this->equalTo(array(array('id' => 23, 'version' => 1)))
@@ -287,12 +274,12 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue(array(22))
             );
 
-        $mapperMock->expects($this->exactly(3))
+        $mapperMock->expects($this->once())
             ->method('extractContentFromRows')
             ->with($this->equalTo($contentRows), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
-        $fieldHandlerMock->expects($this->exactly(3))
+        $fieldHandlerMock->expects($this->once())
             ->method('loadExternalFieldData')
             ->with($this->isInstanceOf(Content::class));
 
@@ -337,7 +324,7 @@ class ContentHandlerTest extends TestCase
             ->with(23, 2)
             ->will(
                 $this->returnValue(
-                    new VersionInfo(array('versionNo' => 2, 'contentInfo' => new ContentInfo(array('currentVersionNo' => 1))))
+                    new VersionInfo(array('contentInfo' => new ContentInfo(array('currentVersionNo' => 1))))
                 )
             );
 
@@ -348,22 +335,16 @@ class ContentHandlerTest extends TestCase
 
         $contentRows = [['ezcontentobject_version_version' => 2]];
 
-        $gatewayMock->expects($this->exactly(2))
+        $gatewayMock->expects($this->once())
             ->method('load')
-            ->withConsecutive(
-                [
-                    $this->equalTo(23),
-                    $this->equalTo(null),
-                    $this->equalTo(null),
-                ],
-                [
-                    $this->equalTo(23),
-                    $this->equalTo(2),
-                    $this->equalTo(null),
-                ]
-            )->willReturn($contentRows);
+            ->with(
+                $this->equalTo(23),
+                $this->equalTo(2),
+                $this->equalTo(null)
+            )
+            ->willReturn($contentRows);
 
-        $gatewayMock->expects($this->exactly(2))
+        $gatewayMock->expects($this->once())
             ->method('loadVersionedNameData')
             ->with(
                 $this->equalTo(array(array('id' => 23, 'version' => 2)))
@@ -371,12 +352,12 @@ class ContentHandlerTest extends TestCase
                 $this->returnValue(array(22))
             );
 
-        $mapperMock->expects($this->exactly(2))
+        $mapperMock->expects($this->once())
             ->method('extractContentFromRows')
             ->with($this->equalTo($contentRows), $this->equalTo(array(22)))
             ->will($this->returnValue(array($this->getContentFixtureForDraft())));
 
-        $fieldHandlerMock->expects($this->exactly(2))
+        $fieldHandlerMock->expects($this->once())
             ->method('loadExternalFieldData')
             ->with($this->isInstanceOf(Content::class));
 
@@ -1507,8 +1488,7 @@ class ContentHandlerTest extends TestCase
                 $this->getSlugConverterMock(),
                 $this->getUrlAliasGatewayMock(),
                 $this->getContentTypeHandlerMock(),
-                $this->getTreeHandlerMock(),
-                $this->getLanguageHandlerMock()
+                $this->getTreeHandlerMock()
             );
         }
 
@@ -1536,7 +1516,6 @@ class ContentHandlerTest extends TestCase
                     $this->getUrlAliasGatewayMock(),
                     $this->getContentTypeHandlerMock(),
                     $this->getTreeHandlerMock(),
-                    $this->getLanguageHandlerMock(),
                 )
             )
             ->getMock();
@@ -1666,17 +1645,5 @@ class ContentHandlerTest extends TestCase
         }
 
         return $this->urlAliasGatewayMock;
-    }
-
-    /**
-     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
-    protected function getLanguageHandlerMock()
-    {
-        if (!isset($this->languageHandlerMock)) {
-            $this->languageHandlerMock = $this->getMockForAbstractClass(LanguageHandler::class);
-        }
-
-        return $this->languageHandlerMock;
     }
 }

@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\ContentService as ContentServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
@@ -432,17 +433,19 @@ class ContentService implements ContentServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      *
      * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
+     * @param string[] $translations
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function publishVersion(VersionInfo $versionInfo)
+    public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL)
     {
-        $returnValue = $this->service->publishVersion($versionInfo);
+        $returnValue = $this->service->publishVersion($versionInfo, $translations);
         $this->signalDispatcher->emit(
             new PublishVersionSignal(
                 array(
                     'contentId' => $versionInfo->getContentInfo()->id,
                     'versionNo' => $versionInfo->versionNo,
+                    'affectedTranslations' => $translations,
                 )
             )
         );
