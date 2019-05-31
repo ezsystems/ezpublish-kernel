@@ -108,7 +108,7 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
             ->end()
             ->scalarNode('page_layout')
                 ->info('The default layout to use')
-                ->example('AppBundle::pagelayout.html.twig')
+                ->example('AppBundle::page_layout.html.twig')
             ->end()
             ->scalarNode('index_page')
                 ->info('The page that the index page will show. Default value is null.')

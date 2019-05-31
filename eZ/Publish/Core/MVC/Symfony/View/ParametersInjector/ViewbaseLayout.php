@@ -20,7 +20,7 @@ class ViewbaseLayout implements EventSubscriberInterface
     private $viewbaseLayout;
 
     /**
-     * @var ConfigResolverInterface
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
      */
     private $configResolver;
 
@@ -30,7 +30,6 @@ class ViewbaseLayout implements EventSubscriberInterface
         $this->configResolver = $configResolver;
     }
 
-
     public static function getSubscribedEvents()
     {
         return [ViewEvents::FILTER_VIEW_PARAMETERS => 'injectViewbaseLayout'];
@@ -38,7 +37,9 @@ class ViewbaseLayout implements EventSubscriberInterface
 
     private function getPageLayout(): string
     {
-        return $this->configResolver->hasParameter('page_layout') ? $this->configResolver->getParameter('page_layout') : $this->configResolver->getParameter('pagelayout');
+        return $this->configResolver->hasParameter('page_layout')
+            ? $this->configResolver->getParameter('page_layout')
+            : $this->configResolver->getParameter('pagelayout');
     }
 
     public function injectViewbaseLayout(FilterViewParametersEvent $event)
