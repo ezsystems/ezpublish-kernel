@@ -12,6 +12,8 @@ use eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
 use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -49,6 +51,11 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     protected $siteAccess;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @var array Siteaccess groups, indexed by siteaccess name
      */
     protected $groupsBySiteAccess;
@@ -74,6 +81,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     private $tooEarlyLoadedList = [];
 
     /**
+     * @param \Psr\Log\LoggerInterface $logger
      * @param array $groupsBySiteAccess SiteAccess groups, indexed by siteaccess.
      * @param string $defaultNamespace The default namespace
      * @param int $undefinedStrategy Strategy to use when encountering undefined parameters.
@@ -82,10 +90,12 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
      *                                  - ConfigResolver::UNDEFINED_STRATEGY_NULL (return null)
      */
     public function __construct(
+        ?LoggerInterface $logger,
         array $groupsBySiteAccess,
         $defaultNamespace,
         $undefinedStrategy = self::UNDEFINED_STRATEGY_EXCEPTION
     ) {
+        $this->logger = $logger ?? new NullLogger();
         $this->groupsBySiteAccess = $groupsBySiteAccess;
         $this->defaultNamespace = $defaultNamespace;
         $this->undefinedStrategy = $undefinedStrategy;
@@ -264,9 +274,8 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
             return;
         }
 
-        $logger = $this->container->get('logger');
         foreach ($this->tooEarlyLoadedList as $param => $services) {
-            $logger->warning(sprintf(
+            $this->logger->warning(sprintf(
                 'ConfigResolver was used to load parameter "%s" before SiteAccess was loaded by services: %s. This can cause issues. '
                 . 'Try to use ConfigResolver lazily, '
                 . (PHP_SAPI === 'cli' ? 'make commands that rely on them lazy, ' : '')

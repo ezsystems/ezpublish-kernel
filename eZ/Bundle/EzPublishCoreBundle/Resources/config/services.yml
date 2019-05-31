@@ -41,7 +41,7 @@ services:
     ezpublish.config.resolver.core:
         public: true # @todo should be private
         class: "%ezpublish.config.resolver.dynamic.class%"
-        arguments: ["%ezpublish.siteaccess.groups_by_siteaccess%", "%ezpublish.config.default_scope%"]
+        arguments: ["@?logger", "%ezpublish.siteaccess.groups_by_siteaccess%", "%ezpublish.config.default_scope%"]
         calls:
             - [setSiteAccess, ["@ezpublish.siteaccess"]]
             - [setContainer, ["@service_container"]]

@@ -42,6 +42,7 @@ class ConfigResolverTest extends TestCase
     private function getResolver($defaultNS = 'ezsettings', $undefinedStrategy = ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, array $groupsBySiteAccess = array())
     {
         $configResolver = new ConfigResolver(
+            null,
             $groupsBySiteAccess,
             $defaultNS,
             $undefinedStrategy
