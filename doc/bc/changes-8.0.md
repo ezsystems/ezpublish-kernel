@@ -25,4 +25,5 @@ Changes affecting version compatibility with former or future versions.
 
 ## Deprecated features
 
-* Twig variable `pagelayout` is deprecated since 8.0 in 9.0 will be replaced by `page_layout`.
+* Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
+* View parameter `pagelayout` set by `pagelayout` setting is deprecated, use `page_layout` instead in your Twig templates.

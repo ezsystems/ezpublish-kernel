@@ -1,4 +1,4 @@
-{% extends no_layout == true ? view_base_layout : pagelayout %}
+{% extends no_layout == true ? view_base_layout : page_layout %}
 {% block content %}
     <h2>{{ ez_content_name(content) }}</h2>
     {% for field in content.fieldsByLanguage(language|default(null)) %}
