@@ -531,7 +531,7 @@ class ContentService implements APIContentService, Sessionable
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if the given status is invalid
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
-     * @param null|int $status
+     * @param int|null $status
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo[] Sorted by creation date
      */
