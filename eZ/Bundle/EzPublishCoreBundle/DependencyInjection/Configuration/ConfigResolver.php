@@ -69,7 +69,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     protected $undefinedStrategy;
 
     /**
-     * @var string[] List of param => [services] loaded while siteAccess->matchingType was 'uninitialized'
+     * @var array[] List of blame => [params] loaded while siteAccess->matchingType was 'uninitialized'
      */
     private $tooEarlyLoadedList = [];
 
@@ -265,13 +265,15 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
         }
 
         $logger = $this->container->get('logger');
-        foreach ($this->tooEarlyLoadedList as $param => $services) {
+        foreach ($this->tooEarlyLoadedList as $blame => $params) {
             $logger->warning(sprintf(
-                'ConfigResolver was used to load parameter "%s" before SiteAccess was loaded by services: %s. This can cause issues. '
-                . 'Try to use ConfigResolver lazily, '
-                . 'or try to mark the service as lazy.',
-                $param,
-                '"' . implode($services, '", "') . '"'
+                'ConfigResolver was used by "%s" before SiteAccess was initialized, loading parameter(s) '
+                . '%s. As this can cause very hard to debug issues, '
+                . 'try to use ConfigResolver lazily, '
+                // Symfony 3.4+: . (PHP_SAPI === 'cli' ? 'make the affected commands lazy, ' : '')
+                . 'make the service lazy or see if you can inject another lazy service.',
+                $blame,
+                '"$' . implode(array_unique($params), '$", "$') . '$"'
             ));
         }
 
@@ -300,39 +302,48 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
             return;
         }
 
-        $serviceName = '??';
+        $blame = '??';
         $resettableServiceIds = $container->getParameter('ezpublish.config_resolver.resettable_services');
         $updatableServices = $container->getParameter('ezpublish.config_resolver.updateable_services');
-        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10) as $t) {
+
+        // Lookup trace to find last service being loaded as possible blame for eager loading
+        // Abort if one of the earlier services is detected to be "safe", aka updatable
+        foreach (debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 35) as $t) {
             if (!isset($t['function']) || $t['function'] === 'getParameter' || $t['function'] === __FUNCTION__) {
                 continue;
             }
 
             // Extract service name from first service matching getXXService pattern
             if (\strpos($t['function'], 'get') === 0 && \strpos($t['function'], 'Service') === \strlen($t['function']) - 7) {
-                $serviceName = \strtolower(\preg_replace('/\B([A-Z])/', '_$1', \str_replace('_', '.', \substr($t['function'], 3, -7))));
+                $potentialClassName = \substr($t['function'], 3, -7);
+                $serviceName = \strtolower(\preg_replace('/\B([A-Z])/', '_$1', \str_replace('_', '.', $potentialClassName)));
 
-                // This (->setter('$dynamic_param$')) is safe as the system is able to update it on scope changes
+                // This (->setter('$dynamic_param$')) is safe as the system is able to update it on scope changes, abort
                 if (isset($updatableServices[$serviceName])) {
                     return;
                 }
 
-                // !! The remaining cases are not safe, typically:
+                // !! The remaining cases are most likely "not safe", typically:
                 // - ctor('$dynamic_param$') => this should be avoided, use setter or use config resolver instead
                 // - config resolver use in service factory => the service (or decorator, if any) should be marked lazy
 
-                // Exception are up-datable cases where we where unable to reverse engineer service name
-                // Which is the case for any class name based services, as namespace is omitted from compiled fn
+                // Possible exception: Class name based services, can't be resolved as namespace is omitted from
+                // compiled function. In this case we won't know if it was updateable and "safe", so we warn to be sure
                 if (!in_array($serviceName, $resettableServiceIds, true) && !$container->has($serviceName)) {
-                    // So in this case we are not sure if this is a warning or not, but we stay safe and warn about it
-                    // TODO: Might be possible to introspect the compiled container to extract class/service name
-                    $serviceName = '->' . $t['function'] . '()';
+                    $blame = $potentialClassName;
+                } else {
+                    $blame = '@' . $serviceName;
                 }
 
-                break;
+                // Detect if we found the command loading the service, if so add info to blame to make it easier to spot
+                if (PHP_SAPI === 'cli' && isset($t['file']) && \strpos($t['file'], 'CommandService.php') !== false) {
+                    $path = explode('/', $t['file']);
+                    $blame = \substr($path[count($path) - 1], 3, -11) . '(' . $blame . ')';
+                    break;
+                }
             }
         }
 
-        $this->tooEarlyLoadedList[$paramName][] = $serviceName;
+        $this->tooEarlyLoadedList[$blame][] = $paramName;
     }
 }
