@@ -100,6 +100,10 @@ services:
     ezpublish.locale.converter:
         class: "%ezpublish.locale.converter.class%"
         arguments: ["%ezpublish.locale.conversion_map%", "@logger"]
+        public: true
+
+    eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface:
+        alias: ezpublish.locale.converter
 
     # Overriding the original locale listener to trigger the internal locale conversion correctly.
     locale_listener:
