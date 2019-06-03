@@ -8,11 +8,16 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
+use function count;
+use const DIRECTORY_SEPARATOR;
+use Doctrine\DBAL\Connection;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Search\Common\Indexer;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use Doctrine\DBAL\Driver\Statement;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -23,8 +28,11 @@ use RuntimeException;
 use DateTime;
 use PDO;
 
-class ReindexCommand extends ContainerAwareCommand
+class ReindexCommand extends Command
 {
+    /** @var string string */
+    protected static $defaultName = 'ezplatform:reindex';
+    
     /**
      * @var \eZ\Publish\Core\Search\Common\Indexer|\eZ\Publish\Core\Search\Common\IncrementalIndexer
      */
@@ -34,6 +42,9 @@ class ReindexCommand extends ContainerAwareCommand
      * @var \Doctrine\DBAL\Connection
      */
     private $connection;
+
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
+    private $locationHandler;
 
     /**
      * @var string
@@ -61,6 +72,39 @@ class ReindexCommand extends ContainerAwareCommand
     private $isDebug;
 
     /**
+     * @param \eZ\Publish\Core\Search\Common\IncrementalIndexer|\eZ\Publish\Core\Search\Common\Indexer $searchIndexer
+     * @param \Doctrine\DBAL\Connection $connection
+     * @param $locationHandler
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param string $siteaccess
+     * @param string $env
+     * @param bool $isDebug
+     * @param string|null $phpPath
+     */
+    public function __construct(
+        $searchIndexer,
+        Connection $connection,
+        Handler $locationHandler,
+        LoggerInterface $logger,
+        string $siteaccess,
+        string $env,
+        bool $isDebug,
+        string $phpPath = null
+    ) {
+        $this->searchIndexer = $searchIndexer;
+        $this->connection = $connection;
+        $this->locationHandler = $locationHandler;
+        $this->phpPath = $phpPath;
+        $this->logger = $logger;
+        $this->siteaccess = $siteaccess;
+        $this->env = $env;
+        $this->isDebug = $isDebug;
+        $this->phpPath = $phpPath;
+
+        parent::__construct();
+    }
+
+    /**
      * Initialize objects required by {@see execute()}.
      *
      * @param InputInterface $input
@@ -69,11 +113,6 @@ class ReindexCommand extends ContainerAwareCommand
     public function initialize(InputInterface $input, OutputInterface $output)
     {
         parent::initialize($input, $output);
-        $this->searchIndexer = $this->getContainer()->get('ezpublish.spi.search.indexer');
-        $this->connection = $this->getContainer()->get('ezpublish.api.storage_engine.legacy.connection');
-        $this->logger = $this->getContainer()->get('logger');
-        $this->env = $this->getContainer()->getParameter('kernel.environment');
-        $this->isDebug = $this->getContainer()->getParameter('kernel.debug');
         if (!$this->searchIndexer instanceof Indexer) {
             throw new RuntimeException(
                 sprintf(
@@ -198,7 +237,7 @@ EOT
             $contentIds = explode(',', $contentIds);
             $output->writeln(sprintf(
                 'Indexing list of content id\'s (%s)' . ($commit ? ', with commit' : ''),
-                \count($contentIds)
+                count($contentIds)
             ));
 
             return $this->searchIndexer->updateSearchIndex($contentIds, $commit);
@@ -324,11 +363,7 @@ EOT
      */
     private function getStatementSubtree($locationId, $count = false)
     {
-        /**
-         * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
-         */
-        $locationHandler = $this->getContainer()->get('ezpublish.spi.persistence.location_handler');
-        $location = $locationHandler->load($locationId);
+        $location = $this->locationHandler->load($locationId);
         $q = $this->connection->createQueryBuilder()
             ->select($count ? 'count(DISTINCT c.id)' : 'DISTINCT c.id')
             ->from('ezcontentobject', 'c')
@@ -423,7 +458,7 @@ EOT
         $phpFinder = new PhpExecutableFinder();
         $this->phpPath = $phpFinder->find();
         if (!$this->phpPath) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 'The php executable could not be found, it\'s needed for executing parable sub processes, so add it to your PATH environment variable and try again'
             );
         }
@@ -441,8 +476,8 @@ EOT
             // Linux (and potentially Windows with linux sub systems)
             $cpuinfo = file_get_contents('/proc/cpuinfo');
             preg_match_all('/^processor/m', $cpuinfo, $matches);
-            $cores = \count($matches[0]);
-        } elseif (\DIRECTORY_SEPARATOR === '\\') {
+            $cores = count($matches[0]);
+        } elseif (DIRECTORY_SEPARATOR === '\\') {
             // Windows
             if (($process = @popen('wmic cpu get NumberOfCores', 'rb')) !== false) {
                 fgets($process);

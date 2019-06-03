@@ -296,3 +296,16 @@ services:
             $extensionGuesser: '@liip_imagine.extension_guesser'
         tags:
             - { name: console.command, command: ezplatform:images:resize-original }
+
+    ezplatform.core.command.reindex:
+        class: eZ\Bundle\EzPublishCoreBundle\Command\ReindexCommand
+        arguments:
+            $searchIndexer: '@ezpublish.spi.search.indexer'
+            $connection: '@ezpublish.api.storage_engine.legacy.connection'
+            $locationHandler: '@ezpublish.spi.persistence.location_handler'
+            $logger: '@logger'
+            $siteaccess: '@ezpublish.siteaccess'
+            $env: '%kernel.environment%'
+            $isDebug: '%kernel.debug%'
+        tags:
+            - { name: console.command, command: ezplatform:reindex }
