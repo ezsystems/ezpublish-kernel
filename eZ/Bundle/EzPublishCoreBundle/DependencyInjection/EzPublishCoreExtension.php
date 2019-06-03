@@ -116,6 +116,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->registerPageConfiguration($config, $container);
         $this->registerRichTextConfiguration($config, $container);
         $this->registerUrlAliasConfiguration($config, $container);
+        $this->registerUrlWildcardsConfiguration($config, $container);
 
         // Routing
         $this->handleRouting($config, $container, $loader);
@@ -660,5 +661,14 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         if ($fileSystem->exists($translationsPath)) {
             $container->prependExtensionConfig('framework', ['translator' => ['paths' => [$translationsPath]]]);
         }
+    }
+
+    private function registerUrlWildcardsConfiguration(array $config, ContainerBuilder $container)
+    {
+        if (!isset($config['url_wildcards']['enabled'])) {
+            $config['url_wildcards']['enabled'] = false;
+        }
+
+        $container->setParameter('ezpublish.url_wildcards.enabled', $config['url_wildcards']['enabled']);
     }
 }

@@ -103,4 +103,20 @@ class ExceptionConversion extends Gateway
             throw new \RuntimeException('Database error', 0, $e);
         }
     }
+
+    /**
+     * Loads the UrlWildcard with given $url.
+     *
+     * @param string $sourceUrl
+     *
+     * @return array
+     */
+    public function loadUrlWildcardBySourceUrl(string $sourceUrl)
+    {
+        try {
+            return $this->innerGateway->loadUrlWildcardBySourceUrl($sourceUrl);
+        } catch (DBALException | PDOException $e) {
+            throw new \RuntimeException('Database error', 0, $e);
+        }
+    }
 }
