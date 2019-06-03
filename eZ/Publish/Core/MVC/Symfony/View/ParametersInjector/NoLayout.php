@@ -9,7 +9,7 @@ use eZ\Publish\Core\MVC\Symfony\View\ViewEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
- * Injects the 'noLayout' boolean based on the value of the 'layout' attribute.
+ * Injects the 'no_layout' boolean based on the value of the 'layout' attribute.
  */
 class NoLayout implements EventSubscriberInterface
 {
@@ -23,7 +23,7 @@ class NoLayout implements EventSubscriberInterface
         $parameters = $event->getBuilderParameters();
 
         $event->getParameterBag()->set(
-            'noLayout',
+            'no_layout',
             isset($parameters['layout']) ? !(bool) $parameters['layout'] : false
         );
     }

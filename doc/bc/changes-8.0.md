@@ -22,3 +22,8 @@ Changes affecting version compatibility with former or future versions.
 * REST Server implementation and Common namespace have been removed in favor of
   eZ Platform REST Bundle available via
   [ezsystems/ezplatform-rest](https://github.com/ezsystems/ezplatform-rest) package.
+
+## Deprecated features
+
+* Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
+* View parameter `pagelayout` set by `pagelayout` setting is deprecated, use `page_layout` instead in your Twig templates.

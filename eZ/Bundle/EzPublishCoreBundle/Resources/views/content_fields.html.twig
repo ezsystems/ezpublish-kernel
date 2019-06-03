@@ -460,7 +460,7 @@
                 {{ render(controller('ez_content:embedAction', {
                     contentId: field.value.destinationContentId,
                     viewType: 'asset_image',
-                    noLayout: true,
+                    no_layout: true,
                     params: {
                         parameters: parameters|default({'alias': 'original'})|merge({'alternativeText': field.value.alternativeText })
                     }

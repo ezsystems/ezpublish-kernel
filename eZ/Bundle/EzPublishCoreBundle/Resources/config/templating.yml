@@ -226,9 +226,9 @@ services:
 
     ezpublish.view.view_parameters.injector.viewbase_layout:
         class: "%ezpublish.view.view_parameters.injector.viewbase_layout.class%"
-        arguments: ["%ezpublish.content_view.viewbase_layout%"]
-        calls:
-            - [setPageLayout, [$pagelayout$]]
+        arguments:
+            - "%ezpublish.content_view.viewbase_layout%"
+            - "@ezpublish.config.resolver"
         tags:
             - { name: kernel.event_subscriber }
 

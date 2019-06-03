@@ -436,7 +436,7 @@ class ViewController extends Controller
      */
     protected function renderLocation(Location $location, $viewType, $layout = false, array $params = array())
     {
-        return $this->viewManager->renderLocation($location, $viewType, $params + array('noLayout' => !$layout));
+        return $this->viewManager->renderLocation($location, $viewType, $params + array('no_layout' => !$layout));
     }
 
     /**
@@ -451,7 +451,7 @@ class ViewController extends Controller
      */
     protected function renderContent(Content $content, $viewType, $layout = false, array $params = array())
     {
-        return $this->viewManager->renderContent($content, $viewType, $params + array('noLayout' => !$layout));
+        return $this->viewManager->renderContent($content, $viewType, $params + array('no_layout' => !$layout));
     }
 
     /**
