@@ -5961,6 +5961,48 @@ XML
     }
 
     /**
+     * Tests loading list of content versions of status draft.
+     */
+    public function testLoadVersionsOfStatusDraft()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion1();
+
+        $contentService->createContentDraft($content->contentInfo);
+        $contentService->createContentDraft($content->contentInfo);
+        $contentService->createContentDraft($content->contentInfo);
+
+        $versions = $contentService->loadVersions($content->contentInfo, VersionInfo::STATUS_DRAFT);
+
+        $this->assertSame(\count($versions), 3);
+    }
+
+    /**
+     * Tests loading list of content versions of status archived.
+     */
+    public function testLoadVersionsOfStatusArchived()
+    {
+        $repository = $this->getRepository();
+
+        $contentService = $repository->getContentService();
+
+        $content = $this->createContentVersion1();
+
+        $draft1 = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draft1->versionInfo);
+
+        $draft2 = $contentService->createContentDraft($content->contentInfo);
+        $contentService->publishVersion($draft2->versionInfo);
+
+        $versions = $contentService->loadVersions($content->contentInfo, VersionInfo::STATUS_ARCHIVED);
+
+        $this->assertSame(\count($versions), 2);
+    }
+
+    /**
      * Asserts that all aliases defined in $expectedAliasProperties with the
      * given properties are available in $actualAliases and not more.
      *
