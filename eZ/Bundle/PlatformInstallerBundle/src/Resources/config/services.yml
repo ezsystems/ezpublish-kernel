@@ -17,6 +17,7 @@ services:
         lazy: true
 
     ezplatform.installer.clean_installer:
+        public: true
         class: "%ezplatform.installer.clean_installer.class%"
         parent: ezplatform.installer.db_based_installer
         tags:
