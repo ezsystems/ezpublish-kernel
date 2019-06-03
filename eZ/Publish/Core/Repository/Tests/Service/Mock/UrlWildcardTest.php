@@ -86,14 +86,8 @@ class UrlWildcardTest extends BaseServiceMockTest
         $handlerMock->expects(
             $this->once()
         )->method(
-            'loadAll'
-        )->will(
-            $this->returnValue(
-                array(
-                    new SPIURLWildcard(array('sourceUrl' => '/lorem/ipsum')),
-                )
-            )
-        );
+            'exists'
+        )->willReturn(true);
 
         $mockedService->create('/lorem/ipsum', 'opossum', true);
     }
@@ -136,10 +130,8 @@ class UrlWildcardTest extends BaseServiceMockTest
         $handlerMock->expects(
             $this->once()
         )->method(
-            'loadAll'
-        )->will(
-            $this->returnValue(array())
-        );
+            'exists'
+        )->willReturn(false);
 
         $mockedService->create($sourceUrl, $destinationUrl, $forward);
     }
@@ -191,10 +183,8 @@ class UrlWildcardTest extends BaseServiceMockTest
         $handlerMock->expects(
             $this->once()
         )->method(
-            'loadAll'
-        )->will(
-            $this->returnValue(array())
-        );
+            'exists'
+        )->willReturn(false);
 
         $handlerMock->expects(
             $this->once()
@@ -260,17 +250,15 @@ class UrlWildcardTest extends BaseServiceMockTest
         $repositoryMock->expects($this->once())->method('beginTransaction');
         $repositoryMock->expects($this->once())->method('rollback');
 
-        $handlerMock->expects(
-            $this->once()
-        )->method(
-            'loadAll'
-        )->will(
-            $this->returnValue(array())
-        );
-
         $sourceUrl = '/lorem';
         $destinationUrl = '/ipsum';
         $forward = true;
+
+        $handlerMock->expects(
+            $this->once()
+        )->method(
+            'exists'
+        )->willReturn(false);
 
         $handlerMock->expects(
             $this->once()
@@ -606,16 +594,13 @@ class UrlWildcardTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
-        $handlerMock->expects(
-            $this->once()
-        )->method(
-            'loadAll'
-        )->with(
-            $this->equalTo(0),
-            $this->equalTo(-1)
-        )->will(
-            $this->returnValue(array(new SPIURLWildcard($createArray)))
-        );
+        $trimmedUrl = trim($url, '/ ');
+
+        $handlerMock
+            ->expects($this->once())
+            ->method('translate')
+            ->with($trimmedUrl)
+            ->willThrowException(new \eZ\Publish\Core\Base\Exceptions\NotFoundException('UrlWildcard', $trimmedUrl));
 
         $mockedService->translate($url);
     }
@@ -714,16 +699,18 @@ class UrlWildcardTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
-        $handlerMock->expects(
-            $this->once()
-        )->method(
-            'loadAll'
-        )->with(
-            $this->equalTo(0),
-            $this->equalTo(-1)
-        )->will(
-            $this->returnValue(array(new SPIURLWildcard($createArray)))
-        );
+        $trimmedUrl = trim($url, '/ ');
+
+        $handlerMock
+            ->expects($this->once())
+            ->method('translate')
+            ->with($trimmedUrl)
+
+            ->willReturn(new SPIURLWildcard([
+                'sourceUrl' => $createArray['sourceUrl'],
+                'destinationUrl' => $uri,
+                'forward' => $createArray['forward']
+            ]));
 
         $translationResult = $mockedService->translate($url);
 
@@ -750,35 +737,19 @@ class UrlWildcardTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $handlerMock */
         $handlerMock = $this->getPersistenceMock()->urlWildcardHandler();
 
-        $handlerMock->expects(
-            $this->once()
-        )->method(
-            'loadAll'
-        )->with(
-            $this->equalTo(0),
-            $this->equalTo(-1)
-        )->will(
-            $this->returnValue(
-                array(
-                    new SPIURLWildcard(
-                        array(
-                            'sourceUrl' => '/something/*',
-                            'destinationUrl' => '/short',
-                            'forward' => true,
-                        )
-                    ),
-                    new SPIURLWildcard(
-                        array(
-                            'sourceUrl' => '/something/something/*',
-                            'destinationUrl' => '/long',
-                            'forward' => false,
-                        )
-                    ),
-                )
-            )
-        );
+        $url = '/something/something/thing';
+        $trimmedUrl = trim($url, '/ ');
 
-        $translationResult = $mockedService->translate('/something/something/thing');
+        $handlerMock
+            ->expects($this->once())
+            ->method('translate')
+            ->with($trimmedUrl)
+            ->willReturn(new SPIURLWildcard([
+                'destinationUrl' => '/long',
+                'forward' => false
+            ]));
+
+        $translationResult = $mockedService->translate($url);
 
         $this->assertEquals(
             new URLWildcardTranslationResult(
