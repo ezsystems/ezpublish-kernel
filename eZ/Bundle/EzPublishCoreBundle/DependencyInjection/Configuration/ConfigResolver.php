@@ -310,7 +310,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
             }
 
             // Extract service name from first service matching getXXService pattern
-            if (\strpos($t['function'], 'get') === 0 && \strpos($t['function'], 'Service') === \strlen($t['function']) -7) {
+            if (\strpos($t['function'], 'get') === 0 && \strpos($t['function'], 'Service') === \strlen($t['function']) - 7) {
                 $serviceName = \strtolower(\preg_replace('/\B([A-Z])/', '_$1', \str_replace('_', '.', \substr($t['function'], 3, -7))));
 
                 // This (->setter('$dynamic_param$')) is safe as the system is able to update it on scope changes
