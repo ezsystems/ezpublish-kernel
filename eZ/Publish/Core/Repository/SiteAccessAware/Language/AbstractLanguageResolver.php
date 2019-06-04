@@ -18,14 +18,10 @@ use eZ\Publish\API\Repository\Values\Content\Language;
  */
 abstract class AbstractLanguageResolver implements APILanguageResolver
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $defaultUseAlwaysAvailable;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $defaultShowAllTranslations;
 
     /**
