@@ -53,6 +53,10 @@ class YamlConfigurationContext implements Context
         $filePath = str_replace('%env%', $env, self::$platformConfigurationFilePath);
         $platformConfig = Yaml::parse(file_get_contents($filePath));
 
+        if (!array_key_exists('imports', $platformConfig)) {
+            $platformConfig = array_merge(['imports' => []], $platformConfig);
+        }
+
         foreach ($platformConfig['imports'] as $import) {
             if ($import['resource'] == $importedFileName) {
                 $importAlreadyExists = true;
