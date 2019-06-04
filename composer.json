@@ -7,7 +7,7 @@
         "php-64bit": "For support of more than 30 languages, a 64bit php installation on all involved prod/dev machines is required"
     },
     "require": {
-        "php": "^7.1",
+        "php": "^7.2",
         "ext-ctype": "*",
         "ext-fileinfo": "*",
         "ext-intl": "*",
@@ -30,7 +30,7 @@
         "symfony/http-kernel": "^4.2",
         "symfony/console": "^4.2",
         "symfony/expression-language": "^4.2",
-        "ezsystems/doctrine-dbal-schema": "dev-symfony4 as 1.0.0",
+        "ezsystems/doctrine-dbal-schema": "^1.0@dev",
         "symfony-cmf/routing": "^2.1",
         "kriswallsmith/buzz": "^1.0",
         "nelmio/cors-bundle": "^1.5.0",
@@ -52,7 +52,6 @@
         "friendsofphp/php-cs-fixer": "~2.7.5",
         "phpunit/phpunit": "^7.0",
         "matthiasnoback/symfony-dependency-injection-test": "~3.0",
-        "symfony/assetic-bundle": "~2.8.2",
         "ezsystems/behatbundle": "^7.0@dev"
     },
     "conflict": {
@@ -74,10 +73,7 @@
         }
     },
     "config": {
-        "process-timeout": 3000,
-        "platform": {
-            "php": "7.1"
-        }
+        "process-timeout": 3000
     },
     "scripts": {
         "fix-cs": "php-cs-fixer fix -v --show-progress=estimating",
