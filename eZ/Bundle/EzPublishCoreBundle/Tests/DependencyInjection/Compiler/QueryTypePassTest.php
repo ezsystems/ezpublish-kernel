@@ -24,6 +24,7 @@ class QueryTypePassTest extends AbstractCompilerPassTestCase
     {
         parent::setUp();
         $this->setDefinition('ezpublish.query_type.registry', new Definition());
+        $this->setParameter('kernel.root_dir', '/var/www/my_application/src');
     }
 
     protected function registerCompilerPass(ContainerBuilder $container)
