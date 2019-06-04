@@ -21,7 +21,7 @@ class YamlConfigurationContext implements Context
 {
     use KernelDictionary;
 
-    private static $platformConfigurationFilePath = 'config/packages/%env%/ezplatform_behat.yml';
+    private static $platformConfigurationFilePath = 'config/packages/%env%/ezplatform.yaml';
 
     public function addConfiguration(array $configuration)
     {
@@ -29,7 +29,7 @@ class YamlConfigurationContext implements Context
         $env = $kernel->getEnvironment();
 
         $yamlString = Yaml::dump($configuration, 5, 4);
-        $destinationFileName = 'ezplatform_behat_' . sha1($yamlString) . '.yml';
+        $destinationFileName = 'ezplatform_behat_' . sha1($yamlString) . '.yaml';
         $destinationFilePath = "config/packages/{$env}/{$destinationFileName}";
 
         if (!file_exists($destinationFilePath)) {
