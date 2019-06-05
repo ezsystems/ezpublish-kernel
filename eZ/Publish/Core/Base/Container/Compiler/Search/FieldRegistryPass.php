@@ -18,6 +18,9 @@ use LogicException;
  */
 class FieldRegistryPass implements CompilerPassInterface
 {
+    public const EZPUBLISH_FIELD_TYPE_INDEXABLE = 'ezpublish.fieldType.indexable';
+    public const EZPLATFORM_FIELD_TYPE_INDEXABLE = 'ezplatform.field_type.indexable';
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -31,11 +34,18 @@ class FieldRegistryPass implements CompilerPassInterface
 
         $fieldRegistryDefinition = $container->getDefinition('ezpublish.search.common.field_registry');
 
-        $ezpublishIndexableFieldTypeTags = $container->findTaggedServiceIds('ezpublish.fieldType.indexable');
+        $ezpublishIndexableFieldTypeTags = $container->findTaggedServiceIds(self::EZPUBLISH_FIELD_TYPE_INDEXABLE);
         foreach ($ezpublishIndexableFieldTypeTags as $ezpublishIndexableFieldTypeTag) {
-            @trigger_error('`ezpublish.fieldType.indexable` service tag is deprecated and will be removed in version 9. Please use `ezplatform.field_type.indexable`. instead.', E_USER_DEPRECATED);
+            @trigger_error(
+                sprintf(
+                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s`. instead.',
+                    self::EZPUBLISH_FIELD_TYPE_INDEXABLE,
+                    self::EZPLATFORM_FIELD_TYPE_INDEXABLE
+                ),
+                E_USER_DEPRECATED
+            );
         }
-        $ezplatformIndexableFieldTypeTags = $container->findTaggedServiceIds('ezplatform.field_type.indexable');
+        $ezplatformIndexableFieldTypeTags = $container->findTaggedServiceIds(self::EZPLATFORM_FIELD_TYPE_INDEXABLE);
         $fieldTypesTags = array_merge($ezpublishIndexableFieldTypeTags, $ezplatformIndexableFieldTypeTags);
         foreach ($fieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
