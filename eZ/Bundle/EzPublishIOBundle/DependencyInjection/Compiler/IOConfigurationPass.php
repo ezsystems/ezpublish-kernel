@@ -92,7 +92,9 @@ class IOConfigurationPass implements CompilerPassInterface
 
             $parentHandlerId = $configurationFactory->getParentServiceId();
             $handlerId = sprintf('%s.%s', $parentHandlerId, $name);
-            $definition = $container->setDefinition($handlerId, new ChildDefinition($parentHandlerId));
+            $handlerServiceDefinition = new ChildDefinition($parentHandlerId);
+            $handlerServiceDefinition->setPublic(true); // @todo It should be private once HandlerFactory is refactored
+            $definition = $container->setDefinition($handlerId, $handlerServiceDefinition);
 
             $configurationFactory->configureHandler($definition, $config);
 

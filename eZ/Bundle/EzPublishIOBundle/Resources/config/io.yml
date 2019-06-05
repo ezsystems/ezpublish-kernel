@@ -132,6 +132,7 @@ services:
 
     # Base service for flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem:
+        public: true # @todo should be private
         abstract: true
         class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
@@ -139,12 +140,14 @@ services:
 
     # Default flysystem metadata handler
     ezpublish.core.io.metadata_handler.flysystem.default:
+        public: true # @todo should be private
         class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
 
     # Base service for flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem:
+        public: true # @todo should be private
         abstract: true
         class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
         arguments:
@@ -153,6 +156,7 @@ services:
 
     # Default flysystem binarydata handler
     ezpublish.core.io.binarydata_handler.flysystem.default:
+        public: true # @todo should be private
         class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
