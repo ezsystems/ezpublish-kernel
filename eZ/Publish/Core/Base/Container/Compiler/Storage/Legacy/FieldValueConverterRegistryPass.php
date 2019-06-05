@@ -18,6 +18,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class FieldValueConverterRegistryPass implements CompilerPassInterface
 {
+    public const EZPUBLISH_STORAGE_ENGINE_LEGACY_CONVERTER = 'ezpublish.storageEngine.legacy.converter';
+    public const EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER = 'ezplatform.field_type.legacy_storage.converter';
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
@@ -29,11 +32,18 @@ class FieldValueConverterRegistryPass implements CompilerPassInterface
 
         $registry = $container->getDefinition('ezpublish.persistence.legacy.field_value_converter.registry');
 
-        $ezpublishFieldTypeStorageConverterTags = $container->findTaggedServiceIds('ezpublish.storageEngine.legacy.converter');
+        $ezpublishFieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::EZPUBLISH_STORAGE_ENGINE_LEGACY_CONVERTER);
         foreach ($ezpublishFieldTypeStorageConverterTags as $ezpublishFieldTypeStorageConverterTag) {
-            @trigger_error('`ezpublish.storageEngine.legacy.converter` service tag is deprecated and will be removed in version 9. Please use `ezplatform.field_type.legacy_storage.converter` instead.', E_USER_DEPRECATED);
+            @trigger_error(
+                sprintf(
+                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
+                    self::EZPUBLISH_STORAGE_ENGINE_LEGACY_CONVERTER,
+                    self::EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER
+                ),
+                E_USER_DEPRECATED
+            );
         }
-        $ezplatformFieldTypeStorageConverterTags = $container->findTaggedServiceIds('ezplatform.field_type.legacy_storage.converter');
+        $ezplatformFieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER);
         $storageConverterFieldTypesTags = array_merge($ezpublishFieldTypeStorageConverterTags, $ezplatformFieldTypeStorageConverterTags);
         foreach ($storageConverterFieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
