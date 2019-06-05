@@ -17,6 +17,9 @@ use LogicException;
  */
 class FieldTypeCollectionPass implements CompilerPassInterface
 {
+    public const EZPUBLISH_FIELD_TYPE = 'ezpublish.fieldType';
+    public const EZPLATFORM_FIELD_TYPE = 'ezplatform.field_type';
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -32,11 +35,18 @@ class FieldTypeCollectionPass implements CompilerPassInterface
 
         // Field types.
         // Alias attribute is the field type string.
-        $ezpublishFieldTypeTags = $container->findTaggedServiceIds('ezpublish.fieldType');
+        $ezpublishFieldTypeTags = $container->findTaggedServiceIds(self::EZPUBLISH_FIELD_TYPE);
         foreach ($ezpublishFieldTypeTags as $ezpublishFieldTypeTag) {
-            @trigger_error('`ezpublish.fieldType` service tag is deprecated and will be removed in version 9. Please use `ezplatform.field_type`. instead.', E_USER_DEPRECATED);
+            @trigger_error(
+                sprintf(
+                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s`. instead.',
+                    self::EZPUBLISH_FIELD_TYPE,
+                    self::EZPLATFORM_FIELD_TYPE
+                ),
+                E_USER_DEPRECATED
+            );
         }
-        $ezplatformFieldTypeTags = $container->findTaggedServiceIds('ezplatform.field_type');
+        $ezplatformFieldTypeTags = $container->findTaggedServiceIds(self::EZPLATFORM_FIELD_TYPE);
         $fieldTypesTags = array_merge($ezpublishFieldTypeTags, $ezplatformFieldTypeTags);
         foreach ($fieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
