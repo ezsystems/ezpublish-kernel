@@ -32,12 +32,15 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         $container->addCompilerPass(new FieldTypeCollectionPass());
     }
 
-    public function testRegisterFieldType()
+    /**
+     * @dataProvider tagsProvider
+     */
+    public function testRegisterFieldType(string $tag)
     {
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag('ezpublish.fieldType', array('alias' => $fieldTypeIdentifier));
+        $def->addTag($tag, ['alias' => $fieldTypeIdentifier]);
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
@@ -45,18 +48,23 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.field_type_collection.factory',
             'registerFieldType',
-            array($serviceId, $fieldTypeIdentifier)
+            [$serviceId, $fieldTypeIdentifier]
         );
     }
 
-    public function testRegisterFieldTypeNoAlias()
+    /**
+     * @dataProvider tagsProvider
+     *
+     * @param string $tag
+     */
+    public function testRegisterFieldTypeNoAlias(string $tag)
     {
         $this->expectException(\LogicException::class);
 
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag('ezpublish.fieldType');
+        $def->addTag($tag);
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
@@ -64,7 +72,15 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.field_type_collection.factory',
             'registerFieldType',
-            array($serviceId, $fieldTypeIdentifier)
+            [$serviceId, $fieldTypeIdentifier]
         );
+    }
+
+    public function tagsProvider(): array
+    {
+        return [
+            ['ezpublish.fieldType'],
+            ['ezplatform.field_type'],
+        ];
     }
 }
