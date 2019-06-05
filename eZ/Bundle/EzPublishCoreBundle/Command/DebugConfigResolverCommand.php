@@ -6,7 +6,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -14,8 +16,29 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
 use Symfony\Component\VarDumper\Dumper\CliDumper;
 
-class DebugConfigResolverCommand extends ContainerAwareCommand
+class DebugConfigResolverCommand extends Command
 {
+    /**
+     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
+     */
+    private $configResolver;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private $siteAccess;
+
+    public function __construct(
+        ConfigResolverInterface $configResolver,
+        SiteAccess $siteAccess
+    ) {
+        $this->configResolver = $configResolver;
+        $this->siteAccess = $siteAccess;
+
+        parent::__construct();
+    }
+
+
     /**
      * {@inheritdoc}.
      */
@@ -67,22 +90,19 @@ EOM
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface $configResolver */
-        $configResolver = $this->getContainer()->get('ezpublish.config.resolver');
         $parameter = $input->getArgument('parameter');
         $namespace = $input->getOption('namespace');
         $scope = $input->getOption('scope');
-        $parameterData = $configResolver->getParameter($parameter, $namespace, $scope);
+        $parameterData = $this->configResolver->getParameter($parameter, $namespace, $scope);
 
+        // In case of json output return early with no newlines and only the parameter data
         if ($input->getOption('json')) {
             $output->write(json_encode($parameterData));
 
             return;
         }
 
-        /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess $siteAccess */
-        $siteAccess = $this->getContainer()->get('ezpublish.siteaccess');
-        $output->writeln('<comment>SiteAccess name:</comment> ' . $siteAccess->name);
+        $output->writeln('<comment>SiteAccess name:</comment> ' . $this->siteAccess->name);
 
         $output->writeln("<comment>Parameter:</comment>");
         $cloner = new VarCloner();
