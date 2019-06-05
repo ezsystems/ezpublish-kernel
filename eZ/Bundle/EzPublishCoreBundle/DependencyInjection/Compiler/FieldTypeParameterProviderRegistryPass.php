@@ -17,6 +17,9 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
 {
+    public const EZPUBLISH_FIELD_TYPE_PARAMETER_PROVIDER = 'ezpublish.fieldType.parameterProvider';
+    public const EZPLATFORM_FIELD_TYPE_PARAMETER_PROVIDER = 'ezplatform.field_type.parameter_provider';
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -30,11 +33,18 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
 
         $parameterProviderRegistryDef = $container->getDefinition('ezpublish.fieldType.parameterProviderRegistry');
 
-        $ezpublishFieldTypeParameterProviderTags = $container->findTaggedServiceIds('ezpublish.fieldType.parameterProvider');
+        $ezpublishFieldTypeParameterProviderTags = $container->findTaggedServiceIds(self::EZPUBLISH_FIELD_TYPE_PARAMETER_PROVIDER);
         foreach ($ezpublishFieldTypeParameterProviderTags as $ezpublishFieldTypeParameterProviderTag) {
-            @trigger_error('`ezpublish.fieldType.parameterProvider` service tag is deprecated and will be removed in version 9. Please use `ezplatform.field_type.parameter_provider` instead.', E_USER_DEPRECATED);
+            @trigger_error(
+                sprintf(
+                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
+                    self::EZPUBLISH_FIELD_TYPE_PARAMETER_PROVIDER,
+                    self::EZPLATFORM_FIELD_TYPE_PARAMETER_PROVIDER
+                ),
+                E_USER_DEPRECATED
+            );
         }
-        $ezplatformFieldTypeParameterProviderTags = $container->findTaggedServiceIds('ezplatform.field_type.parameter_provider');
+        $ezplatformFieldTypeParameterProviderTags = $container->findTaggedServiceIds(self::EZPLATFORM_FIELD_TYPE_PARAMETER_PROVIDER);
         $parameterProviderFieldTypesTags = array_merge($ezpublishFieldTypeParameterProviderTags, $ezplatformFieldTypeParameterProviderTags);
         foreach ($parameterProviderFieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
