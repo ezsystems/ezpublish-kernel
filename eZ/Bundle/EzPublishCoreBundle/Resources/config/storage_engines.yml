@@ -19,6 +19,7 @@ services:
             - [setContainer, ["@service_container"]]
 
     ezpublish.persistence.connection:
+        public: true # @todo should be private
         class: "%ezpublish.persistence.connection.class%"
         factory: ["@ezpublish.persistence.connection.factory", getConnection]
         lazy: true

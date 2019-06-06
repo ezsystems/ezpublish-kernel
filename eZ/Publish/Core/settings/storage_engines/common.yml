@@ -88,4 +88,5 @@ services:
             - "%ezpublish.api.storage_engine.preprocessed_transformation_rules.resources%"
 
     ezpublish.persistence.connection:
+        public: true # @todo should be private
         alias: ezpublish.api.storage_engine.legacy.connection
