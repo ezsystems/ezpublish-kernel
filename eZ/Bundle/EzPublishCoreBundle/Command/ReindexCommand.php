@@ -370,6 +370,8 @@ EOT
             for ($i = 0; $i < $iterationCount; ++$i) {
                 if ($contentId = $stmt->fetch(PDO::FETCH_COLUMN)) {
                     $contentIds[] = $contentId;
+                } elseif (empty($contentIds)) {
+                    return;
                 } else {
                     break;
                 }
@@ -387,6 +389,10 @@ EOT
      */
     private function getPhpProcess(array $contentIds, $commit)
     {
+        if (empty($contentIds)) {
+            throw new RuntimeException("'--content-ids=' can not be empty on parallel sub process");
+        }
+
         $consolePath = file_exists('bin/console') ? 'bin/console' : 'app/console';
         $subProcessArgs = [
             $consolePath,
