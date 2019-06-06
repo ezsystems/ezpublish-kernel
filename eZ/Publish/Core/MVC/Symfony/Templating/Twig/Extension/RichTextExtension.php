@@ -39,12 +39,12 @@ class RichTextExtension extends AbstractExtension
     {
         return [
             new TwigFilter(
-                'richtext_to_html5',
+                'ez_richtext_to_html5',
                 [$this, 'richTextToHtml5'],
                 ['is_safe' => ['html']]
             ),
             new TwigFilter(
-                'richtext_to_html5_edit',
+                'ez_richtext_to_html5_edit',
                 [$this, 'richTextToHtml5Edit'],
                 ['is_safe' => ['html']]
             ),
@@ -52,7 +52,7 @@ class RichTextExtension extends AbstractExtension
     }
 
     /**
-     * Implements the "richtext_to_html5" filter.
+     * Implements the "ez_richtext_to_html5" filter.
      *
      * @param \DOMDocument $xmlData
      *
@@ -64,7 +64,7 @@ class RichTextExtension extends AbstractExtension
     }
 
     /**
-     * Implements the "richtext_to_html5_edit" filter.
+     * Implements the "ez_richtext_to_html5_edit" filter.
      *
      * @param \DOMDocument $xmlData
      *

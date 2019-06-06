@@ -50,7 +50,7 @@ class ImageExtension extends AbstractExtension
                 ['is_safe' => ['html']]
             ),
             new TwigFunction(
-                'ez_image_asset_content_field_identifier',
+                'ez_content_field_identifier_image_asset',
                 [$this, 'getImageAssetContentFieldIdentifier'],
                 ['is_safe' => ['html']]
             ),

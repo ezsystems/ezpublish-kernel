@@ -80,7 +80,7 @@ class ContentExtension extends AbstractExtension
                 [$this, 'getTranslatedField']
             ),
             new TwigFunction(
-                'ez_is_field_empty',
+                'ez_field_is_empty',
                 [$this, 'isFieldEmpty']
             ),
             new TwigFunction(
@@ -92,11 +92,7 @@ class ContentExtension extends AbstractExtension
                 [$this, 'getTranslatedFieldDefinitionDescription']
             ),
             new TwigFunction(
-                'ez_trans_prop',
-                [$this, 'getTranslatedProperty']
-            ),
-            new TwigFunction(
-                'ez_first_filled_image_field_identifier',
+                'ez_content_field_identifier_first_filed_image',
                 [$this, 'getFirstFilledImageFieldIdentifier']
             ),
         ];
@@ -206,44 +202,6 @@ class ContentExtension extends AbstractExtension
         }
 
         throw new InvalidArgumentType('$content', 'Content|ContentInfo', $content);
-    }
-
-    /**
-     * Gets translated property generic helper.
-     *
-     * For generic use, expects property in singular form. For instance if 'name' is provided it will first look for
-     * getName( $lang ) method, then property called ->names[$lang], in either case look for correct translation.
-     *
-     * Languages will consist of either forced language or current SiteAccess languages list, in addition for property
-     * lookup helper will look for mainLanguage property and use it if either alwaysAvailable property is true or non-
-     * existing.
-     *
-     * @param \eZ\Publish\API\Repository\Values\ValueObject $object Can be any kid of Value object which directly holds the translated data
-     * @param string $property Property name, example 'name', 'description'
-     * @param string $forcedLanguage Locale we want the content name translation in (e.g. "fre-FR"). Null by default (takes current locale)
-     *
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue If $property does not exists as plural or as method
-     *
-     * @return string|null
-     */
-    public function getTranslatedProperty(ValueObject $object, $property, $forcedLanguage = null)
-    {
-        $pluralProperty = $property . 's';
-        if (method_exists($object, 'get' . $property)) {
-            return $this->translationHelper->getTranslatedByMethod(
-                $object,
-                'get' . $property,
-                $forcedLanguage
-            );
-        } elseif (property_exists($object, $pluralProperty) && is_array($object->$pluralProperty)) {
-            return $this->translationHelper->getTranslatedByProperty(
-                $object,
-                $pluralProperty,
-                $forcedLanguage
-            );
-        }
-
-        throw new InvalidArgumentValue('$property', $property, get_class($object));
     }
 
     /**

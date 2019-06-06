@@ -1,4 +1,4 @@
-{% set image_field_identifier = ez_first_filled_image_field_identifier(content) %}
+{% set image_field_identifier = ez_content_field_identifier_first_filed_image(content) %}
 
 {% if image_field_identifier is not null %}
     {{ ez_render_field(
