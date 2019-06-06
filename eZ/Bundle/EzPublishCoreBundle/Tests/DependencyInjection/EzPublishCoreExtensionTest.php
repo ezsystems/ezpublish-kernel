@@ -153,7 +153,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             'ezpublish.fieldType.ezrichtext',
-            'ezpublish.fieldType',
+            'ezplatform.field_type',
             ['alias' => 'ezrichtext']
         );
 
