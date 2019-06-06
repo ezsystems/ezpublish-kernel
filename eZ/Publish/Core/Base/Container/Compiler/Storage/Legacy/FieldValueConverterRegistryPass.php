@@ -48,7 +48,13 @@ class FieldValueConverterRegistryPass implements CompilerPassInterface
         foreach ($storageConverterFieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
-                    throw new LogicException('ezpublish.storageEngine.legacy.converter or ezplatform.field_type.legacy_storage.converter service tag needs an "alias" attribute to identify the field type. None given.');
+                    throw new LogicException(
+                        sprintf(
+                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            self::EZPUBLISH_STORAGE_ENGINE_LEGACY_CONVERTER,
+                            self::EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER
+                        )
+                    );
                 }
 
                 $registry->addMethodCall(

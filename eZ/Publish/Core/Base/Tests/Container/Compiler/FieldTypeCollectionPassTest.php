@@ -79,8 +79,8 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
     public function tagsProvider(): array
     {
         return [
-            ['ezpublish.fieldType'],
-            ['ezplatform.field_type'],
+            [FieldTypeCollectionPass::EZPUBLISH_FIELD_TYPE],
+            [FieldTypeCollectionPass::EZPLATFORM_FIELD_TYPE],
         ];
     }
 }

@@ -50,8 +50,11 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new \LogicException(
-                        'ezpublish.fieldType.parameterProvider or ezplatform.field_type.parameter_provider service tag needs an "alias" ' .
-                        'attribute to identify the field type. None given.'
+                        sprintf(
+                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            self::EZPUBLISH_FIELD_TYPE_PARAMETER_PROVIDER,
+                            self::EZPLATFORM_FIELD_TYPE_PARAMETER_PROVIDER
+                        )
                     );
                 }
 

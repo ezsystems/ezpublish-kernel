@@ -51,8 +51,11 @@ class FieldRegistryPass implements CompilerPassInterface
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
-                        'ezpublish.fieldType.indexable or ezplatform.field_type.indexable service tag needs an "alias" attribute to ' .
-                        'identify the indexable field type. None given.'
+                        sprintf(
+                            '%s or %s service tag needs an "alias" attribute to identify the indexable field type. None given.',
+                            self::EZPUBLISH_FIELD_TYPE_INDEXABLE,
+                            self::EZPLATFORM_FIELD_TYPE_INDEXABLE
+                        )
                     );
                 }
 

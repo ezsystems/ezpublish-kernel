@@ -12,6 +12,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Commo
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Content;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubPolicyProvider;
+use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Yaml\Yaml;
@@ -153,7 +154,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
         $this->assertContainerBuilderHasServiceDefinitionWithTag(
             'ezpublish.fieldType.ezrichtext',
-            'ezplatform.field_type',
+            FieldTypeCollectionPass::EZPLATFORM_FIELD_TYPE,
             ['alias' => 'ezrichtext']
         );
 
