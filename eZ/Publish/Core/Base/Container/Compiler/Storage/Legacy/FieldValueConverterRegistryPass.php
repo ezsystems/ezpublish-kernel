@@ -18,8 +18,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class FieldValueConverterRegistryPass implements CompilerPassInterface
 {
-    public const EZPUBLISH_STORAGE_ENGINE_LEGACY_CONVERTER = 'ezpublish.storageEngine.legacy.converter';
-    public const EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER = 'ezplatform.field_type.legacy_storage.converter';
+    public const STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG = 'ezplatform.field_type.legacy_storage.converter';
+    public const DEPRECATED_STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG = 'ezpublish.storageEngine.legacy.converter';
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
@@ -32,27 +32,27 @@ class FieldValueConverterRegistryPass implements CompilerPassInterface
 
         $registry = $container->getDefinition('ezpublish.persistence.legacy.field_value_converter.registry');
 
-        $ezpublishFieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::EZPUBLISH_STORAGE_ENGINE_LEGACY_CONVERTER);
-        foreach ($ezpublishFieldTypeStorageConverterTags as $ezpublishFieldTypeStorageConverterTag) {
+        $deprecatedFieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::DEPRECATED_STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG);
+        foreach ($deprecatedFieldTypeStorageConverterTags as $deprecatedFieldTypeStorageConverterTag) {
             @trigger_error(
                 sprintf(
                     '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
-                    self::EZPUBLISH_STORAGE_ENGINE_LEGACY_CONVERTER,
-                    self::EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER
+                    self::DEPRECATED_STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG,
+                    self::STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG
                 ),
                 E_USER_DEPRECATED
             );
         }
-        $ezplatformFieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER);
-        $storageConverterFieldTypesTags = array_merge($ezpublishFieldTypeStorageConverterTags, $ezplatformFieldTypeStorageConverterTags);
+        $fieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG);
+        $storageConverterFieldTypesTags = array_merge($deprecatedFieldTypeStorageConverterTags, $fieldTypeStorageConverterTags);
         foreach ($storageConverterFieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         sprintf(
                             '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
-                            self::EZPUBLISH_STORAGE_ENGINE_LEGACY_CONVERTER,
-                            self::EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER
+                            self::DEPRECATED_STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG,
+                            self::STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG
                         )
                     );
                 }

@@ -42,7 +42,7 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
         $def = new Definition();
         $def->setClass($class);
         $def->addTag(
-            FieldValueConverterRegistryPass::EZPLATFORM_FIELD_TYPE_LEGACY_STORAGE_CONVERTER,
+            FieldValueConverterRegistryPass::STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG,
             array('alias' => $fieldTypeIdentifier)
         );
         $this->setDefinition($serviceId, $def);

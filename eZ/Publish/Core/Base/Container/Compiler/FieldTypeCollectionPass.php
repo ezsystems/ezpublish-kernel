@@ -17,8 +17,8 @@ use LogicException;
  */
 class FieldTypeCollectionPass implements CompilerPassInterface
 {
-    public const EZPUBLISH_FIELD_TYPE = 'ezpublish.fieldType';
-    public const EZPLATFORM_FIELD_TYPE = 'ezplatform.field_type';
+    public const FIELD_TYPE_SERVICE_TAG = 'ezplatform.field_type';
+    public const DEPRECATED_FIELD_TYPE_SERVICE_TAG = 'ezpublish.fieldType';
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
@@ -35,27 +35,27 @@ class FieldTypeCollectionPass implements CompilerPassInterface
 
         // Field types.
         // Alias attribute is the field type string.
-        $ezpublishFieldTypeTags = $container->findTaggedServiceIds(self::EZPUBLISH_FIELD_TYPE);
-        foreach ($ezpublishFieldTypeTags as $ezpublishFieldTypeTag) {
+        $deprecatedFieldTypeTags = $container->findTaggedServiceIds(self::DEPRECATED_FIELD_TYPE_SERVICE_TAG);
+        foreach ($deprecatedFieldTypeTags as $deprecatedFieldTypeTag) {
             @trigger_error(
                 sprintf(
                     '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s`. instead.',
-                    self::EZPUBLISH_FIELD_TYPE,
-                    self::EZPLATFORM_FIELD_TYPE
+                    self::DEPRECATED_FIELD_TYPE_SERVICE_TAG,
+                    self::FIELD_TYPE_SERVICE_TAG
                 ),
                 E_USER_DEPRECATED
             );
         }
-        $ezplatformFieldTypeTags = $container->findTaggedServiceIds(self::EZPLATFORM_FIELD_TYPE);
-        $fieldTypesTags = array_merge($ezpublishFieldTypeTags, $ezplatformFieldTypeTags);
+        $fieldTypeTags = $container->findTaggedServiceIds(self::FIELD_TYPE_SERVICE_TAG);
+        $fieldTypesTags = array_merge($deprecatedFieldTypeTags, $fieldTypeTags);
         foreach ($fieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         sprintf(
                             '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
-                            self::EZPUBLISH_FIELD_TYPE,
-                            self::EZPLATFORM_FIELD_TYPE
+                            self::DEPRECATED_FIELD_TYPE_SERVICE_TAG,
+                            self::FIELD_TYPE_SERVICE_TAG
                         )
                     );
                 }

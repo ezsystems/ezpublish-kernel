@@ -18,8 +18,8 @@ use LogicException;
  */
 class FieldRegistryPass implements CompilerPassInterface
 {
-    public const EZPUBLISH_FIELD_TYPE_INDEXABLE = 'ezpublish.fieldType.indexable';
-    public const EZPLATFORM_FIELD_TYPE_INDEXABLE = 'ezplatform.field_type.indexable';
+    public const FIELD_TYPE_INDEXABLE_SERVICE_TAG = 'ezplatform.field_type.indexable';
+    public const DEPRECATED_FIELD_TYPE_INDEXABLE_SERVICE_TAG = 'ezpublish.fieldType.indexable';
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
@@ -34,27 +34,27 @@ class FieldRegistryPass implements CompilerPassInterface
 
         $fieldRegistryDefinition = $container->getDefinition('ezpublish.search.common.field_registry');
 
-        $ezpublishIndexableFieldTypeTags = $container->findTaggedServiceIds(self::EZPUBLISH_FIELD_TYPE_INDEXABLE);
-        foreach ($ezpublishIndexableFieldTypeTags as $ezpublishIndexableFieldTypeTag) {
+        $deprecatedIndexableFieldTypeTags = $container->findTaggedServiceIds(self::DEPRECATED_FIELD_TYPE_INDEXABLE_SERVICE_TAG);
+        foreach ($deprecatedIndexableFieldTypeTags as $deprecatedIndexableFieldTypeTag) {
             @trigger_error(
                 sprintf(
                     '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s`. instead.',
-                    self::EZPUBLISH_FIELD_TYPE_INDEXABLE,
-                    self::EZPLATFORM_FIELD_TYPE_INDEXABLE
+                    self::DEPRECATED_FIELD_TYPE_INDEXABLE_SERVICE_TAG,
+                    self::FIELD_TYPE_INDEXABLE_SERVICE_TAG
                 ),
                 E_USER_DEPRECATED
             );
         }
-        $ezplatformIndexableFieldTypeTags = $container->findTaggedServiceIds(self::EZPLATFORM_FIELD_TYPE_INDEXABLE);
-        $fieldTypesTags = array_merge($ezpublishIndexableFieldTypeTags, $ezplatformIndexableFieldTypeTags);
+        $indexableFieldTypeTags = $container->findTaggedServiceIds(self::FIELD_TYPE_INDEXABLE_SERVICE_TAG);
+        $fieldTypesTags = array_merge($deprecatedIndexableFieldTypeTags, $indexableFieldTypeTags);
         foreach ($fieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
                         sprintf(
                             '%s or %s service tag needs an "alias" attribute to identify the indexable field type. None given.',
-                            self::EZPUBLISH_FIELD_TYPE_INDEXABLE,
-                            self::EZPLATFORM_FIELD_TYPE_INDEXABLE
+                            self::DEPRECATED_FIELD_TYPE_INDEXABLE_SERVICE_TAG,
+                            self::FIELD_TYPE_INDEXABLE_SERVICE_TAG
                         )
                     );
                 }
