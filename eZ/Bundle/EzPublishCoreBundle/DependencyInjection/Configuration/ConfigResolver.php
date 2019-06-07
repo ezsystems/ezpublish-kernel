@@ -314,7 +314,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
             }
 
             // Extract service name from first service matching getXXService pattern
-            if (\strpos($t['function'], 'get') === 0 && \strpos($t['function'], 'Service') === \strlen($t['function']) - 7) {
+            if (\strpos($t['function'], 'get') === 0 && \strrpos($t['function'], 'Service') === \strlen($t['function']) - 7) {
                 $potentialClassName = \substr($t['function'], 3, -7);
                 $serviceName = \strtolower(\preg_replace('/\B([A-Z])/', '_$1', \str_replace('_', '.', $potentialClassName)));
 
@@ -336,7 +336,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
                 }
 
                 // Detect if we found the command loading the service, if so add info to blame to make it easier to spot
-                if (PHP_SAPI === 'cli' && isset($t['file']) && \strpos($t['file'], 'CommandService.php') !== false) {
+                if (PHP_SAPI === 'cli' && isset($t['file']) && \stripos($t['file'], 'CommandService.php') !== false) {
                     $path = explode('/', $t['file']);
                     $blame = \substr($path[count($path) - 1], 3, -11) . '(' . $blame . ')';
                     break;
