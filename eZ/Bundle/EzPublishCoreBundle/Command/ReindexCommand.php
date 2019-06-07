@@ -8,6 +8,7 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
 use eZ\Publish\Core\Search\Common\Indexer;
 use eZ\Publish\Core\Search\Common\IncrementalIndexer;
@@ -162,7 +163,7 @@ EOT
         $iterationCount = $input->getOption('iteration-count');
         $this->siteaccess = $input->getOption('siteaccess');
         if (!is_numeric($iterationCount) || (int) $iterationCount < 1) {
-            throw new RuntimeException("'--iteration-count' option should be > 0, got '{$iterationCount}'");
+            throw new InvalidArgumentException('--iteration-count', "Option should be > 0, got '{$iterationCount}'");
         }
 
         if (!$this->searchIndexer instanceof IncrementalIndexer) {
@@ -390,7 +391,7 @@ EOT
     private function getPhpProcess(array $contentIds, $commit)
     {
         if (empty($contentIds)) {
-            throw new RuntimeException("'--content-ids=' can not be empty on parallel sub process");
+            throw new InvalidArgumentException('--content-ids', '$contentIds can not be empty');
         }
 
         $consolePath = file_exists('bin/console') ? 'bin/console' : 'app/console';
