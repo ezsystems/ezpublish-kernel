@@ -257,11 +257,9 @@ class RoleServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('loadRoles')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('loadRoles')->with(...$parameters);
-
-        $decoratedService->loadRoles(...$parameters);
+        $decoratedService->loadRoles();
     }
 
     public function testDeleteRoleDecorator()
@@ -445,11 +443,9 @@ class RoleServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newPolicyUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newPolicyUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newPolicyUpdateStruct(...$parameters);
+        $decoratedService->newPolicyUpdateStruct();
     }
 
     public function testNewRoleUpdateStructDecorator()
@@ -457,11 +453,9 @@ class RoleServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newRoleUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newRoleUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newRoleUpdateStruct(...$parameters);
+        $decoratedService->newRoleUpdateStruct();
     }
 
     public function testGetLimitationTypeDecorator()

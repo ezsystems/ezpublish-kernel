@@ -75,11 +75,9 @@ class SectionServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('loadSections')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('loadSections')->with(...$parameters);
-
-        $decoratedService->loadSections(...$parameters);
+        $decoratedService->loadSections();
     }
 
     public function testLoadSectionByIdentifierDecorator()
@@ -165,11 +163,9 @@ class SectionServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newSectionCreateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newSectionCreateStruct')->with(...$parameters);
-
-        $decoratedService->newSectionCreateStruct(...$parameters);
+        $decoratedService->newSectionCreateStruct();
     }
 
     public function testNewSectionUpdateStructDecorator()
@@ -177,10 +173,8 @@ class SectionServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newSectionUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newSectionUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newSectionUpdateStruct(...$parameters);
+        $decoratedService->newSectionUpdateStruct();
     }
 }

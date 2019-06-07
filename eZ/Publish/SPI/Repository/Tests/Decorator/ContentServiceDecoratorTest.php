@@ -463,11 +463,9 @@ class ContentServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newContentMetadataUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newContentMetadataUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newContentMetadataUpdateStruct(...$parameters);
+        $decoratedService->newContentMetadataUpdateStruct();
     }
 
     public function testNewContentUpdateStructDecorator()
@@ -475,10 +473,8 @@ class ContentServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newContentUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newContentUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newContentUpdateStruct(...$parameters);
+        $decoratedService->newContentUpdateStruct();
     }
 }

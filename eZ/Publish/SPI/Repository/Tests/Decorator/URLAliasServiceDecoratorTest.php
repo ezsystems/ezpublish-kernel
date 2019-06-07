@@ -166,10 +166,8 @@ class URLAliasServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('deleteCorruptedUrlAliases')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('deleteCorruptedUrlAliases')->with(...$parameters);
-
-        $decoratedService->deleteCorruptedUrlAliases(...$parameters);
+        $decoratedService->deleteCorruptedUrlAliases();
     }
 }

@@ -159,11 +159,9 @@ class UserServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('loadAnonymousUser')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('loadAnonymousUser')->with(...$parameters);
-
-        $decoratedService->loadAnonymousUser(...$parameters);
+        $decoratedService->loadAnonymousUser();
     }
 
     public function testLoadUserByCredentialsDecorator()
@@ -407,11 +405,9 @@ class UserServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newUserUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newUserUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newUserUpdateStruct(...$parameters);
+        $decoratedService->newUserUpdateStruct();
     }
 
     public function testNewUserGroupUpdateStructDecorator()
@@ -419,11 +415,9 @@ class UserServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newUserGroupUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newUserGroupUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newUserGroupUpdateStruct(...$parameters);
+        $decoratedService->newUserGroupUpdateStruct();
     }
 
     public function testValidatePasswordDecorator()

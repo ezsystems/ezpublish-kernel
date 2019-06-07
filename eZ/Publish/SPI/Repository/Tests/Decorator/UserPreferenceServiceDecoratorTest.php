@@ -70,10 +70,8 @@ class UserPreferenceServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('getUserPreferenceCount')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('getUserPreferenceCount')->with(...$parameters);
-
-        $decoratedService->getUserPreferenceCount(...$parameters);
+        $decoratedService->getUserPreferenceCount();
     }
 }

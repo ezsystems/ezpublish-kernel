@@ -34,11 +34,9 @@ class URLServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('createUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('createUpdateStruct')->with(...$parameters);
-
-        $decoratedService->createUpdateStruct(...$parameters);
+        $decoratedService->createUpdateStruct();
     }
 
     public function testFindUrlsDecorator()

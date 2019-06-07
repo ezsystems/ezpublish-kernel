@@ -250,11 +250,9 @@ class ObjectStateServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newObjectStateGroupUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newObjectStateGroupUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newObjectStateGroupUpdateStruct(...$parameters);
+        $decoratedService->newObjectStateGroupUpdateStruct();
     }
 
     public function testNewObjectStateCreateStructDecorator()
@@ -274,10 +272,8 @@ class ObjectStateServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newObjectStateUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newObjectStateUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newObjectStateUpdateStruct(...$parameters);
+        $decoratedService->newObjectStateUpdateStruct();
     }
 }

@@ -267,11 +267,9 @@ class LocationServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newLocationUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newLocationUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newLocationUpdateStruct(...$parameters);
+        $decoratedService->newLocationUpdateStruct();
     }
 
     public function testGetAllLocationsCountDecorator()
@@ -279,11 +277,9 @@ class LocationServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('getAllLocationsCount')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('getAllLocationsCount')->with(...$parameters);
-
-        $decoratedService->getAllLocationsCount(...$parameters);
+        $decoratedService->getAllLocationsCount();
     }
 
     public function testLoadAllLocationsDecorator()

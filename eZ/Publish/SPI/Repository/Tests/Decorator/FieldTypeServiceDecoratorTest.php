@@ -31,11 +31,9 @@ class FieldTypeServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('getFieldTypes')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('getFieldTypes')->with(...$parameters);
-
-        $decoratedService->getFieldTypes(...$parameters);
+        $decoratedService->getFieldTypes();
     }
 
     public function testGetFieldTypeDecorator()

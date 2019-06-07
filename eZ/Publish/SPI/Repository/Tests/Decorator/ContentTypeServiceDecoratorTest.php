@@ -391,11 +391,9 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newContentTypeUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newContentTypeUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newContentTypeUpdateStruct(...$parameters);
+        $decoratedService->newContentTypeUpdateStruct();
     }
 
     public function testNewContentTypeGroupUpdateStructDecorator()
@@ -403,11 +401,9 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newContentTypeGroupUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newContentTypeGroupUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newContentTypeGroupUpdateStruct(...$parameters);
+        $decoratedService->newContentTypeGroupUpdateStruct();
     }
 
     public function testNewFieldDefinitionCreateStructDecorator()
@@ -430,11 +426,9 @@ class ContentTypeServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('newFieldDefinitionUpdateStruct')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('newFieldDefinitionUpdateStruct')->with(...$parameters);
-
-        $decoratedService->newFieldDefinitionUpdateStruct(...$parameters);
+        $decoratedService->newFieldDefinitionUpdateStruct();
     }
 
     public function testIsContentTypeUsedDecorator()

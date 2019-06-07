@@ -73,11 +73,9 @@ class TrashServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $parameters = [];
+        $serviceMock->expects($this->exactly(1))->method('emptyTrash')->with();
 
-        $serviceMock->expects($this->exactly(1))->method('emptyTrash')->with(...$parameters);
-
-        $decoratedService->emptyTrash(...$parameters);
+        $decoratedService->emptyTrash();
     }
 
     public function testDeleteTrashItemDecorator()
