@@ -23,14 +23,14 @@ class RichTextTest extends AbstractParserTestCase
      *
      * @return ExtensionInterface[]
      */
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return array(
             new EzPublishCoreExtension(array(new RichTextConfigParser())),
         );
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return Yaml::parse(file_get_contents(__DIR__ . '/../../../Fixtures/FieldType/RichText/ezrichtext.yml'));
     }

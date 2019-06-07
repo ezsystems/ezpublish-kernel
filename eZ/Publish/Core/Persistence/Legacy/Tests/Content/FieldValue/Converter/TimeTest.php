@@ -37,7 +37,7 @@ class TimeTest extends TestCase
      */
     protected $time;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->converter = new TimeConverter();

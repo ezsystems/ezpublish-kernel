@@ -36,7 +36,7 @@ class LocaleListenerTest extends TestCase
      */
     private $requestStack;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->container = $this->createMock(ContainerInterface::class);

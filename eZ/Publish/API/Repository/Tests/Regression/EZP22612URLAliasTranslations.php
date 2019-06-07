@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Tests\BaseTest;
 
 class EZP22612URLAliasTranslations extends BaseTest
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $contentService = $this->getRepository()->getContentService();
         $draft = $contentService->createContent(

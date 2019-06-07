@@ -30,7 +30,7 @@ class TemplateRendererTest extends TestCase
      */
     private $eventDispatcherMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->templateEngineMock = $this->createMock(EngineInterface::class);
         $this->eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);

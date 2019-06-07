@@ -29,7 +29,7 @@ class UrlTest extends BaseServiceMockTest
      */
     private $urlHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->urlHandler = $this->getPersistenceMockHandler('URL\\Handler');

@@ -27,7 +27,7 @@ class CacheFactoryTest extends TestCase
      */
     private $container;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->configResolver = $this->createMock(ConfigResolverInterface::class);

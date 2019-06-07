@@ -16,7 +16,7 @@ class ComplexSettingParserTest extends TestCase
     /** @var ComplexSettingParser */
     private $parser;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->parser = new ComplexSettingParser();
     }

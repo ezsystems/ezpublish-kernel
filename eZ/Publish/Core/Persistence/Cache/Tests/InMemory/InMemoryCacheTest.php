@@ -24,7 +24,7 @@ class InMemoryCacheTest extends TestCase
     /**
      * Setup Test.
      */
-    final protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,7 +37,7 @@ class InMemoryCacheTest extends TestCase
     /**
      * Tear down test (properties).
      */
-    final protected function tearDown()
+protected function tearDown(): void
     {
         $this->cache->clear();
 

@@ -17,7 +17,7 @@ class TemplatesTest extends AbstractParserTestCase
 {
     private $config;
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return array(
             new EzPublishCoreExtension(
@@ -26,7 +26,7 @@ class TemplatesTest extends AbstractParserTestCase
         );
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return $this->config = Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_templates.yml'));
     }

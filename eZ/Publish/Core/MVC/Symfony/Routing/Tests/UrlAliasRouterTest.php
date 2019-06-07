@@ -63,7 +63,7 @@ class UrlAliasRouterTest extends TestCase
      */
     protected $router;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $repositoryClass = Repository::class;

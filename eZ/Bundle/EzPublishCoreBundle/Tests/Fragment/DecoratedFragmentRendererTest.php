@@ -23,7 +23,7 @@ class DecoratedFragmentRendererTest extends TestCase
      */
     protected $innerRenderer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->innerRenderer = $this->createMock(FragmentRendererInterface::class);

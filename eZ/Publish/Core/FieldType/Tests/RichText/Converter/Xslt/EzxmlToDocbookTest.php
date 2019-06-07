@@ -21,7 +21,7 @@ use eZ\Publish\Core\FieldType\RichText\Converter\Xslt;
  */
 class EzxmlToDocbookTest extends BaseTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -25,7 +25,7 @@ class ConfigResolverTest extends TestCase
      */
     private $containerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->siteAccess = new SiteAccess('test');

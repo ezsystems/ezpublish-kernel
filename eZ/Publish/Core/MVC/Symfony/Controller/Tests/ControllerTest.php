@@ -34,7 +34,7 @@ class ControllerTest extends TestCase
      */
     protected $containerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->templateEngineMock = $this->createMock(EngineInterface::class);
         $this->containerMock = $this->createMock(ContainerInterface::class);

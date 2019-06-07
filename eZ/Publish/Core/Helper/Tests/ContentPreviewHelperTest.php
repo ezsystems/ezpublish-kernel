@@ -35,7 +35,7 @@ class ContentPreviewHelperTest extends TestCase
      */
     private $previewHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);

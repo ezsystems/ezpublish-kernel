@@ -69,7 +69,7 @@ class UrlAliasGeneratorTest extends TestCase
      */
     private $configResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->router = $this->createMock(RouterInterface::class);

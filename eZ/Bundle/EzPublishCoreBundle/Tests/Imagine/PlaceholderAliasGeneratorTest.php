@@ -57,7 +57,7 @@ class PlaceholderAliasGeneratorTest extends TestCase
      */
     private $placeholderOptions;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->innerAliasGenerator = $this->createMock(VariationHandler::class);
         $this->ioService = $this->createMock(IOServiceInterface::class);

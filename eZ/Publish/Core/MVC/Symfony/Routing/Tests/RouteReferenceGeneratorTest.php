@@ -25,7 +25,7 @@ class RouteReferenceGeneratorTest extends TestCase
      */
     private $dispatcher;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);

@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ChainRoutingPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setDefinition('ezpublish.chain_router', new Definition());
@@ -28,7 +28,7 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new ChainRoutingPass());
     }

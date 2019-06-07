@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class TranslationCollectorPassTest extends AbstractCompilerPassTestCase
 {
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new TranslationCollectorPass());
     }

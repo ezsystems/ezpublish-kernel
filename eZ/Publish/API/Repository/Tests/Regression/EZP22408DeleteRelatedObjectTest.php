@@ -19,7 +19,7 @@ class EZP22408DeleteRelatedObjectTest extends BaseTest
      */
     private $testContentType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

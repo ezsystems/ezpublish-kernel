@@ -30,7 +30,7 @@ class HandlerTest extends TestCase
     /** @var \eZ\Publish\Core\Persistence\Legacy\Bookmark\Handler */
     private $handler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->gateway = $this->createMock(Gateway::class);
         $this->mapper = $this->createMock(Mapper::class);

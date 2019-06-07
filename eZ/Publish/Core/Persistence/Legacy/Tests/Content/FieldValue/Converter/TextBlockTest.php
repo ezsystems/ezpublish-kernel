@@ -30,7 +30,7 @@ class TextBlockTest extends TestCase
 
     protected $longText;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->converter = new TextBlockConverter();

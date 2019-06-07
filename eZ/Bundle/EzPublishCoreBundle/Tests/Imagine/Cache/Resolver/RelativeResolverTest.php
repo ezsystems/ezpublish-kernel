@@ -17,7 +17,7 @@ class RelativeResolverTest extends TestCase
      */
     private $liipResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->liipResolver = $this->getMockBuilder(ResolverInterface::class)->getMock();

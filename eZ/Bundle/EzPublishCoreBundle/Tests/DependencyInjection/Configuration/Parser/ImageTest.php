@@ -16,7 +16,7 @@ class ImageTest extends AbstractParserTestCase
 {
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -25,7 +25,7 @@ class ImageTest extends AbstractParserTestCase
         }
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         $this->config = Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_image.yml'));
         $this->config += array(
@@ -38,7 +38,7 @@ class ImageTest extends AbstractParserTestCase
         return $this->config;
     }
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return array(
             new EzPublishCoreExtension(array(new Image())),

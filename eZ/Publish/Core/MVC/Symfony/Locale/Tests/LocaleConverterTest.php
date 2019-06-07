@@ -26,7 +26,7 @@ class LocaleConverterTest extends TestCase
 
     private $conversionMap;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->conversionMap = array(

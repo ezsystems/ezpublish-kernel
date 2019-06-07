@@ -67,7 +67,7 @@ class ContentViewBuilderTest extends TestCase
      */
     private $requestStack;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->repository = $this->getMockBuilder(Repository::class)->disableOriginalConstructor()->setMethods(['sudo', 'getPermissionResolver'])->getMock();
         $this->viewConfigurator = $this->getMockBuilder(Configurator::class)->getMock();

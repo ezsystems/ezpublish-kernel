@@ -39,7 +39,7 @@ class UserLanguagePreferenceProviderTest extends TestCase
      */
     private $userPreferenceServiceMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->requestStackMock = $this->createMock(RequestStack::class);
 

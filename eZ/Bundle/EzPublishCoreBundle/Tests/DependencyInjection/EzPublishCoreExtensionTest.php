@@ -35,7 +35,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
      */
     private static $richTextDefaultSettings;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->extension = new EzPublishCoreExtension();
         $this->siteaccessConfig = array(
@@ -62,12 +62,12 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         parent::setUp();
     }
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return array($this->extension);
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return $this->minimalConfig = Yaml::parse(file_get_contents(__DIR__ . '/Fixtures/ezpublish_minimal_no_siteaccess.yml'));
     }

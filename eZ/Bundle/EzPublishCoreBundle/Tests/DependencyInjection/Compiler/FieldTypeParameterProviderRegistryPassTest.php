@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class FieldTypeParameterProviderRegistryPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setDefinition('ezpublish.fieldType.parameterProviderRegistry', new Definition());
@@ -28,7 +28,7 @@ class FieldTypeParameterProviderRegistryPassTest extends AbstractCompilerPassTes
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new FieldTypeParameterProviderRegistryPass());
     }

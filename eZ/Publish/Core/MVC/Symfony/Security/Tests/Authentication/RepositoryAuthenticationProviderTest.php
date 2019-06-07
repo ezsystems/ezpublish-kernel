@@ -38,7 +38,7 @@ class RepositoryAuthenticationProviderTest extends TestCase
      */
     private $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->encoderFactory = $this->createMock(EncoderFactoryInterface::class);

@@ -26,7 +26,7 @@ class AuthorTest extends FieldTypeTest
      */
     private $authors;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->authors = array(
@@ -408,7 +408,7 @@ class AuthorTest extends FieldTypeTest
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->authors);
         parent::tearDown();

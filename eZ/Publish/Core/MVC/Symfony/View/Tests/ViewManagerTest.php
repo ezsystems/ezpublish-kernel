@@ -61,7 +61,7 @@ class ViewManagerTest extends TestCase
 
     private $viewBaseLayout = 'EzPublishCoreBundle::viewbase.html.twig';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->templateEngineMock = $this->createMock(EngineInterface::class);

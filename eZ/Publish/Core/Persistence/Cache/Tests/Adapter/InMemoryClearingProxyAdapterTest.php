@@ -42,7 +42,7 @@ class InMemoryClearingProxyAdapterTest extends TestCase
     /**
      * Setup the HandlerTest.
      */
-    final protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -73,7 +73,7 @@ class InMemoryClearingProxyAdapterTest extends TestCase
     /**
      * Tear down test (properties).
      */
-    final protected function tearDown()
+protected function tearDown(): void
     {
         unset($this->cache);
         unset($this->innerPool);

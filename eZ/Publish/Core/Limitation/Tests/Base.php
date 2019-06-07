@@ -58,7 +58,7 @@ abstract class Base extends TestCase
     /**
      * unset properties.
      */
-    public function tearDown()
+protected function tearDown(): void
     {
         if ($this->persistenceHandlerMock !== null) {
             unset($this->persistenceHandlerMock);

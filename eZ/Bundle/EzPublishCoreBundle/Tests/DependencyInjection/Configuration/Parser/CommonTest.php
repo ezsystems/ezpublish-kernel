@@ -22,14 +22,14 @@ class CommonTest extends AbstractParserTestCase
      */
     private $suggestionCollector;
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         $this->suggestionCollector = $this->createMock(SuggestionCollectorInterface::class);
 
         return array(new EzPublishCoreExtension(array(new Common())));
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return $this->minimalConfig = Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_minimal.yml'));
     }

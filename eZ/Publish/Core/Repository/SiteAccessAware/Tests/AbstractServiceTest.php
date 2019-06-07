@@ -43,7 +43,7 @@ abstract class AbstractServiceTest extends TestCase
 
     abstract public function getSiteAccessAwareServiceClassName();
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->innerApiServiceMock = $this->getMockBuilder($this->getAPIServiceClassName())->getMock();
@@ -58,7 +58,7 @@ abstract class AbstractServiceTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->service);
         unset($this->languageResolverMock);

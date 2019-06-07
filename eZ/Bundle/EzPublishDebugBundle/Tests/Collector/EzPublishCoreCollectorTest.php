@@ -22,7 +22,7 @@ class EzPublishCoreCollectorTest extends TestCase
      */
     private $mainCollector;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->mainCollector = new EzPublishCoreCollector();

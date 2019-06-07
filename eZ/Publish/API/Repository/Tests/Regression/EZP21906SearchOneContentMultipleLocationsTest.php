@@ -18,7 +18,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
  */
 class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

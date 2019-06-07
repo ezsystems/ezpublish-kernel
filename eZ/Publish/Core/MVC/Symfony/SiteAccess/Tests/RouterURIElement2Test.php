@@ -24,7 +24,7 @@ class RouterURIElement2Test extends TestCase
      */
     private $matcherBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->matcherBuilder = new MatcherBuilder();

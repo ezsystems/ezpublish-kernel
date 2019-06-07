@@ -26,7 +26,7 @@ class LocationParamConverterTest extends AbstractParamConverterTest
 
     private $locationServiceMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->locationServiceMock = $this->createMock(LocationService::class);
 

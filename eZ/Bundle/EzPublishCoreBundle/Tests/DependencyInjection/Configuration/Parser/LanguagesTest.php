@@ -14,12 +14,12 @@ use Symfony\Component\Yaml\Yaml;
 
 class LanguagesTest extends AbstractParserTestCase
 {
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return array(new EzPublishCoreExtension(array(new Languages())));
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return $this->minimalConfig = Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_minimal.yml'));
     }

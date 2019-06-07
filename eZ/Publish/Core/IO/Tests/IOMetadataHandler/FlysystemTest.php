@@ -24,7 +24,7 @@ class FlysystemTest extends TestCase
     /** @var \League\Flysystem\FilesystemInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $filesystem;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->filesystem = $this->createMock(FilesystemInterface::class);
         $this->handler = new Flysystem($this->filesystem);

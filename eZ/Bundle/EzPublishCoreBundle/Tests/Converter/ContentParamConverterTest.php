@@ -26,7 +26,7 @@ class ContentParamConverterTest extends AbstractParamConverterTest
 
     private $contentServiceMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->contentServiceMock = $this->createMock(ContentService::class);
         $this->converter = new ContentParamConverter($this->contentServiceMock);

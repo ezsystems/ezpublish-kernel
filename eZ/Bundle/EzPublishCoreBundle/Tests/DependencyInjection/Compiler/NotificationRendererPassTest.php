@@ -19,14 +19,14 @@ class NotificationRendererPassTest extends AbstractCompilerPassTestCase
     const NOTIFICATION_RENDERER_ID = 'notification.renderer.id';
     const NOTIFICATION_ALIAS = 'example';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->setDefinition(NotificationRendererPass::REGISTRY_DEFINITION_ID, new Definition());
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new NotificationRendererPass());
     }

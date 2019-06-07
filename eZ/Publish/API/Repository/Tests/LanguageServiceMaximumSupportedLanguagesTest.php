@@ -32,7 +32,7 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
     /**
      * Creates as much languages as possible.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

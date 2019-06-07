@@ -30,7 +30,7 @@ class ResolverFactoryTest extends TestCase
      */
     private $factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->configResolver = $this->getMockBuilder(ConfigResolverInterface::class)->getMock();

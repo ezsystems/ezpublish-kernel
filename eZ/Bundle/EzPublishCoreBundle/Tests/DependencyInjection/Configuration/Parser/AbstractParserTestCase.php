@@ -13,17 +13,6 @@ use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 abstract class AbstractParserTestCase extends AbstractExtensionTestCase
 {
     /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
-     */
-    protected $configResolver;
-
-    protected function load(array $configurationValues = array())
-    {
-        parent::load($configurationValues);
-        $this->configResolver = $this->container->get('ezpublish.config.resolver.core');
-    }
-
-    /**
      * Asserts a parameter from ConfigResolver has expected value for given scope.
      *
      * @param string $parameterName
@@ -33,7 +22,8 @@ abstract class AbstractParserTestCase extends AbstractExtensionTestCase
      */
     protected function assertConfigResolverParameterValue($parameterName, $expectedValue, $scope, $assertSame = true)
     {
+        $configResolver = $this->container->get('ezpublish.config.resolver.core');
         $assertMethod = $assertSame ? 'assertSame' : 'assertEquals';
-        $this->$assertMethod($expectedValue, $this->configResolver->getParameter($parameterName, 'ezsettings', $scope));
+        $this->$assertMethod($expectedValue, $configResolver->getParameter($parameterName, 'ezsettings', $scope));
     }
 }

@@ -68,7 +68,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
     /**
      * Setup the HandlerTest.
      */
-    final protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -115,7 +115,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
     /**
      * Tear down test (properties).
      */
-    final protected function tearDown()
+protected function tearDown(): void
     {
         unset($this->cacheMock);
         unset($this->persistenceHandlerMock);

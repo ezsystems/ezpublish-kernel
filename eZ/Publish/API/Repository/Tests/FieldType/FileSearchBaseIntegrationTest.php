@@ -86,7 +86,7 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
     /**
      * Perform storage directory setup on first execution.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

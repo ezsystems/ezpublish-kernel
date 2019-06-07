@@ -27,7 +27,7 @@ class EZP21109EzIntegerTest extends BaseTest
      */
     protected $contentType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -37,7 +37,7 @@ class EZP21109EzIntegerTest extends BaseTest
         $this->contentType = $this->createTestContentType();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteTestContentType();
         parent::tearDown();

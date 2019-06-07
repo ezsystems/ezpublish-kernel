@@ -60,7 +60,7 @@ class ViewControllerListenerTest extends TestCase
     /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $eventDispatcher;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->controllerResolver = $this->createMock(ControllerResolverInterface::class);

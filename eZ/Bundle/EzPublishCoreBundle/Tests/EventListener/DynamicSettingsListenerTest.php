@@ -32,7 +32,7 @@ class DynamicSettingsListenerTest extends TestCase
      */
     private $expressionLanguage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->container = $this->createMock(ContainerInterface::class);

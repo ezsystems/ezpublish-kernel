@@ -44,7 +44,7 @@ class SiteAccessListenerTest extends TestCase
     /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     private $defaultSiteaccess;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->defaultSiteaccess = new SiteAccess('default');

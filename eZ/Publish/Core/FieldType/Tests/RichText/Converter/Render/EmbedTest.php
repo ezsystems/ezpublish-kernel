@@ -16,7 +16,7 @@ use Psr\Log\LoggerInterface;
 
 class EmbedTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->rendererMock = $this->getRendererMock();
         $this->loggerMock = $this->getLoggerMock();

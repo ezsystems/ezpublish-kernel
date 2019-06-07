@@ -49,7 +49,7 @@ abstract class BaseTest extends TestCase
      */
     private $repository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -75,7 +75,7 @@ abstract class BaseTest extends TestCase
     /**
      * Resets the temporary used repository between each test run.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->repository = null;
         parent::tearDown();

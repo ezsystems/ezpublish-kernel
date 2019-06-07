@@ -37,7 +37,7 @@ class SessionSetDynamicNameListenerTest extends TestCase
      */
     private $sessionStorage;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->configResolver = $this->getMockBuilder(ConfigResolverInterface::class)

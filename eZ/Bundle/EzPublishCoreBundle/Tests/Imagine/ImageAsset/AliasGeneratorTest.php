@@ -41,7 +41,7 @@ class AliasGeneratorTest extends TestCase
      */
     private $assetMapper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->innerAliasGenerator = $this->createMock(VariationHandler::class);
         $this->contentService = $this->createMock(ContentService::class);

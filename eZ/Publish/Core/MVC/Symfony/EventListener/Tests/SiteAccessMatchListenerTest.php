@@ -43,7 +43,7 @@ class SiteAccessMatchListenerTest extends TestCase
      */
     private $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->saRouter = $this->createMock(Router::class);

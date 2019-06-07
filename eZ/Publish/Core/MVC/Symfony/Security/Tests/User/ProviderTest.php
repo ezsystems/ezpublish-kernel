@@ -39,7 +39,7 @@ class ProviderTest extends TestCase
      */
     private $userProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->userService = $this->createMock(UserService::class);

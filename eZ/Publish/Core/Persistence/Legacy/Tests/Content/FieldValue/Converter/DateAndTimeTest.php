@@ -38,7 +38,7 @@ class DateAndTimeTest extends TestCase
      */
     protected $date;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->converter = new DateAndTimeConverter();

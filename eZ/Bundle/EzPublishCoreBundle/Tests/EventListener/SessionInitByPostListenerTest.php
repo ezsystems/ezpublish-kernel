@@ -29,7 +29,7 @@ class SessionInitByPostListenerTest extends TestCase
      */
     private $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->session = $this->createMock(SessionInterface::class);
