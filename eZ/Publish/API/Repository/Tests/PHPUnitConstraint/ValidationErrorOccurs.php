@@ -28,8 +28,6 @@ class ValidationErrorOccurs extends AbstractPHPUnitConstraint
      */
     public function __construct($expectedValidationErrorMessage)
     {
-        parent::__construct();
-
         $this->expectedValidationErrorMessage = $expectedValidationErrorMessage;
     }
 

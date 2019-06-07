@@ -66,7 +66,7 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
         }
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         while (($language = array_pop($this->createdLanguages)) !== null) {
             $this->languageService->deleteLanguage($language);
