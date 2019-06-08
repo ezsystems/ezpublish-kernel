@@ -297,3 +297,7 @@ services:
             - [setEnableViewCache, [$content.view_cache$]]
         tags:
             - { name: kernel.event_subscriber }
+
+    eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\DataAttributesExtension:
+        autoconfigure: true
+        public: false

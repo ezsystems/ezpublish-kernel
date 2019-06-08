@@ -1,0 +1,37 @@
+--TEST--
+"ez_data_attributes_serialize" filter
+--TEMPLATE--
+<a href="/article" {{ data_attributes|ez_data_attributes_serialize }}>Article</a>
+--DATA--
+return [
+    'data_attributes' => [
+        'my-attr1' => 'value1',
+        'my-attr2' => 'value2,value3',
+    ]
+];
+--EXPECT--
+<a href="/article" data-my-attr1="value1" data-my-attr2="value2,value3">Article</a>
+--DATA--
+return [
+    'data_attributes' => [
+        'attr' => 'foo" style="background: red',
+    ]
+];
+--EXPECT--
+<a href="/article" data-attr="foo&quot; style=&quot;background: red">Article</a>
+--DATA--
+return [
+    'data_attributes' => [
+        'attr' => true,
+    ]
+];
+--EXPECT--
+<a href="/article" data-attr="true">Article</a>
+--DATA--
+return [
+    'data_attributes' => [
+        'attr' => ['key1' => 'value1', 'key2' => 'value2'],
+    ]
+];
+--EXPECT--
+<a href="/article" data-attr="{&quot;key1&quot;:&quot;value1&quot;,&quot;key2&quot;:&quot;value2&quot;}">Article</a>
