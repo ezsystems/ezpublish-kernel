@@ -91,7 +91,7 @@ class SiteAccessListener implements EventSubscriberInterface
      *               Second element is the view parameters hash.
      *               Third element is the view parameters string (e.g. /(foo)/bar)
      */
-    private function getViewParameters($pathinfo): array
+    private function getViewParameters(string $pathinfo): array
     {
         // No view parameters, get out of here.
         if (($vpStart = strpos($pathinfo, '/(')) === false) {
@@ -114,7 +114,7 @@ class SiteAccessListener implements EventSubscriberInterface
      *
      * @return array
      */
-    private function generateViewParametersArray($vpString): array
+    private function generateViewParametersArray(string $vpString): array
     {
         $vpString = trim($vpString, '/');
         $viewParameters = array();

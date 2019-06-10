@@ -26,7 +26,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     const FIELD_DEFINITION_EDIT_SUFFIX = '_field_definition_edit';
 
     /**
-     * @var Environment
+     * @var \Twig\Environment
      */
     private $twig;
 
@@ -35,7 +35,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * Either the path to each template and its priority in a hash or its
      * \Twig\Template (compiled) counterpart.
      *
-     * @var Template[]|array
+     * @var \Twig\Template[]|array
      */
     private $fieldViewResources = [];
 
@@ -44,7 +44,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * Either the path to each template and its priority in a hash or its
      * \Twig\Template (compiled) counterpart.
      *
-     * @var Template[]|array
+     * @var \Twig\Template[]|array
      */
     private $fieldEditResources = [];
 
@@ -53,7 +53,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * Either the path to each template and its priority in a hash or its
      * \Twig\Template (compiled) counterpart.
      *
-     * @var Template[]|array
+     * @var \Twig\Template[]|array
      */
     private $fieldDefinitionViewResources = [];
 
@@ -62,14 +62,14 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * Either the path to each template and its priority in a hash or its
      * \Twig\Template (compiled) counterpart.
      *
-     * @var Template[]|array
+     * @var \Twig\Template[]|array
      */
     private $fieldDefinitionEditResources = [];
 
     /**
      * A \Twig\Template instance used to render template blocks, or path to the template to use.
      *
-     * @var Template|string
+     * @var \Twig\Template|string
      */
     private $baseTemplate;
 
@@ -81,7 +81,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     private $blocks = [];
 
     /**
-     * @param Environment $twig
+     * @param \Twig\Environment $twig
      */
     public function setTwig(Environment $twig)
     {
@@ -89,7 +89,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     }
 
     /**
-     * @param string|Template $baseTemplate
+     * @param string|\Twig\Template $baseTemplate
      */
     public function setBaseTemplate($baseTemplate)
     {
@@ -227,11 +227,11 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      * found, returns null.
      *
      * @param string $blockName
-     * @param Template $tpl
+     * @param \Twig\Template $tpl
      *
      * @return array|null
      */
-    private function searchBlock($blockName, Template $tpl)
+    private function searchBlock(string $blockName, Template $tpl)
     {
         // Current template might have parents, so we need to loop against
         // them to find a matching block
@@ -253,7 +253,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
      *
      * @param string $fieldTypeIdentifier
      * @param int $type Either self::VIEW or self::EDIT
-     * @param null|string|Template $localTemplate a file where to look for the block first
+     * @param null|string|\Twig\Template $localTemplate a file where to look for the block first
      *
      * @return array
      */
