@@ -1,5 +1,11 @@
+{%
+    set data_attributes_str = (data_attributes is defined)
+        ? ' ' ~ data_attributes|ez_data_attributes_serialize
+        : ''
+%}
+
 {% if location is defined %}
-    <a href="{{ path(location) }}">{{ content.name }}</a>
+    <a href="{{ path(location) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
 {% else %}
-    <a href="{{ path( "ez_urlalias", {"contentId": content.id} ) }}">{{ content.name }}</a>
+    <a href="{{ path( "ez_urlalias", {"contentId": content.id} ) }}"{% if class is defined %} class="{{ class }}"{% endif %}{{ data_attributes_str|raw }}>{{ content.name }}</a>
 {% endif %}
