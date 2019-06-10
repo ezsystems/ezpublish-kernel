@@ -50,7 +50,7 @@
     "require-dev": {
         "brianium/paratest": "^3.0",
         "friendsofphp/php-cs-fixer": "^2.15",
-        "phpunit/phpunit": "^8.1",
+        "phpunit/phpunit": "^8.2",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
         "ezsystems/behatbundle": "^7.0@dev"
     },
