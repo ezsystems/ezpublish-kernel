@@ -26,7 +26,7 @@ use RuntimeException;
  */
 class SearchServiceFulltextTest extends BaseTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

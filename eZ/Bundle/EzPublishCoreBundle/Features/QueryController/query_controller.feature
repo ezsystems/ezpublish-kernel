@@ -3,6 +3,7 @@ Feature: Query controller
     As a developer
     I want to run repository queries from content views
 
+@broken
 Scenario: A content view can be configured to run and render a query
     Given a content item that matches the view configuration block below
       And the following content view configuration block:

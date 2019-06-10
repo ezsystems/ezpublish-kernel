@@ -19,14 +19,14 @@ class PlaceholderProviderPassTest extends AbstractCompilerPassTestCase
     const PROVIDER_ID = 'provider.id';
     const PROVIDER_TYPE = 'provider.test';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->setDefinition(PlaceholderProviderPass::REGISTRY_DEFINITION_ID, new Definition());
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new PlaceholderProviderPass());
     }

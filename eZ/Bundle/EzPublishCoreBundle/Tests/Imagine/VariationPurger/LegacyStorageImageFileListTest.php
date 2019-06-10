@@ -17,7 +17,7 @@ class LegacyStorageImageFileListTest extends TestCase
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPurger\LegacyStorageImageFileList */
     protected $fileList;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->rowReaderMock = $this->createMock(ImageFileRowReader::class);
         $this->fileList = new LegacyStorageImageFileList(

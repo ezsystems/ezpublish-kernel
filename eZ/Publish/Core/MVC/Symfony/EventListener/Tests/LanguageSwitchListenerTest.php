@@ -23,7 +23,7 @@ class LanguageSwitchListenerTest extends TestCase
      */
     private $translationHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->translationHelper = $this->getMockBuilder(TranslationHelper::class)

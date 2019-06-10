@@ -39,4 +39,9 @@ class SiteAccessCollector extends DataCollector
     {
         return $this->data['siteAccess'];
     }
+
+    public function reset(): void
+    {
+        $this->data = [];
+    }
 }

@@ -53,7 +53,7 @@ class PreviewControllerTest extends TestCase
 
     protected $controllerChecker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -27,7 +27,7 @@ class APIFieldTypeTest extends TestCase
      */
     private $fieldType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->innerFieldType = $this->createMock(SPIFieldType::class);

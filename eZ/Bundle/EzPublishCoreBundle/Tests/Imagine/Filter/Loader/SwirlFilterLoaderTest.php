@@ -25,7 +25,7 @@ class SwirlFilterLoaderTest extends TestCase
      */
     private $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->filter = $this->createMock(FilterInterface::class);

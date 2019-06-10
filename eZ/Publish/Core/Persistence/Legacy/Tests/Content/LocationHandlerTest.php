@@ -65,7 +65,7 @@ class LocationHandlerTest extends TestCase
      */
     protected $treeHandler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -28,7 +28,7 @@ class URLCheckerTest extends TestCase
     /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $logger;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urlService = $this->createMock(URLService::class);
         $this->urlService

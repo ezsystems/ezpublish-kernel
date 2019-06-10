@@ -33,7 +33,7 @@ class HandlerTest extends TestCase
      */
     private $handler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->gateway = $this->createMock(Gateway::class);

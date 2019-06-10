@@ -30,7 +30,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
      */
     protected $gateway;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

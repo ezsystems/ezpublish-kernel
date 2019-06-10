@@ -8,6 +8,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+use eZ\Publish\API\Repository\Tests\Container\Compiler\SetAllServicesPublicPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -42,7 +44,6 @@ $loader->load('storage_engines/common.yml');
 $loader->load('storage_engines/cache.yml');
 $loader->load('storage_engines/legacy.yml');
 $loader->load('storage_engines/shortcuts.yml');
-$loader->load('search_engines/common.yml');
 $loader->load('settings.yml');
 $loader->load('utils.yml');
 $loader->load('tests/common.yml');
@@ -81,5 +82,11 @@ $containerBuilder->addCompilerPass(new Compiler\Storage\Legacy\RoleLimitationCon
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriteriaConverterPass());
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\CriterionFieldValueHandlerRegistryPass());
 $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\SortClauseConverterPass());
+
+//
+// Symfony 4 makes services private by default. Test cases are not prepared for this.
+// This is a simple workaround to override services as public.
+//
+$containerBuilder->addCompilerPass(new SetAllServicesPublicPass());
 
 return $containerBuilder;

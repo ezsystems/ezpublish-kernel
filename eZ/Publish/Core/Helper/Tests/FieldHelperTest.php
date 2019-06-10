@@ -43,7 +43,7 @@ class FieldHelperTest extends TestCase
      */
     private $translationHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->fieldTypeServiceMock = $this->createMock(FieldTypeService::class);

@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class SignalSlotPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setDefinition('ezpublish.signalslot.signal_dispatcher', new Definition());
@@ -28,7 +28,7 @@ class SignalSlotPassTest extends AbstractCompilerPassTestCase
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new SignalSlotPass());
     }

@@ -16,13 +16,13 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class DataCollectorPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setDefinition('ezpublish_debug.data_collector', new Definition());
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new DataCollectorPass());
     }

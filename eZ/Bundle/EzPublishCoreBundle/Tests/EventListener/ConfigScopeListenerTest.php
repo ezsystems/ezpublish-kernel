@@ -34,7 +34,7 @@ class ConfigScopeListenerTest extends TestCase
      */
     private $viewProviders;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->configResolver = $this->createMock(VersatileScopeInterface::class);

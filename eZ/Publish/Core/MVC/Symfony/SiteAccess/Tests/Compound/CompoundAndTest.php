@@ -25,7 +25,7 @@ class CompoundAndTest extends TestCase
      */
     private $matcherBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->matcherBuilder = $this->createMock(MatcherBuilderInterface::class);

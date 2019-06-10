@@ -111,7 +111,7 @@ abstract class TestCase extends BaseTestCase
      * Resets the database on test setup, so we always operate on a clean
      * database.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         try {
             $handler = $this->getDatabaseHandler();
@@ -131,7 +131,7 @@ abstract class TestCase extends BaseTestCase
         $this->resetSequences();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->handler);
         unset($this->connection);

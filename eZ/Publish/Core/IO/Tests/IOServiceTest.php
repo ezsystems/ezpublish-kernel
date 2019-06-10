@@ -37,7 +37,7 @@ class IOServiceTest extends TestCase
     /** @var MimeTypeDetector|\PHPUnit\Framework\MockObject\MockObject */
     protected $mimeTypeDetectorMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

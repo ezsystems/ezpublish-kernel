@@ -93,7 +93,7 @@ class AliasGeneratorTest extends TestCase
      */
     private $variationPathGenerator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->dataLoader = $this->createMock(LoaderInterface::class);

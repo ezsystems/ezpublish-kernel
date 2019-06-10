@@ -26,7 +26,7 @@ class SectionServiceTest extends BaseTest
      * at least returns an object, because this method is utilized in several
      * tests,.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

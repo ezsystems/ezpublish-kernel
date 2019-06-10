@@ -43,7 +43,7 @@ class IndexRequestListenerTest extends TestCase
      */
     private $httpKernel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

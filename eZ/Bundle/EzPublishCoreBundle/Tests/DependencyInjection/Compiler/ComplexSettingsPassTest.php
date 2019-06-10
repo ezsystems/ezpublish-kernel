@@ -20,7 +20,7 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
     /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParserInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $parserMock;
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new ComplexSettingsPass(new ComplexSettingParser()));
     }

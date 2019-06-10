@@ -31,15 +31,18 @@ services:
         alias: ezpublish.core.io.metadata_handler.flysystem
 
     ezpublish.core.io.metadata_handler.flysystem:
+        public: true # @todo should be private
         class: "%ezpublish.core.io.metadata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"
 
     # binarydata handlers
     ezpublish.core.io.binarydata_handler:
+        public: true # @todo should be private
         alias: ezpublish.core.io.binarydata_handler.flysystem
 
     ezpublish.core.io.binarydata_handler.flysystem:
+        public: true # @todo should be private
         class: "%ezpublish.core.io.binarydata_handler.flysystem.class%"
         arguments:
             - "@ezpublish.core.io.flysystem.default_filesystem"

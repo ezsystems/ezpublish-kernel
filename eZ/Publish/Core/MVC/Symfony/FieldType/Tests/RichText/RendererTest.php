@@ -25,7 +25,7 @@ use Symfony\Component\Templating\EngineInterface;
 
 class RendererTest extends TestCase
 {
-    public function setUp()
+    protected function setUp(): void
     {
         $this->repositoryMock = $this->getRepositoryMock();
         $this->authorizationCheckerMock = $this->getAuthorizationCheckerMock();

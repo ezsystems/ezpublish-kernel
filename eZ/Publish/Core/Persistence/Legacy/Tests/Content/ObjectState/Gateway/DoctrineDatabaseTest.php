@@ -35,7 +35,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     /**
      * Inserts DB fixture.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

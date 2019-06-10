@@ -24,7 +24,7 @@ class PersistenceLoggerTest extends TestCase
     /**
      * Setup the HandlerTest.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->logger = new PersistenceLogger();
@@ -33,7 +33,7 @@ class PersistenceLoggerTest extends TestCase
     /**
      * Tear down test (properties).
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->logger);
         parent::tearDown();

@@ -24,7 +24,7 @@ abstract class ConfigurationFactoryTest extends AbstractContainerBuilderTestCase
     /** @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory */
     protected $factory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

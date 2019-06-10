@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterStorageEnginePassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setDefinition('ezpublish.api.storage_engine.factory', new Definition());
@@ -29,7 +29,7 @@ class RegisterStorageEnginePassTest extends AbstractCompilerPassTestCase
      *
      *   $container->addCompilerPass(new MyCompilerPass());
      */
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new RegisterStorageEnginePass());
     }

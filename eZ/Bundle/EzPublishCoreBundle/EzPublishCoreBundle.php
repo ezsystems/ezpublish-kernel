@@ -8,7 +8,6 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\AsseticPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\BinaryContentDownloadPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ComplexSettingsPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ConfigResolverParameterPass;
@@ -77,7 +76,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new ImaginePass());
         $container->addCompilerPass(new ComplexSettingsPass(new ComplexSettingParser()));
         $container->addCompilerPass(new ConfigResolverParameterPass(new DynamicSettingParser()));
-        $container->addCompilerPass(new AsseticPass());
         $container->addCompilerPass(new URLHandlerPass());
         $container->addCompilerPass(new BinaryContentDownloadPass());
         $container->addCompilerPass(new ViewProvidersPass());

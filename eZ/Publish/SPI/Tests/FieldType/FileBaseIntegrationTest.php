@@ -2,6 +2,7 @@
 
 namespace eZ\Publish\SPI\Tests\FieldType;
 
+use eZ\Publish\API\Repository\Tests\Container\Compiler\SetAllServicesPublicPass;
 use eZ\Publish\Core\IO\IOServiceInterface;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
@@ -62,7 +63,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     /**
      * Sets up a temporary directory and stores its path in self::$tmpDir.
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $calledClass = get_called_class();
 
@@ -91,7 +92,7 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
     /**
      * Removes the temp dir.
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         self::removeRecursive(self::$tmpDir);
         parent::tearDownAfterClass();
@@ -160,6 +161,8 @@ abstract class FileBaseIntegrationTest extends BaseIntegrationTest
             'io_root_dir',
             self::$tmpDir . '/var/ezdemo_site/storage'
         );
+
+        $containerBuilder->addCompilerPass(new SetAllServicesPublicPass());
 
         $containerBuilder->compile();
 

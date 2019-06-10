@@ -8,9 +8,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\EventListener\FragmentListener;
 
@@ -45,7 +45,7 @@ class FragmentPass implements CompilerPassInterface
             $definition->setPublic(false);
             $container->setDefinition($renamedId, $definition);
 
-            $decoratedDef = new DefinitionDecorator('ezpublish.decorated_fragment_renderer');
+            $decoratedDef = new ChildDefinition('ezpublish.decorated_fragment_renderer');
             $decoratedDef->setArguments(array(new Reference($renamedId)));
             $decoratedDef->setPublic($public);
             $decoratedDef->setTags($tags);

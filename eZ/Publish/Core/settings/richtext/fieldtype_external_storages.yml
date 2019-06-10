@@ -4,6 +4,7 @@ parameters:
 services:
     ezpublish.fieldType.ezrichtext.externalStorage:
         class: "%ezpublish.fieldType.ezrichtext.externalStorage.class%"
+        public: true # @todo should be private
         arguments: ["@ezpublish.fieldType.ezrichtext.storage_gateway"]
         tags:
             - {name: ezpublish.fieldType.externalStorageHandler, alias: ezrichtext}

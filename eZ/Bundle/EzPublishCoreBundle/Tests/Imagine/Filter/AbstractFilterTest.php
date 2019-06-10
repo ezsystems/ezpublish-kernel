@@ -18,7 +18,7 @@ class AbstractFilterTest extends TestCase
      */
     protected $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->filter = $this->getFilter();

@@ -36,6 +36,7 @@ services:
         arguments:
           - "@ezpublish.cache_pool.inner"
           - !tagged ez.spi.persistence.cache.inmemory
+        public: true # @todo should be private
 
     ezpublish.cache_pool.inner:
         public: false

@@ -21,7 +21,7 @@ abstract class BaseLimitationIntegrationTest extends BaseTest
      */
     protected $permissionResolver;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $repository = $this->getRepository(false);
         $this->permissionResolver = $repository->getPermissionResolver();

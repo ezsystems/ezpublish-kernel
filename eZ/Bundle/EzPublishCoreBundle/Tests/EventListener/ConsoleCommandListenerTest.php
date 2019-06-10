@@ -59,7 +59,7 @@ class ConsoleCommandListenerTest extends TestCase
      */
     private $testOutput;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->siteAccess = new SiteAccess();

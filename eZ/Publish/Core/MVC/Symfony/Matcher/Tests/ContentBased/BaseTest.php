@@ -26,7 +26,7 @@ abstract class BaseTest extends TestCase
      */
     protected $repositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->repositoryMock = $this->getRepositoryMock();

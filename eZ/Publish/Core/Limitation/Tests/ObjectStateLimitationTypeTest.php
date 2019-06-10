@@ -42,7 +42,7 @@ class ObjectStateLimitationTypeTest extends Base
     /**
      * Setup Handler mock.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -74,7 +74,7 @@ class ObjectStateLimitationTypeTest extends Base
     /**
      * Tear down Handler mock.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->objectStateHandlerMock);
 

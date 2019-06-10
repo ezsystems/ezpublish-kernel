@@ -25,7 +25,7 @@ class CropFilterLoaderTest extends TestCase
      */
     private $loader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->innerLoader = $this->createMock(LoaderInterface::class);

@@ -26,7 +26,7 @@ class DoctrineDatabaseTest extends TestCase
     /**
      * Inserts DB fixture.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

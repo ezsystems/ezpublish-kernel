@@ -36,7 +36,7 @@ class BinaryLoaderTest extends TestCase
      */
     private $binaryLoader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->ioService = $this->createMock(IOServiceInterface::class);

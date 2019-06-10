@@ -25,7 +25,7 @@ class ConfigResolverTest extends TestCase
      */
     private $containerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->siteAccess = new SiteAccess('test');
@@ -42,6 +42,7 @@ class ConfigResolverTest extends TestCase
     private function getResolver($defaultNS = 'ezsettings', $undefinedStrategy = ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, array $groupsBySiteAccess = array())
     {
         $configResolver = new ConfigResolver(
+            null,
             $groupsBySiteAccess,
             $defaultNS,
             $undefinedStrategy

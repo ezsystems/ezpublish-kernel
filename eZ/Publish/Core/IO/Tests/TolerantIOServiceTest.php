@@ -16,7 +16,7 @@ use eZ\Publish\Core\IO\Values\MissingBinaryFile;
  */
 class TolerantIOServiceTest extends IOServiceTest
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

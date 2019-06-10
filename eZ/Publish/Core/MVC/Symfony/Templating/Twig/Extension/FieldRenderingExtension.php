@@ -15,14 +15,14 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistryInterface;
 use eZ\Publish\Core\MVC\Symfony\Templating\FieldBlockRendererInterface;
-use Twig_Environment;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Environment;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Twig extension for content fields/fieldDefinitions rendering (view and edit).
  */
-class FieldRenderingExtension extends Twig_Extension
+class FieldRenderingExtension extends AbstractExtension
 {
     /**
      * @var FieldBlockRendererInterface|\eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
@@ -64,18 +64,18 @@ class FieldRenderingExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_render_field',
-                function (Twig_Environment $environment, Content $content, $fieldIdentifier, array $params = []) {
+                function (Environment $environment, Content $content, $fieldIdentifier, array $params = []) {
                     $this->fieldBlockRenderer->setTwig($environment);
 
                     return $this->renderField($content, $fieldIdentifier, $params);
                 },
                 ['is_safe' => ['html'], 'needs_environment' => true]
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_render_fielddefinition_settings',
-                function (Twig_Environment $environment, FieldDefinition $fieldDefinition, array $params = []) {
+                function (Environment $environment, FieldDefinition $fieldDefinition, array $params = []) {
                     $this->fieldBlockRenderer->setTwig($environment);
 
                     return $this->renderFieldDefinitionSettings($fieldDefinition, $params);

@@ -7,7 +7,9 @@ namespace eZ\Bundle\EzPublishCoreBundle\Routing\JsRouting;
 
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use FOS\JsRoutingBundle\Extractor\ExposedRoutesExtractorInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 /**
  * Decorator of FOSJsRouting routes extractor.
@@ -16,22 +18,22 @@ use Symfony\Component\HttpFoundation\Request;
 class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
 {
     /**
-     * @var ExposedRoutesExtractorInterface
+     * @var \FOS\JsRoutingBundle\Extractor\ExposedRoutesExtractorInterface
      */
     private $innerExtractor;
 
     /**
-     * @var Request
+     * @var \Symfony\Component\HttpFoundation\RequestStack
      */
-    private $masterRequest;
+    private $requestStack;
 
-    public function __construct(ExposedRoutesExtractorInterface $innerExtractor, Request $masterRequest)
+    public function __construct(ExposedRoutesExtractorInterface $innerExtractor, RequestStack $requestStack)
     {
         $this->innerExtractor = $innerExtractor;
-        $this->masterRequest = $masterRequest;
+        $this->requestStack = $requestStack;
     }
 
-    public function getRoutes()
+    public function getRoutes(): RouteCollection
     {
         return $this->innerExtractor->getRoutes();
     }
@@ -43,10 +45,11 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
      *
      * @return string
      */
-    public function getBaseUrl()
+    public function getBaseUrl(): string
     {
+        $masterRequest = $this->requestStack->getMasterRequest();
         $baseUrl = $this->innerExtractor->getBaseUrl();
-        $siteAccess = $this->masterRequest->attributes->get('siteaccess');
+        $siteAccess = $masterRequest->attributes->get('siteaccess');
         if ($siteAccess instanceof SiteAccess && $siteAccess->matcher instanceof SiteAccess\URILexer) {
             $baseUrl .= $siteAccess->matcher->analyseLink('');
         }
@@ -54,33 +57,38 @@ class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
         return $baseUrl;
     }
 
-    public function getPrefix($locale)
+    public function getPrefix($locale): string
     {
         return $this->innerExtractor->getPrefix($locale);
     }
 
-    public function getHost()
+    public function getHost(): string
     {
         return $this->innerExtractor->getHost();
     }
 
-    public function getScheme()
+    public function getScheme(): string
     {
         return $this->innerExtractor->getScheme();
     }
 
-    public function getCachePath($locale)
+    public function getCachePath($locale): string
     {
         return $this->innerExtractor->getCachePath($locale);
     }
 
-    public function getResources()
+    public function getResources(): array
     {
         return $this->innerExtractor->getResources();
     }
 
-    public function getExposedRoutes()
+    public function getPort(): string
     {
-        return $this->innerExtractor->getExposedRoutes();
+        return $this->innerExtractor->getPort();
+    }
+
+    public function isRouteExposed(Route $route, $name): bool
+    {
+        return $this->innerExtractor->isRouteExposed($route, $name);
     }
 }

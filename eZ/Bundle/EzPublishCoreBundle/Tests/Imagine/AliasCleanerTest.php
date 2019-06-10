@@ -24,7 +24,7 @@ class AliasCleanerTest extends TestCase
      */
     private $resolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resolver = $this->createMock(ResolverInterface::class);

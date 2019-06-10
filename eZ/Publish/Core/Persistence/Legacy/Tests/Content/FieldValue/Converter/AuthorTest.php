@@ -37,7 +37,7 @@ class AuthorTest extends TestCase
      */
     private $authors;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->converter = new AuthorConverter();
@@ -48,7 +48,7 @@ class AuthorTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->authors);
         parent::tearDown();

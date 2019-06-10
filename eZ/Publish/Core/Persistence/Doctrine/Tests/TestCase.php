@@ -19,7 +19,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected $handler;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $dsn = getenv('DATABASE');
 

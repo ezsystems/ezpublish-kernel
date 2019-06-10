@@ -29,7 +29,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
  */
 class EZP21069Test extends BaseTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

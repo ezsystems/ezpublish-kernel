@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode;
  */
 class EZP20018LanguageTest extends BaseTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

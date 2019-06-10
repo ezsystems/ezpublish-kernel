@@ -63,7 +63,7 @@ class SecurityListenerTest extends TestCase
      */
     protected $listener;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->repository = $this->createMock(Repository::class);

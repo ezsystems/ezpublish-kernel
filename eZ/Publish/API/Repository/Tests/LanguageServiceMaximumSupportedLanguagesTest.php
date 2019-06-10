@@ -32,7 +32,7 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
     /**
      * Creates as much languages as possible.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -66,7 +66,7 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
         }
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         while (($language = array_pop($this->createdLanguages)) !== null) {
             $this->languageService->deleteLanguage($language);

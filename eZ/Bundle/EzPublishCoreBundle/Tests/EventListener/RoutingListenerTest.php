@@ -37,7 +37,7 @@ class RoutingListenerTest extends TestCase
      */
     private $urlAliasGenerator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->container = $this->createMock(ContainerInterface::class);

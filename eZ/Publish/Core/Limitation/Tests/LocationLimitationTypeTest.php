@@ -37,7 +37,7 @@ class LocationLimitationTypeTest extends Base
     /**
      * Setup Location Handler mock.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->locationHandlerMock = $this->createMock(SPIHandler::class);
@@ -46,7 +46,7 @@ class LocationLimitationTypeTest extends Base
     /**
      * Tear down Location Handler mock.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->locationHandlerMock);
         parent::tearDown();

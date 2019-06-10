@@ -42,7 +42,7 @@ class AbstractTestCase extends LanguageAwareTestCase
      * time, which is not required to spent, since we are only reading from the
      * database anyways.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         if (!self::$setup) {
             parent::setUp();

@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
  */
 class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
     }

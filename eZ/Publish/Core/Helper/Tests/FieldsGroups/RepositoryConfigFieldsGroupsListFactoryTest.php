@@ -6,8 +6,8 @@ namespace eZ\Publish\Core\Helper\Tests\FieldsGroups;
 
 use eZ\Publish\Core\Helper\FieldsGroups\RepositoryConfigFieldsGroupsListFactory;
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider;
-use Symfony\Component\Translation\TranslatorInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RepositoryConfigFieldsGroupsListFactoryTest extends TestCase
 {
@@ -47,7 +47,7 @@ class RepositoryConfigFieldsGroupsListFactoryTest extends TestCase
     }
 
     /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Translation\TranslatorInterface
+     * @return \PHPUnit\Framework\MockObject\MockObject|\Symfony\Contracts\Translation\TranslatorInterface
      */
     protected function getTranslatorMock()
     {

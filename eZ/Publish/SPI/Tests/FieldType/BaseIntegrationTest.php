@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
+use eZ\Publish\API\Repository\Tests\Container\Compiler\SetAllServicesPublicPass;
 use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
@@ -212,7 +213,7 @@ abstract class BaseIntegrationTest extends TestCase
      * time, which is not required to spent, since we are only reading from the
      * database anyways.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         if (!self::$setUp) {
             self::$container = $this->getContainer();
@@ -593,6 +594,8 @@ abstract class BaseIntegrationTest extends TestCase
             'legacy_dsn',
             $this->getDsn()
         );
+
+        $containerBuilder->addCompilerPass(new SetAllServicesPublicPass());
 
         $containerBuilder->compile();
 

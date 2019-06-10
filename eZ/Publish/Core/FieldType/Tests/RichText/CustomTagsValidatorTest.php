@@ -25,7 +25,7 @@ class CustomTagsValidatorTest extends TestCase
      */
     private $validator;
 
-    public function setUp()
+    protected function setUp(): void
     {
         // reuse Custom Tags configuration from common test settings
         $commonSettings = Yaml::parseFile(__DIR__ . '/../../../settings/tests/common.yml');

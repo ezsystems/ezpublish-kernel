@@ -17,13 +17,13 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setDefinition('ezpublish.persistence.external_storage_registry.factory', new Definition());
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new ExternalStorageRegistryPass());
     }

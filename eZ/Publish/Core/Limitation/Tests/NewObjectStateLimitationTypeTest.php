@@ -34,7 +34,7 @@ class NewObjectStateLimitationTypeTest extends Base
     /**
      * Setup Handler mock.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectStateHandlerMock = $this->createMock(SPIHandler::class);
@@ -43,7 +43,7 @@ class NewObjectStateLimitationTypeTest extends Base
     /**
      * Tear down Handler mock.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         unset($this->objectStateHandlerMock);
         parent::tearDown();

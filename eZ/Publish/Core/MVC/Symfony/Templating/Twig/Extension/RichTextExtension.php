@@ -9,10 +9,10 @@
 namespace eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension;
 
 use eZ\Publish\Core\FieldType\RichText\Converter as RichTextConverterInterface;
-use Twig_Extension;
-use Twig_SimpleFilter;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
 
-class RichTextExtension extends Twig_Extension
+class RichTextExtension extends AbstractExtension
 {
     /**
      * @var RichTextConverterInterface
@@ -38,12 +38,12 @@ class RichTextExtension extends Twig_Extension
     public function getFilters()
     {
         return array(
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'richtext_to_html5',
                 array($this, 'richTextToHtml5'),
                 array('is_safe' => array('html'))
             ),
-            new Twig_SimpleFilter(
+            new TwigFilter(
                 'richtext_to_html5_edit',
                 array($this, 'richTextToHtml5Edit'),
                 array('is_safe' => array('html'))

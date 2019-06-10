@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class SecurityPassTest extends AbstractCompilerPassTestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->setDefinition('security.authentication.provider.dao', new Definition());
@@ -26,7 +26,7 @@ class SecurityPassTest extends AbstractCompilerPassTestCase
         $this->setDefinition('security.authentication.success_handler', new Definition());
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new SecurityPass());
     }

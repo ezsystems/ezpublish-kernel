@@ -37,7 +37,7 @@ class LegacyTest extends TestCase
      */
     protected $draftIoServiceMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->publishedIoServiceMock = $this->createMock(IOServiceInterface::class);
         $this->draftIoServiceMock = $this->createMock(IOServiceInterface::class);

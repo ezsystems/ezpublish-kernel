@@ -26,13 +26,13 @@ class RouterTest extends TestCase
      */
     private $matcherBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->matcherBuilder = new MatcherBuilder();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         putenv('EZPUBLISH_SITEACCESS');
         parent::tearDown();

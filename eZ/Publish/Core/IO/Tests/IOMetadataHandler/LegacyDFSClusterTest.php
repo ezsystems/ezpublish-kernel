@@ -29,7 +29,7 @@ class LegacyDFSClusterTest extends TestCase
     /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $urlDecoratorMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->dbalMock = $this->createMock(Connection::class);
         $this->urlDecoratorMock = $this->createMock(UrlDecorator::class);

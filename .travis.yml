@@ -27,41 +27,29 @@ env:
     - COMPOSE_FILE="doc/docker/base-dev.yml:doc/docker/selenium.yml"
     # In order to specify extra flags like ignoring platform reqs, using only stable packages and so on.
     - COMPOSER_FLAGS=""
+    - COMPOSER_MEMORY_LIMIT=4G
 
 matrix:
   fast_finish: true
   include:
-# 7.1
-    - php: 7.1
+# 7.3
+    - php: 7.3
       env: TEST_CONFIG="phpunit.xml"
     - name: "Kernel Behat Core tests"
       env:
         - COMPOSE_FILE="doc/docker/base-dev.yml:doc/docker/selenium.yml"
         - BEHAT_OPTS="--profile=core --tags=~@broken"
-        - SYMFONY_ENV=behat
-        - SYMFONY_DEBUG=1
-    - php: 7.1
+        - APP_ENV=behat
+        - APP_DEBUG=1
+    - php: 7.3
       env: SOLR_VERSION="6.4.2" TEST_CONFIG="phpunit-integration-legacy-solr.xml" CUSTOM_CACHE_POOL="singleredis" CORES_SETUP="shared" SOLR_CONFIG="vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/schema.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/custom-fields-types.xml vendor/ezsystems/ezplatform-solr-search-engine/lib/Resources/config/solr/language-fieldtypes.xml"
-    - php: 7.1
+    - php: 7.3
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="postgresql" DATABASE="pgsql://postgres@localhost/testdb"
-    - php: 7.1
+    - php: 7.3
       env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb"
 # Disabled as it currently fails, integration tests are not written for language config awareness in Repo, should probably be opt in by test
-#    - php: 7.1
+#    - php: 7.3
 #      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mysql" DATABASE="mysql://root@localhost/testdb" REPOSITORY_SERVICE_ID="ezpublish.siteaccessaware.repository"
-# 7.2
-    - php: 7.2
-      env: TEST_CONFIG="phpunit.xml"
-# 7.3
-    # Temp: Need to use --ignore-platform-reqs due to: https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3697
-    - php: 7.3
-      env: TEST_CONFIG="phpunit.xml" COMPOSER_FLAGS="--ignore-platform-reqs"
-    - name: Legacy Storage engine tests with MariaDB 10.3
-      php: 7.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mariadb" DATABASE="mysql://root@localhost/testdb" COMPOSER_FLAGS="--ignore-platform-reqs"
-      addons:
-        mariadb: 10.3
-
 
 # test only master, stable branches and pull requests
 branches:

@@ -46,6 +46,7 @@ services:
         tags:
             - {name: ezpublish.storageEngine, alias: legacy}
         lazy: true
+        public: true # @todo should be private
 
     # Compiler pass will alias 'ezpublish.api.storage_engine.legacy.connection' service to the StorageConnectionFactory
     ezpublish.api.storage_engine.legacy.dbhandler:
@@ -54,6 +55,7 @@ services:
         arguments:
             - "@ezpublish.api.storage_engine.legacy.connection"
         lazy: true
+        public: true # @todo should be private
 
     ezpublish.api.storage_engine.legacy.connection:
         class: "%ezpublish.persistence.connection.class%"

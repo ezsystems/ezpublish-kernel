@@ -21,21 +21,24 @@ class YamlConfigurationContext implements Context
 {
     use KernelDictionary;
 
-    private static $platformConfigurationFilePath = 'app/config/ezplatform_behat.yml';
+    private static $platformConfigurationFilePath = 'config/packages/%env%/ezplatform.yaml';
 
     public function addConfiguration(array $configuration)
     {
+        $kernel = $this->getKernel();
+        $env = $kernel->getEnvironment();
+
         $yamlString = Yaml::dump($configuration, 5, 4);
-        $destinationFileName = 'ezplatform_behat_' . sha1($yamlString) . '.yml';
-        $destinationFilePath = 'app/config/' . $destinationFileName;
+        $destinationFileName = 'ezplatform_behat_' . sha1($yamlString) . '.yaml';
+        $destinationFilePath = "config/packages/{$env}/{$destinationFileName}";
 
         if (!file_exists($destinationFilePath)) {
             file_put_contents($destinationFilePath, $yamlString);
         }
 
-        $this->addImportToPlatformYaml($destinationFileName);
+        $this->addImportToPlatformYaml($destinationFileName, $env);
 
-        $application = new Application($this->getKernel());
+        $application = new Application($kernel);
         $application->setAutoExit(false);
 
         $input = new ArrayInput([
@@ -45,9 +48,14 @@ class YamlConfigurationContext implements Context
         $application->run($input);
     }
 
-    private function addImportToPlatformYaml($importedFileName)
+    private function addImportToPlatformYaml(string $importedFileName, string $env): void
     {
-        $platformConfig = Yaml::parse(file_get_contents(self::$platformConfigurationFilePath));
+        $filePath = str_replace('%env%', $env, self::$platformConfigurationFilePath);
+        $platformConfig = Yaml::parse(file_get_contents($filePath));
+
+        if (!array_key_exists('imports', $platformConfig)) {
+            $platformConfig = array_merge(['imports' => []], $platformConfig);
+        }
 
         foreach ($platformConfig['imports'] as $import) {
             if ($import['resource'] == $importedFileName) {
@@ -59,7 +67,7 @@ class YamlConfigurationContext implements Context
             $platformConfig['imports'][] = ['resource' => $importedFileName];
 
             file_put_contents(
-                self::$platformConfigurationFilePath,
+                $filePath,
                 Yaml::dump($platformConfig, 5, 4)
             );
         }

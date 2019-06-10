@@ -29,7 +29,7 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
      */
     private $configResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configResolver = $this->createMock(ConfigResolverInterface::class);
         $this->configResolver

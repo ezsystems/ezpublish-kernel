@@ -29,7 +29,7 @@ class UserPreferenceTest extends BaseServiceMockTest
      */
     private $userSPIPreferenceHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->userSPIPreferenceHandler = $this->getPersistenceMockHandler('UserPreference\\Handler');

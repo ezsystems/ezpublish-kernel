@@ -23,7 +23,7 @@ class MediaTest extends TestCase
 {
     protected $converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->converter = new MediaConverter();
     }

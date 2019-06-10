@@ -32,7 +32,7 @@ class StreamFileListenerTest extends TestCase
     /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $configResolverMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->ioServiceMock = $this->createMock(IOServiceInterface::class);
 

@@ -24,7 +24,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     /** @var ConfigurationFactory|MockObject */
     protected $binarydataConfigurationFactoryMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->container->setParameter('ez_io.metadata_handlers', array());
@@ -34,7 +34,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         $this->container->setDefinition('ezpublish.core.io.metadata_handler.factory', new Definition());
     }
 
-    protected function registerCompilerPass(ContainerBuilder $container)
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $this->metadataConfigurationFactoryMock = $this->createMock(ConfigurationFactory::class);
         $this->binarydataConfigurationFactoryMock = $this->createMock(ConfigurationFactory::class);

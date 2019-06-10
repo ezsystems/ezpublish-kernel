@@ -29,7 +29,7 @@ class BookmarkTest extends BaseServiceMockTest
     /** @var \eZ\Publish\SPI\Persistence\Bookmark\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $bookmarkHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

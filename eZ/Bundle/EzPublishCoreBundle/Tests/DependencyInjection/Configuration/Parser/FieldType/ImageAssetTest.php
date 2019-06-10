@@ -17,7 +17,7 @@ class ImageAssetTest extends AbstractParserTestCase
     /**
      * @{@inheritdoc}
      */
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return [
             new EzPublishCoreExtension([new ImageAssetConfigParser()]),

@@ -23,7 +23,7 @@ use eZ\Publish\API\Repository\Values\URL\UsageSearchResult;
  */
 class URLServiceTest extends BaseURLServiceTest
 {
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

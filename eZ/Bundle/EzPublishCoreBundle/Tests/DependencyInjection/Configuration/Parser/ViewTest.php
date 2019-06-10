@@ -17,14 +17,14 @@ class ViewTest extends AbstractParserTestCase
 {
     private $config;
 
-    protected function getContainerExtensions()
+    protected function getContainerExtensions(): array
     {
         return array(
             new EzPublishCoreExtension(array(new LocationView(), new ContentView())),
         );
     }
 
-    protected function getMinimalConfiguration()
+    protected function getMinimalConfiguration(): array
     {
         return $this->config = Yaml::parse(file_get_contents(__DIR__ . '/../../Fixtures/ezpublish_view.yml'));
     }

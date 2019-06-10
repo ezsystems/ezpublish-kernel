@@ -28,7 +28,7 @@ class EZP21089Test extends BaseTest
      */
     private $contentType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

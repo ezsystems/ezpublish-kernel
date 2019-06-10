@@ -14,7 +14,7 @@ class ChainConfigResolverTest extends TestCase
      */
     private $chainResolver;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->chainResolver = new ChainConfigResolver();
     }

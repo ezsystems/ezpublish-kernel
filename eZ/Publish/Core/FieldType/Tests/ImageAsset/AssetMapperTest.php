@@ -52,7 +52,7 @@ class AssetMapperTest extends TestCase
         'parent_location_id' => 51,
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contentService = $this->createMock(ContentService::class);
         $this->locationService = $this->createMock(LocationService::class);

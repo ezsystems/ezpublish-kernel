@@ -23,7 +23,7 @@ class UrlRedecoratorTest extends TestCase
     /** @var \eZ\Publish\Core\IO\UrlDecorator|\PHPUnit\Framework\MockObject\MockObject */
     private $targetDecoratorMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->redecorator = new UrlRedecorator(
             $this->sourceDecoratorMock = $this->createMock(UrlDecorator::class),

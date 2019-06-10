@@ -282,18 +282,21 @@ services:
     ezpublish.fieldType.ezauthor:
         class: "%ezpublish.fieldType.ezauthor.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezauthor}
 
     ezpublish.fieldType.ezbinaryfile:
         class: "%ezpublish.fieldType.ezbinaryfile.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezbinaryfile}
 
     ezpublish.fieldType.ezboolean:
         class: "%ezpublish.fieldType.ezboolean.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezboolean}
 
@@ -301,12 +304,14 @@ services:
         class: "%ezpublish.fieldType.ezcountry.class%"
         arguments: ["%ezpublish.fieldType.ezcountry.data%"]
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezcountry}
 
     ezpublish.fieldType.ezdate:
         class: "%ezpublish.fieldType.ezdate.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezdate" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezdate}
@@ -314,12 +319,14 @@ services:
     ezpublish.fieldType.ezdatetime:
         class: "%ezpublish.fieldType.ezdatetime.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezdatetime}
 
     ezpublish.fieldType.eztime:
         class: "%ezpublish.fieldType.eztime.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "eztime" ]
         tags:
             - {name: ezpublish.fieldType, alias: eztime}
@@ -327,96 +334,112 @@ services:
     ezpublish.fieldType.ezemail:
         class: "%ezpublish.fieldType.ezemail.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezemail}
 
     ezpublish.fieldType.ezfloat:
         class: "%ezpublish.fieldType.ezfloat.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezfloat}
 
     ezpublish.fieldType.ezinteger:
         class: "%ezpublish.fieldType.ezinteger.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezinteger}
 
     ezpublish.fieldType.ezimage:
         class: "%ezpublish.fieldType.ezimage.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezimage}
 
     ezpublish.fieldType.ezisbn:
         class: "%ezpublish.fieldType.ezisbn.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezisbn}
 
     ezpublish.fieldType.ezkeyword:
         class: "%ezpublish.fieldType.ezkeyword.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezkeyword}
 
     ezpublish.fieldType.ezmedia:
         class: "%ezpublish.fieldType.ezmedia.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezmedia}
 
     ezpublish.fieldType.ezobjectrelation:
         class: "%ezpublish.fieldType.ezobjectrelation.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezsrrating:
         class: "%ezpublish.fieldType.ezsrrating.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezsrrating}
 
     ezpublish.fieldType.ezselection:
         class: "%ezpublish.fieldType.ezselection.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezselection}
 
     ezpublish.fieldType.eztext:
         class: "%ezpublish.fieldType.eztext.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: eztext}
 
     ezpublish.fieldType.ezstring:
         class: "%ezpublish.fieldType.ezstring.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezstring}
 
     ezpublish.fieldType.ezurl:
         class: "%ezpublish.fieldType.ezurl.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezurl}
 
     ezpublish.fieldType.ezgmaplocation:
         class: "%ezpublish.fieldType.ezgmaplocation.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezgmaplocation}
 
     ezpublish.fieldType.ezobjectrelationlist:
         class: "%ezpublish.fieldType.ezobjectrelationlist.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.ezuser:
         class: "%ezpublish.fieldType.ezuser.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: ["@ezpublish.spi.persistence.cache.userHandler"]
         tags:
             - {name: ezpublish.fieldType, alias: ezuser}
@@ -427,6 +450,7 @@ services:
     ezpublish.fieldType.ezenum:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezenum" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezenum}
@@ -434,6 +458,7 @@ services:
     ezpublish.fieldType.ezidentifier:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezidentifier" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezidentifier}
@@ -441,6 +466,7 @@ services:
     ezpublish.fieldType.ezinisetting:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezinisetting" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezinisetting}
@@ -448,6 +474,7 @@ services:
     ezpublish.fieldType.ezmatrix:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezmatrix" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmatrix}
@@ -455,6 +482,7 @@ services:
     ezpublish.fieldType.ezmultioption:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezmultioption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultioption}
@@ -462,6 +490,7 @@ services:
     ezpublish.fieldType.ezmultioption2:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezmultioption2" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultioption2}
@@ -469,6 +498,7 @@ services:
     ezpublish.fieldType.ezmultiprice:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezmultiprice" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezmultiprice}
@@ -476,6 +506,7 @@ services:
     ezpublish.fieldType.ezoption:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezoption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezoption}
@@ -483,6 +514,7 @@ services:
     ezpublish.fieldType.ezpackage:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezpackage" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezpackage}
@@ -490,6 +522,7 @@ services:
     ezpublish.fieldType.ezproductcategory:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezproductcategory" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezproductcategory}
@@ -497,6 +530,7 @@ services:
     ezpublish.fieldType.ezrangeoption:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezrangeoption" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezrangeoption}
@@ -504,6 +538,7 @@ services:
     ezpublish.fieldType.ezsubtreesubscription:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezsubtreesubscription" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezsubtreesubscription}
@@ -512,6 +547,7 @@ services:
     ezpublish.fieldType.ezcomcomments:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezcomcomments" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezcomcomments}
@@ -519,6 +555,7 @@ services:
     ezpublish.fieldType.ezpaex:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezpaex" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezpaex}
@@ -526,6 +563,7 @@ services:
     ezpublish.fieldType.ezsurvey:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezsurvey" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezsurvey}
@@ -533,6 +571,7 @@ services:
     ezpublish.fieldType.eztags:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "eztags" ]
         tags:
             - {name: ezpublish.fieldType, alias: eztags}
@@ -540,12 +579,14 @@ services:
     ezpublish.fieldType.ezrecommendation:
         class: "%ezpublish.fieldType.eznull.class%"
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments: [ "ezrecommendation" ]
         tags:
             - {name: ezpublish.fieldType, alias: ezrecommendation}
 
     eZ\Publish\Core\FieldType\ImageAsset\Type:
         parent: ezpublish.fieldType
+        public: true # @todo should be private
         arguments:
             - '@ezpublish.api.service.content'
             - '@ezpublish.api.service.content_type'

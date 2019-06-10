@@ -19,7 +19,7 @@ use DateTime;
  */
 class EZP22409RelationListTypeStateTest extends BaseTest
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -18,14 +18,14 @@ use eZ\Publish\Core\Helper\TranslationHelper;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use Psr\Log\LoggerInterface;
-use Twig_Extension;
-use Twig_SimpleFunction;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * Twig content extension for eZ Publish specific usage.
  * Exposes helpers to play with public API objects.
  */
-class ContentExtension extends Twig_Extension
+class ContentExtension extends AbstractExtension
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -67,35 +67,35 @@ class ContentExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_content_name',
                 array($this, 'getTranslatedContentName')
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_field_value',
                 array($this, 'getTranslatedFieldValue')
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_field',
                 array($this, 'getTranslatedField')
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_is_field_empty',
                 array($this, 'isFieldEmpty')
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_field_name',
                 array($this, 'getTranslatedFieldDefinitionName')
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_field_description',
                 array($this, 'getTranslatedFieldDefinitionDescription')
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_trans_prop',
                 array($this, 'getTranslatedProperty')
             ),
-            new Twig_SimpleFunction(
+            new TwigFunction(
                 'ez_first_filled_image_field_identifier',
                 array($this, 'getFirstFilledImageFieldIdentifier')
             ),

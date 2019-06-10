@@ -56,7 +56,7 @@ class IORepositoryResolverTest extends TestCase
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $variationPathGenerator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->ioService = $this->createMock(IOServiceInterface::class);

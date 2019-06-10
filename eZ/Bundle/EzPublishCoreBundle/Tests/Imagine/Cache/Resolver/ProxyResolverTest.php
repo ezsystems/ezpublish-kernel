@@ -27,7 +27,7 @@ class ProxyResolverTest extends TestCase
      */
     private $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->resolver = $this->getMockBuilder(ResolverInterface::class)->getMock();
