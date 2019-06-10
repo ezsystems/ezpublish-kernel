@@ -663,12 +663,12 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         }
     }
 
-    private function registerUrlWildcardsConfiguration(array $config, ContainerBuilder $container)
+    /**
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    private function registerUrlWildcardsConfiguration(array $config, ContainerBuilder $container): void
     {
-        if (!isset($config['url_wildcards']['enabled'])) {
-            $config['url_wildcards']['enabled'] = false;
-        }
-
-        $container->setParameter('ezpublish.url_wildcards.enabled', $config['url_wildcards']['enabled']);
+        $container->setParameter('ezpublish.url_wildcards.enabled', $config['url_wildcards']['enabled'] ?? false);
     }
 }

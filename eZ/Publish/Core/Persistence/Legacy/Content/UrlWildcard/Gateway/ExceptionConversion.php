@@ -105,13 +105,13 @@ class ExceptionConversion extends Gateway
     }
 
     /**
-     * Loads the UrlWildcard with given $url.
+     * Loads the UrlWildcard with given $sourceUrl.
      *
      * @param string $sourceUrl
      *
      * @return array
      */
-    public function loadUrlWildcardBySourceUrl(string $sourceUrl)
+    public function loadUrlWildcardBySourceUrl(string $sourceUrl): array
     {
         try {
             return $this->innerGateway->loadUrlWildcardBySourceUrl($sourceUrl);

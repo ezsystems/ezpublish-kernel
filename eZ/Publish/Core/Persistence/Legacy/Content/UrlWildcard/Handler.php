@@ -20,6 +20,8 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
  */
 class Handler implements BaseUrlWildcardHandler
 {
+    private const PLACEHOLDERS_REGEXP = '(\{(\d+)\})';
+
     /**
      * UrlWildcard Gateway.
      *
@@ -159,7 +161,7 @@ class Handler implements BaseUrlWildcardHandler
      *
      * @return bool
      */
-    public function exists(string $sourceUrl): bool
+    public function exactSourceUrlExists(string $sourceUrl): bool
     {
         $row = $this->gateway->loadUrlWildcardBySourceUrl($sourceUrl);
 
@@ -177,7 +179,7 @@ class Handler implements BaseUrlWildcardHandler
      *
      * @return string|null
      */
-    private function match($url, $wildcard): ?string
+    private function match(string $url, array $wildcard): ?string
     {
         if (preg_match($this->compile($wildcard['source_url']), $url, $match)) {
             return $this->substitute($wildcard['destination_url'], $match);
@@ -193,7 +195,7 @@ class Handler implements BaseUrlWildcardHandler
      *
      * @return string
      */
-    private function compile($sourceUrl): string
+    private function compile(string $sourceUrl): string
     {
         return '(^' . str_replace('\\*', '(.*)', preg_quote($sourceUrl)) . '$)U';
     }
@@ -207,9 +209,9 @@ class Handler implements BaseUrlWildcardHandler
      *
      * @return string
      */
-    private function substitute($destinationUrl, array $values): string
+    private function substitute(string $destinationUrl, array $values): string
     {
-        preg_match_all('(\{(\d+)\})', $destinationUrl, $matches);
+        preg_match_all(self::PLACEHOLDERS_REGEXP, $destinationUrl, $matches);
 
         foreach ($matches[1] as $match) {
             $destinationUrl = str_replace("{{$match}}", $values[$match], $destinationUrl);

@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @copyright Copyright (C) eZ Systems AS. All rights reserved.
+ * @license For full copyright and license information view LICENSE file distributed with this source code.
+ */
 namespace eZ\Publish\Core\Persistence\Cache;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException;
@@ -12,7 +16,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
     /**
      * Constant used for storing not found results for lookup().
      */
-    const NOT_FOUND = 0;
+    private const NOT_FOUND = 0;
 
     /**
      * @see \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler::create
@@ -46,7 +50,6 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
 
         $this->persistenceHandler->urlWildcardHandler()->remove($urlWildcard->id);
 
-        // need to clear lists of UrlWildcards cached due to loadAll()
         $this->cache->invalidateTags(['ez-urlWildcard-id-' . $urlWildcard->id]);
     }
 
@@ -60,11 +63,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         $cacheItem = $this->cache->getItem('ez-urlWildcard-id-' . $id);
 
         if ($cacheItem->isHit()) {
-            if (($return = $cacheItem->get()) === self::NOT_FOUND) {
-                throw new NotFoundException('UrlWildcard', $id);
-            }
-
-            return $return;
+            return $cacheItem->get();
         }
 
         $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->load($id);
@@ -111,7 +110,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
                 ->expiresAfter(30)
                 ->tag(['urlWildcard-notFound']);
             $this->cache->save($cacheItem);
-            throw $e;
+            throw new NotFoundException('UrlWildcard', $sourceUrl, $e);
         }
 
         $cacheItem->set($urlWildcard);
@@ -119,6 +118,14 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         $this->cache->save($cacheItem);
 
         return $urlWildcard;
+    }
+
+    /**
+     * @see \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler::exactSourceUrlExists()
+     */
+    public function exactSourceUrlExists(string $sourceUrl): bool
+    {
+        return $this->persistenceHandler->urlWildcardHandler()->exactSourceUrlExists($sourceUrl);
     }
 
     /**
@@ -135,14 +142,5 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         }
 
         return $tags;
-    }
-
-    /**
-     * @param string $sourceUrl
-     * @return bool
-     */
-    public function exists(string $sourceUrl): bool
-    {
-        return $this->persistenceHandler->urlWildcardHandler()->exists($sourceUrl);
     }
 }

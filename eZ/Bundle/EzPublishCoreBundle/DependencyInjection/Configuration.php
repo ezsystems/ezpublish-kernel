@@ -693,7 +693,7 @@ EOT;
      *
      * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
      */
-    private function addUrlWildcardsSection($rootNode)
+    private function addUrlWildcardsSection($rootNode): ArrayNodeDefinition
     {
         return $rootNode
             ->children()

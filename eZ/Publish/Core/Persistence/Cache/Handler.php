@@ -75,7 +75,7 @@ class Handler implements PersistenceHandlerInterface
     /** @var \eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler */
     protected $userPreferenceHandler;
 
-    /** @var UrlWildcardHandler */
+    /** @var \eZ\Publish\Core\Persistence\Cache\UrlWildcardHandler */
     private $urlWildcardHandler;
 
     /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */

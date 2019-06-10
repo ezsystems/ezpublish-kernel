@@ -164,13 +164,13 @@ class DoctrineDatabase extends Gateway
     }
 
     /**
-     * Loads the UrlWildcard with given $url.
+     * Loads the UrlWildcard with given $sourceUrl.
      *
      * @param string $sourceUrl
      *
      * @return array
      */
-    public function loadUrlWildcardBySourceUrl(string $sourceUrl)
+    public function loadUrlWildcardBySourceUrl(string $sourceUrl): array
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
@@ -189,6 +189,6 @@ class DoctrineDatabase extends Gateway
         $stmt = $query->prepare();
         $stmt->execute();
 
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(\PDO::FETCH_ASSOC) ?: [];
     }
 }

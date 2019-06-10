@@ -77,5 +77,5 @@ interface Handler
      *
      * @return bool
      */
-    public function exists(string $sourceUrl): bool;
+    public function exactSourceUrlExists(string $sourceUrl): bool;
 }

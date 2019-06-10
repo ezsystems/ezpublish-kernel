@@ -9,7 +9,7 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\URLWildcardService;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
-use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,17 +48,22 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
      * @param \eZ\Publish\API\Repository\URLWildcardService $wildcardService
      * @param \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator $generator
      * @param \Symfony\Component\Routing\RequestContext $requestContext
-     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         URLWildcardService $wildcardService,
         UrlAliasGenerator $generator,
-        RequestContext $requestContext,
-        LoggerInterface $logger
+        RequestContext $requestContext
     ) {
         $this->wildcardService = $wildcardService;
         $this->generator = $generator;
         $this->requestContext = $requestContext;
+    }
+
+    /**
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function setLogger($logger)
+    {
         $this->logger = $logger;
     }
 
@@ -79,12 +84,13 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
             throw new ResourceNotFoundException($e->getMessage(), $e->getCode(), $e);
         }
 
-        $this->logger->info("UrlWildcard matched. Destination URL: {$urlWildcardTranslationResult->uri}");
-
+        if ($this->logger !== null) {
+            $this->logger->info("UrlWildcard matched. Destination URL: {$urlWildcardTranslationResult->uri}");
+        }
         // redirect if URLWildcard is configured as forward
         if ($urlWildcardTranslationResult->forward) {
             $params = [
-                '_controller' => 'Symfony\Bundle\FrameworkBundle\Controller\RedirectController::urlRedirectAction',
+                '_controller' => RedirectController::class . '::urlRedirectAction',
                 'path' => $urlWildcardTranslationResult->uri,
                 'keepRequestMethod' => true,
             ];
@@ -100,22 +106,38 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
         throw new ResourceNotFoundException();
     }
 
+    /**
+     * @return \Symfony\Component\Routing\RouteCollection
+     */
     public function getRouteCollection(): RouteCollection
     {
         return new RouteCollection();
     }
 
+    /**
+     * @param string $name
+     * @param array $parameters
+     * @param int $referenceType
+     *
+     * @return string|void
+     */
     public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
     {
         throw new RouteNotFoundException('Could not match route');
     }
 
+    /**
+     * @param \Symfony\Component\Routing\RequestContext $context
+     */
     public function setContext(RequestContext $context): void
     {
         $this->requestContext = $context;
         $this->generator->setRequestContext($context);
     }
 
+    /**
+     * @return \Symfony\Component\Routing\RequestContext
+     */
     public function getContext(): RequestContext
     {
         $this->requestContext;
@@ -124,7 +146,7 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
     /**
      * Not supported. Please use matchRequest() instead.
      *
-     * @param $pathinfo
+     * @param string $pathinfo
      *
      * @return array
      *

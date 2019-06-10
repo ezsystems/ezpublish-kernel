@@ -86,7 +86,7 @@ class UrlWildcardTest extends BaseServiceMockTest
         $handlerMock->expects(
             $this->once()
         )->method(
-            'exists'
+            'exactSourceUrlExists'
         )->willReturn(true);
 
         $mockedService->create('/lorem/ipsum', 'opossum', true);
@@ -130,7 +130,7 @@ class UrlWildcardTest extends BaseServiceMockTest
         $handlerMock->expects(
             $this->once()
         )->method(
-            'exists'
+            'exactSourceUrlExists'
         )->willReturn(false);
 
         $mockedService->create($sourceUrl, $destinationUrl, $forward);
@@ -183,7 +183,7 @@ class UrlWildcardTest extends BaseServiceMockTest
         $handlerMock->expects(
             $this->once()
         )->method(
-            'exists'
+            'exactSourceUrlExists'
         )->willReturn(false);
 
         $handlerMock->expects(
@@ -257,7 +257,7 @@ class UrlWildcardTest extends BaseServiceMockTest
         $handlerMock->expects(
             $this->once()
         )->method(
-            'exists'
+            'exactSourceUrlExists'
         )->willReturn(false);
 
         $handlerMock->expects(

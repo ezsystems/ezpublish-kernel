@@ -78,7 +78,7 @@ class URLWildcardService implements URLWildcardServiceInterface
         $sourceUrl = $this->cleanUrl($sourceUrl);
         $destinationUrl = $this->cleanUrl($destinationUrl);
 
-        if ($this->urlWildcardHandler->exists($this->cleanPath($sourceUrl))) {
+        if ($this->urlWildcardHandler->exactSourceUrlExists($this->cleanPath($sourceUrl))) {
             throw new InvalidArgumentException(
                 '$sourceUrl',
                 'Pattern already exists'
@@ -109,30 +109,6 @@ class URLWildcardService implements URLWildcardServiceInterface
         }
 
         return $this->buildUrlWildcardDomainObject($spiUrlWildcard);
-    }
-
-    /**
-     * Removes leading and trailing slashes and spaces.
-     *
-     * @param string $url
-     *
-     * @return string
-     */
-    protected function cleanUrl($url): string
-    {
-        return '/' . trim($url, '/ ');
-    }
-
-    /**
-     * Removes leading slash from given path.
-     *
-     * @param string $path
-     *
-     * @return string
-     */
-    protected function cleanPath($path): string
-    {
-        return trim($path, '/ ');
     }
 
     /**
@@ -238,5 +214,29 @@ class URLWildcardService implements URLWildcardServiceInterface
                 'forward' => $wildcard->forward,
             )
         );
+    }
+
+    /**
+     * Removes leading and trailing slashes and spaces.
+     *
+     * @param string $url
+     *
+     * @return string
+     */
+    private function cleanUrl(string $url): string
+    {
+        return '/' . trim($url, '/ ');
+    }
+
+    /**
+     * Removes leading slash from given path.
+     *
+     * @param string $path
+     *
+     * @return string
+     */
+    private function cleanPath(string $path): string
+    {
+        return trim($path, '/ ');
     }
 }
