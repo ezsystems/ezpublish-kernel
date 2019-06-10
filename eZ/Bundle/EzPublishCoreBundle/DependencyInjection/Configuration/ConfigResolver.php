@@ -81,7 +81,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     private $tooEarlyLoadedList = [];
 
     /**
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface|null $logger
      * @param array $groupsBySiteAccess SiteAccess groups, indexed by siteaccess.
      * @param string $defaultNamespace The default namespace
      * @param int $undefinedStrategy Strategy to use when encountering undefined parameters.

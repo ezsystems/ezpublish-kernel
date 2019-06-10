@@ -115,7 +115,7 @@ abstract class AbstractBaseHandlerTest extends TestCase
     /**
      * Tear down test (properties).
      */
-protected function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->cacheMock);
         unset($this->persistenceHandlerMock);

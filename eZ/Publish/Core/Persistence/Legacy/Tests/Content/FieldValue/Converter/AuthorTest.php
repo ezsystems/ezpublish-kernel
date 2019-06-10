@@ -48,7 +48,7 @@ class AuthorTest extends TestCase
         );
     }
 
-protected function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->authors);
         parent::tearDown();

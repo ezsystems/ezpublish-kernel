@@ -20,13 +20,12 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  * WARNING! DO NOT USE IT IN YOUR APPLICATION.
  *
  * Inspired by \Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\TestServiceContainerWeakRefPass
+ *
+ * @internal
  */
 class SetAllServicesPublicPass implements CompilerPassInterface
 {
-    /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
-     */
-    public function process(ContainerBuilder $containerBuilder)
+    public function process(ContainerBuilder $containerBuilder): void
     {
         $definitions = $containerBuilder->getDefinitions();
         foreach ($definitions as $id => $definition) {

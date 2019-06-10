@@ -131,7 +131,7 @@ abstract class TestCase extends BaseTestCase
         $this->resetSequences();
     }
 
-protected function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->handler);
         unset($this->connection);

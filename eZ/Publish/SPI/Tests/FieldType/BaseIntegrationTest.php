@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
+use eZ\Publish\Core\Base\Container\Compiler\SetAllServicesPublicPass;
 use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
@@ -594,7 +595,7 @@ abstract class BaseIntegrationTest extends TestCase
             $this->getDsn()
         );
 
-        $this->setAllServicesPublic($containerBuilder);
+        $containerBuilder->addCompilerPass(new SetAllServicesPublicPass());
 
         $containerBuilder->compile();
 
@@ -632,47 +633,5 @@ abstract class BaseIntegrationTest extends TestCase
         $storageRegistry->register($identifier, $externalStorage);
 
         return self::$container->get('ezpublish.spi.persistence.legacy');
-    }
-
-    /**
-     * Overrides all services to be public.
-     *
-     * It is a workaround to the change in Symfony 4 which makes all services private by default.
-     * Our integration tests are not prepared for this as they get services directly from the Container.
-     *
-     * Inspired by {@link \Symfony\Bundle\FrameworkBundle\DependencyInjection\Compiler\TestServiceContainerWeakRefPass}
-     *
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder
-     */
-    private function setAllServicesPublic(ContainerBuilder $containerBuilder): void
-    {
-        $definitions = $containerBuilder->getDefinitions();
-
-        foreach ($definitions as $id => $definition) {
-            if (
-                $id && '.' !== $id[0]
-                && (!$definition->isPublic() || $definition->isPrivate())
-                && !$definition->getErrors()
-                && !$definition->isAbstract()
-            ) {
-                $definition->setPublic(true);
-            }
-        }
-
-        $aliases = $containerBuilder->getAliases();
-        foreach ($aliases as $id => $alias) {
-            if ($id && '.' !== $id[0] && (!$alias->isPublic() || $alias->isPrivate())) {
-                while (isset($aliases[$target = (string) $alias])) {
-                    $alias = $aliases[$target];
-                }
-                if (
-                    isset($definitions[$target])
-                    && !$definitions[$target]->getErrors()
-                    && !$definitions[$target]->isAbstract()
-                ) {
-                    $definition->setPublic(true);
-                }
-            }
-        }
     }
 }

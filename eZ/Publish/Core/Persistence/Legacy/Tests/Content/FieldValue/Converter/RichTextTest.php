@@ -45,7 +45,7 @@ class RichTextTest extends TestCase
 EOT;
     }
 
-protected function tearDown(): void
+    protected function tearDown(): void
     {
         unset($this->docbookString);
         parent::tearDown();

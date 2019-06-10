@@ -88,7 +88,6 @@ class DynamicSettingsListener implements EventSubscriberInterface
             }
 
             // @todo Replace DynamicSettings implementation since it's no longer allowed in SF 4
-//            $this->container->set($serviceId, null);
         }
 
         // Update services that can be updated.

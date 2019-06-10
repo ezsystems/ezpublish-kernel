@@ -74,7 +74,7 @@ class ReindexCommand extends Command
     /**
      * @param \eZ\Publish\Core\Search\Common\IncrementalIndexer|\eZ\Publish\Core\Search\Common\Indexer $searchIndexer
      * @param \Doctrine\DBAL\Connection $connection
-     * @param $locationHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \Psr\Log\LoggerInterface $logger
      * @param string $siteaccess
      * @param string $env

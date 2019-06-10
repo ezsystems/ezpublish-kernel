@@ -75,7 +75,6 @@ services:
 
     # Symfony 3.4+ service definitions:
     eZ\Publish\Core\FieldType\ImageAsset\NameableField:
-#        public: false
         public: true # @todo should be private
         arguments:
             $handler: '@ezpublish.spi.persistence.cache.contentHandler'

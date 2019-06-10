@@ -37,7 +37,7 @@ class InMemoryCacheTest extends TestCase
     /**
      * Tear down test (properties).
      */
-protected function tearDown(): void
+    protected function tearDown(): void
     {
         $this->cache->clear();
 

@@ -276,8 +276,8 @@
     {% if not ez_is_field_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
         {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
-{#        {{ fos_httpcache_tag('relation-' ~ contentId) }}#}
-            {# @todo should be uncommented once HTTP cache bundle is enabled #}
+        {# @todo should be uncommented once HTTP cache bundle is enabled #}
+        {# {{ fos_httpcache_tag('relation-' ~ contentId) }}#}
         <li>
             {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
         </li>
