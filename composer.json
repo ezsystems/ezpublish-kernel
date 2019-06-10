@@ -52,7 +52,7 @@
         "friendsofphp/php-cs-fixer": "^2.15",
         "phpunit/phpunit": "^8.1",
         "matthiasnoback/symfony-dependency-injection-test": "^4.0",
-        "ezsystems/behatbundle": "dev-symfony4 as 7.0.x-dev"
+        "ezsystems/behatbundle": "^7.0@dev"
     },
     "conflict": {
         "doctrine/dbal": "2.7.0",
