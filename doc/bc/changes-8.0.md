@@ -23,7 +23,7 @@ Changes affecting version compatibility with former or future versions.
   eZ Platform REST Bundle available via
   [ezsystems/ezplatform-rest](https://github.com/ezsystems/ezplatform-rest) package.
   
-* Assetic support has been dropped. 
+* Assetic support has been dropped.
 
 * Minimal PHP version has been raised to 7.3.
 
