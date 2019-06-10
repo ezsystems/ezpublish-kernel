@@ -5,7 +5,6 @@
 namespace eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler;
 
 use Exception;
-use eZ\Publish\Core\QueryType\QueryType;
 use ReflectionClass;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -23,7 +22,6 @@ class QueryTypePass implements CompilerPassInterface
             return;
         }
 
-        $queryTypeServices = [];
         $queryTypes = [];
         $queryTypesClasses = [];
 
@@ -42,36 +40,7 @@ class QueryTypePass implements CompilerPassInterface
             }
         }
 
-        // named by convention in application
-        $applicationRootDir = dirname($container->getParameter('kernel.root_dir'));
-        foreach (glob($applicationRootDir . '/src/QueryType/*QueryType.php') as $queryTypeFilePath) {
-            $queryTypeFileName = basename($queryTypeFilePath, '.php');
-            $queryTypeClassName = 'App\\QueryType\\' . $queryTypeFileName;
-            if (!class_exists($queryTypeClassName)) {
-                throw new Exception("Expected $queryTypeClassName to be defined in $queryTypeFilePath");
-            }
-
-            $queryTypeName = $queryTypeClassName::getName();
-
-            // skip if the class was already registered as a tagged service with the same name
-            if (isset($queryTypesClasses[$queryTypeClassName][$queryTypeName])) {
-                continue;
-            }
-
-            $queryTypeReflectionClass = new ReflectionClass($queryTypeClassName);
-            if (!$queryTypeReflectionClass->implementsInterface(QueryType::class)) {
-                throw new Exception(
-                    sprintf('%s needs to implement %s', $queryTypeClassName, QueryType::class)
-                );
-            }
-
-            $serviceId = 'ezpublish.query_type.convention.app_' . strtolower($queryTypeFileName);
-            $queryTypeServices[$serviceId] = new Definition($queryTypeClassName);
-
-            $queryTypes[$queryTypeName] = new Reference($serviceId);
-        }
-
-        // named by convention inside bundles
+        // named by convention query types
         if ($container->hasParameter('kernel.bundles')) {
             foreach ($container->getParameter('kernel.bundles') as $bundleName => $bundleClass) {
                 $bundleReflectionClass = new ReflectionClass($bundleClass);
@@ -83,6 +52,7 @@ class QueryTypePass implements CompilerPassInterface
                     continue;
                 }
 
+                $queryTypeServices = [];
                 $bundleQueryTypeNamespace = substr($bundleClass, 0, strrpos($bundleClass, '\\') + 1) . 'QueryType';
                 foreach (glob($bundleQueryTypesDir . DIRECTORY_SEPARATOR . '*QueryType.php') as $queryTypeFilePath) {
                     $queryTypeFileName = basename($queryTypeFilePath, '.php');
@@ -109,10 +79,9 @@ class QueryTypePass implements CompilerPassInterface
                     $queryTypes[$queryTypeName] = new Reference($serviceId);
                 }
 
+                $container->addDefinitions($queryTypeServices);
             }
         }
-
-        $container->addDefinitions($queryTypeServices);
 
         $aggregatorDefinition = $container->getDefinition('ezpublish.query_type.registry');
         $aggregatorDefinition->addMethodCall('addQueryTypes', [$queryTypes]);
