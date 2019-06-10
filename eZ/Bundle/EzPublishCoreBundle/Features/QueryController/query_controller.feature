@@ -15,10 +15,10 @@ Scenario: A content view can be configured to run and render a query
                   parentLocationId: 2
               assign_results_to: 'children'
       """
-      And a LocationChildren QueryType defined in "src/QueryType/LocationChildrenQueryType.php":
+      And a LocationChildren QueryType defined in "src/AppBundle/QueryType/LocationChildrenQueryType.php":
       """
       <?php
-      namespace App\QueryType;
+      namespace AppBundle\QueryType;
 
       use eZ\Publish\API\Repository\Values\Content\LocationQuery;
       use eZ\Publish\API\Repository\Values\Content\Query\Criterion\ParentLocationId;
