@@ -8,6 +8,8 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+
+use eZ\Publish\API\Repository\Tests\Container\Compiler\SetAllServicesPublicPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -85,6 +87,6 @@ $containerBuilder->addCompilerPass(new Compiler\Search\Legacy\SortClauseConverte
 // Symfony 4 makes services private by default. Test cases are not prepared for this.
 // This is a simple workaround to override services as public.
 //
-$containerBuilder->addCompilerPass(new Compiler\SetAllServicesPublicPass());
+$containerBuilder->addCompilerPass(new SetAllServicesPublicPass());
 
 return $containerBuilder;

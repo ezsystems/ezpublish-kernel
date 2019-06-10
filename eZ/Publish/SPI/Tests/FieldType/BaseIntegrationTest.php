@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\SPI\Tests\FieldType;
 
-use eZ\Publish\Core\Base\Container\Compiler\SetAllServicesPublicPass;
+use eZ\Publish\API\Repository\Tests\Container\Compiler\SetAllServicesPublicPass;
 use eZ\Publish\Core\Persistence;
 use eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased;
 use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
