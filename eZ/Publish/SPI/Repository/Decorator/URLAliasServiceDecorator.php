@@ -30,7 +30,7 @@ abstract class URLAliasServiceDecorator implements URLAliasService
         $forwarding = false,
         $alwaysAvailable = false
     ) {
-        $this->innerService->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
+        return $this->innerService->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
     }
 
     public function createGlobalUrlAlias(
@@ -40,7 +40,7 @@ abstract class URLAliasServiceDecorator implements URLAliasService
         $forwarding = false,
         $alwaysAvailable = false
     ) {
-        $this->innerService->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
+        return $this->innerService->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
     }
 
     public function listLocationAliases(
@@ -48,7 +48,7 @@ abstract class URLAliasServiceDecorator implements URLAliasService
         $custom = true,
         $languageCode = null
     ) {
-        $this->innerService->listLocationAliases($location, $custom, $languageCode);
+        return $this->innerService->listLocationAliases($location, $custom, $languageCode);
     }
 
     public function listGlobalAliases(
@@ -56,31 +56,31 @@ abstract class URLAliasServiceDecorator implements URLAliasService
         $offset = 0,
         $limit = -1
     ) {
-        $this->innerService->listGlobalAliases($languageCode, $offset, $limit);
+        return $this->innerService->listGlobalAliases($languageCode, $offset, $limit);
     }
 
     public function removeAliases(array $aliasList)
     {
-        $this->innerService->removeAliases($aliasList);
+        return $this->innerService->removeAliases($aliasList);
     }
 
     public function lookup(
         $url,
         $languageCode = null
     ) {
-        $this->innerService->lookup($url, $languageCode);
+        return $this->innerService->lookup($url, $languageCode);
     }
 
     public function reverseLookup(
         Location $location,
         $languageCode = null
     ) {
-        $this->innerService->reverseLookup($location, $languageCode);
+        return $this->innerService->reverseLookup($location, $languageCode);
     }
 
     public function load($id)
     {
-        $this->innerService->load($id);
+        return $this->innerService->load($id);
     }
 
     public function refreshSystemUrlAliasesForLocation(Location $location): void

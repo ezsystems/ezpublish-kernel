@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection OverridingDeprecatedMethodInspection */
 
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
@@ -35,14 +35,14 @@ abstract class UserServiceDecorator implements UserService
         UserGroupCreateStruct $userGroupCreateStruct,
         UserGroup $parentGroup
     ) {
-        $this->innerService->createUserGroup($userGroupCreateStruct, $parentGroup);
+        return $this->innerService->createUserGroup($userGroupCreateStruct, $parentGroup);
     }
 
     public function loadUserGroup(
         $id,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadUserGroup($id, $prioritizedLanguages);
+        return $this->innerService->loadUserGroup($id, $prioritizedLanguages);
     }
 
     public function loadSubUserGroups(
@@ -51,45 +51,45 @@ abstract class UserServiceDecorator implements UserService
         $limit = 25,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadSubUserGroups($userGroup, $offset, $limit, $prioritizedLanguages);
+        return $this->innerService->loadSubUserGroups($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
     public function deleteUserGroup(UserGroup $userGroup)
     {
-        $this->innerService->deleteUserGroup($userGroup);
+        return $this->innerService->deleteUserGroup($userGroup);
     }
 
     public function moveUserGroup(
         UserGroup $userGroup,
         UserGroup $newParent
     ) {
-        $this->innerService->moveUserGroup($userGroup, $newParent);
+        return $this->innerService->moveUserGroup($userGroup, $newParent);
     }
 
     public function updateUserGroup(
         UserGroup $userGroup,
         UserGroupUpdateStruct $userGroupUpdateStruct
     ) {
-        $this->innerService->updateUserGroup($userGroup, $userGroupUpdateStruct);
+        return $this->innerService->updateUserGroup($userGroup, $userGroupUpdateStruct);
     }
 
     public function createUser(
         UserCreateStruct $userCreateStruct,
         array $parentGroups
     ) {
-        $this->innerService->createUser($userCreateStruct, $parentGroups);
+        return $this->innerService->createUser($userCreateStruct, $parentGroups);
     }
 
     public function loadUser(
         $userId,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadUser($userId, $prioritizedLanguages);
+        return $this->innerService->loadUser($userId, $prioritizedLanguages);
     }
 
     public function loadAnonymousUser()
     {
-        $this->innerService->loadAnonymousUser();
+        return $this->innerService->loadAnonymousUser();
     }
 
     public function loadUserByCredentials(
@@ -97,66 +97,66 @@ abstract class UserServiceDecorator implements UserService
         $password,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadUserByCredentials($login, $password, $prioritizedLanguages);
+        return $this->innerService->loadUserByCredentials($login, $password, $prioritizedLanguages);
     }
 
     public function loadUserByLogin(
         $login,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadUserByLogin($login, $prioritizedLanguages);
+        return $this->innerService->loadUserByLogin($login, $prioritizedLanguages);
     }
 
     public function loadUsersByEmail(
         $email,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadUsersByEmail($email, $prioritizedLanguages);
+        return $this->innerService->loadUsersByEmail($email, $prioritizedLanguages);
     }
 
     public function loadUserByToken(
         $hash,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadUserByToken($hash, $prioritizedLanguages);
+        return $this->innerService->loadUserByToken($hash, $prioritizedLanguages);
     }
 
     public function deleteUser(User $user)
     {
-        $this->innerService->deleteUser($user);
+        return $this->innerService->deleteUser($user);
     }
 
     public function updateUser(
         User $user,
         UserUpdateStruct $userUpdateStruct
     ) {
-        $this->innerService->updateUser($user, $userUpdateStruct);
+        return $this->innerService->updateUser($user, $userUpdateStruct);
     }
 
     public function updateUserToken(
         User $user,
         UserTokenUpdateStruct $userTokenUpdateStruct
     ) {
-        $this->innerService->updateUserToken($user, $userTokenUpdateStruct);
+        return $this->innerService->updateUserToken($user, $userTokenUpdateStruct);
     }
 
     public function expireUserToken($hash)
     {
-        $this->innerService->expireUserToken($hash);
+        return $this->innerService->expireUserToken($hash);
     }
 
     public function assignUserToUserGroup(
         User $user,
         UserGroup $userGroup
     ) {
-        $this->innerService->assignUserToUserGroup($user, $userGroup);
+        return $this->innerService->assignUserToUserGroup($user, $userGroup);
     }
 
     public function unAssignUserFromUserGroup(
         User $user,
         UserGroup $userGroup
     ) {
-        $this->innerService->unAssignUserFromUserGroup($user, $userGroup);
+        return $this->innerService->unAssignUserFromUserGroup($user, $userGroup);
     }
 
     public function loadUserGroupsOfUser(
@@ -165,7 +165,7 @@ abstract class UserServiceDecorator implements UserService
         $limit = 25,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadUserGroupsOfUser($user, $offset, $limit, $prioritizedLanguages);
+        return $this->innerService->loadUserGroupsOfUser($user, $offset, $limit, $prioritizedLanguages);
     }
 
     public function loadUsersOfUserGroup(
@@ -174,7 +174,7 @@ abstract class UserServiceDecorator implements UserService
         $limit = 25,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadUsersOfUserGroup($userGroup, $offset, $limit, $prioritizedLanguages);
+        return $this->innerService->loadUsersOfUserGroup($userGroup, $offset, $limit, $prioritizedLanguages);
     }
 
     public function isUser(Content $content): bool
@@ -194,24 +194,24 @@ abstract class UserServiceDecorator implements UserService
         $mainLanguageCode,
         $contentType = null
     ) {
-        $this->innerService->newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType);
+        return $this->innerService->newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType);
     }
 
     public function newUserGroupCreateStruct(
         $mainLanguageCode,
         $contentType = null
     ) {
-        $this->innerService->newUserGroupCreateStruct($mainLanguageCode, $contentType);
+        return $this->innerService->newUserGroupCreateStruct($mainLanguageCode, $contentType);
     }
 
     public function newUserUpdateStruct()
     {
-        $this->innerService->newUserUpdateStruct();
+        return $this->innerService->newUserUpdateStruct();
     }
 
     public function newUserGroupUpdateStruct()
     {
-        $this->innerService->newUserGroupUpdateStruct();
+        return $this->innerService->newUserGroupUpdateStruct();
     }
 
     public function validatePassword(

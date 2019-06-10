@@ -30,7 +30,7 @@ abstract class SearchServiceDecorator implements SearchService
         array $languageFilter = [],
         $filterOnUserPermissions = true
     ) {
-        $this->innerService->findContent($query, $languageFilter, $filterOnUserPermissions);
+        return $this->innerService->findContent($query, $languageFilter, $filterOnUserPermissions);
     }
 
     public function findContentInfo(
@@ -38,7 +38,7 @@ abstract class SearchServiceDecorator implements SearchService
         array $languageFilter = [],
         $filterOnUserPermissions = true
     ) {
-        $this->innerService->findContentInfo($query, $languageFilter, $filterOnUserPermissions);
+        return $this->innerService->findContentInfo($query, $languageFilter, $filterOnUserPermissions);
     }
 
     public function findSingle(
@@ -46,7 +46,7 @@ abstract class SearchServiceDecorator implements SearchService
         array $languageFilter = [],
         $filterOnUserPermissions = true
     ) {
-        $this->innerService->findSingle($filter, $languageFilter, $filterOnUserPermissions);
+        return $this->innerService->findSingle($filter, $languageFilter, $filterOnUserPermissions);
     }
 
     public function suggest(
@@ -55,7 +55,7 @@ abstract class SearchServiceDecorator implements SearchService
         $limit = 10,
         Criterion $filter = null
     ) {
-        $this->innerService->suggest($prefix, $fieldPaths, $limit, $filter);
+        return $this->innerService->suggest($prefix, $fieldPaths, $limit, $filter);
     }
 
     public function findLocations(
@@ -63,11 +63,11 @@ abstract class SearchServiceDecorator implements SearchService
         array $languageFilter = [],
         $filterOnUserPermissions = true
     ) {
-        $this->innerService->findLocations($query, $languageFilter, $filterOnUserPermissions);
+        return $this->innerService->findLocations($query, $languageFilter, $filterOnUserPermissions);
     }
 
     public function supports($capabilityFlag)
     {
-        $this->innerService->supports($capabilityFlag);
+        return $this->innerService->supports($capabilityFlag);
     }
 }

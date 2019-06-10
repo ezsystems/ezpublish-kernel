@@ -40,7 +40,7 @@ class URLAliasServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f4613.54899052',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('createUrlAlias')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('createUrlAlias')->with(...$parameters);
 
         $decoratedService->createUrlAlias(...$parameters);
     }
@@ -58,7 +58,7 @@ class URLAliasServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f46c8.07270908',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('createGlobalUrlAlias')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('createGlobalUrlAlias')->with(...$parameters);
 
         $decoratedService->createGlobalUrlAlias(...$parameters);
     }
@@ -74,7 +74,7 @@ class URLAliasServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f4720.32499208',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('listLocationAliases')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('listLocationAliases')->with(...$parameters);
 
         $decoratedService->listLocationAliases(...$parameters);
     }
@@ -90,7 +90,7 @@ class URLAliasServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f4774.51720548',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('listGlobalAliases')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('listGlobalAliases')->with(...$parameters);
 
         $decoratedService->listGlobalAliases(...$parameters);
     }
@@ -102,7 +102,7 @@ class URLAliasServiceDecoratorTest extends TestCase
 
         $parameters = [['random_value_5ced05ce0f4797.71498070']];
 
-        $serviceMock->expects($this->exactly(1))->method('removeAliases')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('removeAliases')->with(...$parameters);
 
         $decoratedService->removeAliases(...$parameters);
     }
@@ -117,7 +117,7 @@ class URLAliasServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f47d7.99589118',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('lookup')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('lookup')->with(...$parameters);
 
         $decoratedService->lookup(...$parameters);
     }
@@ -132,7 +132,7 @@ class URLAliasServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f4803.92292057',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('reverseLookup')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('reverseLookup')->with(...$parameters);
 
         $decoratedService->reverseLookup(...$parameters);
     }
@@ -144,7 +144,7 @@ class URLAliasServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce0f4839.47843200'];
 
-        $serviceMock->expects($this->exactly(1))->method('load')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('load')->with(...$parameters);
 
         $decoratedService->load(...$parameters);
     }
@@ -156,7 +156,7 @@ class URLAliasServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(Location::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('refreshSystemUrlAliasesForLocation')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('refreshSystemUrlAliasesForLocation')->with(...$parameters);
 
         $decoratedService->refreshSystemUrlAliasesForLocation(...$parameters);
     }
@@ -166,8 +166,10 @@ class URLAliasServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $serviceMock->expects($this->exactly(1))->method('deleteCorruptedUrlAliases')->with();
+        $parameters = [];
 
-        $decoratedService->deleteCorruptedUrlAliases();
+        $serviceMock->expects($this->once())->method('deleteCorruptedUrlAliases')->with(...$parameters);
+
+        $decoratedService->deleteCorruptedUrlAliases(...$parameters);
     }
 }

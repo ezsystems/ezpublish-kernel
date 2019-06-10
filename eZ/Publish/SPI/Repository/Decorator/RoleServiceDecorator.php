@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection OverridingDeprecatedMethodInspection */
 
 /**
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
@@ -36,43 +36,43 @@ abstract class RoleServiceDecorator implements RoleService
 
     public function createRole(RoleCreateStruct $roleCreateStruct)
     {
-        $this->innerService->createRole($roleCreateStruct);
+        return $this->innerService->createRole($roleCreateStruct);
     }
 
     public function createRoleDraft(Role $role)
     {
-        $this->innerService->createRoleDraft($role);
+        return $this->innerService->createRoleDraft($role);
     }
 
     public function loadRoleDraft($id)
     {
-        $this->innerService->loadRoleDraft($id);
+        return $this->innerService->loadRoleDraft($id);
     }
 
     public function loadRoleDraftByRoleId($roleId)
     {
-        $this->innerService->loadRoleDraftByRoleId($roleId);
+        return $this->innerService->loadRoleDraftByRoleId($roleId);
     }
 
     public function updateRoleDraft(
         RoleDraft $roleDraft,
         RoleUpdateStruct $roleUpdateStruct
     ) {
-        $this->innerService->updateRoleDraft($roleDraft, $roleUpdateStruct);
+        return $this->innerService->updateRoleDraft($roleDraft, $roleUpdateStruct);
     }
 
     public function addPolicyByRoleDraft(
         RoleDraft $roleDraft,
         PolicyCreateStruct $policyCreateStruct
     ) {
-        $this->innerService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
+        return $this->innerService->addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
     }
 
     public function removePolicyByRoleDraft(
         RoleDraft $roleDraft,
         PolicyDraft $policyDraft
     ) {
-        $this->innerService->removePolicyByRoleDraft($roleDraft, $policyDraft);
+        return $this->innerService->removePolicyByRoleDraft($roleDraft, $policyDraft);
     }
 
     public function updatePolicyByRoleDraft(
@@ -80,68 +80,68 @@ abstract class RoleServiceDecorator implements RoleService
         PolicyDraft $policy,
         PolicyUpdateStruct $policyUpdateStruct
     ) {
-        $this->innerService->updatePolicyByRoleDraft($roleDraft, $policy, $policyUpdateStruct);
+        return $this->innerService->updatePolicyByRoleDraft($roleDraft, $policy, $policyUpdateStruct);
     }
 
     public function deleteRoleDraft(RoleDraft $roleDraft)
     {
-        $this->innerService->deleteRoleDraft($roleDraft);
+        return $this->innerService->deleteRoleDraft($roleDraft);
     }
 
     public function publishRoleDraft(RoleDraft $roleDraft)
     {
-        $this->innerService->publishRoleDraft($roleDraft);
+        return $this->innerService->publishRoleDraft($roleDraft);
     }
 
     public function updateRole(
         Role $role,
         RoleUpdateStruct $roleUpdateStruct
     ) {
-        $this->innerService->updateRole($role, $roleUpdateStruct);
+        return $this->innerService->updateRole($role, $roleUpdateStruct);
     }
 
     public function addPolicy(
         Role $role,
         PolicyCreateStruct $policyCreateStruct
     ) {
-        $this->innerService->addPolicy($role, $policyCreateStruct);
+        return $this->innerService->addPolicy($role, $policyCreateStruct);
     }
 
     public function deletePolicy(Policy $policy)
     {
-        $this->innerService->deletePolicy($policy);
+        return $this->innerService->deletePolicy($policy);
     }
 
     public function updatePolicy(
         Policy $policy,
         PolicyUpdateStruct $policyUpdateStruct
     ) {
-        $this->innerService->updatePolicy($policy, $policyUpdateStruct);
+        return $this->innerService->updatePolicy($policy, $policyUpdateStruct);
     }
 
     public function loadRole($id)
     {
-        $this->innerService->loadRole($id);
+        return $this->innerService->loadRole($id);
     }
 
     public function loadRoleByIdentifier($identifier)
     {
-        $this->innerService->loadRoleByIdentifier($identifier);
+        return $this->innerService->loadRoleByIdentifier($identifier);
     }
 
     public function loadRoles()
     {
-        $this->innerService->loadRoles();
+        return $this->innerService->loadRoles();
     }
 
     public function deleteRole(Role $role)
     {
-        $this->innerService->deleteRole($role);
+        return $this->innerService->deleteRole($role);
     }
 
     public function loadPoliciesByUserId($userId)
     {
-        $this->innerService->loadPoliciesByUserId($userId);
+        return $this->innerService->loadPoliciesByUserId($userId);
     }
 
     public function assignRoleToUserGroup(
@@ -149,14 +149,14 @@ abstract class RoleServiceDecorator implements RoleService
         UserGroup $userGroup,
         RoleLimitation $roleLimitation = null
     ) {
-        $this->innerService->assignRoleToUserGroup($role, $userGroup, $roleLimitation);
+        return $this->innerService->assignRoleToUserGroup($role, $userGroup, $roleLimitation);
     }
 
     public function unassignRoleFromUserGroup(
         Role $role,
         UserGroup $userGroup
     ) {
-        $this->innerService->unassignRoleFromUserGroup($role, $userGroup);
+        return $this->innerService->unassignRoleFromUserGroup($role, $userGroup);
     }
 
     public function assignRoleToUser(
@@ -164,74 +164,74 @@ abstract class RoleServiceDecorator implements RoleService
         User $user,
         RoleLimitation $roleLimitation = null
     ) {
-        $this->innerService->assignRoleToUser($role, $user, $roleLimitation);
+        return $this->innerService->assignRoleToUser($role, $user, $roleLimitation);
     }
 
     public function unassignRoleFromUser(
         Role $role,
         User $user
     ) {
-        $this->innerService->unassignRoleFromUser($role, $user);
+        return $this->innerService->unassignRoleFromUser($role, $user);
     }
 
     public function loadRoleAssignment($roleAssignmentId)
     {
-        $this->innerService->loadRoleAssignment($roleAssignmentId);
+        return $this->innerService->loadRoleAssignment($roleAssignmentId);
     }
 
     public function getRoleAssignments(Role $role)
     {
-        $this->innerService->getRoleAssignments($role);
+        return $this->innerService->getRoleAssignments($role);
     }
 
     public function getRoleAssignmentsForUser(
         User $user,
         $inherited = false
     ) {
-        $this->innerService->getRoleAssignmentsForUser($user, $inherited);
+        return $this->innerService->getRoleAssignmentsForUser($user, $inherited);
     }
 
     public function getRoleAssignmentsForUserGroup(UserGroup $userGroup)
     {
-        $this->innerService->getRoleAssignmentsForUserGroup($userGroup);
+        return $this->innerService->getRoleAssignmentsForUserGroup($userGroup);
     }
 
     public function removeRoleAssignment(RoleAssignment $roleAssignment)
     {
-        $this->innerService->removeRoleAssignment($roleAssignment);
+        return $this->innerService->removeRoleAssignment($roleAssignment);
     }
 
     public function newRoleCreateStruct($name)
     {
-        $this->innerService->newRoleCreateStruct($name);
+        return $this->innerService->newRoleCreateStruct($name);
     }
 
     public function newPolicyCreateStruct(
         $module,
         $function
     ) {
-        $this->innerService->newPolicyCreateStruct($module, $function);
+        return $this->innerService->newPolicyCreateStruct($module, $function);
     }
 
     public function newPolicyUpdateStruct()
     {
-        $this->innerService->newPolicyUpdateStruct();
+        return $this->innerService->newPolicyUpdateStruct();
     }
 
     public function newRoleUpdateStruct()
     {
-        $this->innerService->newRoleUpdateStruct();
+        return $this->innerService->newRoleUpdateStruct();
     }
 
     public function getLimitationType($identifier)
     {
-        $this->innerService->getLimitationType($identifier);
+        return $this->innerService->getLimitationType($identifier);
     }
 
     public function getLimitationTypesByModuleFunction(
         $module,
         $function
     ) {
-        $this->innerService->getLimitationTypesByModuleFunction($module, $function);
+        return $this->innerService->getLimitationTypesByModuleFunction($module, $function);
     }
 }

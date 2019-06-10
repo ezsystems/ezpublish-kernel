@@ -31,14 +31,14 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
 
     public function createObjectStateGroup(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct)
     {
-        $this->innerService->createObjectStateGroup($objectStateGroupCreateStruct);
+        return $this->innerService->createObjectStateGroup($objectStateGroupCreateStruct);
     }
 
     public function loadObjectStateGroup(
         $objectStateGroupId,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
+        return $this->innerService->loadObjectStateGroup($objectStateGroupId, $prioritizedLanguages);
     }
 
     public function loadObjectStateGroups(
@@ -46,59 +46,59 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
         $limit = -1,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadObjectStateGroups($offset, $limit, $prioritizedLanguages);
+        return $this->innerService->loadObjectStateGroups($offset, $limit, $prioritizedLanguages);
     }
 
     public function loadObjectStates(
         ObjectStateGroup $objectStateGroup,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadObjectStates($objectStateGroup, $prioritizedLanguages);
+        return $this->innerService->loadObjectStates($objectStateGroup, $prioritizedLanguages);
     }
 
     public function updateObjectStateGroup(
         ObjectStateGroup $objectStateGroup,
         ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct
     ) {
-        $this->innerService->updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
+        return $this->innerService->updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
     }
 
     public function deleteObjectStateGroup(ObjectStateGroup $objectStateGroup)
     {
-        $this->innerService->deleteObjectStateGroup($objectStateGroup);
+        return $this->innerService->deleteObjectStateGroup($objectStateGroup);
     }
 
     public function createObjectState(
         ObjectStateGroup $objectStateGroup,
         ObjectStateCreateStruct $objectStateCreateStruct
     ) {
-        $this->innerService->createObjectState($objectStateGroup, $objectStateCreateStruct);
+        return $this->innerService->createObjectState($objectStateGroup, $objectStateCreateStruct);
     }
 
     public function loadObjectState(
         $stateId,
         array $prioritizedLanguages = []
     ) {
-        $this->innerService->loadObjectState($stateId, $prioritizedLanguages);
+        return $this->innerService->loadObjectState($stateId, $prioritizedLanguages);
     }
 
     public function updateObjectState(
         ObjectState $objectState,
         ObjectStateUpdateStruct $objectStateUpdateStruct
     ) {
-        $this->innerService->updateObjectState($objectState, $objectStateUpdateStruct);
+        return $this->innerService->updateObjectState($objectState, $objectStateUpdateStruct);
     }
 
     public function setPriorityOfObjectState(
         ObjectState $objectState,
         $priority
     ) {
-        $this->innerService->setPriorityOfObjectState($objectState, $priority);
+        return $this->innerService->setPriorityOfObjectState($objectState, $priority);
     }
 
     public function deleteObjectState(ObjectState $objectState)
     {
-        $this->innerService->deleteObjectState($objectState);
+        return $this->innerService->deleteObjectState($objectState);
     }
 
     public function setContentState(
@@ -106,38 +106,38 @@ abstract class ObjectStateServiceDecorator implements ObjectStateService
         ObjectStateGroup $objectStateGroup,
         ObjectState $objectState
     ) {
-        $this->innerService->setContentState($contentInfo, $objectStateGroup, $objectState);
+        return $this->innerService->setContentState($contentInfo, $objectStateGroup, $objectState);
     }
 
     public function getContentState(
         ContentInfo $contentInfo,
         ObjectStateGroup $objectStateGroup
     ) {
-        $this->innerService->getContentState($contentInfo, $objectStateGroup);
+        return $this->innerService->getContentState($contentInfo, $objectStateGroup);
     }
 
     public function getContentCount(ObjectState $objectState)
     {
-        $this->innerService->getContentCount($objectState);
+        return $this->innerService->getContentCount($objectState);
     }
 
     public function newObjectStateGroupCreateStruct($identifier)
     {
-        $this->innerService->newObjectStateGroupCreateStruct($identifier);
+        return $this->innerService->newObjectStateGroupCreateStruct($identifier);
     }
 
     public function newObjectStateGroupUpdateStruct()
     {
-        $this->innerService->newObjectStateGroupUpdateStruct();
+        return $this->innerService->newObjectStateGroupUpdateStruct();
     }
 
     public function newObjectStateCreateStruct($identifier)
     {
-        $this->innerService->newObjectStateCreateStruct($identifier);
+        return $this->innerService->newObjectStateCreateStruct($identifier);
     }
 
     public function newObjectStateUpdateStruct()
     {
-        $this->innerService->newObjectStateUpdateStruct();
+        return $this->innerService->newObjectStateUpdateStruct();
     }
 }

@@ -24,16 +24,16 @@ abstract class FieldTypeServiceDecorator implements FieldTypeService
 
     public function getFieldTypes()
     {
-        $this->innerService->getFieldTypes();
+        return $this->innerService->getFieldTypes();
     }
 
     public function getFieldType($identifier)
     {
-        $this->innerService->getFieldType($identifier);
+        return $this->innerService->getFieldType($identifier);
     }
 
     public function hasFieldType($identifier)
     {
-        $this->innerService->hasFieldType($identifier);
+        return $this->innerService->hasFieldType($identifier);
     }
 }

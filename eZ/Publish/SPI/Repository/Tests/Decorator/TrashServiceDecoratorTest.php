@@ -36,7 +36,7 @@ class TrashServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce15c270.43306350'];
 
-        $serviceMock->expects($this->exactly(1))->method('loadTrashItem')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('loadTrashItem')->with(...$parameters);
 
         $decoratedService->loadTrashItem(...$parameters);
     }
@@ -48,7 +48,7 @@ class TrashServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(Location::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('trash')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('trash')->with(...$parameters);
 
         $decoratedService->trash(...$parameters);
     }
@@ -63,7 +63,7 @@ class TrashServiceDecoratorTest extends TestCase
             $this->createMock(Location::class),
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('recover')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('recover')->with(...$parameters);
 
         $decoratedService->recover(...$parameters);
     }
@@ -73,9 +73,11 @@ class TrashServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $serviceMock->expects($this->exactly(1))->method('emptyTrash')->with();
+        $parameters = [];
 
-        $decoratedService->emptyTrash();
+        $serviceMock->expects($this->once())->method('emptyTrash')->with(...$parameters);
+
+        $decoratedService->emptyTrash(...$parameters);
     }
 
     public function testDeleteTrashItemDecorator()
@@ -85,7 +87,7 @@ class TrashServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(TrashItem::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('deleteTrashItem')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('deleteTrashItem')->with(...$parameters);
 
         $decoratedService->deleteTrashItem(...$parameters);
     }
@@ -97,7 +99,7 @@ class TrashServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(Query::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('findTrashItems')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('findTrashItems')->with(...$parameters);
 
         $decoratedService->findTrashItems(...$parameters);
     }

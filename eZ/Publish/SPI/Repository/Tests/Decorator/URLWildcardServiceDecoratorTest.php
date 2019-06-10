@@ -38,7 +38,7 @@ class URLWildcardServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f7713.40900633',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('create')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('create')->with(...$parameters);
 
         $decoratedService->create(...$parameters);
     }
@@ -50,7 +50,7 @@ class URLWildcardServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(URLWildcard::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('remove')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('remove')->with(...$parameters);
 
         $decoratedService->remove(...$parameters);
     }
@@ -62,7 +62,7 @@ class URLWildcardServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce0f7e67.73670278'];
 
-        $serviceMock->expects($this->exactly(1))->method('load')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('load')->with(...$parameters);
 
         $decoratedService->load(...$parameters);
     }
@@ -77,7 +77,7 @@ class URLWildcardServiceDecoratorTest extends TestCase
             'random_value_5ced05ce0f7eb2.19026311',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('loadAll')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('loadAll')->with(...$parameters);
 
         $decoratedService->loadAll(...$parameters);
     }
@@ -89,7 +89,7 @@ class URLWildcardServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce0f7ee7.19290474'];
 
-        $serviceMock->expects($this->exactly(1))->method('translate')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('translate')->with(...$parameters);
 
         $decoratedService->translate(...$parameters);
     }

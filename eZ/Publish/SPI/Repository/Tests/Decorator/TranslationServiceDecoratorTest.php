@@ -37,7 +37,7 @@ class TranslationServiceDecoratorTest extends TestCase
             'random_value_5ced05ce16efc3.57825052',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('translate')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('translate')->with(...$parameters);
 
         $decoratedService->translate(...$parameters);
     }
@@ -52,7 +52,7 @@ class TranslationServiceDecoratorTest extends TestCase
             'random_value_5ced05ce16f065.78328330',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('translateString')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('translateString')->with(...$parameters);
 
         $decoratedService->translateString(...$parameters);
     }

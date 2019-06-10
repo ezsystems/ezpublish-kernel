@@ -31,9 +31,11 @@ class FieldTypeServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $serviceMock->expects($this->exactly(1))->method('getFieldTypes')->with();
+        $parameters = [];
 
-        $decoratedService->getFieldTypes();
+        $serviceMock->expects($this->once())->method('getFieldTypes')->with(...$parameters);
+
+        $decoratedService->getFieldTypes(...$parameters);
     }
 
     public function testGetFieldTypeDecorator()
@@ -43,7 +45,7 @@ class FieldTypeServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce0eda66.08473991'];
 
-        $serviceMock->expects($this->exactly(1))->method('getFieldType')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('getFieldType')->with(...$parameters);
 
         $decoratedService->getFieldType(...$parameters);
     }
@@ -55,7 +57,7 @@ class FieldTypeServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce0edab1.24451920'];
 
-        $serviceMock->expects($this->exactly(1))->method('hasFieldType')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('hasFieldType')->with(...$parameters);
 
         $decoratedService->hasFieldType(...$parameters);
     }

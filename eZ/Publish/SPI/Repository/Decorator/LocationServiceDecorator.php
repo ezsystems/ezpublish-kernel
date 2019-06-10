@@ -31,7 +31,7 @@ abstract class LocationServiceDecorator implements LocationService
         Location $subtree,
         Location $targetParentLocation
     ) {
-        $this->innerService->copySubtree($subtree, $targetParentLocation);
+        return $this->innerService->copySubtree($subtree, $targetParentLocation);
     }
 
     public function loadLocation(
@@ -39,7 +39,7 @@ abstract class LocationServiceDecorator implements LocationService
         array $prioritizedLanguages = null,
         bool $useAlwaysAvailable = null
     ) {
-        $this->innerService->loadLocation($locationId, $prioritizedLanguages, $useAlwaysAvailable);
+        return $this->innerService->loadLocation($locationId, $prioritizedLanguages, $useAlwaysAvailable);
     }
 
     public function loadLocationList(
@@ -55,7 +55,7 @@ abstract class LocationServiceDecorator implements LocationService
         array $prioritizedLanguages = null,
         bool $useAlwaysAvailable = null
     ) {
-        $this->innerService->loadLocationByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable);
+        return $this->innerService->loadLocationByRemoteId($remoteId, $prioritizedLanguages, $useAlwaysAvailable);
     }
 
     public function loadLocations(
@@ -63,7 +63,7 @@ abstract class LocationServiceDecorator implements LocationService
         Location $rootLocation = null,
         array $prioritizedLanguages = null
     ) {
-        $this->innerService->loadLocations($contentInfo, $rootLocation, $prioritizedLanguages);
+        return $this->innerService->loadLocations($contentInfo, $rootLocation, $prioritizedLanguages);
     }
 
     public function loadLocationChildren(
@@ -72,72 +72,72 @@ abstract class LocationServiceDecorator implements LocationService
         $limit = 25,
         array $prioritizedLanguages = null
     ) {
-        $this->innerService->loadLocationChildren($location, $offset, $limit, $prioritizedLanguages);
+        return $this->innerService->loadLocationChildren($location, $offset, $limit, $prioritizedLanguages);
     }
 
     public function loadParentLocationsForDraftContent(
         VersionInfo $versionInfo,
         array $prioritizedLanguages = null
     ) {
-        $this->innerService->loadParentLocationsForDraftContent($versionInfo, $prioritizedLanguages);
+        return $this->innerService->loadParentLocationsForDraftContent($versionInfo, $prioritizedLanguages);
     }
 
     public function getLocationChildCount(Location $location)
     {
-        $this->innerService->getLocationChildCount($location);
+        return $this->innerService->getLocationChildCount($location);
     }
 
     public function createLocation(
         ContentInfo $contentInfo,
         LocationCreateStruct $locationCreateStruct
     ) {
-        $this->innerService->createLocation($contentInfo, $locationCreateStruct);
+        return $this->innerService->createLocation($contentInfo, $locationCreateStruct);
     }
 
     public function updateLocation(
         Location $location,
         LocationUpdateStruct $locationUpdateStruct
     ) {
-        $this->innerService->updateLocation($location, $locationUpdateStruct);
+        return $this->innerService->updateLocation($location, $locationUpdateStruct);
     }
 
     public function swapLocation(
         Location $location1,
         Location $location2
     ) {
-        $this->innerService->swapLocation($location1, $location2);
+        return $this->innerService->swapLocation($location1, $location2);
     }
 
     public function hideLocation(Location $location)
     {
-        $this->innerService->hideLocation($location);
+        return $this->innerService->hideLocation($location);
     }
 
     public function unhideLocation(Location $location)
     {
-        $this->innerService->unhideLocation($location);
+        return $this->innerService->unhideLocation($location);
     }
 
     public function moveSubtree(
         Location $location,
         Location $newParentLocation
     ) {
-        $this->innerService->moveSubtree($location, $newParentLocation);
+        return $this->innerService->moveSubtree($location, $newParentLocation);
     }
 
     public function deleteLocation(Location $location)
     {
-        $this->innerService->deleteLocation($location);
+        return $this->innerService->deleteLocation($location);
     }
 
     public function newLocationCreateStruct($parentLocationId)
     {
-        $this->innerService->newLocationCreateStruct($parentLocationId);
+        return $this->innerService->newLocationCreateStruct($parentLocationId);
     }
 
     public function newLocationUpdateStruct()
     {
-        $this->innerService->newLocationUpdateStruct();
+        return $this->innerService->newLocationUpdateStruct();
     }
 
     public function getAllLocationsCount(): int

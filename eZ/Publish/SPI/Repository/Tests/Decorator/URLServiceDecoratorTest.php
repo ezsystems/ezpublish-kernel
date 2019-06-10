@@ -34,9 +34,11 @@ class URLServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $serviceMock->expects($this->exactly(1))->method('createUpdateStruct')->with();
+        $parameters = [];
 
-        $decoratedService->createUpdateStruct();
+        $serviceMock->expects($this->once())->method('createUpdateStruct')->with(...$parameters);
+
+        $decoratedService->createUpdateStruct(...$parameters);
     }
 
     public function testFindUrlsDecorator()
@@ -46,7 +48,7 @@ class URLServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(URLQuery::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('findUrls')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('findUrls')->with(...$parameters);
 
         $decoratedService->findUrls(...$parameters);
     }
@@ -62,7 +64,7 @@ class URLServiceDecoratorTest extends TestCase
             'random_value_5ced05ce1725a8.96796907',
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('findUsages')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('findUsages')->with(...$parameters);
 
         $decoratedService->findUsages(...$parameters);
     }
@@ -74,7 +76,7 @@ class URLServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce172600.22330806'];
 
-        $serviceMock->expects($this->exactly(1))->method('loadById')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('loadById')->with(...$parameters);
 
         $decoratedService->loadById(...$parameters);
     }
@@ -86,7 +88,7 @@ class URLServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce172635.77719845'];
 
-        $serviceMock->expects($this->exactly(1))->method('loadByUrl')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('loadByUrl')->with(...$parameters);
 
         $decoratedService->loadByUrl(...$parameters);
     }
@@ -101,7 +103,7 @@ class URLServiceDecoratorTest extends TestCase
             $this->createMock(URLUpdateStruct::class),
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('updateUrl')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('updateUrl')->with(...$parameters);
 
         $decoratedService->updateUrl(...$parameters);
     }

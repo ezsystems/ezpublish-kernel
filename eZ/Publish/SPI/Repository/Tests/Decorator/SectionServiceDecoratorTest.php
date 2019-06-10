@@ -38,7 +38,7 @@ class SectionServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(SectionCreateStruct::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('createSection')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('createSection')->with(...$parameters);
 
         $decoratedService->createSection(...$parameters);
     }
@@ -53,7 +53,7 @@ class SectionServiceDecoratorTest extends TestCase
             $this->createMock(SectionUpdateStruct::class),
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('updateSection')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('updateSection')->with(...$parameters);
 
         $decoratedService->updateSection(...$parameters);
     }
@@ -65,7 +65,7 @@ class SectionServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce10cd25.80094030'];
 
-        $serviceMock->expects($this->exactly(1))->method('loadSection')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('loadSection')->with(...$parameters);
 
         $decoratedService->loadSection(...$parameters);
     }
@@ -75,9 +75,11 @@ class SectionServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $serviceMock->expects($this->exactly(1))->method('loadSections')->with();
+        $parameters = [];
 
-        $decoratedService->loadSections();
+        $serviceMock->expects($this->once())->method('loadSections')->with(...$parameters);
+
+        $decoratedService->loadSections(...$parameters);
     }
 
     public function testLoadSectionByIdentifierDecorator()
@@ -87,7 +89,7 @@ class SectionServiceDecoratorTest extends TestCase
 
         $parameters = ['random_value_5ced05ce10cd87.67751220'];
 
-        $serviceMock->expects($this->exactly(1))->method('loadSectionByIdentifier')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('loadSectionByIdentifier')->with(...$parameters);
 
         $decoratedService->loadSectionByIdentifier(...$parameters);
     }
@@ -99,7 +101,7 @@ class SectionServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(Section::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('countAssignedContents')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('countAssignedContents')->with(...$parameters);
 
         $decoratedService->countAssignedContents(...$parameters);
     }
@@ -111,7 +113,7 @@ class SectionServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(Section::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('isSectionUsed')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('isSectionUsed')->with(...$parameters);
 
         $decoratedService->isSectionUsed(...$parameters);
     }
@@ -126,7 +128,7 @@ class SectionServiceDecoratorTest extends TestCase
             $this->createMock(Section::class),
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('assignSection')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('assignSection')->with(...$parameters);
 
         $decoratedService->assignSection(...$parameters);
     }
@@ -141,7 +143,7 @@ class SectionServiceDecoratorTest extends TestCase
             $this->createMock(Section::class),
         ];
 
-        $serviceMock->expects($this->exactly(1))->method('assignSectionToSubtree')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('assignSectionToSubtree')->with(...$parameters);
 
         $decoratedService->assignSectionToSubtree(...$parameters);
     }
@@ -153,7 +155,7 @@ class SectionServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(Section::class)];
 
-        $serviceMock->expects($this->exactly(1))->method('deleteSection')->with(...$parameters);
+        $serviceMock->expects($this->once())->method('deleteSection')->with(...$parameters);
 
         $decoratedService->deleteSection(...$parameters);
     }
@@ -163,9 +165,11 @@ class SectionServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $serviceMock->expects($this->exactly(1))->method('newSectionCreateStruct')->with();
+        $parameters = [];
 
-        $decoratedService->newSectionCreateStruct();
+        $serviceMock->expects($this->once())->method('newSectionCreateStruct')->with(...$parameters);
+
+        $decoratedService->newSectionCreateStruct(...$parameters);
     }
 
     public function testNewSectionUpdateStructDecorator()
@@ -173,8 +177,10 @@ class SectionServiceDecoratorTest extends TestCase
         $serviceMock = $this->createServiceMock();
         $decoratedService = $this->createDecorator($serviceMock);
 
-        $serviceMock->expects($this->exactly(1))->method('newSectionUpdateStruct')->with();
+        $parameters = [];
 
-        $decoratedService->newSectionUpdateStruct();
+        $serviceMock->expects($this->once())->method('newSectionUpdateStruct')->with(...$parameters);
+
+        $decoratedService->newSectionUpdateStruct(...$parameters);
     }
 }

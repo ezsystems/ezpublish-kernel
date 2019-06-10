@@ -27,13 +27,13 @@ abstract class TranslationServiceDecorator implements TranslationService
         Translation $translation,
         $locale
     ) {
-        $this->innerService->translate($translation, $locale);
+        return $this->innerService->translate($translation, $locale);
     }
 
     public function translateString(
         $translation,
         $locale
     ) {
-        $this->innerService->translateString($translation, $locale);
+        return $this->innerService->translateString($translation, $locale);
     }
 }

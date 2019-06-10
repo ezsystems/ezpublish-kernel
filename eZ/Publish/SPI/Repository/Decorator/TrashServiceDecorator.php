@@ -27,33 +27,33 @@ abstract class TrashServiceDecorator implements TrashService
 
     public function loadTrashItem($trashItemId)
     {
-        $this->innerService->loadTrashItem($trashItemId);
+        return $this->innerService->loadTrashItem($trashItemId);
     }
 
     public function trash(Location $location)
     {
-        $this->innerService->trash($location);
+        return $this->innerService->trash($location);
     }
 
     public function recover(
         TrashItem $trashItem,
         Location $newParentLocation = null
     ) {
-        $this->innerService->recover($trashItem, $newParentLocation);
+        return $this->innerService->recover($trashItem, $newParentLocation);
     }
 
     public function emptyTrash()
     {
-        $this->innerService->emptyTrash();
+        return $this->innerService->emptyTrash();
     }
 
     public function deleteTrashItem(TrashItem $trashItem)
     {
-        $this->innerService->deleteTrashItem($trashItem);
+        return $this->innerService->deleteTrashItem($trashItem);
     }
 
     public function findTrashItems(Query $query)
     {
-        $this->innerService->findTrashItems($query);
+        return $this->innerService->findTrashItems($query);
     }
 }

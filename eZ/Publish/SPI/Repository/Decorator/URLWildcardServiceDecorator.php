@@ -28,28 +28,28 @@ abstract class URLWildcardServiceDecorator implements URLWildcardService
         $destinationUrl,
         $forward = false
     ) {
-        $this->innerService->create($sourceUrl, $destinationUrl, $forward);
+        return $this->innerService->create($sourceUrl, $destinationUrl, $forward);
     }
 
     public function remove(URLWildcard $urlWildcard)
     {
-        $this->innerService->remove($urlWildcard);
+        return $this->innerService->remove($urlWildcard);
     }
 
     public function load($id)
     {
-        $this->innerService->load($id);
+        return $this->innerService->load($id);
     }
 
     public function loadAll(
         $offset = 0,
         $limit = -1
     ) {
-        $this->innerService->loadAll($offset, $limit);
+        return $this->innerService->loadAll($offset, $limit);
     }
 
     public function translate($url)
     {
-        $this->innerService->translate($url);
+        return $this->innerService->translate($url);
     }
 }

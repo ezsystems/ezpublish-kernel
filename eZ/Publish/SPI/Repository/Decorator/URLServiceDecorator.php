@@ -27,12 +27,12 @@ abstract class URLServiceDecorator implements URLService
 
     public function createUpdateStruct()
     {
-        $this->innerService->createUpdateStruct();
+        return $this->innerService->createUpdateStruct();
     }
 
     public function findUrls(URLQuery $query)
     {
-        $this->innerService->findUrls($query);
+        return $this->innerService->findUrls($query);
     }
 
     public function findUsages(
@@ -40,23 +40,23 @@ abstract class URLServiceDecorator implements URLService
         $offset = 0,
         $limit = -1
     ) {
-        $this->innerService->findUsages($url, $offset, $limit);
+        return $this->innerService->findUsages($url, $offset, $limit);
     }
 
     public function loadById($id)
     {
-        $this->innerService->loadById($id);
+        return $this->innerService->loadById($id);
     }
 
     public function loadByUrl($url)
     {
-        $this->innerService->loadByUrl($url);
+        return $this->innerService->loadByUrl($url);
     }
 
     public function updateUrl(
         URL $url,
         URLUpdateStruct $struct
     ) {
-        $this->innerService->updateUrl($url, $struct);
+        return $this->innerService->updateUrl($url, $struct);
     }
 }

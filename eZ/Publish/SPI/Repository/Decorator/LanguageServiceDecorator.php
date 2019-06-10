@@ -26,39 +26,39 @@ abstract class LanguageServiceDecorator implements LanguageService
 
     public function createLanguage(LanguageCreateStruct $languageCreateStruct)
     {
-        $this->innerService->createLanguage($languageCreateStruct);
+        return $this->innerService->createLanguage($languageCreateStruct);
     }
 
     public function updateLanguageName(
         Language $language,
         $newName
     ) {
-        $this->innerService->updateLanguageName($language, $newName);
+        return $this->innerService->updateLanguageName($language, $newName);
     }
 
     public function enableLanguage(Language $language)
     {
-        $this->innerService->enableLanguage($language);
+        return $this->innerService->enableLanguage($language);
     }
 
     public function disableLanguage(Language $language)
     {
-        $this->innerService->disableLanguage($language);
+        return $this->innerService->disableLanguage($language);
     }
 
     public function loadLanguage($languageCode)
     {
-        $this->innerService->loadLanguage($languageCode);
+        return $this->innerService->loadLanguage($languageCode);
     }
 
     public function loadLanguages()
     {
-        $this->innerService->loadLanguages();
+        return $this->innerService->loadLanguages();
     }
 
     public function loadLanguageById($languageId)
     {
-        $this->innerService->loadLanguageById($languageId);
+        return $this->innerService->loadLanguageById($languageId);
     }
 
     public function loadLanguageListByCode(array $languageCodes): iterable
@@ -73,16 +73,16 @@ abstract class LanguageServiceDecorator implements LanguageService
 
     public function deleteLanguage(Language $language)
     {
-        $this->innerService->deleteLanguage($language);
+        return $this->innerService->deleteLanguage($language);
     }
 
     public function getDefaultLanguageCode()
     {
-        $this->innerService->getDefaultLanguageCode();
+        return $this->innerService->getDefaultLanguageCode();
     }
 
     public function newLanguageCreateStruct()
     {
-        $this->innerService->newLanguageCreateStruct();
+        return $this->innerService->newLanguageCreateStruct();
     }
 }
