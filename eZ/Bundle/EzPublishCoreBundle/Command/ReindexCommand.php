@@ -30,7 +30,9 @@ use PDO;
 
 class ReindexCommand extends Command
 {
-    /** @var string string */
+    /**
+     * @var string string
+     */
     protected static $defaultName = 'ezplatform:reindex';
 
     /**
@@ -43,7 +45,9 @@ class ReindexCommand extends Command
      */
     private $connection;
 
-    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
+    /**
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
+     */
     private $locationHandler;
 
     /**
