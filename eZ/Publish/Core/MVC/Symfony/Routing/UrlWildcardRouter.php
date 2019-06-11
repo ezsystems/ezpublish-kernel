@@ -140,7 +140,7 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
      */
     public function getContext(): RequestContext
     {
-        $this->requestContext;
+        return $this->requestContext;
     }
 
     /**
