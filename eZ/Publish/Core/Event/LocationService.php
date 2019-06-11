@@ -33,7 +33,7 @@ use eZ\Publish\Core\Event\Location\SwapLocationEvent;
 use eZ\Publish\Core\Event\Location\UnhideLocationEvent;
 use eZ\Publish\Core\Event\Location\UpdateLocationEvent;
 
-class LocationService extends LocationServiceDecorator implements LocationServiceInterface
+class LocationService extends LocationServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

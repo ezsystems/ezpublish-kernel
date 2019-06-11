@@ -22,7 +22,7 @@ use eZ\Publish\Core\Event\URLAlias\RefreshSystemUrlAliasesForLocationEvent;
 use eZ\Publish\Core\Event\URLAlias\RemoveAliasesEvent;
 use eZ\Publish\Core\Event\URLAlias\URLAliasEvents;
 
-class URLAliasService extends URLAliasServiceDecorator implements URLAliasServiceInterface
+class URLAliasService extends URLAliasServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -102,7 +102,7 @@ class URLAliasService extends URLAliasServiceDecorator implements URLAliasServic
         return $urlAlias;
     }
 
-    public function removeAliases(array $aliasList)
+    public function removeAliases(array $aliasList): void
     {
         $eventData = [$aliasList];
 

@@ -54,7 +54,7 @@ use eZ\Publish\Core\Event\ContentType\UpdateContentTypeDraftEvent;
 use eZ\Publish\Core\Event\ContentType\UpdateContentTypeGroupEvent;
 use eZ\Publish\Core\Event\ContentType\UpdateFieldDefinitionEvent;
 
-class ContentTypeService extends ContentTypeServiceDecorator implements ContentTypeServiceInterface
+class ContentTypeService extends ContentTypeServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

@@ -20,7 +20,7 @@ use eZ\Publish\Core\Event\URLWildcard\RemoveEvent;
 use eZ\Publish\Core\Event\URLWildcard\TranslateEvent;
 use eZ\Publish\Core\Event\URLWildcard\URLWildcardEvents;
 
-class URLWildcardService extends URLWildcardServiceDecorator implements URLWildcardServiceInterface
+class URLWildcardService extends URLWildcardServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -64,7 +64,7 @@ class URLWildcardService extends URLWildcardServiceDecorator implements URLWildc
         return $urlWildcard;
     }
 
-    public function remove(URLWildcard $urlWildcard)
+    public function remove(URLWildcard $urlWildcard): void
     {
         $eventData = [$urlWildcard];
 

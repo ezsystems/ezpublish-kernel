@@ -25,7 +25,7 @@ use eZ\Publish\Core\Event\Language\EnableLanguageEvent;
 use eZ\Publish\Core\Event\Language\LanguageEvents;
 use eZ\Publish\Core\Event\Language\UpdateLanguageNameEvent;
 
-class LanguageService extends LanguageServiceDecorator implements LanguageServiceInterface
+class LanguageService extends LanguageServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

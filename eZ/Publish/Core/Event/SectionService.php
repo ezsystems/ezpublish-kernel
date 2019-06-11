@@ -28,7 +28,7 @@ use eZ\Publish\Core\Event\Section\DeleteSectionEvent;
 use eZ\Publish\Core\Event\Section\SectionEvents;
 use eZ\Publish\Core\Event\Section\UpdateSectionEvent;
 
-class SectionService extends SectionServiceDecorator implements SectionServiceInterface
+class SectionService extends SectionServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -94,7 +94,7 @@ class SectionService extends SectionServiceDecorator implements SectionServiceIn
     public function assignSection(
         ContentInfo $contentInfo,
         Section $section
-    ) {
+    ): void {
         $eventData = [
             $contentInfo,
             $section,
@@ -135,7 +135,7 @@ class SectionService extends SectionServiceDecorator implements SectionServiceIn
         );
     }
 
-    public function deleteSection(Section $section)
+    public function deleteSection(Section $section): void
     {
         $eventData = [$section];
 

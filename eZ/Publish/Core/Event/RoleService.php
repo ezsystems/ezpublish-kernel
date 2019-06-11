@@ -61,7 +61,7 @@ use eZ\Publish\Core\Event\Role\UpdatePolicyEvent;
 use eZ\Publish\Core\Event\Role\UpdateRoleDraftEvent;
 use eZ\Publish\Core\Event\Role\UpdateRoleEvent;
 
-class RoleService extends RoleServiceDecorator implements RoleServiceInterface
+class RoleService extends RoleServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -311,7 +311,7 @@ class RoleService extends RoleServiceDecorator implements RoleServiceInterface
         return $updatedRole;
     }
 
-    public function deletePolicy(Policy $policy)
+    public function deletePolicy(Policy $policy): void
     {
         $eventData = [$policy];
 
@@ -354,7 +354,7 @@ class RoleService extends RoleServiceDecorator implements RoleServiceInterface
         return $updatedPolicy;
     }
 
-    public function deleteRole(Role $role)
+    public function deleteRole(Role $role): void
     {
         $eventData = [$role];
 
@@ -375,7 +375,7 @@ class RoleService extends RoleServiceDecorator implements RoleServiceInterface
         Role $role,
         UserGroup $userGroup,
         RoleLimitation $roleLimitation = null
-    ) {
+    ): void {
         $eventData = [
             $role,
             $userGroup,
@@ -398,7 +398,7 @@ class RoleService extends RoleServiceDecorator implements RoleServiceInterface
     public function unassignRoleFromUserGroup(
         Role $role,
         UserGroup $userGroup
-    ) {
+    ): void {
         $eventData = [
             $role,
             $userGroup,
@@ -421,7 +421,7 @@ class RoleService extends RoleServiceDecorator implements RoleServiceInterface
         Role $role,
         User $user,
         RoleLimitation $roleLimitation = null
-    ) {
+    ): void {
         $eventData = [
             $role,
             $user,
@@ -444,7 +444,7 @@ class RoleService extends RoleServiceDecorator implements RoleServiceInterface
     public function unassignRoleFromUser(
         Role $role,
         User $user
-    ) {
+    ): void {
         $eventData = [
             $role,
             $user,
@@ -463,7 +463,7 @@ class RoleService extends RoleServiceDecorator implements RoleServiceInterface
         );
     }
 
-    public function removeRoleAssignment(RoleAssignment $roleAssignment)
+    public function removeRoleAssignment(RoleAssignment $roleAssignment): void
     {
         $eventData = [$roleAssignment];
 

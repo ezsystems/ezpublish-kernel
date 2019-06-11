@@ -12,7 +12,7 @@ use eZ\Publish\SPI\Repository\Decorator\SearchServiceDecorator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 
-class SearchService extends SearchServiceDecorator implements SearchServiceInterface
+class SearchService extends SearchServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

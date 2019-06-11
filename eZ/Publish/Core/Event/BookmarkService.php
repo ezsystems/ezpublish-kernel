@@ -18,7 +18,7 @@ use eZ\Publish\Core\Event\Bookmark\BookmarkEvents;
 use eZ\Publish\Core\Event\Bookmark\CreateBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\DeleteBookmarkEvent;
 
-class BookmarkService extends BookmarkServiceDecorator implements BookmarkServiceInterface
+class BookmarkService extends BookmarkServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

@@ -12,7 +12,7 @@ use eZ\Publish\SPI\Repository\Decorator\FieldTypeServiceDecorator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 
-class FieldTypeService extends FieldTypeServiceDecorator implements FieldTypeServiceInterface
+class FieldTypeService extends FieldTypeServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

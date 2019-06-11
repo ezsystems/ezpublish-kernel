@@ -23,7 +23,7 @@ use eZ\Publish\Core\Event\Trash\RecoverEvent;
 use eZ\Publish\Core\Event\Trash\TrashEvent;
 use eZ\Publish\Core\Event\Trash\TrashEvents;
 
-class TrashService extends TrashServiceDecorator implements TrashServiceInterface
+class TrashService extends TrashServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

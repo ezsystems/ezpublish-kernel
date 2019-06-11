@@ -17,7 +17,7 @@ use eZ\Publish\Core\Event\URL\BeforeUpdateUrlEvent;
 use eZ\Publish\Core\Event\URL\URLEvents;
 use eZ\Publish\Core\Event\URL\UpdateUrlEvent;
 
-class URLService extends URLServiceDecorator implements URLServiceInterface
+class URLService extends URLServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

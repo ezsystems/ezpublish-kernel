@@ -15,7 +15,7 @@ use eZ\Publish\Core\Event\UserPreference\BeforeSetUserPreferenceEvent;
 use eZ\Publish\Core\Event\UserPreference\SetUserPreferenceEvent;
 use eZ\Publish\Core\Event\UserPreference\UserPreferenceEvents;
 
-class UserPreferenceService extends UserPreferenceServiceDecorator implements UserPreferenceServiceInterface
+class UserPreferenceService extends UserPreferenceServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

@@ -40,7 +40,7 @@ use eZ\Publish\Core\Event\User\UpdateUserGroupEvent;
 use eZ\Publish\Core\Event\User\UpdateUserTokenEvent;
 use eZ\Publish\Core\Event\User\UserEvents;
 
-class UserService extends UserServiceDecorator implements UserServiceInterface
+class UserService extends UserServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -106,7 +106,7 @@ class UserService extends UserServiceDecorator implements UserServiceInterface
     public function moveUserGroup(
         UserGroup $userGroup,
         UserGroup $newParent
-    ) {
+    ): void {
         $eventData = [
             $userGroup,
             $newParent,
@@ -253,7 +253,7 @@ class UserService extends UserServiceDecorator implements UserServiceInterface
     public function assignUserToUserGroup(
         User $user,
         UserGroup $userGroup
-    ) {
+    ): void {
         $eventData = [
             $user,
             $userGroup,
@@ -275,7 +275,7 @@ class UserService extends UserServiceDecorator implements UserServiceInterface
     public function unAssignUserFromUserGroup(
         User $user,
         UserGroup $userGroup
-    ) {
+    ): void {
         $eventData = [
             $user,
             $userGroup,

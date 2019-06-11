@@ -21,7 +21,7 @@ use eZ\Publish\Core\Event\Notification\DeleteNotificationEvent;
 use eZ\Publish\Core\Event\Notification\MarkNotificationAsReadEvent;
 use eZ\Publish\Core\Event\Notification\NotificationEvents;
 
-class NotificationService extends NotificationServiceDecorator implements NotificationServiceInterface
+class NotificationService extends NotificationServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

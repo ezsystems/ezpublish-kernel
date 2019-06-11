@@ -36,7 +36,7 @@ use eZ\Publish\Core\Event\ObjectState\SetPriorityOfObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateGroupEvent;
 
-class ObjectStateService extends ObjectStateServiceDecorator implements ObjectStateServiceInterface
+class ObjectStateService extends ObjectStateServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface

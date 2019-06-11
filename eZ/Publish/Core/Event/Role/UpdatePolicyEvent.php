@@ -51,7 +51,7 @@ final class UpdatePolicyEvent extends AfterEvent
         return $this->policyUpdateStruct;
     }
 
-    public function getUpdatedPolicy()
+    public function getUpdatedPolicy(): Policy
     {
         return $this->updatedPolicy;
     }

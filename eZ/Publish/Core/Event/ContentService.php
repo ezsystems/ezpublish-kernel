@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\SPI\Repository\Decorator\ContentServiceDecorator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -48,7 +49,7 @@ use eZ\Publish\Core\Event\Content\RevealContentEvent;
 use eZ\Publish\Core\Event\Content\UpdateContentEvent;
 use eZ\Publish\Core\Event\Content\UpdateContentMetadataEvent;
 
-class ContentService extends ContentServiceDecorator implements ContentServiceInterface
+class ContentService extends ContentServiceDecorator
 {
     /**
      * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
@@ -191,7 +192,7 @@ class ContentService extends ContentServiceDecorator implements ContentServiceIn
         return $content;
     }
 
-    public function publishVersion(VersionInfo $versionInfo): Content
+    public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL): Content
     {
         $eventData = [$versionInfo];
 
