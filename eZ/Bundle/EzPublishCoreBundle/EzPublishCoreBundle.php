@@ -33,7 +33,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SecurityPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SignalSlotPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\SlugConverterConfigurationPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\TranslationCollectorPass;
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\UrlWildcardRouterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\ViewProvidersPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\RichTextHtml5ConverterPass;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnectionPass;
@@ -61,7 +60,6 @@ class EzPublishCoreBundle extends Bundle
         $container->addCompilerPass(new FieldTypeCollectionPass(), PassConfig::TYPE_OPTIMIZE);
         $container->addCompilerPass(new FieldTypeNameableCollectionPass(), PassConfig::TYPE_OPTIMIZE);
         $container->addCompilerPass(new FieldTypeParameterProviderRegistryPass());
-        $container->addCompilerPass(new UrlWildcardRouterPass());
         $container->addCompilerPass(new ChainRoutingPass());
         $container->addCompilerPass(new ChainConfigResolverPass());
         $container->addCompilerPass(new RegisterLimitationTypePass());

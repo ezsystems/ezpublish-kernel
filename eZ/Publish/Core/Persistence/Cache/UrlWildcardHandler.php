@@ -46,11 +46,9 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
     {
         $this->logger->logCall(__METHOD__, ['id' => $id]);
 
-        $urlWildcard = $this->load($id);
+        $this->persistenceHandler->urlWildcardHandler()->remove($id);
 
-        $this->persistenceHandler->urlWildcardHandler()->remove($urlWildcard->id);
-
-        $this->cache->invalidateTags(['ez-urlWildcard-id-' . $urlWildcard->id]);
+        $this->cache->invalidateTags(['ez-urlWildcard-id-' . $id]);
     }
 
     /**
@@ -58,13 +56,15 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
      */
     public function load($id)
     {
-        $this->logger->logCall(__METHOD__, ['id' => $id]);
-
         $cacheItem = $this->cache->getItem('ez-urlWildcard-id-' . $id);
 
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(['id' => $id]);
+
             return $cacheItem->get();
         }
+
+        $this->logger->logCacheMiss(['id' => $id]);
 
         $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->load($id);
 
@@ -90,11 +90,11 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
      */
     public function translate(string $sourceUrl): UrlWildcard
     {
-        $this->logger->logCall(__METHOD__, ['url' => $sourceUrl]);
-
         $cacheItem = $this->cache->getItem('ez-urlWildcard-source-' . $this->escapeForCacheKey($sourceUrl));
 
         if ($cacheItem->isHit()) {
+            $this->logger->logCacheHit(['url' => $sourceUrl]);
+
             if (($return = $cacheItem->get()) === self::NOT_FOUND) {
                 throw new NotFoundException('UrlWildcard', $sourceUrl);
             }
@@ -103,6 +103,7 @@ class UrlWildcardHandler extends AbstractHandler implements UrlWildcardHandlerIn
         }
 
         $this->logger->logCacheMiss(['url' => $sourceUrl]);
+
         try {
             $urlWildcard = $this->persistenceHandler->urlWildcardHandler()->translate($sourceUrl);
         } catch (APINotFoundException $e) {

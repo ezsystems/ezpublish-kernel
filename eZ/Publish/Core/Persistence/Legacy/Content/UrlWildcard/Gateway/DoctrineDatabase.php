@@ -191,6 +191,8 @@ class DoctrineDatabase extends Gateway
             )
         );
 
-        return $queryBuilder->execute()->fetchAll(FetchMode::ASSOCIATIVE);
+        $result = $queryBuilder->execute()->fetch(FetchMode::ASSOCIATIVE);
+
+        return $result ?: [];
     }
 }
