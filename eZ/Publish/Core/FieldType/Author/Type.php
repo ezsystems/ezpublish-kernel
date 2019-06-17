@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Author;
 
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\Core\FieldType\FieldType;
 use eZ\Publish\Core\FieldType\Value as BaseValue;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
@@ -51,19 +52,9 @@ class Type extends FieldType
         return 'ezauthor';
     }
 
-    /**
-     * Returns the name of the given field value.
-     *
-     * It will be used to generate content name and url alias if current field is designated
-     * to be used in the content name/urlAlias pattern.
-     *
-     * @param \eZ\Publish\Core\FieldType\Author\Value $value
-     *
-     * @return string
-     */
-    public function getName(SPIValue $value)
+    public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
-        return isset($value->authors[0]) ? $value->authors[0]->name : '';
+        return $value->authors[0]->name ?? '';
     }
 
     /**

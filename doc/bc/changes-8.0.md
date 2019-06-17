@@ -27,6 +27,13 @@ Changes affecting version compatibility with former or future versions.
 
 * Minimal PHP version has been raised to 7.3.
 
+* Deprecated method `getName` from the interface `eZ\Publish\SPI\FieldType\FieldType` has been changed. 
+  Now it accepts two additional parameters: `FieldDefinition $fieldDefinition` and `string $languageCode`
+  
+* Interface `eZ\Publish\SPI\FieldType\FieldType` has been transformed to abstract class.   
+
+* Interface `eZ\Publish\SPI\FieldType\Nameable` has been removed.
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.

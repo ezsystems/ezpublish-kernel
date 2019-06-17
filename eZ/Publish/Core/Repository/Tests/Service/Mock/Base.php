@@ -19,7 +19,6 @@ use eZ\Publish\Core\Repository\Values\User\User;
 use eZ\Publish\Core\Repository\FieldTypeService;
 use eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper;
 use eZ\Publish\Core\Repository\Helper\FieldTypeRegistry;
-use eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry;
 use eZ\Publish\SPI\Persistence\Handler;
 
 /**
@@ -116,20 +115,6 @@ abstract class Base extends TestCase
         }
 
         return $this->fieldTypeRegistryMock;
-    }
-
-    protected $nameableFieldTypeRegistryMock;
-
-    /**
-     * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\NameableFieldTypeRegistry
-     */
-    protected function getNameableFieldTypeRegistryMock()
-    {
-        if (!isset($this->nameableFieldTypeRegistryMock)) {
-            $this->nameableFieldTypeRegistryMock = $this->createMock(NameableFieldTypeRegistry::class);
-        }
-
-        return $this->nameableFieldTypeRegistryMock;
     }
 
     /**

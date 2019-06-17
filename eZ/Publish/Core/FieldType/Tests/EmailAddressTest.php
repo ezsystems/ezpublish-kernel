@@ -395,18 +395,12 @@ class EmailAddressTest extends FieldTypeTest
         return 'ezemail';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array(
-                new EmailAddressValue('john.doe@example.com'),
-                'john.doe@example.com',
-            ),
-            array(
-                new EmailAddressValue('JANE.DOE@EXAMPLE.COM'),
-                'jane.doe@example.com',
-            ),
-        );
+        return [
+            [new EmailAddressValue('john.doe@example.com'), [], 'en_GB', 'john.doe@example.com'],
+            [new EmailAddressValue('JANE.DOE@EXAMPLE.COM'), [], 'en_GB', 'jane.doe@example.com'],
+        ];
     }
 
     /**

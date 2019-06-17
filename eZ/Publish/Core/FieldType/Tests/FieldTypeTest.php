@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType\Tests;
 
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use PHPUnit\Framework\TestCase;
 use Exception;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition as APIFieldDefinition;
@@ -216,7 +217,7 @@ abstract class FieldTypeTest extends TestCase
      *
      * @return array
      */
-    abstract public function provideDataForGetName();
+    abstract public function provideDataForGetName(): array;
 
     /**
      * Provide data sets with field settings which are considered valid by the
@@ -540,15 +541,14 @@ abstract class FieldTypeTest extends TestCase
 
     /**
      * @dataProvider provideDataForGetName
-     *
-     * @param SPIValue $value
-     * @param string $expected
      */
-    public function testGetName(SPIValue $value, $expected)
+    public function testGetName(SPIValue $value, array $fieldSettings = [], string $languageCode = 'en_GB', string $expected)
     {
+        $fieldDefinitionMock = $this->getFieldDefinitionMock($fieldSettings);
+
         self::assertSame(
             $expected,
-            $this->getFieldTypeUnderTest()->getName($value)
+            $this->getFieldTypeUnderTest()->getName($value, $fieldDefinitionMock, $languageCode)
         );
     }
 
@@ -974,6 +974,20 @@ abstract class FieldTypeTest extends TestCase
         $validationErrors = $fieldType->validate($fieldDefinitionMock, $value);
 
         return $validationErrors;
+    }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition|\PHPUnit\Framework\MockObject\MockObject
+     */
+    protected function getFieldDefinitionMock(array $fieldSettings)
+    {
+        /** @var |\PHPUnit\Framework\MockObject\MockObject $fieldDefinitionMock */
+        $fieldDefinitionMock = $this->createMock(FieldDefinition::class);
+        $fieldDefinitionMock
+            ->method('getFieldSettings')
+            ->willReturn($fieldSettings);
+
+        return $fieldDefinitionMock;
     }
 
     // @todo: More test methods …

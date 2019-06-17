@@ -419,12 +419,12 @@ class IntegerTest extends FieldTypeTest
         return 'ezinteger';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new IntegerValue(42), '42'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [new IntegerValue(42), [], 'en_GB', '42'],
+        ];
     }
 
     /**

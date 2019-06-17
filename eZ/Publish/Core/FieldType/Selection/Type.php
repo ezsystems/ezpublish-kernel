@@ -126,18 +126,28 @@ class Type extends FieldType
     }
 
     /**
-     * Returns the name of the given field value.
-     *
-     * It will be used to generate content name and url alias if current field is designated
-     * to be used in the content name/urlAlias pattern.
-     *
-     * @param mixed $value
-     *
-     * @return string
+     * @param \eZ\Publish\Core\FieldType\Selection\Value|\eZ\Publish\SPI\FieldType\Value $value
      */
-    public function getName(SPIValue $value)
+    public function getName(SPIValue $value, FieldDefinition $fieldDefinition, string $languageCode): string
     {
-        throw new \RuntimeException('Name generation provided via NameableField set via "ezpublish.fieldType.nameable" service tag');
+        if (empty($value->selection)) {
+            return '';
+        }
+
+        $names = [];
+        $fieldSettings = $fieldDefinition->getFieldSettings();
+
+        foreach ($value->selection as $optionIndex) {
+            if (isset($fieldSettings['multilingualOptions'][$languageCode][$optionIndex])) {
+                $names[] = $fieldSettings['multilingualOptions'][$languageCode][$optionIndex];
+            } elseif (isset($fieldSettings['multilingualOptions'][$fieldDefinition->mainLanguageCode][$optionIndex])) {
+                $names[] = $fieldSettings['multilingualOptions'][$fieldDefinition->mainLanguageCode][$optionIndex];
+            } elseif (isset($fieldSettings['options'][$optionIndex])) {
+                $names[] = $fieldSettings['options'][$optionIndex];
+            }
+        }
+
+        return implode(' ', $names);
     }
 
     /**

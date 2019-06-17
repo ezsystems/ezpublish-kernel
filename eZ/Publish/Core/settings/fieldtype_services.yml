@@ -3,9 +3,6 @@ parameters:
     ezpublish.fieldType.ezimage.pathGenerator.class: eZ\Publish\Core\FieldType\Image\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezbinaryfile.pathGenerator.class: eZ\Publish\Core\FieldType\BinaryBase\PathGenerator\LegacyPathGenerator
     ezpublish.fieldType.ezimage.io_service.options_provider.class: eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
-    ezpublish.fieldType.ezobjectrelation.nameable_field.class: eZ\Publish\Core\FieldType\Relation\NameableField
-    ezpublish.fieldType.ezobjectrelationlist.nameable_field.class: eZ\Publish\Core\FieldType\RelationList\NameableField
-    ezpublish.fieldType.ezselection.nameable_field.class: eZ\Publish\Core\FieldType\Selection\NameableField
 
 services:
     # Deprecated since 5.4. Use ezpublish.fieldType.ezimage.io_service.
@@ -50,37 +47,7 @@ services:
     ezpublish.fieldType.ezbinaryfile.pathGenerator:
         class: "%ezpublish.fieldType.ezbinaryfile.pathGenerator.class%"
 
-    # Nameable services (for fieldtypes that need advance name handling)
-    ezpublish.fieldType.ezobjectrelation.nameable_field:
-        public: true # @todo should be private
-        class: "%ezpublish.fieldType.ezobjectrelation.nameable_field.class%"
-        arguments:
-          - "@ezpublish.spi.persistence.cache.contentHandler"
-        tags:
-            - {name: ezpublish.fieldType.nameable, alias: ezobjectrelation}
-
-    ezpublish.fieldType.ezobjectrelationlist.nameable_field:
-        class: "%ezpublish.fieldType.ezobjectrelationlist.nameable_field.class%"
-        public: true # @todo should be private
-        arguments:
-          - "@ezpublish.spi.persistence.cache.contentHandler"
-        tags:
-            - {name: ezpublish.fieldType.nameable, alias: ezobjectrelationlist}
-
-    ezpublish.fieldType.ezselection.nameable_field:
-        public: true # @todo should be private
-        class: "%ezpublish.fieldType.ezselection.nameable_field.class%"
-        tags:
-            - {name: ezpublish.fieldType.nameable, alias: ezselection}
-
     # Symfony 3.4+ service definitions:
-    eZ\Publish\Core\FieldType\ImageAsset\NameableField:
-        public: true # @todo should be private
-        arguments:
-            $handler: '@ezpublish.spi.persistence.cache.contentHandler'
-        tags:
-            - {name: ezpublish.fieldType.nameable, alias: ezimageasset}
-
     eZ\Publish\Core\FieldType\ImageAsset\AssetMapper:
         arguments:
             $contentService: '@ezpublish.api.service.content'

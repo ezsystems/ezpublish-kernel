@@ -347,11 +347,11 @@ class TextBlockTest extends FieldTypeTest
         return 'eztext';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
         return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new TextBlockValue('This is a piece of text'), 'This is a piece of text'),
+            array($this->getEmptyValueExpectation(), [], 'en_GB', ''),
+            array(new TextBlockValue('This is a piece of text'), [], 'en_GB', 'This is a piece of text'),
         );
     }
 }

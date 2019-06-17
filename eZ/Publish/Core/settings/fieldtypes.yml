@@ -383,6 +383,8 @@ services:
     ezpublish.fieldType.ezobjectrelation:
         class: "%ezpublish.fieldType.ezobjectrelation.class%"
         parent: ezpublish.fieldType
+        arguments:
+            - "@ezpublish.spi.persistence.cache.contentHandler"
         public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelation}
@@ -432,6 +434,8 @@ services:
     ezpublish.fieldType.ezobjectrelationlist:
         class: "%ezpublish.fieldType.ezobjectrelationlist.class%"
         parent: ezpublish.fieldType
+        arguments:
+            - "@ezpublish.spi.persistence.cache.contentHandler"
         public: true # @todo should be private
         tags:
             - {name: ezpublish.fieldType, alias: ezobjectrelationlist}
@@ -591,6 +595,7 @@ services:
             - '@ezpublish.api.service.content'
             - '@ezpublish.api.service.content_type'
             - '@eZ\Publish\Core\FieldType\ImageAsset\AssetMapper'
+            - '@ezpublish.spi.persistence.cache.contentHandler'
         tags:
             - {name: ezpublish.fieldType, alias: ezimageasset}
 

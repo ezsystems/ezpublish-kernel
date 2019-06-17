@@ -37,7 +37,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Compiler\StorageConnection
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ComplexSettings\ComplexSettingParser;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\DynamicSettingParser;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
-use eZ\Publish\Core\Base\Container\Compiler\FieldTypeNameableCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\RegisterLimitationTypePass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\ExternalStorageRegistryPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
@@ -56,7 +55,6 @@ class EzPublishCoreBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new FieldTypeCollectionPass(), PassConfig::TYPE_OPTIMIZE);
-        $container->addCompilerPass(new FieldTypeNameableCollectionPass(), PassConfig::TYPE_OPTIMIZE);
         $container->addCompilerPass(new FieldTypeParameterProviderRegistryPass());
         $container->addCompilerPass(new ChainRoutingPass());
         $container->addCompilerPass(new ChainConfigResolverPass());

@@ -335,7 +335,7 @@ class RatingTest extends FieldTypeTest
     public function testBuildFieldValueWithParamFalse()
     {
         $value = new Value(false);
-        self::assertSame(false, $value->isDisabled);
+        self::assertFalse($value->isDisabled);
     }
 
     /**
@@ -344,7 +344,7 @@ class RatingTest extends FieldTypeTest
     public function testBuildFieldValueWithParamTrue()
     {
         $value = new Value(true);
-        self::assertSame(true, $value->isDisabled);
+        self::assertTrue($value->isDisabled);
     }
 
     /**
@@ -353,7 +353,7 @@ class RatingTest extends FieldTypeTest
     public function testBuildFieldValueWithoutParam()
     {
         $value = new Value();
-        self::assertSame(false, $value->isDisabled);
+        self::assertFalse($value->isDisabled);
     }
 
     protected function provideFieldTypeIdentifier()
@@ -365,17 +365,17 @@ class RatingTest extends FieldTypeTest
      * @dataProvider provideDataForGetName
      * @expectedException \RuntimeException
      */
-    public function testGetName(SPIValue $value, $expected)
+    public function testGetName(SPIValue $value, array $fieldSettings = [], string $languageCode = 'en_GB', $expected)
     {
-        $this->getFieldTypeUnderTest()->getName(
-            $value
-        );
+        $fieldSettingsMock = $this->getFieldDefinitionMock($fieldSettings);
+
+        $this->getFieldTypeUnderTest()->getName($value, $fieldSettingsMock, $languageCode);
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+        ];
     }
 }

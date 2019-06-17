@@ -28,7 +28,6 @@ services:
         arguments:
             - "@ezpublish.config.resolver"
             - "@ezpublish.field_type_collection.factory"
-            - "@ezpublish.field_type_nameable_collection.factory"
             - "%ezpublish.api.inner_repository.class%"
             - "%ezpublish.api.role.policy_map%"
             - "@?logger"

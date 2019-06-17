@@ -16,7 +16,6 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
 use eZ\Publish\SPI\Search\Handler as SearchHandler;
 use eZ\Publish\SPI\Limitation\Type as SPILimitationType;
 use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory;
-use eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -37,13 +36,6 @@ class RepositoryFactory implements ContainerAwareInterface
      * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeCollectionFactory
      */
     protected $fieldTypeCollectionFactory;
-
-    /**
-     * Collection of fieldTypes, lazy loaded via a closure.
-     *
-     * @var \eZ\Publish\Core\Base\Container\ApiLoader\FieldTypeNameableCollectionFactory
-     */
-    protected $fieldTypeNameableCollectionFactory;
 
     /**
      * @var string
@@ -72,14 +64,12 @@ class RepositoryFactory implements ContainerAwareInterface
     public function __construct(
         ConfigResolverInterface $configResolver,
         FieldTypeCollectionFactory $fieldTypeCollectionFactory,
-        FieldTypeNameableCollectionFactory $fieldTypeNameableCollectionFactory,
         $repositoryClass,
         array $policyMap,
         LoggerInterface $logger = null
     ) {
         $this->configResolver = $configResolver;
         $this->fieldTypeCollectionFactory = $fieldTypeCollectionFactory;
-        $this->fieldTypeNameableCollectionFactory = $fieldTypeNameableCollectionFactory;
         $this->repositoryClass = $repositoryClass;
         $this->policyMap = $policyMap;
         $this->logger = null !== $logger ? $logger : new NullLogger();
@@ -113,7 +103,6 @@ class RepositoryFactory implements ContainerAwareInterface
             $relationProcessor,
             array(
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
-                'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
                 'role' => array(
                     'limitationTypes' => $this->roleLimitations,
                     'policyMap' => $this->policyMap,

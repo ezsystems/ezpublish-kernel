@@ -553,18 +553,18 @@ class AuthorTest extends FieldTypeTest
      *
      * @return array
      */
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
         $authorList = new AuthorValue(
-            array(
-                new Author(array('id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com')),
-                new Author(array('id' => 2, 'name' => 'Luke Skywalker', 'email' => 'luke.skywalker@example.com')),
-            )
+            [
+                new Author(['id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com']),
+                new Author(['id' => 2, 'name' => 'Luke Skywalker', 'email' => 'luke.skywalker@example.com']),
+            ]
         );
 
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array($authorList, 'Boba Fett'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [$authorList, [], 'en_GB', 'Boba Fett'],
+        ];
     }
 }

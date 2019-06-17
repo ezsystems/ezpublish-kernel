@@ -8,7 +8,7 @@
  */
 namespace eZ\Publish\Core\FieldType;
 
-use eZ\Publish\SPI\FieldType\FieldType as FieldTypeInterface;
+use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceValue;
@@ -32,7 +32,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentType;
  * Field types are primed and pre-configured with the Field Definitions found in
  * Content Types.
  */
-abstract class FieldType implements FieldTypeInterface
+abstract class FieldType extends SPIFieldType
 {
     /**
      * The setting keys which are available on this field type.

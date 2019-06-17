@@ -15,9 +15,68 @@ use eZ\Publish\Core\FieldType\ValidationError;
 use eZ\Publish\SPI\FieldType\Value as SPIValue;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\SPI\Persistence\Content\Handler as SPIContentHandler;
+use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 
 class RelationListTest extends FieldTypeTest
 {
+    private const DESTINATION_CONTENT_ID_14 = 14;
+    private const DESTINATION_CONTENT_ID_22 = 22;
+
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
+    private $contentHandler;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $versionInfo14 = new VersionInfo([
+            'versionNo' => 1,
+            'names' => [
+                'en_GB' => 'name_14_en_GB',
+                'de_DE' => 'Name_14_de_DE',
+            ],
+        ]);
+        $versionInfo22 = new VersionInfo([
+            'versionNo' => 1,
+            'names' => [
+                'en_GB' => 'name_22_en_GB',
+                'de_DE' => 'Name_22_de_DE',
+            ],
+        ]);
+        $currentVersionNoFor14 = 44;
+        $destinationContentInfo14 = $this->createMock(ContentInfo::class);
+        $destinationContentInfo14
+            ->method('__get')
+            ->willReturnMap([
+                ['currentVersionNo', $currentVersionNoFor14],
+                ['mainLanguageCode', 'en_GB'],
+            ]);
+        $currentVersionNoFor22 = 22;
+        $destinationContentInfo22 = $this->createMock(ContentInfo::class);
+        $destinationContentInfo22
+            ->method('__get')
+            ->willReturnMap([
+                ['currentVersionNo', $currentVersionNoFor22],
+                ['mainLanguageCode', 'en_GB'],
+            ]);
+
+        $this->contentHandler = $this->createMock(SPIContentHandler::class);
+        $this->contentHandler
+            ->method('loadContentInfo')
+            ->willReturnMap([
+                [self::DESTINATION_CONTENT_ID_14, $destinationContentInfo14],
+                [self::DESTINATION_CONTENT_ID_22, $destinationContentInfo22],
+            ]);
+
+        $this->contentHandler
+            ->method('loadVersionInfo')
+            ->willReturnMap([
+                [self::DESTINATION_CONTENT_ID_14, $currentVersionNoFor14, $versionInfo14],
+                [self::DESTINATION_CONTENT_ID_22, $currentVersionNoFor22, $versionInfo22],
+            ]);
+    }
+
     /**
      * Returns the field type under test.
      *
@@ -31,7 +90,7 @@ class RelationListTest extends FieldTypeTest
      */
     protected function createFieldTypeUnderTest()
     {
-        $fieldType = new RelationList();
+        $fieldType = new RelationList($this->contentHandler);
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
         return $fieldType;
@@ -741,17 +800,22 @@ class RelationListTest extends FieldTypeTest
 
     /**
      * @dataProvider provideDataForGetName
-     * @expectedException \RuntimeException
      */
-    public function testGetName(SPIValue $value, $expected)
+    public function testGetName(SPIValue $value, array $fieldSettings = [], string $languageCode = 'en_GB', $expected)
     {
-        $this->getFieldTypeUnderTest()->getName($value);
+        $fieldDefinitionMock = $this->getFieldDefinitionMock($fieldSettings);
+
+        $name = $this->getFieldTypeUnderTest()->getName($value, $fieldDefinitionMock, $languageCode);
+
+        self::assertSame($expected, $name);
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [new Value([self::DESTINATION_CONTENT_ID_14, self::DESTINATION_CONTENT_ID_22]), [], 'en_GB', 'name_14_en_GB name_22_en_GB'],
+            [new Value([self::DESTINATION_CONTENT_ID_14, self::DESTINATION_CONTENT_ID_22]), [], 'de_DE', 'Name_14_de_DE Name_22_de_DE'],
+        ];
     }
 }

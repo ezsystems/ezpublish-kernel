@@ -28,7 +28,7 @@ use eZ\Publish\SPI\Persistence\Content\FieldValue;
  * The corresponding {@link fromHash()} method must convert such a
  * representation back into a value, which is understood by the FieldType.
  */
-interface FieldType
+abstract class FieldType
 {
     /**
      * Returns the field type identifier for this field type.
@@ -41,22 +41,23 @@ interface FieldType
      *
      * @return string
      */
-    public function getFieldTypeIdentifier();
+    abstract public function getFieldTypeIdentifier();
 
     /**
-     * Returns a human readable string representation from the given $value.
+     * Returns a human readable string representation from a given value.
      *
      * It will be used to generate content name and url alias if current field
      * is designated to be used in the content name/urlAlias pattern.
      *
-     * The used $value can be assumed to be already accepted by {@link * acceptValue()}.
+     * The used $value can be assumed to be already accepted by {@link FieldType::acceptValue()}.
      *
-     * @deprecated Since 6.3/5.4.7, use \eZ\Publish\SPI\FieldType\Nameable
      * @param \eZ\Publish\SPI\FieldType\Value $value
+     * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
+     * @param string $languageCode
      *
      * @return string
      */
-    public function getName(Value $value);
+    abstract public function getName(Value $value, FieldDefinition $fieldDefinition, string $languageCode): string;
 
     /**
      * Returns a schema for the settings expected by the FieldType.
@@ -77,7 +78,7 @@ interface FieldType
      *
      * @return mixed
      */
-    public function getSettingsSchema();
+    abstract public function getSettingsSchema();
 
     /**
      * Returns a schema for the validator configuration expected by the FieldType.
@@ -118,7 +119,7 @@ interface FieldType
      *
      * @return mixed
      */
-    public function getValidatorConfigurationSchema();
+    abstract public function getValidatorConfigurationSchema();
 
     /**
      * Validates a field based on the validator configuration in the field definition.
@@ -130,7 +131,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validate(FieldDefinition $fieldDef, Value $value);
+    abstract public function validate(FieldDefinition $fieldDef, Value $value);
 
     /**
      * Validates the validatorConfiguration of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
@@ -143,7 +144,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateValidatorConfiguration($validatorConfiguration);
+    abstract public function validateValidatorConfiguration($validatorConfiguration);
 
     /**
      * Applies the default values to the given $validatorConfiguration of a FieldDefinitionCreateStruct.
@@ -152,7 +153,7 @@ interface FieldType
      *
      * @param mixed $validatorConfiguration
      */
-    public function applyDefaultValidatorConfiguration(&$validatorConfiguration);
+    abstract public function applyDefaultValidatorConfiguration(&$validatorConfiguration);
 
     /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
@@ -164,7 +165,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\ValidationError[]
      */
-    public function validateFieldSettings($fieldSettings);
+    abstract public function validateFieldSettings($fieldSettings);
 
     /**
      * Applies the default values to the fieldSettings of a FieldDefinitionCreateStruct.
@@ -173,28 +174,28 @@ interface FieldType
      *
      * @param mixed $fieldSettings
      */
-    public function applyDefaultSettings(&$fieldSettings);
+    abstract public function applyDefaultSettings(&$fieldSettings);
 
     /**
      * Indicates if the field type supports indexing and sort keys for searching.
      *
      * @return bool
      */
-    public function isSearchable();
+    abstract public function isSearchable();
 
     /**
      * Indicates if the field definition of this type can appear only once in the same ContentType.
      *
      * @return bool
      */
-    public function isSingular();
+    abstract public function isSingular();
 
     /**
      * Indicates if the field definition of this type can be added to a ContentType with Content instances.
      *
      * @return bool
      */
-    public function onlyEmptyInstance();
+    abstract public function onlyEmptyInstance();
 
     /**
      * Returns the empty value for this field type.
@@ -206,7 +207,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\Value
      */
-    public function getEmptyValue();
+    abstract public function getEmptyValue();
 
     /**
      * Returns if the given $value is considered empty by the field type.
@@ -219,7 +220,7 @@ interface FieldType
      *
      * @return bool
      */
-    public function isEmptyValue(Value $value);
+    abstract public function isEmptyValue(Value $value);
 
     /**
      * Potentially builds and checks the type and structure of the $inputValue.
@@ -242,7 +243,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\Value The potentially converted and structurally plausible value.
      */
-    public function acceptValue($inputValue);
+    abstract public function acceptValue($inputValue);
 
     /**
      * Converts an $hash to the Value defined by the field type.
@@ -256,7 +257,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\Value
      */
-    public function fromHash($hash);
+    abstract public function fromHash($hash);
 
     /**
      * Converts the given $value into a plain hash format.
@@ -270,7 +271,7 @@ interface FieldType
      *
      * @return mixed
      */
-    public function toHash(Value $value);
+    abstract public function toHash(Value $value);
 
     /**
      * Converts the given $fieldSettings to a simple hash format.
@@ -281,7 +282,7 @@ interface FieldType
      *
      * @return array|hash|scalar|null
      */
-    public function fieldSettingsToHash($fieldSettings);
+    abstract public function fieldSettingsToHash($fieldSettings);
 
     /**
      * Converts the given $fieldSettingsHash to field settings of the type.
@@ -293,7 +294,7 @@ interface FieldType
      *
      * @return mixed
      */
-    public function fieldSettingsFromHash($fieldSettingsHash);
+    abstract public function fieldSettingsFromHash($fieldSettingsHash);
 
     /**
      * Converts the given $validatorConfiguration to a simple hash format.
@@ -304,7 +305,7 @@ interface FieldType
      *
      * @return array|hash|scalar|null
      */
-    public function validatorConfigurationToHash($validatorConfiguration);
+    abstract public function validatorConfigurationToHash($validatorConfiguration);
 
     /**
      * Converts the given $validatorConfigurationHash to a validator
@@ -316,7 +317,7 @@ interface FieldType
      *
      * @return mixed
      */
-    public function validatorConfigurationFromHash($validatorConfigurationHash);
+    abstract public function validatorConfigurationFromHash($validatorConfigurationHash);
 
     /**
      * Converts a $value to a persistence value.
@@ -340,7 +341,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\Persistence\Content\FieldValue the value processed by the storage engine
      */
-    public function toPersistenceValue(Value $value);
+    abstract public function toPersistenceValue(Value $value);
 
     /**
      * Converts a persistence $value to a Value.
@@ -351,7 +352,7 @@ interface FieldType
      *
      * @return \eZ\Publish\SPI\FieldType\Value
      */
-    public function fromPersistenceValue(FieldValue $fieldValue);
+    abstract public function fromPersistenceValue(FieldValue $fieldValue);
 
     /**
      * Returns relation data extracted from value.
@@ -378,5 +379,5 @@ interface FieldType
      *  )
      * </code>
      */
-    public function getRelations(Value $value);
+    abstract public function getRelations(Value $value);
 }

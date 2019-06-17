@@ -438,34 +438,40 @@ class ImageTest extends FieldTypeTest
         return 'ezimage';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(
-                new ImageValue(array('fileName' => 'Sindelfingen-Squirrels.jpg')),
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [
+                new ImageValue(['fileName' => 'Sindelfingen-Squirrels.jpg']),
+                [],
+                'en_GB',
                 'Sindelfingen-Squirrels.jpg',
-            ),
+            ],
             // Alternative text has priority
-            array(
+            [
                 new ImageValue(
-                    array(
+                    [
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'alternativeText' => 'This is so Sindelfingen!',
-                    )
+                    ]
                 ),
+                [],
+                'en_GB',
                 'This is so Sindelfingen!',
-            ),
-            array(
+            ],
+            [
                 new ImageValue(
-                    array(
+                    [
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'alternativeText' => 'This is so Sindelfingen!',
-                    )
+                    ]
                 ),
+                [],
+                'en_GB',
                 'This is so Sindelfingen!',
-            ),
-        );
+            ],
+        ];
     }
 
     /**

@@ -336,11 +336,11 @@ class MapLocationTest extends FieldTypeTest
         return 'ezgmaplocation';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new MapLocation\Value(array('address' => 'Bag End, The Shire')), 'Bag End, The Shire'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [new MapLocation\Value(['address' => 'Bag End, The Shire']), [], 'en_GB', 'Bag End, The Shire'],
+        ];
     }
 }

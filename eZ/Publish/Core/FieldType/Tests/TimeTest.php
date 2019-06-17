@@ -375,11 +375,11 @@ class TimeTest extends FieldTypeTest
         return 'eztime';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
         return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new TimeValue(200), '12:03:20 am'),
+            array($this->getEmptyValueExpectation(), [], 'en_GB', ''),
+            array(new TimeValue(200), [], 'en_GB', '12:03:20 am'),
         );
     }
 }

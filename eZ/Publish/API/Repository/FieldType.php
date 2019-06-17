@@ -14,7 +14,7 @@ use eZ\Publish\SPI\FieldType\Value;
 /**
  * Interface that FieldTypes expose to the public API.
  *
- * @see eZ\Publish\SPI\FieldType\FieldType For implementer doc
+ * @see \eZ\Publish\SPI\FieldType\FieldType For implementer doc
  */
 interface FieldType
 {
@@ -27,13 +27,8 @@ interface FieldType
 
     /**
      * Returns a human readable string representation from the given $value.
-     *
-     * @deprecated Since 6.3/5.4.7, functionality moved to \eZ\Publish\SPI\FieldType\Nameable
-     * @param mixed $value
-     *
-     * @return string
      */
-    public function getName($value);
+    public function getName(Value $value, FieldDefinition $fieldDefinition, string $languageCode): string;
 
     /**
      * Returns a schema for the settings expected by the FieldType.

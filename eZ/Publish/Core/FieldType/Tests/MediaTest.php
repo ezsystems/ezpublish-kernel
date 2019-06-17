@@ -668,17 +668,21 @@ class MediaTest extends BinaryBaseTest
         return 'ezmedia';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array(
+        return [
+            [
                 new MediaValue(),
+                [],
+                'en_GB',
                 '',
-            ),
-            array(
-                new MediaValue(array('fileName' => 'sindelfingen.jpg')),
+            ],
+            [
+                new MediaValue(['fileName' => 'sindelfingen.jpg']),
+                [],
+                'en_GB',
                 'sindelfingen.jpg',
-            ),
-        );
+            ],
+        ];
     }
 }

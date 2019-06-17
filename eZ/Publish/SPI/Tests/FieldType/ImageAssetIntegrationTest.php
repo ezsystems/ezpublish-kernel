@@ -33,6 +33,7 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
         $contentService = $this->createMock(ContentService::class);
         $locationService = $this->createMock(LocationService::class);
         $contentTypeService = $this->createMock(ContentTypeService::class);
+        $contentHandler = $this->createMock(Content\Handler::class);
 
         $config = [];
 
@@ -46,7 +47,8 @@ class ImageAssetIntegrationTest extends BaseIntegrationTest
         $fieldType = new FieldType\ImageAsset\Type(
             $contentService,
             $contentTypeService,
-            $mapper
+            $mapper,
+            $contentHandler
         );
 
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());

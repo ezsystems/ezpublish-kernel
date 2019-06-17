@@ -366,17 +366,11 @@ class DateTest extends FieldTypeTest
         return 'ezdate';
     }
 
-    public function provideDataForGetName()
+    public function provideDataForGetName(): array
     {
-        return array(
-            array(
-                $this->getEmptyValueExpectation(),
-                '',
-            ),
-            array(
-                new DateValue(new DateTime('11/24/1983')),
-                'Thursday 24 November 1983',
-            ),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), [], 'en_GB', ''],
+            [new DateValue(new DateTime('11/24/1983')), [], 'en_GB', 'Thursday 24 November 1983'],
+        ];
     }
 }
