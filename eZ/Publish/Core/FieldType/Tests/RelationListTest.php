@@ -26,7 +26,7 @@ class RelationListTest extends FieldTypeTest
     /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     private $contentHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

@@ -24,7 +24,7 @@ class RelationTest extends FieldTypeTest
 
     private $contentHandler;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
