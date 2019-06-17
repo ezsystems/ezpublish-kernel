@@ -240,3 +240,7 @@ services:
             - $content.default_ttl$
         tags:
             - { name: kernel.event_subscriber }
+
+    eZ\Publish\Core\MVC\Symfony\Templating\Twig\Extension\DataAttributesExtension:
+        autoconfigure: true
+        public: false
