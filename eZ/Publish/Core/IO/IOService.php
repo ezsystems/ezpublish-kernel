@@ -141,7 +141,6 @@ class IOService implements IOServiceInterface
     {
         $this->checkBinaryFileId($binaryFile->id);
         $spiUri = $this->getPrefixedUri($binaryFile->id);
-
         try {
             $this->metadataHandler->delete($spiUri);
         } catch (BinaryFileNotFoundException $e) {

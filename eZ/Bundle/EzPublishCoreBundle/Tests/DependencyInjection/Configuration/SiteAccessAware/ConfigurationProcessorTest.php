@@ -56,10 +56,11 @@ class ConfigurationProcessorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testMapConfigWrongMapper()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $namespace = 'ez_test';
         $siteAccessNodeName = 'foo';
         $container = $this->getContainerMock();

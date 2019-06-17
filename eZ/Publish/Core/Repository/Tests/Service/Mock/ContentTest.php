@@ -190,10 +190,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the loadVersionInfo() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadVersionInfoByIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+
         $contentServiceMock = $this->getPartlyMockedContentService(array('loadContentInfo'));
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
@@ -222,10 +223,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the loadVersionInfo() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::loadVersionInfoById
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testLoadVersionInfoByIdThrowsUnauthorizedExceptionNonPublishedVersion()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepositoryMock();
         $contentServiceMock = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
@@ -451,10 +453,11 @@ class ContentTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testLoadContentUnauthorized()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService(array('internalLoadContent'));
         $content = $this->createMock(APIContent::class);
@@ -475,10 +478,11 @@ class ContentTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testLoadContentNotPublishedStatusUnauthorized()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService(array('internalLoadContent'));
         $content = $this->createMock(APIContent::class);
@@ -579,10 +583,11 @@ class ContentTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testInternalLoadContentNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+
         $contentService = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
@@ -674,10 +679,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the deleteContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testDeleteContentThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
         $contentInfo = $this->createMock(APIContentInfo::class);
@@ -766,10 +772,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the deleteContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteContent
-     * @expectedException \Exception
      */
     public function testDeleteContentWithRollback()
     {
+        $this->expectException(\Exception::class);
+
         $repository = $this->getRepositoryMock();
 
         $repository->expects($this->once())
@@ -810,10 +817,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the deleteVersion() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteVersion
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testDeleteVersionThrowsBadStateExceptionLastVersion()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepositoryMock();
         $repository
             ->expects($this->once())
@@ -866,11 +874,12 @@ class ContentTest extends BaseServiceMockTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentCreateStruct' is invalid: 'mainLanguageCode' property must be set
      */
     public function testCreateContentThrowsInvalidArgumentExceptionMainLanguageCodeNotSet()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentCreateStruct\' is invalid: \'mainLanguageCode\' property must be set');
+
         $mockedService = $this->getPartlyMockedContentService();
         $mockedService->createContent(new ContentCreateStruct(), array());
     }
@@ -879,11 +888,12 @@ class ContentTest extends BaseServiceMockTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentCreateStruct' is invalid: 'contentType' property must be set
      */
     public function testCreateContentThrowsInvalidArgumentExceptionContentTypeNotSet()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentCreateStruct\' is invalid: \'contentType\' property must be set');
+
         $mockedService = $this->getPartlyMockedContentService();
         $mockedService->createContent(
             new ContentCreateStruct(array('mainLanguageCode' => 'eng-US')),
@@ -895,10 +905,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testCreateContentThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedContentService();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
@@ -954,11 +965,12 @@ class ContentTest extends BaseServiceMockTest
      * Test for the createContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @exceptionMessage Argument '$contentCreateStruct' is invalid: Another content with remoteId 'faraday' exists
      */
     public function testCreateContentThrowsInvalidArgumentExceptionDuplicateRemoteId()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContentByRemoteId'));
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
@@ -1774,11 +1786,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForCreate
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @dataProvider providerForTestCreateContentWithInvalidLanguage
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @expectedExceptionMessage Could not find 'Language' with identifier 'Klingon'
      */
     public function testCreateContentWithInvalidLanguage($mainLanguageCode, $structFields)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $this->expectExceptionMessage('Could not find \'Language\' with identifier \'Klingon\'');
+
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
@@ -1938,11 +1951,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @expectedExceptionMessage Field definition 'identifier' does not exist in given ContentType
      */
     public function testCreateContentThrowsContentValidationExceptionFieldDefinition($mainLanguageCode, $structFields)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
+        $this->expectExceptionMessage('Field definition \'identifier\' does not exist in given ContentType');
+
         $this->assertForCreateContentContentValidationException(
             $mainLanguageCode,
             $structFields,
@@ -1975,11 +1989,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionTranslation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @expectedExceptionMessage A value is set for non translatable field definition 'identifier' with language 'eng-US'
      */
     public function testCreateContentThrowsContentValidationExceptionTranslation($mainLanguageCode, $structFields)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
+        $this->expectExceptionMessage('A value is set for non translatable field definition \'identifier\' with language \'eng-US\'');
+
         $fieldDefinitions = array(
             new FieldDefinition(
                 array(
@@ -2150,7 +2165,6 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionRequiredField
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      */
     public function testCreateContentRequiredField(
         $mainLanguageCode,
@@ -2158,6 +2172,8 @@ class ContentTest extends BaseServiceMockTest
         $identifier,
         $languageCode
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
+
         $fieldDefinitions = array(
             new FieldDefinition(
                 array(
@@ -2359,11 +2375,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentFieldValidationException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     * @expectedExceptionMessage Content fields did not validate
      */
     public function testCreateContentThrowsContentFieldValidationException($mainLanguageCode, $structFields)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
+        $this->expectExceptionMessage('Content fields did not validate');
+
         $fieldDefinitions = $this->fixturesForTestCreateContentNonRedundantFieldSetComplex();
         list($contentCreateStruct, $allFieldErrors) =
             $this->assertForTestCreateContentThrowsContentFieldValidationException(
@@ -2525,11 +2542,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForCreate
      * @covers \eZ\Publish\Core\Repository\ContentService::buildSPILocationCreateStructs
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Multiple LocationCreateStructs with the same parent Location '321' are given
      */
     public function testCreateContentWithLocationsDuplicateUnderParent()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Multiple LocationCreateStructs with the same parent Location \'321\' are given');
+
         $fieldDefinitions = array(
             new FieldDefinition(
                 array(
@@ -2761,11 +2779,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
      * @covers \eZ\Publish\Core\Repository\ContentService::createContent
      * @dataProvider providerForTestCreateContentThrowsContentValidationExceptionTranslation
-     * @expectedException \Exception
-     * @expectedExceptionMessage Store failed
      */
     public function testCreateContentWithRollback()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Store failed');
+
         $fieldDefinitions = array(
             new FieldDefinition(
                 array(
@@ -2818,11 +2837,12 @@ class ContentTest extends BaseServiceMockTest
      * Test for the updateContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @dataProvider providerForTestUpdateContentThrowsBadStateException
      */
     public function testUpdateContentThrowsBadStateException($status)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
         $contentUpdateStruct = new ContentUpdateStruct();
         $versionInfo = new VersionInfo(
@@ -2856,10 +2876,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the updateContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUpdateContentThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
         $contentUpdateStruct = new ContentUpdateStruct();
@@ -4554,11 +4575,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentWithInvalidLanguage
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
-     * @expectedExceptionMessage Could not find 'Language' with identifier 'Klingon'
      */
     public function testUpdateContentWithInvalidLanguage($initialLanguageCode, $structFields)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+        $this->expectExceptionMessage('Could not find \'Language\' with identifier \'Klingon\'');
+
         $repositoryMock = $this->getRepositoryMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
         $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
@@ -4740,11 +4762,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentThrowsContentValidationExceptionFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @expectedExceptionMessage Field definition 'identifier' does not exist in given ContentType
      */
     public function testUpdateContentThrowsContentValidationExceptionFieldDefinition($initialLanguageCode, $structFields)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
+        $this->expectExceptionMessage('Field definition \'identifier\' does not exist in given ContentType');
+
         $this->assertForUpdateContentContentValidationException(
             $initialLanguageCode,
             $structFields,
@@ -4777,11 +4800,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentThrowsContentValidationExceptionTranslation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentValidationException
-     * @expectedExceptionMessage A value is set for non translatable field definition 'identifier' with language 'eng-US'
      */
     public function testUpdateContentThrowsContentValidationExceptionTranslation($initialLanguageCode, $structFields)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
+        $this->expectExceptionMessage('A value is set for non translatable field definition \'identifier\' with language \'eng-US\'');
+
         $fieldDefinitions = array(
             new FieldDefinition(
                 array(
@@ -4952,7 +4976,6 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentRequiredField
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      */
     public function testUpdateContentRequiredField(
         $initialLanguageCode,
@@ -4960,6 +4983,8 @@ class ContentTest extends BaseServiceMockTest
         $identifier,
         $languageCode
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
+
         $existingFields = array(
             new Field(
                 array(
@@ -5265,11 +5290,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
      * @dataProvider providerForTestUpdateContentThrowsContentFieldValidationException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
-     * @expectedExceptionMessage Content fields did not validate
      */
     public function testUpdateContentThrowsContentFieldValidationException($initialLanguageCode, $structFields, $spiField, $allFieldErrors)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
+        $this->expectExceptionMessage('Content fields did not validate');
+
         list($existingFields, $fieldDefinitions) = $this->fixturesForTestUpdateContentNonRedundantFieldSetComplex();
         list($versionInfo, $contentUpdateStruct) =
             $this->assertForTestUpdateContentThrowsContentFieldValidationException(
@@ -5293,11 +5319,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::getLanguageCodesForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::mapFieldsForUpdate
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContent
-     * @expectedException \Exception
-     * @expectedExceptionMessage Store failed
      */
     public function testUpdateContentTransactionRollback()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Store failed');
+
         $existingFields = array(
             new Field(
                 array(
@@ -5355,10 +5382,11 @@ class ContentTest extends BaseServiceMockTest
      * Test for the copyContent() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testCopyContentThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
         $contentInfo = $this->createMock(APIContentInfo::class);
@@ -5654,11 +5682,12 @@ class ContentTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\ContentService::copyContent
      * @covers \eZ\Publish\Core\Repository\ContentService::getDefaultObjectStates
      * @covers \eZ\Publish\Core\Repository\ContentService::internalPublishVersion
-     * @expectedException \Exception
-     * @expectedExceptionMessage Handler threw an exception
      */
     public function testCopyContentWithRollback()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Handler threw an exception');
+
         $repositoryMock = $this->getRepositoryMock();
         $contentService = $this->getPartlyMockedContentService();
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */

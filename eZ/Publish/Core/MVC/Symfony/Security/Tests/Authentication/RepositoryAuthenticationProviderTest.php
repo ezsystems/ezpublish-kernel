@@ -74,10 +74,11 @@ class RepositoryAuthenticationProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\BadCredentialsException
      */
     public function testCheckAuthenticationCredentialsChanged()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\BadCredentialsException::class);
+
         $apiUser = $this->getMockBuilder(APIUser::class)
             ->setConstructorArgs([['passwordHash' => 'some_encoded_password']])
             ->setMethods(['getUserId'])
@@ -132,10 +133,11 @@ class RepositoryAuthenticationProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\BadCredentialsException
      */
     public function testCheckAuthenticationFailed()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\BadCredentialsException::class);
+
         $user = $this->createMock(User::class);
         $userName = 'my_username';
         $password = 'foo';

@@ -180,11 +180,12 @@ class ContentTypeHandlerTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::deleteGroup
      * @covers \eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
-     * @expectedException \eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
-     * @expectedExceptionMessage Group with ID "23" is not empty.
      */
     public function testDeleteGroupFailure()
     {
+        $this->expectException(\eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty::class);
+        $this->expectExceptionMessage('Group with ID "23" is not empty.');
+
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects($this->once())
             ->method('countTypesInGroup')
@@ -365,10 +366,11 @@ class ContentTypeHandlerTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
-     * @expectedException \eZ\Publish\Core\Persistence\Legacy\Exception\TypeNotFound
      */
     public function testLoadNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\Persistence\Legacy\Exception\TypeNotFound::class);
+
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects($this->once())
             ->method('loadTypeData')
@@ -645,10 +647,11 @@ class ContentTypeHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\BadStateException
      */
     public function testDeleteThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\BadStateException::class);
+
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects(
@@ -873,11 +876,12 @@ class ContentTypeHandlerTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::unlink
      * @covers \eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType
-     * @expectedException \eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType
-     * @expectedExceptionMessage Type with ID "23" in status "1" cannot be unlinked from its last group.
      */
     public function testUnlinkFailure()
     {
+        $this->expectException(\eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType::class);
+        $this->expectExceptionMessage('Type with ID "23" in status "1" cannot be unlinked from its last group.');
+
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects($this->once())
             ->method('countGroupsForType')

@@ -116,10 +116,11 @@ class FlysystemTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException
      */
     public function testLoadNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
+
         $this->filesystem
             ->expects($this->once())
             ->method('getMetadata')

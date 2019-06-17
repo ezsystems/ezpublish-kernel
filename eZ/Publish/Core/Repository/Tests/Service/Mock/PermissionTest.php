@@ -410,10 +410,11 @@ class PermissionTest extends BaseServiceMockTest
      * Test for the hasAccess() method.
      *
      * @dataProvider providerForTestHasAccessReturnsLimitationNotFoundException
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException
      */
     public function testHasAccessReturnsLimitationNotFoundException(array $roles, array $roleAssignments)
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFound\LimitationNotFoundException::class);
+
         /** @var $userHandlerMock \PHPUnit\Framework\MockObject\MockObject */
         $userHandlerMock = $this->getPersistenceMock()->userHandler();
         $roleDomainMapper = $this->getRoleDomainMapperMock();
@@ -524,10 +525,11 @@ class PermissionTest extends BaseServiceMockTest
      * Test for the hasAccess() method.
      *
      * @dataProvider providerForTestHasAccessReturnsInvalidArgumentValueException
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
     public function testHasAccessReturnsInvalidArgumentValueException(array $roles, array $roleAssignments)
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue::class);
+
         $permissionResolverMock = $this->getPermissionResolverMock(['getCurrentUserReference']);
 
         /** @var $role \eZ\Publish\SPI\Persistence\User\Role */

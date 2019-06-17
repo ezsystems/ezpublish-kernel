@@ -57,10 +57,11 @@ class CriterionFieldValueHandlerRegistryPassTest extends AbstractCompilerPassTes
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterValueHandlerNoAlias()
     {
+        $this->expectException(\LogicException::class);
+
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
         $def = new Definition();

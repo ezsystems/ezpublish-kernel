@@ -125,10 +125,11 @@ class SearchTest extends BaseServiceMockTest
 
     /**
      * @dataProvider providerForFindContentValidatesLocationCriteriaAndSortClauses
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFindContentValidatesLocationCriteriaAndSortClauses($query, $exceptionMessage)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
@@ -173,10 +174,11 @@ class SearchTest extends BaseServiceMockTest
 
     /**
      * @dataProvider providerForFindSingleValidatesLocationCriteria
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFindSingleValidatesLocationCriteria($criterion, $exceptionMessage)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
@@ -205,11 +207,12 @@ class SearchTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findContent
-     * @expectedException \Exception
-     * @expectedExceptionMessage Handler threw an exception
      */
     public function testFindContentThrowsHandlerException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Handler threw an exception');
+
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
@@ -542,10 +545,11 @@ class SearchTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testFindSingleThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
@@ -577,11 +581,12 @@ class SearchTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\SearchService::addPermissionsCriterion
      * @covers \eZ\Publish\Core\Repository\SearchService::findSingle
-     * @expectedException \Exception
-     * @expectedExceptionMessage Handler threw an exception
      */
     public function testFindSingleThrowsHandlerException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Handler threw an exception');
+
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');
@@ -868,11 +873,12 @@ class SearchTest extends BaseServiceMockTest
     /**
      * Test for the findLocations() method.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Handler threw an exception
      */
     public function testFindLocationsThrowsHandlerException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Handler threw an exception');
+
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Search\Handler $searchHandlerMock */
         $searchHandlerMock = $this->getSPIMockHandler('Search\\Handler');

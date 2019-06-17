@@ -94,10 +94,11 @@ class FlysystemTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException
      */
     public function testDeleteNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
+
         $this->filesystem
             ->expects($this->once())
             ->method('delete')
@@ -122,10 +123,11 @@ class FlysystemTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException
      */
     public function testGetContentsNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
+
         $this->filesystem
             ->expects($this->once())
             ->method('read')
@@ -155,10 +157,11 @@ class FlysystemTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException
      */
     public function testGetResourceNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
+
         $this->filesystem
             ->expects($this->once())
             ->method('readStream')

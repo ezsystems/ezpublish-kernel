@@ -93,10 +93,11 @@ class StatusLimitationTest extends BaseLimitationTest
      * Tests a StatusLimitation.
      *
      * @see eZ\Publish\API\Repository\Values\User\Limitation\StatusLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testStatusLimitationForbid()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $administratorUserId = $this->generateId('user', 14);

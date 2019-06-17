@@ -99,10 +99,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadGroupThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getObjectStateHandler();
         $gatewayMock = $this->getGatewayMock();
 
@@ -143,10 +144,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadGroupByIdentifier
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadGroupByIdentifierThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getObjectStateHandler();
         $gatewayMock = $this->getGatewayMock();
 
@@ -363,10 +365,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::load
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getObjectStateHandler();
         $gatewayMock = $this->getGatewayMock();
 
@@ -407,10 +410,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::loadByIdentifier
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadByIdentifierThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getObjectStateHandler();
         $gatewayMock = $this->getGatewayMock();
 
@@ -559,10 +563,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\ObjectState\Handler::delete
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getObjectStateHandler();
         $gatewayMock = $this->getGatewayMock();
 

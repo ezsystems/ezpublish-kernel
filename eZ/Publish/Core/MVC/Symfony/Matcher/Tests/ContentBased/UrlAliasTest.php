@@ -152,12 +152,13 @@ class UrlAliasTest extends BaseTest
     }
 
     /**
-     * @expectedException \RuntimeException
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias::matchContentInfo
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias::setMatchingConfig
      */
     public function testMatchContentInfo()
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->matcher->setMatchingConfig('foo/bar');
         $this->matcher->matchContentInfo($this->getContentInfoMock());
     }

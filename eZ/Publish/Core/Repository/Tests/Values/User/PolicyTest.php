@@ -39,10 +39,11 @@ class PolicyTest extends TestCase
      * Test retrieving missing property.
      *
      * @covers \eZ\Publish\API\Repository\Values\User\Policy::__get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testMissingProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException::class);
+
         $policy = new Policy();
         $value = $policy->notDefined;
         self::fail('Succeeded getting non existing property');
@@ -52,10 +53,11 @@ class PolicyTest extends TestCase
      * Test setting read only property.
      *
      * @covers \eZ\Publish\API\Repository\Values\User\Policy::__set
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testReadOnlyProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+
         $policy = new Policy();
         $policy->id = 42;
         self::fail('Succeeded setting read only property');
@@ -80,10 +82,11 @@ class PolicyTest extends TestCase
      * Test unsetting a property.
      *
      * @covers \eZ\Publish\API\Repository\Values\User\Policy::__unset
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testUnsetProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+
         $policy = new Policy(['id' => 1]);
         unset($policy->id);
         self::fail('Unsetting read-only property succeeded');

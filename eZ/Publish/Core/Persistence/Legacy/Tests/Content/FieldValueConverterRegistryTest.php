@@ -53,10 +53,11 @@ class FieldValueConverterRegistryTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::getConverter
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
-     * @expectedException \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      */
     public function testGetNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound::class);
+
         $registry = new Registry(array());
 
         $registry->getConverter('not-found');

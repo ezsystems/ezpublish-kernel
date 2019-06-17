@@ -298,11 +298,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the createContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         if ($this->isVersion4()) {
             $this->markTestSkipped('This test requires eZ Publish 5');
         }
@@ -340,11 +341,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the createContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsInvalidArgumentExceptionOnFieldTypeNotAccept()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -367,11 +369,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the createContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentThrowsContentFieldValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -395,11 +398,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the createContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::createContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      */
     public function testCreateContentRequiredFieldMissing()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -428,11 +432,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      * @depend(s) eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @group user
      */
     public function testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $locationService = $repository->getLocationService();
@@ -452,11 +457,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the createContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::createContent($contentCreateStruct, $locationCreateStructs)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContentWithLocationCreateParameterDoesNotCreateLocationImmediately
      */
     public function testCreateContentThrowsInvalidArgumentExceptionWithLocationCreateParameter()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $parentLocationId = $this->generateId('location', 56);
@@ -556,11 +562,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the loadContentInfo() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfo()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfo
      */
     public function testLoadContentInfoThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
@@ -665,11 +672,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the loadContentInfoByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentInfoByRemoteId()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentInfoByRemoteId
      */
     public function testLoadContentInfoByRemoteIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -775,11 +783,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the loadVersionInfoById() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoById
      */
     public function testLoadVersionInfoByIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
@@ -883,11 +892,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the loadContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      */
     public function testLoadContentThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistentContentId = $this->generateId('object', self::DB_INT_MAX);
@@ -952,11 +962,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the loadContentByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteId
      */
     public function testLoadContentByRemoteIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1172,11 +1183,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the publishVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::publishVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testPublishVersionThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1632,11 +1644,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the updateContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1664,11 +1677,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the updateContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsInvalidArgumentExceptionWhenFieldTypeDoesNotAccept()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1694,11 +1708,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the updateContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentWhenMandatoryFieldIsEmpty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -1726,11 +1741,12 @@ class ContentServiceTest extends BaseContentServiceTest
      * Test for the updateContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::updateContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContent
      */
     public function testUpdateContentThrowsContentFieldValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2217,11 +2233,12 @@ XML
      * Test for the updateContentMetadata() method.
      *
      * @covers \eZ\Publish\API\Repository\ContentService::updateContentMetadata()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testUpdateContentMetadata
      */
     public function testUpdateContentMetadataThrowsInvalidArgumentExceptionOnDuplicateRemoteId()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2249,10 +2266,11 @@ XML
      * Test for the updateContentMetadata() method.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::updateContentMetadata
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateContentMetadataThrowsInvalidArgumentExceptionOnNoMetadataPropertiesSet()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2268,11 +2286,12 @@ XML
      * Test for the deleteContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testDeleteContent()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2300,11 +2319,12 @@ XML
      * "contentService: Unable to delete a content with an empty file attribute"
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteContent()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersionFromContentDraft
      */
     public function testDeleteContentWithEmptyBinaryField()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2482,11 +2502,12 @@ XML
      * Test for the loadVersionInfo() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfo($contentInfo, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadVersionInfoWithSecondParameter
      */
     public function testLoadVersionInfoThrowsNotFoundExceptionWithSecondParameter()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2589,10 +2610,11 @@ XML
      * Test for the loadVersionInfoById() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadVersionInfoById($contentId, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadVersionInfoByIdThrowsNotFoundExceptionWithSecondParameter()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2879,11 +2901,12 @@ XML
      * Test for the loadContentByContentInfo() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByContentInfo($contentInfo, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByContentInfoWithVersionNumberParameter
      */
     public function testLoadContentByContentInfoThrowsNotFoundExceptionWithVersionNumberParameter()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2925,12 +2948,13 @@ XML
      * Test for the loadContent() method using undefined translation.
      *
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithSecondParameter
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Content $contentDraft
      */
     public function testLoadContentWithSecondParameterThrowsNotFoundException(Content $contentDraft)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -2972,11 +2996,12 @@ XML
      * Test for the loadContent() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContent($contentId, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentWithThirdParameter
      */
     public function testLoadContentThrowsNotFoundExceptionWithThirdParameter()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -3057,11 +3082,12 @@ XML
      * Test for the loadContentByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::loadContentByRemoteId($remoteId, $languages, $versionNo)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContentByRemoteIdWithThirdParameter
      */
     public function testLoadContentByRemoteIdThrowsNotFoundExceptionWithThirdParameter()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -3159,13 +3185,14 @@ XML
      * Test for the deleteVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testDeleteVersionThrowsBadStateExceptionOnPublishedVersion()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -3183,13 +3210,14 @@ XML
      * Test for the deleteVersion() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteVersion()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testLoadContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testCreateContent
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testPublishVersion
      */
     public function testDeleteVersionWorksIfOnlyVersionIsDraft()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -3626,11 +3654,12 @@ XML
      * Test for the addRelation() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::addRelation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testAddRelation
      */
     public function testAddRelationThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -4148,11 +4177,12 @@ XML
      * Test for the deleteRelation() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -4190,11 +4220,12 @@ XML
      * Test for the deleteRelation() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::deleteRelation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentServiceTest::testDeleteRelation
      */
     public function testDeleteRelationThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $contentService = $repository->getContentService();
@@ -5355,11 +5386,12 @@ XML
     /**
      * Test publish / content policy is required to be able to publish content.
      *
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
-     * @expectedExceptionMessageRegExp /User does not have access to 'publish' 'content'/
      */
     public function testPublishContentWithoutPublishPolicyThrowsException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+        $this->expectExceptionMessageRegExp('/User does not have access to \'publish\' \'content\'/');
+
         $repository = $this->getRepository();
 
         $this->createRoleWithPolicies('Writer', [
@@ -5488,11 +5520,12 @@ XML
      * Test removal of a main translation throws BadStateException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage Specified translation is the main translation of the Content Object
      */
     public function testDeleteTranslationMainLanguageThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+        $this->expectExceptionMessage('Specified translation is the main translation of the Content Object');
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         $content = $this->createContentVersion2();
@@ -5539,11 +5572,12 @@ XML
      * throws UnauthorizedException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @expectedExceptionMessage User does not have access to 'remove' 'content'
      */
     public function testDeleteTranslationThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+        $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -5570,11 +5604,12 @@ XML
      * Test removal of a non-existent translation throws InvalidArgumentException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$languageCode' is invalid: ger-DE does not exist in the Content item
      */
     public function testDeleteTranslationThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$languageCode\' is invalid: ger-DE does not exist in the Content item');
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
         // content created by the createContentVersion1 method has eng-US translation only.
@@ -5758,11 +5793,12 @@ XML
      * Test deleting a Translation from Draft which has single Translation throws BadStateException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage Specified Translation is the only one Content Object Version has
      */
     public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnSingleTranslation()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+        $this->expectExceptionMessage('Specified Translation is the only one Content Object Version has');
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -5797,11 +5833,12 @@ XML
      * Test deleting the Main Translation from Draft throws BadStateException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage Specified Translation is the main Translation of the Content Object
      */
     public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnMainTranslation()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+        $this->expectExceptionMessage('Specified Translation is the main Translation of the Content Object');
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -5824,11 +5861,12 @@ XML
      * Test deleting the Translation from Published Version throws BadStateException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage Version is not a draft
      */
     public function testDeleteTranslationFromDraftThrowsBadStateExceptionOnPublishedVersion()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+        $this->expectExceptionMessage('Version is not a draft');
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -5843,11 +5881,12 @@ XML
      * Test deleting a Translation from Draft throws UnauthorizedException if user cannot edit Content.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @expectedExceptionMessage User does not have access to 'edit' 'content'
      */
     public function testDeleteTranslationFromDraftThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+        $this->expectExceptionMessage('User does not have access to \'edit\' \'content\'');
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 
@@ -5877,11 +5916,12 @@ XML
      * Test deleting a non-existent Translation from Draft throws InvalidArgumentException.
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::deleteTranslationFromDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessageRegExp /The Version \(ContentId=\d+, VersionNo=\d+\) is not translated into ger-DE/
      */
     public function testDeleteTranslationFromDraftThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessageRegExp('/The Version \\(ContentId=\\d+, VersionNo=\\d+\\) is not translated into ger-DE/');
+
         $repository = $this->getRepository();
         $contentService = $repository->getContentService();
 

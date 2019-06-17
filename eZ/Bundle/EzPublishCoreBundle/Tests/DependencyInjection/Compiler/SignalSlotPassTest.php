@@ -44,10 +44,11 @@ class SignalSlotPassTest extends TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testProcessNoSignal()
     {
+        $this->expectException(\LogicException::class);
+
         $slotDef = new Definition();
         $slotDef->addTag('ezpublish.api.slot', array());
 

@@ -69,10 +69,11 @@ class ConfigResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
      */
     public function testGetParameterFailedWithException()
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Exception\ParameterNotFoundException::class);
+
         $resolver = $this->getResolver('ezsettings', ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION);
         $resolver->getParameter('foo');
     }

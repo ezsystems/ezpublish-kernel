@@ -65,10 +65,11 @@ class TemplateRendererTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\MVC\Exception\NoViewTemplateException
      */
     public function testRenderNoViewTemplate()
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Exception\NoViewTemplateException::class);
+
         $this->renderer->render($this->createView());
     }
 

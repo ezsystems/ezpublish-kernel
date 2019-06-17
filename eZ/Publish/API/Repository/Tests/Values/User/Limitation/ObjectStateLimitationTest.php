@@ -32,10 +32,11 @@ class ObjectStateLimitationTest extends BaseLimitationTest
      *
      * @throws \ErrorException
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testObjectStateLimitationAllow()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
         $notLockedState = $this->generateId('objectstate', 2);
 
@@ -95,10 +96,11 @@ class ObjectStateLimitationTest extends BaseLimitationTest
      * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
      *
      * @throws \ErrorException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testObjectStateLimitationForbid()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $lockedState = $this->generateId('objectstate', 1);
 
@@ -159,11 +161,12 @@ class ObjectStateLimitationTest extends BaseLimitationTest
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
      *
      * @throws \ErrorException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @expectedExceptionMessage 'remove' 'content'
      */
     public function testObjectStateLimitationForbidVariant()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+        $this->expectExceptionMessage('\'remove\' \'content\'');
+
         $repository = $this->getRepository();
         $objectStateGroup = $this->createObjectStateGroup();
         $objectState = $this->createObjectState($objectStateGroup);

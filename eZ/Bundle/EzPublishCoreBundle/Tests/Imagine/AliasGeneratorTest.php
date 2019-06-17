@@ -154,10 +154,11 @@ class AliasGeneratorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetVariationWrongValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $field = new Field(array('value' => $this->createMock(FieldTypeValue::class)));
         $this->aliasGenerator->getVariation($field, new VersionInfo(), 'foo');
     }
@@ -378,10 +379,11 @@ class AliasGeneratorTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException
      */
     public function testGetVariationOriginalNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException::class);
+
         $this->dataLoader
             ->expects($this->once())
             ->method('find')
@@ -392,10 +394,11 @@ class AliasGeneratorTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
      */
     public function testGetVariationInvalidVariation()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidVariationException::class);
+
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'my_variation';
         $imageId = '123-45';

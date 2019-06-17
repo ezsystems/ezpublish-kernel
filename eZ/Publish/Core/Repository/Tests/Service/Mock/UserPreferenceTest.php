@@ -73,10 +73,11 @@ class UserPreferenceTest extends BaseServiceMockTest
 
     /**
      * @covers \eZ\Publish\Core\Repository\UserPreferenceService::setUserPreference
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testSetUserPreferenceThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $apiUserPreferenceSetStruct = new APIUserPreferenceSetStruct([
             'value' => 'value',
         ]);
@@ -90,10 +91,11 @@ class UserPreferenceTest extends BaseServiceMockTest
 
     /**
      * @covers \eZ\Publish\Core\Repository\UserPreferenceService::setUserPreference
-     * @expectedException \Exception
      */
     public function testSetUserPreferenceWithRollback()
     {
+        $this->expectException(\Exception::class);
+
         $apiUserPreferenceSetStruct = new APIUserPreferenceSetStruct([
             'name' => 'setting',
             'value' => 'value',

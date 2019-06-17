@@ -15,10 +15,11 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
      * Test for the findUrls() method.
      *
      * @see \eZ\Publish\API\Repository\URLService::findUrls
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testFindUrlsThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -43,10 +44,11 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
      * Test for the updateUrl() method.
      *
      * @see \eZ\Publish\API\Repository\URLService::updateUrl
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUpdateUrlThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -73,10 +75,11 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
      * Test for the loadById() method.
      *
      * @see \eZ\Publish\API\Repository\URLService::loadById
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testLoadByIdThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -99,10 +102,11 @@ class URLServiceAuthorizationTest extends BaseURLServiceTest
      * Test for the loadByUrl() method.
      *
      * @see \eZ\Publish\API\Repository\URLService::loadById
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testLoadByUrlThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);

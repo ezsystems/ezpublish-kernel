@@ -58,11 +58,12 @@ class ContentViewTest extends TestCase
 
     /**
      * @dataProvider constructFailProvider
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
      */
     public function testConstructFail($templateIdentifier)
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentType::class);
+
         new ContentView($templateIdentifier);
     }
 
@@ -132,13 +133,14 @@ class ContentViewTest extends TestCase
 
     /**
      * @depends testGetParameter
-     * @expectedException \InvalidArgumentException
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::setParameters
      * @covers \eZ\Publish\Core\MVC\Symfony\View\ContentView::getParameters
      */
     public function testGetParameterFail(ContentView $contentView)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $contentView->getParameter('nonExistent');
     }
 
@@ -169,12 +171,13 @@ class ContentViewTest extends TestCase
     /**
      * @dataProvider badTemplateIdentifierProvider
      *
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentType
      *
      * @param $badTemplateIdentifier
      */
     public function testSetTemplateIdentifierWrongType($badTemplateIdentifier)
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentType::class);
+
         $contentView = new ContentView();
         $contentView->setTemplateIdentifier($badTemplateIdentifier);
     }

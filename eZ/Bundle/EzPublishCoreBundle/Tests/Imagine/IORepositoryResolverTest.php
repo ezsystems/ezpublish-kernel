@@ -164,10 +164,11 @@ class IORepositoryResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException
      */
     public function testResolveMissing()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException::class);
+
         $path = 'foo/something.jpg';
         $this->ioService
             ->expects($this->once())
@@ -179,10 +180,11 @@ class IORepositoryResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException
      */
     public function testResolveNotFound()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException::class);
+
         $path = 'foo/something.jpg';
         $this->ioService
             ->expects($this->once())

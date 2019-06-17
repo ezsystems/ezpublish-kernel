@@ -83,11 +83,12 @@ class ConsoleCommandListenerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
-     * @expectedExceptionMessageRegExp /^Invalid siteaccess 'foo', matched by .+\. Valid siteaccesses are/
      */
     public function testInvalidSiteAccessDev()
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid siteaccess \'foo\', matched by .+\\. Valid siteaccesses are/');
+
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
         $input = new ArrayInput(array('--siteaccess' => 'foo'), $this->inputDefinition);
@@ -97,11 +98,12 @@ class ConsoleCommandListenerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
-     * @expectedExceptionMessageRegExp /^Invalid siteaccess 'foo', matched by .+\.$/
      */
     public function testInvalidSiteAccessProd()
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid siteaccess \'foo\', matched by .+\\.$/');
+
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
         $input = new ArrayInput(array('--siteaccess' => 'foo'), $this->inputDefinition);

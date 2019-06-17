@@ -31,10 +31,11 @@ class SudoMainLocationLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadLocationNoMainLocation()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $contentInfo = new ContentInfo();
 
         $this->getLocationServiceMock()
@@ -69,10 +70,11 @@ class SudoMainLocationLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadLocationError()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $contentInfo = new ContentInfo(['mainLocationId' => 42]);
         $location = new Location();
 

@@ -69,10 +69,11 @@ class StorageConnectionFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
      */
     public function testGetConnectionInvalidRepository()
     {
+        $this->expectException(\eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException::class);
+
         $repositories = array(
             'foo' => array(
                 'storage' => array(
@@ -96,10 +97,11 @@ class StorageConnectionFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetConnectionInvalidConnection()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $repositoryConfigurationProviderMock = $this->createMock(RepositoryConfigurationProvider::class);
         $repositoryConfig = array(
             'alias' => 'foo',

@@ -75,10 +75,11 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \Doctrine\DBAL\DBALException
      */
     public function testCreateDuplicateUser()
     {
+        $this->expectException(\Doctrine\DBAL\DBALException::class);
+
         $handler = $this->getUserHandler();
 
         $handler->create($user = $this->getValidUser());
@@ -86,10 +87,11 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \Doctrine\DBAL\DBALException
      */
     public function testInsertIncompleteUser()
     {
+        $this->expectException(\Doctrine\DBAL\DBALException::class);
+
         $handler = $this->getUserHandler();
 
         $user = new Persistence\User();
@@ -110,10 +112,11 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadUnknownUser()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getUserHandler();
 
         $handler->load(1337);
@@ -132,10 +135,11 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadUserByEmailNotFound()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getUserHandler();
         $handler->create($user = $this->getValidUser());
 
@@ -155,10 +159,11 @@ class UserHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadUserByTokenNotFound()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getUserHandler();
         $handler->create($user = $this->getValidUser());
         $handler->updateUserToken($this->getValidUserToken());

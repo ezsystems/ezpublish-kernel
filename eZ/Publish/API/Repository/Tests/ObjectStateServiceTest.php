@@ -284,10 +284,11 @@ class ObjectStateServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectStateGroup()
      * @depends testCreateObjectStateGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateObjectStateGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $objectStateService = $repository->getObjectStateService();
@@ -355,11 +356,12 @@ class ObjectStateServiceTest extends BaseTest
      *
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectStateGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends testLoadObjectStateGroup
      */
     public function testLoadObjectStateGroupThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistentObjectStateGroupId = $this->generateId('objectstategroup', self::DB_INT_MAX);
@@ -696,10 +698,11 @@ class ObjectStateServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectStateGroup()
      * @depends testUpdateObjectStateGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateObjectStateGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $objectStateService = $repository->getObjectStateService();
@@ -880,7 +883,6 @@ class ObjectStateServiceTest extends BaseTest
     /**
      * Test for the createObjectState() method.
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::createObjectState()
      * @depends testLoadObjectStateGroup
@@ -888,6 +890,8 @@ class ObjectStateServiceTest extends BaseTest
      */
     public function testCreateObjectStateThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $objectStateGroupId = $this->generateId('objectstategroup', 2);
@@ -1012,11 +1016,12 @@ class ObjectStateServiceTest extends BaseTest
      *
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::loadObjectState()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends testLoadObjectState
      */
     public function testLoadObjectStateThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistingObjectStateId = $this->generateId('objectstate', self::DB_INT_MAX);
@@ -1317,13 +1322,14 @@ class ObjectStateServiceTest extends BaseTest
     /**
      * Test for the updateObjectState() method.
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @see \eZ\Publish\API\Repository\ObjectStateService::updateObjectState()
      * @depends testUpdateObjectState
      */
     public function testUpdateObjectStateThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $objectStateId = $this->generateId('objectstate', 2);
@@ -1588,11 +1594,12 @@ class ObjectStateServiceTest extends BaseTest
      * Test for the setContentState() method.
      *
      * @covers \eZ\Publish\API\Repository\ObjectStateService::setContentState
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ObjectStateServiceTest::testSetContentState
      */
     public function testSetContentStateThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $createdStateGroups = $this->createObjectStateGroups();

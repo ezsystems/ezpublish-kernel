@@ -46,10 +46,11 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterExternalStorageHandlerNoAlias()
     {
+        $this->expectException(\LogicException::class);
+
         $def = new Definition();
         $fieldTypeIdentifier = 'field_type_identifier';
         $def->addTag('ezpublish.fieldType.externalStorageHandler');
@@ -99,10 +100,11 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterExternalStorageHandlerWithoutRegisteredGateway()
     {
+        $this->expectException(\LogicException::class);
+
         $handlerDef = new Definition();
         $handlerDef->setClass(GatewayBasedStorageHandler::class);
         $fieldTypeIdentifier = 'field_type_identifier';
@@ -120,10 +122,11 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterExternalStorageHandlerWithGatewayNoAlias()
     {
+        $this->expectException(\LogicException::class);
+
         $handlerDef = new Definition();
         $handlerDef->setClass(GatewayBasedStorageHandler::class);
         $fieldTypeIdentifier = 'field_type_identifier';
@@ -147,10 +150,11 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterExternalStorageHandlerWithGatewayNoIdentifier()
     {
+        $this->expectException(\LogicException::class);
+
         $handlerDef = new Definition();
         $handlerDef->setClass(GatewayBasedStorageHandler::class);
         $fieldTypeIdentifier = 'field_type_identifier';

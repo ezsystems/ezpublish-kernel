@@ -112,11 +112,12 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Unknown handler
      */
     public function testUnknownMetadataHandler()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Unknown handler');
+
         $this->container->setParameter(
             'ez_io.metadata_handlers',
             array('test' => array('type' => 'unknown'))
@@ -126,11 +127,12 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Unknown handler
      */
     public function testUnknownBinarydataHandler()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Unknown handler');
+
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
             array('test' => array('type' => 'unknown'))

@@ -482,10 +482,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCreateContentType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      */
     public function testCreateContentTypeFailsWithInvalidFieldSettings()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException::class);
+
         $this->createContentType(
             $this->getInvalidFieldSettings(),
             $this->getValidValidatorConfiguration()
@@ -506,10 +507,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
 
     /**
      * @depends testCreateContentType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException
      */
     public function testCreateContentTypeFailsWithInvalidValidatorConfiguration()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentTypeFieldDefinitionValidationException::class);
+
         $this->createContentType(
             $this->getValidFieldSettings(),
             $this->getInvalidValidatorConfiguration()
@@ -920,10 +922,11 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
     /**
      * @depends testCopyField
      * @dep_ends eZ\Publish\API\Repository\Tests\ContentServiceTest::deleteContent
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContent($content)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $content = $this->testPublishContent();
 
         $repository = $this->getRepository();

@@ -51,10 +51,11 @@ class SignalSlotPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testAttachSignalNoAlias()
     {
+        $this->expectException(\LogicException::class);
+
         $signal = 'signal_identifier';
         $serviceId = 'service_id';
         $def = new Definition();

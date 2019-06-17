@@ -51,10 +51,11 @@ class RegisterLimitationTypePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterLimitationTypeNoAlias()
     {
+        $this->expectException(\LogicException::class);
+
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
         $def = new Definition();

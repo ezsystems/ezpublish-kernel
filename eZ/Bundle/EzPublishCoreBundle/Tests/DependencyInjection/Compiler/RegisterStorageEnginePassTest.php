@@ -71,10 +71,11 @@ class RegisterStorageEnginePassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterStorageEngineNoAlias()
     {
+        $this->expectException(\LogicException::class);
+
         $storageEngineDef = new Definition();
         $storageEngineIdentifier = 'i_am_a_storage_engine';
         $storageEngineDef->addTag('ezpublish.storageEngine');

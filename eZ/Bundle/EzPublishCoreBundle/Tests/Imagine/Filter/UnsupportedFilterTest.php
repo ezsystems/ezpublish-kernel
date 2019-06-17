@@ -14,10 +14,11 @@ use Imagine\Image\ImageInterface;
 class UnsupportedFilterTest extends AbstractFilterTest
 {
     /**
-     * @expectedException \Imagine\Exception\NotSupportedException
      */
     public function testLoad()
     {
+        $this->expectException(\Imagine\Exception\NotSupportedException::class);
+
         $filter = new UnsupportedFilter();
         $filter->apply($this->createMock(ImageInterface::class));
     }

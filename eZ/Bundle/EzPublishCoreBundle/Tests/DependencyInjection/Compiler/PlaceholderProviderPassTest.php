@@ -47,10 +47,11 @@ class PlaceholderProviderPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testAddProviderWithoutType()
     {
+        $this->expectException(\LogicException::class);
+
         $definition = new Definition();
         $definition->addTag(PlaceholderProviderPass::TAG_NAME);
 

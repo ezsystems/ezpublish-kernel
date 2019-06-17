@@ -76,10 +76,11 @@ class PlaceholderAliasGeneratorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetVariationWrongValue()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $field = new Field([
             'value' => $this->createMock(FieldTypeValue::class),
         ]);

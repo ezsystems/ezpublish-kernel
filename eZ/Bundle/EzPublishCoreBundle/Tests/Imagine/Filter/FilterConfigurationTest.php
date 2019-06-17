@@ -50,10 +50,11 @@ class FilterConfigurationTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testGetNoEzVariationInvalidImagineFilter()
     {
+        $this->expectException(\RuntimeException::class);
+
         $fooConfig = array('fooconfig');
         $barConfig = array('barconfig');
         $this->filterConfiguration->set('foo', $fooConfig);
@@ -69,10 +70,11 @@ class FilterConfigurationTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidVariationException
      */
     public function testGetWithEzVariationInvalidFilters()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidVariationException::class);
+
         $fooConfig = array('fooconfig');
         $barConfig = array('barconfig');
         $this->filterConfiguration->set('foo', $fooConfig);

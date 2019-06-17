@@ -42,10 +42,11 @@ class EzPublishCoreCollectorTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetInvalidCollector()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $collector = $this->getDataCollectorMock();
         $this->mainCollector->addCollector($collector);
         $this->assertSame($collector, $this->mainCollector->getCollector('foo'));

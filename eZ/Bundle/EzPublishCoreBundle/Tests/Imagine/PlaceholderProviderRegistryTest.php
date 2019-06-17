@@ -58,10 +58,11 @@ class PlaceholderProviderRegistryTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGetProviderUnknown()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $registry = new PlaceholderProviderRegistry([
             'foo' => $this->getPlaceholderProviderMock(),
         ]);

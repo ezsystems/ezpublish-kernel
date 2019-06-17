@@ -26,11 +26,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the createLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testCreateLocationThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $editorsGroupId = $this->generateId('group', 13);
@@ -66,11 +67,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the createLocation() method. Tests a case when user doesn't have content/manage_locations policy for the new location ID.
      *
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
      */
     public function testCreateLocationThrowsUnauthorizedExceptionDueToLackOfContentManageLocationsPolicy()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $mediaDirectoryLocationId = $this->generateId('location', '43');
@@ -124,11 +126,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the loadLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      */
     public function testLoadLocationThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $editorsGroupId = $this->generateId('group', 13);
@@ -171,11 +174,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the loadLocationByRemoteId() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocationByRemoteId
      */
     public function testLoadLocationByRemoteIdThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -227,11 +231,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the updateLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUpdateLocation
      */
     public function testUpdateLocationThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $editorsGroupId = $this->generateId('group', 13);
@@ -264,11 +269,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the swapLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::swapLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testSwapLocation
      */
     public function testSwapLocationThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $mediaLocationId = $this->generateId('location', 43);
@@ -303,11 +309,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the hideLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::hideLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testHideLocation
      */
     public function testHideLocationThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $editorsGroupId = $this->generateId('group', 13);
@@ -331,11 +338,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the unhideLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::unhideLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testUnhideLocation
      */
     public function testUnhideLocationThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $editorsGroupId = $this->generateId('group', 13);
@@ -362,11 +370,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the deleteLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
      */
     public function testDeleteLocationThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $editorsGroupId = $this->generateId('group', 13);
@@ -390,12 +399,13 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the deleteLocation() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     * @expectedExceptionMessage User does not have access to 'remove' 'content'
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testDeleteLocation
      */
     public function testDeleteLocationWithSubtreeThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+        $this->expectExceptionMessage('User does not have access to \'remove\' \'content\'');
+
         $repository = $this->getRepository();
 
         $parentLocationId = $this->generateId('location', 43);
@@ -479,11 +489,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the copySubtree() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCopySubtree
      */
     public function testCopySubtreeThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $mediaLocationId = $this->generateId('location', 43);
@@ -521,11 +532,12 @@ class LocationServiceAuthorizationTest extends BaseTest
      * Test for the moveSubtree() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::moveSubtree()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
      */
     public function testMoveSubtreeThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $mediaLocationId = $this->generateId('location', 43);

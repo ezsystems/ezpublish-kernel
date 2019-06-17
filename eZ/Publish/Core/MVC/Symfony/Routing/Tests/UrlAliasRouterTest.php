@@ -122,10 +122,11 @@ class UrlAliasRouterTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testMatch()
     {
+        $this->expectException(\RuntimeException::class);
+
         $this->router->match('/foo');
     }
 
@@ -472,10 +473,11 @@ class UrlAliasRouterTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Routing\Exception\ResourceNotFoundException
      */
     public function testMatchRequestFail()
     {
+        $this->expectException(\Symfony\Component\Routing\Exception\ResourceNotFoundException::class);
+
         $pathInfo = '/foo/bar';
         $request = $this->getRequestByPathInfo($pathInfo);
         $this->urlAliasService
@@ -659,10 +661,11 @@ class UrlAliasRouterTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Routing\Exception\RouteNotFoundException
      */
     public function testGenerateFail()
     {
+        $this->expectException(\Symfony\Component\Routing\Exception\RouteNotFoundException::class);
+
         $this->router->generate('invalidRoute');
     }
 
@@ -681,18 +684,20 @@ class UrlAliasRouterTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testGenerateNoLocation()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->router->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, array('foo' => 'bar'));
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testGenerateInvalidLocation()
     {
+        $this->expectException(\LogicException::class);
+
         $this->router->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, array('location' => new \stdClass()));
     }
 
@@ -780,10 +785,11 @@ class UrlAliasRouterTest extends TestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testGenerateWithContentIdWithMissingMainLocation()
     {
+        $this->expectException(\LogicException::class);
+
         $contentId = 456;
         $contentInfo = new ContentInfo(array('id' => $contentId, 'mainLocationId' => null));
         $parameters = array('some' => 'thing');

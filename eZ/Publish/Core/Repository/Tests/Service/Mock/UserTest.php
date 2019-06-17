@@ -85,10 +85,11 @@ class UserTest extends BaseServiceMockTest
      * Test for the deleteUser() method.
      *
      * @covers \eZ\Publish\Core\Repository\UserService::deleteUser
-     * @expectedException \Exception
      */
     public function testDeleteUserWithRollback()
     {
+        $this->expectException(\Exception::class);
+
         $repository = $this->getRepositoryMock();
         $userService = $this->getPartlyMockedUserService(array('loadUser'));
         $contentService = $this->createMock(APIContentService::class);

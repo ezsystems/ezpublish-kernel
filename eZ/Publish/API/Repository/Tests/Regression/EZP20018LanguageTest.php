@@ -60,10 +60,11 @@ class EZP20018LanguageTest extends BaseTest
 
     /**
      * @see \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testSearchOnNotExistingLanguageGivesException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $setupFactory = $this->getSetupFactory();
         if ($setupFactory instanceof LegacySetupFactory) {
             $this->markTestSkipped('Skipped on Solr as it is not clear that SPI search should have to validate Criterion values, in this case language code');

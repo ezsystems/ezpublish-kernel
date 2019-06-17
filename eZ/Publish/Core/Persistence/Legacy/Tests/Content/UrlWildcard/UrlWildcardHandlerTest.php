@@ -69,10 +69,11 @@ class UrlWildcardHandlerTest extends TestCase
      * Test for the load() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler::load
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $this->insertDatabaseFixture(__DIR__ . '/Gateway/_fixtures/urlwildcards.php');
         $handler = $this->getHandler();
 
@@ -118,11 +119,12 @@ class UrlWildcardHandlerTest extends TestCase
      * Test for the remove() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler::remove
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends testLoad
      */
     public function testRemove()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $this->insertDatabaseFixture(__DIR__ . '/Gateway/_fixtures/urlwildcards.php');
         $handler = $this->getHandler();
 

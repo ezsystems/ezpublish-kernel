@@ -164,10 +164,11 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionContentAlreadyBelowParent()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $contentId = $this->generateId('object', 11);
@@ -197,10 +198,11 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionParentIsSubLocationOfContent()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $contentId = $this->generateId('object', 4);
@@ -230,10 +232,11 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionRemoteIdExists()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $contentId = $this->generateId('object', 41);
@@ -264,10 +267,11 @@ class LocationServiceTest extends BaseTest
      * @covers \eZ\Publish\API\Repository\LocationService::createLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testNewLocationCreateStruct
      * @dataProvider dataProviderForOutOfRangeLocationPriority
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateLocationThrowsInvalidArgumentExceptionPriorityIsOutOfRange($priority)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $contentId = $this->generateId('object', 41);
@@ -534,10 +538,11 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCreateLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadLocationThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistentLocationId = $this->generateId('location', 2342);
@@ -662,10 +667,11 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocationByRemoteId()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadLocationByRemoteIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -817,10 +823,11 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testLoadLocationsThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -846,10 +853,11 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::loadLocations($contentInfo, $rootLocation)
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocations
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testLoadLocationsThrowsBadStateExceptionLimitedSubtree()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         $someLocationId = $this->generateId('location', 2);
@@ -1285,10 +1293,11 @@ class LocationServiceTest extends BaseTest
      *
      * @see \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateLocationThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $locationId = $this->generateId('location', 5);
@@ -1314,10 +1323,11 @@ class LocationServiceTest extends BaseTest
      * @covers \eZ\Publish\API\Repository\LocationService::updateLocation()
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testLoadLocation
      * @dataProvider dataProviderForOutOfRangeLocationPriority
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateLocationThrowsInvalidArgumentExceptionPriorityIsOutOfRange($priority)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $locationId = $this->generateId('location', 5);
@@ -1990,10 +2000,11 @@ class LocationServiceTest extends BaseTest
      * Related issue: EZP-21904
      *
      * @see \eZ\Publish\API\Repository\LocationService::deleteLocation()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContentObjectLastLocation()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use case */
@@ -2294,11 +2305,12 @@ class LocationServiceTest extends BaseTest
      * Test for the copySubtree() method.
      *
      * @see \eZ\Publish\API\Repository\LocationService::copySubtree()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testCopySubtree
      */
     public function testCopySubtreeThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $communityLocationId = $this->generateId('location', 5);
@@ -2715,10 +2727,11 @@ class LocationServiceTest extends BaseTest
      * Test for the moveSubtree() method.
      *
      * @depends eZ\Publish\API\Repository\Tests\LocationServiceTest::testMoveSubtree
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testMoveSubtreeThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $mediaLocationId = $this->generateId('location', 43);
         $multimediaLocationId = $this->generateId('location', 53);

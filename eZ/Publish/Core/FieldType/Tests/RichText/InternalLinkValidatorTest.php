@@ -32,11 +32,12 @@ class InternalLinkValidatorTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument 'eznull' is invalid: Given scheme 'eznull' is not supported.
      */
     public function testValidateFailOnNotSupportedSchema()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'eznull\' is invalid: Given scheme \'eznull\' is not supported.');
+
         $validator = $this->getInternalLinkValidator();
         $validator->validate('eznull', 1);
     }

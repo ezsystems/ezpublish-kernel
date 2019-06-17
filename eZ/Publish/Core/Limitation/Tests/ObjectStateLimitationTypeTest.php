@@ -215,12 +215,13 @@ class ObjectStateLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \RuntimeException
      *
      * @param \eZ\Publish\Core\Limitation\ObjectStateLimitationType $limitationType
      */
     public function testGetCriterionInvalidValue(ObjectStateLimitationType $limitationType)
     {
+        $this->expectException(\RuntimeException::class);
+
         $limitationType->getCriterion(
             new ObjectStateLimitation([]),
             $this->getUserMock()

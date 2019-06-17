@@ -128,11 +128,12 @@ class ChainConfigResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \LogicException
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver::getDefaultNamespace
      */
     public function testGetDefaultNamespace()
     {
+        $this->expectException(\LogicException::class);
+
         $this->chainResolver->getDefaultNamespace();
     }
 
@@ -154,11 +155,12 @@ class ChainConfigResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\MVC\Exception\ParameterNotFoundException
      * @covers \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver::getParameter
      */
     public function testGetParameterInvalid()
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Exception\ParameterNotFoundException::class);
+
         $paramName = 'foo';
         $namespace = 'namespace';
         $scope = 'scope';

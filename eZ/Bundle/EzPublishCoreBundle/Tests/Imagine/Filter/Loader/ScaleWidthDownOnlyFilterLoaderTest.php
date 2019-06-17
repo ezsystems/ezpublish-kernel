@@ -34,10 +34,11 @@ class ScaleWidthDownOnlyFilterLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \Imagine\Exception\InvalidArgumentException
      */
     public function testLoadInvalid()
     {
+        $this->expectException(\Imagine\Exception\InvalidArgumentException::class);
+
         $this->loader->load($this->createMock(ImageInterface::class), array());
     }
 

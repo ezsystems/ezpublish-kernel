@@ -45,13 +45,14 @@ class MatcherBuilderTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      *
      * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::buildMatcher
      */
     public function testBuildMatcherServiceWrongInterface()
     {
+        $this->expectException(\RuntimeException::class);
+
         $serviceId = 'foo';
         $this->container
             ->expects($this->once())
