@@ -17,7 +17,6 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use DOMDocument;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\SPI\FieldType\ValidationError;
 
 /**
  * Integration test for use field type.

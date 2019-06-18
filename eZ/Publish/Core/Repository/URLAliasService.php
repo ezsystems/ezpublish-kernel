@@ -10,7 +10,6 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
