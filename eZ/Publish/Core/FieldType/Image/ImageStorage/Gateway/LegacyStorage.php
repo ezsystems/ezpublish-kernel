@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
 use eZ\Publish\Core\IO\UrlRedecorator;
 use eZ\Publish\SPI\Persistence\Content\VersionInfo;
 use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
+use PDO;
 
 class LegacyStorage extends Gateway
 {
@@ -254,6 +255,82 @@ class LegacyStorage extends Gateway
         $statement->execute();
 
         return (int)$statement->fetchColumn();
+    }
+
+    /**
+     * Returns the number of recorded references outside of the given $path.
+     *
+     * @param string $uri File IO uri (not legacy)
+     *
+     * @return int
+     */
+    public function countImageReferencesOutsidePath($uri)
+    {
+        $path = $this->redecorator->redecorateFromSource($uri);
+
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $selectQuery->expr->count(
+                $connection->quoteColumn('id')
+            )
+        )->from(
+            $connection->quoteTable('ezimagefile')
+        )->where(
+            $selectQuery->expr->not(
+                $selectQuery->expr->like(
+                    $connection->quoteColumn('filepath'),
+                    $selectQuery->bindValue($path . '%')
+                )
+            )
+        );
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
+    }
+
+    /**
+     * Return references outside of the given $path
+     *
+     * @param string $uri File IO uri (not legacy)
+     * @param int $limit
+     * @param int $offset
+     *
+     * @return array
+     */
+    public function getImagesOutsidePath($uri, $limit = null, $offset = 0)
+    {
+        $path = $this->redecorator->redecorateFromSource($uri);
+
+        $connection = $this->getConnection();
+
+        $selectQuery = $connection->createSelectQuery();
+        $selectQuery->select(
+            $connection->quoteColumn('id'),
+            $connection->quoteColumn('contentobject_attribute_id'),
+            $connection->quoteColumn('filepath')
+        )->from(
+            $connection->quoteTable('ezimagefile')
+        )->where(
+            $selectQuery->expr->not(
+                $selectQuery->expr->like(
+                    $connection->quoteColumn('filepath'),
+                    $selectQuery->bindValue($path . '%')
+                )
+            )
+        );
+
+        if ($limit && $offset) {
+           $selectQuery->limit($limit, $offset);
+        }
+
+        $statement = $selectQuery->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll(\PDO::FETCH_ASSOC);
     }
 
     /**

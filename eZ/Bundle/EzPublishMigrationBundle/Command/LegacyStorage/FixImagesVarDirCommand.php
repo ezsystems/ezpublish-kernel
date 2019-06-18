@@ -8,9 +8,15 @@
  */
 namespace eZ\Bundle\EzPublishMigrationBundle\Command\LegacyStorage;
 
-use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver;
+use Doctrine\DBAL\Connection;
+use Exception;
+use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver;
+use eZ\Publish\Core\MVC\Symfony\SiteAccess;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway;
+use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway as ImageGateway;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Process;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,18 +28,39 @@ use PDO;
 use DOMDocument;
 use Symfony\Component\Console\Exception\RuntimeException;
 
-set_error_handler(function ($errno, $errstr, $errfile, $errline, array $errcontext) {
-    if (0 === error_reporting()) {
-        return false;
-    }
-
-    throw new RuntimeException($errstr, 0);
-});
-
-class FixImagesVarDirCommand extends ContainerAwareCommand
+class FixImagesVarDirCommand extends Command
 {
     const DEFAULT_ITERATION_COUNT = 100;
     const STORAGE_IMAGES_PATH = '/storage/images/';
+
+    /**
+     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
+     */
+    private $db;
+    /**
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
+     */
+    private $contentGateway;
+
+    /**
+     * @var \eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway
+     */
+    private $imageGateway;
+
+    /**
+     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
+     */
+    private $configResolver;
+
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
+    /**
+     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
+     */
+    private $siteaccess;
 
     /**
      * @var int
@@ -51,16 +78,6 @@ class FixImagesVarDirCommand extends ContainerAwareCommand
     private $dryRun;
 
     /**
-     * @var bool
-     */
-    private $moveFiles;
-
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
-
-    /**
      * @var int
      */
     private $varDir;
@@ -69,6 +86,25 @@ class FixImagesVarDirCommand extends ContainerAwareCommand
      * @var array
      */
     private $imageAttributes = [];
+
+    /**
+     * @param ChainConfigResolver $configResolver
+     * @param DatabaseHandler $db
+     * @param Connection $connection
+     * @param SiteAccess $siteaccess
+     * @param ContentGateway $contentGateway
+     * @param ImageGateway $imageGateway
+     */
+    function __construct(ChainConfigResolver $configResolver, DatabaseHandler $db, Connection $connection, SiteAccess $siteaccess, ContentGateway $contentGateway, ImageGateway $imageGateway)
+    {
+        parent::__construct();
+        $this->db = $db;
+        $this->configResolver = $configResolver;
+        $this->connection = $connection;
+        $this->siteaccess = $siteaccess;
+        $this->contentGateway = $contentGateway;
+        $this->imageGateway = $imageGateway;
+    }
 
     protected function configure()
     {
@@ -84,16 +120,10 @@ class FixImagesVarDirCommand extends ContainerAwareCommand
                 'Execute a dry run'
             )
             ->addOption(
-                'move-files',
-                null,
-                InputOption::VALUE_NONE,
-                'Move image files between var directories'
-            )
-            ->addOption(
                 'iteration-count',
                 null,
                 InputArgument::OPTIONAL,
-                'Limit how much records get updated by single process',
+                'Limit how many records get updated by single process',
                 self::DEFAULT_ITERATION_COUNT
             )
             ->setHelp(
@@ -110,14 +140,10 @@ EOT
             );
     }
 
-    /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
-        /* @var \Doctrine\DBAL\Connection $databaseHandler */
-        $this->connection = $this->getContainer()->get('ezpublish.api.search_engine.legacy.connection');
+        parent::initialize($input, $output);
+        $this->imageGateway->setConnection($this->db);
     }
 
     /**
@@ -129,17 +155,12 @@ EOT
     {
         $iterationCount = (int) $input->getOption('iteration-count');
         $this->dryRun = $input->getOption('dry-run');
-        $this->moveFiles = $input->getOption('move-files');
         $consoleScript = $_SERVER['argv'][0];
 
-        $siteAccess = $this->getContainer()->get('ezpublish.siteaccess');
-
-        /** @var ConfigResolver $configResolver */
-        $configResolver = $this->getContainer()->get('ezpublish.config.resolver');
-        $this->varDir = $configResolver->getParameter(
+        $this->varDir = $this->configResolver->getParameter(
             'var_dir',
             null,
-            $siteAccess->name
+            $this->siteaccess->name
         );
 
         if (getenv('INNER_CALL')) {
@@ -147,7 +168,7 @@ EOT
             $output->writeln($this->done);
         } else {
             $output->writeln([
-                sprintf('Fixing image references using siteaccess %s (var_dir: %s)', $siteAccess->name, $this->varDir),
+                sprintf('Fixing image references using siteaccess %s (var_dir: %s)', $this->siteaccess->name, $this->varDir),
                 'Calculating number of Images to fix...',
             ]);
 
@@ -184,6 +205,7 @@ EOT
                     $consoleScript,
                     $this->getName(),
                     '--iteration-count=' . $iterationCount,
+                    '--siteaccess=' . $this->siteaccess->name,
                 ];
 
                 $process = new Process(
@@ -214,7 +236,7 @@ EOT
      * @param int $limit
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      */
-    protected function processImages(int $limit, OutputInterface $output)
+    protected function processImages($limit, OutputInterface $output)
     {
         $images = $this->getImagesToFix($limit);
 
@@ -229,10 +251,6 @@ EOT
 
             if (!$this->dryRun) {
                 $this->updateImage($image['id'], $image['contentobject_attribute_id'], $filePath, $newFilePath);
-
-                if ($this->moveFiles) {
-                    $this->moveFile($filePath, $newFilePath);
-                }
             }
 
             ++$this->done;
@@ -244,22 +262,12 @@ EOT
     }
 
     /**
-     * @todo Implement this(?)
-     *
-     * @param string $oldFilePath
-     * @param string $newFilePath
-     */
-    protected function moveFile(string $oldFilePath, string $newFilePath)
-    {
-    }
-
-    /**
      * @param int $imageId
      * @param int $contentObjectAttributeId
      * @param string $oldFilePath
      * @param string $newFilePath
      */
-    protected function updateImage(int $imageId, int $contentObjectAttributeId, string $oldFilePath, string $newFilePath)
+    protected function updateImage($imageId, $contentObjectAttributeId, $oldFilePath, $newFilePath)
     {
         $query = $this->connection->createQueryBuilder();
         $query
@@ -282,8 +290,8 @@ EOT
                 $dom = new DOMDocument('1.0', 'utf-8');
 
                 try {
-                    $dom->loadXML($attributeObject['data_text']);
-                } catch (\RuntimeException $e) {
+                    $dom->loadXML('');
+                } catch (Exception $e) {
                     continue;
                 }
 
@@ -314,14 +322,23 @@ EOT
      * @param int $version
      * @param string $dataText
      */
-    protected function updateContentObjectAtribute(int $id, int $version, string $dataText)
+    protected function updateContentObjectAtribute($id, $version, $dataText)
     {
         $query = $this->connection->createQueryBuilder();
         $query
             ->update('ezcontentobject_attribute', 'oa')
-            ->set('oa.data_text', $query->expr()->literal($dataText))
-            ->where('oa.id = ' . $id)
-            ->andWhere('oa.version = ' . $version);
+            ->set('oa.data_text', ':text')
+            ->where('oa.id = :id')
+            ->andWhere('oa.version = :version')
+            ->setParameters([
+                'text' => $dataText,
+                'id' => $id,
+                'version' => $version,
+            ],[
+                'text' => PDO::PARAM_STR,
+                'id' => PDO::PARAM_INT,
+                'version' => PDO::PARAM_INT,
+            ]);
 
         $query->execute();
     }
@@ -331,14 +348,14 @@ EOT
      *
      * @return array
      */
-    protected function getContentObjectAtrributesById(int $id)
+    protected function getContentObjectAtrributesById($id)
     {
         $query = $this->connection->createQueryBuilder();
         $query
             ->select('oa.data_text, oa.id, oa.version')
             ->from('ezcontentobject_attribute', 'oa')
             ->where('oa.id = :id')
-            ->setParameter('id', $id);
+            ->setParameter('id', $id, PDO::PARAM_INT);
         $statement = $query->execute();
 
         return $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -349,18 +366,9 @@ EOT
      *
      * @return array
      */
-    protected function getImagesToFix(int $limit)
+    protected function getImagesToFix($limit)
     {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->select('i.id, i.contentobject_attribute_id, i.filepath')
-            ->from('ezimagefile', 'i')
-            ->where('i.filepath not like :var_dir')
-            ->setParameter('var_dir', $this->varDir . '%')
-            ->setMaxResults($limit);
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $this->imageGateway->getImagesOutsidePath('/' . $this->varDir . '/storage/', $limit, 0);
     }
 
     /**
@@ -368,15 +376,7 @@ EOT
      */
     protected function countImagesToFix()
     {
-        $query = $this->connection->createQueryBuilder();
-        $query
-            ->select('count(*) as count')
-            ->from('ezimagefile', 'i')
-            ->where('i.filepath not like :var_dir')
-            ->setParameter('var_dir', $this->varDir . '%');
-        $statement = $query->execute();
-
-        return (int) $statement->fetchColumn();
+        return $this->imageGateway->countImageReferencesOutsidePath('/' . $this->varDir . '/storage/');
     }
 
     /**
@@ -385,7 +385,7 @@ EOT
      *
      * @return \Symfony\Component\Console\Helper\ProgressBar
      */
-    protected function getProgressBar(int $maxSteps, OutputInterface $output)
+    protected function getProgressBar($maxSteps, OutputInterface $output)
     {
         $progressBar = new ProgressBar($output, $maxSteps);
         $progressBar->setFormat(
