@@ -42,30 +42,6 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     protected $languageHandlerMock;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::__construct
-     */
-    public function testConstruct()
-    {
-        $handler = $this->getTransactionHandler();
-
-        $this->assertAttributeSame(
-            $this->getDatabaseHandlerMock(),
-            'dbHandler',
-            $handler
-        );
-        $this->assertAttributeSame(
-            $this->getContentTypeHandlerMock(),
-            'contentTypeHandler',
-            $handler
-        );
-        $this->assertAttributeSame(
-            $this->getLanguageHandlerMock(),
-            'languageHandler',
-            $handler
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::beginTransaction
      */
     public function testBeginTransaction()

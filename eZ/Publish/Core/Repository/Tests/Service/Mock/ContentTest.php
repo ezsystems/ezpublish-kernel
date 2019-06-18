@@ -68,7 +68,7 @@ class ContentTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\ContentService::__construct
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $repositoryMock = $this->getRepositoryMock();
         /** @var \eZ\Publish\SPI\Persistence\Handler $persistenceHandlerMock */
@@ -87,48 +87,6 @@ class ContentTest extends BaseServiceMockTest
             $nameSchemaServiceMock,
             $fieldTypeRegistryMock,
             $settings
-        );
-
-        $this->assertAttributeSame(
-            $repositoryMock,
-            'repository',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $persistenceHandlerMock,
-            'persistenceHandler',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $domainMapperMock,
-            'domainMapper',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $relationProcessorMock,
-            'relationProcessor',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $nameSchemaServiceMock,
-            'nameSchemaService',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $fieldTypeRegistryMock,
-            'fieldTypeRegistry',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $settings,
-            'settings',
-            $service
         );
     }
 

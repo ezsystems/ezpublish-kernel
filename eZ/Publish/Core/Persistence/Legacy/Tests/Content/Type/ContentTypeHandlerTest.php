@@ -50,30 +50,6 @@ class ContentTypeHandlerTest extends TestCase
     protected $updateHandlerMock;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::__construct
-     */
-    public function testCtor()
-    {
-        $handler = $this->getHandler();
-
-        $this->assertAttributeSame(
-            $this->getGatewayMock(),
-            'contentTypeGateway',
-            $handler
-        );
-        $this->assertAttributeSame(
-            $this->getMapperMock(),
-            'mapper',
-            $handler
-        );
-        $this->assertAttributeSame(
-            $this->getUpdateHandlerMock(),
-            'updateHandler',
-            $handler
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createGroup
      */
     public function testCreateGroup()

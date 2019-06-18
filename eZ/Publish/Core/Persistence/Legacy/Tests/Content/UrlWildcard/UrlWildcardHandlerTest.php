@@ -20,27 +20,6 @@ use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 class UrlWildcardHandlerTest extends TestCase
 {
     /**
-     * Test for the __construct() method.
-     *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler::__construct
-     */
-    public function testConstructor()
-    {
-        $handler = $this->getHandler();
-
-        self::assertAttributeSame(
-            $this->gateway,
-            'gateway',
-            $handler
-        );
-        self::assertAttributeSame(
-            $this->mapper,
-            'mapper',
-            $handler
-        );
-    }
-
-    /**
      * Test for the load() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler::load

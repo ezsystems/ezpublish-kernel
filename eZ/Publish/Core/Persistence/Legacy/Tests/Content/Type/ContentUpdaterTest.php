@@ -64,25 +64,6 @@ class ContentUpdaterTest extends TestCase
     protected $contentMapperMock;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
-     */
-    public function testCtor()
-    {
-        $updater = $this->getContentUpdater();
-
-        $this->assertAttributeSame(
-            $this->getContentGatewayMock(),
-            'contentGateway',
-            $updater
-        );
-        $this->assertAttributeSame(
-            $this->getConverterRegistryMock(),
-            'converterRegistry',
-            $updater
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::determineActions
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::hasFieldDefinition
      */

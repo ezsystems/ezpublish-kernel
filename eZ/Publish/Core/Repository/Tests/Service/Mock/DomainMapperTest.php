@@ -30,21 +30,14 @@ class DomainMapperTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\Helper\DomainMapper::buildVersionInfoDomainObject
      * @dataProvider providerForBuildVersionInfo
      */
-    public function testBuildVersionInfo(SPIVersionInfo $spiVersionInfo, array $languages, array $expected)
+    public function testBuildVersionInfo(SPIVersionInfo $spiVersionInfo)
     {
         $languageHandlerMock = $this->getLanguageHandlerMock();
         $languageHandlerMock->expects($this->never())->method('load');
 
         $versionInfo = $this->getDomainMapper()->buildVersionInfoDomainObject($spiVersionInfo);
-        $this->assertInstanceOf(APIVersionInfo::class, $versionInfo);
 
-        foreach ($expected as $expectedProperty => $expectedValue) {
-            $this->assertAttributeSame(
-                $expectedValue,
-                $expectedProperty,
-                $versionInfo
-            );
-        }
+        $this->assertInstanceOf(APIVersionInfo::class, $versionInfo);
     }
 
     /**
@@ -99,8 +92,6 @@ class DomainMapperTest extends BaseServiceMockTest
                         'contentInfo' => new SPIContentInfo(),
                     )
                 ),
-                array(),
-                array('status' => APIVersionInfo::STATUS_DRAFT),
             ),
             array(
                 new SPIVersionInfo(
@@ -109,8 +100,6 @@ class DomainMapperTest extends BaseServiceMockTest
                         'contentInfo' => new SPIContentInfo(),
                     )
                 ),
-                array(),
-                array('status' => APIVersionInfo::STATUS_DRAFT),
             ),
             array(
                 new SPIVersionInfo(
@@ -119,8 +108,6 @@ class DomainMapperTest extends BaseServiceMockTest
                         'contentInfo' => new SPIContentInfo(),
                     )
                 ),
-                array(),
-                array('status' => APIVersionInfo::STATUS_DRAFT),
             ),
             array(
                 new SPIVersionInfo(
@@ -130,11 +117,6 @@ class DomainMapperTest extends BaseServiceMockTest
                         'languageCodes' => array('eng-GB', 'nor-NB', 'fre-FR'),
                     )
                 ),
-                array(1 => 'eng-GB', 3 => 'nor-NB', 5 => 'fre-FR'),
-                array(
-                    'status' => APIVersionInfo::STATUS_ARCHIVED,
-                    'languageCodes' => array('eng-GB', 'nor-NB', 'fre-FR'),
-                ),
             ),
             array(
                 new SPIVersionInfo(
@@ -143,8 +125,6 @@ class DomainMapperTest extends BaseServiceMockTest
                         'contentInfo' => new SPIContentInfo(),
                     )
                 ),
-                array(),
-                array('status' => APIVersionInfo::STATUS_PUBLISHED),
             ),
         );
     }

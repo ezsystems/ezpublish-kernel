@@ -34,21 +34,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     protected $databaseGateway;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::__construct
-     */
-    public function testCtor()
-    {
-        $handlerMock = $this->getDatabaseHandler();
-        $gateway = $this->getDatabaseGateway();
-
-        $this->assertAttributeSame(
-            $handlerMock,
-            'dbHandler',
-            $gateway
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertContentObject
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
      *

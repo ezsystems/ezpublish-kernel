@@ -36,21 +36,6 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase::__construct
-     */
-    public function testCtor()
-    {
-        $handler = $this->getDatabaseHandler();
-        $gateway = $this->getDatabaseGateway();
-
-        $this->assertAttributeSame(
-            $handler,
-            'handler',
-            $gateway
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\User\Gateway\DoctrineDatabase::removeRoleAssignmentById
      */
     public function testRemoveRoleByAssignmentId()

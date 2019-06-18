@@ -18,21 +18,17 @@ use eZ\Publish\Core\FieldType\NullStorage;
  */
 class StorageRegistryTest extends TestCase
 {
+    private const TYPE_NAME = 'some-type';
+
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::register
      */
-    public function testRegister()
+    public function testRegister(): void
     {
         $storage = $this->getStorageMock();
-        $registry = new StorageRegistry(array('some-type' => $storage));
+        $registry = new StorageRegistry(array(self::TYPE_NAME => $storage));
 
-        $this->assertAttributeSame(
-            array(
-                'some-type' => $storage,
-            ),
-            'storageMap',
-            $registry
-        );
+        $this->assertSame($storage, $registry->getStorage(self::TYPE_NAME));
     }
 
     /**
@@ -41,9 +37,9 @@ class StorageRegistryTest extends TestCase
     public function testGetStorage()
     {
         $storage = $this->getStorageMock();
-        $registry = new StorageRegistry(array('some-type' => $storage));
+        $registry = new StorageRegistry(array(self::TYPE_NAME => $storage));
 
-        $res = $registry->getStorage('some-type');
+        $res = $registry->getStorage(self::TYPE_NAME);
 
         $this->assertSame(
             $storage,

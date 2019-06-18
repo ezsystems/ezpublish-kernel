@@ -38,21 +38,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::__construct
-     */
-    public function testCtor()
-    {
-        $handlerMock = $this->getDatabaseHandler();
-        $gateway = $this->getGateway();
-
-        $this->assertAttributeSame(
-            $handlerMock,
-            'dbHandler',
-            $gateway
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\DoctrineDatabase::insertGroup
      */
     public function testInsertGroup()

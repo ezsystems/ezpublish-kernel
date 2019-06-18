@@ -18,20 +18,19 @@ use eZ\Publish\SPI\Persistence\FieldType as SPIPersistenceFieldType;
  */
 class FieldTypeRegistryTest extends TestCase
 {
+    private const FIELD_TYPE_IDENTIFIER = 'some-type';
+
     /**
      * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::__construct
      */
-    public function testConstructor()
+    public function testConstructor(): void
     {
         $fieldType = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array('some-type' => $fieldType));
+        $registry = new FieldTypeRegistry(array(self::FIELD_TYPE_IDENTIFIER => $fieldType));
 
-        $this->assertAttributeSame(
-            array(
-                'some-type' => $fieldType,
-            ),
-            'coreFieldTypeMap',
-            $registry
+        $this->assertInstanceOf(
+            SPIPersistenceFieldType::class,
+            $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER)
         );
     }
 
@@ -41,16 +40,11 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetFieldTypeInstance()
     {
         $instance = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array('some-type' => $instance));
+        $registry = new FieldTypeRegistry(array(self::FIELD_TYPE_IDENTIFIER => $instance));
 
-        $result = $registry->getFieldType('some-type');
+        $result = $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER);
 
         $this->assertInstanceOf(SPIPersistenceFieldType::class, $result);
-        $this->assertAttributeSame(
-            $instance,
-            'internalFieldType',
-            $result
-        );
     }
 
     /**
@@ -62,16 +56,11 @@ class FieldTypeRegistryTest extends TestCase
         $closure = function () use ($instance) {
             return $instance;
         };
-        $registry = new FieldTypeRegistry(array('some-type' => $closure));
+        $registry = new FieldTypeRegistry(array(self::FIELD_TYPE_IDENTIFIER => $closure));
 
-        $result = $registry->getFieldType('some-type');
+        $result = $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER);
 
         $this->assertInstanceOf(SPIPersistenceFieldType::class, $result);
-        $this->assertAttributeSame(
-            $instance,
-            'internalFieldType',
-            $result
-        );
     }
 
     /**
@@ -107,8 +96,8 @@ class FieldTypeRegistryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $registry = new FieldTypeRegistry(array('some-type' => new \DateTime()));
-        $registry->getFieldType('some-type');
+        $registry = new FieldTypeRegistry(array(self::FIELD_TYPE_IDENTIFIER => new \DateTime()));
+        $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER);
     }
 
     /**
@@ -118,14 +107,11 @@ class FieldTypeRegistryTest extends TestCase
     {
         $fieldType = $this->getFieldTypeMock();
         $registry = new FieldTypeRegistry(array());
-        $registry->register('some-type', $fieldType);
+        $registry->register(self::FIELD_TYPE_IDENTIFIER, $fieldType);
 
-        $this->assertAttributeSame(
-            array(
-                'some-type' => $fieldType,
-            ),
-            'coreFieldTypeMap',
-            $registry
+        $this->assertInstanceOf(
+            SPIPersistenceFieldType::class,
+            $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER)
         );
     }
 

@@ -16,17 +16,15 @@ use PHPUnit\Framework\TestCase;
  */
 class FieldTypeRegistryTest extends TestCase
 {
+    private const FIELD_TYPE_ID = 'one';
+
     public function testConstructor()
     {
-        $fieldTypes = array('field types');
+        $fieldType = $this->getFieldTypeMock();
+        $fieldTypes = [self::FIELD_TYPE_ID => $fieldType];
 
         $registry = new FieldTypeRegistry($fieldTypes);
-
-        $this->assertAttributeSame(
-            $fieldTypes,
-            'fieldTypes',
-            $registry
-        );
+        $this->assertTrue($registry->hasFieldType(self::FIELD_TYPE_ID));
     }
 
     protected function getFieldTypeMock()
@@ -44,12 +42,12 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetFieldType()
     {
         $fieldTypes = array(
-            'one' => $this->getFieldTypeMock(),
+            self::FIELD_TYPE_ID => $this->getFieldTypeMock(),
         );
 
         $registry = new FieldTypeRegistry($fieldTypes);
 
-        $fieldType = $registry->getFieldType('one');
+        $fieldType = $registry->getFieldType(self::FIELD_TYPE_ID);
 
         $this->assertInstanceOf(
             FieldType::class,
@@ -60,12 +58,12 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetClosureFieldType()
     {
         $fieldTypes = array(
-            'one' => $this->getClosure($this->getFieldTypeMock()),
+            self::FIELD_TYPE_ID => $this->getClosure($this->getFieldTypeMock()),
         );
 
         $registry = new FieldTypeRegistry($fieldTypes);
 
-        $fieldType = $registry->getFieldType('one');
+        $fieldType = $registry->getFieldType(self::FIELD_TYPE_ID);
 
         $this->assertInstanceOf(
             FieldType::class,
@@ -113,7 +111,7 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetFieldTypes()
     {
         $fieldTypes = array(
-            'one' => $this->getFieldTypeMock(),
+            self::FIELD_TYPE_ID => $this->getFieldTypeMock(),
             'two' => $this->getClosure($this->getFieldTypeMock()),
         );
 
@@ -123,10 +121,10 @@ class FieldTypeRegistryTest extends TestCase
 
         $this->assertIsArray($fieldTypes);
         $this->assertCount(2, $fieldTypes);
-        $this->assertArrayHasKey('one', $fieldTypes);
+        $this->assertArrayHasKey(self::FIELD_TYPE_ID, $fieldTypes);
         $this->assertInstanceOf(
             FieldType::class,
-            $fieldTypes['one']
+            $fieldTypes[self::FIELD_TYPE_ID]
         );
         $this->assertArrayHasKey('two', $fieldTypes);
         $this->assertInstanceOf(

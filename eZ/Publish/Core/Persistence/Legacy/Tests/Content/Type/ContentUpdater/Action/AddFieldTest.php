@@ -60,7 +60,7 @@ class AddFieldTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
-    public function testCtor()
+    public function testConstructor()
     {
         $action = new AddField(
             $this->getContentGatewayMock(),
@@ -70,21 +70,7 @@ class AddFieldTest extends TestCase
             $this->getContentMapperMock()
         );
 
-        $this->assertAttributeSame(
-            $this->getContentGatewayMock(),
-            'contentGateway',
-            $action
-        );
-        $this->assertAttributeEquals(
-            $this->getFieldDefinitionFixture(),
-            'fieldDefinition',
-            $action
-        );
-        $this->assertAttributeSame(
-            $this->getFieldValueConverterMock(),
-            'fieldValueConverter',
-            $action
-        );
+        $this->assertInstanceOf(AddField::class, $action);
     }
 
     public function testApplySingleVersionSingleTranslation()

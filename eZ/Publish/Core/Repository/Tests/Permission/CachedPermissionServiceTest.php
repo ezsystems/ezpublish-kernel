@@ -36,40 +36,6 @@ use PHPUnit\Framework\TestCase;
  */
 class CachedPermissionServiceTest extends TestCase
 {
-    /**
-     * Test for the __construct() method.
-     */
-    public function testConstructor()
-    {
-        $permissionResolverMock = $this->getPermissionResolverMock();
-        $criterionResolverMock = $this->getPermissionCriterionResolverMock();
-        $cachedService = $this->getCachedPermissionService(10);
-
-        $this->assertAttributeSame(
-            $permissionResolverMock,
-            'permissionResolver',
-            $cachedService
-        );
-        $this->assertAttributeSame(
-            $criterionResolverMock,
-            'permissionCriterionResolver',
-            $cachedService
-        );
-        $this->assertAttributeEquals(
-            10,
-            'cacheTTL',
-            $cachedService
-        );
-        $this->assertAttributeEmpty(
-            'permissionCriterion',
-            $cachedService
-        );
-        $this->assertAttributeEmpty(
-            'permissionCriterionTs',
-            $cachedService
-        );
-    }
-
     public function providerForTestPermissionResolverPassTrough()
     {
         $valueObject = $this
@@ -117,10 +83,6 @@ class CachedPermissionServiceTest extends TestCase
 
         $actualReturn = $cachedService->$method(...$arguments);
         $this->assertSame($expectedReturn, $actualReturn);
-
-        // Make sure no cache properties where set
-        $this->assertAttributeEmpty('permissionCriterion', $cachedService);
-        $this->assertAttributeEmpty('permissionCriterionTs', $cachedService);
     }
 
     public function testGetPermissionsCriterionPassTrough()
@@ -140,10 +102,6 @@ class CachedPermissionServiceTest extends TestCase
 
         $actualReturn = $cachedService->getPermissionsCriterion('content', 'remove');
         $this->assertSame($criterionMock, $actualReturn);
-
-        // Make sure no cache properties where set
-        $this->assertAttributeEmpty('permissionCriterion', $cachedService);
-        $this->assertAttributeEmpty('permissionCriterionTs', $cachedService);
     }
 
     public function testGetPermissionsCriterionCaching()
@@ -163,23 +121,17 @@ class CachedPermissionServiceTest extends TestCase
 
         $actualReturn = $cachedService->getPermissionsCriterion('content', 'read');
         $this->assertSame($criterionMock, $actualReturn);
-        $this->assertAttributeSame($criterionMock, 'permissionCriterion', $cachedService);
-        $this->assertAttributeEquals(1417624982, 'permissionCriterionTs', $cachedService);
 
         // +1
         $actualReturn = $cachedService->getPermissionsCriterion('content', 'read');
         $this->assertSame($criterionMock, $actualReturn);
-        $this->assertAttributeSame($criterionMock, 'permissionCriterion', $cachedService);
-        $this->assertAttributeEquals(1417624982, 'permissionCriterionTs', $cachedService);
 
         // +3, time() will be called twice and cache will be updated
         $actualReturn = $cachedService->getPermissionsCriterion('content', 'read');
         $this->assertSame($criterionMock, $actualReturn);
-        $this->assertAttributeSame($criterionMock, 'permissionCriterion', $cachedService);
-        $this->assertAttributeEquals(1417624985, 'permissionCriterionTs', $cachedService);
     }
 
-    public function testSetCurrentUserReferenceCacheClear()
+    public function testSetCurrentUserReferenceCacheClear(): void
     {
         $criterionMock = $this
             ->getMockBuilder(Criterion::class)
@@ -196,13 +148,11 @@ class CachedPermissionServiceTest extends TestCase
 
         $actualReturn = $cachedService->getPermissionsCriterion('content', 'read');
         $this->assertSame($criterionMock, $actualReturn);
-        $this->assertAttributeSame($criterionMock, 'permissionCriterion', $cachedService);
 
         $userRef = $this
             ->getMockBuilder(UserReference::class)
             ->getMockForAbstractClass();
         $cachedService->setCurrentUserReference($userRef);
-        $this->assertAttributeEmpty('permissionCriterion', $cachedService);
     }
 
     /**

@@ -36,21 +36,6 @@ class DoctrineDatabaseTest extends TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::__construct
-     */
-    public function testCtor()
-    {
-        $handler = $this->getDatabaseHandler();
-        $gateway = $this->getDatabaseGateway();
-
-        $this->assertAttributeSame(
-            $handler,
-            'dbHandler',
-            $gateway
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\DoctrineDatabase::insertSection
      */
     public function testInsertSection()

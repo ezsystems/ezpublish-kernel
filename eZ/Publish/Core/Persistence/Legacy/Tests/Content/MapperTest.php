@@ -37,22 +37,6 @@ class MapperTest extends LanguageAwareTestCase
     protected $valueConverterRegistryMock;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Mapper::__construct
-     */
-    public function testCtor()
-    {
-        $regMock = $this->getValueConverterRegistryMock();
-
-        $mapper = $this->getMapper();
-
-        $this->assertAttributeSame(
-            $regMock,
-            'converterRegistry',
-            $mapper
-        );
-    }
-
-    /**
      * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct

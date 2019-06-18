@@ -44,34 +44,6 @@ class CachingLanguageHandlerTest extends TestCase
     protected $languageCacheMock;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
-     */
-    public function testCtorPropertyInnerHandler()
-    {
-        $handler = $this->getLanguageHandler();
-
-        $this->assertAttributeSame(
-            $this->getInnerLanguageHandlerMock(),
-            'innerHandler',
-            $handler
-        );
-    }
-
-    /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
-     */
-    public function testCtorPropertyLanguageCache()
-    {
-        $handler = $this->getLanguageHandler();
-
-        $this->assertAttributeSame(
-            $this->getLanguageCacheMock(),
-            'cache',
-            $handler
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::create
      */
     public function testCreate()

@@ -47,25 +47,6 @@ class RemoveFieldTest extends TestCase
     protected $removeFieldAction;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
-     */
-    public function testCtor()
-    {
-        $action = $this->getRemoveFieldAction();
-
-        $this->assertAttributeSame(
-            $this->getContentGatewayMock(),
-            'contentGateway',
-            $action
-        );
-        $this->assertAttributeEquals(
-            $this->getFieldDefinitionFixture(),
-            'fieldDefinition',
-            $action
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApplySingleVersionSingleTranslation()

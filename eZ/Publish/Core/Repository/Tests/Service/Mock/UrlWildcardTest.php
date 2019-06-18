@@ -20,23 +20,8 @@ use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 class UrlWildcardTest extends BaseServiceMockTest
 {
     /**
-     * Test for the __construct() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\URLWildcardService::__construct
-     */
-    public function testConstructor()
-    {
-        $service = $this->getPartlyMockedURLWildcardService();
-
-        self::assertAttributeSame($this->getRepositoryMock(), 'repository', $service);
-        self::assertAttributeSame($this->getPersistenceMockHandler('Content\\UrlWildcard\\Handler'), 'urlWildcardHandler', $service);
-        self::assertAttributeSame(array(), 'settings', $service);
-    }
-
-    /**
      * Test for the create() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
      */
     public function testCreateThrowsUnauthorizedException()
@@ -62,7 +47,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the create() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
      */
     public function testCreateThrowsInvalidArgumentException()
@@ -112,7 +96,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the create() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
      * @dataProvider providerForTestCreateThrowsContentValidationException
      */
@@ -163,7 +146,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the create() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
      * @dataProvider providerForTestCreate
      */
@@ -238,7 +220,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the create() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::create
      */
     public function testCreateWithRollback()
@@ -294,7 +275,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the remove() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
      */
     public function testRemoveThrowsUnauthorizedException()
@@ -325,7 +305,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the remove() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
      */
     public function testRemove()
@@ -366,7 +345,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the remove() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
      */
     public function testRemoveWithRollback()
@@ -411,7 +389,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the load() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
      */
     public function testLoadThrowsException()
@@ -438,7 +415,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the load() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::remove
      */
     public function testLoad()
@@ -484,7 +460,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the loadAll() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::loadAll
      */
     public function testLoadAll()
@@ -510,7 +485,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the loadAll() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::loadAll
      */
     public function testLoadAllWithLimitAndOffset()
@@ -602,7 +576,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the translate() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::translate
      * @dataProvider providerForTestTranslateThrowsNotFoundException
      */
@@ -712,7 +685,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the translate() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::translate
      * @dataProvider providerForTestTranslate
      */
@@ -749,7 +721,6 @@ class UrlWildcardTest extends BaseServiceMockTest
     /**
      * Test for the translate() method.
      *
-     * @depends testConstructor
      * @covers \eZ\Publish\Core\Repository\URLWildcardService::translate
      */
     public function testTranslateUsesLongestMatchingWildcard()

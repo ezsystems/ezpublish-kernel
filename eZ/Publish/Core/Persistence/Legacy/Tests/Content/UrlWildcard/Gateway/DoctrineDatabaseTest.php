@@ -46,23 +46,6 @@ class DoctrineDatabaseTest extends TestCase
     );
 
     /**
-     * Test for the __construct() method.
-     *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::__construct
-     */
-    public function testConstructor()
-    {
-        $dbHandler = $this->getDatabaseHandler();
-        $gateway = $this->getGateway();
-
-        $this->assertAttributeSame(
-            $dbHandler,
-            'dbHandler',
-            $gateway
-        );
-    }
-
-    /**
      * Test for the loadUrlWildcardData() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase::loadUrlWildcardData

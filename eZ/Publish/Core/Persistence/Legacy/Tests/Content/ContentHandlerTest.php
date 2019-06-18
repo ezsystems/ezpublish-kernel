@@ -110,31 +110,6 @@ class ContentHandlerTest extends TestCase
     protected $contentTypeHandlerMock;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::__construct
-     */
-    public function testCtor()
-    {
-        $handler = $this->getContentHandler();
-
-        $this->assertAttributeSame(
-            $this->getGatewayMock(),
-            'contentGateway',
-            $handler
-        );
-        $this->assertAttributeSame(
-            $this->getMapperMock(),
-            'mapper',
-            $handler
-        );
-        $this->assertAttributeSame(
-            $this->getFieldHandlerMock(),
-            'fieldHandler',
-            $handler
-        );
-        // @todo Assert missing properties
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::create
      *
      * @todo Current method way to complex to test, refactor!

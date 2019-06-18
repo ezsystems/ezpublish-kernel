@@ -24,27 +24,6 @@ use PHPUnit\Framework\TestCase;
  */
 class PermissionCriterionResolverTest extends TestCase
 {
-    /**
-     * Test for the __construct() method.
-     */
-    public function testConstructor()
-    {
-        $permissionResolverMock = $this->getPermissionResolverMock();
-        $limitationServiceMock = $this->getLimitationServiceMock();
-        $criterionResolver = $this->getPermissionCriterionResolverMock();
-
-        $this->assertAttributeSame(
-            $permissionResolverMock,
-            'permissionResolver',
-            $criterionResolver
-        );
-        $this->assertAttributeSame(
-            $limitationServiceMock,
-            'limitationService',
-            $criterionResolver
-        );
-    }
-
     public function providerForTestGetPermissionsCriterion()
     {
         $criterionMock = $this
