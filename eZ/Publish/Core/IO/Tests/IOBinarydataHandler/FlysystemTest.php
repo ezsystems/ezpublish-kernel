@@ -93,8 +93,6 @@ class FlysystemTest extends TestCase
         $this->handler->delete('prefix/my/file.png');
     }
 
-    /**
-     */
     public function testDeleteNotFound()
     {
         $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
@@ -122,8 +120,6 @@ class FlysystemTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetContentsNotFound()
     {
         $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
@@ -156,8 +152,6 @@ class FlysystemTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetResourceNotFound()
     {
         $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);

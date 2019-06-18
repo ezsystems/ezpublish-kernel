@@ -57,8 +57,6 @@ class PlaceholderProviderRegistryTest extends TestCase
         $this->assertEquals($provider, $registry->getProvider('foo'));
     }
 
-    /**
-     */
     public function testGetProviderUnknown()
     {
         $this->expectException(\InvalidArgumentException::class);

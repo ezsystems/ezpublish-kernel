@@ -49,8 +49,6 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testRegisterFieldTypeNoAlias()
     {
         $this->expectException(\LogicException::class);

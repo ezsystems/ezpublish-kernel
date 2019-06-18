@@ -5385,7 +5385,6 @@ XML
 
     /**
      * Test publish / content policy is required to be able to publish content.
-     *
      */
     public function testPublishContentWithoutPublishPolicyThrowsException()
     {

@@ -13,8 +13,6 @@ use Imagine\Image\ImageInterface;
 
 class UnsupportedFilterTest extends AbstractFilterTest
 {
-    /**
-     */
     public function testLoad()
     {
         $this->expectException(\Imagine\Exception\NotSupportedException::class);

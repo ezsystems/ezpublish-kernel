@@ -27,7 +27,6 @@ class ParentDepthLimitationTest extends BaseLimitationTest
      *
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
-     *
      */
     public function testParentDepthLimitationForbid()
     {

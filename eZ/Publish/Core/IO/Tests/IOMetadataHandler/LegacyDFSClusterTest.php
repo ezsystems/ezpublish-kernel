@@ -74,8 +74,6 @@ class LegacyDFSClusterTest extends TestCase
         $this->assertEquals($mtimeExpected, $spiBinary->mtime);
     }
 
-    /**
-     */
     public function testCreateInvalidArgument()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -110,8 +108,6 @@ class LegacyDFSClusterTest extends TestCase
         $this->handler->delete('prefix/my/file.png');
     }
 
-    /**
-     */
     public function testDeleteNotFound()
     {
         $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
@@ -162,8 +158,6 @@ class LegacyDFSClusterTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testLoadNotFound()
     {
         $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);

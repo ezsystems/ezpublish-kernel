@@ -33,8 +33,6 @@ class ScaleWidthFilterLoaderTest extends TestCase
         $this->loader->setInnerLoader($this->innerLoader);
     }
 
-    /**
-     */
     public function testLoadFail()
     {
         $this->expectException(\Imagine\Exception\InvalidArgumentException::class);

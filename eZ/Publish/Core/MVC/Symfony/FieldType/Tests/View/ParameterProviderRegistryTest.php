@@ -30,7 +30,6 @@ class ParameterProviderRegistryTest extends TestCase
     }
 
     /**
-     *
      * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::getParameterProvider
      */
     public function testGetParameterProviderFail()

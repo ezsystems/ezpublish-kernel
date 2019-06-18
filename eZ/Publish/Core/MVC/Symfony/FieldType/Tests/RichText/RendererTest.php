@@ -608,8 +608,6 @@ class RendererTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testRenderContentEmbedThrowsException()
     {
         $this->expectException(\Exception::class);
@@ -1146,8 +1144,6 @@ class RendererTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testRenderLocationEmbedThrowsException()
     {
         $this->expectException(\Exception::class);

@@ -27,7 +27,6 @@ class OwnerLimitationTest extends BaseLimitationTest
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\OwnerLimitation
      *
      * @throws \ErrorException
-     *
      */
     public function testOwnerLimitationAllow()
     {

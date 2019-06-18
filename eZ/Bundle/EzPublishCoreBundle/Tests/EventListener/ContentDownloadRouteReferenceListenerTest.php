@@ -39,8 +39,6 @@ class ContentDownloadRouteReferenceListenerTest extends TestCase
         self::assertEquals('some_route', $routeReference->getRoute());
     }
 
-    /**
-     */
     public function testThrowsExceptionOnBadContentParameter()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -58,8 +56,6 @@ class ContentDownloadRouteReferenceListenerTest extends TestCase
         $eventListener->onRouteReferenceGeneration($event);
     }
 
-    /**
-     */
     public function testThrowsExceptionOnBadFieldIdentifier()
     {
         $this->expectException(\InvalidArgumentException::class);

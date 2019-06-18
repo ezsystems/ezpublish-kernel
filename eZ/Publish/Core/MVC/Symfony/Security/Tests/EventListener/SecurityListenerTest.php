@@ -184,8 +184,6 @@ class SecurityListenerTest extends TestCase
         $this->listener->onInteractiveLogin($event);
     }
 
-    /**
-     */
     public function testCheckSiteAccessPermissionDenied()
     {
         $this->expectException(\eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException::class);

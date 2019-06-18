@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
 {
     /**
-     *
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::match
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::getMatcher

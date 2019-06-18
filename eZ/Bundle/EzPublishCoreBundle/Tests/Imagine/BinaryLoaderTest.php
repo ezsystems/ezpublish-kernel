@@ -44,8 +44,6 @@ class BinaryLoaderTest extends TestCase
         $this->binaryLoader = new BinaryLoader($this->ioService, $this->extensionGuesser);
     }
 
-    /**
-     */
     public function testFindNotFound()
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
@@ -60,8 +58,6 @@ class BinaryLoaderTest extends TestCase
         $this->binaryLoader->find($path);
     }
 
-    /**
-     */
     public function testFindMissing()
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);

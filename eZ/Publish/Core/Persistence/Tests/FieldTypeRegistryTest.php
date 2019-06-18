@@ -102,7 +102,6 @@ class FieldTypeRegistryTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getFieldType
-     *
      */
     public function testGetNotCallableOrInstance()
     {

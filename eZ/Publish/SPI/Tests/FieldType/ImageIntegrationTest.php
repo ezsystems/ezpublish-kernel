@@ -280,8 +280,6 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
         }*/
     }
 
-    /**
-     */
     public function testCreateContentUsingIdPropertyThrowsWarning()
     {
         $this->expectException(\eZ\Publish\Core\IO\Exception\InvalidBinaryFileIdException::class);

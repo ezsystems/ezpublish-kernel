@@ -121,8 +121,6 @@ class UrlAliasRouterTest extends TestCase
         $this->assertSame($newContext, $this->router->getContext());
     }
 
-    /**
-     */
     public function testMatch()
     {
         $this->expectException(\RuntimeException::class);
@@ -472,8 +470,6 @@ class UrlAliasRouterTest extends TestCase
         $this->assertEquals($expected, $this->router->matchRequest($request));
     }
 
-    /**
-     */
     public function testMatchRequestFail()
     {
         $this->expectException(\Symfony\Component\Routing\Exception\ResourceNotFoundException::class);
@@ -660,8 +656,6 @@ class UrlAliasRouterTest extends TestCase
         $this->assertEquals($expected, $this->router->matchRequest($request));
     }
 
-    /**
-     */
     public function testGenerateFail()
     {
         $this->expectException(\Symfony\Component\Routing\Exception\RouteNotFoundException::class);
@@ -683,8 +677,6 @@ class UrlAliasRouterTest extends TestCase
         $this->assertSame($generatedLink, $this->router->generate($location, $parameters, $referenceType));
     }
 
-    /**
-     */
     public function testGenerateNoLocation()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -692,8 +684,6 @@ class UrlAliasRouterTest extends TestCase
         $this->router->generate(UrlAliasRouter::URL_ALIAS_ROUTE_NAME, array('foo' => 'bar'));
     }
 
-    /**
-     */
     public function testGenerateInvalidLocation()
     {
         $this->expectException(\LogicException::class);
@@ -784,8 +774,6 @@ class UrlAliasRouterTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGenerateWithContentIdWithMissingMainLocation()
     {
         $this->expectException(\LogicException::class);

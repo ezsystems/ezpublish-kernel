@@ -44,8 +44,6 @@ class URLHandlerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testRegisterURLHandlerNoScheme()
     {
         $this->expectException(\LogicException::class);

@@ -66,8 +66,6 @@ class CommonTest extends AbstractParserTestCase
         $this->assertConfigResolverParameterValue('default_page', $defaultPage2, 'ezdemo_site_admin');
     }
 
-    /**
-     */
     public function testDatabaseSingleSiteaccess()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -89,8 +87,6 @@ class CommonTest extends AbstractParserTestCase
         );
     }
 
-    /**
-     */
     public function testDatabaseSiteaccessGroup()
     {
         $this->expectException(\InvalidArgumentException::class);

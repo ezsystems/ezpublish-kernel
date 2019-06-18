@@ -115,8 +115,6 @@ class FlysystemTest extends TestCase
         $this->assertNull($spiBinaryFile->mtime);
     }
 
-    /**
-     */
     public function testLoadNotFound()
     {
         $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);

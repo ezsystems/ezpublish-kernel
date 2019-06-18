@@ -30,8 +30,6 @@ class SudoMainLocationLoaderTest extends TestCase
         $this->loader = new SudoMainLocationLoader($this->getRepositoryMock());
     }
 
-    /**
-     */
     public function testLoadLocationNoMainLocation()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
@@ -69,8 +67,6 @@ class SudoMainLocationLoaderTest extends TestCase
         $this->assertSame($location, $this->loader->loadLocation($contentInfo));
     }
 
-    /**
-     */
     public function testLoadLocationError()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);

@@ -57,8 +57,6 @@ class ProviderTest extends TestCase
         $this->assertSame($user, $this->userProvider->loadUserByUsername($user));
     }
 
-    /**
-     */
     public function testLoadUserByUsernameUserNotFound()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\UsernameNotFoundException::class);
@@ -88,8 +86,6 @@ class ProviderTest extends TestCase
         $this->assertSame(array('ROLE_USER'), $user->getRoles());
     }
 
-    /**
-     */
     public function testRefreshUserNotSupported()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\UnsupportedUserException::class);
@@ -137,8 +133,6 @@ class ProviderTest extends TestCase
         $this->assertSame($user, $this->userProvider->refreshUser($user));
     }
 
-    /**
-     */
     public function testRefreshUserNotFound()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\UsernameNotFoundException::class);

@@ -48,8 +48,6 @@ class NotificationRendererPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testAddRendererWithoutAliasThrowsLogicException()
     {
         $this->expectException(\LogicException::class);

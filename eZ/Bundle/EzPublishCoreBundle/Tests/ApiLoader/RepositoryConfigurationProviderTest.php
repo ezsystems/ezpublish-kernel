@@ -70,8 +70,6 @@ class RepositoryConfigurationProviderTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetRepositoryConfigUndefinedRepository()
     {
         $this->expectException(\eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException::class);

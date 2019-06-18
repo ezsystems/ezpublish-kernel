@@ -41,8 +41,6 @@ class EzPublishCoreCollectorTest extends TestCase
         $this->assertSame($collector, $this->mainCollector->getCollector($name));
     }
 
-    /**
-     */
     public function testGetInvalidCollector()
     {
         $this->expectException(\InvalidArgumentException::class);

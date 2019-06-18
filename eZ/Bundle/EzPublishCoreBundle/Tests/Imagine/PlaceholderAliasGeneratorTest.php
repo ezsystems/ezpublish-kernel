@@ -75,8 +75,6 @@ class PlaceholderAliasGeneratorTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetVariationWrongValue()
     {
         $this->expectException(\InvalidArgumentException::class);

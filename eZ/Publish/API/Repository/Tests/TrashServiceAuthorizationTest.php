@@ -57,7 +57,6 @@ class TrashServiceAuthorizationTest extends BaseTrashServiceTest
      * Test for the trash() method without proper permissions.
      *
      * @covers \eZ\Publish\API\Repository\TrashService::trash
-     *
      */
     public function testTrashThrowsUnauthorizedException()
     {

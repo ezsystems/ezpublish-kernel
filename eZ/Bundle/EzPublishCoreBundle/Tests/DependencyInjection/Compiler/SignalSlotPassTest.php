@@ -43,8 +43,6 @@ class SignalSlotPassTest extends TestCase
         $this->assertEquals($slotId, new Reference($serviceId));
     }
 
-    /**
-     */
     public function testProcessNoSignal()
     {
         $this->expectException(\LogicException::class);

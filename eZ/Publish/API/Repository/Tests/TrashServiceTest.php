@@ -373,7 +373,6 @@ class TrashServiceTest extends BaseTrashServiceTest
      *
      * @see \eZ\Publish\API\Repository\TrashService::recover()
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
-     *
      */
     public function testNotFoundAliasAfterRemoveIt()
     {

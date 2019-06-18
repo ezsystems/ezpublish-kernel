@@ -73,8 +73,6 @@ class FieldTypeRegistryTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetFieldTypeThrowsNotFoundException()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException::class);
@@ -84,8 +82,6 @@ class FieldTypeRegistryTest extends TestCase
         $registry->getFieldType('none');
     }
 
-    /**
-     */
     public function testGetFieldTypeThrowsRuntimeExceptionIncorrectType()
     {
         $this->expectException(\RuntimeException::class);
@@ -100,8 +96,6 @@ class FieldTypeRegistryTest extends TestCase
         $registry->getFieldType('none');
     }
 
-    /**
-     */
     public function testGetClosureFieldTypeThrowsRuntimeExceptionIncorrectType()
     {
         $this->expectException(\RuntimeException::class);

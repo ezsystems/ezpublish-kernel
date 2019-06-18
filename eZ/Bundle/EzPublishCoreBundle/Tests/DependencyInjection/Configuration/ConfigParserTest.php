@@ -17,8 +17,6 @@ use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 
 class ConfigParserTest extends TestCase
 {
-    /**
-     */
     public function testConstructWrongInnerParser()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentType::class);

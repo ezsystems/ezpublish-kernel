@@ -146,8 +146,6 @@ class SearchServiceLocationTest extends BaseTest
         $this->assertEquals(0, $result->totalCount);
     }
 
-    /**
-     */
     public function testInvalidFieldIdentifierRange()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -169,8 +167,6 @@ class SearchServiceLocationTest extends BaseTest
         );
     }
 
-    /**
-     */
     public function testInvalidFieldIdentifierIn()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -192,8 +188,6 @@ class SearchServiceLocationTest extends BaseTest
         );
     }
 
-    /**
-     */
     public function testFindLocationsWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);

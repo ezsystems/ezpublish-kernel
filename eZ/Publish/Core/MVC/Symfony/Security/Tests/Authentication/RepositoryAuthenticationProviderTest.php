@@ -73,8 +73,6 @@ class RepositoryAuthenticationProviderTest extends TestCase
         $method->invoke($this->authProvider, $user, $token);
     }
 
-    /**
-     */
     public function testCheckAuthenticationCredentialsChanged()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\BadCredentialsException::class);
@@ -132,8 +130,6 @@ class RepositoryAuthenticationProviderTest extends TestCase
         $method->invoke($this->authProvider, $user, $token);
     }
 
-    /**
-     */
     public function testCheckAuthenticationFailed()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\BadCredentialsException::class);

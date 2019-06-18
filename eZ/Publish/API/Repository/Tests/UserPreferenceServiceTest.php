@@ -85,7 +85,6 @@ class UserPreferenceServiceTest extends BaseTest
     /**
      * @covers \eZ\Publish\API\Repository\UserPreferenceService::setUserPreference()
      * @depends testSetUserPreference
-     *
      */
     public function testSetUserPreferenceThrowsInvalidArgumentExceptionOnInvalidValue()
     {

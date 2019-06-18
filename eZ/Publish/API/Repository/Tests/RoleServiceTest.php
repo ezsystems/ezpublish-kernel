@@ -630,8 +630,6 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
     }
 
-    /**
-     */
     public function testLoadRoleDraftByRoleIdThrowsNotFoundException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);

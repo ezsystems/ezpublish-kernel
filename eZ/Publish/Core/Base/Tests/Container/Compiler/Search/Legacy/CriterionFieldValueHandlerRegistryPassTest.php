@@ -56,8 +56,6 @@ class CriterionFieldValueHandlerRegistryPassTest extends AbstractCompilerPassTes
         );
     }
 
-    /**
-     */
     public function testRegisterValueHandlerNoAlias()
     {
         $this->expectException(\LogicException::class);

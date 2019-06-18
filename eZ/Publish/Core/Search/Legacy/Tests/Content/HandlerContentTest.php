@@ -347,8 +347,6 @@ class HandlerContentTest extends AbstractTestCase
         $this->assertEquals(10, $contentInfo->id);
     }
 
-    /**
-     */
     public function testFindSingleWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -363,8 +361,6 @@ class HandlerContentTest extends AbstractTestCase
         );
     }
 
-    /**
-     */
     public function testFindContentWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -384,8 +380,6 @@ class HandlerContentTest extends AbstractTestCase
         );
     }
 
-    /**
-     */
     public function testFindSingleTooMany()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -394,8 +388,6 @@ class HandlerContentTest extends AbstractTestCase
         $locator->findSingle(new Criterion\ContentId(array(4, 10, 12, 23)));
     }
 
-    /**
-     */
     public function testFindSingleZero()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
@@ -1045,8 +1037,6 @@ class HandlerContentTest extends AbstractTestCase
         );
     }
 
-    /**
-     */
     public function testFullTextFilterInvalidStopwordThreshold()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);

@@ -41,8 +41,6 @@ class DynamicSettingParserTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testParseDynamicSettingFail()
     {
         $this->expectException(\OutOfBoundsException::class);

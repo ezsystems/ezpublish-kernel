@@ -55,8 +55,6 @@ class ConfigurationProcessorTest extends TestCase
         $this->assertSame($newContextualizer, $processor->getContextualizer());
     }
 
-    /**
-     */
     public function testMapConfigWrongMapper()
     {
         $this->expectException(\InvalidArgumentException::class);

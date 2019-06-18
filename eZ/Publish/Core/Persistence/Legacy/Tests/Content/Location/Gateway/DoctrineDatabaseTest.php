@@ -91,8 +91,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         self::assertLoadLocationProperties($locationRow);
     }
 
-    /**
-     */
     public function testLoadInvalidLocation()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);

@@ -57,8 +57,6 @@ class CriteriaConverterTest extends TestCase
         ));
     }
 
-    /**
-     */
     public function testConvertCriteriaFailure()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotImplementedException::class);

@@ -72,8 +72,6 @@ class StorageEngineFactoryTest extends TestCase
         $this->assertSame($expectedStorageEngine, $factory->buildStorageEngine());
     }
 
-    /**
-     */
     public function testBuildInvalidStorageEngine()
     {
         $this->expectException(\eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine::class);

@@ -31,7 +31,6 @@ class ObjectStateLimitationTest extends BaseLimitationTest
      * @see eZ\Publish\API\Repository\Values\User\Limitation\ObjectStateLimitation
      *
      * @throws \ErrorException
-     *
      */
     public function testObjectStateLimitationAllow()
     {

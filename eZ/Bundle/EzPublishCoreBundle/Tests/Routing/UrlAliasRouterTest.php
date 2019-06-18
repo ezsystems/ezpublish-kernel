@@ -65,8 +65,6 @@ class UrlAliasRouterTest extends BaseUrlAliasRouterTest
         $this->router->setConfigResolver($this->configResolver);
     }
 
-    /**
-     */
     public function testMatchRequestDeactivatedUrlAlias()
     {
         $this->expectException(\Symfony\Component\Routing\Exception\ResourceNotFoundException::class);

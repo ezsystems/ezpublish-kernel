@@ -230,8 +230,6 @@ class RouterTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testMatchByNameInvalidSiteAccess()
     {
         $this->expectException(\InvalidArgumentException::class);

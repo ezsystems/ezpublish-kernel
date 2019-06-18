@@ -872,7 +872,6 @@ class SearchTest extends BaseServiceMockTest
 
     /**
      * Test for the findLocations() method.
-     *
      */
     public function testFindLocationsThrowsHandlerException()
     {

@@ -68,8 +68,6 @@ class StorageConnectionFactoryTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetConnectionInvalidRepository()
     {
         $this->expectException(\eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException::class);
@@ -96,8 +94,6 @@ class StorageConnectionFactoryTest extends TestCase
         $factory->getConnection();
     }
 
-    /**
-     */
     public function testGetConnectionInvalidConnection()
     {
         $this->expectException(\InvalidArgumentException::class);

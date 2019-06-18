@@ -105,7 +105,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the load() method.
-     *
      */
     public function testLoadThrowsNotFoundException()
     {
@@ -160,7 +159,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the load() method.
-     *
      */
     public function testLoadThrowsNotFoundExceptionPath()
     {
@@ -187,7 +185,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the removeAliases() method.
-     *
      */
     public function testRemoveAliasesThrowsInvalidArgumentException()
     {
@@ -255,7 +252,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the removeAliases() method.
-     *
      */
     public function testRemoveAliasesWithRollback()
     {
@@ -2808,7 +2804,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the lookup() method.
-     *
      */
     public function testLookupThrowsNotFoundException()
     {
@@ -3039,7 +3034,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the reverseLookup() method.
-     *
      */
     public function testReverseLookupCustomConfiguration()
     {
@@ -3066,7 +3060,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the reverseLookup() method.
-     *
      */
     public function testReverseLookupThrowsNotFoundException()
     {
@@ -3280,7 +3273,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the createUrlAlias() method.
-     *
      */
     public function testCreateUrlAliasWithRollback()
     {
@@ -3339,7 +3331,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the createUrlAlias() method.
-     *
      */
     public function testCreateUrlAliasThrowsInvalidArgumentException()
     {
@@ -3446,7 +3437,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the createGlobalUrlAlias() method.
-     *
      */
     public function testCreateGlobalUrlAliasWithRollback()
     {
@@ -3504,7 +3494,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the createGlobalUrlAlias() method.
-     *
      */
     public function testCreateGlobalUrlAliasThrowsInvalidArgumentExceptionResource()
     {
@@ -3537,7 +3526,6 @@ class UrlAliasTest extends BaseServiceMockTest
 
     /**
      * Test for the createGlobalUrlAlias() method.
-     *
      */
     public function testCreateGlobalUrlAliasThrowsInvalidArgumentExceptionPath()
     {

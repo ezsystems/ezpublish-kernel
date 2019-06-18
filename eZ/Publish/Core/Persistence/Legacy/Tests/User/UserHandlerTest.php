@@ -74,8 +74,6 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testCreateDuplicateUser()
     {
         $this->expectException(\Doctrine\DBAL\DBALException::class);
@@ -86,8 +84,6 @@ class UserHandlerTest extends TestCase
         $handler->create($user);
     }
 
-    /**
-     */
     public function testInsertIncompleteUser()
     {
         $this->expectException(\Doctrine\DBAL\DBALException::class);
@@ -111,8 +107,6 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testLoadUnknownUser()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
@@ -134,8 +128,6 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testLoadUserByEmailNotFound()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
@@ -158,8 +150,6 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testLoadUserByTokenNotFound()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);

@@ -13,8 +13,6 @@ use eZ\Publish\Core\FieldType\FieldType;
 
 class FieldTypeMockTest extends TestCase
 {
-    /**
-     */
     public function testApplyDefaultSettingsThrowsInvalidArgumentException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -163,8 +161,6 @@ class FieldTypeMockTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testApplyDefaultValidatorConfigurationEmptyThrowsInvalidArgumentException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);

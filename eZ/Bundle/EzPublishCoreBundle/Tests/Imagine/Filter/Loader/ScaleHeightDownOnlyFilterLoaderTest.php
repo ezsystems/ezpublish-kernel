@@ -33,8 +33,6 @@ class ScaleHeightDownOnlyFilterLoaderTest extends TestCase
         $this->loader->setInnerLoader($this->innerLoader);
     }
 
-    /**
-     */
     public function testLoadInvalid()
     {
         $this->expectException(\Imagine\Exception\InvalidArgumentException::class);

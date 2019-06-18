@@ -636,8 +636,6 @@ class FieldNameResolverTest extends TestCase
         $this->assertEquals('generated_typed_field_name', key($fieldName));
     }
 
-    /**
-     */
     public function testGetIndexFieldNameDefaultMatchFieldThrowsRuntimeException()
     {
         $this->expectException(\RuntimeException::class);
@@ -682,8 +680,6 @@ class FieldNameResolverTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetIndexFieldNameDefaultSortFieldThrowsRuntimeException()
     {
         $this->expectException(\RuntimeException::class);
@@ -728,8 +724,6 @@ class FieldNameResolverTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetIndexFieldNameNamedFieldThrowsRuntimeException()
     {
         $this->expectException(\RuntimeException::class);

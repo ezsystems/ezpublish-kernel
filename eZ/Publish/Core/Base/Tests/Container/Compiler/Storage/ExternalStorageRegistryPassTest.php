@@ -45,8 +45,6 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testRegisterExternalStorageHandlerNoAlias()
     {
         $this->expectException(\LogicException::class);
@@ -99,8 +97,6 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testRegisterExternalStorageHandlerWithoutRegisteredGateway()
     {
         $this->expectException(\LogicException::class);
@@ -121,8 +117,6 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testRegisterExternalStorageHandlerWithGatewayNoAlias()
     {
         $this->expectException(\LogicException::class);
@@ -149,8 +143,6 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testRegisterExternalStorageHandlerWithGatewayNoIdentifier()
     {
         $this->expectException(\LogicException::class);

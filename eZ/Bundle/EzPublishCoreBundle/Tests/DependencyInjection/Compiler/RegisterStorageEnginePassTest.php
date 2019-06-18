@@ -70,8 +70,6 @@ class RegisterStorageEnginePassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testRegisterStorageEngineNoAlias()
     {
         $this->expectException(\LogicException::class);

@@ -46,8 +46,6 @@ class PlaceholderProviderPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testAddProviderWithoutType()
     {
         $this->expectException(\LogicException::class);

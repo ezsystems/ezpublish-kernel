@@ -105,7 +105,6 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
-     *
      */
     public function testCommitException()
     {
@@ -148,7 +147,6 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
-     *
      */
     public function testRollbackException()
     {

@@ -163,8 +163,6 @@ class IORepositoryResolverTest extends TestCase
         $this->assertSame($expected, $result);
     }
 
-    /**
-     */
     public function testResolveMissing()
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException::class);
@@ -179,8 +177,6 @@ class IORepositoryResolverTest extends TestCase
         $this->imageResolver->resolve($path, 'some_filter');
     }
 
-    /**
-     */
     public function testResolveNotFound()
     {
         $this->expectException(\Liip\ImagineBundle\Exception\Imagine\Cache\Resolver\NotResolvableException::class);

@@ -1417,8 +1417,6 @@ class ContentHandlerTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testCopyThrowsNotFoundExceptionContentNotFound()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);

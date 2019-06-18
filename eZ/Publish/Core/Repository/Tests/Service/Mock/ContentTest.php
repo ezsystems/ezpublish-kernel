@@ -452,8 +452,6 @@ class ContentTest extends BaseServiceMockTest
         $this->assertSame($content, $contentService->loadContent($contentId));
     }
 
-    /**
-     */
     public function testLoadContentUnauthorized()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
@@ -477,8 +475,6 @@ class ContentTest extends BaseServiceMockTest
         $contentService->loadContent($contentId);
     }
 
-    /**
-     */
     public function testLoadContentNotPublishedStatusUnauthorized()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
@@ -582,8 +578,6 @@ class ContentTest extends BaseServiceMockTest
         );
     }
 
-    /**
-     */
     public function testInternalLoadContentNotFound()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);

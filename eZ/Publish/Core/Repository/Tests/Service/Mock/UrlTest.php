@@ -35,8 +35,6 @@ class UrlTest extends BaseServiceMockTest
         $this->urlHandler = $this->getPersistenceMockHandler('URL\\Handler');
     }
 
-    /**
-     */
     public function testFindUrlsUnauthorized()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
@@ -46,8 +44,6 @@ class UrlTest extends BaseServiceMockTest
         $this->createUrlService()->findUrls(new URLQuery());
     }
 
-    /**
-     */
     public function testFindUrlsNonNumericOffset()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue::class);
@@ -60,8 +56,6 @@ class UrlTest extends BaseServiceMockTest
         $this->createUrlService()->findUrls($query);
     }
 
-    /**
-     */
     public function testFindUrlsNonNumericLimit()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue::class);
@@ -103,8 +97,6 @@ class UrlTest extends BaseServiceMockTest
         $this->assertEquals($expected, $this->createUrlService()->findUrls($query));
     }
 
-    /**
-     */
     public function testUpdateUrlUnauthorized()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
@@ -120,8 +112,6 @@ class UrlTest extends BaseServiceMockTest
         $this->createUrlService()->updateUrl($url, new URLUpdateStruct());
     }
 
-    /**
-     */
     public function testUpdateUrlNonUnique()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentException::class);
@@ -260,8 +250,6 @@ class UrlTest extends BaseServiceMockTest
         ]), $urlService->updateUrl($apiUrl, $apiStruct));
     }
 
-    /**
-     */
     public function testLoadByIdUnauthorized()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
@@ -290,8 +278,6 @@ class UrlTest extends BaseServiceMockTest
         ]), $this->createUrlService()->loadById($urlId));
     }
 
-    /**
-     */
     public function testLoadByUrlUnauthorized()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);

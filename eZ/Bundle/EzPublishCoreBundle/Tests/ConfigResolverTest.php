@@ -68,8 +68,6 @@ class ConfigResolverTest extends TestCase
         $this->assertSame('anotherNamespace', $resolver->getDefaultNamespace());
     }
 
-    /**
-     */
     public function testGetParameterFailedWithException()
     {
         $this->expectException(\eZ\Publish\Core\MVC\Exception\ParameterNotFoundException::class);

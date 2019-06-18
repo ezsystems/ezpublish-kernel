@@ -49,8 +49,6 @@ class FilterConfigurationTest extends TestCase
         $this->assertSame($barConfig, $this->filterConfiguration->get('bar'));
     }
 
-    /**
-     */
     public function testGetNoEzVariationInvalidImagineFilter()
     {
         $this->expectException(\RuntimeException::class);
@@ -69,8 +67,6 @@ class FilterConfigurationTest extends TestCase
         $this->filterConfiguration->get('foobar');
     }
 
-    /**
-     */
     public function testGetWithEzVariationInvalidFilters()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidVariationException::class);

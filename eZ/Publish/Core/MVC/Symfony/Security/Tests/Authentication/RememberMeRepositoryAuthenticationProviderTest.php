@@ -48,8 +48,6 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
         $this->authProvider->setRepository($this->repository);
     }
 
-    /**
-     */
     public function testAuthenticateUnsupportedToken()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
@@ -62,8 +60,6 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
         $this->authProvider->authenticate($anonymousToken);
     }
 
-    /**
-     */
     public function testAuthenticateWrongProviderKey()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
@@ -87,8 +83,6 @@ class RememberMeRepositoryAuthenticationProviderTest extends TestCase
         $this->authProvider->authenticate($rememberMeToken);
     }
 
-    /**
-     */
     public function testAuthenticateWrongSecret()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\BadCredentialsException::class);

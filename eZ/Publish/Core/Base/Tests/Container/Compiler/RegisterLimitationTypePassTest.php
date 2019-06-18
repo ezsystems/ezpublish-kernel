@@ -50,8 +50,6 @@ class RegisterLimitationTypePassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testRegisterLimitationTypeNoAlias()
     {
         $this->expectException(\LogicException::class);

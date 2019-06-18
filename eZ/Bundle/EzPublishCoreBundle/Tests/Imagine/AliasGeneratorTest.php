@@ -153,8 +153,6 @@ class AliasGeneratorTest extends TestCase
         ];
     }
 
-    /**
-     */
     public function testGetVariationWrongValue()
     {
         $this->expectException(\InvalidArgumentException::class);
@@ -378,8 +376,6 @@ class AliasGeneratorTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testGetVariationOriginalNotFound()
     {
         $this->expectException(\eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException::class);
@@ -393,8 +389,6 @@ class AliasGeneratorTest extends TestCase
         $this->aliasGenerator->getVariation($field, new VersionInfo(), 'foo');
     }
 
-    /**
-     */
     public function testGetVariationInvalidVariation()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidVariationException::class);

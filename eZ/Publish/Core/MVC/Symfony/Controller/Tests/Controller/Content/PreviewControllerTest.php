@@ -82,8 +82,6 @@ class PreviewControllerTest extends TestCase
         return $controller;
     }
 
-    /**
-     */
     public function testPreviewUnauthorized()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
@@ -100,8 +98,6 @@ class PreviewControllerTest extends TestCase
         $controller->previewContentAction(new Request(), $contentId, $versionNo, $lang, 'test');
     }
 
-    /**
-     */
     public function testPreviewCanUserFail()
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);

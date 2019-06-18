@@ -31,8 +31,6 @@ class InternalLinkValidatorTest extends TestCase
         $this->locationHandler = $this->createMock(LocationHandler::class);
     }
 
-    /**
-     */
     public function testValidateFailOnNotSupportedSchema()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentException::class);

@@ -102,8 +102,6 @@ class HandlerTest extends TestCase
         $this->assertEquals($expected, $this->handler->find($query));
     }
 
-    /**
-     */
     public function testLoadByIdWithoutUrlData()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
@@ -144,8 +142,6 @@ class HandlerTest extends TestCase
         $this->assertEquals($url, $this->handler->loadById($url->id));
     }
 
-    /**
-     */
     public function testLoadByUrlWithoutUrlData()
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);

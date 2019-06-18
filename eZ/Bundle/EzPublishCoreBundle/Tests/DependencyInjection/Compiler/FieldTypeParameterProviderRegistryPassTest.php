@@ -50,8 +50,6 @@ class FieldTypeParameterProviderRegistryPassTest extends AbstractCompilerPassTes
         );
     }
 
-    /**
-     */
     public function testRegisterFieldTypeNoAlias()
     {
         $this->expectException(\LogicException::class);

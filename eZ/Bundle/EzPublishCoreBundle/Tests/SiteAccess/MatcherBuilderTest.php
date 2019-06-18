@@ -45,7 +45,6 @@ class MatcherBuilderTest extends TestCase
     }
 
     /**
-     *
      * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::__construct
      * @covers \eZ\Bundle\EzPublishCoreBundle\SiteAccess\MatcherBuilder::buildMatcher
      */

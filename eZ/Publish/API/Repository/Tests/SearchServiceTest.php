@@ -1059,8 +1059,6 @@ class SearchServiceTest extends BaseTest
         }
     }
 
-    /**
-     */
     public function testFindNoPerformCountException()
     {
         $this->expectException(\RuntimeException::class);
@@ -1107,8 +1105,6 @@ class SearchServiceTest extends BaseTest
         }
     }
 
-    /**
-     */
     public function testFindLocationsNoPerformCountException()
     {
         $this->expectException(\RuntimeException::class);
@@ -1235,8 +1231,6 @@ class SearchServiceTest extends BaseTest
         $this->assertEquals(0, $result->totalCount);
     }
 
-    /**
-     */
     public function testInvalidFieldIdentifierRange()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -1259,8 +1253,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    /**
-     */
     public function testInvalidFieldIdentifierIn()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -1283,8 +1275,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    /**
-     */
     public function testFindContentWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -1307,8 +1297,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    /**
-     */
     public function testSortFieldWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -1326,8 +1314,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    /**
-     */
     public function testSortMapLocationDistanceWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -1352,8 +1338,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    /**
-     */
     public function testFindSingleFailMultiple()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -1368,8 +1352,6 @@ class SearchServiceTest extends BaseTest
         );
     }
 
-    /**
-     */
     public function testFindSingleWithNonSearchableField()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);

@@ -82,8 +82,6 @@ class ConsoleCommandListenerTest extends TestCase
         );
     }
 
-    /**
-     */
     public function testInvalidSiteAccessDev()
     {
         $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
@@ -97,8 +95,6 @@ class ConsoleCommandListenerTest extends TestCase
         $this->listener->onConsoleCommand($event);
     }
 
-    /**
-     */
     public function testInvalidSiteAccessProd()
     {
         $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);

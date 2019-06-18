@@ -137,8 +137,6 @@ class AssetMapperTest extends TestCase
         $this->assertEquals($expectedValue, $mapper->getAssetField($content));
     }
 
-    /**
-     */
     public function testGetAssetFieldThrowsInvalidArgumentException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
@@ -196,8 +194,6 @@ class AssetMapperTest extends TestCase
         $this->assertEquals($expectedValue, $mapper->getAssetValue($content));
     }
 
-    /**
-     */
     public function testGetAssetValueThrowsInvalidArgumentException()
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);

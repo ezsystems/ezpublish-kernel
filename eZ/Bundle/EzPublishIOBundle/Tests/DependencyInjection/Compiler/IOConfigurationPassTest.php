@@ -111,8 +111,6 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-    /**
-     */
     public function testUnknownMetadataHandler()
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
@@ -126,8 +124,6 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         $this->compile();
     }
 
-    /**
-     */
     public function testUnknownBinarydataHandler()
     {
         $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
