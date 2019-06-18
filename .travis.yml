@@ -51,12 +51,11 @@ matrix:
     - php: 7.2
       env: TEST_CONFIG="phpunit.xml"
 # 7.3
-    # Temp: Need to use --ignore-platform-reqs due to: https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3697
     - php: 7.3
-      env: TEST_CONFIG="phpunit.xml" COMPOSER_FLAGS="--ignore-platform-reqs"
+      env: TEST_CONFIG="phpunit.xml"
     - name: Legacy Storage engine tests with MariaDB 10.3
       php: 7.3
-      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mariadb" DATABASE="mysql://root@localhost/testdb" COMPOSER_FLAGS="--ignore-platform-reqs"
+      env: TEST_CONFIG="phpunit-integration-legacy.xml" DB="mariadb" DATABASE="mysql://root@localhost/testdb"
       addons:
         mariadb: 10.3
 

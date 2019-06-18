@@ -9,7 +9,6 @@
 namespace eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor\Field;
 
 use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor\FieldBase;
-use eZ\Publish\Core\Search\Elasticsearch\Content\SortClauseVisitor;
 use eZ\Publish\API\Repository\Values\Content\Query\SortClause;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Search\Common\FieldNameResolver;
