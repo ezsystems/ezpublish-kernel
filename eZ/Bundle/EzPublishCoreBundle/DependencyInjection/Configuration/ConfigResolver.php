@@ -273,7 +273,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
                 // Symfony 3.4+: . (PHP_SAPI === 'cli' ? 'make the affected commands lazy, ' : '')
                 . 'make the service lazy or see if you can inject another lazy service.',
                 $blame,
-                '"$' . implode(array_unique($params), '$", "$') . '$"'
+                '"$' . implode('$", "$', array_unique($params)) . '$"'
             ));
         }
 

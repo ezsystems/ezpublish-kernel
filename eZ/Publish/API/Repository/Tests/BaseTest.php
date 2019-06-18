@@ -11,7 +11,6 @@ namespace eZ\Publish\API\Repository\Tests;
 use Doctrine\DBAL\Connection;
 use eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException;
 use eZ\Publish\API\Repository\Tests\PHPUnitConstraint\ValidationErrorOccurs as PHPUnitConstraintValidationErrorOccurs;
-use eZ\Publish\API\Repository\Values\Content\Location;
 use EzSystems\EzPlatformSolrSearchEngine\Tests\SetupFactory\LegacySetupFactory as LegacySolrSetupFactory;
 use PHPUnit\Framework\TestCase;
 use eZ\Publish\API\Repository\Repository;

@@ -38,7 +38,7 @@
         "twig/twig": "~1.35|~2.4"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "~2.7.5",
+        "friendsofphp/php-cs-fixer": "~2.15.0",
         "phpunit/phpunit": "^5.7",
         "matthiasnoback/symfony-dependency-injection-test": "~1.0",
         "symfony/assetic-bundle": "~2.8.2",

@@ -54,9 +54,8 @@ matrix:
     - php: 7.2
       env: TEST_CONFIG="phpunit.xml" SYMFONY_VERSION="~3.4.26"
 # 7.3
-    # Temp: Need to use --ignore-platform-reqs due to: https://github.com/FriendsOfPHP/PHP-CS-Fixer/issues/3697
     - php: 7.3
-      env: TEST_CONFIG="phpunit.xml" COMPOSER_FLAGS="--ignore-platform-reqs"
+      env: TEST_CONFIG="phpunit.xml"
 
 # test only master, stable branches and pull requests
 branches:
