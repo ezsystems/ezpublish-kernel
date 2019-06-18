@@ -428,20 +428,22 @@ class AuthorTest extends FieldTypeTest
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidType()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $ft = $this->createFieldTypeUnderTest();
         $ft->acceptValue($this->createMock(Value::class));
     }
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Author\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidFormat()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $ft = $this->createFieldTypeUnderTest();
         $value = new AuthorValue();
         $value->authors = 'This is not a valid author collection';

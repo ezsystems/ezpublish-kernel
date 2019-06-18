@@ -37,10 +37,11 @@ class RoleTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\RoleService::validateRoleCreateStruct
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testCreateRoleThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $limitationMock = $this->createMock(RoleLimitation::class);
         $limitationTypeMock = $this->createMock(SPIType::class);
 
@@ -104,10 +105,11 @@ class RoleTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\RoleService::addPolicy
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAddPolicyThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $limitationMock = $this->createMock(RoleLimitation::class);
         $limitationTypeMock = $this->createMock(SPIType::class);
 
@@ -170,10 +172,11 @@ class RoleTest extends BaseServiceMockTest
      * @covers \eZ\Publish\Core\Repository\RoleService::updatePolicy
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitations
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testUpdatePolicyThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $limitationMock = $this->createMock(RoleLimitation::class);
         $limitationTypeMock = $this->createMock(SPIType::class);
 
@@ -238,10 +241,11 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUser() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testAssignRoleToUserThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepositoryMock();
         $roleServiceMock = $this->getPartlyMockedRoleService();
         /** @var \eZ\Publish\API\Repository\Values\User\Role $roleMock */
@@ -266,10 +270,11 @@ class RoleTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAssignRoleToUserThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $limitationMock = $this->createMock(RoleLimitation::class);
         $limitationTypeMock = $this->createMock(SPIType::class);
 
@@ -315,10 +320,11 @@ class RoleTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testAssignRoleToUserThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepositoryMock();
         $roleServiceMock = $this->getPartlyMockedRoleService();
         /** @var \eZ\Publish\API\Repository\Values\User\Role $roleMock */
@@ -498,10 +504,11 @@ class RoleTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUser
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \Exception
      */
     public function testAssignRoleToUserWithRollback()
     {
+        $this->expectException(\Exception::class);
+
         $repository = $this->getRepositoryMock();
         $roleServiceMock = $this->getPartlyMockedRoleService(array('checkAssignmentAndFilterLimitationValues'));
         $roleMock = $this->createMock(Role::class);
@@ -562,10 +569,11 @@ class RoleTest extends BaseServiceMockTest
      * Test for the assignRoleToUserGroup() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testAssignRoleToUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepositoryMock();
         $roleServiceMock = $this->getPartlyMockedRoleService();
         /** @var \eZ\Publish\API\Repository\Values\User\Role $roleMock */
@@ -590,10 +598,11 @@ class RoleTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testAssignRoleToUserGroupThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $limitationMock = $this->createMock(RoleLimitation::class);
         $limitationTypeMock = $this->createMock(SPIType::class);
 
@@ -639,10 +648,11 @@ class RoleTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testAssignRoleGroupToUserThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepositoryMock();
         $roleServiceMock = $this->getPartlyMockedRoleService();
         /** @var \eZ\Publish\API\Repository\Values\User\Role $roleMock */
@@ -830,10 +840,11 @@ class RoleTest extends BaseServiceMockTest
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::assignRoleToUserGroup
      * @covers \eZ\Publish\Core\Repository\Helper\LimitationService::validateLimitation
-     * @expectedException \Exception
      */
     public function testAssignRoleToUserGroupWithRollback()
     {
+        $this->expectException(\Exception::class);
+
         $repository = $this->getRepositoryMock();
         $roleServiceMock = $this->getPartlyMockedRoleService(array('checkAssignmentAndFilterLimitationValues'));
         $roleMock = $this->createMock(Role::class);
@@ -898,10 +909,11 @@ class RoleTest extends BaseServiceMockTest
      * Test for the deletePolicy() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::deletePolicy
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeletePolicyThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepositoryMock();
         $roleServiceMock = $this->getPartlyMockedRoleService();
         $policyMock = $this->createMock(Policy::class);
@@ -921,11 +933,12 @@ class RoleTest extends BaseServiceMockTest
      * Test for the deletePolicy() method.
      *
      * @covers \eZ\Publish\Core\Repository\RoleService::deletePolicy
-     * @expectedException \Exception
-     * @expectedExceptionMessage Handler threw an exception
      */
     public function testDeletePolicyWithRollback()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Handler threw an exception');
+
         $repository = $this->getRepositoryMock();
         $roleServiceMock = $this->getPartlyMockedRoleService();
         $policyMock = $this->createMock(Policy::class);

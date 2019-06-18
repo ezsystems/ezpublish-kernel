@@ -54,7 +54,6 @@ abstract class AbstractMatcherFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      *
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::match
@@ -62,6 +61,8 @@ abstract class AbstractMatcherFactoryTest extends TestCase
      */
     public function testMatchInvalidMatcher()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $matcherFactory = new $this->matcherFactoryClass(
             $this->getRepositoryMock(),
             array(

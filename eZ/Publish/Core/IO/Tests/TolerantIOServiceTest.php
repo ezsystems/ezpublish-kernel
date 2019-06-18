@@ -33,7 +33,8 @@ class TolerantIOServiceTest extends IOServiceTest
      */
     public function testLoadBinaryFileNotFound()
     {
-        $binaryFile = parent::testLoadBinaryFileNotFound();
+        $binaryFile = parent::loadBinaryFileNotFound();
+
         self::assertEquals(
             new MissingBinaryFile(array('id' => 'id.ext')),
             $binaryFile
@@ -54,7 +55,7 @@ class TolerantIOServiceTest extends IOServiceTest
             ->with($prefixedUri)
             ->will($this->returnValue("/$prefixedUri"));
 
-        $binaryFile = parent::testLoadBinaryFileNotFound();
+        $binaryFile = parent::loadBinaryFileNotFound();
         self::assertEquals(
             new MissingBinaryFile(array('id' => 'id.ext', 'uri' => "/$prefixedUri")),
             $binaryFile
@@ -68,14 +69,14 @@ class TolerantIOServiceTest extends IOServiceTest
      */
     public function testDeleteBinaryFileNotFound()
     {
-        parent::testDeleteBinaryFileNotFound();
+        parent::deleteBinaryFileNotFound();
     }
 
     public function testLoadBinaryFileByUriNotFound()
     {
         self::assertEquals(
             new MissingBinaryFile(array('id' => 'my/path.png')),
-            parent::testLoadBinaryFileByUriNotFound()
+            parent::loadBinaryFileByUriNotFound()
         );
     }
 }

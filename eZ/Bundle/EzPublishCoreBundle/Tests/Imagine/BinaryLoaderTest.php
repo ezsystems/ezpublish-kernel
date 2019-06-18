@@ -45,10 +45,11 @@ class BinaryLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      */
     public function testFindNotFound()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+
         $path = 'something.jpg';
         $this->ioService
             ->expects($this->once())
@@ -60,10 +61,11 @@ class BinaryLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException
      */
     public function testFindMissing()
     {
+        $this->expectException(\Liip\ImagineBundle\Exception\Binary\Loader\NotLoadableException::class);
+
         $path = 'something.jpg';
         $this->ioService
             ->expects($this->once())

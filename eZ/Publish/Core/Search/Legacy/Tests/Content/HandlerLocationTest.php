@@ -1161,10 +1161,11 @@ class HandlerLocationTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFullTextFilterInvalidStopwordThreshold()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $this->getContentSearchHandler(
             array(
                 'stopWordThresholdFactor' => 2,

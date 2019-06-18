@@ -51,10 +51,11 @@ class FieldTypeParameterProviderRegistryPassTest extends AbstractCompilerPassTes
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterFieldTypeNoAlias()
     {
+        $this->expectException(\LogicException::class);
+
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
         $def = new Definition();

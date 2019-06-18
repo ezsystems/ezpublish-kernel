@@ -65,10 +65,11 @@ class UserGroupTest extends TestCase
      * Test retrieving missing property.
      *
      * @covers \eZ\Publish\API\Repository\Values\User\UserGroup::__get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testMissingProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException::class);
+
         $userGroup = new UserGroup();
         $value = $userGroup->notDefined;
         self::fail('Succeeded getting non existing property');
@@ -103,10 +104,11 @@ class UserGroupTest extends TestCase
      * Test setting read only property.
      *
      * @covers \eZ\Publish\API\Repository\Values\User\UserGroup::__set
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testReadOnlyProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+
         $userGroup = new UserGroup();
         $userGroup->parentId = 42;
         self::fail('Succeeded setting read only property');
@@ -131,10 +133,11 @@ class UserGroupTest extends TestCase
      * Test unsetting a property.
      *
      * @covers \eZ\Publish\API\Repository\Values\User\UserGroup::__unset
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testUnsetProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+
         $userGroup = new UserGroup(['parentId' => 1]);
         unset($userGroup->parentId);
         self::fail('Unsetting read-only property succeeded');

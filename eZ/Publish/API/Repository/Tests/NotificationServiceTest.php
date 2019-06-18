@@ -158,10 +158,11 @@ class NotificationServiceTest extends BaseTest
     /**
      * @covers \eZ\Publish\API\Repository\NotificationService::createNotification()
      * @depends testCreateNotification
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateNotificationThrowsInvalidArgumentExceptionOnMissingOwner()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -179,10 +180,11 @@ class NotificationServiceTest extends BaseTest
     /**
      * @covers \eZ\Publish\API\Repository\NotificationService::createNotification()
      * @depends testCreateNotification
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateNotificationThrowsInvalidArgumentExceptionOnMissingType()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */

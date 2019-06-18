@@ -86,11 +86,12 @@ class SearchServiceAuthorizationTest extends BaseTest
      * Test for the findSingle() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findSingle()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceTest::testFindSingle
      */
     public function testFindSingleThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -183,11 +184,12 @@ class SearchServiceAuthorizationTest extends BaseTest
      * Test for the findSingle() method.
      *
      * @see \eZ\Publish\API\Repository\ContentService::findSingle($query, $languageFilter, $filterOnUserPermissions)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SearchServiceAuthorizationTest::testFindContent
      */
     public function testFindSingleThrowsNotFoundExceptionWithUserPermissionFilter()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */

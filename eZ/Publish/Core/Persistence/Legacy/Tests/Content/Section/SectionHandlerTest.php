@@ -242,10 +242,11 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::delete
-     * @expectedException \RuntimeException
      */
     public function testDeleteFailure()
     {
+        $this->expectException(\RuntimeException::class);
+
         $handler = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();

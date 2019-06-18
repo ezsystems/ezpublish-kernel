@@ -290,10 +290,11 @@ class RatingTest extends FieldTypeTest
 
     /**
      * @covers \eZ\Publish\Core\FieldType\Rating\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidFormat()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $ft = $this->createFieldTypeUnderTest();
         $ref = new ReflectionObject($ft);
         $refMethod = $ref->getMethod('acceptValue');
@@ -363,10 +364,11 @@ class RatingTest extends FieldTypeTest
 
     /**
      * @dataProvider provideDataForGetName
-     * @expectedException \RuntimeException
      */
     public function testGetName(SPIValue $value, array $fieldSettings = [], string $languageCode = 'en_GB', $expected)
     {
+        $this->expectException(\RuntimeException::class);
+
         $fieldSettingsMock = $this->getFieldDefinitionMock($fieldSettings);
 
         $this->getFieldTypeUnderTest()->getName($value, $fieldSettingsMock, $languageCode);

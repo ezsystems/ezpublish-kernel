@@ -51,10 +51,11 @@ class LocationTest extends TestCase
      * Test retrieving missing property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\Location::__get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testMissingProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException::class);
+
         $location = new Location();
         $value = $location->notDefined;
         self::fail('Succeeded getting non existing property');
@@ -64,10 +65,11 @@ class LocationTest extends TestCase
      * Test setting read only property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\Location::__set
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testReadOnlyProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+
         $location = new Location();
         $location->id = 42;
         self::fail('Succeeded setting read only property');
@@ -92,10 +94,11 @@ class LocationTest extends TestCase
      * Test unsetting a property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\Location::__unset
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testUnsetProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+
         $location = new Location(['id' => 2]);
         unset($location->id);
         self::fail('Unsetting read-only property succeeded');

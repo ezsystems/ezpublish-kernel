@@ -138,10 +138,11 @@ class AssetMapperTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testGetAssetFieldThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $content = $this->createContentWithId(self::EXAMPLE_CONTENT_ID);
 
         $mapper = $this->createPartialMapper(['isAsset']);
@@ -196,10 +197,11 @@ class AssetMapperTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testGetAssetValueThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $content = $this->createContentWithId(self::EXAMPLE_CONTENT_ID);
 
         $mapper = $this->createPartialMapper(['isAsset']);

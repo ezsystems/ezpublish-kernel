@@ -79,10 +79,11 @@ class MapperTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Notification\Mapper::extractNotificationsFromRows
-     * @expectedException \RuntimeException
      */
     public function testExtractNotificationsFromRowsThrowsRuntimeException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $rows = [
             [
                 'id' => 1,

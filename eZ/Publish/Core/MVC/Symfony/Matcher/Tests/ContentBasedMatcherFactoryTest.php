@@ -11,7 +11,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Matcher\Tests;
 abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
 {
     /**
-     * @expectedException \InvalidArgumentException
      *
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::__construct
      * @covers \eZ\Publish\Core\MVC\Symfony\Matcher\AbstractMatcherFactory::match
@@ -20,6 +19,8 @@ abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
      */
     public function testMatchNonContentBasedMatcher()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $matcherFactory = new $this->matcherFactoryClass(
             $this->getRepositoryMock(),
             array(

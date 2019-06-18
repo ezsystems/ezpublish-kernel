@@ -83,10 +83,11 @@ class SectionLimitationTest extends BaseLimitationTest
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
      *
      * @throws \ErrorException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testSectionLimitationForbid()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */

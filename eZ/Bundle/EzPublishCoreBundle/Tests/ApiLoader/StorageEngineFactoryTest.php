@@ -73,10 +73,11 @@ class StorageEngineFactoryTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine
      */
     public function testBuildInvalidStorageEngine()
     {
+        $this->expectException(\eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidStorageEngine::class);
+
         $configResolver = $this->getConfigResolverMock();
         $repositoryAlias = 'main';
         $repositories = array(

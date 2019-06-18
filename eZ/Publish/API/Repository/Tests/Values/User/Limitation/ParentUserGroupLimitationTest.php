@@ -87,10 +87,11 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
      * Tests a ParentUserGroupLimitation.
      *
      * @see eZ\Publish\API\Repository\Values\User\Limitation\ParentUserGroupLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testParentUserGroupLimitationForbid()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 

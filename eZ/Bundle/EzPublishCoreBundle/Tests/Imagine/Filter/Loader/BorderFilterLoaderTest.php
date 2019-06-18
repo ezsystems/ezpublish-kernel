@@ -19,11 +19,12 @@ use PHPUnit\Framework\TestCase;
 class BorderFilterLoaderTest extends TestCase
 {
     /**
-     * @expectedException \Imagine\Exception\InvalidArgumentException
      * @dataProvider loadInvalidProvider
      */
     public function testLoadInvalidOptions(array $options)
     {
+        $this->expectException(\Imagine\Exception\InvalidArgumentException::class);
+
         $loader = new BorderFilterLoader();
         $loader->load($this->createMock(ImageInterface::class), $options);
     }

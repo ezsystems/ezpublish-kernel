@@ -605,10 +605,11 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadErrorNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+
         $handler = $this->getContentHandler();
 
         $gatewayMock = $this->getGatewayMock();
@@ -1417,10 +1418,11 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testCopyThrowsNotFoundExceptionContentNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+
         $handler = $this->getContentHandler();
 
         $treeHandlerMock = $this->getTreeHandlerMock();
@@ -1437,10 +1439,11 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Handler::copy
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testCopyThrowsNotFoundExceptionVersionNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+
         $handler = $this->getContentHandler();
 
         $gatewayMock = $this->getGatewayMock();

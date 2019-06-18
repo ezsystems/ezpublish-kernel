@@ -78,10 +78,11 @@ class FieldTypeRegistryTest extends TestCase
      * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getFieldType
      *
      * @since 5.3.2
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException
      */
     public function testGetNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException::class);
+
         $registry = new FieldTypeRegistry(array());
         $registry->getFieldType('not-found');
     }
@@ -90,10 +91,11 @@ class FieldTypeRegistryTest extends TestCase
      * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getFieldType
      *
      * BC with 5.0-5.3.2
-     * @expectedException \RuntimeException
      */
     public function testGetNotFoundBCException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $registry = new FieldTypeRegistry(array());
         $registry->getFieldType('not-found');
     }
@@ -101,10 +103,11 @@ class FieldTypeRegistryTest extends TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\FieldTypeRegistry::getFieldType
      *
-     * @expectedException \RuntimeException
      */
     public function testGetNotCallableOrInstance()
     {
+        $this->expectException(\RuntimeException::class);
+
         $registry = new FieldTypeRegistry(array('some-type' => new \DateTime()));
         $registry->getFieldType('some-type');
     }

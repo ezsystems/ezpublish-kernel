@@ -268,7 +268,6 @@ class RichTextStorageTest extends TestCase
 
     /**
      * @dataProvider providerForTestStoreFieldDataThrowsNotFoundException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testStoreFieldDataThrowsNotFoundException(
         $xmlString,
@@ -278,6 +277,8 @@ class RichTextStorageTest extends TestCase
         $remoteIds,
         $contentIds
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $gateway = $this->getGatewayMock();
         $gateway
             ->expects($this->once())

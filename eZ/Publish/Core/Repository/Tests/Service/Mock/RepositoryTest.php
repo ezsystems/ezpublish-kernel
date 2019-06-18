@@ -57,10 +57,11 @@ class RepositoryTest extends BaseServiceMockTest
      * Test for the commit() method.
      *
      * @covers \eZ\Publish\API\Repository\Repository::commit
-     * @expectedException \RuntimeException
      */
     public function testCommitThrowsRuntimeException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $mockedRepository = $this->getRepository();
         $persistenceHandlerMock = $this->getPersistenceMock();
 
@@ -98,10 +99,11 @@ class RepositoryTest extends BaseServiceMockTest
      * Test for the rollback() method.
      *
      * @covers \eZ\Publish\API\Repository\Repository::rollback
-     * @expectedException \RuntimeException
      */
     public function testRollbackThrowsRuntimeException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $mockedRepository = $this->getRepository();
         $persistenceHandlerMock = $this->getPersistenceMock();
 

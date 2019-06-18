@@ -67,13 +67,14 @@ class BlockingLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\BlockingLimitationType $limitationType
      */
     public function testAcceptValueException(Limitation $limitation, BlockingLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $limitationType->acceptValue($limitation);
     }
 
@@ -235,13 +236,14 @@ class BlockingLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
         Limitation $limitation,
         ValueObject $object,
         array $targets
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
@@ -283,12 +285,13 @@ class BlockingLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\BlockingLimitationType $limitationType
      */
     public function testValueSchema(BlockingLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotImplementedException::class);
+
         self::assertEquals(
             array(),
             $limitationType->valueSchema()

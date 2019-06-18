@@ -348,10 +348,11 @@ class HandlerContentTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFindSingleWithNonSearchableField()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $locator = $this->getContentSearchHandler();
         $locator->findSingle(
             new Criterion\Field(
@@ -363,10 +364,11 @@ class HandlerContentTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFindContentWithNonSearchableField()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $locator = $this->getContentSearchHandler();
         $locator->findContent(
             new Query(
@@ -383,19 +385,21 @@ class HandlerContentTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFindSingleTooMany()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $locator = $this->getContentSearchHandler();
         $locator->findSingle(new Criterion\ContentId(array(4, 10, 12, 23)));
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testFindSingleZero()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $locator = $this->getContentSearchHandler();
         $locator->findSingle(new Criterion\ContentId(0));
     }
@@ -1042,10 +1046,11 @@ class HandlerContentTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFullTextFilterInvalidStopwordThreshold()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $this->getContentSearchHandler(
             array(
                 'stopWordThresholdFactor' => 2,

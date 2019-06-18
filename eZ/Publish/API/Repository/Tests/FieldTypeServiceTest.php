@@ -75,10 +75,11 @@ class FieldTypeServiceTest extends BaseTest
      * Test for the getFieldType() method.
      *
      * @see \eZ\Publish\API\Repository\FieldTypeService::getFieldType()
-     * @expectedException \RuntimeException
      */
     public function testGetFieldTypeThrowsNotFoundException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */

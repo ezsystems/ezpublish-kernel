@@ -86,10 +86,11 @@ class UserPreferenceServiceTest extends BaseTest
      * @covers \eZ\Publish\API\Repository\UserPreferenceService::setUserPreference()
      * @depends testSetUserPreference
      *
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     public function testSetUserPreferenceThrowsInvalidArgumentExceptionOnInvalidValue()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -108,10 +109,11 @@ class UserPreferenceServiceTest extends BaseTest
     /**
      * @covers \eZ\Publish\API\Repository\UserPreferenceService::setUserPreference()
      * @depends testSetUserPreference
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testSetUserPreferenceThrowsInvalidArgumentExceptionOnEmptyName()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */

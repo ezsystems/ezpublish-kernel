@@ -26,10 +26,11 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
      * Tests that invalid path string provided for subtree criterion result in exception.
      *
      * @dataProvider searchContentQueryWithInvalidDataProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testSearchContentSubtreeShouldThrowException($pathString)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $query = new Query(
             array(
                 'filter' => new Criterion\Subtree($pathString),

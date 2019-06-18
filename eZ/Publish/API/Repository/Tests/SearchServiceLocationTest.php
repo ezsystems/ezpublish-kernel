@@ -147,10 +147,11 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testInvalidFieldIdentifierRange()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
@@ -169,10 +170,11 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testInvalidFieldIdentifierIn()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
@@ -191,10 +193,11 @@ class SearchServiceLocationTest extends BaseTest
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testFindLocationsWithNonSearchableField()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 

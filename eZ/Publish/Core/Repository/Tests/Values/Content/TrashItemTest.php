@@ -50,10 +50,11 @@ class TrashItemTest extends TestCase
      * Test retrieving missing property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testMissingProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException::class);
+
         $trashItem = new TrashItem();
         $value = $trashItem->notDefined;
         self::fail('Succeeded getting non existing property');
@@ -63,10 +64,11 @@ class TrashItemTest extends TestCase
      * Test setting read only property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__set
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testReadOnlyProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+
         $trashItem = new TrashItem();
         $trashItem->id = 42;
         self::fail('Succeeded setting read only property');
@@ -91,10 +93,11 @@ class TrashItemTest extends TestCase
      * Test unsetting a property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\TrashItem::__unset
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
      */
     public function testUnsetProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+
         $trashItem = new TrashItem(['id' => 2]);
         unset($trashItem->id);
         self::fail('Unsetting read-only property succeeded');

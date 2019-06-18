@@ -35,11 +35,12 @@ class ScaleFilterLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \Imagine\Exception\InvalidArgumentException
      * @dataProvider loadInvalidProvider
      */
     public function testLoadInvalidOptions(array $options)
     {
+        $this->expectException(\Imagine\Exception\InvalidArgumentException::class);
+
         $this->loader->load($this->createMock(ImageInterface::class), $options);
     }
 

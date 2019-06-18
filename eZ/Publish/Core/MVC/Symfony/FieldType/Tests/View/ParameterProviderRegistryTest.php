@@ -30,12 +30,13 @@ class ParameterProviderRegistryTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      *
      * @covers \eZ\Publish\Core\MVC\Symfony\FieldType\View\ParameterProviderRegistry::getParameterProvider
      */
     public function testGetParameterProviderFail()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $registry = new ParameterProviderRegistry();
         $registry->getParameterProvider('foo');
     }

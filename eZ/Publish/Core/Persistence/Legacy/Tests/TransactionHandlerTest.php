@@ -106,11 +106,12 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::commit
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage test
      */
     public function testCommitException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('test');
+
         $handler = $this->getTransactionHandler();
         $this->getDatabaseHandlerMock()
             ->expects($this->once())
@@ -148,11 +149,12 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\TransactionHandler::rollback
      *
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage test
      */
     public function testRollbackException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('test');
+
         $handler = $this->getTransactionHandler();
         $this->getDatabaseHandlerMock()
             ->expects($this->once())

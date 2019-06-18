@@ -33,10 +33,11 @@ class ReduceNoiseFilterLoaderTest extends TestCase
     }
 
     /**
-     * @expectedException \Imagine\Exception\NotSupportedException
      */
     public function testLoadInvalidDriver()
     {
+        $this->expectException(\Imagine\Exception\NotSupportedException::class);
+
         $this->loader->load($this->createMock(ImageInterface::class));
     }
 }

@@ -609,11 +609,12 @@ class RendererTest extends TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Something threw up
      */
     public function testRenderContentEmbedThrowsException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Something threw up');
+
         $renderer = $this->getMockedRenderer(array('checkContentPermissions'));
         $contentId = 42;
         $mainLocationId = 2;
@@ -1146,11 +1147,12 @@ class RendererTest extends TestCase
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Something threw up
      */
     public function testRenderLocationEmbedThrowsException()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Something threw up');
+
         $renderer = $this->getMockedRenderer(array('checkLocation'));
         $locationId = 42;
 

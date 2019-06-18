@@ -67,10 +67,11 @@ class CommonTest extends AbstractParserTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testDatabaseSingleSiteaccess()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->load(
             array(
                 'system' => array(
@@ -89,10 +90,11 @@ class CommonTest extends AbstractParserTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testDatabaseSiteaccessGroup()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->load(
             array(
                 'system' => array(

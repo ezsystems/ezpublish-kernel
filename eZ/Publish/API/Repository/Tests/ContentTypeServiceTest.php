@@ -167,12 +167,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the createContentTypeGroup() method.
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentTypeGroupCreateStruct' is invalid: A group with the identifier 'Content' already exists
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testCreateContentTypeGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentTypeGroupCreateStruct\' is invalid: A group with the identifier \'Content\' already exists');
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -240,10 +241,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the loadContentTypeGroup() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentTypeGroupThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $contentTypeService = $repository->getContentTypeService();
@@ -298,11 +300,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the loadContentTypeGroupByIdentifier() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroupByIdentifier
      */
     public function testLoadContentTypeGroupByIdentifierThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -508,12 +511,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the updateContentTypeGroup() method.
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentTypeGroupUpdateStruct->identifier' is invalid: given identifier already exists
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
     public function testUpdateContentTypeGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentTypeGroupUpdateStruct->identifier\' is invalid: given identifier already exists');
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -536,10 +540,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContentTypeGroup()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -674,10 +679,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentTypeGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testDeleteContentTypeGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -936,12 +942,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the createContentType() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentTypeCreateStruct' is invalid: Another ContentType with identifier 'folder' exists
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateIdentifier()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentTypeCreateStruct\' is invalid: Another ContentType with identifier \'folder\' exists');
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -969,12 +976,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * remoteId.
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::createContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Another ContentType with remoteId 'a3d405b81be900468eb153d774f4f0d2' exists
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateRemoteId()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Another ContentType with remoteId \'a3d405b81be900468eb153d774f4f0d2\' exists');
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1002,12 +1010,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the createContentType() method creating content with duplicate field identifiers.
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::createContentType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentTypeCreateStruct' is invalid: Argument contains duplicate field definition identifier 'title'
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateFieldIdentifier()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentTypeCreateStruct\' is invalid: Argument contains duplicate field definition identifier \'title\'');
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1038,12 +1047,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * existing identifier.
      *
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Another ContentType with identifier 'blog-post' exists
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentType
      */
     public function testCreateContentTypeThrowsInvalidArgumentExceptionDuplicateContentTypeIdentifier()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Another ContentType with identifier \'blog-post\' exists');
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1133,12 +1143,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the createContentTypeGroup() method called with no groups.
      *
      * @depends testCreateContentType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentTypeGroups' is invalid: Argument must contain at least one ContentTypeGroup
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::createContentTypeGroup
      */
     public function testCreateContentTypeThrowsInvalidArgumentExceptionGroupsEmpty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentTypeGroups\' is invalid: Argument must contain at least one ContentTypeGroup');
+
         $repository = $this->getRepository();
 
         $contentTypeService = $repository->getContentTypeService();
@@ -1222,10 +1233,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeDraft()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentTypeDraftThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistingContentTypeId = $this->generateId('type', 2342);
@@ -1377,11 +1389,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the updateContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
     public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionDuplicateIdentifier()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1400,11 +1413,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the updateContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
     public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionDuplicateRemoteId()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1423,12 +1437,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the updateContentTypeDraft() method.
      *
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentTypeDraft' is invalid: There is no ContentType draft assigned to the authenticated user
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::updateContentTypeDraft
      */
     public function testUpdateContentTypeDraftThrowsInvalidArgumentExceptionNoDraftForAuthenticatedUser()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentTypeDraft\' is invalid: There is no ContentType draft assigned to the authenticated user');
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
         $roleService = $repository->getRoleService();
@@ -1542,10 +1557,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAddFieldDefinitionThrowsInvalidArgumentExceptionDuplicateFieldIdentifier()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1626,11 +1642,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage ContentType already contains field definition of non-repeatable field type 'ezuser'
      */
     public function testAddFieldDefinitionThrowsBadStateExceptionNonRepeatableField()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+        $this->expectExceptionMessage('ContentType already contains field definition of non-repeatable field type \'ezuser\'');
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1666,11 +1683,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * times to the same ContentTypeCreateStruct.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\ContentTypeValidationException
-     * @expectedExceptionMessage FieldType 'ezuser' is singular and can't be repeated in a ContentType
      */
     public function testCreateContentThrowsContentTypeValidationException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\ContentTypeValidationException::class);
+        $this->expectExceptionMessage('FieldType \'ezuser\' is singular and can\'t be repeated in a ContentType');
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1719,11 +1737,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
-     * @expectedExceptionMessage Field definition of 'ezuser' field type cannot be added because ContentType has Content instances
      */
     public function testAddFieldDefinitionThrowsBadStateExceptionContentInstances()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+        $this->expectExceptionMessage('Field definition of \'ezuser\' field type cannot be added because ContentType has Content instances');
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1815,11 +1834,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the removeFieldDefinition() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
      */
     public function testRemoveFieldDefinitionThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -1840,11 +1860,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test removeFieldDefinition() method for field in a different draft throws an exception.
      *
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @covers \eZ\Publish\Core\Repository\ContentTypeService::removeFieldDefinition
      */
     public function testRemoveFieldDefinitionThrowsInvalidArgumentExceptionOnWrongDraft()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -2316,11 +2337,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition
      * depends \eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$fieldDefinitionUpdateStruct' is invalid: Another FieldDefinition with identifier 'title' exists in the ContentType
      */
     public function testUpdateFieldDefinitionThrowsInvalidArgumentExceptionFieldIdentifierExists()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$fieldDefinitionUpdateStruct\' is invalid: Another FieldDefinition with identifier \'title\' exists in the ContentType');
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -2347,11 +2369,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$fieldDefinition' is invalid: The given FieldDefinition does not belong to the ContentType
      */
     public function testUpdateFieldDefinitionThrowsInvalidArgumentExceptionForUndefinedField()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$fieldDefinition\' is invalid: The given FieldDefinition does not belong to the ContentType');
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -2499,10 +2522,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testPublishContentTypeDraft
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testPublishContentTypeDraftThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -2520,12 +2544,13 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the createContentTypeGroup() method trying to create Content Type without any fields.
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
-     * @expectedExceptionMessage Argument '$contentTypeDraft' is invalid: The content type draft should have at least one field definition
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testPublishContentTypeDraft
      */
     public function testPublishContentTypeDraftThrowsInvalidArgumentExceptionWithoutFields()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Argument \'$contentTypeDraft\' is invalid: The content type draft should have at least one field definition');
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -2769,10 +2794,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentTypeThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistentTypeId = $this->generateId('type', 2342);
@@ -2834,11 +2860,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the loadContentTypeByIdentifier() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByIdentifier()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
      */
     public function testLoadContentTypeByIdentifierThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2898,10 +2925,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeByRemoteId()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentType
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadContentTypeByRemoteIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -3100,11 +3128,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the createContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeDraft
      */
     public function testCreateContentTypeDraftThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -3124,10 +3153,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @covers \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeByIdentifier
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteContentType()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -3146,11 +3176,12 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      * Test for the deleteContentType() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentType
      */
     public function testDeleteContentTypeThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -3360,10 +3391,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::assignContentTypeGroup()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAssignContentTypeGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAssignContentTypeGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -3422,10 +3454,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::unassignContentTypeGroup()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUnassignContentTypeGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUnassignContentTypeGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -3444,10 +3477,11 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::unassignContentTypeGroup()
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUnassignContentTypeGroup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
      */
     public function testUnassignContentTypeGroupThrowsBadStateException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */

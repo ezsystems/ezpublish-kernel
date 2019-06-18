@@ -71,10 +71,11 @@ class RepositoryConfigurationProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException
      */
     public function testGetRepositoryConfigUndefinedRepository()
     {
+        $this->expectException(\eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidRepositoryException::class);
+
         $configResolver = $this->getConfigResolverMock();
         $repositories = array(
             'main' => array(

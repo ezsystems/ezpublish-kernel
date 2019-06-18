@@ -75,10 +75,11 @@ class LegacyDFSClusterTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreateInvalidArgument()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $this->dbalMock
             ->expects($this->never())
             ->method('prepare');
@@ -110,10 +111,11 @@ class LegacyDFSClusterTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException
      */
     public function testDeleteNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
+
         $statement = $this->createDbalStatementMock();
         $statement
             ->expects($this->once())
@@ -161,10 +163,11 @@ class LegacyDFSClusterTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException
      */
     public function testLoadNotFound()
     {
+        $this->expectException(\eZ\Publish\Core\IO\Exception\BinaryFileNotFoundException::class);
+
         $statement = $this->createDbalStatementMock();
         $statement
             ->expects($this->once())

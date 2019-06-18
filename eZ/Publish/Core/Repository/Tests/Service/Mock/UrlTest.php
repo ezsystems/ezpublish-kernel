@@ -36,20 +36,22 @@ class UrlTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testFindUrlsUnauthorized()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $this->configureUrlViewPermission(false);
 
         $this->createUrlService()->findUrls(new URLQuery());
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
     public function testFindUrlsNonNumericOffset()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue::class);
+
         $this->configureUrlViewPermission(true);
 
         $query = new URLQuery();
@@ -59,10 +61,11 @@ class UrlTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
     public function testFindUrlsNonNumericLimit()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue::class);
+
         $this->configureUrlViewPermission(true);
 
         $query = new URLQuery();
@@ -101,10 +104,11 @@ class UrlTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testUpdateUrlUnauthorized()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $url = $this->getApiUrl();
 
         $this->getRepositoryMock()
@@ -117,10 +121,11 @@ class UrlTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      */
     public function testUpdateUrlNonUnique()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentException::class);
+
         $this->configureUrlUpdatePermission(true);
 
         $url = $this->getApiUrl(1, 'http://ez.no');
@@ -256,10 +261,11 @@ class UrlTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testLoadByIdUnauthorized()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $this->configureUrlViewPermission(false);
 
         $this->createUrlService()->loadById(1);
@@ -285,10 +291,11 @@ class UrlTest extends BaseServiceMockTest
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\UnauthorizedException
      */
     public function testLoadByUrlUnauthorized()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
+
         $this->configureUrlViewPermission(false);
 
         $this->createUrlService()->loadByUrl('http://ez.no');

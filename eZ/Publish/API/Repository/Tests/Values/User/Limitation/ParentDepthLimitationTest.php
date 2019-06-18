@@ -28,10 +28,11 @@ class ParentDepthLimitationTest extends BaseLimitationTest
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see \eZ\Publish\API\Repository\Values\User\Limitation\ParentDepthLimitation
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testParentDepthLimitationForbid()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $contentTypeId = $this->generateId('contentType', 22);

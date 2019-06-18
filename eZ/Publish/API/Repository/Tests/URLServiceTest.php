@@ -308,10 +308,11 @@ class URLServiceTest extends BaseURLServiceTest
      * Test for URLService::findUrls() method.
      *
      * @see \eZ\Publish\Core\Repository\URLService::findUrls()
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
     public function testFindUrlsWithInvalidOffsetThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue::class);
+
         $query = new URLQuery();
         $query->filter = new Criterion\MatchAll();
         $query->offset = 'invalid!';
@@ -329,10 +330,11 @@ class URLServiceTest extends BaseURLServiceTest
      * Test for URLService::findUrls() method.
      *
      * @see \eZ\Publish\Core\Repository\URLService::findUrls()
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
      */
     public function testFindUrlsWithInvalidLimitThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue::class);
+
         $query = new URLQuery();
         $query->filter = new Criterion\MatchAll();
         $query->limit = 'invalid!';
@@ -535,11 +537,12 @@ class URLServiceTest extends BaseURLServiceTest
      * Test for URLService::updateUrl() method.
      *
      * @see \eZ\Publish\Core\Repository\URLService::updateUrl()
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\URLServiceTest::testUpdateUrl
      */
     public function testUpdateUrlWithNonUniqueUrl()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $id = $this->generateId('url', 23);
@@ -588,11 +591,12 @@ class URLServiceTest extends BaseURLServiceTest
      * Test for URLService::loadById() method.
      *
      * @see \eZ\Publish\Core\Repository\URLService::loadById
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\URLServiceTest::testLoadById
      */
     public function testLoadByIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistentUrlId = $this->generateId('url', self::DB_INT_MAX);
@@ -636,11 +640,12 @@ class URLServiceTest extends BaseURLServiceTest
      * Test for URLService::loadByUrl() method.
      *
      * @see \eZ\Publish\Core\Repository\URLService::loadByUrl
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\URLServiceTest::testLoadByUrl
      */
     public function testLoadByUrlThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistentUrl = 'https://laravel.com/';

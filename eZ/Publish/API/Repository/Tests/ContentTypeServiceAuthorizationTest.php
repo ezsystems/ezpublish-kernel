@@ -22,11 +22,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the createContentTypeGroup() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testCreateContentTypeGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $creatorId = $this->generateId('user', 14);
@@ -61,11 +62,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the updateContentTypeGroup() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
     public function testUpdateContentTypeGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $modifierId = $this->generateId('user', 42);
@@ -109,11 +111,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the deleteContentTypeGroup() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentTypeGroup
      */
     public function testDeleteContentTypeGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -144,11 +147,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the createContentType() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentType
      */
     public function testCreateContentTypeThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $creatorId = $this->generateId('user', 14);
@@ -199,11 +203,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the updateContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeDraft
      */
     public function testUpdateContentTypeDraftThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -249,11 +254,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the addFieldDefinition() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::addFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAddFieldDefinition
      */
     public function testAddFieldDefinitionThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -303,11 +309,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the removeFieldDefinition() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::removeFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testRemoveFieldDefinition
      */
     public function testRemoveFieldDefinitionThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -334,11 +341,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the updateFieldDefinition() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateFieldDefinition()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateFieldDefinition
      */
     public function testUpdateFieldDefinitionThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -390,11 +398,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the publishContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::publishContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testPublishContentTypeDraft
      */
     public function testPublishContentTypeDraftThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
 
@@ -419,11 +428,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the createContentTypeDraft() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeDraft
      */
     public function testCreateContentTypeDraftThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -449,11 +459,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the deleteContentType() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testDeleteContentType
      */
     public function testDeleteContentTypeThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -479,11 +490,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the copyContentType() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::copyContentType()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCopyContentType
      */
     public function testCopyContentTypeThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -509,11 +521,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the assignContentTypeGroup() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::assignContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testAssignContentTypeGroup
      */
     public function testAssignContentTypeGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -540,11 +553,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
      * Test for the unassignContentTypeGroup() method.
      *
      * @see \eZ\Publish\API\Repository\ContentTypeService::unassignContentTypeGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUnassignContentTypeGroup
      */
     public function testUnassignContentTypeGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);

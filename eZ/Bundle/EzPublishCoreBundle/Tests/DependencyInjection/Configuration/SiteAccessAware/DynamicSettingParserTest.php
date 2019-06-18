@@ -42,10 +42,11 @@ class DynamicSettingParserTest extends TestCase
     }
 
     /**
-     * @expectedException \OutOfBoundsException
      */
     public function testParseDynamicSettingFail()
     {
+        $this->expectException(\OutOfBoundsException::class);
+
         $parser = new DynamicSettingParser();
         $parser->parseDynamicSetting('$foo;bar;baz;biz$');
     }

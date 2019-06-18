@@ -40,10 +40,11 @@ class ContentDownloadRouteReferenceListenerTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testThrowsExceptionOnBadContentParameter()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $routeReference = new RouteReference(
             ContentDownloadRouteReferenceListener::ROUTE_NAME,
             [
@@ -58,10 +59,11 @@ class ContentDownloadRouteReferenceListenerTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testThrowsExceptionOnBadFieldIdentifier()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $content = new Content(
             [
                 'internalFields' => [],

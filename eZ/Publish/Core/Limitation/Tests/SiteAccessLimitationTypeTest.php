@@ -89,13 +89,14 @@ class SiteAccessLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestAcceptValueException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\SiteAccessLimitationType $limitationType
      */
     public function testAcceptValueException(Limitation $limitation, SiteAccessLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $limitationType->acceptValue($limitation);
     }
 
@@ -243,13 +244,14 @@ class SiteAccessLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
         Limitation $limitation,
         ValueObject $object,
         SiteAccessLimitationType $limitationType
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $userMock = $this->getUserMock();
         $userMock->expects($this->never())->method($this->anything());
 
@@ -262,12 +264,13 @@ class SiteAccessLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\SiteAccessLimitationType $limitationType
      */
     public function testGetCriterion(SiteAccessLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotImplementedException::class);
+
         $limitationType->getCriterion(new SiteAccessLimitation(), $this->getUserMock());
     }
 

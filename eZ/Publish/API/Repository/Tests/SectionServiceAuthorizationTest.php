@@ -22,11 +22,12 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the createSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
     public function testCreateSectionThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -52,11 +53,12 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the loadSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSection
      */
     public function testLoadSectionThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -84,11 +86,12 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the updateSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
     public function testUpdateSectionThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $standardSectionId = $this->generateId('section', 1);
@@ -120,11 +123,12 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the loadSections() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::loadSections()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
     public function testLoadSectionsThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -158,10 +162,11 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the loadSectionByIdentifier() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testLoadSectionByIdentifierThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -189,10 +194,11 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the assignSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::assignSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testAssignSectionThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $standardSectionId = $this->generateId('section', 1);
@@ -230,10 +236,11 @@ class SectionServiceAuthorizationTest extends BaseTest
      * Test for the deleteSection() method.
      *
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeleteSectionThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);

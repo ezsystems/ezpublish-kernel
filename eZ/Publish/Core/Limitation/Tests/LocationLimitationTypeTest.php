@@ -98,13 +98,14 @@ class LocationLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\LocationLimitationType $limitationType
      */
     public function testAcceptValueException(Limitation $limitation, LocationLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $limitationType->acceptValue($limitation);
     }
 
@@ -421,7 +422,6 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
         Limitation $limitation,
@@ -429,6 +429,8 @@ class LocationLimitationTypeTest extends Base
         $targets,
         array $persistenceLocations
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
@@ -453,12 +455,13 @@ class LocationLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \RuntimeException
      *
      * @param \eZ\Publish\Core\Limitation\LocationLimitationType $limitationType
      */
     public function testGetCriterionInvalidValue(LocationLimitationType $limitationType)
     {
+        $this->expectException(\RuntimeException::class);
+
         $limitationType->getCriterion(
             new LocationLimitation(array()),
             $this->getUserMock()

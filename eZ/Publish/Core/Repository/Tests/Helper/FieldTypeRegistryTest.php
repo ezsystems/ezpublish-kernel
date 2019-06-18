@@ -74,21 +74,23 @@ class FieldTypeRegistryTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException
      */
     public function testGetFieldTypeThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException::class);
+
         $registry = new FieldTypeRegistry(array());
 
         $registry->getFieldType('none');
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage $fieldTypes[none] must be instance of SPI\FieldType\FieldType or callable
      */
     public function testGetFieldTypeThrowsRuntimeExceptionIncorrectType()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('$fieldTypes[none] must be instance of SPI\\FieldType\\FieldType or callable');
+
         $registry = new FieldTypeRegistry(
             array(
                 'none' => "I'm not a field type",
@@ -99,11 +101,12 @@ class FieldTypeRegistryTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage $fieldTypes[none] must be instance of SPI\FieldType\FieldType or callable
      */
     public function testGetClosureFieldTypeThrowsRuntimeExceptionIncorrectType()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('$fieldTypes[none] must be instance of SPI\\FieldType\\FieldType or callable');
+
         $registry = new FieldTypeRegistry(
             array(
                 'none' => $this->getClosure("I'm not a field type"),

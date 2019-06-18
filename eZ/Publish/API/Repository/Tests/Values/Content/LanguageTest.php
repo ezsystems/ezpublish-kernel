@@ -38,11 +38,12 @@ class LanguageTest extends TestCase
      * Test retrieving missing property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\Language::__get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
-     * @expectedExceptionMessage Property 'notDefined' not found on class
      */
     public function testMissingProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException::class);
+        $this->expectExceptionMessage('Property \'notDefined\' not found on class');
+
         $language = new Language();
         $value = $language->notDefined;
         self::fail('Succeeded getting non existing property');
@@ -52,11 +53,12 @@ class LanguageTest extends TestCase
      * Test setting read only property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\Language::__set
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
-     * @expectedExceptionMessage Property 'id' is readonly on class
      */
     public function testReadOnlyProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+        $this->expectExceptionMessage('Property \'id\' is readonly on class');
+
         $language = new Language();
         $language->id = 42;
         self::fail('Succeeded setting read only property');
@@ -81,11 +83,12 @@ class LanguageTest extends TestCase
      * Test unsetting a property.
      *
      * @covers \eZ\Publish\API\Repository\Values\Content\Language::__unset
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException
-     * @expectedExceptionMessage Property 'id' is readonly on class
      */
     public function testUnsetProperty()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
+        $this->expectExceptionMessage('Property \'id\' is readonly on class');
+
         $language = new Language(['id' => 2]);
         unset($language->id);
         self::fail('Unsetting read-only property succeeded');

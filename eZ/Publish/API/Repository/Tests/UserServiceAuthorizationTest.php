@@ -21,11 +21,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the loadUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroup
      */
     public function testLoadUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -46,11 +47,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the loadSubUserGroups() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadSubUserGroups()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadSubUserGroups
      */
     public function testLoadSubUserGroupsThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -71,11 +73,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the createUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::createUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUserGroup
      */
     public function testCreateUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -103,11 +106,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the deleteUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::deleteUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testDeleteUserGroup
      */
     public function testDeleteUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -128,11 +132,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the moveUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::moveUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testMoveUserGroup
      */
     public function testMoveUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -160,11 +165,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the updateUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::updateUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUpdateUserGroup
      */
     public function testUpdateUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -195,11 +201,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the createUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::createUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testCreateUser
      */
     public function testCreateUserThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -236,11 +243,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the deleteUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::deleteUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testDeleteUser
      */
     public function testDeleteUserThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -259,10 +267,11 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the updateUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::updateUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUpdateUserThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -285,11 +294,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the assignUserToUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::assignUserToUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testAssignUserToUserGroup
      */
     public function testAssignUserToUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -315,11 +325,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the unAssignUssrFromUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::unAssignUssrFromUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testUnAssignUserFromUserGroup
      */
     public function testUnAssignUserFromUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 
@@ -353,11 +364,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the loadUserGroupsOfUser() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadUserGroupsOfUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUserGroupsOfUser
      */
     public function testLoadUserGroupsOfUserThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $userService = $repository->getUserService();
@@ -377,11 +389,12 @@ class UserServiceAuthorizationTest extends BaseTest
      * Test for the loadUsersOfUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\UserService::loadUsersOfUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testLoadUsersOfUserGroup
      */
     public function testLoadUsersOfUserGroupThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $userService = $repository->getUserService();
 

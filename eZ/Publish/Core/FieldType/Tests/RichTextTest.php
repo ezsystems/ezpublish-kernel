@@ -94,10 +94,11 @@ class RichTextTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\FieldType\RichText\Type::acceptValue
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testAcceptValueInvalidType()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $this->getFieldType()->acceptValue($this->createMock(CoreValue::class));
     }
 

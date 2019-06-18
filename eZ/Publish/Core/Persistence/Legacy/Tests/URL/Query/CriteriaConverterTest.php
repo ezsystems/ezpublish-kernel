@@ -58,10 +58,11 @@ class CriteriaConverterTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      */
     public function testConvertCriteriaFailure()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotImplementedException::class);
+
         $criteriaConverter = new CriteriaConverter();
         $criteriaConverter->convertCriteria(
             $this->createMock(SelectQuery::class),

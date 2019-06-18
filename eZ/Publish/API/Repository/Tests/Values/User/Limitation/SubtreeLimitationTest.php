@@ -72,10 +72,11 @@ class SubtreeLimitationTest extends BaseLimitationTest
      * @see eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation
      * @see eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation
      * @see eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testSubtreeLimitationForbid()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $userGroupId = $this->generateId('content', 13);

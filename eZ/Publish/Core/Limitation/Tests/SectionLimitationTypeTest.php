@@ -103,13 +103,14 @@ class SectionLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\SectionLimitationType $limitationType
      */
     public function testAcceptValueException(Limitation $limitation, SectionLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $limitationType->acceptValue($limitation);
     }
 
@@ -395,13 +396,14 @@ class SectionLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
         Limitation $limitation,
         ValueObject $object,
         $targets
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
@@ -425,12 +427,13 @@ class SectionLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \RuntimeException
      *
      * @param \eZ\Publish\Core\Limitation\SectionLimitationType $limitationType
      */
     public function testGetCriterionInvalidValue(SectionLimitationType $limitationType)
     {
+        $this->expectException(\RuntimeException::class);
+
         $limitationType->getCriterion(
             new SectionLimitation(array()),
             $this->getUserMock()
@@ -478,12 +481,13 @@ class SectionLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\SectionLimitationType $limitationType
      */
     public function testValueSchema(SectionLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotImplementedException::class);
+
         $limitationType->valueSchema();
     }
 }

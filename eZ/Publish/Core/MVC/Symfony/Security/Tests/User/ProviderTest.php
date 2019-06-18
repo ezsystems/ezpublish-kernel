@@ -58,10 +58,11 @@ class ProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function testLoadUserByUsernameUserNotFound()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\UsernameNotFoundException::class);
+
         $username = 'foobar';
         $this->userService
             ->expects($this->once())
@@ -88,10 +89,11 @@ class ProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      */
     public function testRefreshUserNotSupported()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\UnsupportedUserException::class);
+
         $user = $this->createMock(SymfonyUserInterface::class);
         $this->userProvider->refreshUser($user);
     }
@@ -136,10 +138,11 @@ class ProviderTest extends TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
      */
     public function testRefreshUserNotFound()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\UsernameNotFoundException::class);
+
         $userId = 123;
         $apiUser = new User(
             array(

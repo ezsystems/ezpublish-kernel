@@ -73,10 +73,11 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
      * @see eZ\Publish\API\Repository\Values\User\Limitation\NewObjectStateLimitation
      *
      * @throws \ErrorException if a mandatory test fixture not exists.
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testNewObjectStateLimitationForbid()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $lockedState = $this->generateId('objectstate', 1);
         $notLockedState = $this->generateId('objectstate', 2);

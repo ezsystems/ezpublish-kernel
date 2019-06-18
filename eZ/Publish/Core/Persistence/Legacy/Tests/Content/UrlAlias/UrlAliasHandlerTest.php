@@ -64,13 +64,14 @@ class UrlAliasHandlerTest extends TestCase
      * Trying to lookup non existent URL alias throws NotFoundException.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @group location
      * @group virtual
      * @group resource
      */
     public function testLookupThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getHandler();
         $handler->lookup('wooden/iron');
     }
@@ -81,12 +82,13 @@ class UrlAliasHandlerTest extends TestCase
      * Trying to lookup URL alias with exceeded path segments limit
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::lookup
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @group location
      * @group case-correction
      */
     public function testLookupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $handler = $this->getHandler();
         $handler->lookup(str_repeat('/1', 99));
     }
@@ -2694,10 +2696,11 @@ class UrlAliasHandlerTest extends TestCase
      * Test for the locationMoved() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationMoved
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLocationMovedReparentHistory()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getHandler();
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_move.php');
 
@@ -2849,10 +2852,11 @@ class UrlAliasHandlerTest extends TestCase
      * Test for the locationCopied() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationCopied
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLocationCopiedHistoryNotCopied()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getHandler();
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_copy.php');
 
@@ -2865,10 +2869,11 @@ class UrlAliasHandlerTest extends TestCase
      * Test for the locationCopied() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::locationCopied
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLocationCopiedSubtreeHistoryNotCopied()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getHandler();
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_copy.php');
 
@@ -3083,10 +3088,11 @@ class UrlAliasHandlerTest extends TestCase
      * Test for the loadUrlAlias() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Handler::loadUrlAlias
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadUrlAliasThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getHandler();
 
         $handler->loadUrlAlias('non-existent');

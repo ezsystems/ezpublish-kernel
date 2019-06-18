@@ -185,10 +185,11 @@ class SecurityListenerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException
      */
     public function testCheckSiteAccessPermissionDenied()
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Symfony\Security\Exception\UnauthorizedSiteAccessException::class);
+
         $user = $this->createMock(UserInterface::class);
         $token = $this->createMock(TokenInterface::class);
         $token

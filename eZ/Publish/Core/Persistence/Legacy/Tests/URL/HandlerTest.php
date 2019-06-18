@@ -103,10 +103,11 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadByIdWithoutUrlData()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+
         $id = 1;
 
         $this->gateway
@@ -144,10 +145,11 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadByUrlWithoutUrlData()
     {
+        $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
+
         $url = 'http://ez.no';
 
         $this->gateway

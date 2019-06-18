@@ -637,10 +637,11 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testGetIndexFieldNameDefaultMatchFieldThrowsRuntimeException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $mockedFieldNameResolver = $this->getMockedFieldNameResolver(array('getSearchableFieldMap'));
         $indexFieldType = $this->getIndexFieldTypeMock();
         $searchFieldTypeMock = $this->getSearchFieldTypeMock();
@@ -682,10 +683,11 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testGetIndexFieldNameDefaultSortFieldThrowsRuntimeException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $mockedFieldNameResolver = $this->getMockedFieldNameResolver(array('getSearchableFieldMap'));
         $indexFieldType = $this->getIndexFieldTypeMock();
         $searchFieldTypeMock = $this->getSearchFieldTypeMock();
@@ -727,10 +729,11 @@ class FieldNameResolverTest extends TestCase
     }
 
     /**
-     * @expectedException \RuntimeException
      */
     public function testGetIndexFieldNameNamedFieldThrowsRuntimeException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $mockedFieldNameResolver = $this->getMockedFieldNameResolver(
             ['getSortFieldName', 'getSearchableFieldMap', 'getFieldNames', 'getFieldTypes', 'getSortFieldName']
         );

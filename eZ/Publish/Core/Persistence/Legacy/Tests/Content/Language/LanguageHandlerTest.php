@@ -144,10 +144,11 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::load
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadFailure()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getLanguageHandler();
         $mapperMock = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
@@ -195,10 +196,11 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadByLanguageCode
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadByLanguageCodeFailure()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getLanguageHandler();
         $mapperMock = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
@@ -264,10 +266,11 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::delete
-     * @expectedException \LogicException
      */
     public function testDeleteFail()
     {
+        $this->expectException(\LogicException::class);
+
         $handler = $this->getLanguageHandler();
         $gatewayMock = $this->getGatewayMock();
 

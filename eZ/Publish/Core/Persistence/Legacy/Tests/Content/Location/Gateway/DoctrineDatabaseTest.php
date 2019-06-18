@@ -92,10 +92,11 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadInvalidLocation()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         $handler = $this->getLocationGateway();
         $handler->getBasicNodeData(1337);

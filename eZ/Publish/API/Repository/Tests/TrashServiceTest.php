@@ -88,11 +88,12 @@ class TrashServiceTest extends BaseTrashServiceTest
      * Test for the trash() method.
      *
      * @see \eZ\Publish\API\Repository\TrashService::trash()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
      */
     public function testTrashRemovesLocationFromMainStorage()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
@@ -284,11 +285,12 @@ class TrashServiceTest extends BaseTrashServiceTest
      * Test for the loadTrashItem() method.
      *
      * @see \eZ\Publish\API\Repository\TrashService::loadTrashItem()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testLoadTrashItem
      */
     public function testLoadTrashItemThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistingTrashId = $this->generateId('trash', 2342);
@@ -349,10 +351,11 @@ class TrashServiceTest extends BaseTrashServiceTest
      * Test recovering a non existing trash item results in a NotFoundException.
      *
      * @covers \eZ\Publish\API\Repository\TrashService::recover
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testRecoverThrowsNotFoundExceptionForNonExistingTrashItem()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 
@@ -371,10 +374,11 @@ class TrashServiceTest extends BaseTrashServiceTest
      * @see \eZ\Publish\API\Repository\TrashService::recover()
      * @depends eZ\Publish\API\Repository\Tests\TrashServiceTest::testTrash
      *
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testNotFoundAliasAfterRemoveIt()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $mediaRemoteId = '75c715a51699d2d309a924eca6a95145';
 
         $repository = $this->getRepository();
@@ -627,10 +631,11 @@ class TrashServiceTest extends BaseTrashServiceTest
      * Test recovering a location from trash to non existing location.
      *
      * @covers \eZ\Publish\API\Repository\TrashService::recover
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testRecoverToNonExistingLocation()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
         $locationService = $repository->getLocationService();
@@ -821,10 +826,11 @@ class TrashServiceTest extends BaseTrashServiceTest
      * Test deleting a non existing trash item.
      *
      * @covers \eZ\Publish\API\Repository\TrashService::deleteTrashItem
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteThrowsNotFoundExceptionForNonExistingTrashItem()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
         $trashService = $repository->getTrashService();
 

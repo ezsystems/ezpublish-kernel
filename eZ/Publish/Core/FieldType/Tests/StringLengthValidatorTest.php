@@ -113,10 +113,11 @@ class StringLengthValidatorTest extends TestCase
      * Tests initializing with a wrong constraint.
      *
      * @covers \eZ\Publish\Core\FieldType\Validator::initializeWithConstraints
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testInitializeBadConstraint()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException::class);
+
         $constraints = array(
             'unexisting' => 0,
         );
@@ -130,10 +131,11 @@ class StringLengthValidatorTest extends TestCase
      * Tests setting a wrong constraint.
      *
      * @covers \eZ\Publish\Core\FieldType\Validator::__set
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testSetBadConstraint()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException::class);
+
         $validator = new StringLengthValidator();
         $validator->unexisting = 0;
     }
@@ -142,10 +144,11 @@ class StringLengthValidatorTest extends TestCase
      * Tests getting a wrong constraint.
      *
      * @covers \eZ\Publish\Core\FieldType\Validator::__get
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException
      */
     public function testGetBadConstraint()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyNotFoundException::class);
+
         $validator = new StringLengthValidator();
         $null = $validator->unexisting;
     }

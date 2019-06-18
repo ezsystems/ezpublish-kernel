@@ -14,10 +14,11 @@ use eZ\Publish\Core\FieldType\FieldType;
 class FieldTypeMockTest extends TestCase
 {
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testApplyDefaultSettingsThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
@@ -163,10 +164,11 @@ class FieldTypeMockTest extends TestCase
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testApplyDefaultValidatorConfigurationEmptyThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,

@@ -529,10 +529,11 @@ abstract class BaseIntegrationTest extends TestCase
 
     /**
      * @depends testUpdateField
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDeleteField($content)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $handler = $this->getCustomHandler();
         $contentHandler = $handler->contentHandler();
 

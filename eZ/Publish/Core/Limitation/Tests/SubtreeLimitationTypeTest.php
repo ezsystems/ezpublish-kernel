@@ -104,13 +104,14 @@ class SubtreeLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
      */
     public function testAcceptValueException(Limitation $limitation, SubtreeLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $limitationType->acceptValue($limitation);
     }
 
@@ -477,7 +478,6 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
         Limitation $limitation,
@@ -485,6 +485,8 @@ class SubtreeLimitationTypeTest extends Base
         $targets,
         array $persistenceLocations
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
@@ -509,12 +511,13 @@ class SubtreeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \RuntimeException
      *
      * @param \eZ\Publish\Core\Limitation\SubtreeLimitationType $limitationType
      */
     public function testGetCriterionInvalidValue(SubtreeLimitationType $limitationType)
     {
+        $this->expectException(\RuntimeException::class);
+
         $limitationType->getCriterion(
             new SubtreeLimitation(array()),
             $this->getUserMock()

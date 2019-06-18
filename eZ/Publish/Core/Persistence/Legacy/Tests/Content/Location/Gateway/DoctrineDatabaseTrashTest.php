@@ -139,10 +139,11 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::untrashLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashInvalidLocation()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         $handler = $this->getLocationGateway();
 
@@ -151,10 +152,11 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::untrashLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocationInvalidParent()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         $handler = $this->getLocationGateway();
         $handler->trashLocation(71);
@@ -164,10 +166,11 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\DoctrineDatabase::untrashLocation
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUntrashLocationInvalidOldParent()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         $handler = $this->getLocationGateway();
         $handler->trashLocation(71);

@@ -336,11 +336,12 @@ class RoleServiceTest extends BaseTest
      * Test for the createRole() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::createRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
      */
     public function testCreateRoleThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -361,11 +362,12 @@ class RoleServiceTest extends BaseTest
      * Test for the createRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::createRoleDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRoleDraft
      */
     public function testCreateRoleDraftThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -391,10 +393,11 @@ class RoleServiceTest extends BaseTest
      * Test for the createRole() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::createRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      */
     public function testCreateRoleThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -585,11 +588,12 @@ class RoleServiceTest extends BaseTest
      * Test for the loadRole() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::loadRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRole
      */
     public function testLoadRoleThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistingRoleId = $this->generateId('role', self::DB_INT_MAX);
@@ -607,11 +611,12 @@ class RoleServiceTest extends BaseTest
      * Test for the loadRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::loadRoleDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleDraft
      */
     public function testLoadRoleDraftThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistingRoleId = $this->generateId('role', self::DB_INT_MAX);
@@ -626,10 +631,11 @@ class RoleServiceTest extends BaseTest
     }
 
     /**
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testLoadRoleDraftByRoleIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistingRoleId = $this->generateId('role', self::DB_INT_MAX);
@@ -676,11 +682,12 @@ class RoleServiceTest extends BaseTest
      * Test for the loadRoleByIdentifier() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::loadRoleByIdentifier()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      */
     public function testLoadRoleByIdentifierThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -851,11 +858,12 @@ class RoleServiceTest extends BaseTest
      * Test for the updateRole() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::updateRole()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRole
      */
     public function testUpdateRoleThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -881,11 +889,12 @@ class RoleServiceTest extends BaseTest
      * Test for the updateRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::updateRoleDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUpdateRoleDraft
      */
     public function testUpdateRoleDraftThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -937,11 +946,12 @@ class RoleServiceTest extends BaseTest
      * Test for the deleteRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::deleteRoleDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleDraft
      */
     public function testDeleteRoleDraft()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1244,12 +1254,13 @@ class RoleServiceTest extends BaseTest
      * Test for the addPolicy() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::addPolicy()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRole
      */
     public function testAddPolicyThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1285,12 +1296,13 @@ class RoleServiceTest extends BaseTest
      * Test for the addPolicyByRoleDraft() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::addPolicyByRoleDraft()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testCreateRoleDraft
      */
     public function testAddPolicyByRoleDraftThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -1636,7 +1648,6 @@ class RoleServiceTest extends BaseTest
      * Test for the updatePolicy() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::updatePolicy()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAddPolicy
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyCreateStruct
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewPolicyUpdateStruct
@@ -1645,6 +1656,8 @@ class RoleServiceTest extends BaseTest
      */
     public function testUpdatePolicyThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2068,12 +2081,13 @@ class RoleServiceTest extends BaseTest
      * Test for the assignRoleToUser() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      */
     public function testAssignRoleToUserWithRoleLimitationThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2106,12 +2120,13 @@ class RoleServiceTest extends BaseTest
      * Makes sure assigning role several times throws.
      *
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      */
     public function testAssignRoleToUserThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2148,12 +2163,13 @@ class RoleServiceTest extends BaseTest
      * Makes sure assigning role several times with same limitations throws.
      *
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUser($role, $user, $roleLimitation)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUser
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      */
     public function testAssignRoleToUserWithRoleLimitationThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         /* BEGIN: Use Case */
@@ -2229,10 +2245,11 @@ class RoleServiceTest extends BaseTest
      * Test for the unassignRoleFromUser() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUser()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUnassignRoleFromUserThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
@@ -2514,12 +2531,13 @@ class RoleServiceTest extends BaseTest
      * Test for the assignRoleToUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\LimitationValidationException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
     public function testAssignRoleToUserGroupWithRoleLimitationThrowsLimitationValidationException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\LimitationValidationException::class);
+
         $repository = $this->getRepository();
 
         $mainGroupId = $this->generateId('group', 4);
@@ -2555,12 +2573,13 @@ class RoleServiceTest extends BaseTest
      * Makes sure assigning role several times throws.
      *
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
     public function testAssignRoleToUserGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $mainGroupId = $this->generateId('group', 4);
@@ -2600,12 +2619,13 @@ class RoleServiceTest extends BaseTest
      * Makes sure assigning role several times with same limitations throws.
      *
      * @see \eZ\Publish\API\Repository\RoleService::assignRoleToUserGroup($role, $userGroup, $roleLimitation)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadRoleByIdentifier
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testAssignRoleToUserGroup
      */
     public function testAssignRoleToUserGroupWithRoleLimitationThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
 
         $mainGroupId = $this->generateId('group', 4);
@@ -2684,11 +2704,12 @@ class RoleServiceTest extends BaseTest
      * Test for the unassignRoleFromUserGroup() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::unassignRoleFromUserGroup()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testUnassignRoleFromUserGroup
      */
     public function testUnassignRoleFromUserGroupThrowsInvalidArgumentException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
@@ -2735,10 +2756,11 @@ class RoleServiceTest extends BaseTest
      * But on current admin user so he lacks access to read roles.
      *
      * @covers \eZ\Publish\API\Repository\RoleService::removeRoleAssignment
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testUnassignRoleByAssignmentThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
@@ -2759,10 +2781,11 @@ class RoleServiceTest extends BaseTest
      * Test unassigning role by non-existing assignment.
      *
      * @covers \eZ\Publish\API\Repository\RoleService::removeRoleAssignment
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testUnassignRoleByAssignmentThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
         $roleService = $repository->getRoleService();
 
@@ -2904,11 +2927,12 @@ class RoleServiceTest extends BaseTest
      * Test for the loadPoliciesByUserId() method.
      *
      * @see \eZ\Publish\API\Repository\RoleService::loadPoliciesByUserId()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testLoadPoliciesByUserId
      */
     public function testLoadPoliciesByUserIdThrowsNotFoundException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotFoundException::class);
+
         $repository = $this->getRepository();
 
         $nonExistingUserId = $this->generateId('user', self::DB_INT_MAX);

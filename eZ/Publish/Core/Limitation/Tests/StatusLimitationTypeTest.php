@@ -80,13 +80,14 @@ class StatusLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestAcceptValueException
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\StatusLimitationType $limitationType
      */
     public function testAcceptValueException(Limitation $limitation, StatusLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $limitationType->acceptValue($limitation);
     }
 
@@ -308,13 +309,14 @@ class StatusLimitationTypeTest extends Base
     /**
      * @depends testConstruct
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
         Limitation $limitation,
         ValueObject $object,
         StatusLimitationType $limitationType
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $userMock = $this->getUserMock();
         $userMock->expects($this->never())->method($this->anything());
 
@@ -328,12 +330,13 @@ class StatusLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\StatusLimitationType $limitationType
      */
     public function testGetCriterion(StatusLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotImplementedException::class);
+
         $limitationType->getCriterion(new StatusLimitation(), $this->getUserMock());
     }
 

@@ -98,13 +98,14 @@ class ContentTypeLimitationTypeTest extends Base
     /**
      * @dataProvider providerForTestAcceptValueException
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType
      */
     public function testAcceptValueException(Limitation $limitation, ContentTypeLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         $limitationType->acceptValue($limitation);
     }
 
@@ -358,13 +359,14 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @dataProvider providerForTestEvaluateInvalidArgument
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testEvaluateInvalidArgument(
         Limitation $limitation,
         ValueObject $object,
         array $targets
     ) {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
+
         // Need to create inline instead of depending on testConstruct() to get correct mock instance
         $limitationType = $this->testConstruct();
 
@@ -389,12 +391,13 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \RuntimeException
      *
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType
      */
     public function testGetCriterionInvalidValue(ContentTypeLimitationType $limitationType)
     {
+        $this->expectException(\RuntimeException::class);
+
         $limitationType->getCriterion(
             new ContentTypeLimitation(array()),
             $this->getUserMock()
@@ -441,12 +444,13 @@ class ContentTypeLimitationTypeTest extends Base
 
     /**
      * @depends testConstruct
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotImplementedException
      *
      * @param \eZ\Publish\Core\Limitation\ContentTypeLimitationType $limitationType
      */
     public function testValueSchema(ContentTypeLimitationType $limitationType)
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\NotImplementedException::class);
+
         self::assertEquals(
             array(),
             $limitationType->valueSchema()

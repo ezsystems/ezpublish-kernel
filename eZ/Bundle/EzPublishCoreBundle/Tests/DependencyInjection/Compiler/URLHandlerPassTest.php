@@ -45,10 +45,11 @@ class URLHandlerPassTest extends AbstractCompilerPassTestCase
     }
 
     /**
-     * @expectedException \LogicException
      */
     public function testRegisterURLHandlerNoScheme()
     {
+        $this->expectException(\LogicException::class);
+
         $serviceId = 'service_id';
         $scheme = 'http';
         $definition = new Definition();

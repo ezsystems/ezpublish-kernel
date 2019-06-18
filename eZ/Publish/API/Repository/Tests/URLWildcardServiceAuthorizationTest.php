@@ -23,11 +23,12 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
      * @return \eZ\Publish\API\Repository\Values\Content\URLWildcard
      *
      * @see \eZ\Publish\API\Repository\URLWildcardService::create()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testCreate
      */
     public function testCreateThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);
@@ -49,11 +50,12 @@ class URLWildcardServiceAuthorizationTest extends BaseTest
      * Test for the remove() method.
      *
      * @see \eZ\Publish\API\Repository\URLWildcardService::remove()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\URLWildcardServiceTest::testRemove
      */
     public function testRemoveThrowsUnauthorizedException()
     {
+        $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
+
         $repository = $this->getRepository();
 
         $anonymousUserId = $this->generateId('user', 10);

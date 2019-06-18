@@ -105,11 +105,12 @@ class RouterTest extends TestCase
 
     /**
      * @depends testConstructDebug
-     * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
-     * @expectedExceptionMessageRegExp /^Invalid siteaccess 'foobar_sa', matched by .+\. Valid siteaccesses are/
      */
     public function testMatchWithDevEnvFail(Router $router)
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid siteaccess \'foobar_sa\', matched by .+\\. Valid siteaccesses are/');
+
         $saName = 'foobar_sa';
         putenv("EZPUBLISH_SITEACCESS=$saName");
         $router->match(new SimplifiedRequest());
@@ -117,11 +118,12 @@ class RouterTest extends TestCase
 
     /**
      * @depends testConstruct
-     * @expectedException \eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException
-     * @expectedExceptionMessageRegExp /^Invalid siteaccess 'foobar_sa', matched by .+\.$/
      */
     public function testMatchWithProdEnvFail(Router $router)
     {
+        $this->expectException(\eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException::class);
+        $this->expectExceptionMessageRegExp('/^Invalid siteaccess \'foobar_sa\', matched by .+\\.$/');
+
         $saName = 'foobar_sa';
         putenv("EZPUBLISH_SITEACCESS=$saName");
         $router->match(new SimplifiedRequest());
@@ -229,10 +231,11 @@ class RouterTest extends TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testMatchByNameInvalidSiteAccess()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $matcherBuilder = $this->createMock(MatcherBuilderInterface::class);
         $logger = $this->createMock(LoggerInterface::class);
         $router = new Router($matcherBuilder, $logger, 'default_sa', array(), array('foo', 'default_sa'));

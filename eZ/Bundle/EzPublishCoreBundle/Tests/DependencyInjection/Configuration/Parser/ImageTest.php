@@ -74,10 +74,11 @@ class ImageTest extends AbstractParserTestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
      */
     public function testPrePostParameters()
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         $this->load(
             array(
                 'system' => array(
