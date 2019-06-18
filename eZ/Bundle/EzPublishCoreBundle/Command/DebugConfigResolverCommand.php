@@ -38,7 +38,6 @@ class DebugConfigResolverCommand extends Command
         parent::__construct();
     }
 
-
     /**
      * {@inheritdoc}.
      */
@@ -104,7 +103,7 @@ EOM
 
         $output->writeln('<comment>SiteAccess name:</comment> ' . $this->siteAccess->name);
 
-        $output->writeln("<comment>Parameter:</comment>");
+        $output->writeln('<comment>Parameter:</comment>');
         $cloner = new VarCloner();
         $dumper = new CliDumper();
         $output->write(

@@ -161,7 +161,7 @@ class PersistenceLogger
         ++$this->calls[$callHash]['stats'][$type];
 
         $trace = $this->getSimpleCallTrace($trimmedBacktrace);
-        $traceHash = \hash('adler32', \implode($trace));
+        $traceHash = \hash('adler32', \implode('', $trace));
         if (empty($this->calls[$callHash]['traces'][$traceHash])) {
             $this->calls[$callHash]['traces'][$traceHash] = [
                 'trace' => $trace,
