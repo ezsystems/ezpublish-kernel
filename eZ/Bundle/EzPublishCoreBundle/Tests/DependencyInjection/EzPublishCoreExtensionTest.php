@@ -397,7 +397,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         foreach ($repositoriesPar as $key => $repo) {
             $this->assertArrayHasKey($key, $expectedRepositories);
             $this->assertArrayHasKey('fields_groups', $repo);
-            $this->assertEquals($expectedRepositories[$key]['fields_groups'], $repo['fields_groups'], 'Invalid fields groups element', 0.0, 10, true);
+            $this->assertEqualsCanonicalizing($expectedRepositories[$key]['fields_groups'], $repo['fields_groups'], 'Invalid fields groups element');
         }
     }
 

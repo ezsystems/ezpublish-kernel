@@ -121,7 +121,7 @@ class FieldTypeRegistryTest extends TestCase
 
         $fieldTypes = $registry->getFieldTypes();
 
-        $this->assertInternalType('array', $fieldTypes);
+        $this->assertIsArray($fieldTypes);
         $this->assertCount(2, $fieldTypes);
         $this->assertArrayHasKey('one', $fieldTypes);
         $this->assertInstanceOf(

@@ -178,7 +178,7 @@ class LanguageServiceTest extends BaseTest
 
         $languages = $languageService->loadLanguageListById([$languageId]);
 
-        $this->assertInternalType('iterable', $languages);
+        $this->assertIsIterable($languages);
         $this->assertCount(1, $languages);
         $this->assertInstanceOf(Language::class, $languages[$languageId]);
     }
@@ -200,7 +200,7 @@ class LanguageServiceTest extends BaseTest
 
         $languages = $languageService->loadLanguageListById([$nonExistentLanguageId]);
 
-        $this->assertInternalType('iterable', $languages);
+        $this->assertIsIterable($languages);
         $this->assertCount(0, $languages);
 
         $this->expectException(NotFoundException::class);
@@ -368,7 +368,7 @@ class LanguageServiceTest extends BaseTest
 
         $languages = $languageService->loadLanguageListByCode(['eng-NZ']);
 
-        $this->assertInternalType('iterable', $languages);
+        $this->assertIsIterable($languages);
         $this->assertCount(1, $languages);
 
         $this->assertPropertiesCorrect(
@@ -397,7 +397,7 @@ class LanguageServiceTest extends BaseTest
 
         $languages = $languageService->loadLanguageListByCode(['fre-FR']);
 
-        $this->assertInternalType('iterable', $languages);
+        $this->assertIsIterable($languages);
         $this->assertCount(0, $languages);
 
         $this->expectException(NotFoundException::class);
@@ -449,7 +449,7 @@ class LanguageServiceTest extends BaseTest
         $languageService->createLanguage($languageCreateFrench);
 
         $languages = $languageService->loadLanguages();
-        self::assertInternalType('array', $languages);
+        self::assertIsArray($languages);
         foreach ($languages as $language) {
             self::assertInstanceOf(Language::class, $language);
             $singleLanguage = $languageService->loadLanguage($language->languageCode);
@@ -462,7 +462,7 @@ class LanguageServiceTest extends BaseTest
         /* END: Use Case */
 
         // eng-US, eng-GB, ger-DE + 2 newly created
-        $this->assertEquals(5, count($languages));
+        $this->assertCount(5, $languages);
     }
 
     /**

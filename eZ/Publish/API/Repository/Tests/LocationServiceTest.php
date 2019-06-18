@@ -568,7 +568,7 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
         $locations = $locationService->loadLocationList([5, 442]);
 
-        self::assertInternalType('iterable', $locations);
+        self::assertIsIterable($locations);
         self::assertCount(1, $locations);
         self::assertEquals([5], array_keys($locations));
         self::assertInstanceOf(Location::class, $locations[5]);
@@ -591,7 +591,7 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
         $locations = $locationService->loadLocationList([5, 442], ['pol-PL'], false);
 
-        self::assertInternalType('iterable', $locations);
+        self::assertIsIterable($locations);
         self::assertCount(0, $locations);
     }
 
@@ -611,7 +611,7 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
         $locations = $locationService->loadLocationList([5, 442], ['pol-PL'], true);
 
-        self::assertInternalType('iterable', $locations);
+        self::assertIsIterable($locations);
         self::assertCount(1, $locations);
         self::assertEquals([5], array_keys($locations));
         self::assertInstanceOf(Location::class, $locations[5]);
@@ -631,7 +631,7 @@ class LocationServiceTest extends BaseTest
         $locationService = $repository->getLocationService();
         $locations = $locationService->loadLocationList([1]);
 
-        self::assertInternalType('iterable', $locations);
+        self::assertIsIterable($locations);
         self::assertCount(1, $locations);
         self::assertEquals([1], array_keys($locations));
         self::assertInstanceOf(Location::class, $locations[1]);
@@ -705,7 +705,7 @@ class LocationServiceTest extends BaseTest
         $locations = $locationService->loadLocations($contentInfo);
         /* END: Use Case */
 
-        $this->assertInternalType('array', $locations);
+        $this->assertIsArray($locations);
         self::assertNotEmpty($locations);
 
         foreach ($locations as $location) {
@@ -727,7 +727,7 @@ class LocationServiceTest extends BaseTest
         $repository = $this->getRepository();
         $locationService = $repository->getLocationService();
 
-        $this->assertEquals(1, count($locations));
+        $this->assertCount(1, $locations);
         foreach ($locations as $loadedLocation) {
             $this->assertInstanceOf(
                 '\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location',
@@ -795,7 +795,7 @@ class LocationServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $this->assertInternalType('array', $locations);
+        $this->assertIsArray($locations);
 
         return $locations;
     }
@@ -810,7 +810,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationsLimitedSubtreeContent(array $locations)
     {
-        $this->assertEquals(1, count($locations));
+        $this->assertCount(1, $locations);
 
         $this->assertEquals(
             $this->generateId('location', 54),
@@ -904,9 +904,9 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(LocationList::class, $childLocations);
-        $this->assertInternalType('array', $childLocations->locations);
+        $this->assertIsArray($childLocations->locations);
         $this->assertNotEmpty($childLocations->locations);
-        $this->assertInternalType('int', $childLocations->totalCount);
+        $this->assertIsInt($childLocations->totalCount);
 
         foreach ($childLocations->locations as $childLocation) {
             $this->assertInstanceOf(Location::class, $childLocation);
@@ -1000,7 +1000,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationChildrenData(LocationList $locations)
     {
-        $this->assertEquals(5, count($locations->locations));
+        $this->assertCount(5, $locations->locations);
         $this->assertEquals(5, $locations->totalCount);
 
         foreach ($locations->locations as $location) {
@@ -1050,8 +1050,8 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList', $childLocations);
-        $this->assertInternalType('array', $childLocations->locations);
-        $this->assertInternalType('int', $childLocations->totalCount);
+        $this->assertIsArray($childLocations->locations);
+        $this->assertIsInt($childLocations->totalCount);
 
         return $childLocations;
     }
@@ -1066,7 +1066,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationChildrenDataWithOffset(LocationList $locations)
     {
-        $this->assertEquals(3, count($locations->locations));
+        $this->assertCount(3, $locations->locations);
         $this->assertEquals(5, $locations->totalCount);
 
         foreach ($locations->locations as $location) {
@@ -1114,8 +1114,8 @@ class LocationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationList', $childLocations);
-        $this->assertInternalType('array', $childLocations->locations);
-        $this->assertInternalType('int', $childLocations->totalCount);
+        $this->assertIsArray($childLocations->locations);
+        $this->assertIsInt($childLocations->totalCount);
 
         return $childLocations;
     }
@@ -1130,7 +1130,7 @@ class LocationServiceTest extends BaseTest
      */
     public function testLoadLocationChildrenDataWithOffsetAndLimit(LocationList $locations)
     {
-        $this->assertEquals(2, count($locations->locations));
+        $this->assertCount(2, $locations->locations);
         $this->assertEquals(5, $locations->totalCount);
 
         foreach ($locations->locations as $location) {

@@ -305,9 +305,9 @@ class HandlerContentTest extends AbstractTestCase
             1,
             $result->totalCount
         );
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            count($result->searchHits)
+            $result->searchHits
         );
     }
 
@@ -332,9 +332,9 @@ class HandlerContentTest extends AbstractTestCase
             1,
             $result->totalCount
         );
-        $this->assertEquals(
+        $this->assertCount(
             0,
-            count($result->searchHits)
+            $result->searchHits
         );
     }
 
@@ -1024,16 +1024,15 @@ class HandlerContentTest extends AbstractTestCase
             )
         );
 
-        $this->assertEquals(
+        $this->assertCount(
             10,
-            count(
+
                 array_map(
                     function ($hit) {
                         return $hit->valueObject->id;
                     },
                     $result->searchHits
                 )
-            )
         );
     }
 

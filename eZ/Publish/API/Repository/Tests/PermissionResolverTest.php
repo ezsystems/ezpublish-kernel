@@ -246,9 +246,7 @@ class PermissionResolverTest extends BaseTest
         $permissionSets = $permissionResolver->hasAccess('content', 'read');
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $permissionSets
+        $this->assertIsArray($permissionSets
         );
         $this->assertNotEmpty($permissionSets);
     }

@@ -166,7 +166,7 @@ class DateTest extends TestCase
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
-        self::assertInternalType('array', $fieldDef->defaultValue->data);
+        self::assertIsArray($fieldDef->defaultValue->data);
         self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertSame($timestamp, $fieldDef->defaultValue->data['timestamp']);

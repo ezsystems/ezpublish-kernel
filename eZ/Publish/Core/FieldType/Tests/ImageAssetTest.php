@@ -293,7 +293,7 @@ class ImageAssetTest extends FieldTypeTest
 
         $validationErrors = $this->doValidate([], new ImageAsset\Value($destinationContentId));
 
-        $this->assertInternalType('array', $validationErrors);
+        $this->assertIsArray($validationErrors);
         $this->assertEquals([
             new ValidationError(
                 'Content %type% is not a valid asset target',
@@ -338,7 +338,7 @@ class ImageAssetTest extends FieldTypeTest
 
         $validationErrors = $this->doValidate([], new ImageAsset\Value($destinationContentId));
 
-        $this->assertInternalType('array', $validationErrors);
+        $this->assertIsArray($validationErrors);
         $this->assertEmpty($validationErrors, "Got value:\n" . var_export($validationErrors, true));
     }
 

@@ -507,7 +507,7 @@ class AuthorTest extends FieldTypeTest
         $value = new AuthorValue();
         $value->authors[] = $this->authors[0];
         self::assertSame(1, $this->authors[0]->id);
-        self::assertSame(1, count($value->authors));
+        self::assertCount(1, $value->authors);
 
         $this->authors[1]->id = 10;
         $value->authors[] = $this->authors[1];
@@ -516,7 +516,7 @@ class AuthorTest extends FieldTypeTest
         $this->authors[2]->id = -1;
         $value->authors[] = $this->authors[2];
         self::assertSame($this->authors[1]->id + 1, $this->authors[2]->id);
-        self::assertSame(3, count($value->authors));
+        self::assertCount(3, $value->authors);
     }
 
     /**

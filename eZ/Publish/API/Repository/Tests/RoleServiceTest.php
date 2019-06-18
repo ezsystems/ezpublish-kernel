@@ -937,7 +937,7 @@ class RoleServiceTest extends BaseTest
         $roleService->deleteRole($role);
         /* END: Use Case */
 
-        $this->assertEquals(5, count($roleService->loadRoles()));
+        $this->assertCount(5, $roleService->loadRoles());
     }
 
     /**
@@ -1913,7 +1913,7 @@ class RoleServiceTest extends BaseTest
 
         /* END: Use Case */
 
-        $this->assertEquals(2, count($roleAssignments));
+        $this->assertCount(2, $roleAssignments);
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
             $roleAssignments[0]
@@ -2003,7 +2003,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         // Members + Partners + Anonymous + Example User
-        $this->assertEquals(4, count($roleAssignments));
+        $this->assertCount(4, $roleAssignments);
 
         // Get the role limitation
         $roleLimitation = null;
@@ -2042,7 +2042,7 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignments($role);
 
         // Members + Partners + Anonymous + Example User
-        $this->assertEquals(5, count($roleAssignments));
+        $this->assertCount(5, $roleAssignments);
 
         // Get the role limitation
         $roleLimitations = [];
@@ -2236,7 +2236,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         // Members + Editors + Partners
-        $this->assertEquals(3, count($roleAssignments));
+        $this->assertCount(3, $roleAssignments);
     }
 
     /**
@@ -2337,7 +2337,7 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignmentsForUser($adminUser);
         /* END: Use Case */
 
-        $this->assertEquals(0, count($roleAssignments));
+        $this->assertCount(0, $roleAssignments);
     }
 
     /**
@@ -2359,7 +2359,7 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignmentsForUser($adminUser, true);
         /* END: Use Case */
 
-        $this->assertEquals(1, count($roleAssignments));
+        $this->assertCount(1, $roleAssignments);
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
             reset($roleAssignments)
@@ -2391,7 +2391,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         // Administrator + Example Group
-        $this->assertEquals(2, count($roleAssignments));
+        $this->assertCount(2, $roleAssignments);
     }
 
     /**
@@ -2421,7 +2421,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEmpty($initRoleAssignments);
-        $this->assertEquals(1, count($updatedRoleAssignments));
+        $this->assertCount(1, $updatedRoleAssignments);
     }
 
     /**
@@ -2457,7 +2457,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         // Members + Partners + Anonymous + Example Group
-        $this->assertEquals(4, count($roleAssignments));
+        $this->assertCount(4, $roleAssignments);
 
         // Get the role limitation
         $roleLimitation = null;
@@ -2492,7 +2492,7 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignments($role);
 
         // Members + Partners + Anonymous + Example User
-        $this->assertEquals(5, count($roleAssignments));
+        $this->assertCount(5, $roleAssignments);
 
         // Get the role limitation
         $roleLimitations = [];
@@ -2695,7 +2695,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         // Members + Editors + Partners
-        $this->assertEquals(3, count($roleAssignments));
+        $this->assertCount(3, $roleAssignments);
     }
 
     /**
@@ -2843,7 +2843,7 @@ class RoleServiceTest extends BaseTest
         $roleAssignments = $roleService->getRoleAssignmentsForUserGroup($userGroup);
         /* END: Use Case */
 
-        $this->assertEquals(1, count($roleAssignments));
+        $this->assertCount(1, $roleAssignments);
         $this->assertInstanceOf(
             '\\eZ\\Publish\\API\\Repository\\Values\\User\\UserGroupRoleAssignment',
             reset($roleAssignments)

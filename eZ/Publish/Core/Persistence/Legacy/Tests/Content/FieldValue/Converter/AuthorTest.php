@@ -109,7 +109,7 @@ EOT;
         $fieldValue = new FieldValue();
 
         $this->converter->toFieldValue($storageFieldValue, $fieldValue);
-        self::assertInternalType('array', $fieldValue->data);
+        self::assertIsArray($fieldValue->data);
 
         $authorsXml = $doc->getElementsByTagName('author');
         self::assertSame($authorsXml->length, count($fieldValue->data));

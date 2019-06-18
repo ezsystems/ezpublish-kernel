@@ -248,7 +248,7 @@ class SubtreeLimitationTypeTest extends Base
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(SubtreeLimitation::class, $value);
-        self::assertInternalType('array', $value->limitationValues);
+        self::assertIsArray($value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
@@ -539,8 +539,8 @@ class SubtreeLimitationTypeTest extends Base
         // Assert that $criterion is instance of API type (for Solr/ES), and internal type(optimization for SQL engines)
         self::assertInstanceOf(Subtree::class, $criterion);
         self::assertInstanceOf(PermissionSubtree::class, $criterion);
-        self::assertInternalType('array', $criterion->value);
-        self::assertInternalType('string', $criterion->operator);
+        self::assertIsArray($criterion->value);
+        self::assertIsString($criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
         self::assertEquals(array('/1/9/'), $criterion->value);
     }
@@ -560,8 +560,8 @@ class SubtreeLimitationTypeTest extends Base
         // Assert that $criterion is instance of API type (for Solr/ES), and internal type(optimization for SQL engines)
         self::assertInstanceOf(Subtree::class, $criterion);
         self::assertInstanceOf(PermissionSubtree::class, $criterion);
-        self::assertInternalType('array', $criterion->value);
-        self::assertInternalType('string', $criterion->operator);
+        self::assertIsArray($criterion->value);
+        self::assertIsString($criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);
         self::assertEquals(array('/1/9/', '/1/55/'), $criterion->value);
     }

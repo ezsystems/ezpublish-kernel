@@ -206,7 +206,7 @@ class ContentTypeLimitationTypeTest extends Base
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(ContentTypeLimitation::class, $value);
-        self::assertInternalType('array', $value->limitationValues);
+        self::assertIsArray($value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
@@ -332,7 +332,7 @@ class ContentTypeLimitationTypeTest extends Base
             $targets
         );
 
-        self::assertInternalType('boolean', $value);
+        self::assertIsBool($value);
         self::assertEquals($expected, $value);
     }
 
@@ -417,8 +417,8 @@ class ContentTypeLimitationTypeTest extends Base
         );
 
         self::assertInstanceOf(ContentTypeId::class, $criterion);
-        self::assertInternalType('array', $criterion->value);
-        self::assertInternalType('string', $criterion->operator);
+        self::assertIsArray($criterion->value);
+        self::assertIsString($criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
         self::assertEquals(array(9), $criterion->value);
     }
@@ -436,8 +436,8 @@ class ContentTypeLimitationTypeTest extends Base
         );
 
         self::assertInstanceOf(ContentTypeId::class, $criterion);
-        self::assertInternalType('array', $criterion->value);
-        self::assertInternalType('string', $criterion->operator);
+        self::assertIsArray($criterion->value);
+        self::assertIsString($criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);
         self::assertEquals(array(9, 55), $criterion->value);
     }

@@ -1147,16 +1147,15 @@ class HandlerLocationTest extends AbstractTestCase
 
         $this->assertEquals(26, $result->totalCount);
         $this->assertCount(10, $result->searchHits);
-        $this->assertEquals(
+        $this->assertCount(
             10,
-            count(
+
                 array_map(
                     function ($hit) {
                         return $hit->valueObject->id;
                     },
                     $result->searchHits
                 )
-            )
         );
     }
 

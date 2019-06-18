@@ -99,7 +99,7 @@ class RouterTest extends TestCase
         $this->assertSame($siteAccess, $sa->name);
         // SiteAccess must be serializable as a whole
         // See https://jira.ez.no/browse/EZP-21613
-        $this->assertInternalType('string', serialize($sa));
+        $this->assertIsString(serialize($sa));
         $router->setSiteAccess();
     }
 

@@ -60,7 +60,7 @@ class FieldNameResolverTest extends TestCase
             'field_name'
         );
 
-        $this->assertInternalType('array', $fieldNames);
+        $this->assertIsArray($fieldNames);
         $this->assertEmpty($fieldNames);
     }
 
@@ -128,7 +128,7 @@ class FieldNameResolverTest extends TestCase
             'field_definition_identifier_1'
         );
 
-        $this->assertInternalType('array', $fieldNames);
+        $this->assertIsArray($fieldNames);
         $this->assertEquals(
             array(
                 'index_field_name_1',
@@ -204,7 +204,7 @@ class FieldNameResolverTest extends TestCase
             'field_name'
         );
 
-        $this->assertInternalType('array', $fieldNames);
+        $this->assertIsArray($fieldNames);
         $this->assertEquals(
             array(
                 'index_field_name_1',
@@ -266,7 +266,7 @@ class FieldNameResolverTest extends TestCase
             null
         );
 
-        $this->assertInternalType('array', $fieldNames);
+        $this->assertIsArray($fieldNames);
         $this->assertEquals(
             array(
                 'index_field_name_1',
@@ -327,7 +327,7 @@ class FieldNameResolverTest extends TestCase
             'field_name'
         );
 
-        $this->assertInternalType('array', $fieldNames);
+        $this->assertIsArray($fieldNames);
         $this->assertEquals(
             array(
                 'index_field_name_1',

@@ -227,9 +227,9 @@ class ContentHandlerTest extends TestCase
             $res->versionInfo->id,
             'Version ID not set correctly'
         );
-        $this->assertEquals(
+        $this->assertCount(
             2,
-            count($res->fields),
+            $res->fields,
             'Fields not set correctly in version'
         );
     }

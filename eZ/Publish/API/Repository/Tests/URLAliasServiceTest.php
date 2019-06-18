@@ -571,13 +571,11 @@ class URLAliasServiceTest extends BaseTest
         $loadedAliases = $urlAliasService->listLocationAliases($location);
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedAliases
+        $this->assertIsArray($loadedAliases
         );
 
         // Only 1 non-history alias
-        $this->assertEquals(1, count($loadedAliases));
+        $this->assertCount(1, $loadedAliases);
 
         return array($loadedAliases, $location);
     }
@@ -628,11 +626,9 @@ class URLAliasServiceTest extends BaseTest
         $loadedAliases = $urlAliasService->listLocationAliases($location, false, 'eng-US');
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedAliases
+        $this->assertIsArray($loadedAliases
         );
-        $this->assertEquals(1, count($loadedAliases));
+        $this->assertCount(1, $loadedAliases);
     }
 
     /**
@@ -659,11 +655,9 @@ class URLAliasServiceTest extends BaseTest
         $loadedAliases = $urlAliasService->listLocationAliases($location, true, 'eng-US');
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedAliases
+        $this->assertIsArray($loadedAliases
         );
-        $this->assertEquals(1, count($loadedAliases));
+        $this->assertCount(1, $loadedAliases);
     }
 
     /**
@@ -685,11 +679,9 @@ class URLAliasServiceTest extends BaseTest
         $loadedAliases = $urlAliasService->listGlobalAliases();
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedAliases
+        $this->assertIsArray($loadedAliases
         );
-        $this->assertEquals(3, count($loadedAliases));
+        $this->assertCount(3, $loadedAliases);
     }
 
     /**
@@ -738,11 +730,9 @@ class URLAliasServiceTest extends BaseTest
         $loadedAliases = $urlAliasService->listGlobalAliases('eng-US');
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedAliases
+        $this->assertIsArray($loadedAliases
         );
-        $this->assertEquals(2, count($loadedAliases));
+        $this->assertCount(2, $loadedAliases);
     }
 
     /**
@@ -764,11 +754,9 @@ class URLAliasServiceTest extends BaseTest
         $loadedAliases = $urlAliasService->listGlobalAliases(null, 1);
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedAliases
+        $this->assertIsArray($loadedAliases
         );
-        $this->assertEquals(2, count($loadedAliases));
+        $this->assertCount(2, $loadedAliases);
     }
 
     /**
@@ -790,11 +778,9 @@ class URLAliasServiceTest extends BaseTest
         $loadedAliases = $urlAliasService->listGlobalAliases(null, 0, 1);
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedAliases
+        $this->assertIsArray($loadedAliases
         );
-        $this->assertEquals(1, count($loadedAliases));
+        $this->assertCount(1, $loadedAliases);
     }
 
     /**

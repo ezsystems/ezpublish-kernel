@@ -32,8 +32,8 @@ class UserPreferenceServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(UserPreferenceList::class, $userPreferenceList);
-        $this->assertInternalType('array', $userPreferenceList->items);
-        $this->assertInternalType('int', $userPreferenceList->totalCount);
+        $this->assertIsArray($userPreferenceList->items);
+        $this->assertIsInt($userPreferenceList->totalCount);
         $this->assertEquals(5, $userPreferenceList->totalCount);
     }
 

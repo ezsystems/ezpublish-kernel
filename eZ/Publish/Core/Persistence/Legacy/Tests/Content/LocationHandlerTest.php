@@ -118,7 +118,7 @@ class LocationHandlerTest extends TestCase
                 )
             );
 
-        $this->assertEquals(2, count($this->getLocationHandler()->loadSubtreeIds(77)));
+        $this->assertCount(2, $this->getLocationHandler()->loadSubtreeIds(77));
     }
 
     public function testLoadLocationByRemoteId()
@@ -170,7 +170,7 @@ class LocationHandlerTest extends TestCase
 
         $locations = $handler->loadLocationsByContent(23, 42);
 
-        $this->assertInternalType('array', $locations);
+        $this->assertIsArray($locations);
     }
 
     public function loadParentLocationsForDraftContent()
@@ -195,7 +195,7 @@ class LocationHandlerTest extends TestCase
 
         $locations = $handler->loadParentLocationsForDraftContent(23);
 
-        $this->assertInternalType('array', $locations);
+        $this->assertIsArray($locations);
     }
 
     public function testMoveSubtree()

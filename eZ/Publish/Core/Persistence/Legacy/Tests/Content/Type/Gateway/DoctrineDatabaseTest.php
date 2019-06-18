@@ -343,9 +343,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getGateway();
         $data = $gateway->loadAllGroupsData();
 
-        $this->assertEquals(
+        $this->assertCount(
             3,
-            count($data)
+            $data
         );
 
         $this->assertEquals(
@@ -373,9 +373,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getGateway();
         $rows = $gateway->loadTypesDataForGroup(1, 0);
 
-        $this->assertEquals(
+        $this->assertCount(
             6,
-            count($rows)
+            $rows
         );
     }
 
@@ -393,13 +393,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getGateway();
         $rows = $gateway->loadTypeData(1, 0);
 
-        $this->assertEquals(
+        $this->assertCount(
             5,
-            count($rows)
+            $rows
         );
-        $this->assertEquals(
+        $this->assertCount(
             49,
-            count($rows[0])
+            $rows[0]
         );
 
         /*
@@ -426,13 +426,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getGateway();
         $rows = $gateway->loadTypeDataByIdentifier('folder', 0);
 
-        $this->assertEquals(
+        $this->assertCount(
             5,
-            count($rows)
+            $rows
         );
-        $this->assertEquals(
+        $this->assertCount(
             49,
-            count($rows[0])
+            $rows[0]
         );
     }
 
@@ -450,13 +450,13 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getGateway();
         $rows = $gateway->loadTypeDataByRemoteId('a3d405b81be900468eb153d774f4f0d2', 0);
 
-        $this->assertEquals(
+        $this->assertCount(
             5,
-            count($rows)
+            $rows
         );
-        $this->assertEquals(
+        $this->assertCount(
             49,
-            count($rows[0])
+            $rows[0]
         );
     }
 

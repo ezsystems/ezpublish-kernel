@@ -168,7 +168,7 @@ class SiteAccessLimitationTypeTest extends Base
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation', $value);
-        self::assertInternalType('array', $value->limitationValues);
+        self::assertIsArray($value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
@@ -218,7 +218,7 @@ class SiteAccessLimitationTypeTest extends Base
             $object
         );
 
-        self::assertInternalType('boolean', $value);
+        self::assertIsBool($value);
         self::assertEquals($expected, $value);
     }
 

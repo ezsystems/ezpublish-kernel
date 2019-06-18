@@ -257,7 +257,7 @@ class DateAndTimeTest extends TestCase
         sleep(1);
         $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
 
-        self::assertInternalType('array', $fieldDef->defaultValue->data);
+        self::assertIsArray($fieldDef->defaultValue->data);
         self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($time, $fieldDef->defaultValue->data['timestamp']);
@@ -288,7 +288,7 @@ class DateAndTimeTest extends TestCase
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
         $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
 
-        self::assertInternalType('array', $fieldDef->defaultValue->data);
+        self::assertIsArray($fieldDef->defaultValue->data);
         self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($timestamp, $fieldDef->defaultValue->data['timestamp']);
@@ -324,7 +324,7 @@ class DateAndTimeTest extends TestCase
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
         $dateTimeFromString = new DateTime($fieldDef->defaultValue->data['timestring']);
 
-        self::assertInternalType('array', $fieldDef->defaultValue->data);
+        self::assertIsArray($fieldDef->defaultValue->data);
         self::assertCount(3, $fieldDef->defaultValue->data);
         self::assertNull($fieldDef->defaultValue->data['rfc850']);
         self::assertGreaterThanOrEqual($timestamp, $fieldDef->defaultValue->data['timestamp']);

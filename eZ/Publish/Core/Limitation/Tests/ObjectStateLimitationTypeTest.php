@@ -209,7 +209,7 @@ class ObjectStateLimitationTypeTest extends Base
             $object
         );
 
-        self::assertInternalType('boolean', $value);
+        self::assertIsBool($value);
         self::assertEquals($expected, $value);
     }
 
@@ -241,8 +241,8 @@ class ObjectStateLimitationTypeTest extends Base
         );
 
         self::assertInstanceOf(ObjectStateId::class, $criterion);
-        self::assertInternalType('array', $criterion->value);
-        self::assertInternalType('string', $criterion->operator);
+        self::assertIsArray($criterion->value);
+        self::assertIsString($criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
         self::assertEquals([2], $criterion->value);
     }
@@ -270,8 +270,8 @@ class ObjectStateLimitationTypeTest extends Base
         );
 
         self::assertInstanceOf(ObjectStateId::class, $criterion);
-        self::assertInternalType('array', $criterion->value);
-        self::assertInternalType('string', $criterion->operator);
+        self::assertIsArray($criterion->value);
+        self::assertIsString($criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);
         self::assertEquals([1, 2], $criterion->value);
     }
@@ -299,15 +299,15 @@ class ObjectStateLimitationTypeTest extends Base
         );
 
         self::assertInstanceOf(LogicalAnd::class, $criterion);
-        self::assertInternalType('array', $criterion->criteria);
+        self::assertIsArray($criterion->criteria);
 
-        self::assertInternalType('array', $criterion->criteria[0]->value);
-        self::assertInternalType('string', $criterion->criteria[0]->operator);
+        self::assertIsArray($criterion->criteria[0]->value);
+        self::assertIsString($criterion->criteria[0]->operator);
         self::assertEquals(Operator::IN, $criterion->criteria[0]->operator);
         self::assertEquals([1, 2], $criterion->criteria[0]->value);
 
-        self::assertInternalType('array', $criterion->criteria[1]->value);
-        self::assertInternalType('string', $criterion->criteria[1]->operator);
+        self::assertIsArray($criterion->criteria[1]->value);
+        self::assertIsString($criterion->criteria[1]->operator);
         self::assertEquals(Operator::IN, $criterion->criteria[1]->operator);
         self::assertEquals([3], $criterion->criteria[1]->value);
     }

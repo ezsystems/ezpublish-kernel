@@ -397,7 +397,7 @@ class ObjectStateServiceTest extends BaseTest
         $loadedObjectStateGroups = $objectStateService->loadObjectStateGroups();
         /* END: Use Case */
 
-        $this->assertInternalType('array', $loadedObjectStateGroups);
+        $this->assertIsArray($loadedObjectStateGroups);
 
         $this->assertObjectsLoadedByIdentifiers(
             $expectedGroupIdentifiers,
@@ -502,7 +502,7 @@ class ObjectStateServiceTest extends BaseTest
         $loadedObjectStateGroups = $objectStateService->loadObjectStateGroups(2);
         /* END: Use Case */
 
-        $this->assertInternalType('array', $loadedObjectStateGroups);
+        $this->assertIsArray($loadedObjectStateGroups);
 
         $this->assertObjectsLoadedByIdentifiers(
             array_slice($existingGroupIdentifiers, 2),
@@ -551,7 +551,7 @@ class ObjectStateServiceTest extends BaseTest
         $loadedObjectStateGroups = $objectStateService->loadObjectStateGroups(1, 2);
         /* END: Use Case */
 
-        $this->assertInternalType('array', $loadedObjectStateGroups);
+        $this->assertIsArray($loadedObjectStateGroups);
 
         $this->assertObjectsLoadedByIdentifiers(
             array_slice($existingGroupIdentifiers, 1, 2),
@@ -585,9 +585,7 @@ class ObjectStateServiceTest extends BaseTest
         $loadedObjectStates = $objectStateService->loadObjectStates($objectStateGroup);
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedObjectStates
+        $this->assertIsArray($loadedObjectStates
         );
         $this->assertObjectsLoadedByIdentifiers(
             array('not_locked' => true, 'locked' => true),

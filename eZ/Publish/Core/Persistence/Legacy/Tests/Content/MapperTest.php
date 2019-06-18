@@ -247,9 +247,9 @@ class MapperTest extends LanguageAwareTestCase
         $mapper = new Mapper($reg, $this->getLanguageHandler());
         $result = $mapper->extractContentFromRows($rowsFixture, $nameRowsFixture);
 
-        $this->assertEquals(
+        $this->assertCount(
             2,
-            count($result)
+            $result
         );
 
         $this->assertEquals(

@@ -194,7 +194,7 @@ class DomainMapperTest extends BaseServiceMockTest
 
         $spiResult = clone $result;
         $missingLocations = $this->getDomainMapper()->buildLocationDomainObjectsOnSearchResult($result, $languageFilter);
-        $this->assertInternalType('array', $missingLocations);
+        $this->assertIsArray($missingLocations);
 
         if (!$missing) {
             $this->assertEmpty($missingLocations);

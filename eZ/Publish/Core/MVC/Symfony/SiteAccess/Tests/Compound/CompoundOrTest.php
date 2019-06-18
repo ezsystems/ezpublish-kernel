@@ -77,7 +77,7 @@ class CompoundOrTest extends TestCase
         $compoundMatcher->setRequest($this->createMock(SimplifiedRequest::class));
         $compoundMatcher->setMatcherBuilder($this->matcherBuilder);
         $matchers = $compoundMatcher->getSubMatchers();
-        $this->assertInternalType('array', $matchers);
+        $this->assertIsArray($matchers);
         foreach ($matchers as $matcher) {
             $this->assertInstanceOf(Matcher::class, $matcher);
         }

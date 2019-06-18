@@ -145,7 +145,7 @@ class BlockingLimitationTypeTest extends Base
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(BlockingLimitation::class, $value);
-        self::assertInternalType('array', $value->limitationValues);
+        self::assertIsArray($value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
@@ -279,8 +279,8 @@ class BlockingLimitationTypeTest extends Base
         );
 
         self::assertInstanceOf(MatchNone::class, $criterion);
-        self::assertInternalType('null', $criterion->value);
-        self::assertInternalType('null', $criterion->operator);
+        self::assertNull($criterion->value);
+        self::assertNull($criterion->operator);
     }
 
     /**

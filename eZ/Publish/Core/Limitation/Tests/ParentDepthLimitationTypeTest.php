@@ -144,7 +144,7 @@ class ParentDepthLimitationTypeTest extends Base
            ParentDepthLimitation::class,
             $value
         );
-        self::assertInternalType('array', $value->limitationValues);
+        self::assertIsArray($value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
@@ -338,7 +338,7 @@ class ParentDepthLimitationTypeTest extends Base
             $targets
         );
 
-        self::assertInternalType('boolean', $value);
+        self::assertIsBool($value);
         self::assertEquals($expected, $value);
     }
 

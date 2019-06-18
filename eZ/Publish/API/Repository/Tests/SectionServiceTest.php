@@ -369,7 +369,7 @@ class SectionServiceTest extends BaseTest
         }
         /* END: Use Case */
 
-        $this->assertEquals(6, count($sections));
+        $this->assertCount(6, $sections);
     }
 
     /**
@@ -719,7 +719,7 @@ class SectionServiceTest extends BaseTest
         $sectionService->deleteSection($section);
         /* END: Use Case */
 
-        $this->assertEquals(6, count($sectionService->loadSections()));
+        $this->assertCount(6, $sectionService->loadSections());
     }
 
     /**

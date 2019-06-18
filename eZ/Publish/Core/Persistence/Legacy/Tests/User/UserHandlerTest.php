@@ -928,7 +928,7 @@ class UserHandlerTest extends TestCase
                 true
             )
         );
-        $this->assertEquals(8, count($policies));
+        $this->assertCount(8, $policies);
     }
 
     public function testLoadRoleAssignmentsByGroupId()
