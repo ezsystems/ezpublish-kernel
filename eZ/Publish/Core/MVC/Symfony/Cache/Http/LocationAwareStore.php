@@ -95,13 +95,13 @@ class LocationAwareStore extends Store implements ContentPurger
             unset($locationCacheDir);
             // If cache purge is in progress, serve stale cache instead of regular cache.
             // We first check for a global cache purge, then for the current location.
-            foreach (array($this->getLocationCacheLockName(), $this->getLocationCacheLockName($locationId)) as $cacheLockFile) {
+            foreach ([$this->getLocationCacheLockName(), $this->getLocationCacheLockName($locationId)] as $cacheLockFile) {
                 if (is_file($cacheLockFile)) {
                     if (function_exists('posix_kill')) {
                         // Check if purge process is still running. If not, remove the lock file to unblock future cache purge
                         if (!posix_kill(file_get_contents($cacheLockFile), 0)) {
                             $fs = $this->getFilesystem();
-                            $fs->remove(array($cacheLockFile, $this->getLocationCacheDir($locationId)));
+                            $fs->remove([$cacheLockFile, $this->getLocationCacheDir($locationId)]);
                             goto returnCachePath;
                         }
                     }
@@ -148,7 +148,7 @@ class LocationAwareStore extends Store implements ContentPurger
             // (123|456|789) => Purge for #123, #456 and #789 location IDs.
             $aLocationId = explode('|', substr($locationId, 1, -1));
         } else {
-            $aLocationId = array($locationId);
+            $aLocationId = [$locationId];
         }
 
         if (empty($aLocationId)) {
@@ -197,7 +197,7 @@ class LocationAwareStore extends Store implements ContentPurger
             file_put_contents($lockFile, getmypid());
             try {
                 // array of removal is in reverse order on purpose since remove() starts from the end.
-                $fs->remove(array($staleCacheDir, $lockFile, $locationCacheDir));
+                $fs->remove([$staleCacheDir, $lockFile, $locationCacheDir]);
 
                 return true;
             } catch (IOException $e) {

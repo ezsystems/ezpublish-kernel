@@ -24,14 +24,14 @@ class Type extends FieldType
     /**
      * @see eZ\Publish\Core\FieldType::$validatorConfigurationSchema
      */
-    protected $validatorConfigurationSchema = array(
-        'FileSizeValidator' => array(
-            'maxFileSize' => array(
+    protected $validatorConfigurationSchema = [
+        'FileSizeValidator' => [
+            'maxFileSize' => [
                 'type' => 'int',
                 'default' => null,
-            ),
-        ),
-    );
+            ],
+        ],
+    ];
 
     /**
      * Returns the field type identifier for this field type.
@@ -148,7 +148,7 @@ class Type extends FieldType
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
-        $errors = array();
+        $errors = [];
 
         if ($this->isEmptyValue($fieldValue)) {
             return $errors;
@@ -176,9 +176,9 @@ class Type extends FieldType
                         $errors[] = new ValidationError(
                             'The file size cannot exceed %size% byte.',
                             'The file size cannot exceed %size% bytes.',
-                            array(
+                            [
                                 '%size%' => $parameters['maxFileSize'],
-                            ),
+                            ],
                             'fileSize'
                         );
                     }
@@ -205,7 +205,7 @@ class Type extends FieldType
                 !getimagesize($filePath)
             )
         ) {
-            $errors[] = new ValidationError('A valid image file is required.', null, array(), $errorContext);
+            $errors[] = new ValidationError('A valid image file is required.', null, [], $errorContext);
         }
     }
 
@@ -218,7 +218,7 @@ class Type extends FieldType
      */
     public function validateValidatorConfiguration($validatorConfiguration)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($validatorConfiguration as $validatorIdentifier => $parameters) {
             switch ($validatorIdentifier) {
@@ -227,10 +227,10 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             'Validator %validator% expects parameter %parameter% to be set.',
                             null,
-                            array(
+                            [
                                 '%validator%' => $validatorIdentifier,
                                 '%parameter%' => 'maxFileSize',
-                            ),
+                            ],
                             "[$validatorIdentifier]"
                         );
                         break;
@@ -239,11 +239,11 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             'Validator %validator% expects parameter %parameter% to be of %type%.',
                             null,
-                            array(
+                            [
                                 '%validator%' => $validatorIdentifier,
                                 '%parameter%' => 'maxFileSize',
                                 '%type%' => 'integer',
-                            ),
+                            ],
                             "[$validatorIdentifier][maxFileSize]"
                         );
                     }
@@ -252,9 +252,9 @@ class Type extends FieldType
                     $validationErrors[] = new ValidationError(
                         "Validator '%validator%' is unknown",
                         null,
-                        array(
+                        [
                             '%validator%' => $validatorIdentifier,
-                        ),
+                        ],
                         "[$validatorIdentifier]"
                     );
             }
@@ -306,7 +306,7 @@ class Type extends FieldType
             return null;
         }
 
-        return array(
+        return [
             'id' => $value->id,
             'path' => $value->inputUri ?: $value->id,
             'alternativeText' => $value->alternativeText,
@@ -317,7 +317,7 @@ class Type extends FieldType
             'inputUri' => $value->inputUri,
             'width' => $value->width,
             'height' => $value->height,
-        );
+        ];
     }
 
     /**
@@ -331,11 +331,11 @@ class Type extends FieldType
     {
         // Store original data as external (to indicate they need to be stored)
         return new FieldValue(
-            array(
+            [
                 'data' => null,
                 'externalData' => $this->toHash($value),
                 'sortKey' => $this->getSortInfo($value),
-            )
+            ]
         );
     }
 
@@ -355,7 +355,7 @@ class Type extends FieldType
         // Restored data comes in $data, since it has already been processed
         // there might be more data in the persistence value than needed here
         $result = $this->fromHash(
-            array(
+            [
                 'id' => (isset($fieldValue->data['id'])
                     ? $fieldValue->data['id']
                     : null),
@@ -380,7 +380,7 @@ class Type extends FieldType
                 'height' => (isset($fieldValue->data['height'])
                     ? $fieldValue->data['height']
                     : null),
-            )
+            ]
         );
 
         return $result;

@@ -27,7 +27,7 @@ class FieldTypeRegistry
     /**
      * @param \eZ\Publish\SPI\FieldType\FieldType[]|\Closure $fieldTypes Hash of SPI FieldTypes where key is identifier
      */
-    public function __construct(array $fieldTypes = array())
+    public function __construct(array $fieldTypes = [])
     {
         $this->fieldTypes = $fieldTypes;
     }

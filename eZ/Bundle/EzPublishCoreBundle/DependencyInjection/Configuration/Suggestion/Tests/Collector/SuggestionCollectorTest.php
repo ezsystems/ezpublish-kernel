@@ -11,7 +11,7 @@ class SuggestionCollectorTest extends TestCase
     public function testAddHasGetSuggestions()
     {
         $collector = new SuggestionCollector();
-        $suggestions = array(new ConfigSuggestion(), new ConfigSuggestion(), new ConfigSuggestion());
+        $suggestions = [new ConfigSuggestion(), new ConfigSuggestion(), new ConfigSuggestion()];
         foreach ($suggestions as $suggestion) {
             $collector->addSuggestion($suggestion);
         }

@@ -43,11 +43,11 @@ class ScalePercentFilterLoaderTest extends TestCase
 
     public function loadInvalidProvider()
     {
-        return array(
-            array(array()),
-            array(array(123)),
-            array(array('foo' => 'bar')),
-        );
+        return [
+            [[]],
+            [[123]],
+            [['foo' => 'bar']],
+        ];
     }
 
     public function testLoad()
@@ -69,9 +69,9 @@ class ScalePercentFilterLoaderTest extends TestCase
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, $this->equalTo(array('size' => array($expectedWidth, $expectedHeight))))
+            ->with($image, $this->equalTo(['size' => [$expectedWidth, $expectedHeight]]))
             ->will($this->returnValue($image));
 
-        $this->assertSame($image, $this->loader->load($image, array($widthPercent, $heightPercent)));
+        $this->assertSame($image, $this->loader->load($image, [$widthPercent, $heightPercent]));
     }
 }

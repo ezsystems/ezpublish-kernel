@@ -28,12 +28,12 @@ abstract class FieldTypeTest extends TestCase
     {
         return $this->getMockForAbstractClass(
             'eZ\\Publish\\Core\\Persistence\\TransformationProcessor',
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('transform', 'transformByGroup')
+            ['transform', 'transformByGroup']
         );
     }
 
@@ -242,11 +242,11 @@ abstract class FieldTypeTest extends TestCase
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(),
-            ),
-        );
+        return [
+            [
+                [],
+            ],
+        ];
     }
 
     /**
@@ -277,11 +277,11 @@ abstract class FieldTypeTest extends TestCase
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
-                array('nonempty'),
-            ),
-        );
+        return [
+            [
+                ['nonempty'],
+            ],
+        ];
     }
 
     /**
@@ -317,11 +317,11 @@ abstract class FieldTypeTest extends TestCase
      */
     public function provideValidValidatorConfiguration()
     {
-        return array(
-            array(
-                array(),
-            ),
-        );
+        return [
+            [
+                [],
+            ],
+        ];
     }
 
     /**
@@ -371,13 +371,13 @@ abstract class FieldTypeTest extends TestCase
      */
     public function provideInvalidValidatorConfiguration()
     {
-        return array(
-            array(
-                array(
-                    'NonExistentValidator' => array(),
-                ),
-            ),
-        );
+        return [
+            [
+                [
+                    'NonExistentValidator' => [],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -427,12 +427,12 @@ abstract class FieldTypeTest extends TestCase
      */
     public function provideValidDataForValidate()
     {
-        return array(
-            array(
-                array(),
+        return [
+            [
+                [],
                 $this->getMock('eZ\\Publish\\SPI\\FieldType\\Value'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -501,13 +501,13 @@ abstract class FieldTypeTest extends TestCase
      */
     public function provideInvalidDataForValidate()
     {
-        return array(
-            array(
-                array(),
+        return [
+            [
+                [],
                 $this->getMock('eZ\\Publish\\SPI\\FieldType\\Value'),
-                array(),
-            ),
-        );
+                [],
+            ],
+        ];
     }
 
     /**
@@ -733,7 +733,7 @@ abstract class FieldTypeTest extends TestCase
             'The method validateFieldSettings() must return an array.'
         );
         $this->assertEquals(
-            array(),
+            [],
             $validationResult,
             'validateFieldSettings() did not consider the input settings valid.'
         );
@@ -757,7 +757,7 @@ abstract class FieldTypeTest extends TestCase
         );
 
         $this->assertNotEquals(
-            array(),
+            [],
             $validationResult,
             'validateFieldSettings() did consider the input settings valid, which should be invalid.'
         );
@@ -788,7 +788,7 @@ abstract class FieldTypeTest extends TestCase
             'The method validateValidatorConfiguration() must return an array.'
         );
         $this->assertEquals(
-            array(),
+            [],
             $validationResult,
             'validateValidatorConfiguration() did not consider the input configuration valid.'
         );
@@ -812,7 +812,7 @@ abstract class FieldTypeTest extends TestCase
         );
 
         $this->assertNotEquals(
-            array(),
+            [],
             $validationResult,
             'validateValidatorConfiguration() did consider the input settings valid, which should be invalid.'
         );
@@ -890,7 +890,7 @@ abstract class FieldTypeTest extends TestCase
      * @param mixed $actualHash
      * @param array $keyChain
      */
-    protected function assertIsValidHashValue($actualHash, $keyChain = array())
+    protected function assertIsValidHashValue($actualHash, $keyChain = [])
     {
         switch ($actualHashType = gettype($actualHash)) {
             case 'boolean':
@@ -905,7 +905,7 @@ abstract class FieldTypeTest extends TestCase
                 foreach ($actualHash as $key => $childHash) {
                     $this->assertIsValidHashValue(
                         $childHash,
-                        array_merge($keyChain, array($key))
+                        array_merge($keyChain, [$key])
                     );
                 }
 

@@ -30,7 +30,7 @@ class CreatedContent extends RestContent
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadContent',
-                array('contentId' => $data->content->contentInfo->id)
+                ['contentId' => $data->content->contentInfo->id]
             )
         );
         $visitor->setStatus(201);

@@ -51,7 +51,7 @@ class AnonymousAuthenticationProviderTest extends TestCase
         $authProvider->setConfigResolver($this->configResolver);
         $anonymousToken = $this
             ->getMockBuilder('Symfony\Component\Security\Core\Authentication\Token\AnonymousToken')
-            ->setConstructorArgs(array($key, $this->getMock('Symfony\Component\Security\Core\User\UserInterface')))
+            ->setConstructorArgs([$key, $this->getMock('Symfony\Component\Security\Core\User\UserInterface')])
             ->getMockForAbstractClass();
         $this->assertSame($anonymousToken, $authProvider->authenticate($anonymousToken));
     }

@@ -31,7 +31,7 @@ class UserSession extends ValueObjectVisitor
 
         $visitor->setHeader('Content-Type', $generator->getMediaType('Session'));
 
-        $sessionHref = $this->router->generate('ezpublish_rest_deleteSession', array('sessionId' => $data->sessionId));
+        $sessionHref = $this->router->generate('ezpublish_rest_deleteSession', ['sessionId' => $data->sessionId]);
 
         //@todo Needs refactoring, disabling certain headers should not be done this way
         $visitor->setHeader('Accept-Patch', false);
@@ -53,7 +53,7 @@ class UserSession extends ValueObjectVisitor
         $generator->startObjectElement('User', 'User');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $data->user->id))
+            $this->router->generate('ezpublish_rest_loadUser', ['userId' => $data->user->id])
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('User');

@@ -63,7 +63,7 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $value) {
             try {
                 $this->persistence->contentLanguageHandler()->loadByLanguageCode($value);
@@ -71,10 +71,10 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
-                    array(
+                    [
                         'value' => $value,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -91,7 +91,7 @@ class LanguageLimitationType extends AbstractPersistenceLimitationType implement
      */
     public function buildValue(array $limitationValues)
     {
-        return new APILanguageLimitation(array('limitationValues' => $limitationValues));
+        return new APILanguageLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

@@ -28,7 +28,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array(
+        return [
             new Search\Field(
                 'file_name',
                 $field->value->externalData['fileName'],
@@ -44,7 +44,7 @@ class SearchField implements Indexable
                 $field->value->externalData['mimeType'],
                 new Search\FieldType\StringField()
             ),
-        );
+        ];
     }
 
     /**
@@ -54,11 +54,11 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'file_name' => new Search\FieldType\StringField(),
             'file_size' => new Search\FieldType\IntegerField(),
             'mime_type' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     /**

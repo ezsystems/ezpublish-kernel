@@ -55,7 +55,7 @@ class LocationSearchHitAdapterTest extends TestCase
         $countQuery = clone $query;
         $countQuery->limit = 0;
 
-        $searchResult = new SearchResult(array('totalCount' => $nbResults));
+        $searchResult = new SearchResult(['totalCount' => $nbResults]);
         $this->searchService
             ->expects($this->once())
             ->method('findLocations')
@@ -88,13 +88,13 @@ class LocationSearchHitAdapterTest extends TestCase
         $searchQuery->limit = $limit;
         $searchQuery->performCount = false;
 
-        $hits = array();
+        $hits = [];
         for ($i = 0; $i < $limit; ++$i) {
             $location = $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\Content\Location');
-            $hits[] = new SearchHit(array('valueObject' => $location));
+            $hits[] = new SearchHit(['valueObject' => $location]);
         }
         $finalResult = $this->getExpectedFinalResultFromHits($hits);
-        $searchResult = new SearchResult(array('searchHits' => $hits, 'totalCount' => $nbResults));
+        $searchResult = new SearchResult(['searchHits' => $hits, 'totalCount' => $nbResults]);
         $this
             ->searchService
             ->expects($this->once())

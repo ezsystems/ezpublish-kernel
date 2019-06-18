@@ -34,7 +34,7 @@ class ContentTypeGroup extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadContentTypeGroup',
-                array('contentTypeGroupId' => $data->id)
+                ['contentTypeGroupId' => $data->id]
             )
         );
         $generator->endAttribute('href');
@@ -54,7 +54,7 @@ class ContentTypeGroup extends ValueObjectVisitor
         $generator->startObjectElement('Creator', 'User');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $data->creatorId))
+            $this->router->generate('ezpublish_rest_loadUser', ['userId' => $data->creatorId])
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Creator');
@@ -62,7 +62,7 @@ class ContentTypeGroup extends ValueObjectVisitor
         $generator->startObjectElement('Modifier', 'User');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadUser', array('userId' => $data->modifierId))
+            $this->router->generate('ezpublish_rest_loadUser', ['userId' => $data->modifierId])
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Modifier');
@@ -72,7 +72,7 @@ class ContentTypeGroup extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_listContentTypesForGroup',
-                array('contentTypeGroupId' => $data->id)
+                ['contentTypeGroupId' => $data->id]
             )
         );
         $generator->endAttribute('href');

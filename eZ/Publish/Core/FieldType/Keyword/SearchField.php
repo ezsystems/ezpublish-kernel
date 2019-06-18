@@ -20,7 +20,7 @@ class SearchField implements Indexable
 {
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array(
+        return [
             new Search\Field(
                 'value',
                 $field->value->externalData,
@@ -36,15 +36,15 @@ class SearchField implements Indexable
                 $field->value->externalData,
                 new Search\FieldType\FullTextField()
             ),
-        );
+        ];
     }
 
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'value' => new Search\FieldType\MultipleStringField(),
             'sort_value' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     public function getDefaultMatchField()

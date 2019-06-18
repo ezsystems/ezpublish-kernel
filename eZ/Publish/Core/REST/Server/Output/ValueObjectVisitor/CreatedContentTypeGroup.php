@@ -32,7 +32,7 @@ class CreatedContentTypeGroup extends ContentTypeGroup
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadContentTypeGroup',
-                array('contentTypeGroupId' => $data->contentTypeGroup->id)
+                ['contentTypeGroupId' => $data->contentTypeGroup->id]
             )
         );
         $visitor->setStatus(201);

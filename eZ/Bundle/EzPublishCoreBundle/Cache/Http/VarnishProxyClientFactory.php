@@ -53,7 +53,7 @@ class VarnishProxyClientFactory
      */
     public function buildProxyClient(array $servers, $baseUrl)
     {
-        $allServers = array();
+        $allServers = [];
         foreach ($servers as $server) {
             if (!$this->dynamicSettingParser->isDynamicSetting($server)) {
                 $allServers[] = $server;

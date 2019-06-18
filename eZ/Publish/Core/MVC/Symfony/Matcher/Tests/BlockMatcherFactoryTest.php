@@ -20,7 +20,7 @@ class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
      */
     protected function getMatchableValueObject()
     {
-        return $this->getBlockView(array('id' => 456));
+        return $this->getBlockView(['id' => 456]);
     }
 
     /**
@@ -31,7 +31,7 @@ class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
      */
     protected function getNonMatchableValueObject()
     {
-        return $this->getBlockView(array('id' => 123456789));
+        return $this->getBlockView(['id' => 123456789]);
     }
 
     /**
@@ -46,16 +46,16 @@ class BlockMatcherFactoryTest extends AbstractMatcherFactoryTest
     {
         $matcherFactory = new $this->matcherFactoryClass(
             $this->getRepositoryMock(),
-            array(
-                'full' => array(
-                    'test' => array(
+            [
+                'full' => [
+                    'test' => [
                         'template' => 'foo.html.twig',
-                        'match' => array(
+                        'match' => [
                             '\\eZ\\Publish\\Core\\MVC\\Symfony\\Matcher\\ContentBased\\Id\\Location' => true,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
         $matcherFactory->match($this->getMatchableValueObject(), 'full');
     }

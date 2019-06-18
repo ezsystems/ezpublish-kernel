@@ -77,9 +77,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\BinaryFileConverter(),
             new FieldType\BinaryFile\BinaryFileStorage(
-                array(
+                [
                     'LegacyStorage' => new FieldType\BinaryFile\BinaryFileStorage\Gateway\LegacyStorage(),
-                ),
+                ],
                 $this->ioService,
                 new FieldType\BinaryBase\PathGenerator\LegacyPathGenerator(),
                 new FileInfo()
@@ -96,13 +96,13 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     public function getTypeConstraints()
     {
         return new FieldTypeConstraints(
-            array(
-                'validators' => array(
-                    'FileSizeValidator' => array(
+            [
+                'validators' => [
+                    'FileSizeValidator' => [
                         'maxFileSize' => 2, // 2 MB
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
     }
 
@@ -115,23 +115,23 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezint field type does not have any special field definition
             // properties
-            array('fieldType', 'ezbinaryfile'),
-            array(
+            ['fieldType', 'ezbinaryfile'],
+            [
                 'fieldTypeConstraints',
                 new FieldTypeConstraints(
-                    array(
-                        'validators' => array(
-                            'FileSizeValidator' => array(
+                    [
+                        'validators' => [
+                            'FileSizeValidator' => [
                                 'maxFileSize' => 2, // 2 MB
-                            ),
-                        ),
-                    )
+                            ],
+                        ],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -142,9 +142,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     'id' => null,
                     'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                     'fileName' => 'Ice-Flower-Binary.jpg',
@@ -152,9 +152,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                     'mimeType' => 'image/jpeg',
                     'downloadCount' => 0,
                     'uri' => __DIR__ . '/_fixtures/image.jpg',
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 
@@ -191,9 +191,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     // used to ensure that inputUri has precedence over 'id'
                     'id' => 'some/value',
                     'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
@@ -203,9 +203,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
                     'mimeType' => 'foo/bar',
                     'downloadCount' => 23,
                     'uri' => __DIR__ . '/_fixtures/image.jpg',
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 

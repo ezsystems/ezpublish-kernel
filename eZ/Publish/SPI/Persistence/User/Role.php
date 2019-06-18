@@ -74,12 +74,12 @@ class Role extends ValueObject
      *
      * @var string[]
      */
-    public $description = array();
+    public $description = [];
 
     /**
      * Policies associated with the role.
      *
      * @var \eZ\Publish\SPI\Persistence\User\Policy[]
      */
-    public $policies = array();
+    public $policies = [];
 }

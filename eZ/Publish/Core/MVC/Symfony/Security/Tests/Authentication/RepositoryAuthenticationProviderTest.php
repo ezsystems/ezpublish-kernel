@@ -72,13 +72,13 @@ class RepositoryAuthenticationProviderTest extends TestCase
     public function testCheckAuthenticationCredentialsChanged()
     {
         $apiUser = $this->getMockBuilder('eZ\Publish\API\Repository\Values\User\User')
-            ->setConstructorArgs(array(array('passwordHash' => 'some_encoded_password')))
+            ->setConstructorArgs([['passwordHash' => 'some_encoded_password']])
             ->getMockForAbstractClass();
         $tokenUser = new User($apiUser);
         $token = new UsernamePasswordToken($tokenUser, 'foo', 'bar');
 
         $renewedApiUser = $this->getMockBuilder('eZ\Publish\API\Repository\Values\User\User')
-            ->setConstructorArgs(array(array('passwordHash' => 'renewed_encoded_password')))
+            ->setConstructorArgs([['passwordHash' => 'renewed_encoded_password']])
             ->getMockForAbstractClass();
 
         $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User');
@@ -97,7 +97,7 @@ class RepositoryAuthenticationProviderTest extends TestCase
         $password = 'encoded_password';
 
         $apiUser = $this->getMockBuilder('eZ\Publish\API\Repository\Values\User\User')
-            ->setConstructorArgs(array(array('passwordHash' => $password)))
+            ->setConstructorArgs([['passwordHash' => $password]])
             ->getMockForAbstractClass();
         $tokenUser = new User($apiUser);
         $token = new UsernamePasswordToken($tokenUser, 'foo', 'bar');

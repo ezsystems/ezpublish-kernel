@@ -53,10 +53,10 @@ class ModifiedRange extends DateMetadata
         $start = $this->getNativeTime($criterion->value[0]);
         $end = isset($criterion->value[1]) ? $this->getNativeTime($criterion->value[1]) : null;
 
-        return array(
-            'range' => array(
+        return [
+            'range' => [
                 'modified_dt' => $this->getFilterRange($criterion->operator, $start, $end),
-            ),
-        );
+            ],
+        ];
     }
 }

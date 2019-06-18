@@ -61,9 +61,9 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            MVCEvents::SITEACCESS => array('onSiteAccessMatch', 250),
-        );
+        return [
+            MVCEvents::SITEACCESS => ['onSiteAccessMatch', 250],
+        ];
     }
 
     public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)

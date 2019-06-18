@@ -173,10 +173,10 @@ class XmlTest extends GeneratorTest
 
         $generator->startHashElement('elements');
 
-        $generator->startValueElement('element', 'element value 1', array('attribute' => 'attribute value 1'));
+        $generator->startValueElement('element', 'element value 1', ['attribute' => 'attribute value 1']);
         $generator->endValueElement('element');
 
-        $generator->startValueElement('element', 'element value 2', array('attribute' => 'attribute value 2'));
+        $generator->startValueElement('element', 'element value 2', ['attribute' => 'attribute value 2']);
         $generator->endValueElement('element');
 
         $generator->endHashElement('elements');
@@ -234,8 +234,8 @@ class XmlTest extends GeneratorTest
             $this->generator = new Common\Output\Generator\Xml(
                 $this->getMock(
                     'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Xml\\FieldTypeHashGenerator',
-                    array(),
-                    array(),
+                    [],
+                    [],
                     '',
                     false
                 )

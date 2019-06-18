@@ -46,10 +46,10 @@ class ContentIdIn extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'terms' => array(
+        return [
+            'terms' => [
                 'content_id_id' => $criterion->value,
-            ),
-        );
+            ],
+        ];
     }
 }

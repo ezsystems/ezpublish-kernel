@@ -28,7 +28,7 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     public function testResolveUrlAliasSchema()
     {
-        $serviceMock = $this->getPartlyMockedNameSchemaService(array('resolve'));
+        $serviceMock = $this->getPartlyMockedNameSchemaService(['resolve']);
 
         list($content, $contentType) = $this->buildTestObjects();
 
@@ -57,7 +57,7 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     public function testResolveUrlAliasSchemaFallbackToNameSchema()
     {
-        $serviceMock = $this->getPartlyMockedNameSchemaService(array('resolve'));
+        $serviceMock = $this->getPartlyMockedNameSchemaService(['resolve']);
 
         list($content, $contentType) = $this->buildTestObjects('<name_schema>', '');
 
@@ -86,7 +86,7 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     public function testResolveNameSchema()
     {
-        $serviceMock = $this->getPartlyMockedNameSchemaService(array('resolve'));
+        $serviceMock = $this->getPartlyMockedNameSchemaService(['resolve']);
 
         list($content, $contentType) = $this->buildTestObjects();
 
@@ -103,7 +103,7 @@ class NameSchemaTest extends BaseServiceMockTest
             $this->returnValue(42)
         );
 
-        $result = $serviceMock->resolveNameSchema($content, array(), array(), $contentType);
+        $result = $serviceMock->resolveNameSchema($content, [], [], $contentType);
 
         self::assertEquals(42, $result);
     }
@@ -115,11 +115,11 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     public function testResolveNameSchemaWithFields()
     {
-        $serviceMock = $this->getPartlyMockedNameSchemaService(array('resolve'));
+        $serviceMock = $this->getPartlyMockedNameSchemaService(['resolve']);
 
         list($content, $contentType) = $this->buildTestObjects();
 
-        $fields = array();
+        $fields = [];
         $fields['text3']['cro-HR'] = new TextLineValue('tri');
         $fields['text1']['ger-DE'] = new TextLineValue('ein');
         $fields['text2']['ger-DE'] = new TextLineValue('zwei');
@@ -130,7 +130,7 @@ class NameSchemaTest extends BaseServiceMockTest
         $mergedFields['text1']['eng-GB'] = new TextLineValue('one');
         $mergedFields['text2']['eng-GB'] = new TextLineValue('two');
         $mergedFields['text3']['eng-GB'] = new TextLineValue('');
-        $languages = array('eng-GB', 'cro-HR', 'ger-DE');
+        $languages = ['eng-GB', 'cro-HR', 'ger-DE'];
 
         $serviceMock->expects(
             $this->once()
@@ -155,50 +155,50 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     protected function getFields()
     {
-        return array(
+        return [
             new Field(
-                array(
+                [
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'text1',
                     'value' => new TextLineValue('one'),
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'text2',
                     'value' => new TextLineValue('two'),
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'languageCode' => 'eng-GB',
                     'fieldDefIdentifier' => 'text3',
                     'value' => new TextLineValue(''),
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'languageCode' => 'cro-HR',
                     'fieldDefIdentifier' => 'text1',
                     'value' => new TextLineValue('jedan'),
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'languageCode' => 'cro-HR',
                     'fieldDefIdentifier' => 'text2',
                     'value' => new TextLineValue('dva'),
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'languageCode' => 'cro-HR',
                     'fieldDefIdentifier' => 'text3',
                     'value' => new TextLineValue(''),
-                )
+                ]
             ),
-        );
+        ];
     }
 
     /**
@@ -206,29 +206,29 @@ class NameSchemaTest extends BaseServiceMockTest
      */
     protected function getFieldDefinitions()
     {
-        return array(
+        return [
             new FieldDefinition(
-                array(
+                [
                     'id' => '1',
                     'identifier' => 'text1',
                     'fieldTypeIdentifier' => 'ezstring',
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => '2',
                     'identifier' => 'text2',
                     'fieldTypeIdentifier' => 'ezstring',
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => '3',
                     'identifier' => 'text3',
                     'fieldTypeIdentifier' => 'ezstring',
-                )
+                ]
             ),
-        );
+        ];
     }
 
     /**
@@ -239,24 +239,24 @@ class NameSchemaTest extends BaseServiceMockTest
     protected function buildTestObjects($nameSchema = '<name_schema>', $urlAliasSchema = '<urlalias_schema>')
     {
         $content = new Content(
-            array(
+            [
                 'internalFields' => $this->getFields(),
                 'versionInfo' => new VersionInfo(
-                    array(
-                        'languageCodes' => array('eng-GB', 'cro-HR'),
-                    )
+                    [
+                        'languageCodes' => ['eng-GB', 'cro-HR'],
+                    ]
                 ),
-            )
+            ]
         );
         $contentType = new ContentType(
-            array(
+            [
                 'nameSchema' => $nameSchema,
                 'urlAliasSchema' => $urlAliasSchema,
                 'fieldDefinitions' => $this->getFieldDefinitions(),
-            )
+            ]
         );
 
-        return array($content, $contentType);
+        return [$content, $contentType];
     }
 
     /**
@@ -273,11 +273,11 @@ class NameSchemaTest extends BaseServiceMockTest
         return $this->getMock(
             'eZ\\Publish\\Core\\Repository\\Helper\\NameSchemaService',
             $methods,
-            array(
+            [
                 $this->getPersistenceMock()->contentTypeHandler(),
                 $this->getContentTypeDomainMapperMock(),
                 $this->getNameableFieldTypeRegistryMock(),
-            )
+            ]
         );
     }
 

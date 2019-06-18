@@ -60,7 +60,7 @@ class ValueObjectVisitorDispatcher
         if (!is_object($data)) {
             throw new Exceptions\InvalidTypeException($data);
         }
-        $checkedClassNames = array();
+        $checkedClassNames = [];
 
         $className = get_class($data);
         do {

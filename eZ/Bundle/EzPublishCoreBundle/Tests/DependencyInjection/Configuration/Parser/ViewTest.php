@@ -20,9 +20,9 @@ class ViewTest extends AbstractParserTestCase
 
     protected function getContainerExtensions()
     {
-        return array(
-            new EzPublishCoreExtension(array(new LocationView(), new ContentView(), new BlockView())),
-        );
+        return [
+            new EzPublishCoreExtension([new LocationView(), new ContentView(), new BlockView()]),
+        ];
     }
 
     protected function getMinimalConfiguration()
@@ -42,14 +42,14 @@ class ViewTest extends AbstractParserTestCase
         foreach ($expectedLocationView as &$rulesets) {
             foreach ($rulesets as &$config) {
                 if (!isset($config['params'])) {
-                    $config['params'] = array();
+                    $config['params'] = [];
                 }
             }
         }
 
         $this->assertConfigResolverParameterValue('location_view', $expectedLocationView, 'ezdemo_site', false);
         $this->assertConfigResolverParameterValue('location_view', $expectedLocationView, 'fre', false);
-        $this->assertConfigResolverParameterValue('location_view', array(), 'ezdemo_site_admin', false);
+        $this->assertConfigResolverParameterValue('location_view', [], 'ezdemo_site_admin', false);
     }
 
     public function testContentView()
@@ -59,14 +59,14 @@ class ViewTest extends AbstractParserTestCase
         foreach ($expectedContentView as &$rulesets) {
             foreach ($rulesets as &$config) {
                 if (!isset($config['params'])) {
-                    $config['params'] = array();
+                    $config['params'] = [];
                 }
             }
         }
 
         $this->assertConfigResolverParameterValue('content_view', $expectedContentView, 'ezdemo_site', false);
         $this->assertConfigResolverParameterValue('content_view', $expectedContentView, 'fre', false);
-        $this->assertConfigResolverParameterValue('content_view', array(), 'ezdemo_site_admin', false);
+        $this->assertConfigResolverParameterValue('content_view', [], 'ezdemo_site_admin', false);
     }
 
     public function testBlockView()
@@ -74,19 +74,19 @@ class ViewTest extends AbstractParserTestCase
         $this->load();
         $this->assertConfigResolverParameterValue(
             'block_view',
-            array('block' => $this->config['system']['ezdemo_frontend_group']['block_view']),
+            ['block' => $this->config['system']['ezdemo_frontend_group']['block_view']],
             'ezdemo_site',
             false
         );
         $this->assertConfigResolverParameterValue(
             'block_view',
-            array('block' => $this->config['system']['ezdemo_frontend_group']['block_view']),
+            ['block' => $this->config['system']['ezdemo_frontend_group']['block_view']],
             'fre',
             false
         );
         $this->assertConfigResolverParameterValue(
             'block_view',
-            array(),
+            [],
             'ezdemo_site_admin',
             false
         );

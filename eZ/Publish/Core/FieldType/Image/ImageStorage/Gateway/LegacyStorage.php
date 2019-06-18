@@ -26,13 +26,13 @@ class LegacyStorage extends Gateway
      *
      * @var array
      */
-    protected $fieldNameMap = array(
+    protected $fieldNameMap = [
         'id' => 'fieldId',
         'version' => 'versionNo',
         'language_code' => 'languageCode',
         'path_identification_string' => 'nodePathString',
         'data_string' => 'xml',
-    );
+    ];
 
     /**
      * @var UrlRedecorator
@@ -178,7 +178,7 @@ class LegacyStorage extends Gateway
         $statement = $selectQuery->prepare();
         $statement->execute();
 
-        $fieldLookup = array();
+        $fieldLookup = [];
         foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
             $fieldLookup[$row['id']] = $row['data_text'];
         }
@@ -312,7 +312,7 @@ class LegacyStorage extends Gateway
             return null;
         }
 
-        $files = array();
+        $files = [];
 
         $dom = new \DOMDocument();
         $dom->loadXml($xml);

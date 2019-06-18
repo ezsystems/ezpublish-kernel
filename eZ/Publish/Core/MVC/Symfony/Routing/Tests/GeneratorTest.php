@@ -43,17 +43,17 @@ class GeneratorTest extends TestCase
 
     public function generateProvider()
     {
-        return array(
-            array('foo_bar', array(), UrlGeneratorInterface::ABSOLUTE_PATH),
-            array('foo_bar', array(), UrlGeneratorInterface::ABSOLUTE_URL),
-            array('foo_bar', array('some' => 'thing'), UrlGeneratorInterface::ABSOLUTE_URL),
-            array(new Location(), array(), UrlGeneratorInterface::ABSOLUTE_PATH),
-            array(new Location(), array(), UrlGeneratorInterface::ABSOLUTE_URL),
-            array(new Location(), array('some' => 'thing'), UrlGeneratorInterface::ABSOLUTE_URL),
-            array(new \stdClass(), array(), UrlGeneratorInterface::ABSOLUTE_PATH),
-            array(new \stdClass(), array(), UrlGeneratorInterface::ABSOLUTE_URL),
-            array(new \stdClass(), array('some' => 'thing'), UrlGeneratorInterface::ABSOLUTE_URL),
-        );
+        return [
+            ['foo_bar', [], UrlGeneratorInterface::ABSOLUTE_PATH],
+            ['foo_bar', [], UrlGeneratorInterface::ABSOLUTE_URL],
+            ['foo_bar', ['some' => 'thing'], UrlGeneratorInterface::ABSOLUTE_URL],
+            [new Location(), [], UrlGeneratorInterface::ABSOLUTE_PATH],
+            [new Location(), [], UrlGeneratorInterface::ABSOLUTE_URL],
+            [new Location(), ['some' => 'thing'], UrlGeneratorInterface::ABSOLUTE_URL],
+            [new \stdClass(), [], UrlGeneratorInterface::ABSOLUTE_PATH],
+            [new \stdClass(), [], UrlGeneratorInterface::ABSOLUTE_URL],
+            [new \stdClass(), ['some' => 'thing'], UrlGeneratorInterface::ABSOLUTE_URL],
+        ];
     }
 
     /**
@@ -128,6 +128,6 @@ class GeneratorTest extends TestCase
         $this->logger
             ->expects($this->once())
             ->method('notice');
-        $this->assertSame($fullUri, $this->generator->generate($urlResource, $parameters + array('siteaccess' => $siteAccessName), $referenceType));
+        $this->assertSame($fullUri, $this->generator->generate($urlResource, $parameters + ['siteaccess' => $siteAccessName], $referenceType));
     }
 }

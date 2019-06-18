@@ -20,7 +20,7 @@ abstract class AbstractSubtree extends Slot
         $contentHandler = $this->persistenceHandler->contentHandler();
         $locationHandler = $this->persistenceHandler->locationHandler();
 
-        $processedContentIdSet = array();
+        $processedContentIdSet = [];
         $subtreeIds = $locationHandler->loadSubtreeIds($locationId);
 
         foreach ($subtreeIds as $locationId => $contentId) {

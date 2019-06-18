@@ -39,19 +39,19 @@ class Flysystem implements IOBinaryDataHandler
             $this->filesystem->writeStream(
                 $binaryFileCreateStruct->id,
                 $binaryFileCreateStruct->getInputStream(),
-                array(
+                [
                     'mimetype' => $binaryFileCreateStruct->mimeType,
                     'visibility' => AdapterInterface::VISIBILITY_PUBLIC,
-                )
+                ]
             );
         } catch (FileExistsException $e) {
             $this->filesystem->updateStream(
                 $binaryFileCreateStruct->id,
                 $binaryFileCreateStruct->getInputStream(),
-                array(
+                [
                     'mimetype' => $binaryFileCreateStruct->mimeType,
                     'visibility' => AdapterInterface::VISIBILITY_PUBLIC,
-                )
+                ]
             );
         }
     }

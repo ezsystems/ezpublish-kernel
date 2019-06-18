@@ -18,7 +18,7 @@ class Visitor
     /**
      * @var \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher
      */
-    protected $valueObjectVisitorDispatcher = array();
+    protected $valueObjectVisitorDispatcher = [];
 
     /**
      * Generator.

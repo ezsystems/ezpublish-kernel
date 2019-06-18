@@ -46,7 +46,7 @@ class ParentLocationRemoteId extends BaseParser
         if (!array_key_exists('ParentLocationRemoteIdCriterion', $data)) {
             throw new Exceptions\Parser('Invalid <ParentLocationRemoteIdCriterion> format');
         }
-        $contentIdArray = array();
+        $contentIdArray = [];
         foreach (explode(',', $data['ParentLocationRemoteIdCriterion']) as $parentRemoteId) {
             $location = $this->locationService->loadLocationByRemoteId($parentRemoteId);
             $contentIdArray[] = $location->id;

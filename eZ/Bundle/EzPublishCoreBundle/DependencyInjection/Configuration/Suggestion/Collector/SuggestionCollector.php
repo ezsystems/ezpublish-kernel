@@ -15,7 +15,7 @@ class SuggestionCollector implements SuggestionCollectorInterface
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\ConfigSuggestion[]
      */
-    private $suggestions = array();
+    private $suggestions = [];
 
     /**
      * Adds a config suggestion to the list.

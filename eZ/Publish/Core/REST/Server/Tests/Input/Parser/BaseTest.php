@@ -41,8 +41,8 @@ abstract class BaseTest extends ParentBaseTest
         if (!isset($this->parsingDispatcherMock)) {
             $this->parsingDispatcherMock = $this->getMock(
                 '\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );
@@ -61,7 +61,7 @@ abstract class BaseTest extends ParentBaseTest
      */
     public function getParseHrefExpectationsMap()
     {
-        return array();
+        return [];
     }
 
     /**

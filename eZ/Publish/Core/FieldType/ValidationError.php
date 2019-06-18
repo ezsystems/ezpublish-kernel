@@ -47,7 +47,7 @@ class ValidationError implements ValidationErrorInterface
      * @param string $plural
      * @param array $values
      */
-    public function __construct($singular, $plural = null, array $values = array(), $target = null)
+    public function __construct($singular, $plural = null, array $values = [], $target = null)
     {
         $this->singular = $singular;
         $this->plural = $plural;

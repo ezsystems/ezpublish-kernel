@@ -59,7 +59,7 @@ class Router implements RequestParser
         return $matchResult;
     }
 
-    public function generate($type, array $values = array())
+    public function generate($type, array $values = [])
     {
         return $this->router->generate($type, $values);
     }

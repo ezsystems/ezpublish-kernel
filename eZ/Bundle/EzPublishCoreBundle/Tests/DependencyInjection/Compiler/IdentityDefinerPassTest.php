@@ -48,7 +48,7 @@ class IdentityDefinerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.user.hash_generator',
             'setIdentityDefiner',
-            array(new Reference($serviceId))
+            [new Reference($serviceId)]
         );
     }
 }

@@ -72,13 +72,13 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array(
-                'fieldSettings' => array(
+            [
+                'fieldSettings' => [
                     'selectionMethod' => 0,
                     'selectionDefaultLocation' => '',
-                    'selectionContentTypes' => array(),
-                ),
-            )
+                    'selectionContentTypes' => [],
+                ],
+            ]
         );
     }
 
@@ -91,16 +91,16 @@ class RelationListIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        $fieldSettings = array(
+        $fieldSettings = [
             'selectionMethod' => 0,
             'selectionDefaultLocation' => '',
-            'selectionContentTypes' => array(),
-        );
+            'selectionContentTypes' => [],
+        ];
 
-        return array(
-            array('fieldType', 'ezobjectrelationlist'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array('fieldSettings' => $fieldSettings))),
-        );
+        return [
+            ['fieldType', 'ezobjectrelationlist'],
+            ['fieldTypeConstraints', new Content\FieldTypeConstraints(['fieldSettings' => $fieldSettings])],
+        ];
     }
 
     /**
@@ -111,11 +111,11 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array('destinationContentIds' => array(4)),
+            [
+                'data' => ['destinationContentIds' => [4]],
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 
@@ -155,11 +155,11 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array('destinationContentIds' => array(11)),
+            [
+                'data' => ['destinationContentIds' => [11]],
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 

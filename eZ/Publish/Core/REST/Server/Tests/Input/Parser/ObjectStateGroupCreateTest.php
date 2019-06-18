@@ -18,26 +18,26 @@ class ObjectStateGroupCreateTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-group',
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateGroupCreate = $this->getParser();
         $result = $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -61,13 +61,13 @@ class ObjectStateGroupCreateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array('eng-GB' => 'Test group'),
+            ['eng-GB' => 'Test group'],
             $result->names,
             'ObjectStateGroupCreateStruct names property not created correctly.'
         );
 
         $this->assertEquals(
-            array('eng-GB' => 'Test group description'),
+            ['eng-GB' => 'Test group description'],
             $result->descriptions,
             'ObjectStateGroupCreateStruct descriptions property not created correctly.'
         );
@@ -81,25 +81,25 @@ class ObjectStateGroupCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingIdentifier()
     {
-        $inputArray = array(
+        $inputArray = [
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateGroupCreate = $this->getParser();
         $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -113,25 +113,25 @@ class ObjectStateGroupCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingDefaultLanguageCode()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-group',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateGroupCreate = $this->getParser();
         $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -145,18 +145,18 @@ class ObjectStateGroupCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingNames()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-group',
             'defaultLanguageCode' => 'eng-GB',
-            'descriptions' => array(
-                'value' => array(
-                    array(
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateGroupCreate = $this->getParser();
         $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -170,19 +170,19 @@ class ObjectStateGroupCreateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidNames()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-group',
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+            'names' => [],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateGroupCreate = $this->getParser();
         $objectStateGroupCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -210,8 +210,8 @@ class ObjectStateGroupCreateTest extends BaseTest
     {
         $objectStateServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\ObjectStateService',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -220,7 +220,7 @@ class ObjectStateGroupCreateTest extends BaseTest
             ->method('newObjectStateGroupCreateStruct')
             ->with($this->equalTo('test-group'))
             ->will(
-                $this->returnValue(new ObjectStateGroupCreateStruct(array('identifier' => 'test-group')))
+                $this->returnValue(new ObjectStateGroupCreateStruct(['identifier' => 'test-group']))
             );
 
         return $objectStateServiceMock;

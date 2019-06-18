@@ -50,9 +50,9 @@ class RelationConverter implements Converter
      */
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
-        $fieldValue->data = array(
+        $fieldValue->data = [
             'destinationContentId' => $value->dataInt ?: null,
-        );
+        ];
         $fieldValue->sortKey = (int)$value->sortKeyInt;
     }
 

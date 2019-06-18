@@ -42,7 +42,7 @@ class FieldRelation extends FieldBase
      */
     protected function getFieldDefinitionsIds($fieldDefinitionIdentifier)
     {
-        $fieldDefinitionIdList = array();
+        $fieldDefinitionIdList = [];
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
 
         foreach ($fieldMap as $contentTypeIdentifier => $fieldIdentifierMap) {
@@ -90,7 +90,7 @@ class FieldRelation extends FieldBase
         switch ($criterion->operator) {
             case Criterion\Operator::CONTAINS:
                 if (count($criterion->value) > 1) {
-                    $subRequest = array();
+                    $subRequest = [];
 
                     foreach ($criterion->value as $value) {
                         $subSelect = $query->subSelect();

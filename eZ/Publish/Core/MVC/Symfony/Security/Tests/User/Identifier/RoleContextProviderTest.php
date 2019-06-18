@@ -30,7 +30,7 @@ class RoleContextProviderTest extends TestCase
         $this->repositoryMock = $this
             ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Repository')
             ->disableOriginalConstructor()
-            ->setMethods(array('getRoleService', 'getCurrentUser', 'getPermissionResolver'))
+            ->setMethods(['getRoleService', 'getCurrentUser', 'getPermissionResolver'])
             ->getMock();
 
         $this->roleServiceMock = $this->getMock('eZ\\Publish\\API\\Repository\\RoleService');
@@ -59,46 +59,46 @@ class RoleContextProviderTest extends TestCase
         $roleId2 = 456;
         $roleId3 = 789;
         $limitationForRole2 = $this->generateLimitationMock(
-            array(
-                'limitationValues' => array('/1/2', '/1/2/43'),
-            )
+            [
+                'limitationValues' => ['/1/2', '/1/2/43'],
+            ]
         );
         $limitationForRole3 = $this->generateLimitationMock(
-            array(
-                'limitationValues' => array('foo', 'bar'),
-            )
+            [
+                'limitationValues' => ['foo', 'bar'],
+            ]
         );
-        $returnedRoleAssignments = array(
+        $returnedRoleAssignments = [
             $this->generateRoleAssignmentMock(
-                array(
+                [
                     'role' => $this->generateRoleMock(
-                        array(
+                        [
                             'id' => $roleId1,
-                        )
+                        ]
                     ),
-                )
+                ]
             ),
             $this->generateRoleAssignmentMock(
-                array(
+                [
                     'role' => $this->generateRoleMock(
-                        array(
+                        [
                             'id' => $roleId2,
-                        )
+                        ]
                     ),
                     'limitation' => $limitationForRole2,
-                )
+                ]
             ),
             $this->generateRoleAssignmentMock(
-                array(
+                [
                     'role' => $this->generateRoleMock(
-                        array(
+                        [
                             'id' => $roleId3,
-                        )
+                        ]
                     ),
                     'limitation' => $limitationForRole3,
-                )
+                ]
             ),
-        );
+        ];
 
         $this->roleServiceMock
             ->expects($this->once())
@@ -106,45 +106,45 @@ class RoleContextProviderTest extends TestCase
             ->with($user, true)
             ->will($this->returnValue($returnedRoleAssignments));
 
-        $this->assertSame(array(), $userContext->getParameters());
+        $this->assertSame([], $userContext->getParameters());
         $contextProvider = new RoleContextProvider($this->repositoryMock);
         $contextProvider->updateUserContext($userContext);
         $userContextParams = $userContext->getParameters();
         $this->assertArrayHasKey('roleIdList', $userContextParams);
-        $this->assertSame(array($roleId1, $roleId2, $roleId3), $userContextParams['roleIdList']);
+        $this->assertSame([$roleId1, $roleId2, $roleId3], $userContextParams['roleIdList']);
         $this->assertArrayHasKey('roleLimitationList', $userContextParams);
         $limitationIdentifierForRole2 = get_class($limitationForRole2);
         $limitationIdentifierForRole3 = get_class($limitationForRole3);
         $this->assertSame(
-            array(
-                "$roleId2-$limitationIdentifierForRole2" => array('/1/2', '/1/2/43'),
-                "$roleId3-$limitationIdentifierForRole3" => array('foo', 'bar'),
-            ),
+            [
+                "$roleId2-$limitationIdentifierForRole2" => ['/1/2', '/1/2/43'],
+                "$roleId3-$limitationIdentifierForRole3" => ['foo', 'bar'],
+            ],
             $userContextParams['roleLimitationList']
         );
     }
 
-    private function generateRoleAssignmentMock(array $properties = array())
+    private function generateRoleAssignmentMock(array $properties = [])
     {
         return $this
             ->getMockBuilder('eZ\\Publish\\Core\\Repository\\Values\\User\\UserRoleAssignment')
-            ->setConstructorArgs(array($properties))
+            ->setConstructorArgs([$properties])
             ->getMockForAbstractClass();
     }
 
-    private function generateRoleMock(array $properties = array())
+    private function generateRoleMock(array $properties = [])
     {
         return $this
             ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\User\\Role')
-            ->setConstructorArgs(array($properties))
+            ->setConstructorArgs([$properties])
             ->getMockForAbstractClass();
     }
 
-    private function generateLimitationMock(array $properties = array())
+    private function generateLimitationMock(array $properties = [])
     {
         $limitationMock = $this
             ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\User\\Limitation\\RoleLimitation')
-            ->setConstructorArgs(array($properties))
+            ->setConstructorArgs([$properties])
             ->getMockForAbstractClass();
         $limitationMock
             ->expects($this->any())

@@ -68,18 +68,18 @@ class UserService implements UserServiceInterface
      * @param \eZ\Publish\SPI\Persistence\User\Handler $userHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $userHandler, array $settings = array())
+    public function __construct(RepositoryInterface $repository, Handler $userHandler, array $settings = [])
     {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             'defaultUserPlacement' => 12,
             'userClassID' => 4, // @todo Rename this settings to swap out "Class" for "Type"
             'userGroupClassID' => 3,
             'hashType' => User::PASSWORD_HASH_MD5_USER,
             'siteName' => 'ez.no',
-        );
+        ];
     }
 
     /**
@@ -122,7 +122,7 @@ class UserService implements UserServiceInterface
 
         $this->repository->beginTransaction();
         try {
-            $contentDraft = $contentService->createContent($userGroupCreateStruct, array($locationCreateStruct));
+            $contentDraft = $contentService->createContent($userGroupCreateStruct, [$locationCreateStruct]);
             $publishedContent = $contentService->publishVersion($contentDraft->getVersionInfo());
             $this->repository->commit();
         } catch (Exception $e) {
@@ -171,7 +171,7 @@ class UserService implements UserServiceInterface
         }
 
         if ($loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            return array();
+            return [];
         }
 
         $mainGroupLocation = $locationService->loadLocation(
@@ -180,10 +180,10 @@ class UserService implements UserServiceInterface
 
         $searchResult = $this->searchSubGroups($mainGroupLocation, $offset, $limit);
         if ($searchResult->totalCount == 0) {
-            return array();
+            return [];
         }
 
-        $subUserGroups = array();
+        $subUserGroups = [];
         foreach ($searchResult->searchHits as $searchHit) {
             $subUserGroups[] = $this->buildDomainUserGroupObject(
                 $this->repository->getContentService()->internalLoadContent(
@@ -218,7 +218,7 @@ class UserService implements UserServiceInterface
 
         $searchQuery->sortClauses = $location->getSortClauses();
 
-        return $this->repository->getSearchService()->findLocations($searchQuery, array(), false);
+        return $this->repository->getSearchService()->findLocations($searchQuery, [], false);
     }
 
     /**
@@ -399,7 +399,7 @@ class UserService implements UserServiceInterface
             $userCreateStruct->contentType = $userContentType;
         }
 
-        $locationCreateStructs = array();
+        $locationCreateStructs = [];
         foreach ($parentGroups as $parentGroup) {
             $parentGroup = $this->loadUserGroup($parentGroup->id);
             if ($parentGroup->getVersionInfo()->getContentInfo()->mainLocationId !== null) {
@@ -429,9 +429,9 @@ class UserService implements UserServiceInterface
                     $userCreateStruct->fields[$index]->value->login = $userCreateStruct->login;
                 } else {
                     $userCreateStruct->fields[$index]->value = new UserValue(
-                        array(
+                        [
                             'login' => $userCreateStruct->login,
-                        )
+                        ]
                     );
                 }
 
@@ -443,9 +443,9 @@ class UserService implements UserServiceInterface
             $userCreateStruct->setField(
                 $userFieldDefinition->identifier,
                 new UserValue(
-                    array(
+                    [
                         'login' => $userCreateStruct->login,
-                    )
+                    ]
                 )
             );
         }
@@ -456,7 +456,7 @@ class UserService implements UserServiceInterface
             // Create user before publishing, so that external data can be returned
             $spiUser = $this->userHandler->create(
                 new SPIUser(
-                    array(
+                    [
                         'id' => $contentDraft->id,
                         'login' => $userCreateStruct->login,
                         'email' => $userCreateStruct->email,
@@ -469,7 +469,7 @@ class UserService implements UserServiceInterface
                         'hashAlgorithm' => $this->settings['hashType'],
                         'isEnabled' => $userCreateStruct->enabled,
                         'maxLogin' => 0,
-                    )
+                    ]
                 )
             );
             $publishedContent = $contentService->publishVersion($contentDraft->getVersionInfo());
@@ -615,7 +615,7 @@ class UserService implements UserServiceInterface
             throw new InvalidArgumentValue('email', $email);
         }
 
-        $users = array();
+        $users = [];
         foreach ($this->userHandler->loadByEmail($email) as $spiUser) {
             $users[] = $this->buildDomainUserObject($spiUser);
         }
@@ -732,7 +732,7 @@ class UserService implements UserServiceInterface
 
             $this->userHandler->update(
                 new SPIUser(
-                    array(
+                    [
                         'id' => $loadedUser->id,
                         'login' => $loadedUser->login,
                         'email' => $userUpdateStruct->email ?: $loadedUser->email,
@@ -747,7 +747,7 @@ class UserService implements UserServiceInterface
                         'hashAlgorithm' => $this->settings['hashType'],
                         'isEnabled' => $userUpdateStruct->enabled !== null ? $userUpdateStruct->enabled : $loadedUser->enabled,
                         'maxLogin' => $userUpdateStruct->maxLogin !== null ? (int)$userUpdateStruct->maxLogin : $loadedUser->maxLogin,
-                    )
+                    ]
                 )
             );
 
@@ -775,7 +775,7 @@ class UserService implements UserServiceInterface
         $loadedGroup = $this->loadUserGroup($userGroup->id);
         $locationService = $this->repository->getLocationService();
 
-        $existingGroupIds = array();
+        $existingGroupIds = [];
         $userLocations = $locationService->loadLocations($loadedUser->getVersionInfo()->getContentInfo());
         foreach ($userLocations as $userLocation) {
             $existingGroupIds[] = $userLocation->parentLocationId;
@@ -878,7 +878,7 @@ class UserService implements UserServiceInterface
             $user->getVersionInfo()->getContentInfo()
         );
 
-        $parentLocationIds = array();
+        $parentLocationIds = [];
         foreach ($userLocations as $userLocation) {
             if ($userLocation->parentLocationId !== null) {
                 $parentLocationIds[] = $userLocation->parentLocationId;
@@ -892,15 +892,15 @@ class UserService implements UserServiceInterface
         $searchQuery->performCount = false;
 
         $searchQuery->filter = new CriterionLogicalAnd(
-            array(
+            [
                 new CriterionContentTypeId($this->settings['userGroupClassID']),
                 new CriterionLocationId($parentLocationIds),
-            )
+            ]
         );
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
-        $userGroups = array();
+        $userGroups = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $userGroups[] = $this->buildDomainUserGroupObject(
                 $this->repository->getContentService()->internalLoadContent(
@@ -928,7 +928,7 @@ class UserService implements UserServiceInterface
         $loadedUserGroup = $this->loadUserGroup($userGroup->id);
 
         if ($loadedUserGroup->getVersionInfo()->getContentInfo()->mainLocationId === null) {
-            return array();
+            return [];
         }
 
         $mainGroupLocation = $this->repository->getLocationService()->loadLocation(
@@ -938,10 +938,10 @@ class UserService implements UserServiceInterface
         $searchQuery = new LocationQuery();
 
         $searchQuery->filter = new CriterionLogicalAnd(
-            array(
+            [
                 new CriterionContentTypeId($this->settings['userClassID']),
                 new CriterionParentLocationId($mainGroupLocation->id),
-            )
+            ]
         );
 
         $searchQuery->offset = $offset;
@@ -951,7 +951,7 @@ class UserService implements UserServiceInterface
 
         $searchResult = $this->repository->getSearchService()->findLocations($searchQuery);
 
-        $users = array();
+        $users = [];
         foreach ($searchResult->searchHits as $resultItem) {
             $users[] = $this->buildDomainUserObject(
                 $this->userHandler->load($resultItem->valueObject->contentInfo->id),
@@ -984,15 +984,15 @@ class UserService implements UserServiceInterface
         }
 
         return new UserCreateStruct(
-            array(
+            [
                 'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
                 'login' => $login,
                 'email' => $email,
                 'password' => $password,
                 'enabled' => true,
-                'fields' => array(),
-            )
+                'fields' => [],
+            ]
         );
     }
 
@@ -1013,11 +1013,11 @@ class UserService implements UserServiceInterface
         }
 
         return new UserGroupCreateStruct(
-            array(
+            [
                 'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
-                'fields' => array(),
-            )
+                'fields' => [],
+            ]
         );
     }
 
@@ -1063,11 +1063,11 @@ class UserService implements UserServiceInterface
         }
 
         return new UserGroup(
-            array(
+            [
                 'content' => $content,
                 'parentId' => isset($parentLocation) ? $parentLocation->contentId : null,
                 'subGroupCount' => $subGroupCount,
-            )
+            ]
         );
     }
 
@@ -1086,7 +1086,7 @@ class UserService implements UserServiceInterface
         }
 
         return new User(
-            array(
+            [
                 'content' => $content,
                 'login' => $spiUser->login,
                 'email' => $spiUser->email,
@@ -1094,7 +1094,7 @@ class UserService implements UserServiceInterface
                 'hashAlgorithm' => (int)$spiUser->hashAlgorithm,
                 'enabled' => $spiUser->isEnabled,
                 'maxLogin' => (int)$spiUser->maxLogin,
-            )
+            ]
         );
     }
 

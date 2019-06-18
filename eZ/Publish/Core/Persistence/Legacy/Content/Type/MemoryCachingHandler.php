@@ -460,7 +460,7 @@ class MemoryCachingHandler implements BaseContentTypeHandler
      */
     public function clearCache()
     {
-        $this->groups = $this->contentTypes = $this->fieldDefinitions = array();
+        $this->groups = $this->contentTypes = $this->fieldDefinitions = [];
         $this->searchableFieldMap = null;
     }
 }

@@ -82,12 +82,12 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezsrrating field type does not have any special field definition
             // properties
-            array('fieldType', 'ezsrrating'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array())),
-        );
+            ['fieldType', 'ezsrrating'],
+            ['fieldTypeConstraints', new Content\FieldTypeConstraints([])],
+        ];
     }
 
     /**
@@ -98,11 +98,11 @@ class RatingIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => 5,
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 
@@ -116,11 +116,11 @@ class RatingIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => 2,
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 }

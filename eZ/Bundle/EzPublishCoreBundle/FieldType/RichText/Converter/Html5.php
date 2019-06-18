@@ -19,7 +19,7 @@ class Html5 extends XsltConverter
     public function __construct($stylesheet, ConfigResolverInterface $configResolver)
     {
         $customStylesheets = $configResolver->getParameter('fieldtypes.ezrichtext.output_custom_xsl');
-        $customStylesheets = $customStylesheets ?: array();
+        $customStylesheets = $customStylesheets ?: [];
         parent::__construct($stylesheet, $customStylesheets);
     }
 }

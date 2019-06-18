@@ -21,21 +21,21 @@ class IdentityTest extends TestCase
     public function testAddInformation()
     {
         $identity = new Identity();
-        $this->assertSame(array(), $identity->getInformation());
+        $this->assertSame([], $identity->getInformation());
 
-        $additionalInfo = array(
+        $additionalInfo = [
             'foo' => 'bar',
             'truc' => 'muche',
             'number' => 123,
-        );
+        ];
 
         $identity->addInformation($additionalInfo);
         $this->assertSame($additionalInfo, $identity->getInformation());
 
-        $moreInfo = array(
+        $moreInfo = [
             'another' => 'one',
             'foot' => 'print',
-        );
+        ];
 
         $identity->addInformation($moreInfo);
         $this->assertEquals($additionalInfo + $moreInfo, $identity->getInformation());
@@ -49,21 +49,21 @@ class IdentityTest extends TestCase
     public function testReplaceInformation()
     {
         $identity = new Identity();
-        $this->assertSame(array(), $identity->getInformation());
+        $this->assertSame([], $identity->getInformation());
 
-        $additionalInfo = array(
+        $additionalInfo = [
             'foo' => 'bar',
             'truc' => 'muche',
             'number' => 123,
-        );
+        ];
 
         $identity->replaceInformation($additionalInfo);
         $this->assertSame($additionalInfo, $identity->getInformation());
 
-        $moreInfo = array(
+        $moreInfo = [
             'another' => 'one',
             'foot' => 'print',
-        );
+        ];
 
         $identity->replaceInformation($moreInfo);
         $this->assertEquals($moreInfo, $identity->getInformation());
@@ -77,12 +77,12 @@ class IdentityTest extends TestCase
     public function testSetInformation()
     {
         $identity = new Identity();
-        $this->assertSame(array(), $identity->getInformation());
-        $info = array(
+        $this->assertSame([], $identity->getInformation());
+        $info = [
             'foo' => 'bar',
             'truc' => 'muche',
             'number' => 123,
-        );
+        ];
 
         foreach ($info as $name => $value) {
             $identity->setInformation($name, $value);
@@ -114,7 +114,7 @@ class IdentityTest extends TestCase
         $this->assertTrue($hash3 !== $hash1);
         $this->assertTrue($hash3 !== $hash2);
 
-        $identity->replaceInformation(array('foo' => 'bar'));
+        $identity->replaceInformation(['foo' => 'bar']);
         $this->assertSame($hash1, $identity->getHash());
     }
 }

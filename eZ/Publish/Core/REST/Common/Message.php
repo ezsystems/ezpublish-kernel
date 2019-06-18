@@ -41,7 +41,7 @@ class Message
      * @param string $body
      * @param int $statusCode
      */
-    public function __construct(array $headers = array(), $body = '', $statusCode = 200)
+    public function __construct(array $headers = [], $body = '', $statusCode = 200)
     {
         $this->headers = $headers;
         $this->body = $body;

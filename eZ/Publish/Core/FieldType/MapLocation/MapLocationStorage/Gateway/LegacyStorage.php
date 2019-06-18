@@ -73,11 +73,11 @@ class LegacyStorage extends Gateway
     {
         if ($field->value->externalData === null) {
             // Store empty value and return
-            $this->deleteFieldData($versionInfo, array($field->id));
-            $field->value->data = array(
+            $this->deleteFieldData($versionInfo, [$field->id]);
+            $field->value->data = [
                 'sortKey' => null,
                 'hasData' => false,
-            );
+            ];
 
             return;
         }
@@ -88,10 +88,10 @@ class LegacyStorage extends Gateway
             $this->storeNewFieldData($versionInfo, $field);
         }
 
-        $field->value->data = array(
+        $field->value->data = [
             'sortKey' => $field->value->externalData['address'],
             'hasData' => true,
-        );
+        ];
 
         return true;
     }

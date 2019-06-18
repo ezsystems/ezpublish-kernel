@@ -31,27 +31,27 @@ class ContentHandlerTest extends HandlerTest
      */
     public function providerForUnCachedMethods()
     {
-        return array(
-            array('create', array(new CreateStruct())),
-            array('createDraftFromVersion', array(2, 1, 14)),
-            array('copy', array(2, 1)),
+        return [
+            ['create', [new CreateStruct()]],
+            ['createDraftFromVersion', [2, 1, 14]],
+            ['copy', [2, 1]],
             //array( 'load', array( 2, 1, array( 'eng-GB' ) ) ),
             //array( 'load', array( 2, 1 ) ),
             //array( 'loadContentInfo', array( 2 ) ),
             //array('loadVersionInfo', array(2, 1)),
-            array('loadDraftsForUser', array(14)),
+            ['loadDraftsForUser', [14]],
             //array( 'setStatus', array( 2, 0, 1 ) ),
             //array( 'updateMetadata', array( 2, new MetadataUpdateStruct ) ),
             //array( 'updateContent', array( 2, 1, new UpdateStruct ) ),
             //array( 'deleteContent', array( 2 ) ),
             //array( 'deleteVersion', array( 2, 1 ) ),
-            array('listVersions', array(2)),
-            array('addRelation', array(new RelationCreateStruct())),
-            array('removeRelation', array(66, APIRelation::COMMON)),
-            array('loadRelations', array(2, 1, 3)),
-            array('loadReverseRelations', array(2, 3)),
+            ['listVersions', [2]],
+            ['addRelation', [new RelationCreateStruct()]],
+            ['removeRelation', [66, APIRelation::COMMON]],
+            ['loadRelations', [2, 1, 3]],
+            ['loadReverseRelations', [2, 3]],
             //array( 'publish', array( 2, 3, new MetadataUpdateStruct ) ),
-        );
+        ];
     }
 
     /**
@@ -86,7 +86,7 @@ class ContentHandlerTest extends HandlerTest
         $expects->will($this->returnValue(null));
 
         $handler = $this->persistenceCacheHandler->contentHandler();
-        call_user_func_array(array($handler, $method), $arguments);
+        call_user_func_array([$handler, $method], $arguments);
     }
 
     /**
@@ -121,19 +121,19 @@ class ContentHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('load')
-            ->with(2, 1, array('eng-GB', 'eng-US'))
+            ->with(2, 1, ['eng-GB', 'eng-US'])
             ->will(
                 $this->returnValue(
                     new Content(
-                        array(
-                            'fields' => array(),
+                        [
+                            'fields' => [],
                             'versionInfo' => new VersionInfo(
-                                array(
+                                [
                                     'versionNo' => 1,
-                                    'contentInfo' => new ContentInfo(array('id' => 2)),
-                                )
+                                    'contentInfo' => new ContentInfo(['id' => 2]),
+                                ]
                             ),
-                        )
+                        ]
                     )
                 )
             );
@@ -150,7 +150,7 @@ class ContentHandlerTest extends HandlerTest
             ->with();
 
         $handler = $this->persistenceCacheHandler->contentHandler();
-        $handler->load(2, 1, array('eng-GB', 'eng-US'));
+        $handler->load(2, 1, ['eng-GB', 'eng-US']);
     }
 
     /**
@@ -181,15 +181,15 @@ class ContentHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new Content(
-                        array(
-                            'fields' => array(),
+                        [
+                            'fields' => [],
                             'versionInfo' => new VersionInfo(
-                                array(
+                                [
                                     'versionNo' => 1,
-                                    'contentInfo' => new ContentInfo(array('id' => 2)),
-                                )
+                                    'contentInfo' => new ContentInfo(['id' => 2]),
+                                ]
                             ),
-                        )
+                        ]
                     )
                 )
             );
@@ -237,7 +237,7 @@ class ContentHandlerTest extends HandlerTest
             ->with(2)
             ->will(
                 $this->returnValue(
-                    new ContentInfo(array('id' => 2))
+                    new ContentInfo(['id' => 2])
                 )
             );
 
@@ -283,7 +283,7 @@ class ContentHandlerTest extends HandlerTest
             ->method('get')
             ->will(
                 $this->returnValue(
-                    new ContentInfo(array('id' => 2))
+                    new ContentInfo(['id' => 2])
                 )
             );
 
@@ -487,7 +487,7 @@ class ContentHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('updateMetadata')
             ->with(2, $this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\MetadataUpdateStruct'))
-            ->willReturn(new ContentInfo(array('id' => 2, 'currentVersionNo' => 3, 'remoteId' => 'o34')));
+            ->willReturn(new ContentInfo(['id' => 2, 'currentVersionNo' => 3, 'remoteId' => 'o34']));
 
         $this->cacheMock
             ->expects($this->at(0))
@@ -537,15 +537,15 @@ class ContentHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new Content(
-                        array(
-                            'fields' => array(),
+                        [
+                            'fields' => [],
                             'versionInfo' => new VersionInfo(
-                                array(
+                                [
                                     'versionNo' => 1,
-                                    'contentInfo' => new ContentInfo(array('id' => 2)),
-                                )
+                                    'contentInfo' => new ContentInfo(['id' => 2]),
+                                ]
                             ),
-                        )
+                        ]
                     )
                 )
             );
@@ -589,7 +589,7 @@ class ContentHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadLocationsByContent')
             ->with(2)
-            ->willReturn([new Content\Location(array('id' => 58))]);
+            ->willReturn([new Content\Location(['id' => 58])]);
 
         $innerHandlerMock = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\Handler');
         $this->persistenceHandlerMock
@@ -603,9 +603,9 @@ class ContentHandlerTest extends HandlerTest
             ->with(2, APIRelation::FIELD)
             ->will(
                 $this->returnValue(
-                    array(
-                        new SPIRelation(array('sourceContentId' => 42)),
-                    )
+                    [
+                        new SPIRelation(['sourceContentId' => 42]),
+                    ]
                 )
             );
 
@@ -728,15 +728,15 @@ class ContentHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new Content(
-                        array(
-                            'fields' => array(),
+                        [
+                            'fields' => [],
                             'versionInfo' => new VersionInfo(
-                                array(
+                                [
                                     'versionNo' => 1,
-                                    'contentInfo' => new ContentInfo(array('id' => 2)),
-                                )
+                                    'contentInfo' => new ContentInfo(['id' => 2]),
+                                ]
                             ),
-                        )
+                        ]
                     )
                 )
             );

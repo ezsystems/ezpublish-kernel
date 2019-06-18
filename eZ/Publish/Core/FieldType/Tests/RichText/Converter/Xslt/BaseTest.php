@@ -38,7 +38,7 @@ abstract class BaseTest extends TestCase
     {
         $fixtureSubdirectories = $this->getFixtureSubdirectories();
 
-        $map = array();
+        $map = [];
 
         foreach (glob(__DIR__ . "/_fixtures/{$fixtureSubdirectories['input']}/*.xml") as $inputFile) {
             $basename = basename($inputFile, '.xml');
@@ -49,7 +49,7 @@ abstract class BaseTest extends TestCase
                 $outputFile = $outputFileLossy;
             }
 
-            $map[] = array($inputFile, $outputFile);
+            $map[] = [$inputFile, $outputFile];
         }
 
         $lossySubdirectory = "_fixtures/{$fixtureSubdirectories['input']}/lossy";
@@ -63,7 +63,7 @@ abstract class BaseTest extends TestCase
                 continue;
             }
 
-            $map[] = array($inputFile, $outputFile);
+            $map[] = [$inputFile, $outputFile];
         }
 
         return $map;
@@ -258,7 +258,7 @@ abstract class BaseTest extends TestCase
      */
     protected function getCustomConversionTransformationStylesheets()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -268,6 +268,6 @@ abstract class BaseTest extends TestCase
      */
     protected function getConversionValidationSchema()
     {
-        return array();
+        return [];
     }
 }

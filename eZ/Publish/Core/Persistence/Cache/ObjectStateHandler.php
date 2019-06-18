@@ -21,7 +21,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function createGroup(InputStruct $input)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $input));
+        $this->logger->logCall(__METHOD__, ['struct' => $input]);
         $group = $this->persistenceHandler->objectStateHandler()->createGroup($input);
 
         $this->cache->clear('objectstategroup', 'all');
@@ -38,7 +38,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $cache = $this->cache->getItem('objectstategroup', $groupId);
         $group = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
+            $this->logger->logCall(__METHOD__, ['groupId' => $groupId]);
             $cache->set($group = $this->persistenceHandler->objectStateHandler()->loadGroup($groupId))->save();
         }
 
@@ -50,7 +50,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadGroupByIdentifier($identifier)
     {
-        $this->logger->logCall(__METHOD__, array('identifier' => $identifier));
+        $this->logger->logCall(__METHOD__, ['identifier' => $identifier]);
 
         return $this->persistenceHandler->objectStateHandler()->loadGroupByIdentifier($identifier);
     }
@@ -64,7 +64,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $cache = $this->cache->getItem('objectstategroup', 'all');
         $stateGroups = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('offset' => $offset, 'limit' => $limit));
+            $this->logger->logCall(__METHOD__, ['offset' => $offset, 'limit' => $limit]);
             $stateGroups = $this->persistenceHandler->objectStateHandler()->loadAllGroups(0, -1);
             $cache->set($stateGroups)->save();
             $stateGroups = array_slice($stateGroups, $offset, $limit > -1 ?: null);
@@ -90,7 +90,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $cache = $this->cache->getItem('objectstate', 'byGroup', $groupId);
         $objectStates = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
+            $this->logger->logCall(__METHOD__, ['groupId' => $groupId]);
             $objectStates = $this->persistenceHandler->objectStateHandler()->loadObjectStates($groupId);
             $cache->set($objectStates)->save();
         } else {
@@ -111,7 +111,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function updateGroup($groupId, InputStruct $input)
     {
-        $this->logger->logCall(__METHOD__, array('groupId' => $groupId, 'struct' => $input));
+        $this->logger->logCall(__METHOD__, ['groupId' => $groupId, 'struct' => $input]);
         $return = $this->persistenceHandler->objectStateHandler()->updateGroup($groupId, $input);
 
         $this->cache->clear('objectstategroup', 'all');
@@ -125,7 +125,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function deleteGroup($groupId)
     {
-        $this->logger->logCall(__METHOD__, array('groupId' => $groupId));
+        $this->logger->logCall(__METHOD__, ['groupId' => $groupId]);
         $return = $this->persistenceHandler->objectStateHandler()->deleteGroup($groupId);
 
         $this->cache->clear('objectstategroup', 'all');
@@ -140,7 +140,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function create($groupId, InputStruct $input)
     {
-        $this->logger->logCall(__METHOD__, array('groupId' => $groupId, 'struct' => $input));
+        $this->logger->logCall(__METHOD__, ['groupId' => $groupId, 'struct' => $input]);
         $return = $this->persistenceHandler->objectStateHandler()->create($groupId, $input);
 
         $this->cache->clear('objectstate', 'byGroup', $groupId);
@@ -156,7 +156,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $cache = $this->cache->getItem('objectstate', $stateId);
         $objectState = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('stateId' => $stateId));
+            $this->logger->logCall(__METHOD__, ['stateId' => $stateId]);
             $cache->set($objectState = $this->persistenceHandler->objectStateHandler()->load($stateId))->save();
         }
 
@@ -168,7 +168,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function loadByIdentifier($identifier, $groupId)
     {
-        $this->logger->logCall(__METHOD__, array('identifier' => $identifier, 'groupId' => $groupId));
+        $this->logger->logCall(__METHOD__, ['identifier' => $identifier, 'groupId' => $groupId]);
 
         return $this->persistenceHandler->objectStateHandler()->loadByIdentifier($identifier, $groupId);
     }
@@ -178,7 +178,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function update($stateId, InputStruct $input)
     {
-        $this->logger->logCall(__METHOD__, array('stateId' => $stateId, 'struct' => $input));
+        $this->logger->logCall(__METHOD__, ['stateId' => $stateId, 'struct' => $input]);
         $return = $this->persistenceHandler->objectStateHandler()->update($stateId, $input);
 
         $this->cache->clear('objectstate', $stateId);
@@ -192,7 +192,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function setPriority($stateId, $priority)
     {
-        $this->logger->logCall(__METHOD__, array('stateId' => $stateId, 'priority' => $priority));
+        $this->logger->logCall(__METHOD__, ['stateId' => $stateId, 'priority' => $priority]);
         $return = $this->persistenceHandler->objectStateHandler()->setPriority($stateId, $priority);
 
         $this->cache->clear('objectstate', $stateId);
@@ -205,7 +205,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function delete($stateId)
     {
-        $this->logger->logCall(__METHOD__, array('stateId' => $stateId));
+        $this->logger->logCall(__METHOD__, ['stateId' => $stateId]);
         $return = $this->persistenceHandler->objectStateHandler()->delete($stateId);
 
         $this->cache->clear('objectstate', $stateId);
@@ -219,7 +219,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function setContentState($contentId, $groupId, $stateId)
     {
-        $this->logger->logCall(__METHOD__, array('contentId' => $contentId, 'groupId' => $groupId, 'stateId' => $stateId));
+        $this->logger->logCall(__METHOD__, ['contentId' => $contentId, 'groupId' => $groupId, 'stateId' => $stateId]);
         $return = $this->persistenceHandler->objectStateHandler()->setContentState($contentId, $groupId, $stateId);
 
         $this->cache->clear('objectstate', 'byContent', $contentId, $groupId);
@@ -235,7 +235,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
         $cache = $this->cache->getItem('objectstate', 'byContent', $contentId, $stateGroupId);
         $stateId = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('contentId' => $contentId, 'stateGroupId' => $stateGroupId));
+            $this->logger->logCall(__METHOD__, ['contentId' => $contentId, 'stateGroupId' => $stateGroupId]);
 
             $contentState = $this->persistenceHandler->objectStateHandler()->getContentState($contentId, $stateGroupId);
             $cache->set($contentState->id)->save();
@@ -253,7 +253,7 @@ class ObjectStateHandler extends AbstractHandler implements ObjectStateHandlerIn
      */
     public function getContentCount($stateId)
     {
-        $this->logger->logCall(__METHOD__, array('stateId' => $stateId));
+        $this->logger->logCall(__METHOD__, ['stateId' => $stateId]);
 
         return $this->persistenceHandler->objectStateHandler()->getContentCount($stateId);
     }

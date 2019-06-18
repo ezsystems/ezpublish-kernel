@@ -30,7 +30,7 @@ class Identity implements IdentityInterface
 
     public function __construct()
     {
-        $this->identityInfo = array();
+        $this->identityInfo = [];
     }
 
     /**
@@ -93,7 +93,7 @@ class Identity implements IdentityInterface
     public function getHash()
     {
         if (!isset($this->hash)) {
-            $hashArray = array();
+            $hashArray = [];
             foreach ($this->identityInfo as $infoType => $infoValue) {
                 $hashArray[] = "$infoType=$infoValue";
             }

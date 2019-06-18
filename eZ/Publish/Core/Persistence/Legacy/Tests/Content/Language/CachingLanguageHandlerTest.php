@@ -255,7 +255,7 @@ class CachingLanguageHandlerTest extends TestCase
 
         $cacheMock->expects($this->once())
             ->method('getAll')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $result = $handler->loadAll();
 
@@ -366,6 +366,6 @@ class CachingLanguageHandlerTest extends TestCase
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 
-        return array($langUs, $langGb);
+        return [$langUs, $langGb];
     }
 }

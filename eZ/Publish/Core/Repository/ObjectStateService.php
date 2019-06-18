@@ -59,14 +59,14 @@ class ObjectStateService implements ObjectStateServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler $objectStateHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $objectStateHandler, array $settings = array())
+    public function __construct(RepositoryInterface $repository, Handler $objectStateHandler, array $settings = [])
     {
         $this->repository = $repository;
         $this->objectStateHandler = $objectStateHandler;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             //'defaultSetting' => array(),
-        );
+        ];
     }
 
     /**
@@ -142,7 +142,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     {
         $spiObjectStateGroups = $this->objectStateHandler->loadAllGroups($offset, $limit);
 
-        $objectStateGroups = array();
+        $objectStateGroups = [];
         foreach ($spiObjectStateGroups as $spiObjectStateGroup) {
             $objectStateGroups[] = $this->buildDomainObjectStateGroupObject($spiObjectStateGroup);
         }
@@ -161,7 +161,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     {
         $spiObjectStates = $this->objectStateHandler->loadObjectStates($objectStateGroup->id);
 
-        $objectStates = array();
+        $objectStates = [];
         foreach ($spiObjectStates as $spiObjectState) {
             $objectStates[] = $this->buildDomainObjectStateObject($spiObjectState, $objectStateGroup);
         }
@@ -459,7 +459,7 @@ class ObjectStateService implements ObjectStateServiceInterface
     public function setContentState(ContentInfo $contentInfo, APIObjectStateGroup $objectStateGroup, APIObjectState $objectState)
     {
         if ($this->repository->canUser('state', 'assign', $contentInfo, $objectState) !== true) {
-            throw new UnauthorizedException('state', 'assign', array('contentId' => $contentInfo->id));
+            throw new UnauthorizedException('state', 'assign', ['contentId' => $contentInfo->id]);
         }
 
         $loadedObjectState = $this->loadObjectState($objectState->id);
@@ -579,7 +579,7 @@ class ObjectStateService implements ObjectStateServiceInterface
         $objectStateGroup = $objectStateGroup ?: $this->loadObjectStateGroup($spiObjectState->groupId);
 
         return new ObjectState(
-            array(
+            [
                 'id' => $spiObjectState->id,
                 'identifier' => $spiObjectState->identifier,
                 'priority' => $spiObjectState->priority,
@@ -588,7 +588,7 @@ class ObjectStateService implements ObjectStateServiceInterface
                 'names' => $spiObjectState->name,
                 'descriptions' => $spiObjectState->description,
                 'objectStateGroup' => $objectStateGroup,
-            )
+            ]
         );
     }
 
@@ -602,14 +602,14 @@ class ObjectStateService implements ObjectStateServiceInterface
     protected function buildDomainObjectStateGroupObject(SPIObjectStateGroup $spiObjectStateGroup)
     {
         return new ObjectStateGroup(
-            array(
+            [
                 'id' => $spiObjectStateGroup->id,
                 'identifier' => $spiObjectStateGroup->identifier,
                 'defaultLanguageCode' => $spiObjectStateGroup->defaultLanguage,
                 'languageCodes' => $spiObjectStateGroup->languageCodes,
                 'names' => $spiObjectStateGroup->name,
                 'descriptions' => $spiObjectStateGroup->description,
-            )
+            ]
         );
     }
 
@@ -657,14 +657,14 @@ class ObjectStateService implements ObjectStateServiceInterface
             throw new InvalidArgumentValue('descriptions', $descriptions);
         }
 
-        $descriptions = $descriptions !== null ? $descriptions : array();
+        $descriptions = $descriptions !== null ? $descriptions : [];
 
         $inputStruct = new InputStruct();
         $inputStruct->identifier = $identifier;
         $inputStruct->defaultLanguage = $defaultLanguageCode;
         $inputStruct->name = $names;
 
-        $inputStruct->description = array();
+        $inputStruct->description = [];
         foreach ($names as $languageCode => $name) {
             if (isset($descriptions[$languageCode]) && !empty($descriptions[$languageCode])) {
                 $inputStruct->description[$languageCode] = $descriptions[$languageCode];
@@ -730,9 +730,9 @@ class ObjectStateService implements ObjectStateServiceInterface
         }
 
         $descriptions = $descriptions !== null ? $descriptions : $objectState->getDescriptions();
-        $descriptions = $descriptions !== null ? $descriptions : array();
+        $descriptions = $descriptions !== null ? $descriptions : [];
 
-        $inputStruct->description = array();
+        $inputStruct->description = [];
         foreach ($inputStruct->name as $languageCode => $name) {
             if (isset($descriptions[$languageCode]) && !empty($descriptions[$languageCode])) {
                 $inputStruct->description[$languageCode] = $descriptions[$languageCode];
@@ -798,9 +798,9 @@ class ObjectStateService implements ObjectStateServiceInterface
         }
 
         $descriptions = $descriptions !== null ? $descriptions : $objectStateGroup->getDescriptions();
-        $descriptions = $descriptions !== null ? $descriptions : array();
+        $descriptions = $descriptions !== null ? $descriptions : [];
 
-        $inputStruct->description = array();
+        $inputStruct->description = [];
         foreach ($inputStruct->name as $languageCode => $name) {
             if (isset($descriptions[$languageCode]) && !empty($descriptions[$languageCode])) {
                 $inputStruct->description[$languageCode] = $descriptions[$languageCode];

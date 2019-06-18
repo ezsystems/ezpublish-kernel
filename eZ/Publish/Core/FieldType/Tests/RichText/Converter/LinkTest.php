@@ -56,8 +56,8 @@ class LinkTest extends TestCase
      */
     public function providerLinkXmlSample()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -72,8 +72,8 @@ class LinkTest extends TestCase
     <link xlink:href="/test">Link text</link>
   </para>
 </section>',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -88,8 +88,8 @@ class LinkTest extends TestCase
     <link xlink:href="/test#anchor">Link text</link>
   </para>
 </section>',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -104,8 +104,8 @@ class LinkTest extends TestCase
     <ezlink xlink:href="/test#anchor" href_resolved="/test#anchor"/>
   </ezembed>
 </section>',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -146,8 +146,8 @@ class LinkTest extends TestCase
      */
     public function providerLocationLink()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -164,8 +164,8 @@ class LinkTest extends TestCase
 </section>',
                 106,
                 'test',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -182,8 +182,8 @@ class LinkTest extends TestCase
 </section>',
                 106,
                 'test',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -200,8 +200,8 @@ class LinkTest extends TestCase
 </section>',
                 106,
                 'test',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -245,8 +245,8 @@ class LinkTest extends TestCase
      */
     public function providerBadLocationLink()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -265,8 +265,8 @@ class LinkTest extends TestCase
                 new APINotFoundException('Location', 106),
                 'warning',
                 'While generating links for richtext, could not locate Location with ID 106',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -285,8 +285,8 @@ class LinkTest extends TestCase
                 new APIUnauthorizedException('Location', 106),
                 'notice',
                 'While generating links for richtext, unauthorized to load Location with ID 106',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -305,8 +305,8 @@ class LinkTest extends TestCase
                 new APIUnauthorizedException('Location', 106),
                 'notice',
                 'While generating links for richtext, unauthorized to load Location with ID 106',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -349,8 +349,8 @@ class LinkTest extends TestCase
      */
     public function providerContentLink()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -367,8 +367,8 @@ class LinkTest extends TestCase
 </section>',
                 104,
                 'test',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -385,8 +385,8 @@ class LinkTest extends TestCase
 </section>',
                 104,
                 'test',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -403,8 +403,8 @@ class LinkTest extends TestCase
 </section>',
                 104,
                 'test',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -460,8 +460,8 @@ class LinkTest extends TestCase
      */
     public function providerBadContentLink()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -480,8 +480,8 @@ class LinkTest extends TestCase
                 new APINotFoundException('Content', 205),
                 'warning',
                 'While generating links for richtext, could not locate Content object with ID 205',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -500,8 +500,8 @@ class LinkTest extends TestCase
                 new APIUnauthorizedException('Content', 205),
                 'notice',
                 'While generating links for richtext, unauthorized to load Content object with ID 205',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" version="5.0-variant ezpublish-1.0">
   <title>Link example</title>
@@ -520,8 +520,8 @@ class LinkTest extends TestCase
                 new APIUnauthorizedException('Content', 205),
                 'notice',
                 'While generating links for richtext, unauthorized to load Content object with ID 205',
-            ),
-        );
+            ],
+        ];
     }
 
     /**

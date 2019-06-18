@@ -16,7 +16,7 @@ class LanguagesTest extends AbstractParserTestCase
 {
     protected function getContainerExtensions()
     {
-        return array(new EzPublishCoreExtension(array(new Languages())));
+        return [new EzPublishCoreExtension([new Languages()])];
     }
 
     protected function getMinimalConfiguration()
@@ -26,89 +26,89 @@ class LanguagesTest extends AbstractParserTestCase
 
     public function testLanguagesSingleSiteaccess()
     {
-        $langDemoSite = array('eng-GB');
-        $langFre = array('fre-FR', 'eng-GB');
-        $config = array(
-            'siteaccess' => array(
-                'list' => array('fre2'),
-            ),
-            'system' => array(
-                'ezdemo_site' => array('languages' => $langDemoSite),
-                'fre' => array('languages' => $langFre),
-                'fre2' => array('languages' => $langFre),
-            ),
-        );
+        $langDemoSite = ['eng-GB'];
+        $langFre = ['fre-FR', 'eng-GB'];
+        $config = [
+            'siteaccess' => [
+                'list' => ['fre2'],
+            ],
+            'system' => [
+                'ezdemo_site' => ['languages' => $langDemoSite],
+                'fre' => ['languages' => $langFre],
+                'fre2' => ['languages' => $langFre],
+            ],
+        ];
         $this->load($config);
 
         $this->assertConfigResolverParameterValue('languages', $langDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('languages', $langFre, 'fre');
         $this->assertConfigResolverParameterValue('languages', $langFre, 'fre2');
         $this->assertSame(
-            array(
-                'eng-GB' => array('ezdemo_site'),
-                'fre-FR' => array('fre', 'fre2'),
-            ),
+            [
+                'eng-GB' => ['ezdemo_site'],
+                'fre-FR' => ['fre', 'fre2'],
+            ],
             $this->container->getParameter('ezpublish.siteaccesses_by_language')
         );
         // languages for ezdemo_site_admin will take default value (empty array)
-        $this->assertConfigResolverParameterValue('languages', array(), 'ezdemo_site_admin');
+        $this->assertConfigResolverParameterValue('languages', [], 'ezdemo_site_admin');
     }
 
     public function testLanguagesSiteaccessGroup()
     {
-        $langDemoSite = array('eng-US', 'eng-GB');
-        $config = array(
-            'system' => array(
-                'ezdemo_frontend_group' => array('languages' => $langDemoSite),
-                'ezdemo_site' => array(),
-                'fre' => array(),
-            ),
-        );
+        $langDemoSite = ['eng-US', 'eng-GB'];
+        $config = [
+            'system' => [
+                'ezdemo_frontend_group' => ['languages' => $langDemoSite],
+                'ezdemo_site' => [],
+                'fre' => [],
+            ],
+        ];
         $this->load($config);
 
         $this->assertConfigResolverParameterValue('languages', $langDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('languages', $langDemoSite, 'fre');
         $this->assertSame(
-            array(
-                'eng-US' => array('ezdemo_site', 'fre'),
-            ),
+            [
+                'eng-US' => ['ezdemo_site', 'fre'],
+            ],
             $this->container->getParameter('ezpublish.siteaccesses_by_language')
         );
         // languages for ezdemo_site_admin will take default value (empty array)
-        $this->assertConfigResolverParameterValue('languages', array(), 'ezdemo_site_admin');
+        $this->assertConfigResolverParameterValue('languages', [], 'ezdemo_site_admin');
     }
 
     public function testTranslationSiteAccesses()
     {
-        $translationSAsDemoSite = array('foo', 'bar');
-        $translationSAsFre = array('foo2', 'bar2');
-        $config = array(
-            'system' => array(
-                'ezdemo_site' => array('translation_siteaccesses' => $translationSAsDemoSite),
-                'fre' => array('translation_siteaccesses' => $translationSAsFre),
-            ),
-        );
+        $translationSAsDemoSite = ['foo', 'bar'];
+        $translationSAsFre = ['foo2', 'bar2'];
+        $config = [
+            'system' => [
+                'ezdemo_site' => ['translation_siteaccesses' => $translationSAsDemoSite],
+                'fre' => ['translation_siteaccesses' => $translationSAsFre],
+            ],
+        ];
         $this->load($config);
 
         $this->assertConfigResolverParameterValue('translation_siteaccesses', $translationSAsDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('translation_siteaccesses', $translationSAsFre, 'fre');
-        $this->assertConfigResolverParameterValue('translation_siteaccesses', array(), 'ezdemo_site_admin');
+        $this->assertConfigResolverParameterValue('translation_siteaccesses', [], 'ezdemo_site_admin');
     }
 
     public function testTranslationSiteAccessesWithGroup()
     {
-        $translationSAsDemoSite = array('ezdemo_site', 'fre');
-        $config = array(
-            'system' => array(
-                'ezdemo_frontend_group' => array('translation_siteaccesses' => $translationSAsDemoSite),
-                'ezdemo_site' => array(),
-                'fre' => array(),
-            ),
-        );
+        $translationSAsDemoSite = ['ezdemo_site', 'fre'];
+        $config = [
+            'system' => [
+                'ezdemo_frontend_group' => ['translation_siteaccesses' => $translationSAsDemoSite],
+                'ezdemo_site' => [],
+                'fre' => [],
+            ],
+        ];
         $this->load($config);
 
         $this->assertConfigResolverParameterValue('translation_siteaccesses', $translationSAsDemoSite, 'ezdemo_site');
         $this->assertConfigResolverParameterValue('translation_siteaccesses', $translationSAsDemoSite, 'fre');
-        $this->assertConfigResolverParameterValue('translation_siteaccesses', array(), 'ezdemo_site_admin');
+        $this->assertConfigResolverParameterValue('translation_siteaccesses', [], 'ezdemo_site_admin');
     }
 }

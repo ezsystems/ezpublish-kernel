@@ -54,12 +54,12 @@ class UrlWildcardHandlerTest extends TestCase
 
         self::assertEquals(
             new UrlWildcard(
-                array(
+                [
                     'id' => 1,
                     'sourceUrl' => '/developer/*',
                     'destinationUrl' => '/dev/{1}',
                     'forward' => false,
-                )
+                ]
             ),
             $urlWildcard
         );
@@ -98,12 +98,12 @@ class UrlWildcardHandlerTest extends TestCase
 
         self::assertEquals(
             new UrlWildcard(
-                array(
+                [
                     'id' => 4,
                     'sourceUrl' => '/amber',
                     'destinationUrl' => '/pattern',
                     'forward' => true,
-                )
+                ]
             ),
             $urlWildcard
         );
@@ -143,11 +143,11 @@ class UrlWildcardHandlerTest extends TestCase
         $urlWildcards = $handler->loadAll();
 
         self::assertEquals(
-            array(
+            [
                 new UrlWildcard($this->fixtureData[0]),
                 new UrlWildcard($this->fixtureData[1]),
                 new UrlWildcard($this->fixtureData[2]),
-            ),
+            ],
             $urlWildcards
         );
     }
@@ -165,9 +165,9 @@ class UrlWildcardHandlerTest extends TestCase
         $urlWildcards = $handler->loadAll(2);
 
         self::assertEquals(
-            array(
+            [
                 new UrlWildcard($this->fixtureData[2]),
-            ),
+            ],
             $urlWildcards
         );
     }
@@ -185,33 +185,33 @@ class UrlWildcardHandlerTest extends TestCase
         $urlWildcards = $handler->loadAll(1, 1);
 
         self::assertEquals(
-            array(
+            [
                 new UrlWildcard($this->fixtureData[1]),
-            ),
+            ],
             $urlWildcards
         );
     }
 
-    protected $fixtureData = array(
-        array(
+    protected $fixtureData = [
+        [
             'id' => 1,
             'sourceUrl' => '/developer/*',
             'destinationUrl' => '/dev/{1}',
             'forward' => false,
-        ),
-        array(
+        ],
+        [
             'id' => 2,
             'sourceUrl' => '/repository/*',
             'destinationUrl' => '/repo/{1}',
             'forward' => false,
-        ),
-        array(
+        ],
+        [
             'id' => 3,
             'sourceUrl' => '/information/*',
             'destinationUrl' => '/info/{1}',
             'forward' => false,
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase

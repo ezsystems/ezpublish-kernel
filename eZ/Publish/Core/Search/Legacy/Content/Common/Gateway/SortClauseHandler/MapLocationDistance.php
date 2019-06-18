@@ -83,7 +83,7 @@ class MapLocationDistance extends Field
             )
         );
 
-        return array($column1);
+        return [$column1];
     }
 
     /**

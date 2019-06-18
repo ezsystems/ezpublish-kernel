@@ -58,7 +58,7 @@ class UrlAlias extends MultipleValued
     public function setMatchingConfig($matchingConfig)
     {
         if (!is_array($matchingConfig)) {
-            $matchingConfig = array($matchingConfig);
+            $matchingConfig = [$matchingConfig];
         }
 
         array_walk(

@@ -28,7 +28,7 @@ class LocalPurgeClientTest extends TestCase
 {
     public function testPurge()
     {
-        $locationIds = array(123, 456, 789);
+        $locationIds = [123, 456, 789];
         $expectedBanRequest = Request::create('http://localhost', 'BAN');
         $expectedBanRequest->headers->set('X-Location-Id', '(' . implode('|', $locationIds) . ')');
 

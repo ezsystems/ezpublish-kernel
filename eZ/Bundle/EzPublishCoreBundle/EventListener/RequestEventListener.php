@@ -52,12 +52,12 @@ class RequestEventListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::REQUEST => array(
-                array('onKernelRequestForward', 10),
-                array('onKernelRequestRedirect', 0),
-            ),
-        );
+        return [
+            KernelEvents::REQUEST => [
+                ['onKernelRequestForward', 10],
+                ['onKernelRequestRedirect', 0],
+            ],
+        ];
     }
 
     /**
@@ -91,7 +91,7 @@ class RequestEventListener implements EventSubscriberInterface
                 if (isset($this->logger)) {
                     $this->logger->info(
                         "URLAlias made request to be forwarded to $semanticPathinfo",
-                        array('pathinfo' => $request->getPathInfo())
+                        ['pathinfo' => $request->getPathInfo()]
                     );
                 }
             }
@@ -140,7 +140,7 @@ class RequestEventListener implements EventSubscriberInterface
                 if (isset($this->logger)) {
                     $this->logger->info(
                         "URLAlias made request to be redirected to $semanticPathinfo",
-                        array('pathinfo' => $request->getPathInfo())
+                        ['pathinfo' => $request->getPathInfo()]
                     );
                 }
             }

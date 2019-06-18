@@ -30,7 +30,7 @@ interface RequestParser
      *
      * @return string
      */
-    public function generate($type, array $values = array());
+    public function generate($type, array $values = []);
 
     /**
      * Tries to match $href as a route, and returns the value of $attribute from the result.

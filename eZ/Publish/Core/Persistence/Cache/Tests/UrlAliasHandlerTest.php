@@ -20,11 +20,11 @@ class UrlAliasHandlerTest extends HandlerTest
      */
     public function providerForUnCachedMethods()
     {
-        return array(
+        return [
             //array( 'publishUrlAliasForLocation', array( 44, 2, 'name', 'eng-GB', true ) ),
             //array( 'createCustomUrlAlias', array( 44, '/path', true, 'eng-GB', true ) ),
             //array( 'createGlobalUrlAlias', array( '/old', '/path', true, 'eng-GB', true ) ),
-            array('listGlobalURLAliases', array('eng-GB', 10, 5)),
+            ['listGlobalURLAliases', ['eng-GB', 10, 5]],
             //array( 'listURLAliasesForLocation', array( 44, true ) ),
             //array( 'removeURLAliases', array( array( 1, 2 ) ) ),
             //array( 'lookup', array( '/url' ) ),
@@ -32,7 +32,7 @@ class UrlAliasHandlerTest extends HandlerTest
             //array( 'locationMoved', array( 44, 2, 45 ) ),
             //array( 'locationCopied', array( 44, 2, 45 ) ),
             //array( 'locationDeleted', array( 44 ) ),
-        );
+        ];
     }
 
     /**
@@ -71,7 +71,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $expects->will($this->returnValue(null));
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
-        call_user_func_array(array($handler, $method), $arguments);
+        call_user_func_array([$handler, $method], $arguments);
     }
 
     /**
@@ -92,7 +92,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('publishUrlAliasForLocation')
             ->with(44, 2, 'name', 'eng-GB', true)
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+            ->will($this->returnValue(new UrlAlias(['id' => 55])));
 
         $this->cacheMock
             ->expects($this->once())
@@ -111,7 +111,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $urlAlias = new UrlAlias(array('id' => 55, 'destination' => 44));
+        $urlAlias = new UrlAlias(['id' => 55, 'destination' => 44]);
         $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler');
         $this->persistenceHandlerMock
             ->expects($this->once())
@@ -155,7 +155,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(array(42)));
+            ->will($this->returnValue([42]));
 
         $cacheItemMock2
             ->expects($this->once())
@@ -165,7 +165,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('set')
-            ->with(array(42, 55))
+            ->with([42, 55])
             ->will($this->returnValue($cacheItemMock2));
 
         $cacheItemMock2
@@ -184,7 +184,7 @@ class UrlAliasHandlerTest extends HandlerTest
     {
         $this->loggerMock->expects($this->once())->method('logCall');
 
-        $urlAlias = new UrlAlias(array('id' => 55, 'destination' => 44));
+        $urlAlias = new UrlAlias(['id' => 55, 'destination' => 44]);
         $innerHandler = $this->getMock('eZ\\Publish\\SPI\\Persistence\\Content\\UrlAlias\\Handler');
         $this->persistenceHandlerMock
             ->expects($this->once())
@@ -238,7 +238,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('set')
-            ->with(array(55))
+            ->with([55])
             ->will($this->returnValue($cacheItemMock2));
 
         $cacheItemMock2
@@ -267,7 +267,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('createGlobalUrlAlias')
             ->with('/old', '/path', true, 'eng-GB', true)
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+            ->will($this->returnValue(new UrlAlias(['id' => 55])));
 
         $cacheItemMock = $this->getMock('Stash\Interfaces\ItemInterface');
         $this->cacheMock
@@ -331,18 +331,18 @@ class UrlAliasHandlerTest extends HandlerTest
             ->with(44, false)
             ->will(
                 $this->returnValue(
-                    array(
-                        new UrlAlias(array('id' => 55)),
-                        new UrlAlias(array('id' => 58)),
-                        new UrlAlias(array('id' => 91)),
-                    )
+                    [
+                        new UrlAlias(['id' => 55]),
+                        new UrlAlias(['id' => 58]),
+                        new UrlAlias(['id' => 91]),
+                    ]
                 )
             );
 
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(55, 58, 91))
+            ->with([55, 58, 91])
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -390,18 +390,18 @@ class UrlAliasHandlerTest extends HandlerTest
             ->with(44, true)
             ->will(
                 $this->returnValue(
-                    array(
-                        new UrlAlias(array('id' => 55)),
-                        new UrlAlias(array('id' => 58)),
-                        new UrlAlias(array('id' => 91)),
-                    )
+                    [
+                        new UrlAlias(['id' => 55]),
+                        new UrlAlias(['id' => 58]),
+                        new UrlAlias(['id' => 91]),
+                    ]
                 )
             );
 
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(55, 58, 91))
+            ->with([55, 58, 91])
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -430,7 +430,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(array(55, 58, 91)));
+            ->will($this->returnValue([55, 58, 91]));
 
         $cacheItemMock
             ->expects($this->once())
@@ -456,7 +456,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->at(0))
             ->method('get')
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+            ->will($this->returnValue(new UrlAlias(['id' => 55])));
 
         $this->cacheMock
             ->expects($this->at(2))
@@ -467,7 +467,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->at(1))
             ->method('get')
-            ->will($this->returnValue(new UrlAlias(array('id' => 58))));
+            ->will($this->returnValue(new UrlAlias(['id' => 58])));
 
         $this->cacheMock
             ->expects($this->at(3))
@@ -478,7 +478,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->at(2))
             ->method('get')
-            ->will($this->returnValue(new UrlAlias(array('id' => 91))));
+            ->will($this->returnValue(new UrlAlias(['id' => 91])));
 
         $cacheItemMock2
             ->expects($this->exactly(3))
@@ -510,7 +510,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(array(55, 58, 91)));
+            ->will($this->returnValue([55, 58, 91]));
 
         $cacheItemMock
             ->expects($this->once())
@@ -536,7 +536,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->at(0))
             ->method('get')
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+            ->will($this->returnValue(new UrlAlias(['id' => 55])));
 
         $this->cacheMock
             ->expects($this->at(2))
@@ -547,7 +547,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->at(1))
             ->method('get')
-            ->will($this->returnValue(new UrlAlias(array('id' => 58))));
+            ->will($this->returnValue(new UrlAlias(['id' => 58])));
 
         $this->cacheMock
             ->expects($this->at(3))
@@ -558,7 +558,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->at(2))
             ->method('get')
-            ->will($this->returnValue(new UrlAlias(array('id' => 91))));
+            ->will($this->returnValue(new UrlAlias(['id' => 91])));
 
         $cacheItemMock2
             ->expects($this->exactly(3))
@@ -612,10 +612,10 @@ class UrlAliasHandlerTest extends HandlerTest
 
         $handler = $this->persistenceCacheHandler->urlAliasHandler();
         $handler->removeURLAliases(
-            array(
-                new UrlAlias(array('id' => 21)),
-                new UrlAlias(array('id' => 32, 'type' => UrlAlias::LOCATION, 'destination' => 44)),
-            )
+            [
+                new UrlAlias(['id' => 21]),
+                new UrlAlias(['id' => 32, 'type' => UrlAlias::LOCATION, 'destination' => 44]),
+            ]
         );
     }
 
@@ -825,7 +825,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+            ->will($this->returnValue(new UrlAlias(['id' => 55])));
 
         $cacheItemMock2
             ->expects($this->once())
@@ -845,7 +845,7 @@ class UrlAliasHandlerTest extends HandlerTest
      */
     public function testLookupHasHistoryCache()
     {
-        $urlAlias = new UrlAlias(array('id' => 55));
+        $urlAlias = new UrlAlias(['id' => 55]);
 
         $this->loggerMock
             ->expects($this->never())
@@ -926,7 +926,7 @@ class UrlAliasHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadUrlAlias')
             ->with(55)
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+            ->will($this->returnValue(new UrlAlias(['id' => 55])));
 
         $cacheItemMock
             ->expects($this->once())
@@ -964,7 +964,7 @@ class UrlAliasHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(new UrlAlias(array('id' => 55))));
+            ->will($this->returnValue(new UrlAlias(['id' => 55])));
 
         $cacheItemMock
             ->expects($this->once())

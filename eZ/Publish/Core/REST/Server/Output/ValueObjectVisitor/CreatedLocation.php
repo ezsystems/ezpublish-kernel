@@ -32,7 +32,7 @@ class CreatedLocation extends RestLocation
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadLocation',
-                array('locationPath' => trim($data->restLocation->location->pathString, '/'))
+                ['locationPath' => trim($data->restLocation->location->pathString, '/')]
             )
         );
         $visitor->setStatus(201);

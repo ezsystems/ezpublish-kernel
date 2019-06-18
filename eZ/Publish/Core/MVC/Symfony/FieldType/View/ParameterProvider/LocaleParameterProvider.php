@@ -43,7 +43,7 @@ class LocaleParameterProvider implements ParameterProviderInterface
      */
     public function getViewParameters(Field $field)
     {
-        $parameters = array();
+        $parameters = [];
 
         $request = $this->getCurrentRequest();
         if ($request && $request->attributes->has('_locale')) {

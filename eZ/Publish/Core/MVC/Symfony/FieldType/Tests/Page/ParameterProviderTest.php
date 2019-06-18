@@ -25,7 +25,7 @@ class ParameterProviderTest extends TestCase
         $field = $this->getMock('eZ\\Publish\\API\\Repository\\Values\\Content\\Field');
         $parameterProvider = new ParameterProvider($pageService);
         $this->assertSame(
-            array('pageService' => $pageService),
+            ['pageService' => $pageService],
             $parameterProvider->getViewParameters($field)
         );
     }

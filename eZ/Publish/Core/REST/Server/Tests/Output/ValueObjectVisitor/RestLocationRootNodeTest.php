@@ -29,7 +29,7 @@ class RestLocationRootNodeTest extends RestLocationTest
 
         $location = new RestLocation(
             new Location(
-                array(
+                [
                     'id' => 1,
                     'priority' => 0,
                     'hidden' => false,
@@ -41,13 +41,13 @@ class RestLocationRootNodeTest extends RestLocationTest
                     'sortField' => Location::SORT_FIELD_PATH,
                     'sortOrder' => Location::SORT_ORDER_ASC,
                     'contentInfo' => new ContentInfo(
-                        array(
+                        [
                             'id' => 42,
                             'contentTypeId' => 4,
                             'name' => 'A Node, long lost',
-                        )
+                        ]
                     ),
-                )
+                ]
             ),
             // Dummy value for ChildCount
             0
@@ -55,28 +55,28 @@ class RestLocationRootNodeTest extends RestLocationTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array('locationPath' => '1'),
+            ['locationPath' => '1'],
             '/content/locations/1'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationChildren',
-            array('locationPath' => '1'),
+            ['locationPath' => '1'],
             '/content/locations/1/children'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array('contentId' => $location->location->contentId),
+            ['contentId' => $location->location->contentId],
             "/content/objects/{$location->location->contentId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_listLocationURLAliases',
-            array('locationPath' => '1'),
+            ['locationPath' => '1'],
             '/content/objects/1/urlaliases'
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array('contentId' => $location->location->contentId),
+            ['contentId' => $location->location->contentId],
             "/content/objects/{$location->location->contentId}"
         );
 
@@ -107,10 +107,10 @@ class RestLocationRootNodeTest extends RestLocationTest
     public function testResultContainsIdValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'id',
                 'content' => '1',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> id value element.',
             false
@@ -127,9 +127,9 @@ class RestLocationRootNodeTest extends RestLocationTest
     public function testResultContainsParentLocationElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ParentLocation',
-            ),
+            ],
             $result,
             'Invalid <ParentLocation> element.',
             false
@@ -146,10 +146,10 @@ class RestLocationRootNodeTest extends RestLocationTest
     public function testResultContainsParentLocationAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ParentLocation',
-                'attributes' => array(),
-            ),
+                'attributes' => [],
+            ],
             $result,
             'Invalid <ParentLocation> attributes.',
             false
@@ -166,13 +166,13 @@ class RestLocationRootNodeTest extends RestLocationTest
     public function testResultContainsLocationAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Location',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Location+xml',
                     'href' => '/content/locations/1',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Location> attributes.',
             false
@@ -189,13 +189,13 @@ class RestLocationRootNodeTest extends RestLocationTest
     public function testResultContainsChildrenAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Children',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.LocationList+xml',
                     'href' => '/content/locations/1/children',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Children> attributes.',
             false
@@ -212,10 +212,10 @@ class RestLocationRootNodeTest extends RestLocationTest
     public function testResultContainsPathStringValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'pathString',
                 'content' => '/1',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> pathString value element.',
             false
@@ -232,13 +232,13 @@ class RestLocationRootNodeTest extends RestLocationTest
     public function testResultContainsUrlAliasesTagAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlAliases',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UrlAliasRefList+xml',
                     'href' => '/content/objects/1/urlaliases',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UrlAliases> attributes.',
             false

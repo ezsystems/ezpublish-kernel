@@ -62,7 +62,7 @@ class DateMetadata extends Criterion implements CriterionInterface
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(Operator::EQ, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
             new Specifications(Operator::GT, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
             new Specifications(Operator::GTE, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
@@ -70,6 +70,6 @@ class DateMetadata extends Criterion implements CriterionInterface
             new Specifications(Operator::LTE, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER),
             new Specifications(Operator::IN, Specifications::FORMAT_ARRAY, Specifications::TYPE_INTEGER),
             new Specifications(Operator::BETWEEN, Specifications::FORMAT_ARRAY, Specifications::TYPE_INTEGER, 2),
-        );
+        ];
     }
 }

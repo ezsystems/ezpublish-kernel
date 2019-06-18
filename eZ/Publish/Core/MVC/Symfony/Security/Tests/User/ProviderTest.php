@@ -78,7 +78,7 @@ class ProviderTest extends TestCase
         $user = $this->userProvider->loadUserByUsername($username);
         $this->assertInstanceOf('eZ\Publish\Core\MVC\Symfony\Security\UserInterface', $user);
         $this->assertSame($apiUser, $user->getAPIUser());
-        $this->assertSame(array('ROLE_USER'), $user->getRoles());
+        $this->assertSame(['ROLE_USER'], $user->getRoles());
     }
 
     /**
@@ -94,15 +94,15 @@ class ProviderTest extends TestCase
     {
         $userId = 123;
         $apiUser = new User(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array('contentInfo' => new ContentInfo(array('id' => $userId)))
+                            ['contentInfo' => new ContentInfo(['id' => $userId])]
                         ),
-                    )
+                    ]
                 ),
-            )
+            ]
         );
         $refreshedAPIUser = clone $apiUser;
         $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
@@ -136,15 +136,15 @@ class ProviderTest extends TestCase
     {
         $userId = 123;
         $apiUser = new User(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array('contentInfo' => new ContentInfo(array('id' => $userId)))
+                            ['contentInfo' => new ContentInfo(['id' => $userId])]
                         ),
-                    )
+                    ]
                 ),
-            )
+            ]
         );
         $user = $this->getMock('eZ\Publish\Core\MVC\Symfony\Security\UserInterface');
         $user
@@ -171,11 +171,11 @@ class ProviderTest extends TestCase
 
     public function supportsClassProvider()
     {
-        return array(
-            array('Symfony\Component\Security\Core\User\UserInterface', false),
-            array('eZ\Publish\Core\MVC\Symfony\Security\User', true),
-            array(get_class($this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User')), true),
-        );
+        return [
+            ['Symfony\Component\Security\Core\User\UserInterface', false],
+            ['eZ\Publish\Core\MVC\Symfony\Security\User', true],
+            [get_class($this->getMock('eZ\Publish\Core\MVC\Symfony\Security\User')), true],
+        ];
     }
 
     public function testLoadUserByAPIUser()

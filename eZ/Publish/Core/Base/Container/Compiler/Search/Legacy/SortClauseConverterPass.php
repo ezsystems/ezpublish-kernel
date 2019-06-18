@@ -50,7 +50,7 @@ class SortClauseConverterPass implements CompilerPassInterface
     protected function addHandlers(Definition $definition, $handlers)
     {
         foreach ($handlers as $id => $attributes) {
-            $definition->addMethodCall('addHandler', array(new Reference($id)));
+            $definition->addMethodCall('addHandler', [new Reference($id)]);
         }
     }
 }

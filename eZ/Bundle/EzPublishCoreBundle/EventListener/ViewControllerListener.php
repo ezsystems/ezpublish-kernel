@@ -47,7 +47,7 @@ class ViewControllerListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(KernelEvents::CONTROLLER => array('getController', 10));
+        return [KernelEvents::CONTROLLER => ['getController', 10]];
     }
 
     /**

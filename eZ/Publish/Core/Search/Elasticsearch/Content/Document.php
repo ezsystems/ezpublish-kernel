@@ -34,5 +34,5 @@ class Document extends ValueObject
      *
      * @var \eZ\Publish\SPI\Search\Field[]
      */
-    public $fields = array();
+    public $fields = [];
 }

@@ -43,11 +43,11 @@ class FieldTypeNameableCollectionPass implements CompilerPassInterface
 
                 $fieldTypeCollectionFactoryDef->addMethodCall(
                     'registerNameableFieldType',
-                    array(
+                    [
                         // Only pass the service Id since field types will be lazy loaded via the service container
                         $id,
                         $attribute['alias'],
-                    )
+                    ]
                 );
 
                 $nameableFieldTypes[] = $attribute['alias'];
@@ -70,11 +70,11 @@ class FieldTypeNameableCollectionPass implements CompilerPassInterface
 
                 $fieldTypeCollectionFactoryDef->addMethodCall(
                     'registerNonNameableFieldType',
-                    array(
+                    [
                         // Only pass the service Id since field types will be lazy loaded via the service container
                         $id,
                         $attribute['alias'],
-                    )
+                    ]
                 );
             }
         }

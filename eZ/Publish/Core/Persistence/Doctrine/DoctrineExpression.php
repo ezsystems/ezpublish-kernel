@@ -626,7 +626,7 @@ class DoctrineExpression implements Expression
     {
         $args = func_get_args();
 
-        return call_user_func_array(array($this->platform, 'getConcatExpression'), $args);
+        return call_user_func_array([$this->platform, 'getConcatExpression'], $args);
     }
 
     /**
@@ -780,7 +780,7 @@ class DoctrineExpression implements Expression
      */
     private function arrayFlatten(array $array)
     {
-        $flat = array();
+        $flat = [];
         foreach ($array as $arg) {
             switch (gettype($arg)) {
                 case 'array':

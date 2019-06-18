@@ -43,7 +43,7 @@ class InstallPlatformCommand extends Command
     private $searchEngine;
 
     /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
-    private $installers = array();
+    private $installers = [];
 
     const EXIT_DATABASE_NOT_FOUND_ERROR = 3;
     const EXIT_GENERAL_DATABASE_ERROR = 4;

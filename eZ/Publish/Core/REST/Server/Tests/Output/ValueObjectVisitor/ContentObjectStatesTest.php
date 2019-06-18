@@ -27,7 +27,7 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         // @todo Improve this test with values...
-        $stateList = new ContentObjectStates(array());
+        $stateList = new ContentObjectStates([]);
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -52,9 +52,9 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentObjectStatesElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentObjectStates',
-            ),
+            ],
             $result,
             'Invalid <ContentObjectStates> element.',
             false
@@ -71,12 +71,12 @@ class ContentObjectStatesTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentObjectStatesAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentObjectStates',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ContentObjectStates+xml',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ContentObjectStates> attributes.',
             false

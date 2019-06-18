@@ -27,14 +27,14 @@ class ObjectStateGroup extends APIObjectStateGroup
      *
      * @var string[]
      */
-    protected $names = array();
+    protected $names = [];
 
     /**
      * Human readable descriptions of object state group.
      *
      * @var string[]
      */
-    protected $descriptions = array();
+    protected $descriptions = [];
 
     /**
      * This method returns the human readable name in all provided languages

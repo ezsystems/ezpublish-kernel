@@ -80,11 +80,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateGroupData')
             ->with($this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateGroupFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will($this->returnValue($this->getObjectStateGroupFixture()));
 
         $result = $handler->loadGroup(2);
@@ -107,7 +107,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateGroupData')
             ->with($this->equalTo(APIBaseTest::DB_INT_MAX))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler->loadGroup(APIBaseTest::DB_INT_MAX);
     }
@@ -124,11 +124,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateGroupDataByIdentifier')
             ->with($this->equalTo('ez_lock'))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateGroupFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will($this->returnValue($this->getObjectStateGroupFixture()));
 
         $result = $handler->loadGroupByIdentifier('ez_lock');
@@ -151,7 +151,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateGroupDataByIdentifier')
             ->with($this->equalTo('unknown'))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler->loadGroupByIdentifier('unknown');
     }
@@ -168,12 +168,12 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateGroupListData')
             ->with($this->equalTo(0), $this->equalTo(-1))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateGroupListFromData')
-            ->with($this->equalTo(array(array())))
-            ->will($this->returnValue(array($this->getObjectStateGroupFixture())));
+            ->with($this->equalTo([[]]))
+            ->will($this->returnValue([$this->getObjectStateGroupFixture()]));
 
         $result = $handler->loadAllGroups();
 
@@ -197,12 +197,12 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateListData')
             ->with($this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateListFromData')
-            ->with($this->equalTo(array(array())))
-            ->will($this->returnValue(array($this->getObjectStateFixture(), $this->getObjectStateFixture())));
+            ->with($this->equalTo([[]]))
+            ->will($this->returnValue([$this->getObjectStateFixture(), $this->getObjectStateFixture()]));
 
         $result = $handler->loadObjectStates(2);
 
@@ -230,16 +230,16 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         $gatewayMock->expects($this->once())
             ->method('updateObjectStateGroup')
-            ->with($this->equalTo(new Group(array('id' => 2))));
+            ->with($this->equalTo(new Group(['id' => 2])));
 
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateGroupData')
             ->with($this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateGroupFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will($this->returnValue($this->getObjectStateGroupFixture()));
 
         $result = $handler->updateGroup(2, $this->getInputStructFixture());
@@ -262,17 +262,17 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateListData')
             ->with($this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateListFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will(
                 $this->returnValue(
-                    array(
-                        new ObjectState(array('id' => 1)),
-                        new ObjectState(array('id' => 2)),
-                    )
+                    [
+                        new ObjectState(['id' => 1]),
+                        new ObjectState(['id' => 2]),
+                    ]
                 )
             );
 
@@ -344,11 +344,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateData')
             ->with($this->equalTo(1))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will($this->returnValue($this->getObjectStateFixture()));
 
         $result = $handler->load(1);
@@ -371,7 +371,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateData')
             ->with($this->equalTo(APIBaseTest::DB_INT_MAX))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler->load(APIBaseTest::DB_INT_MAX);
     }
@@ -388,11 +388,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateDataByIdentifier')
             ->with($this->equalTo('not_locked'), $this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will($this->returnValue($this->getObjectStateFixture()));
 
         $result = $handler->loadByIdentifier('not_locked', 2);
@@ -415,7 +415,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateDataByIdentifier')
             ->with($this->equalTo('unknown'), $this->equalTo(2))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler->loadByIdentifier('unknown', 2);
     }
@@ -436,16 +436,16 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
 
         $gatewayMock->expects($this->once())
             ->method('updateObjectState')
-            ->with($this->equalTo(new ObjectState(array('id' => 1))));
+            ->with($this->equalTo(new ObjectState(['id' => 1])));
 
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateData')
             ->with($this->equalTo(1))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will($this->returnValue($this->getObjectStateFixture()));
 
         $result = $handler->update(1, $this->getInputStructFixture());
@@ -468,28 +468,28 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateData')
             ->with($this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateFromData')
-            ->with($this->equalTo(array(array())))
-            ->will($this->returnValue(new ObjectState(array('id' => 2, 'groupId' => 2))));
+            ->with($this->equalTo([[]]))
+            ->will($this->returnValue(new ObjectState(['id' => 2, 'groupId' => 2])));
 
         $gatewayMock->expects($this->any())
             ->method('loadObjectStateListData')
             ->with($this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->any())
             ->method('createObjectStateListFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will(
                 $this->returnValue(
-                    array(
-                        new ObjectState(array('id' => 1, 'groupId' => 2)),
-                        new ObjectState(array('id' => 2, 'groupId' => 2)),
-                        new ObjectState(array('id' => 3, 'groupId' => 2)),
-                    )
+                    [
+                        new ObjectState(['id' => 1, 'groupId' => 2]),
+                        new ObjectState(['id' => 2, 'groupId' => 2]),
+                        new ObjectState(['id' => 3, 'groupId' => 2]),
+                    ]
                 )
             );
 
@@ -523,12 +523,12 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateData')
             ->with($this->equalTo(1))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateFromData')
-            ->with($this->equalTo(array(array())))
-            ->will($this->returnValue(new ObjectState(array('id' => 1, 'groupId' => 2))));
+            ->with($this->equalTo([[]]))
+            ->will($this->returnValue(new ObjectState(['id' => 1, 'groupId' => 2])));
 
         $gatewayMock->expects($this->once())
             ->method('deleteObjectState')
@@ -537,12 +537,12 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->any())
             ->method('loadObjectStateListData')
             ->with($this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->any())
             ->method('createObjectStateListFromData')
-            ->with($this->equalTo(array(array())))
-            ->will($this->returnValue(array(new ObjectState(array('id' => 2, 'groupId' => 2)))));
+            ->with($this->equalTo([[]]))
+            ->will($this->returnValue([new ObjectState(['id' => 2, 'groupId' => 2])]));
 
         $gatewayMock->expects($this->once())
             ->method('updateObjectStatePriority')
@@ -567,7 +567,7 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateData')
             ->with($this->equalTo(APIBaseTest::DB_INT_MAX))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler->delete(APIBaseTest::DB_INT_MAX);
     }
@@ -601,11 +601,11 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         $gatewayMock->expects($this->once())
             ->method('loadObjectStateDataForContent')
             ->with($this->equalTo(42), $this->equalTo(2))
-            ->will($this->returnValue(array(array())));
+            ->will($this->returnValue([[]]));
 
         $mapperMock->expects($this->once())
             ->method('createObjectStateFromData')
-            ->with($this->equalTo(array(array())))
+            ->with($this->equalTo([[]]))
             ->will($this->returnValue($this->getObjectStateFixture()));
 
         $result = $handler->getContentState(42, 2);
@@ -691,8 +691,8 @@ class ObjectStateHandlerTest extends LanguageAwareTestCase
         if (!isset($this->mapperMock)) {
             $this->mapperMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\ObjectState\\Mapper',
-                array(),
-                array($this->getLanguageHandler())
+                [],
+                [$this->getLanguageHandler()]
             );
         }
 

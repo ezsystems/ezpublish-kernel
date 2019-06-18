@@ -36,97 +36,97 @@ class SectionServiceTest extends ServiceTest
         $contentId = 42;
 
         $section = new Section(
-            array(
+            [
                 'id' => $sectionId,
                 'identifier' => $sectionIdentifier,
                 'name' => $sectionName,
-            )
+            ]
         );
         $contentInfo = $this->getContentInfo($contentId, md5('Osgiliath'));
 
         $sectionCreateStruct = new SectionCreateStruct();
         $sectionUpdateStruct = new SectionUpdateStruct();
 
-        return array(
-            array(
+        return [
+            [
                 'createSection',
-                array($sectionCreateStruct),
+                [$sectionCreateStruct],
                 $section,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\SectionService\CreateSectionSignal',
-                array('sectionId' => $sectionId),
-            ),
-            array(
+                ['sectionId' => $sectionId],
+            ],
+            [
                 'updateSection',
-                array($section, $sectionUpdateStruct),
+                [$section, $sectionUpdateStruct],
                 $section,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\SectionService\UpdateSectionSignal',
-                array('sectionId' => $sectionId),
-            ),
-            array(
+                ['sectionId' => $sectionId],
+            ],
+            [
                 'loadSection',
-                array($sectionId),
+                [$sectionId],
                 $section,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadSections',
-                array(),
-                array($section),
+                [],
+                [$section],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadSectionByIdentifier',
-                array($sectionIdentifier),
+                [$sectionIdentifier],
                 $section,
                 0,
-            ),
-            array(
+            ],
+            [
                 'countAssignedContents',
-                array($section),
+                [$section],
                 42,
                 0,
-            ),
-            array(
+            ],
+            [
                 'isSectionUsed',
-                array($section),
+                [$section],
                 true,
                 0,
-            ),
-            array(
+            ],
+            [
                 'assignSection',
-                array($contentInfo, $section),
+                [$contentInfo, $section],
                 null,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\SectionService\AssignSectionSignal',
-                array(
+                [
                     'contentId' => $contentId,
                     'sectionId' => $sectionId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'deleteSection',
-                array($section),
+                [$section],
                 null,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\SectionService\DeleteSectionSignal',
-                array(
+                [
                     'sectionId' => $sectionId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'newSectionCreateStruct',
-                array(),
+                [],
                 $sectionCreateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newSectionUpdateStruct',
-                array(),
+                [],
                 $sectionUpdateStruct,
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

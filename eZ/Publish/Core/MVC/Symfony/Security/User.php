@@ -24,7 +24,7 @@ class User implements UserInterface, EquatableInterface
      */
     private $roles;
 
-    public function __construct(APIUser $user = null, array $roles = array())
+    public function __construct(APIUser $user = null, array $roles = [])
     {
         $this->user = $user;
         $this->roles = $roles;

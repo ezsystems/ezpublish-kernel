@@ -28,14 +28,14 @@ class ObjectState extends APIObjectState
      *
      * @var string[]
      */
-    protected $names = array();
+    protected $names = [];
 
     /**
      * Human readable descriptions of object state.
      *
      * @var string[]
      */
-    protected $descriptions = array();
+    protected $descriptions = [];
 
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup

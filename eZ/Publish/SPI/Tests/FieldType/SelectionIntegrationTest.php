@@ -57,19 +57,19 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array(
+            [
                 'validators' => null,
                 'fieldSettings' => new FieldSettings(
-                    array(
+                    [
                         'isMultiple' => true,
-                        'options' => array(
+                        'options' => [
                             1 => 'First',
                             2 => 'Second',
                             3 => 'Sindelfingen',
-                        ),
-                    )
+                        ],
+                    ]
                 ),
-            )
+            ]
         );
     }
 
@@ -82,27 +82,27 @@ class SelectionIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
-            array('fieldType', 'ezselection'),
-            array(
+        return [
+            ['fieldType', 'ezselection'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
+                    [
                         'validators' => null,
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => true,
-                                'options' => array(
+                                'options' => [
                                     1 => 'First',
                                     2 => 'Second',
                                     3 => 'Sindelfingen',
-                                ),
-                            )
+                                ],
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -113,11 +113,11 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(1, 3),
+            [
+                'data' => [1, 3],
                 'externalData' => null,
                 'sortKey' => '1-3',
-            )
+            ]
         );
     }
 
@@ -131,11 +131,11 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(2),
+            [
+                'data' => [2],
                 'externalData' => null,
                 'sortKey' => '2',
-            )
+            ]
         );
     }
 }

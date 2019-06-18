@@ -20,7 +20,7 @@ class Value extends BaseValue
      *
      * @var string[]
      */
-    public $values = array();
+    public $values = [];
 
     /**
      * Construct a new Value object and initialize with $values.
@@ -31,7 +31,7 @@ class Value extends BaseValue
     {
         if ($values !== null) {
             if (!is_array($values)) {
-                $tags = array();
+                $tags = [];
                 foreach (explode(',', $values) as $tag) {
                     $tag = trim($tag);
                     if ($tag) {

@@ -40,7 +40,7 @@ class VarnishProxyClientFactoryTest extends TestCase
 
     public function testBuildProxyClientNoDynamicSettings()
     {
-        $servers = array('http://varnish1', 'http://varnish2');
+        $servers = ['http://varnish1', 'http://varnish2'];
         $baseUrl = 'http://phoenix-rises.fm/rapmm';
         $this->configResolver
             ->expects($this->never())
@@ -57,9 +57,9 @@ class VarnishProxyClientFactoryTest extends TestCase
 
     public function testBuildProxyClientWithDynamicSettings()
     {
-        $servers = array('$http_cache.purge_servers$', 'http://varnish2');
-        $configuredServers = array('http://varnishconfigured1', 'http://varnishconfigured2');
-        $expectedServers = array('http://varnishconfigured1', 'http://varnishconfigured2', 'http://varnish2');
+        $servers = ['$http_cache.purge_servers$', 'http://varnish2'];
+        $configuredServers = ['http://varnishconfigured1', 'http://varnishconfigured2'];
+        $expectedServers = ['http://varnishconfigured1', 'http://varnishconfigured2', 'http://varnish2'];
         $baseUrl = 'http://phoenix-rises.fm/rapmm';
         $this->configResolver
             ->expects($this->once())

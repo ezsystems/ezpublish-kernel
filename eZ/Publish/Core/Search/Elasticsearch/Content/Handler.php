@@ -84,7 +84,7 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $languageFilter = array())
+    public function findContent(Query $query, array $languageFilter = [])
     {
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
@@ -109,7 +109,7 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array())
+    public function findSingle(Criterion $filter, array $languageFilter = [])
     {
         $query = new Query();
         $query->filter = $filter;
@@ -143,7 +143,7 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = array())
+    public function findLocations(LocationQuery $query, array $languageFilter = [])
     {
         $query->filter = $query->filter ?: new Criterion\MatchAll();
         $query->query = $query->query ?: new Criterion\MatchAll();
@@ -161,7 +161,7 @@ class Handler implements SearchHandlerInterface
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
     {
         // TODO: Implement suggest() method.
     }
@@ -189,7 +189,7 @@ class Handler implements SearchHandlerInterface
      */
     public function bulkIndexContent(array $contentObjects)
     {
-        $documents = array();
+        $documents = [];
         foreach ($contentObjects as $content) {
             $documents[] = $this->mapper->mapContent($content);
         }
@@ -220,7 +220,7 @@ class Handler implements SearchHandlerInterface
      */
     public function bulkIndexLocations(array $locations)
     {
-        $documents = array();
+        $documents = [];
         foreach ($locations as $location) {
             $documents[] = $this->mapper->mapLocation($location);
         }
@@ -260,41 +260,41 @@ class Handler implements SearchHandlerInterface
     public function deleteLocation($locationId, $contentId)
     {
         // 1. Update (reindex) all Content in the subtree with additional Location(s) outside of it
-        $ast = array(
-            'filter' => array(
-                'and' => array(
-                    0 => array(
-                        'nested' => array(
+        $ast = [
+            'filter' => [
+                'and' => [
+                    0 => [
+                        'nested' => [
                             'path' => 'locations_doc',
-                            'filter' => array(
-                                'regexp' => array(
+                            'filter' => [
+                                'regexp' => [
                                     'locations_doc.path_string_id' => ".*/{$locationId}/.*",
-                                ),
-                            ),
-                        ),
-                    ),
-                    1 => array(
-                        'nested' => array(
+                                ],
+                            ],
+                        ],
+                    ],
+                    1 => [
+                        'nested' => [
                             'path' => 'locations_doc',
-                            'filter' => array(
-                                'regexp' => array(
-                                    'locations_doc.path_string_id' => array(
+                            'filter' => [
+                                'regexp' => [
+                                    'locations_doc.path_string_id' => [
                                         // Matches anything (@) and (&) not (~) <expression>
                                         'value' => "@&~(.*/{$locationId}/.*)",
                                         'flags' => 'INTERSECTION|COMPLEMENT|ANYSTRING',
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $response = $this->gateway->findRaw(json_encode($ast), $this->contentDocumentTypeIdentifier);
         $result = json_decode($response->body);
 
-        $documents = array();
+        $documents = [];
         foreach ($result->hits->hits as $hit) {
             $documents[] = $this->mapper->mapContentById($hit->_id);
         }
@@ -302,14 +302,14 @@ class Handler implements SearchHandlerInterface
         $this->gateway->bulkIndex($documents);
 
         // 2. Delete all Content in the subtree with no other Location(s) outside of it
-        $ast['filter']['and'][1] = array(
+        $ast['filter']['and'][1] = [
             'not' => $ast['filter']['and'][1],
-        );
-        $ast = array(
-            'query' => array(
+        ];
+        $ast = [
+            'query' => [
                 'filtered' => $ast,
-            ),
-        );
+            ],
+        ];
 
         $response = $this->gateway->findRaw(json_encode($ast), $this->contentDocumentTypeIdentifier);
         $documentsToDelete = json_decode($response->body);

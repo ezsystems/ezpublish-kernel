@@ -38,7 +38,7 @@ class LocationSearchHitAdapter implements AdapterInterface
      */
     private $nbResults;
 
-    public function __construct(LocationQuery $query, SearchService $searchService, array $languageFilter = array())
+    public function __construct(LocationQuery $query, SearchService $searchService, array $languageFilter = [])
     {
         $this->query = $query;
         $this->searchService = $searchService;

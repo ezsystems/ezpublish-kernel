@@ -31,12 +31,12 @@ class LegacyDFSClusterTest extends ConfigurationFactoryTest
 
     public function provideParentServiceDefinition()
     {
-        return new Definition(null, array(null));
+        return new Definition(null, [null]);
     }
 
     public function provideHandlerConfiguration()
     {
-        return array('connection' => 'doctrine.dbal.test_connection');
+        return ['connection' => 'doctrine.dbal.test_connection'];
     }
 
     /**

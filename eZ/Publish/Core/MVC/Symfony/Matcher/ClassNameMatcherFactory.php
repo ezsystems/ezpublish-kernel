@@ -136,7 +136,7 @@ class ClassNameMatcherFactory implements MatcherFactoryInterface
             }
 
             if ($hasMatched) {
-                return $this->alreadyMatched[$viewType][$view] = $configHash + array('matcher' => $matcher);
+                return $this->alreadyMatched[$viewType][$view] = $configHash + ['matcher' => $matcher];
             }
         }
 

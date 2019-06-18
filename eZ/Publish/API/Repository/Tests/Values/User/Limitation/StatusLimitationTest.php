@@ -56,7 +56,7 @@ class StatusLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'versionread');
         $policyCreate->addLimitation(
             new StatusLimitation(
-                array('limitationValues' => array(VersionInfo::STATUS_DRAFT))
+                ['limitationValues' => [VersionInfo::STATUS_DRAFT]]
             )
         );
 
@@ -124,7 +124,7 @@ class StatusLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'versionread');
         $policyCreate->addLimitation(
             new StatusLimitation(
-                array('limitationValues' => array(VersionInfo::STATUS_PUBLISHED))
+                ['limitationValues' => [VersionInfo::STATUS_PUBLISHED]]
             )
         );
 

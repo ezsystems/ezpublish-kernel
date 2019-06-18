@@ -68,7 +68,7 @@ class PageController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewBlock(Block $block, array $params = array(), array $cacheSettings = array())
+    public function viewBlock(Block $block, array $params = [], array $cacheSettings = [])
     {
         $response = new Response();
         if ($this->getParameter('content.view_cache') === true) {
@@ -90,11 +90,11 @@ class PageController extends Controller
         $response->setContent(
             $this->viewManager->renderBlock(
                 $block,
-                $params + array(
+                $params + [
                     // @deprecated pageService injection will be removed in 6.0.
                     'pageService' => $this->pageService,
                     'valid_items' => $this->pageService->getValidBlockItems($block),
-                )
+                ]
             )
         );
 
@@ -117,7 +117,7 @@ class PageController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewBlockById($id, array $params = array(), array $cacheSettings = array())
+    public function viewBlockById($id, array $params = [], array $cacheSettings = [])
     {
         return $this->viewBlock(
             $this->pageService->loadBlock($id),

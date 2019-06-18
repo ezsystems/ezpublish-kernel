@@ -32,7 +32,7 @@ class HttpCachePassTest extends AbstractCompilerPassTestCase
 
     public function testProcessCacheManager()
     {
-        $this->setDefinition('ezpublish.http_cache.cache_manager', new Definition('foo', array(true)));
+        $this->setDefinition('ezpublish.http_cache.cache_manager', new Definition('foo', [true]));
         $varnishProxyClient = new Definition();
         $this->setDefinition('fos_http_cache.proxy_client.varnish', $varnishProxyClient);
         $this->compile();

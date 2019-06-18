@@ -32,11 +32,11 @@ class CreatedRelation extends RestRelation
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadVersionRelation',
-                array(
+                [
                     'contentId' => $data->relation->contentId,
                     'versionNumber' => $data->relation->versionNo,
                     'relationId' => $data->relation->relation->id,
-                )
+                ]
             )
         );
         $visitor->setStatus(201);

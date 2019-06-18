@@ -28,7 +28,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array(
+        return [
             new Search\Field(
                 'value_address',
                 $field->value->externalData['address'],
@@ -36,10 +36,10 @@ class SearchField implements Indexable
             ),
             new Search\Field(
                 'value_location',
-                array(
+                [
                     'latitude' => $field->value->externalData['latitude'],
                     'longitude' => $field->value->externalData['longitude'],
-                ),
+                ],
                 new Search\FieldType\GeoLocationField()
             ),
             new Search\Field(
@@ -47,7 +47,7 @@ class SearchField implements Indexable
                 $field->value->externalData['address'],
                 new Search\FieldType\FullTextField()
             ),
-        );
+        ];
     }
 
     /**
@@ -57,10 +57,10 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'value_address' => new Search\FieldType\StringField(),
             'value_location' => new Search\FieldType\GeoLocationField(),
-        );
+        ];
     }
 
     /**

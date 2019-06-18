@@ -36,7 +36,7 @@ class AliasCleanerTest extends TestCase
         $this->resolver
             ->expects($this->once())
             ->method('remove')
-            ->with(array($originalPath), array());
+            ->with([$originalPath], []);
 
         $this->aliasCleaner->removeAliases($originalPath);
     }

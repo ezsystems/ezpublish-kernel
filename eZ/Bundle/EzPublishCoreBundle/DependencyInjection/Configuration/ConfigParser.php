@@ -23,7 +23,7 @@ class ConfigParser implements ParserInterface
      */
     private $configParsers;
 
-    public function __construct(array $configParsers = array())
+    public function __construct(array $configParsers = [])
     {
         foreach ($configParsers as $parser) {
             if (!$parser instanceof ParserInterface) {

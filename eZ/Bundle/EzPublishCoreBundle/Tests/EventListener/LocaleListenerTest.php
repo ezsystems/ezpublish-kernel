@@ -92,47 +92,47 @@ class LocaleListenerTest extends TestCase
 
     public function onKernelRequestProvider()
     {
-        return array(
-            array(
-                array('eng-GB'),
-                array(
-                    array('eng-GB', 'en_GB'),
-                ),
+        return [
+            [
+                ['eng-GB'],
+                [
+                    ['eng-GB', 'en_GB'],
+                ],
                 'en_GB',
-            ),
-            array(
-                array('eng-DE'),
-                array(
-                    array('eng-DE', null),
-                ),
+            ],
+            [
+                ['eng-DE'],
+                [
+                    ['eng-DE', null],
+                ],
                 // Default locale
                 null,
-            ),
-            array(
-                array('fre-CA', 'fre-FR', 'eng-US'),
-                array(
-                    array('fre-CA', null),
-                    array('fre-FR', 'fr_FR'),
-                ),
+            ],
+            [
+                ['fre-CA', 'fre-FR', 'eng-US'],
+                [
+                    ['fre-CA', null],
+                    ['fre-FR', 'fr_FR'],
+                ],
                 'fr_FR',
-            ),
-            array(
-                array('fre-CA', 'fre-FR', 'eng-US'),
-                array(
-                    array('fre-CA', null),
-                    array('fre-FR', null),
-                    array('eng-US', null),
-                ),
+            ],
+            [
+                ['fre-CA', 'fre-FR', 'eng-US'],
+                [
+                    ['fre-CA', null],
+                    ['fre-FR', null],
+                    ['eng-US', null],
+                ],
                 null,
-            ),
-            array(
-                array('esl-ES', 'eng-GB'),
-                array(
-                    array('esl-ES', 'es_ES'),
-                    array('eng-GB', 'en_GB'),
-                ),
+            ],
+            [
+                ['esl-ES', 'eng-GB'],
+                [
+                    ['esl-ES', 'es_ES'],
+                    ['eng-GB', 'en_GB'],
+                ],
                 'es_ES',
-            ),
-        );
+            ],
+        ];
     }
 }

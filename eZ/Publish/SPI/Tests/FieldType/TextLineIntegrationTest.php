@@ -82,24 +82,24 @@ class TextLineIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezstring field type does not have any special field definition
             // properties
-            array('fieldType', 'ezstring'),
-            array(
+            ['fieldType', 'ezstring'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
-                        'validators' => array(
-                            'StringLengthValidator' => array(
+                    [
+                        'validators' => [
+                            'StringLengthValidator' => [
                                 'minStringLength' => 0,
                                 'maxStringLength' => 0,
-                            ),
-                        ),
-                    )
+                            ],
+                        ],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -110,11 +110,11 @@ class TextLineIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => 'Some text…',
                 'externalData' => null,
                 'sortKey' => 'some text',
-            )
+            ]
         );
     }
 
@@ -128,11 +128,11 @@ class TextLineIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
                 'externalData' => null,
                 'sortKey' => '',
-            )
+            ]
         );
     }
 }

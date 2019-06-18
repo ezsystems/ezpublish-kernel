@@ -43,7 +43,7 @@ class Ancestor extends Criterion implements CriterionInterface
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::EQ,
                 Specifications::FORMAT_SINGLE,
@@ -54,7 +54,7 @@ class Ancestor extends Criterion implements CriterionInterface
                 Specifications::FORMAT_ARRAY,
                 Specifications::TYPE_STRING
             ),
-        );
+        ];
     }
 
     public static function createFromQueryBuilder($target, $operator, $value)

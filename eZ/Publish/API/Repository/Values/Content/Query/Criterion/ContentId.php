@@ -38,10 +38,10 @@ class ContentId extends Criterion implements CriterionInterface
     {
         $types = Specifications::TYPE_INTEGER | Specifications::TYPE_STRING;
 
-        return array(
+        return [
             new Specifications(Operator::IN, Specifications::FORMAT_ARRAY, $types),
             new Specifications(Operator::EQ, Specifications::FORMAT_SINGLE, $types),
-        );
+        ];
     }
 
     public static function createFromQueryBuilder($target, $operator, $value)

@@ -17,7 +17,7 @@ abstract class AbstractParserTestCase extends AbstractExtensionTestCase
      */
     protected $configResolver;
 
-    protected function load(array $configurationValues = array())
+    protected function load(array $configurationValues = [])
     {
         parent::load($configurationValues);
         $this->configResolver = $this->container->get('ezpublish.config.resolver.core');

@@ -50,7 +50,7 @@ class EZP21069Test extends BaseTest
         $contentService->publishVersion(
             $contentService->createContent(
                 $contentCreateStruct,
-                array($locationService->newLocationCreateStruct(2))
+                [$locationService->newLocationCreateStruct(2)]
             )->versionInfo
         );
 

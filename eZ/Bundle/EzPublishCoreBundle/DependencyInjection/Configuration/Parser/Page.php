@@ -63,12 +63,12 @@ class Page extends AbstractParser
     public function preMap(array $config, ContextualizerInterface $contextualizer)
     {
         $container = $contextualizer->getContainer();
-        $defaultConfig = array(
+        $defaultConfig = [
             'layouts' => $container->getParameter('ezpublish.ezpage.layouts'),
             'blocks' => $container->getParameter('ezpublish.ezpage.blocks'),
             'enabledLayouts' => $container->getParameter('ezpublish.ezpage.enabledLayouts'),
             'enabledBlocks' => $container->getParameter('ezpublish.ezpage.enabledBlocks'),
-        );
+        ];
         $container->setParameter(
             'ezsettings.' . ConfigResolver::SCOPE_DEFAULT . '.ezpage',
             $defaultConfig
@@ -80,10 +80,10 @@ class Page extends AbstractParser
         // the enabled ones for this sa
         foreach ($config['siteaccess']['list'] as $sa) {
             $ezpageSettings = $container->getParameter("ezsettings.$sa.ezpage");
-            foreach (array('layouts', 'blocks') as $type) {
+            foreach (['layouts', 'blocks'] as $type) {
                 $enabledKey = 'enabled' . ucfirst($type);
                 if (empty($ezpageSettings[$enabledKey])) {
-                    $ezpageSettings[$type] = array();
+                    $ezpageSettings[$type] = [];
                     continue;
                 }
                 $ezpageSettings[$type] = array_intersect_key(

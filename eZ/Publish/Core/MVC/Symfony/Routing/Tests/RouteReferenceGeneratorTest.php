@@ -33,7 +33,7 @@ class RouteReferenceGeneratorTest extends TestCase
     public function testGenerateNullResource()
     {
         $currentRouteName = 'my_route';
-        $currentRouteParams = array('foo' => 'bar');
+        $currentRouteParams = ['foo' => 'bar'];
 
         $request = new Request();
         $request->attributes->set('_route', $currentRouteName);
@@ -58,8 +58,8 @@ class RouteReferenceGeneratorTest extends TestCase
     public function testGenerateNullResourceAndPassedParams()
     {
         $currentRouteName = 'my_route';
-        $currentRouteParams = array('foo' => 'bar');
-        $passedParams = array('hello' => 'world', 'isIt' => true);
+        $currentRouteParams = ['foo' => 'bar'];
+        $passedParams = ['hello' => 'world', 'isIt' => true];
         $expectedParams = $passedParams + $currentRouteParams;
 
         $request = new Request();
@@ -88,7 +88,7 @@ class RouteReferenceGeneratorTest extends TestCase
     public function testGenerate($resource, array $params)
     {
         $currentRouteName = 'my_route';
-        $currentRouteParams = array('foo' => 'bar');
+        $currentRouteParams = ['foo' => 'bar'];
 
         $request = new Request();
         $request->attributes->set('_route', $currentRouteName);
@@ -113,13 +113,13 @@ class RouteReferenceGeneratorTest extends TestCase
     public function testGenerateNullResourceWithoutRoute()
     {
         $currentRouteName = 'my_route';
-        $currentRouteParams = array('foo' => 'bar');
+        $currentRouteParams = ['foo' => 'bar'];
 
         $request = new Request();
         $requestStack = new RequestStack();
         $requestStack->push($request);
 
-        $event = new RouteReferenceGenerationEvent(new RouteReference(null, array()), $request);
+        $event = new RouteReferenceGenerationEvent(new RouteReference(null, []), $request);
         $this->dispatcher
             ->expects($this->once())
             ->method('dispatch')
@@ -133,11 +133,11 @@ class RouteReferenceGeneratorTest extends TestCase
 
     public function generateGenerator()
     {
-        return array(
-            array('my_route', array('hello' => 'world', 'isIt' => true)),
-            array('foobar', array('foo' => 'bar', 'object' => new \stdClass())),
-            array(new Location(), array('switchLanguage' => 'fre-FR')),
-            array(new Location(), array()),
-        );
+        return [
+            ['my_route', ['hello' => 'world', 'isIt' => true]],
+            ['foobar', ['foo' => 'bar', 'object' => new \stdClass()]],
+            [new Location(), ['switchLanguage' => 'fre-FR']],
+            [new Location(), []],
+        ];
     }
 }

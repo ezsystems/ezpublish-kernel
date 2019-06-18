@@ -22,7 +22,7 @@ class Stream implements HttpClient
      *
      * @var array
      */
-    private $headers = array();
+    private $headers = [];
 
     /**
      * The remote REST server location.
@@ -39,14 +39,14 @@ class Stream implements HttpClient
     public function __construct($server)
     {
         $url = parse_url(rtrim($server, '/'));
-        $url += array(
+        $url += [
             'scheme' => 'http',
             'host' => null,
             'port' => null,
             'user' => null,
             'pass' => null,
             'path' => null,
-        );
+        ];
 
         if ($url['user'] || $url['pass']) {
             $this->headers['Authorization'] = 'Basic ' . base64_encode("{$url['user']}:{$url['pass']}");
@@ -78,14 +78,14 @@ class Stream implements HttpClient
 
         $url = $this->server . $path;
 
-        $contextOptions = array(
-            'http' => array(
+        $contextOptions = [
+            'http' => [
                 'method' => $method,
                 'content' => $message->body,
                 'ignore_errors' => true,
                 'header' => $requestHeaders,
-            ),
-        );
+            ],
+        ];
 
         $httpFilePointer = @fopen(
             $url,
@@ -110,7 +110,7 @@ class Stream implements HttpClient
         $rawHeaders = isset($metaData['wrapper_data']['headers']) ?
             $metaData['wrapper_data']['headers'] :
             $metaData['wrapper_data'];
-        $headers = array();
+        $headers = [];
 
         foreach ($rawHeaders as $lineContent) {
             // Extract header values

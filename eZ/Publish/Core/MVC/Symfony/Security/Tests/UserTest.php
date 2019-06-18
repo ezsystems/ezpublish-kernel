@@ -20,16 +20,16 @@ class UserTest extends TestCase
         $apiUser = $this
             ->getMockBuilder('eZ\Publish\API\Repository\Values\User\User')
             ->setConstructorArgs(
-                array(
-                    array(
+                [
+                    [
                         'login' => $login,
                         'passwordHash' => $passwordHash,
                         'enabled' => true,
-                    ),
-                )
+                    ],
+                ]
             )
             ->getMockForAbstractClass();
-        $roles = array('ROLE_USER');
+        $roles = ['ROLE_USER'];
 
         $user = new User($apiUser, $roles);
         $this->assertSame($apiUser, $user->getAPIUser());
@@ -52,7 +52,7 @@ class UserTest extends TestCase
             ->method('__get')
             ->with('id')
             ->will($this->returnValue($userId));
-        $roles = array('ROLE_USER');
+        $roles = ['ROLE_USER'];
 
         $user = new User($apiUser, $roles);
 
@@ -62,7 +62,7 @@ class UserTest extends TestCase
             ->method('__get')
             ->with('id')
             ->will($this->returnValue($userId));
-        $user2 = new User($apiUser2, array());
+        $user2 = new User($apiUser2, []);
 
         $this->assertTrue($user->isEqualTo($user2));
     }
@@ -75,7 +75,7 @@ class UserTest extends TestCase
             ->method('__get')
             ->with('id')
             ->will($this->returnValue(123));
-        $roles = array('ROLE_USER');
+        $roles = ['ROLE_USER'];
 
         $user = new User($apiUser, $roles);
 
@@ -85,7 +85,7 @@ class UserTest extends TestCase
             ->method('__get')
             ->with('id')
             ->will($this->returnValue(456));
-        $user2 = new User($apiUser2, array());
+        $user2 = new User($apiUser2, []);
 
         $this->assertFalse($user->isEqualTo($user2));
     }
@@ -110,7 +110,7 @@ class UserTest extends TestCase
         $fullName = 'My full name';
         $userContentInfo = $this
             ->getMockBuilder('eZ\Publish\API\Repository\Values\Content\ContentInfo')
-            ->setConstructorArgs(array(array('name' => $fullName)))
+            ->setConstructorArgs([['name' => $fullName]])
             ->getMockForAbstractClass();
         $apiUser = $this->getMock('eZ\Publish\API\Repository\Values\User\User');
         $apiUser

@@ -73,18 +73,18 @@ class ContentTypeDomainMapper
             $spiContentType->initialLanguageId
         )->languageCode;
 
-        $contentTypeGroups = array();
+        $contentTypeGroups = [];
         foreach ($spiContentTypeGroups as $spiContentTypeGroup) {
             $contentTypeGroups[] = $this->buildContentTypeGroupDomainObject($spiContentTypeGroup);
         }
 
-        $fieldDefinitions = array();
+        $fieldDefinitions = [];
         foreach ($spiContentType->fieldDefinitions as $spiFieldDefinition) {
             $fieldDefinitions[] = $this->buildFieldDefinitionDomainObject($spiFieldDefinition);
         }
 
         return new ContentType(
-            array(
+            [
                 'names' => $spiContentType->name,
                 'descriptions' => $spiContentType->description,
                 'contentTypeGroups' => $contentTypeGroups,
@@ -104,7 +104,7 @@ class ContentTypeDomainMapper
                 'defaultAlwaysAvailable' => $spiContentType->defaultAlwaysAvailable,
                 'defaultSortField' => $spiContentType->sortField,
                 'defaultSortOrder' => $spiContentType->sortOrder,
-            )
+            ]
         );
     }
 
@@ -181,9 +181,9 @@ class ContentTypeDomainMapper
     public function buildContentTypeDraftDomainObject(SPIContentType $spiContentType, array $spiContentTypeGroups)
     {
         return new ContentTypeDraft(
-            array(
+            [
                 'innerContentType' => $this->buildContentTypeDomainObject($spiContentType, $spiContentTypeGroups),
-            )
+            ]
         );
     }
 
@@ -197,7 +197,7 @@ class ContentTypeDomainMapper
     public function buildContentTypeGroupDomainObject(SPIContentTypeGroup $spiGroup)
     {
         return new ContentTypeGroup(
-            array(
+            [
                 'id' => $spiGroup->id,
                 'identifier' => $spiGroup->identifier,
                 'creationDate' => $this->getDateTime($spiGroup->created),
@@ -206,7 +206,7 @@ class ContentTypeDomainMapper
                 'modifierId' => $spiGroup->modifierId,
                 'names' => $spiGroup->name,
                 'descriptions' => $spiGroup->description,
-            )
+            ]
         );
     }
 
@@ -222,7 +222,7 @@ class ContentTypeDomainMapper
         /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
         $fieldType = $this->fieldTypeRegistry->getFieldType($spiFieldDefinition->fieldType);
         $fieldDefinition = new FieldDefinition(
-            array(
+            [
                 'names' => $spiFieldDefinition->name,
                 'descriptions' => $spiFieldDefinition->description,
                 'id' => $spiFieldDefinition->id,
@@ -237,7 +237,7 @@ class ContentTypeDomainMapper
                 'isSearchable' => !$fieldType->isSearchable() ? false : $spiFieldDefinition->isSearchable,
                 'fieldSettings' => (array)$spiFieldDefinition->fieldTypeConstraints->fieldSettings,
                 'validatorConfiguration' => (array)$spiFieldDefinition->fieldTypeConstraints->validators,
-            )
+            ]
         );
 
         return $fieldDefinition;
@@ -269,7 +269,7 @@ class ContentTypeDomainMapper
             ? $fieldDefinition->fieldSettings
             : $fieldDefinitionUpdateStruct->fieldSettings;
 
-        $validationErrors = array();
+        $validationErrors = [];
         if ($fieldDefinitionUpdateStruct->isSearchable && !$fieldType->isSearchable()) {
             $validationErrors[] = new ValidationError(
                 "FieldType '{$fieldDefinition->fieldTypeIdentifier}' is not searchable"
@@ -286,7 +286,7 @@ class ContentTypeDomainMapper
         }
 
         $spiFieldDefinition = new SPIFieldDefinition(
-            array(
+            [
                 'id' => $fieldDefinition->id,
                 'fieldType' => $fieldDefinition->fieldTypeIdentifier,
                 'name' => $fieldDefinitionUpdateStruct->names === null ?
@@ -319,7 +319,7 @@ class ContentTypeDomainMapper
                 // These properties are precreated in constructor
                 //"fieldTypeConstraints"
                 //"defaultValue"
-            )
+            ]
         );
 
         $spiFieldDefinition->fieldTypeConstraints->validators = $validatorConfiguration;
@@ -345,15 +345,15 @@ class ContentTypeDomainMapper
     public function buildSPIFieldDefinitionCreate(APIFieldDefinitionCreateStruct $fieldDefinitionCreateStruct, SPIFieldType $fieldType)
     {
         $spiFieldDefinition = new SPIFieldDefinition(
-            array(
+            [
                 'id' => null,
                 'identifier' => $fieldDefinitionCreateStruct->identifier,
                 'fieldType' => $fieldDefinitionCreateStruct->fieldTypeIdentifier,
                 'name' => $fieldDefinitionCreateStruct->names === null ?
-                    array() :
+                    [] :
                     $fieldDefinitionCreateStruct->names,
                 'description' => $fieldDefinitionCreateStruct->descriptions === null ?
-                    array() :
+                    [] :
                     $fieldDefinitionCreateStruct->descriptions,
                 'fieldGroup' => $fieldDefinitionCreateStruct->fieldGroup === null ?
                     '' :
@@ -374,7 +374,7 @@ class ContentTypeDomainMapper
                 // These properties are precreated in constructor
                 //"fieldTypeConstraints"
                 //"defaultValue"
-            )
+            ]
         );
 
         $spiFieldDefinition->fieldTypeConstraints->validators = $fieldDefinitionCreateStruct->validatorConfiguration;

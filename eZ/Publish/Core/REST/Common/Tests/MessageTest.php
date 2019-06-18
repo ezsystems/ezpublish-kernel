@@ -23,7 +23,7 @@ class MessageTest extends TestCase
     {
         $message = new Common\Message();
 
-        $this->assertSame(array(), $message->headers);
+        $this->assertSame([], $message->headers);
     }
 
     /**
@@ -42,9 +42,9 @@ class MessageTest extends TestCase
     public function testCreateMessageConstructorHeaders()
     {
         $message = new Common\Message(
-            $headers = array(
+            $headers = [
                 'Content-Type' => 'text/xml',
-            )
+            ]
         );
 
         $this->assertSame($headers, $message->headers);
@@ -56,7 +56,7 @@ class MessageTest extends TestCase
     public function testCreateMessageConstructorBody()
     {
         $message = new Common\Message(
-            array(),
+            [],
             'Hello world!'
         );
 

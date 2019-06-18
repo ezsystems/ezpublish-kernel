@@ -72,9 +72,9 @@ class RichTextConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDefinition, FieldDefinition $fieldDefinition)
     {
         $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'numRows' => $storageDefinition->dataInt1,
-            )
+            ]
         );
 
         $fieldDefinition->defaultValue->data = Value::EMPTY_VALUE;

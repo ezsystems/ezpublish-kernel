@@ -74,9 +74,9 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->createObjectStateGroup($objectStateGroupCreateStruct);
         $this->signalDispatcher->emit(
             new CreateObjectStateGroupSignal(
-                array(
+                [
                     'objectStateGroupId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -138,9 +138,9 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateObjectStateGroupSignal(
-                array(
+                [
                     'objectStateGroupId' => $objectStateGroup->id,
-                )
+                ]
             )
         );
 
@@ -159,9 +159,9 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->deleteObjectStateGroup($objectStateGroup);
         $this->signalDispatcher->emit(
             new DeleteObjectStateGroupSignal(
-                array(
+                [
                     'objectStateGroupId' => $objectStateGroup->id,
-                )
+                ]
             )
         );
 
@@ -187,10 +187,10 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->createObjectState($objectStateGroup, $objectStateCreateStruct);
         $this->signalDispatcher->emit(
             new CreateObjectStateSignal(
-                array(
+                [
                     'objectStateGroupId' => $objectStateGroup->id,
                     'objectStateId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -227,9 +227,9 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->updateObjectState($objectState, $objectStateUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateObjectStateSignal(
-                array(
+                [
                     'objectStateId' => $objectState->id,
-                )
+                ]
             )
         );
 
@@ -249,10 +249,10 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->setPriorityOfObjectState($objectState, $priority);
         $this->signalDispatcher->emit(
             new SetPriorityOfObjectStateSignal(
-                array(
+                [
                     'objectStateId' => $objectState->id,
                     'priority' => $priority,
-                )
+                ]
             )
         );
 
@@ -272,9 +272,9 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->deleteObjectState($objectState);
         $this->signalDispatcher->emit(
             new DeleteObjectStateSignal(
-                array(
+                [
                     'objectStateId' => $objectState->id,
-                )
+                ]
             )
         );
 
@@ -296,11 +296,11 @@ class ObjectStateService implements ObjectStateServiceInterface
         $returnValue = $this->service->setContentState($contentInfo, $objectStateGroup, $objectState);
         $this->signalDispatcher->emit(
             new SetContentStateSignal(
-                array(
+                [
                     'contentId' => $contentInfo->id,
                     'objectStateGroupId' => $objectStateGroup->id,
                     'objectStateId' => $objectState->id,
-                )
+                ]
             )
         );
 

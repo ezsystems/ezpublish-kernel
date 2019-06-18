@@ -44,9 +44,9 @@ class RoutingListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            MVCEvents::SITEACCESS => array('onSiteAccessMatch', 200),
-        );
+        return [
+            MVCEvents::SITEACCESS => ['onSiteAccessMatch', 200],
+        ];
     }
 
     public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)

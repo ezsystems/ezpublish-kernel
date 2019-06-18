@@ -23,14 +23,14 @@ class ConfigurationProcessor
      *
      * @var array
      */
-    protected static $availableSiteAccesses = array();
+    protected static $availableSiteAccesses = [];
 
     /**
      * Registered scope groups names, indexed by scope.
      *
      * @var array
      */
-    protected static $groupsBySiteAccess = array();
+    protected static $groupsBySiteAccess = [];
 
     /**
      * Name of the node under which scope based (semantic) configuration takes place.
@@ -103,7 +103,7 @@ class ConfigurationProcessor
         $scopeNodeName = $this->contextualizer->getSiteAccessNodeName();
         foreach ($config[$scopeNodeName] as $currentScope => &$scopeSettings) {
             if ($mapperCallable) {
-                call_user_func_array($mapper, array(&$scopeSettings, $currentScope, $this->contextualizer));
+                call_user_func_array($mapper, [&$scopeSettings, $currentScope, $this->contextualizer]);
             } else {
                 $mapper->mapConfig($scopeSettings, $currentScope, $this->contextualizer);
             }

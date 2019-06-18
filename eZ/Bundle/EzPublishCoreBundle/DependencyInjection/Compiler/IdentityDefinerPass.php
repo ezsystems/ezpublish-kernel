@@ -24,7 +24,7 @@ class IdentityDefinerPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('ezpublish.identity_definer') as $id => $attributes) {
             $hashGeneratorDef->addMethodCall(
                 'setIdentityDefiner',
-                array(new Reference($id))
+                [new Reference($id)]
             );
         }
     }

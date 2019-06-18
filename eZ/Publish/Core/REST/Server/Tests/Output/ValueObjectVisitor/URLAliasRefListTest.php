@@ -28,19 +28,19 @@ class URLAliasRefListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $urlAliasRefList = new URLAliasRefList(
-            array(
+            [
                 new URLAlias(
-                    array(
+                    [
                         'id' => 'some-id',
-                    )
+                    ]
                 ),
-            ),
+            ],
             '/some/path'
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadURLAlias',
-            array('urlAliasId' => $urlAliasRefList->urlAliases[0]->id),
+            ['urlAliasId' => $urlAliasRefList->urlAliases[0]->id],
             "/content/urlaliases/{$urlAliasRefList->urlAliases[0]->id}"
         );
 

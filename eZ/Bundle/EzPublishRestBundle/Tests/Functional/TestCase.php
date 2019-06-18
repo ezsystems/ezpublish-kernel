@@ -60,7 +60,7 @@ class TestCase extends BaseTestCase
      *
      * @var array
      */
-    private static $createdContent = array();
+    private static $createdContent = [];
 
     protected function setUp()
     {

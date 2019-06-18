@@ -75,11 +75,11 @@ class GlobalHelperTest extends TestCase
     public function testGetViewParameters()
     {
         $request = Request::create('/foo');
-        $viewParameters = array(
+        $viewParameters = [
             'foo' => 'bar',
             'toto' => 'tata',
             'somethingelse' => 'héhé-høhø',
-        );
+        ];
         $request->attributes->set('viewParameters', $viewParameters);
         $requestStack = new RequestStack();
         $requestStack->push($request);
@@ -139,7 +139,7 @@ class GlobalHelperTest extends TestCase
         $this->router
             ->expects($this->once())
             ->method('generate')
-            ->with('_ezpublishLocation', array('locationId' => $locationId, 'viewType' => $viewType))
+            ->with('_ezpublishLocation', ['locationId' => $locationId, 'viewType' => $viewType])
             ->will($this->returnValue($expectedSystemUriString));
 
         $this->helper->setRequestStack($requestStack);
@@ -163,7 +163,7 @@ class GlobalHelperTest extends TestCase
 
         $rootLocation = $this
             ->getMockBuilder('eZ\\Publish\\API\\Repository\\Values\\Content\\Location')
-            ->setConstructorArgs(array(array('id' => $rootLocationId)));
+            ->setConstructorArgs([['id' => $rootLocationId]]);
         $this->locationService
             ->expects($this->once())
             ->method('loadLocation')
@@ -188,7 +188,7 @@ class GlobalHelperTest extends TestCase
 
     public function testGetAvailableLanguages()
     {
-        $languages = array('fre-FR', 'eng-GB', 'esl-ES');
+        $languages = ['fre-FR', 'eng-GB', 'esl-ES'];
         $this->translationHelper
             ->expects($this->once())
             ->method('getAvailableLanguages')

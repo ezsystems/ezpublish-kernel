@@ -75,9 +75,9 @@ class TextBlockConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'textRows' => $storageDef->dataInt1,
-            )
+            ]
         );
         $fieldDef->defaultValue->data = null;
         $fieldDef->defaultValue->sortKey = '';

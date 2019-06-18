@@ -39,8 +39,8 @@ class PathStringRouteBasedLimitationParserTest extends BaseTest
 
     public function getParseHrefExpectationsMap()
     {
-        return array(
-            array('/content/locations/1/2/3/4/', 'pathString', '1/2/3/4/'),
-        );
+        return [
+            ['/content/locations/1/2/3/4/', 'pathString', '1/2/3/4/'],
+        ];
     }
 }

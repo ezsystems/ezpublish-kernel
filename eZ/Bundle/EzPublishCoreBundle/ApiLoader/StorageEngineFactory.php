@@ -27,7 +27,7 @@ class StorageEngineFactory
      *
      * @var \eZ\Publish\SPI\Persistence\Handler[]
      */
-    protected $storageEngines = array();
+    protected $storageEngines = [];
 
     public function __construct(RepositoryConfigurationProvider $repositoryConfigurationProvider)
     {

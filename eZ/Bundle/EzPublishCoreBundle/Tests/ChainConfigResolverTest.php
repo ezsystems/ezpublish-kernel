@@ -25,7 +25,7 @@ class ChainConfigResolverTest extends TestCase
      */
     public function testPriority()
     {
-        $this->assertEquals(array(), $this->chainResolver->getAllResolvers());
+        $this->assertEquals([], $this->chainResolver->getAllResolvers());
 
         list($low, $high) = $this->createResolverMocks();
 
@@ -33,10 +33,10 @@ class ChainConfigResolverTest extends TestCase
         $this->chainResolver->addResolver($high, 100);
 
         $this->assertEquals(
-            array(
+            [
                 $high,
                 $low,
-            ),
+            ],
             $this->chainResolver->getAllResolvers()
         );
     }
@@ -55,21 +55,21 @@ class ChainConfigResolverTest extends TestCase
         // We're using a mock here and not $this->chainResolver because we need to ensure that the sorting operation is done only once.
         $resolver = $this->buildMock(
             'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\ChainConfigResolver',
-            array('sortResolvers')
+            ['sortResolvers']
         );
         $resolver
             ->expects($this->once())
             ->method('sortResolvers')
             ->will(
                 $this->returnValue(
-                    array($high, $medium, $low)
+                    [$high, $medium, $low]
                 )
             );
 
         $resolver->addResolver($low, 10);
         $resolver->addResolver($medium, 50);
         $resolver->addResolver($high, 100);
-        $expectedSortedRouters = array($high, $medium, $low);
+        $expectedSortedRouters = [$high, $medium, $low];
         // Let's get all routers 5 times, we should only sort once.
         for ($i = 0; $i < 5; ++$i) {
             $this->assertSame($expectedSortedRouters, $resolver->getAllResolvers());
@@ -90,14 +90,14 @@ class ChainConfigResolverTest extends TestCase
         // We're using a mock here and not $this->chainResolver because we need to ensure that the sorting operation is done only once.
         $resolver = $this->buildMock(
             'eZ\\Bundle\\EzPublishCoreBundle\\DependencyInjection\\Configuration\\ChainConfigResolver',
-            array('sortResolvers')
+            ['sortResolvers']
         );
         $resolver
             ->expects($this->at(0))
             ->method('sortResolvers')
             ->will(
                 $this->returnValue(
-                    array($high, $medium, $low)
+                    [$high, $medium, $low]
                 )
             );
         // The second time sortResolvers() is called, we're supposed to get the newly added router ($highest)
@@ -106,7 +106,7 @@ class ChainConfigResolverTest extends TestCase
             ->method('sortResolvers')
             ->will(
                 $this->returnValue(
-                    array($highest, $high, $medium, $low)
+                    [$highest, $high, $medium, $low]
                 )
             );
 
@@ -114,14 +114,14 @@ class ChainConfigResolverTest extends TestCase
         $resolver->addResolver($medium, 50);
         $resolver->addResolver($high, 100);
         $this->assertSame(
-            array($high, $medium, $low),
+            [$high, $medium, $low],
             $resolver->getAllResolvers()
         );
 
         // Now adding another resolver on the fly, sorting must have been reset
         $resolver->addResolver($highest, 101);
         $this->assertSame(
-            array($highest, $high, $medium, $low),
+            [$highest, $high, $medium, $low],
             $resolver->getAllResolvers()
         );
     }
@@ -198,12 +198,12 @@ class ChainConfigResolverTest extends TestCase
 
     public function getParameterProvider()
     {
-        return array(
-            array('foo', 'namespace', 'scope', 'someValue'),
-            array('some.parameter', 'wowNamespace', 'mySiteaccess', array('foo', 'bar')),
-            array('another.parameter.but.longer.name', 'yetAnotherNamespace', 'anotherSiteaccess', array('foo', array('fruit' => 'apple'))),
-            array('boolean.parameter', 'yetAnotherNamespace', 'admin', false),
-        );
+        return [
+            ['foo', 'namespace', 'scope', 'someValue'],
+            ['some.parameter', 'wowNamespace', 'mySiteaccess', ['foo', 'bar']],
+            ['another.parameter.but.longer.name', 'yetAnotherNamespace', 'anotherSiteaccess', ['foo', ['fruit' => 'apple']]],
+            ['boolean.parameter', 'yetAnotherNamespace', 'admin', false],
+        ];
     }
 
     /**
@@ -263,14 +263,14 @@ class ChainConfigResolverTest extends TestCase
      */
     private function createResolverMocks()
     {
-        return array(
+        return [
             $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
             $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
             $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface'),
-        );
+        ];
     }
 
-    private function buildMock($class, array $methods = array())
+    private function buildMock($class, array $methods = [])
     {
         return $this
             ->getMockBuilder($class)

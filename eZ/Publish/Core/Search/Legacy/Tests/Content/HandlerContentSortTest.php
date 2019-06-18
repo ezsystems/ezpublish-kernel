@@ -62,7 +62,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
      *
      * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
-    protected function getContentSearchHandler(array $fullTextSearchConfiguration = array())
+    protected function getContentSearchHandler(array $fullTextSearchConfiguration = [])
     {
         $db = $this->getDatabaseHandler();
 
@@ -70,7 +70,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
             new Content\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 new Content\Common\Gateway\CriteriaConverter(
-                    array(
+                    [
                         new Content\Common\Gateway\CriterionHandler\MatchAll($db),
                         new Content\Common\Gateway\CriterionHandler\LogicalAnd($db),
                         new Content\Common\Gateway\CriterionHandler\SectionId($db),
@@ -78,10 +78,10 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                             $db,
                             $this->getContentTypeHandler()
                         ),
-                    )
+                    ]
                 ),
                 new Content\Common\Gateway\SortClauseConverter(
-                    array(
+                    [
                         new Content\Common\Gateway\SortClauseHandler\DateModified($db),
                         new Content\Common\Gateway\SortClauseHandler\DatePublished($db),
                         new Content\Common\Gateway\SortClauseHandler\SectionIdentifier($db),
@@ -92,7 +92,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                             $this->getLanguageHandler(),
                             $this->getContentTypeHandler()
                         ),
-                    )
+                    ]
                 ),
                 $this->getLanguageHandler()
             ),
@@ -123,7 +123,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                 ),
                 new ContentTypeMapper(
                     new ConverterRegistry(
-                        array(
+                        [
                             'ezdatetime' => new Converter\DateAndTimeConverter(),
                             'ezinteger' => new Converter\IntegerConverter(),
                             'ezstring' => new Converter\TextLineConverter(),
@@ -136,7 +136,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
                             'ezimage' => new Converter\NullConverter(),
                             'ezsrrating' => new Converter\NullConverter(),
                             'ezmultioption' => new Converter\NullConverter(),
-                        )
+                        ]
                     )
                 ),
                 $this->getMock('eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler')
@@ -155,11 +155,11 @@ class HandlerContentSortTest extends LanguageAwareTestCase
     {
         $mapperMock = $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-            array('extractContentInfoFromRows'),
-            array(
+            ['extractContentInfoFromRows'],
+            [
                 $this->getFieldRegistry(),
                 $this->getLanguageHandler(),
-            )
+            ]
         );
         $mapperMock->expects($this->any())
             ->method('extractContentInfoFromRows')
@@ -167,7 +167,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
             ->will(
                 $this->returnCallback(
                     function ($rows) {
-                        $contentInfoObjs = array();
+                        $contentInfoObjs = [];
                         foreach ($rows as $row) {
                             $contentId = (int)$row['id'];
                             if (!isset($contentInfoObjs[$contentId])) {
@@ -194,8 +194,8 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         if (!isset($this->fieldRegistry)) {
             $this->fieldRegistry = $this->getMock(
                 '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
-                array(),
-                array(array())
+                [],
+                [[]]
             );
         }
 
@@ -211,8 +211,8 @@ class HandlerContentSortTest extends LanguageAwareTestCase
     {
         return $this->getMock(
             'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
-            array('loadExternalFieldData'),
-            array(),
+            ['loadExternalFieldData'],
+            [],
             '',
             false
         );
@@ -224,12 +224,12 @@ class HandlerContentSortTest extends LanguageAwareTestCase
 
         $result = $locator->findContent(
             new Query(
-                array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                [
+                    'filter' => new Criterion\SectionId([2]),
                     'offset' => 0,
                     'limit' => 10,
-                    'sortClauses' => array(),
-                )
+                    'sortClauses' => [],
+                ]
             )
         );
 
@@ -241,7 +241,7 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         );
         sort($ids);
         $this->assertEquals(
-            array(4, 10, 11, 12, 13, 14, 42, 226),
+            [4, 10, 11, 12, 13, 14, 42, 226],
             $ids
         );
     }
@@ -252,19 +252,19 @@ class HandlerContentSortTest extends LanguageAwareTestCase
 
         $result = $locator->findContent(
             new Query(
-                array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                [
+                    'filter' => new Criterion\SectionId([2]),
                     'offset' => 0,
                     'limit' => 10,
-                    'sortClauses' => array(
+                    'sortClauses' => [
                         new SortClause\DateModified(),
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
         $this->assertEquals(
-            array(4, 12, 13, 42, 10, 14, 11, 226),
+            [4, 12, 13, 42, 10, 14, 11, 226],
             array_map(
                 function ($hit) {
                     return $hit->valueObject->id;
@@ -280,19 +280,19 @@ class HandlerContentSortTest extends LanguageAwareTestCase
 
         $result = $locator->findContent(
             new Query(
-                array(
-                    'filter' => new Criterion\SectionId(array(2)),
+                [
+                    'filter' => new Criterion\SectionId([2]),
                     'offset' => 0,
                     'limit' => 10,
-                    'sortClauses' => array(
+                    'sortClauses' => [
                         new SortClause\DatePublished(),
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
         $this->assertEquals(
-            array(4, 10, 11, 12, 13, 14, 226, 42),
+            [4, 10, 11, 12, 13, 14, 226, 42],
             array_map(
                 function ($hit) {
                     return $hit->valueObject->id;
@@ -308,14 +308,14 @@ class HandlerContentSortTest extends LanguageAwareTestCase
 
         $result = $locator->findContent(
             new Query(
-                array(
-                    'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
+                [
+                    'filter' => new Criterion\SectionId([4, 2, 6, 3]),
                     'offset' => 0,
                     'limit' => null,
-                    'sortClauses' => array(
+                    'sortClauses' => [
                         new SortClause\SectionIdentifier(),
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
@@ -323,12 +323,12 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         // From inside a specific section, no particular order should be defined
         // the logic is then to have a set of sorted id's to compare with
         // the comparison being done slice by slice.
-        $idMapSet = array(
-            2 => array(4, 10, 11, 12, 13, 14, 42, 226),
-            3 => array(41, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 66, 200, 201),
-            4 => array(45, 52),
-            6 => array(154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164),
-        );
+        $idMapSet = [
+            2 => [4, 10, 11, 12, 13, 14, 42, 226],
+            3 => [41, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 66, 200, 201],
+            4 => [45, 52],
+            6 => [154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164],
+        ];
         $contentIds = array_map(
             function ($hit) {
                 return $hit->valueObject->id;
@@ -354,14 +354,14 @@ class HandlerContentSortTest extends LanguageAwareTestCase
 
         $result = $locator->findContent(
             new Query(
-                array(
-                    'filter' => new Criterion\SectionId(array(4, 2, 6, 3)),
+                [
+                    'filter' => new Criterion\SectionId([4, 2, 6, 3]),
                     'offset' => 0,
                     'limit' => null,
-                    'sortClauses' => array(
+                    'sortClauses' => [
                         new SortClause\SectionName(),
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
@@ -370,12 +370,12 @@ class HandlerContentSortTest extends LanguageAwareTestCase
         // From inside a specific section, no particular order should be defined
         // the logic is then to have a set of sorted id's to compare with
         // the comparison being done slice by slice.
-        $idMapSet = array(
-            'media' => array(41, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 66, 200, 201),
-            'protected' => array(154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164),
-            'setup' => array(45, 52),
-            'users' => array(4, 10, 11, 12, 13, 14, 42, 226),
-        );
+        $idMapSet = [
+            'media' => [41, 49, 50, 51, 57, 58, 59, 60, 61, 62, 63, 64, 66, 200, 201],
+            'protected' => [154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164],
+            'setup' => [45, 52],
+            'users' => [4, 10, 11, 12, 13, 14, 42, 226],
+        ];
         $contentIds = array_map(
             function ($hit) {
                 return $hit->valueObject->id;
@@ -408,19 +408,19 @@ class HandlerContentSortTest extends LanguageAwareTestCase
 
         $result = $locator->findContent(
             new Query(
-                array(
-                    'filter' => new Criterion\SectionId(array(2, 3)),
+                [
+                    'filter' => new Criterion\SectionId([2, 3]),
                     'offset' => 0,
                     'limit' => null,
-                    'sortClauses' => array(
+                    'sortClauses' => [
                         new SortClause\ContentName(),
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
         $this->assertEquals(
-            array(226, 14, 12, 10, 42, 57, 13, 50, 49, 41, 11, 51, 62, 4, 58, 59, 61, 60, 64, 63, 200, 66, 201),
+            [226, 14, 12, 10, 42, 57, 13, 50, 49, 41, 11, 51, 62, 4, 58, 59, 61, 60, 64, 63, 200, 66, 201],
             array_map(
                 function ($hit) {
                     return $hit->valueObject->id;
@@ -436,51 +436,51 @@ class HandlerContentSortTest extends LanguageAwareTestCase
 
         $result = $locator->findContent(
             new Query(
-                array(
+                [
                     'filter' => new Criterion\LogicalAnd(
-                        array(
-                            new Criterion\SectionId(array(1)),
-                            new Criterion\ContentTypeIdentifier(array('article')),
-                        )
+                        [
+                            new Criterion\SectionId([1]),
+                            new Criterion\ContentTypeIdentifier(['article']),
+                        ]
                     ),
                     'offset' => 0,
                     'limit' => null,
-                    'sortClauses' => array(
+                    'sortClauses' => [
                         new SortClause\Field('article', 'title', Query::SORT_ASC, 'eng-US'),
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
         // There are several identical titles, need to take care about this
-        $idMapSet = array(
-            'aenean malesuada ligula' => array(83),
-            'aliquam pulvinar suscipit tellus' => array(102),
-            'asynchronous publishing' => array(148, 215),
-            'canonical links' => array(147, 216),
-            'class aptent taciti' => array(88),
-            'class aptent taciti sociosqu' => array(82),
-            'duis auctor vehicula erat' => array(89),
-            'etiam posuere sodales arcu' => array(78),
-            'etiam sodales mauris' => array(87),
-            'ez publish enterprise' => array(151),
-            'fastcgi' => array(144, 218),
-            'fusce sagittis sagittis' => array(77),
-            'fusce sagittis sagittis urna' => array(81),
-            'get involved' => array(107),
-            'how to develop with ez publish' => array(127, 211),
-            'how to manage ez publish' => array(118, 202),
-            'how to use ez publish' => array(108, 193),
-            'improved block editing' => array(136),
-            'improved front-end editing' => array(139),
-            'improved user registration workflow' => array(132),
-            'in hac habitasse platea' => array(79),
-            'lots of websites, one ez publish installation' => array(130),
-            'rest api interface' => array(150, 214),
-            'separate content & design in ez publish' => array(191),
-            'support for red hat enterprise' => array(145, 217),
-            'tutorials for' => array(106),
-        );
+        $idMapSet = [
+            'aenean malesuada ligula' => [83],
+            'aliquam pulvinar suscipit tellus' => [102],
+            'asynchronous publishing' => [148, 215],
+            'canonical links' => [147, 216],
+            'class aptent taciti' => [88],
+            'class aptent taciti sociosqu' => [82],
+            'duis auctor vehicula erat' => [89],
+            'etiam posuere sodales arcu' => [78],
+            'etiam sodales mauris' => [87],
+            'ez publish enterprise' => [151],
+            'fastcgi' => [144, 218],
+            'fusce sagittis sagittis' => [77],
+            'fusce sagittis sagittis urna' => [81],
+            'get involved' => [107],
+            'how to develop with ez publish' => [127, 211],
+            'how to manage ez publish' => [118, 202],
+            'how to use ez publish' => [108, 193],
+            'improved block editing' => [136],
+            'improved front-end editing' => [139],
+            'improved user registration workflow' => [132],
+            'in hac habitasse platea' => [79],
+            'lots of websites, one ez publish installation' => [130],
+            'rest api interface' => [150, 214],
+            'separate content & design in ez publish' => [191],
+            'support for red hat enterprise' => [145, 217],
+            'tutorials for' => [106],
+        ];
         $contentIds = array_map(
             function ($hit) {
                 return $hit->valueObject->id;
@@ -506,24 +506,24 @@ class HandlerContentSortTest extends LanguageAwareTestCase
 
         $result = $locator->findContent(
             new Query(
-                array(
+                [
                     'filter' => new Criterion\LogicalAnd(
-                        array(
-                            new Criterion\SectionId(array(1)),
+                        [
+                            new Criterion\SectionId([1]),
                             new Criterion\ContentTypeIdentifier('product'),
-                        )
+                        ]
                     ),
                     'offset' => 0,
                     'limit' => null,
-                    'sortClauses' => array(
+                    'sortClauses' => [
                         new SortClause\Field('product', 'price', Query::SORT_ASC, 'eng-US'),
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
         $this->assertEquals(
-            array(73, 71, 72, 69),
+            [73, 71, 72, 69],
             array_map(
                 function ($hit) {
                     return $hit->valueObject->id;

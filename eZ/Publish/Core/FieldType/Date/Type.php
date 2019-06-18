@@ -27,13 +27,13 @@ class Type extends FieldType
      */
     const DEFAULT_CURRENT_DATE = 1;
 
-    protected $settingsSchema = array(
+    protected $settingsSchema = [
         // One of the DEFAULT_* class constants
-        'defaultType' => array(
+        'defaultType' => [
             'type' => 'choice',
             'default' => self::DEFAULT_EMPTY,
-        ),
-    );
+        ],
+    ];
 
     /**
      * Returns the field type identifier for this field type.
@@ -174,16 +174,16 @@ class Type extends FieldType
         }
 
         if ($value->date instanceof DateTime) {
-            return array(
+            return [
                 'timestamp' => $value->date->getTimestamp(),
                 'rfc850' => $value->date->format(DateTime::RFC850),
-            );
+            ];
         }
 
-        return array(
+        return [
             'timestamp' => 0,
             'rfc850' => null,
-        );
+        ];
     }
 
     /**
@@ -205,16 +205,16 @@ class Type extends FieldType
      */
     public function validateFieldSettings($fieldSettings)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($fieldSettings as $name => $value) {
             if (!isset($this->settingsSchema[$name])) {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
-                    array(
+                    [
                         '%setting%' => $name,
-                    ),
+                    ],
                     "[$name]"
                 );
                 continue;
@@ -222,17 +222,17 @@ class Type extends FieldType
 
             switch ($name) {
                 case 'defaultType':
-                    $definedTypes = array(
+                    $definedTypes = [
                         self::DEFAULT_EMPTY,
                         self::DEFAULT_CURRENT_DATE,
-                    );
+                    ];
                     if (!in_array($value, $definedTypes, true)) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' is of unknown type",
                             null,
-                            array(
+                            [
                                 '%setting%' => $name,
-                            ),
+                            ],
                             "[$name]"
                         );
                     }

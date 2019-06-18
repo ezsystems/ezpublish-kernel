@@ -93,10 +93,10 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
 
     protected function getAdditionallyIndexedMultivaluedFieldData()
     {
-        return array();
+        return [];
     }
 
-    protected $legacyUnsupportedOperators = array(
+    protected $legacyUnsupportedOperators = [
         Operator::EQ => 'EQ',
         Operator::IN => 'IN',
         Operator::GT => 'GT',
@@ -104,7 +104,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
         Operator::LT => 'LT',
         Operator::LTE => 'LTE',
         Operator::BETWEEN => 'BETWEEN',
-    );
+    ];
 
     protected function checkOperatorSupport($operator)
     {
@@ -152,7 +152,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
 
         $contentType = $this->createTestContentType();
 
-        $context = array(
+        $context = [
             $repository,
             $this->createTestSearchContent(
                 $this->getValidMultivaluedSearchValuesOne(),
@@ -164,7 +164,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                 $repository,
                 $contentType
             )->id,
-        );
+        ];
 
         $this->refreshSearch($repository);
 
@@ -181,19 +181,19 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
     public function findMultivaluedProvider()
     {
         $additionalFields = $this->getAdditionallyIndexedMultivaluedFieldData();
-        $additionalFields[] = array(
+        $additionalFields[] = [
             null,
             $this->getMultivaluedSearchTargetValuesOne(),
             $this->getMultivaluedSearchTargetValuesTwo(),
-        );
-        $templates = array(
-            array(true, true),
-            array(true, false),
-            array(false, true),
-            array(false, false),
-        );
+        ];
+        $templates = [
+            [true, true],
+            [true, false],
+            [false, true],
+            [false, false],
+        ];
 
-        $fixture = array();
+        $fixture = [];
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
@@ -669,10 +669,10 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                 $criteria = new Field(
                     'data',
                     Operator::BETWEEN,
-                    array(
+                    [
                         $valueOne,
                         $valueTwo,
-                    )
+                    ]
                 );
 
                 $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
@@ -702,10 +702,10 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                     new Field(
                         'data',
                         Operator::BETWEEN,
-                        array(
+                        [
                             $valueOne,
                             $valueTwo,
-                        )
+                        ]
                     )
                 );
 
@@ -735,10 +735,10 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                 $criteria = new Field(
                     'data',
                     Operator::BETWEEN,
-                    array(
+                    [
                         $valueTwo,
                         $valueOne,
-                    )
+                    ]
                 );
 
                 $this->assertFindResult($context, $criteria, false, false, $filter, $content, $modifyField);
@@ -768,10 +768,10 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
                     new Field(
                         'data',
                         Operator::BETWEEN,
-                        array(
+                        [
                             $valueTwo,
                             $valueOne,
-                        )
+                        ]
                     )
                 );
 

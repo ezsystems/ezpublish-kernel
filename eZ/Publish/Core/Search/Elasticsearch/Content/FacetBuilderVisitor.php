@@ -61,7 +61,7 @@ abstract class FacetBuilderVisitor
      */
     protected function mapData($data)
     {
-        $values = array();
+        $values = [];
 
         foreach ($data->buckets as $bucket) {
             $values[$bucket->key] = $bucket->doc_count;

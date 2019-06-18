@@ -81,9 +81,9 @@ class ISBNConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'isISBN13' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
-            )
+            ]
         );
 
         $fieldDef->defaultValue->data = $storageDef->dataText1 ?: null;

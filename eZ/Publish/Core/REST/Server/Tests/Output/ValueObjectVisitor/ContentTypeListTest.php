@@ -27,7 +27,7 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $contentTypeList = new ContentTypeList(array(), '/content/typegroups/2/types');
+        $contentTypeList = new ContentTypeList([], '/content/typegroups/2/types');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -52,9 +52,9 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentTypeListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentTypeList',
-            ),
+            ],
             $result,
             'Invalid <ContentTypeList> element.',
             false
@@ -71,13 +71,13 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentTypeListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentTypeList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ContentTypeList+xml',
                     'href' => '/content/typegroups/2/types',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ContentTypeList> attributes.',
             false
@@ -95,18 +95,18 @@ class ContentTypeListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $contentTypeList = new ContentTypeList(
-            array(
+            [
                 new ContentType\ContentType(
-                    array(
-                        'fieldDefinitions' => array(),
-                    )
+                    [
+                        'fieldDefinitions' => [],
+                    ]
                 ),
                 new ContentType\ContentType(
-                    array(
-                        'fieldDefinitions' => array(),
-                    )
+                    [
+                        'fieldDefinitions' => [],
+                    ]
                 ),
-            ),
+            ],
             '/content/typegroups/2/types'
         );
 

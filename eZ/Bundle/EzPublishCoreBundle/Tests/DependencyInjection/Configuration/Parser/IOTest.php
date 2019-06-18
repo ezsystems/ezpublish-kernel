@@ -27,9 +27,9 @@ class IOTest extends AbstractParserTestCase
 
     protected function getContainerExtensions()
     {
-        return array(
-            new EzPublishCoreExtension(array(new IO(new ComplexSettingParser()))),
-        );
+        return [
+            new EzPublishCoreExtension([new IO(new ComplexSettingParser())]),
+        ];
     }
 
     protected function getMinimalConfiguration()
@@ -39,16 +39,16 @@ class IOTest extends AbstractParserTestCase
 
     public function testHandlersConfig()
     {
-        $config = array(
-            'system' => array(
-                'ezdemo_site' => array(
-                    'io' => array(
+        $config = [
+            'system' => [
+                'ezdemo_site' => [
+                    'io' => [
                         'binarydata_handler' => 'cluster',
                         'metadata_handler' => 'cluster',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $this->load($config);
 

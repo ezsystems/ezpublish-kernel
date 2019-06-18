@@ -34,7 +34,7 @@ class ContentUpdate extends BaseParser
      */
     public function parse(array $data, ParsingDispatcher $parsingDispatcher)
     {
-        $parsedData = array();
+        $parsedData = [];
 
         if (array_key_exists('Section', $data) && is_array($data['Section']) && isset($data['Section']['_href'])) {
             try {

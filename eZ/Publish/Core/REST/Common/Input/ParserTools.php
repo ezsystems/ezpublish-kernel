@@ -66,7 +66,7 @@ class ParserTools
      */
     public function parseTranslatableList(array $listElement)
     {
-        $listItems = array();
+        $listItems = [];
         foreach ($listElement['value'] as $valueRow) {
             $listItems[$valueRow['_languageCode']] = isset($valueRow['#text']) ?
                 $valueRow['#text'] :
@@ -197,7 +197,7 @@ class ParserTools
             throw new Exceptions\Parser('Invalid format for limitation values in Limitation.');
         }
 
-        $limitationValues = array();
+        $limitationValues = [];
         foreach ($limitation['values']['ref'] as $limitationValue) {
             if (!array_key_exists('_href', $limitationValue)) {
                 throw new Exceptions\Parser('Invalid format for limitation values in Limitation.');

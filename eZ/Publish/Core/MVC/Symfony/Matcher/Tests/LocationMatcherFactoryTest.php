@@ -20,7 +20,7 @@ class LocationMatcherFactoryTest extends ContentBasedMatcherFactoryTest
      */
     protected function getMatchableValueObject()
     {
-        return $this->getContentView(array('id' => 789), array('id' => 456));
+        return $this->getContentView(['id' => 789], ['id' => 456]);
     }
 
     /**
@@ -31,7 +31,7 @@ class LocationMatcherFactoryTest extends ContentBasedMatcherFactoryTest
      */
     protected function getNonMatchableValueObject()
     {
-        return $this->getContentView(array('id' => 123456789), array('id' => 987654321));
+        return $this->getContentView(['id' => 123456789], ['id' => 987654321]);
     }
 
     protected function getMatcherClass()

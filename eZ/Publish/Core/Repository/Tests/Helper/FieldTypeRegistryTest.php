@@ -17,7 +17,7 @@ class FieldTypeRegistryTest extends TestCase
 {
     public function testConstructor()
     {
-        $fieldTypes = array('field types');
+        $fieldTypes = ['field types'];
 
         $registry = new FieldTypeRegistry($fieldTypes);
 
@@ -42,9 +42,9 @@ class FieldTypeRegistryTest extends TestCase
 
     public function testGetFieldType()
     {
-        $fieldTypes = array(
+        $fieldTypes = [
             'one' => $this->getFieldTypeMock(),
-        );
+        ];
 
         $registry = new FieldTypeRegistry($fieldTypes);
 
@@ -58,9 +58,9 @@ class FieldTypeRegistryTest extends TestCase
 
     public function testGetClosureFieldType()
     {
-        $fieldTypes = array(
+        $fieldTypes = [
             'one' => $this->getClosure($this->getFieldTypeMock()),
-        );
+        ];
 
         $registry = new FieldTypeRegistry($fieldTypes);
 
@@ -77,7 +77,7 @@ class FieldTypeRegistryTest extends TestCase
      */
     public function testGetFieldTypeThrowsNotFoundException()
     {
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry([]);
 
         $registry->getFieldType('none');
     }
@@ -89,9 +89,9 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetFieldTypeThrowsRuntimeExceptionIncorrectType()
     {
         $registry = new FieldTypeRegistry(
-            array(
+            [
                 'none' => "I'm not a field type",
-            )
+            ]
         );
 
         $registry->getFieldType('none');
@@ -104,9 +104,9 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetClosureFieldTypeThrowsRuntimeExceptionIncorrectType()
     {
         $registry = new FieldTypeRegistry(
-            array(
+            [
                 'none' => $this->getClosure("I'm not a field type"),
-            )
+            ]
         );
 
         $registry->getFieldType('none');
@@ -114,10 +114,10 @@ class FieldTypeRegistryTest extends TestCase
 
     public function testGetFieldTypes()
     {
-        $fieldTypes = array(
+        $fieldTypes = [
             'one' => $this->getFieldTypeMock(),
             'two' => $this->getClosure($this->getFieldTypeMock()),
-        );
+        ];
 
         $registry = new FieldTypeRegistry($fieldTypes);
 

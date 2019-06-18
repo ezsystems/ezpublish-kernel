@@ -57,9 +57,9 @@ class EmailAddressTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array(
-            'EmailAddressValidator' => array(),
-        );
+        return [
+            'EmailAddressValidator' => [],
+        ];
     }
 
     /**
@@ -69,7 +69,7 @@ class EmailAddressTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -105,16 +105,16 @@ class EmailAddressTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 23,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
+            ],
+            [
                 new EmailAddressValue(23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -148,20 +148,20 @@ class EmailAddressTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new EmailAddressValue(),
-            ),
-            array(
+            ],
+            [
                 'spam_mail@ex-something.no',
                 new EmailAddressValue('spam_mail@ex-something.no'),
-            ),
-            array(
+            ],
+            [
                 new EmailAddressValue('spam_mail@ex-something.no'),
                 new EmailAddressValue('spam_mail@ex-something.no'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -201,16 +201,16 @@ class EmailAddressTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new EmailAddressValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new EmailAddressValue('spam_mail@ex-something.no'),
                 'spam_mail@ex-something.no',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -250,20 +250,20 @@ class EmailAddressTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new EmailAddressValue(),
-            ),
-            array(
+            ],
+            [
                 '',
                 new EmailAddressValue(),
-            ),
-            array(
+            ],
+            [
                 'spam_mail@ex-something.no',
                 new EmailAddressValue('spam_mail@ex-something.no'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -296,23 +296,23 @@ class EmailAddressTest extends FieldTypeTest
      */
     public function provideValidValidatorConfiguration()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
-                    'EmailAddressValidator' => array(),
-                ),
-            ),
-            array(
-                array(
-                    'EmailAddressValidator' => array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
+                    'EmailAddressValidator' => [],
+                ],
+            ],
+            [
+                [
+                    'EmailAddressValidator' => [
                         'Extent' => 'regex',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -359,34 +359,34 @@ class EmailAddressTest extends FieldTypeTest
      */
     public function provideInvalidValidatorConfiguration()
     {
-        return array(
-            array(
-                array(
-                    'NonExistentValidator' => array(),
-                ),
-            ),
-            array(
-                array(
-                    'EmailAddressValidator' => array(
+        return [
+            [
+                [
+                    'NonExistentValidator' => [],
+                ],
+            ],
+            [
+                [
+                    'EmailAddressValidator' => [
                         'Extent' => 23,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'EmailAddressValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'EmailAddressValidator' => [
                         'Extent' => '',
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'EmailAddressValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'EmailAddressValidator' => [
                         'Extent' => '\\http\\',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -396,16 +396,16 @@ class EmailAddressTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array(
+        return [
+            [
                 new EmailAddressValue('john.doe@example.com'),
                 'john.doe@example.com',
-            ),
-            array(
+            ],
+            [
                 new EmailAddressValue('JANE.DOE@EXAMPLE.COM'),
                 'jane.doe@example.com',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -455,14 +455,14 @@ class EmailAddressTest extends FieldTypeTest
      */
     public function provideValidDataForValidate()
     {
-        return array(
-            array(
-                array(
-                    'validatorConfiguration' => array(),
-                ),
+        return [
+            [
+                [
+                    'validatorConfiguration' => [],
+                ],
                 new EmailAddressValue('jane.doe@example.com'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -531,16 +531,16 @@ class EmailAddressTest extends FieldTypeTest
      */
     public function provideInvalidDataForValidate()
     {
-        return array(
-            array(
-                array(
-                    'validatorConfiguration' => array(),
-                ),
+        return [
+            [
+                [
+                    'validatorConfiguration' => [],
+                ],
                 new EmailAddressValue('jane.doe.example.com'),
-                array(
-                    new ValidationError('The value must be a valid email address.', null, array(), 'email'),
-                ),
-            ),
-        );
+                [
+                    new ValidationError('The value must be a valid email address.', null, [], 'email'),
+                ],
+            ],
+        ];
     }
 }

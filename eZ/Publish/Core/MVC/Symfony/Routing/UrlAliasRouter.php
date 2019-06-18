@@ -130,19 +130,19 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
                 $pathPrefix = $this->generator->getPathPrefixByRootLocationId($this->rootLocationId);
             }
 
-            $params = array(
+            $params = [
                 '_route' => self::URL_ALIAS_ROUTE_NAME,
-            );
+            ];
             switch ($urlAlias->type) {
                 case URLAlias::LOCATION:
                     $location = $this->generator->loadLocation($urlAlias->destination);
-                    $params += array(
+                    $params += [
                         '_controller' => static::VIEW_ACTION,
                         'contentId' => $location->contentId,
                         'locationId' => $urlAlias->destination,
                         'viewType' => ViewManager::VIEW_TYPE_FULL,
                         'layout' => true,
-                    );
+                    ];
 
                     $request->attributes->set('locationId', $urlAlias->destination);
 
@@ -301,7 +301,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      *
      * @api
      */
-    public function generate($name, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    public function generate($name, $parameters = [], $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         // Direct access to Location
         if ($name instanceof Location) {
@@ -389,7 +389,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
     /**
      * @see Symfony\Cmf\Component\Routing\VersatileGeneratorInterface::getRouteDebugMessage()
      */
-    public function getRouteDebugMessage($name, array $parameters = array())
+    public function getRouteDebugMessage($name, array $parameters = [])
     {
         if ($name instanceof RouteObjectInterface) {
             return 'Route with key ' . $name->getRouteKey();

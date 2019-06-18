@@ -140,7 +140,7 @@ class ViewController extends Controller
      *
      * @deprecated Since 6.0.0. Viewing locations is now done with ViewContent.
      */
-    public function viewLocation($locationId, $viewType, $layout = false, array $params = array())
+    public function viewLocation($locationId, $viewType, $layout = false, array $params = [])
     {
         @trigger_error(
             "ViewController::viewLocation() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
@@ -200,7 +200,7 @@ class ViewController extends Controller
      *
      * @deprecated Since 6.0.0. Viewing locations is now done with ViewContent.
      */
-    public function embedLocation($locationId, $viewType, $layout = false, array $params = array())
+    public function embedLocation($locationId, $viewType, $layout = false, array $params = [])
     {
         @trigger_error(
             "ViewController::embedLocation() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
@@ -229,14 +229,14 @@ class ViewController extends Controller
                     new AuthorizationAttribute(
                         'content',
                         'read',
-                        array('valueObject' => $location->contentInfo, 'targets' => $location)
+                        ['valueObject' => $location->contentInfo, 'targets' => $location]
                     )
                 )
                 && !$this->authorizationChecker->isGranted(
                     new AuthorizationAttribute(
                         'content',
                         'view_embed',
-                        array('valueObject' => $location->contentInfo, 'targets' => $location)
+                        ['valueObject' => $location->contentInfo, 'targets' => $location]
                     )
                 )
             ) {
@@ -282,7 +282,7 @@ class ViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function viewContent($contentId, $viewType, $layout = false, array $params = array())
+    public function viewContent($contentId, $viewType, $layout = false, array $params = [])
     {
         @trigger_error(
             "ViewController::viewContent() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
@@ -337,7 +337,7 @@ class ViewController extends Controller
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function embedContent($contentId, $viewType, $layout = false, array $params = array())
+    public function embedContent($contentId, $viewType, $layout = false, array $params = [])
     {
         @trigger_error(
             "ViewController::embedContent() is deprecated since kernel 6.0.0, and will be removed in the future.\n" .
@@ -359,10 +359,10 @@ class ViewController extends Controller
             // Check both 'content/read' and 'content/view_embed'.
             if (
                 !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute('content', 'read', array('valueObject' => $content))
+                    new AuthorizationAttribute('content', 'read', ['valueObject' => $content])
                 )
                 && !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute('content', 'view_embed', array('valueObject' => $content))
+                    new AuthorizationAttribute('content', 'view_embed', ['valueObject' => $content])
                 )
             ) {
                 throw new AccessDeniedException();
@@ -372,7 +372,7 @@ class ViewController extends Controller
             if (
                 $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
                 && !$this->authorizationChecker->isGranted(
-                    new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))
+                    new AuthorizationAttribute('content', 'versionread', ['valueObject' => $content])
                 )
             ) {
                 throw new AccessDeniedException();
@@ -400,11 +400,11 @@ class ViewController extends Controller
     {
         $event = new APIContentExceptionEvent(
             $e,
-            array(
+            [
                 'contentId' => $contentId,
                 'locationId' => $locationId,
                 'viewType' => $viewType,
-            )
+            ]
         );
         $this->getEventDispatcher()->dispatch(MVCEvents::API_CONTENT_EXCEPTION, $event);
         if ($event->hasContentView()) {
@@ -431,9 +431,9 @@ class ViewController extends Controller
      *
      * @return string
      */
-    protected function renderLocation(Location $location, $viewType, $layout = false, array $params = array())
+    protected function renderLocation(Location $location, $viewType, $layout = false, array $params = [])
     {
-        return $this->viewManager->renderLocation($location, $viewType, $params + array('noLayout' => !$layout));
+        return $this->viewManager->renderLocation($location, $viewType, $params + ['noLayout' => !$layout]);
     }
 
     /**
@@ -446,9 +446,9 @@ class ViewController extends Controller
      *
      * @return string
      */
-    protected function renderContent(Content $content, $viewType, $layout = false, array $params = array())
+    protected function renderContent(Content $content, $viewType, $layout = false, array $params = [])
     {
-        return $this->viewManager->renderContent($content, $viewType, $params + array('noLayout' => !$layout));
+        return $this->viewManager->renderContent($content, $viewType, $params + ['noLayout' => !$layout]);
     }
 
     /**

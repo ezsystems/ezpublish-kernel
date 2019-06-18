@@ -38,12 +38,12 @@ class RouteReferenceGenerator implements RouteReferenceGeneratorInterface
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Routing\RouteReference
      */
-    public function generate($resource = null, array $params = array())
+    public function generate($resource = null, array $params = [])
     {
         $request = $this->getCurrentRequest();
         if ($resource === null) {
             $resource = $request->attributes->get('_route');
-            $params += $request->attributes->get('_route_params', array());
+            $params += $request->attributes->get('_route_params', []);
         }
 
         $event = new RouteReferenceGenerationEvent(new RouteReference($resource, $params), $request);

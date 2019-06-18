@@ -35,5 +35,5 @@ class SearchResult extends ValueObject
      *
      * @var \eZ\Publish\API\Repository\Values\ValueObject[]
      */
-    public $items = array();
+    public $items = [];
 }

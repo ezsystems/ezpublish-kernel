@@ -26,7 +26,7 @@ class MapLocationDistance extends Criterion implements CriterionInterface, Custo
      *
      * @var array
      */
-    protected $customFields = array();
+    protected $customFields = [];
 
     /**
      * @todo needs to be defined, could be a string identifying one of the predefined easing methods
@@ -51,7 +51,7 @@ class MapLocationDistance extends Criterion implements CriterionInterface, Custo
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(Operator::IN, Specifications::FORMAT_ARRAY),
             new Specifications(Operator::EQ, Specifications::FORMAT_SINGLE),
             new Specifications(Operator::GT, Specifications::FORMAT_SINGLE),
@@ -59,7 +59,7 @@ class MapLocationDistance extends Criterion implements CriterionInterface, Custo
             new Specifications(Operator::LT, Specifications::FORMAT_SINGLE),
             new Specifications(Operator::LTE, Specifications::FORMAT_SINGLE),
             new Specifications(Operator::BETWEEN, Specifications::FORMAT_ARRAY, null, 2),
-        );
+        ];
     }
 
     /**

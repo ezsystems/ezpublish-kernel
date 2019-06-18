@@ -13,19 +13,19 @@ use PHPUnit\Framework\TestCase;
 
 class DateProcessorTest extends TestCase
 {
-    protected $constants = array(
+    protected $constants = [
         'DEFAULT_EMPTY',
         'DEFAULT_CURRENT_DATE',
-    );
+    ];
 
     public function fieldSettingsHashes()
     {
         return array_map(
             function ($constantName) {
-                return array(
-                    array('defaultType' => $constantName),
-                    array('defaultType' => constant("eZ\\Publish\\Core\\FieldType\\Date\\Type::{$constantName}")),
-                );
+                return [
+                    ['defaultType' => $constantName],
+                    ['defaultType' => constant("eZ\\Publish\\Core\\FieldType\\Date\\Type::{$constantName}")],
+                ];
             },
             $this->constants
         );

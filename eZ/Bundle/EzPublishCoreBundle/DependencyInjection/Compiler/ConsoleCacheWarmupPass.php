@@ -27,7 +27,7 @@ class ConsoleCacheWarmupPass implements CompilerPassInterface
             return;
         }
 
-        $warmers = array();
+        $warmers = [];
         foreach ($container->findTaggedServiceIds('kernel.cache_warmer') as $id => $attributes) {
             if ($id === 'kernel.class_cache.cache_warmer') {
                 continue;

@@ -90,13 +90,13 @@ class LegacyStorage extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $items = array();
+        $items = [];
         foreach ($rows as $row) {
             $items[] = $this->buildBlockItem(
-                $row + array(
+                $row + [
                     'block_id' => $block->id,
                     'ts_hidden' => 0,
-                )
+                ]
             );
         }
 
@@ -134,10 +134,10 @@ class LegacyStorage extends Gateway
         }
 
         return $this->buildBlockItem(
-            $rows[0] + array(
+            $rows[0] + [
                 'block_id' => $block->id,
                 'ts_hidden' => 0,
-            )
+            ]
         );
     }
 
@@ -166,14 +166,14 @@ class LegacyStorage extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $items = array();
+        $items = [];
         foreach ($rows as $row) {
             $items[] = $this->buildBlockItem(
-                $row + array(
+                $row + [
                     'block_id' => $block->id,
                     'ts_visible' => 0,
                     'ts_hidden' => 0,
-                )
+                ]
             );
         }
 
@@ -203,12 +203,12 @@ class LegacyStorage extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $items = array();
+        $items = [];
         foreach ($rows as $row) {
             $items[] = $this->buildBlockItem(
-                $row + array(
+                $row + [
                     'block_id' => $block->id,
-                )
+                ]
             );
         }
 
@@ -268,7 +268,7 @@ class LegacyStorage extends Gateway
     protected function buildBlockItem(array $row)
     {
         return new Item(
-            array(
+            [
                 'blockId' => $row['block_id'],
                 'contentId' => (int)$row['object_id'],
                 'locationId' => (int)$row['node_id'],
@@ -278,7 +278,7 @@ class LegacyStorage extends Gateway
                 'hiddenDate' => $row['ts_hidden'] ? new DateTime("@{$row['ts_hidden']}") : null,
                 'rotationUntilDate' => $row['rotation_until'] ? new DateTime("@{$row['rotation_until']}") : null,
                 'movedTo' => $row['moved_to'],
-            )
+            ]
         );
     }
 }

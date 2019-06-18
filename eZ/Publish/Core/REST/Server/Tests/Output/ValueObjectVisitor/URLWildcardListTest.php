@@ -27,11 +27,11 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $urlWildcardList = new URLWildcardList(array());
+        $urlWildcardList = new URLWildcardList([]);
 
         $this->addRouteExpectation(
             'ezpublish_rest_listURLWildcards',
-            array(),
+            [],
             '/content/urlwildcards'
         );
 
@@ -58,9 +58,9 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlWildcardListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlWildcardList',
-            ),
+            ],
             $result,
             'Invalid <UrlWildcardList> element.',
             false
@@ -77,13 +77,13 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlWildcardListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlWildcardList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UrlWildcardList+xml',
                     'href' => '/content/urlwildcards',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UrlWildcardList> attributes.',
             false
@@ -101,10 +101,10 @@ class URLWildcardListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $urlWildcardList = new URLWildcardList(
-            array(
+            [
                 new Content\URLWildcard(),
                 new Content\URLWildcard(),
-            )
+            ]
         );
 
         $this->getVisitorMock()->expects($this->exactly(2))

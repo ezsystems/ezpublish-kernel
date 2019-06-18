@@ -30,7 +30,7 @@ abstract class MultipleValued extends RepositoryAware implements MatcherInterfac
      */
     public function setMatchingConfig($matchingConfig)
     {
-        $matchingConfig = !is_array($matchingConfig) ? array($matchingConfig) : $matchingConfig;
+        $matchingConfig = !is_array($matchingConfig) ? [$matchingConfig] : $matchingConfig;
         $this->values = array_fill_keys($matchingConfig, true);
     }
 

@@ -37,7 +37,7 @@ class MultipleIdentifierMapper extends IdentifierMapper
      */
     public function map(Field $field)
     {
-        $values = array();
+        $values = [];
 
         foreach ($field->value as $value) {
             $values[] = $this->convert($value);

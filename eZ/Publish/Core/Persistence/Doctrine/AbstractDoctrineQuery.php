@@ -34,14 +34,14 @@ abstract class AbstractDoctrineQuery
      *
      * @var array(string=>&mixed)
      */
-    private $boundParameters = array();
+    private $boundParameters = [];
 
     /**
      * Stores the type of a value which will we used when the value is bound.
      *
      * @var array(string=>int)
      */
-    private $boundParametersType = array();
+    private $boundParametersType = [];
 
     /**
      * Stores the list of values that will be bound with doBind().
@@ -50,14 +50,14 @@ abstract class AbstractDoctrineQuery
      *
      * @var array(string=>mixed)
      */
-    private $boundValues = array();
+    private $boundValues = [];
 
     /**
      * Stores the type of a value which will we used when the value is bound.
      *
      * @var array(string=>int)
      */
-    private $boundValuesType = array();
+    private $boundValuesType = [];
 
     /**
      * @var \eZ\Publish\Core\Persistence\Database\Expression

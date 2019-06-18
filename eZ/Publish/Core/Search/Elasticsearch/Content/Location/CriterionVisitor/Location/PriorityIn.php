@@ -48,10 +48,10 @@ class PriorityIn extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'terms' => array(
+        return [
+            'terms' => [
                 'priority_i' => $criterion->value,
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -57,7 +57,7 @@ class LanguageLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new LanguageLimitation(
-                array('limitationValues' => array('eng-GB'))
+                ['limitationValues' => ['eng-GB']]
             )
         );
         $roleService->updatePolicy($editPolicy, $policyUpdate);
@@ -128,7 +128,7 @@ class LanguageLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new LanguageLimitation(
-                array('limitationValues' => array('eng-US'))
+                ['limitationValues' => ['eng-US']]
             )
         );
         $roleService->updatePolicy($editPolicy, $policyUpdate);

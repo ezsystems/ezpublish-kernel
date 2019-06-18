@@ -78,15 +78,15 @@ class SearchService implements SearchServiceInterface
         Helper\DomainMapper $domainMapper,
         PermissionCriterionResolver $permissionCriterionResolver,
         BackgroundIndexer $backgroundIndexer,
-        array $settings = array()
+        array $settings = []
     ) {
         $this->repository = $repository;
         $this->searchHandler = $searchHandler;
         $this->domainMapper = $domainMapper;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             //'defaultSetting' => array(),
-        );
+        ];
         $this->permissionCriterionResolver = $permissionCriterionResolver;
         $this->backgroundIndexer = $backgroundIndexer;
     }
@@ -104,7 +104,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findContent(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         $contentService = $this->repository->getContentService();
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
@@ -149,7 +149,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContentInfo(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findContentInfo(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         $result = $this->internalFindContentInfo($query, $languageFilter, $filterOnUserPermissions);
         foreach ($result->searchHits as $hit) {
@@ -176,7 +176,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With "raw" SPI contentInfo objects in result
      */
-    protected function internalFindContentInfo(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    protected function internalFindContentInfo(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
@@ -197,12 +197,12 @@ class SearchService implements SearchServiceInterface
         $query = clone $query;
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
-        $this->validateContentCriteria(array($query->query), '$query');
-        $this->validateContentCriteria(array($query->filter), '$query');
+        $this->validateContentCriteria([$query->query], '$query');
+        $this->validateContentCriteria([$query->filter], '$query');
         $this->validateContentSortClauses($query);
 
         if ($filterOnUserPermissions && !$this->addPermissionsCriterion($query->filter)) {
-            return new SearchResult(array('time' => 0, 'totalCount' => 0));
+            return new SearchResult(['time' => 0, 'totalCount' => 0]);
         }
 
         return $this->searchHandler->findContent($query, $languageFilter);
@@ -262,9 +262,9 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findSingle(Criterion $filter, array $languageFilter = [], $filterOnUserPermissions = true)
     {
-        $this->validateContentCriteria(array($filter), '$filter');
+        $this->validateContentCriteria([$filter], '$filter');
 
         if ($filterOnUserPermissions && !$this->addPermissionsCriterion($filter)) {
             throw new NotFoundException('Content', '*');
@@ -289,7 +289,7 @@ class SearchService implements SearchServiceInterface
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
     {
     }
 
@@ -306,7 +306,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findLocations(LocationQuery $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         if (!is_int($query->offset)) {
             throw new InvalidArgumentType(
@@ -328,7 +328,7 @@ class SearchService implements SearchServiceInterface
         $query->filter = $query->filter ?: new Criterion\MatchAll();
 
         if ($filterOnUserPermissions && !$this->addPermissionsCriterion($query->filter)) {
-            return new SearchResult(array('time' => 0, 'totalCount' => 0));
+            return new SearchResult(['time' => 0, 'totalCount' => 0]);
         }
 
         $result = $this->searchHandler->findLocations($query, $languageFilter);
@@ -374,10 +374,10 @@ class SearchService implements SearchServiceInterface
             $criterion->criteria[] = $permissionCriterion;
         } else {
             $criterion = new LogicalAnd(
-                array(
+                [
                     $criterion,
                     $permissionCriterion,
-                )
+                ]
             );
         }
 

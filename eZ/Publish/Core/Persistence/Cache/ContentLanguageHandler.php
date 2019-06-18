@@ -22,7 +22,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function create(CreateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $language = $this->persistenceHandler->contentLanguageHandler()->create($struct);
         $this->cache->getItem('language', $language->id)->set($language)->save();
 
@@ -34,7 +34,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function update(Language $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
         $this->cache->clear('language', $struct->id);
@@ -50,7 +50,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
         $cache = $this->cache->getItem('language', $id);
         $language = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('language' => $id));
+            $this->logger->logCall(__METHOD__, ['language' => $id]);
             $cache->set($language = $this->persistenceHandler->contentLanguageHandler()->load($id))->save();
         }
 
@@ -62,7 +62,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function loadByLanguageCode($languageCode)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $languageCode));
+        $this->logger->logCall(__METHOD__, ['language' => $languageCode]);
 
         return $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode($languageCode);
     }
@@ -82,7 +82,7 @@ class ContentLanguageHandler extends AbstractHandler implements ContentLanguageH
      */
     public function delete($id)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $id));
+        $this->logger->logCall(__METHOD__, ['language' => $id]);
         $return = $this->persistenceHandler->contentLanguageHandler()->delete($id);
 
         $this->cache->clear('language', $id);

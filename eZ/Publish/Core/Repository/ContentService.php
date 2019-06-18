@@ -106,7 +106,7 @@ class ContentService implements ContentServiceInterface
         Helper\RelationProcessor $relationProcessor,
         Helper\NameSchemaService $nameSchemaService,
         Helper\FieldTypeRegistry $fieldTypeRegistry,
-        array $settings = array()
+        array $settings = []
     ) {
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
@@ -115,10 +115,10 @@ class ContentService implements ContentServiceInterface
         $this->nameSchemaService = $nameSchemaService;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             // Version archive limit (0-50), only enforced on publish, not on un-publish.
             'default_version_archive_limit' => 5,
-        );
+        ];
     }
 
     /**
@@ -137,7 +137,7 @@ class ContentService implements ContentServiceInterface
     {
         $contentInfo = $this->internalLoadContentInfo($contentId);
         if (!$this->repository->canUser('content', 'read', $contentInfo)) {
-            throw new UnauthorizedException('content', 'read', array('contentId' => $contentId));
+            throw new UnauthorizedException('content', 'read', ['contentId' => $contentId]);
         }
 
         return $contentInfo;
@@ -189,7 +189,7 @@ class ContentService implements ContentServiceInterface
         $contentInfo = $this->internalLoadContentInfo($remoteId, true);
 
         if (!$this->repository->canUser('content', 'read', $contentInfo)) {
-            throw new UnauthorizedException('content', 'read', array('remoteId' => $remoteId));
+            throw new UnauthorizedException('content', 'read', ['remoteId' => $remoteId]);
         }
 
         return $contentInfo;
@@ -240,10 +240,10 @@ class ContentService implements ContentServiceInterface
         } catch (APINotFoundException $e) {
             throw new NotFoundException(
                 'VersionInfo',
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
-                ),
+                ],
                 $e
             );
         }
@@ -257,7 +257,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if (!$this->repository->canUser('content', $function, $versionInfo)) {
-            throw new UnauthorizedException('content', $function, array('contentId' => $contentId));
+            throw new UnauthorizedException('content', $function, ['contentId' => $contentId]);
         }
 
         return $versionInfo;
@@ -339,14 +339,14 @@ class ContentService implements ContentServiceInterface
         $content = $this->internalLoadContent($contentId, $languages, $versionNo, false, $useAlwaysAvailable);
 
         if (!$this->repository->canUser('content', 'read', $content)) {
-            throw new UnauthorizedException('content', 'read', array('contentId' => $contentId));
+            throw new UnauthorizedException('content', 'read', ['contentId' => $contentId]);
         }
 
         if (
             $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
             && !$this->repository->canUser('content', 'versionread', $content)
         ) {
-            throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentId, 'versionNo' => $versionNo));
+            throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentId, 'versionNo' => $versionNo]);
         }
 
         return $content;
@@ -399,11 +399,11 @@ class ContentService implements ContentServiceInterface
         } catch (APINotFoundException $e) {
             throw new NotFoundException(
                 'Content',
-                array(
+                [
                     $isRemoteId ? 'remoteId' : 'id' => $id,
                     'languages' => $languages,
                     'versionNo' => $versionNo,
-                ),
+                ],
                 $e
             );
         }
@@ -436,14 +436,14 @@ class ContentService implements ContentServiceInterface
         $content = $this->internalLoadContent($remoteId, $languages, $versionNo, true, $useAlwaysAvailable);
 
         if (!$this->repository->canUser('content', 'read', $content)) {
-            throw new UnauthorizedException('content', 'read', array('remoteId' => $remoteId));
+            throw new UnauthorizedException('content', 'read', ['remoteId' => $remoteId]);
         }
 
         if (
             $content->getVersionInfo()->status !== APIVersionInfo::STATUS_PUBLISHED
             && !$this->repository->canUser('content', 'versionread', $content)
         ) {
-            throw new UnauthorizedException('content', 'versionread', array('remoteId' => $remoteId, 'versionNo' => $versionNo));
+            throw new UnauthorizedException('content', 'versionread', ['remoteId' => $remoteId, 'versionNo' => $versionNo]);
         }
 
         return $content;
@@ -525,7 +525,7 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent(APIContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array())
+    public function createContent(APIContentCreateStruct $contentCreateStruct, array $locationCreateStructs = [])
     {
         if ($contentCreateStruct->mainLanguageCode === null) {
             throw new InvalidArgumentException('$contentCreateStruct', "'mainLanguageCode' property must be set");
@@ -564,12 +564,12 @@ class ContentService implements ContentServiceInterface
             throw new UnauthorizedException(
                 'content',
                 'create',
-                array(
+                [
                     'parentLocationId' => isset($locationCreateStructs[0]) ?
                             $locationCreateStructs[0]->parentLocationId :
                             null,
                     'sectionId' => $contentCreateStruct->sectionId,
-                )
+                ]
             );
         }
 
@@ -593,11 +593,11 @@ class ContentService implements ContentServiceInterface
         $languageCodes = $this->getLanguageCodesForCreate($contentCreateStruct);
         $fields = $this->mapFieldsForCreate($contentCreateStruct);
 
-        $fieldValues = array();
-        $spiFields = array();
-        $allFieldErrors = array();
-        $inputRelations = array();
-        $locationIdToContentIdMapping = array();
+        $fieldValues = [];
+        $spiFields = [];
+        $allFieldErrors = [];
+        $inputRelations = [];
+        $locationIdToContentIdMapping = [];
 
         foreach ($contentCreateStruct->contentType->getFieldDefinitions() as $fieldDefinition) {
             /** @var $fieldType \eZ\Publish\Core\FieldType\FieldType */
@@ -656,14 +656,14 @@ class ContentService implements ContentServiceInterface
                     (!$isEmptyValue && $isLanguageMain)
                 ) {
                     $spiFields[] = new SPIField(
-                        array(
+                        [
                             'id' => null,
                             'fieldDefinitionId' => $fieldDefinition->id,
                             'type' => $fieldDefinition->fieldTypeIdentifier,
                             'value' => $fieldType->toPersistenceValue($fieldValue),
                             'languageCode' => $languageCode,
                             'versionNo' => null,
-                        )
+                        ]
                     );
                 }
             }
@@ -674,7 +674,7 @@ class ContentService implements ContentServiceInterface
         }
 
         $spiContentCreateStruct = new SPIContentCreateStruct(
-            array(
+            [
                 'name' => $this->nameSchemaService->resolve(
                     $contentCreateStruct->contentType->nameSchema,
                     $contentCreateStruct->contentType,
@@ -692,7 +692,7 @@ class ContentService implements ContentServiceInterface
                 'initialLanguageId' => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
                     $contentCreateStruct->mainLanguageCode
                 )->id,
-            )
+            ]
         );
 
         $defaultObjectStates = $this->getDefaultObjectStates();
@@ -731,7 +731,7 @@ class ContentService implements ContentServiceInterface
      */
     protected function getDefaultObjectStates()
     {
-        $defaultObjectStatesMap = array();
+        $defaultObjectStatesMap = [];
         $objectStateHandler = $this->persistenceHandler->objectStateHandler();
 
         foreach ($objectStateHandler->loadAllGroups() as $objectStateGroup) {
@@ -756,7 +756,7 @@ class ContentService implements ContentServiceInterface
      */
     protected function getLanguageCodesForCreate(APIContentCreateStruct $contentCreateStruct)
     {
-        $languageCodes = array();
+        $languageCodes = [];
 
         foreach ($contentCreateStruct->fields as $field) {
             if ($field->languageCode === null || isset($languageCodes[$field->languageCode])) {
@@ -792,7 +792,7 @@ class ContentService implements ContentServiceInterface
      */
     protected function mapFieldsForCreate(APIContentCreateStruct $contentCreateStruct)
     {
-        $fields = array();
+        $fields = [];
 
         foreach ($contentCreateStruct->fields as $field) {
             $fieldDefinition = $contentCreateStruct->contentType->getFieldDefinition($field->fieldDefIdentifier);
@@ -807,7 +807,7 @@ class ContentService implements ContentServiceInterface
             if ($field->languageCode === null) {
                 $field = $this->cloneField(
                     $field,
-                    array('languageCode' => $contentCreateStruct->mainLanguageCode)
+                    ['languageCode' => $contentCreateStruct->mainLanguageCode]
                 );
             }
 
@@ -832,15 +832,15 @@ class ContentService implements ContentServiceInterface
      *
      * @return Field
      */
-    private function cloneField(Field $field, array $overrides = array())
+    private function cloneField(Field $field, array $overrides = [])
     {
         $fieldData = array_merge(
-            array(
+            [
                 'id' => $field->id,
                 'value' => $field->value,
                 'languageCode' => $field->languageCode,
                 'fieldDefIdentifier' => $field->fieldDefIdentifier,
-            ),
+            ],
             $overrides
         );
 
@@ -856,8 +856,8 @@ class ContentService implements ContentServiceInterface
      */
     protected function buildSPILocationCreateStructs(array $locationCreateStructs)
     {
-        $spiLocationCreateStructs = array();
-        $parentLocationIdSet = array();
+        $spiLocationCreateStructs = [];
+        $parentLocationIdSet = [];
         $mainLocation = true;
 
         foreach ($locationCreateStructs as $locationCreateStruct) {
@@ -928,7 +928,7 @@ class ContentService implements ContentServiceInterface
         $loadedContentInfo = $this->loadContentInfo($contentInfo->id);
 
         if (!$this->repository->canUser('content', 'edit', $loadedContentInfo)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $loadedContentInfo->id));
+            throw new UnauthorizedException('content', 'edit', ['contentId' => $loadedContentInfo->id]);
         }
 
         if (isset($contentMetadataUpdateStruct->remoteId)) {
@@ -952,7 +952,7 @@ class ContentService implements ContentServiceInterface
                 $this->persistenceHandler->contentHandler()->updateMetadata(
                     $loadedContentInfo->id,
                     new SPIMetadataUpdateStruct(
-                        array(
+                        [
                             'ownerId' => $contentMetadataUpdateStruct->ownerId,
                             'publicationDate' => isset($contentMetadataUpdateStruct->publishedDate) ?
                                 $contentMetadataUpdateStruct->publishedDate->getTimestamp() :
@@ -967,7 +967,7 @@ class ContentService implements ContentServiceInterface
                                 null,
                             'alwaysAvailable' => $contentMetadataUpdateStruct->alwaysAvailable,
                             'remoteId' => $contentMetadataUpdateStruct->remoteId,
-                        )
+                        ]
                     )
                 );
             }
@@ -1038,7 +1038,7 @@ class ContentService implements ContentServiceInterface
         $contentInfo = $this->internalLoadContentInfo($contentInfo->id);
 
         if (!$this->repository->canUser('content', 'remove', $contentInfo)) {
-            throw new UnauthorizedException('content', 'remove', array('contentId' => $contentInfo->id));
+            throw new UnauthorizedException('content', 'remove', ['contentId' => $contentInfo->id]);
         }
 
         $affectedLocations = [];
@@ -1119,7 +1119,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if (!$this->repository->canUser('content', 'edit', $contentInfo)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $contentInfo->id));
+            throw new UnauthorizedException('content', 'edit', ['contentId' => $contentInfo->id]);
         }
 
         $this->repository->beginTransaction();
@@ -1161,12 +1161,12 @@ class ContentService implements ContentServiceInterface
         }
 
         $spiVersionInfoList = $this->persistenceHandler->contentHandler()->loadDraftsForUser($user->getUserId());
-        $versionInfoList = array();
+        $versionInfoList = [];
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
             // @todo: Change this to filter returned drafts by permissions instead of throwing
             if (!$this->repository->canUser('content', 'versionread', $versionInfo)) {
-                throw new UnauthorizedException('content', 'versionread', array('contentId' => $versionInfo->contentInfo->id));
+                throw new UnauthorizedException('content', 'versionread', ['contentId' => $versionInfo->contentInfo->id]);
             }
 
             $versionInfoList[] = $versionInfo;
@@ -1237,7 +1237,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if (!$this->repository->canUser('content', 'edit', $content)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $content->id));
+            throw new UnauthorizedException('content', 'edit', ['contentId' => $content->id]);
         }
 
         $mainLanguageCode = $content->contentInfo->mainLanguageCode;
@@ -1260,11 +1260,11 @@ class ContentService implements ContentServiceInterface
             $mainLanguageCode
         );
 
-        $fieldValues = array();
-        $spiFields = array();
-        $allFieldErrors = array();
-        $inputRelations = array();
-        $locationIdToContentIdMapping = array();
+        $fieldValues = [];
+        $spiFields = [];
+        $allFieldErrors = [];
+        $inputRelations = [];
+        $locationIdToContentIdMapping = [];
 
         foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
             /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
@@ -1332,7 +1332,7 @@ class ContentService implements ContentServiceInterface
                 }
 
                 $spiFields[] = new SPIField(
-                    array(
+                    [
                         'id' => $isLanguageNew ?
                             null :
                             $content->getField($fieldDefinition->identifier, $languageCode)->id,
@@ -1341,7 +1341,7 @@ class ContentService implements ContentServiceInterface
                         'value' => $fieldType->toPersistenceValue($fieldValue),
                         'languageCode' => $languageCode,
                         'versionNo' => $versionInfo->versionNo,
-                    )
+                    ]
                 );
             }
         }
@@ -1351,7 +1351,7 @@ class ContentService implements ContentServiceInterface
         }
 
         $spiContentUpdateStruct = new SPIContentUpdateStruct(
-            array(
+            [
                 'name' => $this->nameSchemaService->resolveNameSchema(
                     $content,
                     $fieldValues,
@@ -1364,7 +1364,7 @@ class ContentService implements ContentServiceInterface
                 'initialLanguageId' => $this->persistenceHandler->contentLanguageHandler()->loadByLanguageCode(
                     $contentUpdateStruct->initialLanguageCode
                 )->id,
-            )
+            ]
         );
         $existingRelations = $this->loadRelations($versionInfo);
 
@@ -1459,7 +1459,7 @@ class ContentService implements ContentServiceInterface
         ContentType $contentType,
         $mainLanguageCode
     ) {
-        $fields = array();
+        $fields = [];
 
         foreach ($contentUpdateStruct->fields as $field) {
             $fieldDefinition = $contentType->getFieldDefinition($field->fieldDefIdentifier);
@@ -1477,7 +1477,7 @@ class ContentService implements ContentServiceInterface
                 } else {
                     $languageCode = $mainLanguageCode;
                 }
-                $field = $this->cloneField($field, array('languageCode' => $languageCode));
+                $field = $this->cloneField($field, ['languageCode' => $languageCode]);
             }
 
             if (!$fieldDefinition->isTranslatable && ($field->languageCode != $mainLanguageCode)) {
@@ -1516,10 +1516,10 @@ class ContentService implements ContentServiceInterface
 
         if (!$content->getVersionInfo()->getContentInfo()->published) {
             if (!$this->repository->canUser('content', 'create', $content)) {
-                throw new UnauthorizedException('content', 'create', array('contentId' => $content->id));
+                throw new UnauthorizedException('content', 'create', ['contentId' => $content->id]);
             }
         } elseif (!$this->repository->canUser('content', 'edit', $content)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $content->id));
+            throw new UnauthorizedException('content', 'edit', ['contentId' => $content->id]);
         }
 
         $this->repository->beginTransaction();
@@ -1615,7 +1615,7 @@ class ContentService implements ContentServiceInterface
             throw new UnauthorizedException(
                 'content',
                 'versionremove',
-                array('contentId' => $versionInfo->contentInfo->id, 'versionNo' => $versionInfo->versionNo)
+                ['contentId' => $versionInfo->contentInfo->id, 'versionNo' => $versionInfo->versionNo]
             );
         }
 
@@ -1657,16 +1657,16 @@ class ContentService implements ContentServiceInterface
     public function loadVersions(ContentInfo $contentInfo)
     {
         if (!$this->repository->canUser('content', 'versionread', $contentInfo)) {
-            throw new UnauthorizedException('content', 'versionread', array('contentId' => $contentInfo->id));
+            throw new UnauthorizedException('content', 'versionread', ['contentId' => $contentInfo->id]);
         }
 
         $spiVersionInfoList = $this->persistenceHandler->contentHandler()->listVersions($contentInfo->id);
 
-        $versions = array();
+        $versions = [];
         foreach ($spiVersionInfoList as $spiVersionInfo) {
             $versionInfo = $this->domainMapper->buildVersionInfoDomainObject($spiVersionInfo);
             if (!$this->repository->canUser('content', 'versionread', $versionInfo)) {
-                throw new UnauthorizedException('content', 'versionread', array('versionId' => $versionInfo->id));
+                throw new UnauthorizedException('content', 'versionread', ['versionId' => $versionInfo->id]);
             }
 
             $versions[] = $versionInfo;
@@ -1767,7 +1767,7 @@ class ContentService implements ContentServiceInterface
         );
 
         /** @var $relations \eZ\Publish\API\Repository\Values\Content\Relation[] */
-        $relations = array();
+        $relations = [];
         foreach ($spiRelations as $spiRelation) {
             $destinationContentInfo = $this->internalLoadContentInfo($spiRelation->destinationContentId);
             if (!$this->repository->canUser('content', 'read', $destinationContentInfo)) {
@@ -1798,14 +1798,14 @@ class ContentService implements ContentServiceInterface
     public function loadReverseRelations(ContentInfo $contentInfo)
     {
         if (!$this->repository->canUser('content', 'reverserelatedlist', $contentInfo)) {
-            throw new UnauthorizedException('content', 'reverserelatedlist', array('contentId' => $contentInfo->id));
+            throw new UnauthorizedException('content', 'reverserelatedlist', ['contentId' => $contentInfo->id]);
         }
 
         $spiRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations(
             $contentInfo->id
         );
 
-        $returnArray = array();
+        $returnArray = [];
         foreach ($spiRelations as $spiRelation) {
             $sourceContentInfo = $this->internalLoadContentInfo($spiRelation->sourceContentId);
             if (!$this->repository->canUser('content', 'read', $sourceContentInfo)) {
@@ -1851,7 +1851,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if (!$this->repository->canUser('content', 'edit', $sourceVersion)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $sourceVersion->contentInfo->id));
+            throw new UnauthorizedException('content', 'edit', ['contentId' => $sourceVersion->contentInfo->id]);
         }
 
         $sourceContentInfo = $sourceVersion->getContentInfo();
@@ -1860,13 +1860,13 @@ class ContentService implements ContentServiceInterface
         try {
             $spiRelation = $this->persistenceHandler->contentHandler()->addRelation(
                 new SPIRelationCreateStruct(
-                    array(
+                    [
                         'sourceContentId' => $sourceContentInfo->id,
                         'sourceContentVersionNo' => $sourceVersion->versionNo,
                         'sourceFieldDefinitionId' => null,
                         'destinationContentId' => $destinationContent->id,
                         'type' => APIRelation::COMMON,
-                    )
+                    ]
                 )
             );
             $this->repository->commit();
@@ -1903,7 +1903,7 @@ class ContentService implements ContentServiceInterface
         }
 
         if (!$this->repository->canUser('content', 'edit', $sourceVersion)) {
-            throw new UnauthorizedException('content', 'edit', array('contentId' => $sourceVersion->contentInfo->id));
+            throw new UnauthorizedException('content', 'edit', ['contentId' => $sourceVersion->contentInfo->id]);
         }
 
         $spiRelations = $this->persistenceHandler->contentHandler()->loadRelations(
@@ -1969,7 +1969,7 @@ class ContentService implements ContentServiceInterface
      *
      * @since 5.0
      */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
+    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = [])
     {
         throw new NotImplementedException(__METHOD__);
     }
@@ -1987,11 +1987,11 @@ class ContentService implements ContentServiceInterface
     public function newContentCreateStruct(ContentType $contentType, $mainLanguageCode)
     {
         return new ContentCreateStruct(
-            array(
+            [
                 'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
                 'alwaysAvailable' => $contentType->defaultAlwaysAvailable,
-            )
+            ]
         );
     }
 

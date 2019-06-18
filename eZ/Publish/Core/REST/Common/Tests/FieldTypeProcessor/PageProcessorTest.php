@@ -19,88 +19,88 @@ class PageProcessorTest extends TestCase
 
     public function fieldValueHashes()
     {
-        return array(
-            array(null, null),
-            array(array(), array()),
-            array(
-                array(
-                    'zones' => array(
-                        array(
+        return [
+            [null, null],
+            [[], []],
+            [
+                [
+                    'zones' => [
+                        [
                             'action' => 'ACTION_ADD',
-                        ),
-                    ),
-                ),
-                array(
-                    'zones' => array(
-                        array(
+                        ],
+                    ],
+                ],
+                [
+                    'zones' => [
+                        [
                             'action' => Base::ACTION_ADD,
-                        ),
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'zones' => array(
-                        array(
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'zones' => [
+                        [
                             'action' => 'ACTION_ADD',
-                            'blocks' => array(
-                                array(
+                            'blocks' => [
+                                [
                                     'action' => 'ACTION_MODIFY',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-                array(
-                    'zones' => array(
-                        array(
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'zones' => [
+                        [
                             'action' => Base::ACTION_ADD,
-                            'blocks' => array(
-                                array(
+                            'blocks' => [
+                                [
                                     'action' => Base::ACTION_MODIFY,
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'zones' => array(
-                        array(
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'zones' => [
+                        [
                             'action' => 'ACTION_ADD',
-                            'blocks' => array(
-                                array(
+                            'blocks' => [
+                                [
                                     'action' => 'ACTION_MODIFY',
-                                    'items' => array(
-                                        array(
+                                    'items' => [
+                                        [
                                             'action' => 'ACTION_REMOVE',
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-                array(
-                    'zones' => array(
-                        array(
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'zones' => [
+                        [
                             'action' => Base::ACTION_ADD,
-                            'blocks' => array(
-                                array(
+                            'blocks' => [
+                                [
                                     'action' => Base::ACTION_MODIFY,
-                                    'items' => array(
-                                        array(
+                                    'items' => [
+                                        [
                                             'action' => Base::ACTION_REMOVE,
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

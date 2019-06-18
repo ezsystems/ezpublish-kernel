@@ -72,12 +72,12 @@ class RelationIntegrationTest extends BaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array(
-                'fieldSettings' => array(
+            [
+                'fieldSettings' => [
                     'selectionMethod' => 0,
                     'selectionRoot' => '',
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -90,15 +90,15 @@ class RelationIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        $fieldSettings = array(
+        $fieldSettings = [
             'selectionMethod' => 0,
             'selectionRoot' => '',
-        );
+        ];
 
-        return array(
-            array('fieldType', 'ezobjectrelation'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array('fieldSettings' => $fieldSettings))),
-        );
+        return [
+            ['fieldType', 'ezobjectrelation'],
+            ['fieldTypeConstraints', new Content\FieldTypeConstraints(['fieldSettings' => $fieldSettings])],
+        ];
     }
 
     /**
@@ -109,11 +109,11 @@ class RelationIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array('destinationContentId' => 1),
+            [
+                'data' => ['destinationContentId' => 1],
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 
@@ -153,11 +153,11 @@ class RelationIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array('destinationContentId' => 2),
+            [
+                'data' => ['destinationContentId' => 2],
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 

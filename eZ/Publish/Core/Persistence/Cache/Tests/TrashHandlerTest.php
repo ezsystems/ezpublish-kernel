@@ -33,7 +33,7 @@ class TrashHandlerTest extends HandlerTest
             ->will($this->returnValue($innerHandlerMock));
 
         $trashed = new SPITrashed(
-            array('id' => 33, 'contentId' => 31)
+            ['id' => 33, 'contentId' => 31]
         );
 
         $innerHandlerMock
@@ -64,7 +64,7 @@ class TrashHandlerTest extends HandlerTest
             ->will($this->returnValue($innerHandlerMock));
 
         $trashed = new SPITrashed(
-            array('id' => 33, 'contentId' => 31)
+            ['id' => 33, 'contentId' => 31]
         );
 
         $innerHandlerMock
@@ -158,9 +158,9 @@ class TrashHandlerTest extends HandlerTest
         $innerHandlerMock
             ->expects($this->once())
             ->method('findTrashItems')
-            ->with($criterion, 10, 11, array())
+            ->with($criterion, 10, 11, [])
             ->will(
-                $this->returnValue(array())
+                $this->returnValue([])
             );
 
         $this->cacheMock
@@ -168,7 +168,7 @@ class TrashHandlerTest extends HandlerTest
             ->method($this->anything());
 
         $handler = $this->persistenceCacheHandler->trashHandler();
-        $this->assertEquals(array(), $handler->findTrashItems($criterion, 10, 11, array()));
+        $this->assertEquals([], $handler->findTrashItems($criterion, 10, 11, []));
     }
 
     /**

@@ -26,7 +26,7 @@ class HttpUtilsTest extends TestCase
         $httpUtils->setSiteAccess(new SiteAccess());
         $request = Request::create('http://ezpublish.dev/');
         $request->attributes->set('siteaccess', new SiteAccess('test'));
-        $requestAttributes = array('foo' => 'bar', 'some' => 'thing');
+        $requestAttributes = ['foo' => 'bar', 'some' => 'thing'];
         $request->attributes->add($requestAttributes);
 
         if ($isUriRouteName) {
@@ -42,13 +42,13 @@ class HttpUtilsTest extends TestCase
 
     public function generateUriStandardProvider()
     {
-        return array(
-            array('http://localhost/foo/bar', false, 'http://localhost/foo/bar'),
-            array('http://localhost/foo/bar?some=thing&toto=tata', false, 'http://localhost/foo/bar?some=thing&toto=tata'),
-            array('/foo/bar?some=thing&toto=tata', false, 'http://ezpublish.dev/foo/bar?some=thing&toto=tata'),
-            array('/foo/bar', false, 'http://ezpublish.dev/foo/bar'),
-            array('some_route_name', true, 'http://ezpublish.dev/some/route'),
-        );
+        return [
+            ['http://localhost/foo/bar', false, 'http://localhost/foo/bar'],
+            ['http://localhost/foo/bar?some=thing&toto=tata', false, 'http://localhost/foo/bar?some=thing&toto=tata'],
+            ['/foo/bar?some=thing&toto=tata', false, 'http://ezpublish.dev/foo/bar?some=thing&toto=tata'],
+            ['/foo/bar', false, 'http://ezpublish.dev/foo/bar'],
+            ['some_route_name', true, 'http://ezpublish.dev/some/route'],
+        ];
     }
 
     /**
@@ -72,7 +72,7 @@ class HttpUtilsTest extends TestCase
         $httpUtils->setSiteAccess($siteAccess);
         $request = Request::create('http://ezpublish.dev/');
         $request->attributes->set('siteaccess', $siteAccess);
-        $requestAttributes = array('foo' => 'bar', 'some' => 'thing');
+        $requestAttributes = ['foo' => 'bar', 'some' => 'thing'];
         $request->attributes->add($requestAttributes);
 
         if ($isUriRouteName) {
@@ -89,13 +89,13 @@ class HttpUtilsTest extends TestCase
 
     public function generateUriProvider()
     {
-        return array(
-            array('http://localhost/foo/bar', false, null, 'http://localhost/foo/bar'),
-            array('http://localhost/foo/bar?some=thing&toto=tata', false, null, 'http://localhost/foo/bar?some=thing&toto=tata'),
-            array('/foo/bar?some=thing&toto=tata', false, '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata'),
-            array('/foo/bar', false, '/blabla', 'http://ezpublish.dev/blabla/foo/bar'),
-            array('some_route_name', true, null, 'http://ezpublish.dev/some/route'),
-        );
+        return [
+            ['http://localhost/foo/bar', false, null, 'http://localhost/foo/bar'],
+            ['http://localhost/foo/bar?some=thing&toto=tata', false, null, 'http://localhost/foo/bar?some=thing&toto=tata'],
+            ['/foo/bar?some=thing&toto=tata', false, '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata'],
+            ['/foo/bar', false, '/blabla', 'http://ezpublish.dev/blabla/foo/bar'],
+            ['some_route_name', true, null, 'http://ezpublish.dev/some/route'],
+        ];
     }
 
     public function testCheckRequestPathStandard()
@@ -130,13 +130,13 @@ class HttpUtilsTest extends TestCase
 
     public function checkRequestPathProvider()
     {
-        return array(
-            array('/foo/bar', null, 'http://localhost/foo/bar', true),
-            array('/foo', null, 'http://localhost/foo/bar', false),
-            array('/foo/bar', null, 'http://localhost/foo/bar?some=thing&toto=tata', true),
-            array('/foo/bar', '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata', true),
-            array('/foo', '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata', false),
-            array('/foo/bar', '/blabla', 'http://ezpublish.dev/blabla/foo/bar', true),
-        );
+        return [
+            ['/foo/bar', null, 'http://localhost/foo/bar', true],
+            ['/foo', null, 'http://localhost/foo/bar', false],
+            ['/foo/bar', null, 'http://localhost/foo/bar?some=thing&toto=tata', true],
+            ['/foo/bar', '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata', true],
+            ['/foo', '/test_access', 'http://ezpublish.dev/test_access/foo/bar?some=thing&toto=tata', false],
+            ['/foo/bar', '/blabla', 'http://ezpublish.dev/blabla/foo/bar', true],
+        ];
     }
 }

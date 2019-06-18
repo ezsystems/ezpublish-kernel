@@ -77,7 +77,7 @@ class StreamFileListenerTest extends TestCase
 
         $event = $this->createEvent($request);
 
-        $binaryFile = new BinaryFile(array('mtime' => new DateTime()));
+        $binaryFile = new BinaryFile(['mtime' => new DateTime()]);
 
         $this->ioServiceMock
             ->expects($this->once())
@@ -109,7 +109,7 @@ class StreamFileListenerTest extends TestCase
 
         $event = $this->createEvent($request);
 
-        $binaryFile = new BinaryFile(array('mtime' => new DateTime()));
+        $binaryFile = new BinaryFile(['mtime' => new DateTime()]);
 
         $this->ioServiceMock
             ->expects($this->once())

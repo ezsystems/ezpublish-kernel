@@ -36,12 +36,12 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'textRows' => array(
+        return [
+            'textRows' => [
                 'type' => 'int',
                 'default' => 10,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -51,9 +51,9 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'textRows' => 0,
-        );
+        ];
     }
 
     /**
@@ -63,9 +63,9 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -75,7 +75,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -85,7 +85,7 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -95,9 +95,9 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 23),
-        );
+        return [
+            'unknown' => ['value' => 23],
+        ];
     }
 
     /**
@@ -135,9 +135,9 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'text' => 'Example',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -167,12 +167,12 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -199,9 +199,9 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'text' => 'Example  2',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -249,9 +249,9 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'text' => 'Example',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -280,12 +280,12 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new TextBlockValue('Simple value'),
                 'Simple value',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -297,35 +297,35 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 'Foobar',
                 new TextBlockValue('Foobar'),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new TextBlockValue()),
-            array(new TextBlockValue(null)),
-            array(new TextBlockValue('')),
-            array(new TextBlockValue("\n\n\n")),
-            array(new TextBlockValue("\r\r\r")),
-            array(new TextBlockValue('   ')),
-        );
+        return [
+            [new TextBlockValue()],
+            [new TextBlockValue(null)],
+            [new TextBlockValue('')],
+            [new TextBlockValue("\n\n\n")],
+            [new TextBlockValue("\r\r\r")],
+            [new TextBlockValue('   ')],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(new TextBlockValue(0)),
-            array(new TextBlockValue('0')),
-        );
+            ],
+            [new TextBlockValue(0)],
+            [new TextBlockValue('0')],
+        ];
     }
 
     protected function getValidSearchValueOne()
@@ -352,8 +352,8 @@ class TextBlockIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getFullTextIndexedFieldData()
     {
-        return array(
-            array('path', 'analysis'),
-        );
+        return [
+            ['path', 'analysis'],
+        ];
     }
 }

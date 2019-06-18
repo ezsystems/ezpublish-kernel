@@ -56,30 +56,30 @@ class TranslationHelperTest extends TestCase
         $this->configResolver = $this->getMock('eZ\\Publish\\Core\\MVC\\ConfigResolverInterface');
         $this->contentService = $this->getMock('eZ\\Publish\\API\\Repository\\ContentService');
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
-        $this->siteAccessByLanguages = array(
-            'fre-FR' => array('fre'),
-            'eng-GB' => array('my_siteaccess', 'eng'),
-            'esl-ES' => array('esl', 'mex'),
-            'heb-IL' => array('heb'),
-        );
+        $this->siteAccessByLanguages = [
+            'fre-FR' => ['fre'],
+            'eng-GB' => ['my_siteaccess', 'eng'],
+            'esl-ES' => ['esl', 'mex'],
+            'heb-IL' => ['heb'],
+        ];
         $this->translationHelper = new TranslationHelper(
             $this->configResolver,
             $this->contentService,
             $this->siteAccessByLanguages,
             $this->logger
         );
-        $this->translatedNames = array(
+        $this->translatedNames = [
             'eng-GB' => 'My name in english',
             'fre-FR' => 'Mon nom en français',
             'esl-ES' => 'Mi nombre en español',
             'heb-IL' => 'השם שלי בעברית',
-        );
-        $this->translatedFields = array(
-            'eng-GB' => new Field(array('value' => 'Content in english', 'fieldDefIdentifier' => 'test', 'languageCode' => 'eng-GB')),
-            'fre-FR' => new Field(array('value' => 'Contenu en français', 'fieldDefIdentifier' => 'test', 'languageCode' => 'fre-FR')),
-            'esl-ES' => new Field(array('value' => 'Contenido en español', 'fieldDefIdentifier' => 'test', 'languageCode' => 'esl-ES')),
-            'heb-IL' => new Field(array('value' => 'תוכן בספרדית', 'fieldDefIdentifier' => 'test', 'languageCode' => 'heb-IL')),
-        );
+        ];
+        $this->translatedFields = [
+            'eng-GB' => new Field(['value' => 'Content in english', 'fieldDefIdentifier' => 'test', 'languageCode' => 'eng-GB']),
+            'fre-FR' => new Field(['value' => 'Contenu en français', 'fieldDefIdentifier' => 'test', 'languageCode' => 'fre-FR']),
+            'esl-ES' => new Field(['value' => 'Contenido en español', 'fieldDefIdentifier' => 'test', 'languageCode' => 'esl-ES']),
+            'heb-IL' => new Field(['value' => 'תוכן בספרדית', 'fieldDefIdentifier' => 'test', 'languageCode' => 'heb-IL']),
+        ];
     }
 
     /**
@@ -88,10 +88,10 @@ class TranslationHelperTest extends TestCase
     private function generateContent()
     {
         return new Content(
-            array(
+            [
                 'versionInfo' => $this->generateVersionInfo(),
                 'internalFields' => $this->translatedFields,
-            )
+            ]
         );
     }
 
@@ -135,7 +135,7 @@ class TranslationHelperTest extends TestCase
     public function testGetTranslatedNameByContentInfo(array $prioritizedLanguages, $expectedLocale)
     {
         $versionInfo = $this->generateVersionInfo();
-        $contentInfo = new ContentInfo(array('id' => 123));
+        $contentInfo = new ContentInfo(['id' => 123]);
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -153,19 +153,19 @@ class TranslationHelperTest extends TestCase
 
     public function getTranslatedNameProvider()
     {
-        return array(
-            array(array('fre-FR', 'eng-GB'), 'fre-FR'),
-            array(array('esl-ES', 'fre-FR'), 'esl-ES'),
-            array(array('eng-US', 'heb-IL'), 'heb-IL'),
-            array(array('eng-US', 'eng-GB'), 'eng-GB'),
-            array(array('eng-US', 'ger-DE'), 'fre-FR'),
-        );
+        return [
+            [['fre-FR', 'eng-GB'], 'fre-FR'],
+            [['esl-ES', 'fre-FR'], 'esl-ES'],
+            [['eng-US', 'heb-IL'], 'heb-IL'],
+            [['eng-US', 'eng-GB'], 'eng-GB'],
+            [['eng-US', 'ger-DE'], 'fre-FR'],
+        ];
     }
 
     public function testGetTranslatedNameByContentInfoForcedLanguage()
     {
         $versionInfo = $this->generateVersionInfo();
-        $contentInfo = new ContentInfo(array('id' => 123));
+        $contentInfo = new ContentInfo(['id' => 123]);
         $this->configResolver
             ->expects($this->never())
             ->method('getParameter');
@@ -185,11 +185,11 @@ class TranslationHelperTest extends TestCase
         $name = 'Name in main language';
         $mainLanguage = 'eng-GB';
         $contentInfo = new ContentInfo(
-            array(
+            [
                 'id' => 123,
                 'mainLanguageCode' => $mainLanguage,
                 'name' => $name,
-            )
+            ]
         );
         $this->configResolver
             ->expects($this->never())
@@ -236,13 +236,13 @@ class TranslationHelperTest extends TestCase
 
     public function getTranslatedFieldProvider()
     {
-        return array(
-            array(array('fre-FR', 'eng-GB'), 'fre-FR'),
-            array(array('esl-ES', 'fre-FR'), 'esl-ES'),
-            array(array('eng-US', 'heb-IL'), 'heb-IL'),
-            array(array('eng-US', 'eng-GB'), 'eng-GB'),
-            array(array('eng-US', 'ger-DE'), 'fre-FR'),
-        );
+        return [
+            [['fre-FR', 'eng-GB'], 'fre-FR'],
+            [['esl-ES', 'fre-FR'], 'esl-ES'],
+            [['eng-US', 'heb-IL'], 'heb-IL'],
+            [['eng-US', 'eng-GB'], 'eng-GB'],
+            [['eng-US', 'ger-DE'], 'fre-FR'],
+        ];
     }
 
     public function testGetTranslationSiteAccessUnkownLanguage()
@@ -252,10 +252,10 @@ class TranslationHelperTest extends TestCase
             ->method('getParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('translation_siteaccesses', null, null, array()),
-                        array('related_siteaccesses', null, null, array()),
-                    )
+                    [
+                        ['translation_siteaccesses', null, null, []],
+                        ['related_siteaccesses', null, null, []],
+                    ]
                 )
             );
 
@@ -276,10 +276,10 @@ class TranslationHelperTest extends TestCase
             ->method('getParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('translation_siteaccesses', null, null, $translationSiteAccesses),
-                        array('related_siteaccesses', null, null, $relatedSiteAccesses),
-                    )
+                    [
+                        ['translation_siteaccesses', null, null, $translationSiteAccesses],
+                        ['related_siteaccesses', null, null, $relatedSiteAccesses],
+                    ]
                 )
             );
 
@@ -288,20 +288,20 @@ class TranslationHelperTest extends TestCase
 
     public function getTranslationSiteAccessProvider()
     {
-        return array(
-            array('eng-GB', array('fre', 'eng', 'heb'), array('esl', 'fre', 'eng', 'heb'), 'eng'),
-            array('eng-GB', array(), array('esl', 'fre', 'eng', 'heb'), 'eng'),
-            array('eng-GB', array(), array('esl', 'fre', 'eng', 'heb', 'my_siteaccess'), 'my_siteaccess'),
-            array('eng-GB', array('esl', 'fre', 'eng', 'heb', 'my_siteaccess'), array(), 'my_siteaccess'),
-            array('eng-GB', array('esl', 'fre', 'eng', 'heb'), array(), 'eng'),
-            array('fre-FR', array('esl', 'fre', 'eng', 'heb'), array(), 'fre'),
-            array('fre-FR', array('esl', 'eng', 'heb'), array(), null),
-            array('heb-IL', array('esl', 'eng'), array(), null),
-            array('esl-ES', array(), array('esl', 'mex', 'fre', 'eng', 'heb'), 'esl'),
-            array('esl-ES', array(), array('mex', 'fre', 'eng', 'heb'), 'mex'),
-            array('esl-ES', array('esl', 'mex', 'fre', 'eng', 'heb'), array(), 'esl'),
-            array('esl-ES', array('mex', 'fre', 'eng', 'heb'), array(), 'mex'),
-        );
+        return [
+            ['eng-GB', ['fre', 'eng', 'heb'], ['esl', 'fre', 'eng', 'heb'], 'eng'],
+            ['eng-GB', [], ['esl', 'fre', 'eng', 'heb'], 'eng'],
+            ['eng-GB', [], ['esl', 'fre', 'eng', 'heb', 'my_siteaccess'], 'my_siteaccess'],
+            ['eng-GB', ['esl', 'fre', 'eng', 'heb', 'my_siteaccess'], [], 'my_siteaccess'],
+            ['eng-GB', ['esl', 'fre', 'eng', 'heb'], [], 'eng'],
+            ['fre-FR', ['esl', 'fre', 'eng', 'heb'], [], 'fre'],
+            ['fre-FR', ['esl', 'eng', 'heb'], [], null],
+            ['heb-IL', ['esl', 'eng'], [], null],
+            ['esl-ES', [], ['esl', 'mex', 'fre', 'eng', 'heb'], 'esl'],
+            ['esl-ES', [], ['mex', 'fre', 'eng', 'heb'], 'mex'],
+            ['esl-ES', ['esl', 'mex', 'fre', 'eng', 'heb'], [], 'esl'],
+            ['esl-ES', ['mex', 'fre', 'eng', 'heb'], [], 'mex'],
+        ];
     }
 
     public function testGetAvailableLanguagesWithTranslationSiteAccesses()
@@ -311,17 +311,17 @@ class TranslationHelperTest extends TestCase
             ->method('getParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('translation_siteaccesses', null, null, array('fre', 'esl')),
-                        array('related_siteaccesses', null, null, array('fre', 'esl', 'heb')),
-                        array('languages', null, null, array('eng-GB')),
-                        array('languages', null, 'fre', array('fre-FR', 'eng-GB')),
-                        array('languages', null, 'esl', array('esl-ES', 'fre-FR', 'eng-GB')),
-                    )
+                    [
+                        ['translation_siteaccesses', null, null, ['fre', 'esl']],
+                        ['related_siteaccesses', null, null, ['fre', 'esl', 'heb']],
+                        ['languages', null, null, ['eng-GB']],
+                        ['languages', null, 'fre', ['fre-FR', 'eng-GB']],
+                        ['languages', null, 'esl', ['esl-ES', 'fre-FR', 'eng-GB']],
+                    ]
                 )
             );
 
-        $expectedLanguages = array('eng-GB', 'esl-ES', 'fre-FR');
+        $expectedLanguages = ['eng-GB', 'esl-ES', 'fre-FR'];
         $this->assertSame($expectedLanguages, $this->translationHelper->getAvailableLanguages());
     }
 
@@ -332,18 +332,18 @@ class TranslationHelperTest extends TestCase
             ->method('getParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('translation_siteaccesses', null, null, array()),
-                        array('related_siteaccesses', null, null, array('fre', 'esl', 'heb')),
-                        array('languages', null, null, array('eng-GB')),
-                        array('languages', null, 'fre', array('fre-FR', 'eng-GB')),
-                        array('languages', null, 'esl', array('esl-ES', 'fre-FR', 'eng-GB')),
-                        array('languages', null, 'heb', array('heb-IL', 'eng-GB')),
-                    )
+                    [
+                        ['translation_siteaccesses', null, null, []],
+                        ['related_siteaccesses', null, null, ['fre', 'esl', 'heb']],
+                        ['languages', null, null, ['eng-GB']],
+                        ['languages', null, 'fre', ['fre-FR', 'eng-GB']],
+                        ['languages', null, 'esl', ['esl-ES', 'fre-FR', 'eng-GB']],
+                        ['languages', null, 'heb', ['heb-IL', 'eng-GB']],
+                    ]
                 )
             );
 
-        $expectedLanguages = array('eng-GB', 'esl-ES', 'fre-FR', 'heb-IL');
+        $expectedLanguages = ['eng-GB', 'esl-ES', 'fre-FR', 'heb-IL'];
         $this->assertSame($expectedLanguages, $this->translationHelper->getAvailableLanguages());
     }
 }

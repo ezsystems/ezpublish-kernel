@@ -30,11 +30,11 @@ abstract class SectionBase extends BaseServiceTest
         $section = new Section();
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
                 'identifier' => null,
                 'name' => null,
-            ),
+            ],
             $section
         );
     }
@@ -91,7 +91,7 @@ abstract class SectionBase extends BaseServiceTest
      */
     public function testUnsetProperty()
     {
-        $section = new Section(array('id' => 1));
+        $section = new Section(['id' => 1]);
         try {
             unset($section->id);
             self::fail('Unsetting read-only property succeeded');
@@ -196,11 +196,11 @@ abstract class SectionBase extends BaseServiceTest
         $section = $sectionService->loadSection(1);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'name' => 'Standard',
                 'identifier' => 'standard',
-            ),
+            ],
             $section
         );
     }
@@ -247,11 +247,11 @@ abstract class SectionBase extends BaseServiceTest
         $section = $sectionService->loadSectionByIdentifier('standard');
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'name' => 'Standard',
                 'identifier' => 'standard',
-            ),
+            ],
             $section
         );
     }
@@ -349,7 +349,7 @@ abstract class SectionBase extends BaseServiceTest
     {
         $sectionService = $this->repository->getSectionService();
 
-        $section = new Section(array('id' => APIBaseTest::DB_INT_MAX));
+        $section = new Section(['id' => APIBaseTest::DB_INT_MAX]);
 
         $sectionService->deleteSection($section);
     }
@@ -383,10 +383,10 @@ abstract class SectionBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct', $sectionCreateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => null,
                 'name' => null,
-            ),
+            ],
             $sectionCreateStruct
         );
     }
@@ -405,10 +405,10 @@ abstract class SectionBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct', $sectionUpdateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => null,
                 'name' => null,
-            ),
+            ],
             $sectionUpdateStruct
         );
     }

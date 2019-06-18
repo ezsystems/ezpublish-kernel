@@ -32,7 +32,7 @@ class CreatedURLWildcard extends URLWildcard
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadURLWildcard',
-                array('urlWildcardId' => $data->urlWildcard->id)
+                ['urlWildcardId' => $data->urlWildcard->id]
             )
         );
         $visitor->setStatus(201);

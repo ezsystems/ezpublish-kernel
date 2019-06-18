@@ -36,7 +36,7 @@ class TrashItemTest extends TestCase
         self::assertContains('sortOrder', $properties, 'Property not found');
 
         // check for duplicates and double check existence of property
-        $propertiesHash = array();
+        $propertiesHash = [];
         foreach ($properties as $property) {
             if (isset($propertiesHash[$property])) {
                 self::fail("Property '{$property}' exists several times in properties list");

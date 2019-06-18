@@ -77,7 +77,7 @@ EOT
         $progress->start($output, $totalCount);
         $i = 0;
         do {
-            $contentObjects = array();
+            $contentObjects = [];
 
             for ($k = 0; $k <= $bulkCount; ++$k) {
                 if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -135,7 +135,7 @@ EOT
         $progress->start($output, $totalCount);
         $i = 0;
         do {
-            $locations = array();
+            $locations = [];
 
             for ($k = 0; $k <= $bulkCount; ++$k) {
                 if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {

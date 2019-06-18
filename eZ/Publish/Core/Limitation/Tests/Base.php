@@ -27,7 +27,7 @@ abstract class Base extends TestCase
      *
      * @return \eZ\Publish\SPI\Persistence\Handler|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function getPersistenceMock(array $mockMethods = array())
+    public function getPersistenceMock(array $mockMethods = [])
     {
         if ($this->persistenceHandlerMock !== null) {
             return $this->persistenceHandlerMock;
@@ -36,7 +36,7 @@ abstract class Base extends TestCase
         return $this->persistenceHandlerMock = $this->getMock(
             'eZ\\Publish\\SPI\\Persistence\\Handler',
             $mockMethods,
-            array(),
+            [],
             '',
             false
         );
@@ -47,7 +47,7 @@ abstract class Base extends TestCase
      *
      * @return \eZ\Publish\API\Repository\Values\User\User|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function getUserMock(array $mockMethods = array())
+    public function getUserMock(array $mockMethods = [])
     {
         if ($this->userMock !== null) {
             return $this->userMock;
@@ -56,7 +56,7 @@ abstract class Base extends TestCase
         return $this->userMock = $this->getMock(
             'eZ\\Publish\\API\\Repository\\Values\\User\\User',
             $mockMethods,
-            array(),
+            [],
             '',
             false
         );

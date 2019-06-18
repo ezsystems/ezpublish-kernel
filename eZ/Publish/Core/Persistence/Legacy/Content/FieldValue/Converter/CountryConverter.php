@@ -79,9 +79,9 @@ class CountryConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
-            )
+            ]
         );
 
         $fieldDef->defaultValue->data = empty($storageDef->dataText5)

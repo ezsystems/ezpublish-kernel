@@ -45,17 +45,17 @@ class LanguageCodeIn extends CriterionVisitor
     protected function getCondition(Criterion $criterion)
     {
         if (count($criterion->value) > 1) {
-            return array(
-                'terms' => array(
+            return [
+                'terms' => [
                     'content_language_code_ms' => $criterion->value,
-                ),
-            );
+                ],
+            ];
         } else {
-            return array(
-                'term' => array(
+            return [
+                'term' => [
                     'content_language_code_ms' => $criterion->value[0],
-                ),
-            );
+                ],
+            ];
         }
     }
 
@@ -74,16 +74,16 @@ class LanguageCodeIn extends CriterionVisitor
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode $criterion */
         if ($criterion->matchAlwaysAvailable) {
-            $filter = array(
-                'or' => array(
+            $filter = [
+                'or' => [
                     $filter,
-                    array(
-                        'term' => array(
+                    [
+                        'term' => [
                             'content_always_available_b' => true,
-                        ),
-                    ),
-                ),
-            );
+                        ],
+                    ],
+                ],
+            ];
         }
 
         return $filter;
@@ -104,19 +104,19 @@ class LanguageCodeIn extends CriterionVisitor
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LanguageCode $criterion */
         if ($criterion->matchAlwaysAvailable) {
-            $filter = array(
-                'bool' => array(
-                    'should' => array(
+            $filter = [
+                'bool' => [
+                    'should' => [
                         $filter,
-                        array(
-                            'term' => array(
+                        [
+                            'term' => [
                                 'content_always_available_b' => true,
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'minimum_should_match' => 1,
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;

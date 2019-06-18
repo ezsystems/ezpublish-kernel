@@ -39,11 +39,11 @@ class LegacyStorageEnginePass implements CompilerPassInterface
 
                 $legacyStorageEngineDef->addMethodCall(
                     'registerFieldType',
-                    array(
+                    [
                         // Only pass the service Id since field types will be lazy loaded via the service container
                         $id,
                         $attribute['alias'],
-                    )
+                    ]
                 );
             }
         }
@@ -69,10 +69,10 @@ class LegacyStorageEnginePass implements CompilerPassInterface
 
                 $legacyStorageEngineDef->addMethodCall(
                     'registerFieldTypeConverter',
-                    array(
+                    [
                         $attribute['alias'],
                         $converter,
-                    )
+                    ]
                 );
             }
         }

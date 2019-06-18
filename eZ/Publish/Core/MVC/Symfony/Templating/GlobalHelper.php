@@ -125,10 +125,10 @@ class GlobalHelper
                 return $this->router
                     ->generate(
                         '_ezpublishLocation',
-                        array(
+                        [
                             'locationId' => $request->attributes->get('locationId'),
                             'viewType' => $request->attributes->get('viewType'),
-                        )
+                        ]
                     );
             }
 
