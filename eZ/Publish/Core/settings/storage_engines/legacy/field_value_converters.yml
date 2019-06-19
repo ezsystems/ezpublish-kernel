@@ -27,8 +27,8 @@ parameters:
     ezpublish.fieldType.eznull.converter.class: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullConverter
 
 services:
-    # Note: converter services tagged with 'ezpublish.storageEngine.legacy.converter' are
-    # registered to this one using compilation pass and factory
+    # Note: converter services tagged with 'ezpublish.storageEngine.legacy.converter' or
+    # 'ezplatform.field_type.legacy_storage.converter' are registered to this one using compilation pass and factory
     ezpublish.persistence.legacy.field_value_converter.registry:
         class: "%ezpublish.persistence.legacy.field_value_converter.registry.class%"
         lazy: true
@@ -36,74 +36,74 @@ services:
     ezpublish.fieldType.ezauthor.converter:
         class: "%ezpublish.fieldType.ezauthor.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezauthor}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezauthor}
 
     ezpublish.fieldType.ezbinaryfile.converter:
         class: "%ezpublish.fieldType.ezbinaryfile.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezbinaryfile}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezbinaryfile}
 
     ezpublish.fieldType.ezboolean.converter:
         class: "%ezpublish.fieldType.ezboolean.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezboolean}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezboolean}
 
     ezpublish.fieldType.ezcountry.converter:
         class: "%ezpublish.fieldType.ezcountry.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezcountry}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezcountry}
 
     ezpublish.fieldType.ezdatetime.converter:
         class: "%ezpublish.fieldType.ezdatetime.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezdatetime}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezdatetime}
 
     ezpublish.fieldType.ezfloat.converter:
         class: "%ezpublish.fieldType.ezfloat.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezfloat}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezfloat}
 
     ezpublish.fieldType.ezinteger.converter:
         class: "%ezpublish.fieldType.ezinteger.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezinteger}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezinteger}
 
     ezpublish.fieldType.ezkeyword.converter:
         class: "%ezpublish.fieldType.ezkeyword.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezkeyword}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezkeyword}
 
     ezpublish.fieldType.ezmedia.converter:
         class: "%ezpublish.fieldType.ezmedia.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmedia}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezmedia}
 
     ezpublish.fieldType.ezselection.converter:
         class: "%ezpublish.fieldType.ezselection.converter.class%"
         arguments:
             - '@ezpublish.api.service.language'
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezselection}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezselection}
 
     ezpublish.fieldType.ezstring.converter:
         class: "%ezpublish.fieldType.ezstring.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezstring}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezstring}
 
     ezpublish.fieldType.eztext.converter:
         class: "%ezpublish.fieldType.eztext.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: eztext}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: eztext}
 
     ezpublish.fieldType.ezsrrating.converter:
         class: "%ezpublish.fieldType.ezsrrating.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezsrrating}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezsrrating}
 
     ezpublish.fieldType.ezurl.converter:
         class: "%ezpublish.fieldType.ezurl.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezurl}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezurl}
 
     ezpublish.fieldType.ezimage.converter:
         class: "%ezpublish.fieldType.ezimage.converter.class%"
@@ -111,140 +111,140 @@ services:
             - "@ezpublish.fieldType.ezimage.io_service"
             - "@ezpublish.core.io.image_fieldtype.legacy_url_redecorator"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezimage}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezimage}
 
     ezpublish.fieldType.ezisbn.converter:
         class: "%ezpublish.fieldType.ezisbn.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezisbn}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezisbn}
 
     ezpublish.fieldType.ezgmaplocation.converter:
         class: "%ezpublish.fieldType.ezgmaplocation.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezgmaplocation}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezgmaplocation}
 
     ezpublish.fieldType.ezemail.converter:
         class: "%ezpublish.fieldType.ezemail.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezemail}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezemail}
 
     ezpublish.fieldType.ezobjectrelation.converter:
         class: "%ezpublish.fieldType.ezobjectrelation.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelation}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezobjectrelationlist.converter:
         class: "%ezpublish.fieldType.ezobjectrelationlist.converter.class%"
         arguments: ["@ezpublish.api.storage_engine.legacy.dbhandler"]
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezobjectrelationlist}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.ezuser.converter:
         class: "%ezpublish.fieldType.ezuser.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezuser}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezuser}
 
     # Not implemented converters
     # Configured to use the Null converter which does not nothing
     ezpublish.fieldType.ezdate.converter:
         class: "%ezpublish.fieldType.ezdate.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezdate}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezdate}
 
     ezpublish.fieldType.ezenum.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezenum}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezenum}
 
     ezpublish.fieldType.ezidentifier.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezidentifier}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezidentifier}
 
     ezpublish.fieldType.ezinisetting.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezinisetting}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezinisetting}
 
     ezpublish.fieldType.ezmatrix.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmatrix}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezmatrix}
 
     ezpublish.fieldType.ezmultioption.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmultioption}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezmultioption}
 
     ezpublish.fieldType.ezmultioption2.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmultioption2}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezmultioption2}
 
     ezpublish.fieldType.ezmultiprice.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezmultiprice}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezmultiprice}
 
     ezpublish.fieldType.ezoption.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezoption}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezoption}
 
     ezpublish.fieldType.ezpackage.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezpackage}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezpackage}
 
     ezpublish.fieldType.ezproductcategory.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezproductcategory}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezproductcategory}
 
     ezpublish.fieldType.ezrangeoption.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezrangeoption}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezrangeoption}
 
     ezpublish.fieldType.ezsubtreesubscription.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezsubtreesubscription}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezsubtreesubscription}
 
     ezpublish.fieldType.eztime.converter:
         class: "%ezpublish.fieldType.eztime.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: eztime}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: eztime}
 
     # not implemented converters from extensions
     ezpublish.fieldType.ezcomcomments.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezcomcomments}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezcomcomments}
 
     ezpublish.fieldType.ezpaex.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezpaex}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezpaex}
 
     ezpublish.fieldType.ezsurvey.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezsurvey}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezsurvey}
 
     ezpublish.fieldType.eztags.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: eztags}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: eztags}
 
     ezpublish.fieldType.ezrecommendation.converter:
         class: "%ezpublish.fieldType.eznull.converter.class%"
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezrecommendation}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezrecommendation}
 
     eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageAssetConverter:
         tags:
-            - {name: ezpublish.storageEngine.legacy.converter, alias: ezimageasset}
+            - {name: ezplatform.field_type.legacy_storage.converter, alias: ezimageasset}
 
     ezpublish.fieldType.ezimageasset.converter:
         alias: eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageAssetConverter

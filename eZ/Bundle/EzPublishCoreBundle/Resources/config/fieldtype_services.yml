@@ -23,30 +23,30 @@ services:
         calls:
             - [setRequestStack, ["@request_stack"]]
         tags:
-            - {name: ezpublish.fieldType.parameterProvider, alias: ezdatetime}
-            - {name: ezpublish.fieldType.parameterProvider, alias: ezdate}
-            - {name: ezpublish.fieldType.parameterProvider, alias: eztime}
+            - {name: ezplatform.field_type.parameter_provider, alias: ezdatetime}
+            - {name: ezplatform.field_type.parameter_provider, alias: ezdate}
+            - {name: ezplatform.field_type.parameter_provider, alias: eztime}
 
     ezpublish.fieldType.ezobjectrelation.parameterProvider:
         class: \eZ\Publish\Core\MVC\Symfony\FieldType\Relation\ParameterProvider
         arguments:
             - "@ezpublish.api.service.content"
         tags:
-            - {name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelation}
+            - {name: ezplatform.field_type.parameter_provider, alias: ezobjectrelation}
 
     ezpublish.fieldType.ezobjectrelationlist.parameterProvider:
         class: \eZ\Publish\Core\MVC\Symfony\FieldType\RelationList\ParameterProvider
         arguments:
             - "@ezpublish.api.service.content"
         tags:
-            - {name: ezpublish.fieldType.parameterProvider, alias: ezobjectrelationlist}
+            - {name: ezplatform.field_type.parameter_provider, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.ezimageasset.parameterProvider:
         class: \eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider
         arguments:
             - "@ezpublish.siteaccessaware.repository"
         tags:
-            - {name: ezpublish.fieldType.parameterProvider, alias: ezimageasset}
+            - {name: ezplatform.field_type.parameter_provider, alias: ezimageasset}
 
     # Image
     ezpublish.fieldType.ezimage.io_service:

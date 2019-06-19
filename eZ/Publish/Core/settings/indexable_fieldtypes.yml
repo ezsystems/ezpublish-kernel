@@ -26,134 +26,134 @@ services:
     ezpublish.fieldType.indexable.ezkeyword:
         class: "%ezpublish.fieldType.indexable.ezkeyword.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezkeyword}
+            - {name: ezplatform.field_type.indexable, alias: ezkeyword}
 
     ezpublish.fieldType.indexable.ezauthor:
         class: "%ezpublish.fieldType.indexable.ezauthor.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezauthor}
+            - {name: ezplatform.field_type.indexable, alias: ezauthor}
 
     ezpublish.fieldType.indexable.ezstring:
         class: "%ezpublish.fieldType.indexable.ezstring.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezstring}
+            - {name: ezplatform.field_type.indexable, alias: ezstring}
 
     ezpublish.fieldType.indexable.ezgmaplocation:
         class: "%ezpublish.fieldType.indexable.ezgmaplocation.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezgmaplocation}
+            - {name: ezplatform.field_type.indexable, alias: ezgmaplocation}
 
     ezpublish.fieldType.indexable.ezcountry:
         class: "%ezpublish.fieldType.indexable.ezcountry.class%"
         arguments:
             - "%ezpublish.fieldType.ezcountry.data%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezcountry}
+            - {name: ezplatform.field_type.indexable, alias: ezcountry}
 
     ezpublish.fieldType.indexable.ezdate:
         class: "%ezpublish.fieldType.indexable.ezdate.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezdate}
+            - {name: ezplatform.field_type.indexable, alias: ezdate}
 
     ezpublish.fieldType.indexable.ezinteger:
         class: "%ezpublish.fieldType.indexable.ezinteger.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezinteger}
+            - {name: ezplatform.field_type.indexable, alias: ezinteger}
 
     ezpublish.fieldType.indexable.ezfloat:
         class: "%ezpublish.fieldType.indexable.ezfloat.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezfloat}
+            - {name: ezplatform.field_type.indexable, alias: ezfloat}
 
     ezpublish.fieldType.indexable.ezemail:
         class: "%ezpublish.fieldType.indexable.ezemail.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezemail}
+            - {name: ezplatform.field_type.indexable, alias: ezemail}
 
     ezpublish.fieldType.indexable.ezimage:
         class: "%ezpublish.fieldType.indexable.ezimage.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezimage}
+            - {name: ezplatform.field_type.indexable, alias: ezimage}
 
     ezpublish.fieldType.indexable.ezmedia:
         class: "%ezpublish.fieldType.indexable.ezmedia.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezmedia}
+            - {name: ezplatform.field_type.indexable, alias: ezmedia}
 
     ezpublish.fieldType.indexable.ezbinaryfile:
         class: "%ezpublish.fieldType.indexable.ezbinaryfile.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezbinaryfile}
+            - {name: ezplatform.field_type.indexable, alias: ezbinaryfile}
 
     ezpublish.fieldType.indexable.eztime:
         class: "%ezpublish.fieldType.indexable.eztime.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: eztime}
+            - {name: ezplatform.field_type.indexable, alias: eztime}
 
     ezpublish.fieldType.indexable.eztext:
         class: "%ezpublish.fieldType.indexable.eztext.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: eztext}
+            - {name: ezplatform.field_type.indexable, alias: eztext}
 
     ezpublish.fieldType.indexable.ezboolean:
         class: "%ezpublish.fieldType.indexable.ezboolean.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezboolean}
+            - {name: ezplatform.field_type.indexable, alias: ezboolean}
 
     ezpublish.fieldType.indexable.ezdatetime:
         class: "%ezpublish.fieldType.indexable.ezdatetime.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezdatetime}
+            - {name: ezplatform.field_type.indexable, alias: ezdatetime}
 
     ezpublish.fieldType.indexable.ezisbn:
         class: "%ezpublish.fieldType.indexable.ezisbn.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezisbn}
+            - {name: ezplatform.field_type.indexable, alias: ezisbn}
 
     ezpublish.fieldType.indexable.ezobjectrelation:
         class: "%ezpublish.fieldType.indexable.ezobjectrelation.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezobjectrelation}
+            - {name: ezplatform.field_type.indexable, alias: ezobjectrelation}
 
     ezpublish.fieldType.indexable.ezselection:
         class: "%ezpublish.fieldType.indexable.ezselection.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezselection}
+            - {name: ezplatform.field_type.indexable, alias: ezselection}
 
     ezpublish.fieldType.indexable.ezobjectrelationlist:
         class: "%ezpublish.fieldType.indexable.ezobjectrelationlist.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezobjectrelationlist}
+            - {name: ezplatform.field_type.indexable, alias: ezobjectrelationlist}
 
     ezpublish.fieldType.indexable.ezurl:
         class: "%ezpublish.fieldType.indexable.ezurl.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezurl}
+            - {name: ezplatform.field_type.indexable, alias: ezurl}
 
     ezpublish.fieldType.indexable.ezimageasset:
         class: 'eZ\Publish\Core\FieldType\ImageAsset\SearchField'
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezimageasset}
+            - {name: ezplatform.field_type.indexable, alias: ezimageasset}
 
 
     ezpublish.fieldType.indexable.unindexed:
         class: "%ezpublish.fieldType.indexable.unindexed.class%"
         tags:
-            - {name: ezpublish.fieldType.indexable, alias: ezuser}
-            - {name: ezpublish.fieldType.indexable, alias: ezenum}
-            - {name: ezpublish.fieldType.indexable, alias: ezidentifier}
-            - {name: ezpublish.fieldType.indexable, alias: ezinisetting}
-            - {name: ezpublish.fieldType.indexable, alias: ezmatrix}
-            - {name: ezpublish.fieldType.indexable, alias: ezmultioption}
-            - {name: ezpublish.fieldType.indexable, alias: ezmultioption2}
-            - {name: ezpublish.fieldType.indexable, alias: ezmultiprice}
-            - {name: ezpublish.fieldType.indexable, alias: ezoption}
-            - {name: ezpublish.fieldType.indexable, alias: ezpackage}
-            - {name: ezpublish.fieldType.indexable, alias: ezproductcategory}
-            - {name: ezpublish.fieldType.indexable, alias: ezrangeoption}
-            - {name: ezpublish.fieldType.indexable, alias: ezsrrating}
-            - {name: ezpublish.fieldType.indexable, alias: ezsubtreesubscription}
-            - {name: ezpublish.fieldType.indexable, alias: ezcomcomments}
-            - {name: ezpublish.fieldType.indexable, alias: ezsurvey}
-            - {name: ezpublish.fieldType.indexable, alias: eztags}
-            - {name: ezpublish.fieldType.indexable, alias: ezrecommendation}
+            - {name: ezplatform.field_type.indexable, alias: ezuser}
+            - {name: ezplatform.field_type.indexable, alias: ezenum}
+            - {name: ezplatform.field_type.indexable, alias: ezidentifier}
+            - {name: ezplatform.field_type.indexable, alias: ezinisetting}
+            - {name: ezplatform.field_type.indexable, alias: ezmatrix}
+            - {name: ezplatform.field_type.indexable, alias: ezmultioption}
+            - {name: ezplatform.field_type.indexable, alias: ezmultioption2}
+            - {name: ezplatform.field_type.indexable, alias: ezmultiprice}
+            - {name: ezplatform.field_type.indexable, alias: ezoption}
+            - {name: ezplatform.field_type.indexable, alias: ezpackage}
+            - {name: ezplatform.field_type.indexable, alias: ezproductcategory}
+            - {name: ezplatform.field_type.indexable, alias: ezrangeoption}
+            - {name: ezplatform.field_type.indexable, alias: ezsrrating}
+            - {name: ezplatform.field_type.indexable, alias: ezsubtreesubscription}
+            - {name: ezplatform.field_type.indexable, alias: ezcomcomments}
+            - {name: ezplatform.field_type.indexable, alias: ezsurvey}
+            - {name: ezplatform.field_type.indexable, alias: eztags}
+            - {name: ezplatform.field_type.indexable, alias: ezrecommendation}

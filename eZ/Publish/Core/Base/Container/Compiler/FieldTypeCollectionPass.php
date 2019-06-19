@@ -17,6 +17,9 @@ use LogicException;
  */
 class FieldTypeCollectionPass implements CompilerPassInterface
 {
+    public const FIELD_TYPE_SERVICE_TAG = 'ezplatform.field_type';
+    public const DEPRECATED_FIELD_TYPE_SERVICE_TAG = 'ezpublish.fieldType';
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
@@ -32,11 +35,28 @@ class FieldTypeCollectionPass implements CompilerPassInterface
 
         // Field types.
         // Alias attribute is the field type string.
-        foreach ($container->findTaggedServiceIds('ezpublish.fieldType') as $id => $attributes) {
+        $deprecatedFieldTypeTags = $container->findTaggedServiceIds(self::DEPRECATED_FIELD_TYPE_SERVICE_TAG);
+        foreach ($deprecatedFieldTypeTags as $deprecatedFieldTypeTag) {
+            @trigger_error(
+                sprintf(
+                    '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s`. instead.',
+                    self::DEPRECATED_FIELD_TYPE_SERVICE_TAG,
+                    self::FIELD_TYPE_SERVICE_TAG
+                ),
+                E_USER_DEPRECATED
+            );
+        }
+        $fieldTypeTags = $container->findTaggedServiceIds(self::FIELD_TYPE_SERVICE_TAG);
+        $fieldTypesTags = array_merge($deprecatedFieldTypeTags, $fieldTypeTags);
+        foreach ($fieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
                 if (!isset($attribute['alias'])) {
                     throw new LogicException(
-                        'ezpublish.fieldType service tag needs an "alias" attribute to identify the field type. None given.'
+                        sprintf(
+                            '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
+                            self::DEPRECATED_FIELD_TYPE_SERVICE_TAG,
+                            self::FIELD_TYPE_SERVICE_TAG
+                        )
                     );
                 }
 

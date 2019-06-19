@@ -29,7 +29,7 @@ parameters:
     ezpublish.search.common.indexer.class: eZ\Publish\Core\Search\Common\Indexer
 
 services:
-    # Note: services tagged with 'ezpublish.fieldType.indexable'
+    # Note: services tagged with 'ezplatform.field_type.indexable'
     # are registered to this one using compilation pass
     ezpublish.search.common.field_registry:
         class: "%ezpublish.search.common.field_registry.class%"
