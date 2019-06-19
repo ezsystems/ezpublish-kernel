@@ -255,9 +255,9 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $handler = $this->getLocationGateway();
         $this->trashSubtree();
 
-        $this->assertEquals(
+        $this->assertCount(
             8,
-            count($handler->listTrashed(0, null, array()))
+            $handler->listTrashed(0, null, array())
         );
     }
 
@@ -270,9 +270,9 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $handler = $this->getLocationGateway();
         $this->trashSubtree();
 
-        $this->assertEquals(
+        $this->assertCount(
             5,
-            count($handler->listTrashed(0, 5, array()))
+            $handler->listTrashed(0, 5, array())
         );
     }
 

@@ -102,7 +102,7 @@ class EZP21069Test extends BaseTest
         $results = $this->getRepository()->getSearchService()->findContent($query);
 
         $this->assertEquals(1, $results->totalCount);
-        $this->assertEquals(1, count($results->searchHits));
+        $this->assertCount(1, $results->searchHits);
     }
 
     public function testSearchOnDraftAttributeContentGivesNoResult()

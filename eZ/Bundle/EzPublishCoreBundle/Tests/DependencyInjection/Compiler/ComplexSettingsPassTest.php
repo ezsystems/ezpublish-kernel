@@ -34,7 +34,7 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
 
         $expressionString = 'service("ezpublish.config.complex_setting_value.resolver").resolveSetting("/mnt/nfs/$var_dir$/$storage_dir$", "var_dir", service("ezpublish.config.resolver").getParameter("var_dir", null, null), "storage_dir", service("ezpublish.config.resolver").getParameter("storage_dir", null, null))';
         $arguments = $definition->getArguments();
-        self::assertSame(1, count($arguments));
+        self::assertCount(1, $arguments);
         self::assertInstanceOf(Expression::class, $arguments[0]);
         self::assertSame($expressionString, (string)$arguments[0]);
     }

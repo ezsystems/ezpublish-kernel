@@ -61,36 +61,6 @@ class SearchTest extends BaseServiceMockTest
             new NullIndexer(),
             $settings
         );
-
-        $this->assertAttributeSame(
-            $repositoryMock,
-            'repository',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $searchHandlerMock,
-            'searchHandler',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $domainMapperMock,
-            'domainMapper',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $permissionsCriterionResolverMock,
-            'permissionCriterionResolver',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $settings,
-            'settings',
-            $service
-        );
     }
 
     public function providerForFindContentValidatesLocationCriteriaAndSortClauses()

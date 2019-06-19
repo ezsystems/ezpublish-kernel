@@ -34,21 +34,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
     protected $databaseGateway;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::__construct
-     */
-    public function testCtor()
-    {
-        $handlerMock = $this->getDatabaseHandler();
-        $gateway = $this->getDatabaseGateway();
-
-        $this->assertAttributeSame(
-            $handlerMock,
-            'dbHandler',
-            $gateway
-        );
-    }
-
-    /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::insertContentObject
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\DoctrineDatabase::generateLanguageMask
      *
@@ -654,15 +639,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
         $res = $gateway->listVersions(226);
 
-        $this->assertEquals(
+        $this->assertCount(
             2,
-            count($res)
+            $res
         );
 
         foreach ($res as $row) {
-            $this->assertEquals(
+            $this->assertCount(
                 23,
-                count($row)
+                $row
             );
         }
 
@@ -712,15 +697,15 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
         $res = $gateway->listVersionsForUser(14);
 
-        $this->assertEquals(
+        $this->assertCount(
             2,
-            count($res)
+            $res
         );
 
         foreach ($res as $row) {
-            $this->assertEquals(
+            $this->assertCount(
                 23,
-                count($row)
+                $row
             );
         }
 
@@ -842,9 +827,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             array('4'),
             $res
         );
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            count($res)
+            $res
         );
     }
 
@@ -861,9 +846,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
         $res = $gateway->load(226, 2, array('de-DE'));
 
-        $this->assertEquals(
+        $this->assertCount(
             0,
-            count($res)
+            $res
         );
     }
 
@@ -1317,7 +1302,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $relations = $gateway->loadRelations(57);
 
-        $this->assertEquals(3, count($relations));
+        $this->assertCount(3, $relations);
 
         $this->assertValuesInRows(
             'ezcontentobject_link_to_contentobject_id',
@@ -1348,7 +1333,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $relations = $gateway->loadRelations(57, null, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON);
 
-        $this->assertEquals(1, count($relations), 'Expecting one relation to be loaded');
+        $this->assertCount(1, $relations, 'Expecting one relation to be loaded');
 
         $this->assertValuesInRows(
             'ezcontentobject_link_relation_type',
@@ -1374,7 +1359,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $relations = $gateway->loadRelations(57, 1);
 
-        $this->assertEquals(1, count($relations), 'Expecting one relation to be loaded');
+        $this->assertCount(1, $relations, 'Expecting one relation to be loaded');
 
         $this->assertValuesInRows(
             'ezcontentobject_link_to_contentobject_id',
@@ -1394,7 +1379,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $relations = $gateway->loadRelations(57, 1, \eZ\Publish\API\Repository\Values\Content\Relation::EMBED);
 
-        $this->assertEquals(0, count($relations), 'Expecting no relation to be loaded');
+        $this->assertCount(0, $relations, 'Expecting no relation to be loaded');
     }
 
     /**
@@ -1408,7 +1393,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $relations = $gateway->loadReverseRelations(58);
 
-        self::assertEquals(2, count($relations));
+        self::assertCount(2, $relations);
 
         $this->assertValuesInRows(
             'ezcontentobject_link_from_contentobject_id',
@@ -1428,7 +1413,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
 
         $relations = $gateway->loadReverseRelations(58, \eZ\Publish\API\Repository\Values\Content\Relation::COMMON);
 
-        self::assertEquals(1, count($relations));
+        self::assertCount(1, $relations);
 
         $this->assertValuesInRows(
             'ezcontentobject_link_from_contentobject_id',

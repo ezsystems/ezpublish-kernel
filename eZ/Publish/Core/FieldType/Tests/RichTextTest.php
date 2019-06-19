@@ -268,7 +268,7 @@ class RichTextTest extends TestCase
         $fieldType = $this->getFieldType();
         $fieldValue = $fieldType->toPersistenceValue($fieldType->acceptValue($xmlString));
 
-        self::assertInternalType('string', $fieldValue->data);
+        self::assertIsString($fieldValue->data);
         self::assertSame($xmlString, $fieldValue->data);
     }
 

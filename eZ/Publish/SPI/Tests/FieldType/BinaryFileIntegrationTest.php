@@ -225,9 +225,9 @@ class BinaryFileIntegrationTest extends FileBaseIntegrationTest
 
         $path = $this->getPathFromId($field->value->externalData['id']);
         // Check old file removed before update
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            count(glob(dirname($path) . '/*'))
+            glob(dirname($path) . '/*')
         );
 
         $this->assertEquals('Blueish-Blue-Binary.jpg', $field->value->externalData['fileName']);

@@ -22,28 +22,6 @@ use PHPUnit\Framework\TestSuite;
 class SlugConverterTest extends TestCase
 {
     /**
-     * Test for the __construct() method.
-     *
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter::__construct
-     */
-    public function testConstructor()
-    {
-        $slugConverter = $this->getMockedSlugConverter();
-
-        $this->assertAttributeSame(
-            $this->getTransformationProcessorMock(),
-            'transformationProcessor',
-            $slugConverter
-        );
-
-        $this->assertAttributeInternalType(
-            'array',
-            'configuration',
-            $slugConverter
-        );
-    }
-
-    /**
      * Test for the convert() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter::convert

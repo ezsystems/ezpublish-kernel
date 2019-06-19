@@ -33,8 +33,8 @@ class NotificationServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertInstanceOf(NotificationList::class, $notificationList);
-        $this->assertInternalType('array', $notificationList->items);
-        $this->assertInternalType('int', $notificationList->totalCount);
+        $this->assertIsArray($notificationList->items);
+        $this->assertIsInt($notificationList->totalCount);
         $this->assertEquals(5, $notificationList->totalCount);
     }
 

@@ -24,6 +24,8 @@ return PhpCsFixer\Config::create()
         'phpdoc_types_order' => false,
         'php_unit_mock_short_will_return' => false,
         'php_unit_construct' => false,
+        'php_unit_dedicate_assert' => true,
+        'php_unit_dedicate_assert_internal_type' => true,
         'standardize_increment' => false,
         'fopen_flags' => false,
     ])

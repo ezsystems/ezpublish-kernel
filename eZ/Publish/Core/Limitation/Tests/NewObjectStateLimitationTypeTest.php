@@ -203,7 +203,7 @@ class NewObjectStateLimitationTypeTest extends Base
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(NewObjectStateLimitation::class, $value);
-        self::assertInternalType('array', $value->limitationValues);
+        self::assertIsArray($value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
@@ -287,7 +287,7 @@ class NewObjectStateLimitationTypeTest extends Base
             $targets
         );
 
-        self::assertInternalType('boolean', $value);
+        self::assertIsBool($value);
         self::assertEquals($expected, $value);
     }
 

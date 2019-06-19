@@ -166,7 +166,7 @@ class LocationServiceAuthorizationTest extends BaseTest
 
         $locations = $locationService->loadLocationList([13]);
 
-        self::assertInternalType('iterable', $locations);
+        self::assertIsIterable($locations);
         self::assertCount(0, $locations);
     }
 

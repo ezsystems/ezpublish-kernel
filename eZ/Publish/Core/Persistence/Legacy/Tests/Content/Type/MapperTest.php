@@ -292,9 +292,9 @@ class MapperTest extends TestCase
         $mapper = $this->getNonConvertingMapper();
         $types = $mapper->extractTypesFromRows($rows);
 
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            count($types),
+            $types,
             'Incorrect number of types extracted'
         );
 
@@ -324,9 +324,9 @@ class MapperTest extends TestCase
             $types[0]
         );
 
-        $this->assertEquals(
+        $this->assertCount(
             6,
-            count($types[0]->fieldDefinitions),
+            $types[0]->fieldDefinitions,
             'Incorrect number of field definitions'
         );
         $this->assertPropertiesCorrect(

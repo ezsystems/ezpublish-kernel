@@ -27,22 +27,6 @@ use Psr\Log\LoggerInterface;
  */
 class RelationProcessorTest extends BaseServiceMockTest
 {
-    /**
-     * Test for the __construct() method.
-     *
-     * @covers \eZ\Publish\Core\Repository\Helper\RelationProcessor::__construct
-     */
-    public function testConstructor()
-    {
-        $relationProcessor = $this->getPartlyMockedRelationProcessor();
-
-        $this->assertAttributeSame(
-            $this->getPersistenceMock(),
-            'persistenceHandler',
-            $relationProcessor
-        );
-    }
-
     public function providerForTestAppendRelations()
     {
         return array(

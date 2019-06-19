@@ -33,7 +33,7 @@ class FieldTypeServiceTest extends BaseTest
         /* END: Use Case */
 
         // Require at least 1 field type
-        $this->assertNotEquals(0, count($fieldTypes));
+        $this->assertNotCount(0, $fieldTypes);
 
         foreach ($fieldTypes as $fieldType) {
             $this->assertInstanceOf(

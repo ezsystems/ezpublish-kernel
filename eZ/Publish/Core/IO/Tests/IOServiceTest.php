@@ -107,7 +107,7 @@ class IOServiceTest extends TestCase
 
         self::assertInstanceOf(BinaryFileCreateStruct::class, $binaryCreateStruct);
         self::assertNull($binaryCreateStruct->id);
-        self::assertTrue(is_resource($binaryCreateStruct->inputStream));
+        self::assertIsResource($binaryCreateStruct->inputStream);
         self::assertEquals(filesize(__FILE__), $binaryCreateStruct->size);
         self::assertEquals('text/x-php', $binaryCreateStruct->mimeType);
 

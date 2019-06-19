@@ -53,28 +53,6 @@ class UrlAliasTest extends BaseServiceMockTest
             $this->getNameSchemaServiceMock(),
             $settings
         );
-
-        $this->assertAttributeSame(
-            $repositoryMock,
-            'repository',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            $urlAliasHandler,
-            'urlAliasHandler',
-            $service
-        );
-
-        $this->assertAttributeSame(
-            array(
-                'settings',
-                'showAllTranslations' => false,
-                'prioritizedLanguageList' => array('prioritizedLanguageList'),
-            ),
-            'settings',
-            $service
-        );
     }
 
     /**

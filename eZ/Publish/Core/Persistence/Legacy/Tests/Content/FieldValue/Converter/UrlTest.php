@@ -66,7 +66,7 @@ class UrlTest extends TestCase
         $fieldValue = new FieldValue();
 
         $this->converter->toFieldValue($storageFieldValue, $fieldValue);
-        self::assertInternalType('array', $fieldValue->data);
+        self::assertIsArray($fieldValue->data);
         self::assertFalse($fieldValue->sortKey);
         self::assertSame($text, $fieldValue->data['text']);
         self::assertEquals($urlId, $fieldValue->data['urlId']);

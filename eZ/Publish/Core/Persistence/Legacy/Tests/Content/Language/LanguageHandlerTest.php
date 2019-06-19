@@ -239,9 +239,7 @@ class LanguageHandlerTest extends TestCase
 
         $result = $handler->loadAll();
 
-        $this->assertInternalType(
-            'array',
-            $result
+        $this->assertIsArray($result
         );
     }
 

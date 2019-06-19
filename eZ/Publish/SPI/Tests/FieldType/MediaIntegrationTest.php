@@ -246,9 +246,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
         );
 
         // Check old file removed before update
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            count(glob(dirname($path) . '/*'))
+            glob(dirname($path) . '/*')
         );
 
         $this->assertEquals('Blueish-Blue-Media.jpg', $field->value->externalData['fileName']);

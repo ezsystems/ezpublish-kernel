@@ -84,7 +84,7 @@ class BinaryLoaderTest extends TestCase
         try {
             $this->binaryLoader->find($path);
         } catch (NotLoadableException $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 "Suggested value: '1/2/3/123-name/name.png'",
                 $e->getMessage()
             );

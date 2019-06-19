@@ -88,7 +88,7 @@ abstract class FileSystemTwigIntegrationTestCase extends IntegrationTestCase
                 $output = trim($template->render(eval($match[1] . ';')), "\n ");
             } catch (Exception $e) {
                 if (false !== $exception) {
-                    $this->assertContains(
+                    $this->assertStringContainsString(
                         trim($exception),
                         trim(
                             sprintf('%s: %s', get_class($e), $e->getMessage())

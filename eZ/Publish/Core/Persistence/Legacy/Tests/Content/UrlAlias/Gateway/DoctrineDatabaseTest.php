@@ -30,21 +30,6 @@ class DoctrineDatabaseTest extends TestCase
     protected $gateway;
 
     /**
-     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::__construct
-     */
-    public function testConstructor()
-    {
-        $dbHandler = $this->getDatabaseHandler();
-        $gateway = $this->getGateway();
-
-        $this->assertAttributeSame(
-            $dbHandler,
-            'dbHandler',
-            $gateway
-        );
-    }
-
-    /**
      * Test for the loadUrlAliasData() method.
      *
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway\DoctrineDatabase::loadUrlAliasData

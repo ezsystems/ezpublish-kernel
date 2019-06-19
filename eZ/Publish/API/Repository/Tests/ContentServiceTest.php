@@ -2051,7 +2051,7 @@ XML
 
         // load first to make sure list gets updated also (cache)
         $versionInfoList = $contentService->loadVersions($content->contentInfo);
-        $this->assertEquals(1, count($versionInfoList));
+        $this->assertCount(1, $versionInfoList);
         $this->assertEquals(1, $versionInfoList[0]->versionNo);
 
         // Create a new draft with versionNo = 2
@@ -2080,7 +2080,7 @@ XML
 
         $versionInfoList = $contentService->loadVersions($content->contentInfo);
 
-        $this->assertEquals(6, count($versionInfoList));
+        $this->assertCount(6, $versionInfoList);
         $this->assertEquals(2, $versionInfoList[0]->versionNo);
         $this->assertEquals(7, $versionInfoList[5]->versionNo);
 
@@ -3366,9 +3366,9 @@ XML
             $contentCopied->id
         );
 
-        $this->assertEquals(
+        $this->assertCount(
             2,
-            count($contentService->loadVersions($contentCopied->contentInfo))
+            $contentService->loadVersions($contentCopied->contentInfo)
         );
 
         $this->assertEquals(2, $contentCopied->getVersionInfo()->versionNo);
@@ -3489,9 +3489,9 @@ XML
             $contentCopied->id
         );
 
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            count($contentService->loadVersions($contentCopied->contentInfo))
+            $contentService->loadVersions($contentCopied->contentInfo)
         );
 
         $this->assertEquals(1, $contentCopied->getVersionInfo()->versionNo);
@@ -3549,9 +3549,9 @@ XML
      */
     public function testAddRelationAddsRelationToContent($relations)
     {
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            count($relations)
+            $relations
         );
     }
 
@@ -3630,9 +3630,9 @@ XML
      */
     public function testCreateContentDraftWithRelationsCreatesRelations($relations)
     {
-        $this->assertEquals(
+        $this->assertCount(
             1,
-            count($relations)
+            $relations
         );
 
         return $relations;
@@ -3939,8 +3939,8 @@ XML
         $this->assertEquals($contentInfo->id, $relation2->getDestinationContentInfo()->id);
         $this->assertEquals($demoDesignDraft->id, $relation2->getSourceContentInfo()->id);
 
-        $this->assertEquals(0, count($relations));
-        $this->assertEquals(2, count($reverseRelations));
+        $this->assertCount(0, $relations);
+        $this->assertCount(2, $reverseRelations);
 
         usort(
             $reverseRelations,
@@ -4041,8 +4041,8 @@ XML
         $this->assertEquals($contentInfo->id, $relation2->getDestinationContentInfo()->id);
         $this->assertEquals($demoDesignDraft->id, $relation2->getSourceContentInfo()->id);
 
-        $this->assertEquals(0, count($relations));
-        $this->assertEquals(1, count($reverseRelations));
+        $this->assertCount(0, $relations);
+        $this->assertCount(1, $reverseRelations);
 
         $this->assertEquals(
             array(
@@ -4117,8 +4117,8 @@ XML
         $this->assertEquals($media->contentInfo->id, $relation2->getDestinationContentInfo()->id);
         $this->assertEquals($demoDesignDraft->id, $relation2->getSourceContentInfo()->id);
 
-        $this->assertEquals(0, count($relations));
-        $this->assertEquals(1, count($reverseRelations));
+        $this->assertCount(0, $relations);
+        $this->assertCount(1, $reverseRelations);
 
         $this->assertEquals(
             array(
@@ -4170,7 +4170,7 @@ XML
         $relations = $contentService->loadRelations($draft->getVersionInfo());
         /* END: Use Case */
 
-        $this->assertEquals(1, count($relations));
+        $this->assertCount(1, $relations);
     }
 
     /**
@@ -5086,7 +5086,7 @@ XML
         )->locations;
         /* END: Use Case */
 
-        $this->assertEquals(1, count($locations));
+        $this->assertCount(1, $locations);
     }
 
     /**
@@ -5146,7 +5146,7 @@ XML
         )->locations;
         /* END: Use Case */
 
-        $this->assertEquals(2, count($locations));
+        $this->assertCount(2, $locations);
     }
 
     public function testURLAliasesCreatedForNewContent()

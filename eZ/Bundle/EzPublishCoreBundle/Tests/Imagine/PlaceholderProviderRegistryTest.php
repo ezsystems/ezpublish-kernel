@@ -14,26 +14,40 @@ use PHPUnit\Framework\TestCase;
 
 class PlaceholderProviderRegistryTest extends TestCase
 {
+    private const FOO = 'foo';
+    private const BAR = 'bar';
+
+    /**
+     * @covers       \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry::__construct
+     * @uses         \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry::getProvider
+     * @depends      testGetProviderKnown
+     */
     public function testConstructor()
     {
         $providers = [
-            'foo' => $this->getPlaceholderProviderMock(),
-            'bar' => $this->getPlaceholderProviderMock(),
+            self::FOO => $this->getPlaceholderProviderMock(),
+            self::BAR => $this->getPlaceholderProviderMock(),
         ];
 
         $registry = new PlaceholderProviderRegistry($providers);
 
-        $this->assertAttributeSame($providers, 'providers', $registry);
+        $this->assertSame($providers[self::FOO], $registry->getProvider(self::FOO));
+        $this->assertSame($providers[self::BAR], $registry->getProvider(self::BAR));
     }
 
-    public function testAddProvider()
+    /**
+     * @covers       \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry::addProvider
+     * @uses         \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry::getProvider
+     * @depends      testGetProviderKnown
+     */
+    public function testAddProvider(): void
     {
         $provider = $this->getPlaceholderProviderMock();
 
         $registry = new PlaceholderProviderRegistry();
-        $registry->addProvider('foo', $provider);
+        $registry->addProvider(self::FOO, $provider);
 
-        $this->assertAttributeSame(['foo' => $provider], 'providers', $registry);
+        $this->assertSame($provider, $registry->getProvider(self::FOO));
     }
 
     public function testSupports()
@@ -51,10 +65,10 @@ class PlaceholderProviderRegistryTest extends TestCase
         $provider = $this->getPlaceholderProviderMock();
 
         $registry = new PlaceholderProviderRegistry([
-            'foo' => $provider,
+            self::FOO => $provider,
         ]);
 
-        $this->assertEquals($provider, $registry->getProvider('foo'));
+        $this->assertEquals($provider, $registry->getProvider(self::FOO));
     }
 
     public function testGetProviderUnknown()
@@ -62,10 +76,10 @@ class PlaceholderProviderRegistryTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
 
         $registry = new PlaceholderProviderRegistry([
-            'foo' => $this->getPlaceholderProviderMock(),
+            self::FOO => $this->getPlaceholderProviderMock(),
         ]);
 
-        $registry->getProvider('bar');
+        $registry->getProvider(self::BAR);
     }
 
     private function getPlaceholderProviderMock(): PlaceholderProvider

@@ -545,9 +545,7 @@ class RepositoryTest extends BaseTest
         $permissionSets = $repository->hasAccess('content', 'read');
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $permissionSets
+        $this->assertIsArray($permissionSets
         );
         $this->assertNotEmpty($permissionSets);
     }

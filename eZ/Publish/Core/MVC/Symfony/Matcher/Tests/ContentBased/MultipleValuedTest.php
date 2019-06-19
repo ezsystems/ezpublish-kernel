@@ -23,7 +23,7 @@ class MultipleValuedTest extends BaseTest
         $matcher = $this->getMultipleValuedMatcherMock();
         $matcher->setMatchingConfig($matchingConfig);
         $values = $matcher->getValues();
-        $this->assertInternalType('array', $values);
+        $this->assertIsArray($values);
 
         $matchingConfig = is_array($matchingConfig) ? $matchingConfig : array($matchingConfig);
         foreach ($matchingConfig as $val) {

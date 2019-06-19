@@ -216,7 +216,7 @@ class SectionLimitationTypeTest extends Base
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(SectionLimitation::class, $value);
-        self::assertInternalType('array', $value->limitationValues);
+        self::assertIsArray($value->limitationValues);
         self::assertEquals($expected, $value->limitationValues);
     }
 
@@ -453,8 +453,8 @@ class SectionLimitationTypeTest extends Base
         );
 
         self::assertInstanceOf(SectionId::class, $criterion);
-        self::assertInternalType('array', $criterion->value);
-        self::assertInternalType('string', $criterion->operator);
+        self::assertIsArray($criterion->value);
+        self::assertIsString($criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
         self::assertEquals(array('9'), $criterion->value);
     }
@@ -472,8 +472,8 @@ class SectionLimitationTypeTest extends Base
         );
 
         self::assertInstanceOf(SectionId::class, $criterion);
-        self::assertInternalType('array', $criterion->value);
-        self::assertInternalType('string', $criterion->operator);
+        self::assertIsArray($criterion->value);
+        self::assertIsString($criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);
         self::assertEquals(array('9', '55'), $criterion->value);
     }

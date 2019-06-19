@@ -17,21 +17,17 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
  */
 class FieldValueConverterRegistryTest extends TestCase
 {
+    private const TYPE_NAME = 'some-type';
+
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry::register
      */
     public function testRegister()
     {
         $converter = $this->getFieldValueConverterMock();
-        $registry = new Registry(array('some-type' => $converter));
+        $registry = new Registry(array(self::TYPE_NAME => $converter));
 
-        $this->assertAttributeSame(
-            array(
-                'some-type' => $converter,
-            ),
-            'converterMap',
-            $registry
-        );
+        $this->assertSame($converter, $registry->getConverter(self::TYPE_NAME));
     }
 
     /**
@@ -40,9 +36,9 @@ class FieldValueConverterRegistryTest extends TestCase
     public function testGetStorage()
     {
         $converter = $this->getFieldValueConverterMock();
-        $registry = new Registry(array('some-type' => $converter));
+        $registry = new Registry(array(self::TYPE_NAME => $converter));
 
-        $res = $registry->getConverter('some-type');
+        $res = $registry->getConverter(self::TYPE_NAME);
 
         $this->assertSame(
             $converter,

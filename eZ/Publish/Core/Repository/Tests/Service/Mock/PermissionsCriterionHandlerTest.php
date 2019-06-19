@@ -23,27 +23,6 @@ use eZ\Publish\Core\Repository\Helper\LimitationService;
  */
 class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 {
-    /**
-     * Test for the __construct() method.
-     */
-    public function testConstructor()
-    {
-        $permissionResolverMock = $this->getPermissionResolverMock();
-        $limitationServiceMock = $this->getLimitationServiceMock();
-        $handler = $this->getPermissionsCriterionHandlerMock();
-
-        $this->assertAttributeSame(
-            $permissionResolverMock,
-            'permissionResolver',
-            $handler
-        );
-        $this->assertAttributeSame(
-            $limitationServiceMock,
-            'limitationService',
-            $handler
-        );
-    }
-
     public function providerForTestAddPermissionsCriterionWithBooleanPermission()
     {
         return array(

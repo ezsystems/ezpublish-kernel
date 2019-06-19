@@ -1627,9 +1627,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         }
 
         // verify all expected relations were found
-        $this->assertEquals(
+        $this->assertCount(
             0,
-            count($expectedRelations),
+            $expectedRelations,
             "Expected to find '" . (count($expectedRelations) + count($actualRelations))
             . "' relations found '" . count($actualRelations) . "'"
         );

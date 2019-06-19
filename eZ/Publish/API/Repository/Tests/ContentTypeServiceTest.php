@@ -335,9 +335,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $loadedGroups = $contentTypeService->loadContentTypeGroups();
         /* END: Use Case */
 
-        $this->assertInternalType(
-            'array',
-            $loadedGroups
+        $this->assertIsArray($loadedGroups
         );
 
         foreach ($loadedGroups as $loadedGroup) {
@@ -366,7 +364,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
      */
     public function testLoadContentTypeGroupsIdentifiers($groups)
     {
-        $this->assertEquals(4, count($groups));
+        $this->assertCount(4, $groups);
 
         $expectedIdentifiers = array(
             'Content' => true,
@@ -1123,10 +1121,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         /* @var $validationErrors */
         $this->assertTrue(isset($validationErrors));
-        $this->assertInternalType('array', $validationErrors);
+        $this->assertIsArray($validationErrors);
         $this->assertCount(1, $validationErrors);
         $this->assertArrayHasKey('temperature', $validationErrors);
-        $this->assertInternalType('array', $validationErrors['temperature']);
+        $this->assertIsArray($validationErrors['temperature']);
         $this->assertCount(1, $validationErrors['temperature']);
         $this->assertInstanceOf('eZ\\Publish\\Core\\FieldType\\ValidationError', $validationErrors['temperature'][0]);
 
@@ -1618,10 +1616,10 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         /* @var $validationErrors */
         $this->assertTrue(isset($validationErrors));
-        $this->assertInternalType('array', $validationErrors);
+        $this->assertIsArray($validationErrors);
         $this->assertCount(1, $validationErrors);
         $this->assertArrayHasKey('temperature', $validationErrors);
-        $this->assertInternalType('array', $validationErrors['temperature']);
+        $this->assertIsArray($validationErrors['temperature']);
         $this->assertCount(1, $validationErrors['temperature']);
         $this->assertInstanceOf('eZ\\Publish\\Core\\FieldType\\ValidationError', $validationErrors['temperature'][0]);
 
@@ -2953,7 +2951,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
 
         $types = $contentTypeService->loadContentTypeList([3, 4]);
 
-        $this->assertInternalType('iterable', $types);
+        $this->assertIsIterable($types);
 
         $this->assertEquals(
             [
@@ -2985,7 +2983,7 @@ class ContentTypeServiceTest extends BaseContentTypeServiceTest
         $types = $contentTypeService->loadContentTypes($contentTypeGroup);
         /* END: Use Case */
 
-        $this->assertInternalType('array', $types);
+        $this->assertIsArray($types);
 
         return $types;
     }

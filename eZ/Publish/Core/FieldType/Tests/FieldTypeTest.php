@@ -730,9 +730,7 @@ abstract class FieldTypeTest extends TestCase
 
         $validationResult = $fieldType->validateFieldSettings($inputSettings);
 
-        $this->assertInternalType(
-            'array',
-            $validationResult,
+        $this->assertIsArray($validationResult,
             'The method validateFieldSettings() must return an array.'
         );
         $this->assertEquals(
@@ -753,9 +751,7 @@ abstract class FieldTypeTest extends TestCase
 
         $validationResult = $fieldType->validateFieldSettings($inputSettings);
 
-        $this->assertInternalType(
-            'array',
-            $validationResult,
+        $this->assertIsArray($validationResult,
             'The method validateFieldSettings() must return an array.'
         );
 
@@ -785,9 +781,7 @@ abstract class FieldTypeTest extends TestCase
 
         $validationResult = $fieldType->validateValidatorConfiguration($inputConfiguration);
 
-        $this->assertInternalType(
-            'array',
-            $validationResult,
+        $this->assertIsArray($validationResult,
             'The method validateValidatorConfiguration() must return an array.'
         );
         $this->assertEquals(
@@ -808,9 +802,7 @@ abstract class FieldTypeTest extends TestCase
 
         $validationResult = $fieldType->validateValidatorConfiguration($inputConfiguration);
 
-        $this->assertInternalType(
-            'array',
-            $validationResult,
+        $this->assertIsArray($validationResult,
             'The method validateValidatorConfiguration() must return an array.'
         );
 
@@ -933,7 +925,7 @@ abstract class FieldTypeTest extends TestCase
     {
         $validationErrors = $this->doValidate($fieldDefinitionData, $value);
 
-        $this->assertInternalType('array', $validationErrors);
+        $this->assertIsArray($validationErrors);
         $this->assertEmpty($validationErrors, "Got value:\n" . var_export($validationErrors, true));
     }
 
@@ -944,7 +936,7 @@ abstract class FieldTypeTest extends TestCase
     {
         $validationErrors = $this->doValidate($fieldDefinitionData, $value);
 
-        $this->assertInternalType('array', $validationErrors);
+        $this->assertIsArray($validationErrors);
         $this->assertEquals($errors, $validationErrors);
     }
 
