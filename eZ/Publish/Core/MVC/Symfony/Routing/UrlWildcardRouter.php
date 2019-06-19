@@ -87,20 +87,10 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
         if ($this->logger !== null) {
             $this->logger->info("UrlWildcard matched. Destination URL: {$urlWildcardTranslationResult->uri}");
         }
-        // redirect if URLWildcard is configured as forward
-        if ($urlWildcardTranslationResult->forward) {
-            $params = [
-                '_controller' => RedirectController::class . '::urlRedirectAction',
-                'path' => $urlWildcardTranslationResult->uri,
-                'keepRequestMethod' => true,
-            ];
-
-            return $params;
-        }
 
         // set translated path for the next router
         $request->attributes->set('semanticPathinfo', $urlWildcardTranslationResult->uri);
-        $request->attributes->set('needsRedirect', false);
+        $request->attributes->set('needsRedirect', (bool) $urlWildcardTranslationResult->forward);
 
         // and throw Exception to pass processing to the next router
         throw new ResourceNotFoundException();
