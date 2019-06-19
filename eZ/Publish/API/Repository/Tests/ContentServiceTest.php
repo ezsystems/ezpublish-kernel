@@ -6729,4 +6729,18 @@ XML
             $content->fields['name']
         );
     }
+
+    public function testCreateContentWithRomanianSpecialCharsInTitle()
+    {
+        $repository = $this->getRepository();
+
+        $baseName = 'ȘșțȚdfdf';
+        $expectedPath = '/SstTdfdf';
+
+        $this->createFolder(['eng-US' => $baseName], 2);
+
+        $urlAliasService = $repository->getURLAliasService();
+        $urlAlias = $urlAliasService->lookup($expectedPath);
+        $this->assertSame($expectedPath, $urlAlias->path);
+    }
 }

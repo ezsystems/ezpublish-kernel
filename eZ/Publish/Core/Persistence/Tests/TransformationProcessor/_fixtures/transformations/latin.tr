@@ -38,6 +38,8 @@ U+017A - U+017E % 02 - 01
 latin_lowercase:
 # These characters span multiple uncode sets
 U+0178 = U+00FF
+U+0218 = U+0219
+U+021A = U+021B
 
 latin_uppercase:
 # These characters span multiple uncode sets
@@ -190,6 +192,10 @@ U+017D = "Z"
 U+017A = "z"
 U+017C = "z"
 U+017E = "z"
+U+0218 = "S"
+U+0219 = "s"
+U+021A = "T"
+U+021B = "t"
 
 # Transliteration of latin1, is used in URLs and identifiers
 latin1_transliterate_ascii:
