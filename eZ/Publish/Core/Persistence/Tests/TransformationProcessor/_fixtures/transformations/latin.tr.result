@@ -1,1510 +1,1984 @@
 <?php
 
-return array (
-  'latin1_lowercase' => array (
-    0 => array (
-      'type' => 13,
-      'data' => array (
-        'srcStart' => 'U+00C0',
-        'srcEnd' => 'U+00D6',
-        'op' => '+',
-        'dest' => '20',
-      ),
-    ),
-    1 => array (
-      'type' => 13,
-      'data' => array (
-        'srcStart' => 'U+00D8',
-        'srcEnd' => 'U+00DE',
-        'op' => '+',
-        'dest' => '20',
-      ),
-    ),
-  ),
-  'latin1_uppercase' => array (
-    0 => array (
-      'type' => 13,
-      'data' => array (
-        'srcStart' => 'U+00E0',
-        'srcEnd' => 'U+00F6',
-        'op' => '-',
-        'dest' => '20',
-      ),
-    ),
-    1 => array (
-      'type' => 13,
-      'data' => array (
-        'srcStart' => 'U+00F8',
-        'srcEnd' => 'U+00FE',
-        'op' => '-',
-        'dest' => '20',
-      ),
-    ),
-    2 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00DF',
-        'dest' => '"SS"',
-      ),
-    ),
-  ),
-  'latin-exta_lowercase' => array (
-    0 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+0100',
-        'srcEnd' => 'U+012E',
-        'modulo' => '02',
-        'op' => '+',
-        'dest' => '01',
-      ),
-    ),
-    1 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+0132',
-        'srcEnd' => 'U+0136',
-        'modulo' => '02',
-        'op' => '+',
-        'dest' => '01',
-      ),
-    ),
-    2 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+0139',
-        'srcEnd' => 'U+0147',
-        'modulo' => '02',
-        'op' => '+',
-        'dest' => '01',
-      ),
-    ),
-    3 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+014A',
-        'srcEnd' => 'U+0176',
-        'modulo' => '02',
-        'op' => '+',
-        'dest' => '01',
-      ),
-    ),
-    4 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+0179',
-        'srcEnd' => 'U+017D',
-        'modulo' => '02',
-        'op' => '+',
-        'dest' => '01',
-      ),
-    ),
-  ),
-  'latin-exta_uppercase' => array (
-    0 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+0101',
-        'srcEnd' => 'U+012F',
-        'modulo' => '02',
-        'op' => '-',
-        'dest' => '01',
-      ),
-    ),
-    1 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+0133',
-        'srcEnd' => 'U+0137',
-        'modulo' => '02',
-        'op' => '-',
-        'dest' => '01',
-      ),
-    ),
-    2 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+013A',
-        'srcEnd' => 'U+0148',
-        'modulo' => '02',
-        'op' => '-',
-        'dest' => '01',
-      ),
-    ),
-    3 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+014B',
-        'srcEnd' => 'U+0177',
-        'modulo' => '02',
-        'op' => '-',
-        'dest' => '01',
-      ),
-    ),
-    4 => array (
-      'type' => 14,
-      'data' => array (
-        'srcStart' => 'U+017A',
-        'srcEnd' => 'U+017E',
-        'modulo' => '02',
-        'op' => '-',
-        'dest' => '01',
-      ),
-    ),
-  ),
-  'latin_lowercase' => array (
-    0 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0178',
-        'dest' => 'U+00FF',
-      ),
-    ),
-  ),
-  'latin_uppercase' => array (
-    0 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00FF',
-        'dest' => 'U+0178',
-      ),
-    ),
-  ),
-  'latin1_diacritical' => array (
-    0 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00C0',
-        'srcEnd' => 'U+00C4',
-        'dest' => '"A"',
-      ),
-    ),
-    1 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00E0',
-        'srcEnd' => 'U+00E4',
-        'dest' => '"a"',
-      ),
-    ),
-    2 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00C8',
-        'srcEnd' => 'U+00CB',
-        'dest' => '"E"',
-      ),
-    ),
-    3 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00E8',
-        'srcEnd' => 'U+00EB',
-        'dest' => '"e"',
-      ),
-    ),
-    4 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00CC',
-        'srcEnd' => 'U+00CF',
-        'dest' => '"I"',
-      ),
-    ),
-    5 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00EC',
-        'srcEnd' => 'U+00EF',
-        'dest' => '"i"',
-      ),
-    ),
-    6 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00D2',
-        'srcEnd' => 'U+00D6',
-        'dest' => '"O"',
-      ),
-    ),
-    7 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00F2',
-        'srcEnd' => 'U+00F6',
-        'dest' => '"o"',
-      ),
-    ),
-    8 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00D9',
-        'srcEnd' => 'U+00DC',
-        'dest' => '"U"',
-      ),
-    ),
-    9 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00F9',
-        'srcEnd' => 'U+00FC',
-        'dest' => '"u"',
-      ),
-    ),
-    10 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00DD',
-        'dest' => '"Y"',
-      ),
-    ),
-    11 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+009F',
-        'dest' => '"Y"',
-      ),
-    ),
-    12 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00FD',
-        'dest' => '"y"',
-      ),
-    ),
-    13 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00FF',
-        'dest' => '"y"',
-      ),
-    ),
-    14 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00C7',
-        'dest' => '"C"',
-      ),
-    ),
-    15 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00E7',
-        'dest' => '"c"',
-      ),
-    ),
-    16 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00D0',
-        'dest' => '"D"',
-      ),
-    ),
-    17 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00F0',
-        'dest' => '"d"',
-      ),
-    ),
-    18 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00D1',
-        'dest' => '"N"',
-      ),
-    ),
-    19 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00F1',
-        'dest' => '"n"',
-      ),
-    ),
-    20 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00DE',
-        'dest' => '"TH"',
-      ),
-    ),
-    21 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00FE',
-        'dest' => '"th"',
-      ),
-    ),
-    22 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00DF',
-        'dest' => '"ss"',
-      ),
-    ),
-  ),
-  'latin-exta_diacritical' => array (
-    0 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0100',
-        'dest' => '"A"',
-      ),
-    ),
-    1 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0102',
-        'dest' => '"A"',
-      ),
-    ),
-    2 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0104',
-        'dest' => '"A"',
-      ),
-    ),
-    3 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0101',
-        'dest' => '"a"',
-      ),
-    ),
-    4 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0103',
-        'dest' => '"a"',
-      ),
-    ),
-    5 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0105',
-        'dest' => '"a"',
-      ),
-    ),
-    6 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0106',
-        'dest' => '"C"',
-      ),
-    ),
-    7 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0108',
-        'dest' => '"C"',
-      ),
-    ),
-    8 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+010A',
-        'dest' => '"C"',
-      ),
-    ),
-    9 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+010C',
-        'dest' => '"C"',
-      ),
-    ),
-    10 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0107',
-        'dest' => '"c"',
-      ),
-    ),
-    11 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0109',
-        'dest' => '"c"',
-      ),
-    ),
-    12 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+010B',
-        'dest' => '"c"',
-      ),
-    ),
-    13 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+010D',
-        'dest' => '"c"',
-      ),
-    ),
-    14 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+010E',
-        'dest' => '"D"',
-      ),
-    ),
-    15 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0110',
-        'dest' => '"D"',
-      ),
-    ),
-    16 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+010F',
-        'dest' => '"d"',
-      ),
-    ),
-    17 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0111',
-        'dest' => '"d"',
-      ),
-    ),
-    18 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0112',
-        'dest' => '"E"',
-      ),
-    ),
-    19 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0114',
-        'dest' => '"E"',
-      ),
-    ),
-    20 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0116',
-        'dest' => '"E"',
-      ),
-    ),
-    21 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0118',
-        'dest' => '"E"',
-      ),
-    ),
-    22 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+011A',
-        'dest' => '"E"',
-      ),
-    ),
-    23 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0113',
-        'dest' => '"e"',
-      ),
-    ),
-    24 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0115',
-        'dest' => '"e"',
-      ),
-    ),
-    25 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0117',
-        'dest' => '"e"',
-      ),
-    ),
-    26 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0119',
-        'dest' => '"e"',
-      ),
-    ),
-    27 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+011B',
-        'dest' => '"e"',
-      ),
-    ),
-    28 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+011C',
-        'dest' => '"G"',
-      ),
-    ),
-    29 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+011E',
-        'dest' => '"G"',
-      ),
-    ),
-    30 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0120',
-        'dest' => '"G"',
-      ),
-    ),
-    31 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0122',
-        'dest' => '"G"',
-      ),
-    ),
-    32 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+011D',
-        'dest' => '"g"',
-      ),
-    ),
-    33 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+011F',
-        'dest' => '"g"',
-      ),
-    ),
-    34 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0121',
-        'dest' => '"g"',
-      ),
-    ),
-    35 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0123',
-        'dest' => '"g"',
-      ),
-    ),
-    36 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0124',
-        'dest' => '"H"',
-      ),
-    ),
-    37 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0126',
-        'dest' => '"H"',
-      ),
-    ),
-    38 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0125',
-        'dest' => '"h"',
-      ),
-    ),
-    39 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0127',
-        'dest' => '"h"',
-      ),
-    ),
-    40 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0128',
-        'dest' => '"I"',
-      ),
-    ),
-    41 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+012A',
-        'dest' => '"I"',
-      ),
-    ),
-    42 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+012C',
-        'dest' => '"I"',
-      ),
-    ),
-    43 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+012E',
-        'dest' => '"I"',
-      ),
-    ),
-    44 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0130',
-        'dest' => '"I"',
-      ),
-    ),
-    45 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0129',
-        'dest' => '"i"',
-      ),
-    ),
-    46 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+012B',
-        'dest' => '"i"',
-      ),
-    ),
-    47 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+012D',
-        'dest' => '"i"',
-      ),
-    ),
-    48 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+012F',
-        'dest' => '"i"',
-      ),
-    ),
-    49 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0131',
-        'dest' => '"i"',
-      ),
-    ),
-    50 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0134',
-        'dest' => '"J"',
-      ),
-    ),
-    51 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0135',
-        'dest' => '"j"',
-      ),
-    ),
-    52 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0136',
-        'dest' => '"K"',
-      ),
-    ),
-    53 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0137',
-        'dest' => '"k"',
-      ),
-    ),
-    54 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0139',
-        'dest' => '"L"',
-      ),
-    ),
-    55 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+013B',
-        'dest' => '"L"',
-      ),
-    ),
-    56 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+013D',
-        'dest' => '"L"',
-      ),
-    ),
-    57 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+013F',
-        'dest' => '"L"',
-      ),
-    ),
-    58 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0141',
-        'dest' => '"L"',
-      ),
-    ),
-    59 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+013A',
-        'dest' => '"l"',
-      ),
-    ),
-    60 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+013C',
-        'dest' => '"l"',
-      ),
-    ),
-    61 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+013E',
-        'dest' => '"l"',
-      ),
-    ),
-    62 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0140',
-        'dest' => '"l"',
-      ),
-    ),
-    63 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0142',
-        'dest' => '"l"',
-      ),
-    ),
-    64 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0143',
-        'dest' => '"N"',
-      ),
-    ),
-    65 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0145',
-        'dest' => '"N"',
-      ),
-    ),
-    66 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0147',
-        'dest' => '"N"',
-      ),
-    ),
-    67 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0144',
-        'dest' => '"n"',
-      ),
-    ),
-    68 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0146',
-        'dest' => '"n"',
-      ),
-    ),
-    69 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0148',
-        'dest' => '"n"',
-      ),
-    ),
-    70 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+014C',
-        'dest' => '"O"',
-      ),
-    ),
-    71 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+014E',
-        'dest' => '"O"',
-      ),
-    ),
-    72 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0150',
-        'dest' => '"O"',
-      ),
-    ),
-    73 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+014D',
-        'dest' => '"o"',
-      ),
-    ),
-    74 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+014F',
-        'dest' => '"o"',
-      ),
-    ),
-    75 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0151',
-        'dest' => '"o"',
-      ),
-    ),
-    76 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0154',
-        'dest' => '"R"',
-      ),
-    ),
-    77 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0156',
-        'dest' => '"R"',
-      ),
-    ),
-    78 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0158',
-        'dest' => '"R"',
-      ),
-    ),
-    79 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0155',
-        'dest' => '"r"',
-      ),
-    ),
-    80 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0157',
-        'dest' => '"r"',
-      ),
-    ),
-    81 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0159',
-        'dest' => '"r"',
-      ),
-    ),
-    82 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+015A',
-        'dest' => '"S"',
-      ),
-    ),
-    83 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+015C',
-        'dest' => '"S"',
-      ),
-    ),
-    84 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+015E',
-        'dest' => '"S"',
-      ),
-    ),
-    85 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0160',
-        'dest' => '"S"',
-      ),
-    ),
-    86 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+015B',
-        'dest' => '"s"',
-      ),
-    ),
-    87 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+015D',
-        'dest' => '"s"',
-      ),
-    ),
-    88 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+015F',
-        'dest' => '"s"',
-      ),
-    ),
-    89 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0161',
-        'dest' => '"s"',
-      ),
-    ),
-    90 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0162',
-        'dest' => '"T"',
-      ),
-    ),
-    91 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0164',
-        'dest' => '"T"',
-      ),
-    ),
-    92 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0166',
-        'dest' => '"T"',
-      ),
-    ),
-    93 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0163',
-        'dest' => '"t"',
-      ),
-    ),
-    94 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0165',
-        'dest' => '"t"',
-      ),
-    ),
-    95 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0167',
-        'dest' => '"t"',
-      ),
-    ),
-    96 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0168',
-        'dest' => '"U"',
-      ),
-    ),
-    97 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+016A',
-        'dest' => '"U"',
-      ),
-    ),
-    98 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+016C',
-        'dest' => '"U"',
-      ),
-    ),
-    99 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+016E',
-        'dest' => '"U"',
-      ),
-    ),
-    100 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0170',
-        'dest' => '"U"',
-      ),
-    ),
-    101 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0172',
-        'dest' => '"U"',
-      ),
-    ),
-    102 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0169',
-        'dest' => '"u"',
-      ),
-    ),
-    103 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+016B',
-        'dest' => '"u"',
-      ),
-    ),
-    104 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+016D',
-        'dest' => '"u"',
-      ),
-    ),
-    105 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+016F',
-        'dest' => '"u"',
-      ),
-    ),
-    106 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0171',
-        'dest' => '"u"',
-      ),
-    ),
-    107 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0173',
-        'dest' => '"u"',
-      ),
-    ),
-    108 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0174',
-        'dest' => '"W"',
-      ),
-    ),
-    109 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0175',
-        'dest' => '"w"',
-      ),
-    ),
-    110 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0176',
-        'dest' => '"Y"',
-      ),
-    ),
-    111 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0177',
-        'dest' => '"y"',
-      ),
-    ),
-    112 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0178',
-        'dest' => '"Y"',
-      ),
-    ),
-    113 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0179',
-        'dest' => '"Z"',
-      ),
-    ),
-    114 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+017B',
-        'dest' => '"Z"',
-      ),
-    ),
-    115 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+017D',
-        'dest' => '"Z"',
-      ),
-    ),
-    116 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+017A',
-        'dest' => '"z"',
-      ),
-    ),
-    117 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+017C',
-        'dest' => '"z"',
-      ),
-    ),
-    118 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+017E',
-        'dest' => '"z"',
-      ),
-    ),
-  ),
-  'latin1_transliterate_ascii' => array (
-    0 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00E6',
-        'dest' => '"ae"',
-      ),
-    ),
-    1 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00C6',
-        'dest' => '"AE"',
-      ),
-    ),
-    2 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00E5',
-        'dest' => '"aa"',
-      ),
-    ),
-    3 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00C5',
-        'dest' => '"AA"',
-      ),
-    ),
-    4 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00F8',
-        'dest' => '"oe"',
-      ),
-    ),
-    5 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00D8',
-        'dest' => '"OE"',
-      ),
-    ),
-    6 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+009C',
-        'dest' => '"oe"',
-      ),
-    ),
-    7 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+008C',
-        'dest' => '"OE"',
-      ),
-    ),
-    8 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00AA',
-        'dest' => '"a"',
-      ),
-    ),
-    9 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00BA',
-        'dest' => '"o"',
-      ),
-    ),
-    10 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00E4',
-        'dest' => '"ae"',
-      ),
-    ),
-    11 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00F6',
-        'dest' => '"oe"',
-      ),
-    ),
-    12 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00FC',
-        'dest' => '"ue"',
-      ),
-    ),
-    13 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00C4',
-        'dest' => '"Ae"',
-      ),
-    ),
-    14 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00D6',
-        'dest' => '"Oe"',
-      ),
-    ),
-    15 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00DC',
-        'dest' => '"Ue"',
-      ),
-    ),
-  ),
-  'latin-exta_transliterate_ascii' => array (
-    0 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0132',
-        'dest' => '"IJ"',
-      ),
-    ),
-    1 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0133',
-        'dest' => '"ij"',
-      ),
-    ),
-    2 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0138',
-        'dest' => '"k"',
-      ),
-    ),
-    3 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0149',
-        'dest' => '"\'n"',
-      ),
-    ),
-    4 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+014A',
-        'dest' => '"N"',
-      ),
-    ),
-    5 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+014B',
-        'dest' => '"n"',
-      ),
-    ),
-    6 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0152',
-        'dest' => '"AE"',
-      ),
-    ),
-    7 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+0153',
-        'dest' => '"ae"',
-      ),
-    ),
-    8 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+017F',
-        'dest' => '"s"',
-      ),
-    ),
-  ),
-  'math_to_ascii' => array (
-    0 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00D7',
-        'dest' => '"*"',
-      ),
-    ),
-    1 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00F7',
-        'dest' => '"/"',
-      ),
-    ),
-  ),
-  'inverted_to_normal' => array (
-    0 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00BF',
-        'dest' => 'U+003F',
-      ),
-    ),
-    1 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00A1',
-        'dest' => 'U+0021',
-      ),
-    ),
-  ),
-  'latin_search_cleanup' => array (
-    0 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00BC',
-        'srcEnd' => 'U+00BE',
-        'dest' => 'U+0020',
-      ),
-    ),
-    1 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+00A2',
-        'srcEnd' => 'U+00A7',
-        'dest' => 'U+0020',
-      ),
-    ),
-    2 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00AC',
-        'dest' => 'U+002D',
-      ),
-    ),
-    3 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00AF',
-        'dest' => 'U+002D',
-      ),
-    ),
-    4 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00B5',
-        'dest' => 'U+0020',
-      ),
-    ),
-    5 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00B6',
-        'dest' => 'U+0020',
-      ),
-    ),
-    6 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00B7',
-        'dest' => 'U+0020',
-      ),
-    ),
-    7 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00B8',
-        'dest' => 'U+0020',
-      ),
-    ),
-    8 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00A6',
-        'dest' => 'U+0020',
-      ),
-    ),
-    9 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00A7',
-        'dest' => 'U+0020',
-      ),
-    ),
-    10 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00A8',
-        'dest' => 'remove',
-      ),
-    ),
-    11 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00B0',
-        'dest' => 'U+0020',
-      ),
-    ),
-    12 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00A9',
-        'dest' => 'U+0020',
-      ),
-    ),
-    13 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00AE',
-        'dest' => 'U+0020',
-      ),
-    ),
-    14 => array (
-      'type' => 11,
-      'data' => array (
-        'src' => 'U+00B4',
-        'dest' => 'U+0020',
-      ),
-    ),
-    15 => array (
-      'type' => 12,
-      'data' => array (
-        'srcStart' => 'U+0080',
-        'srcEnd' => 'U+009F',
-        'dest' => 'U+0020',
-      ),
-    ),
-  ),
+return array(
+    'latin1_lowercase' =>
+        array(
+            0 =>
+                array(
+                    'type' => 13,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00C0',
+                            'srcEnd' => 'U+00D6',
+                            'op' => '+',
+                            'dest' => '20',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 13,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00D8',
+                            'srcEnd' => 'U+00DE',
+                            'op' => '+',
+                            'dest' => '20',
+                        ),
+                ),
+        ),
+    'latin1_uppercase' =>
+        array(
+            0 =>
+                array(
+                    'type' => 13,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00E0',
+                            'srcEnd' => 'U+00F6',
+                            'op' => '-',
+                            'dest' => '20',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 13,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00F8',
+                            'srcEnd' => 'U+00FE',
+                            'op' => '-',
+                            'dest' => '20',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00DF',
+                            'dest' => '"SS"',
+                        ),
+                ),
+        ),
+    'latin-exta_lowercase' =>
+        array(
+            0 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+0100',
+                            'srcEnd' => 'U+012E',
+                            'modulo' => '02',
+                            'op' => '+',
+                            'dest' => '01',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+0132',
+                            'srcEnd' => 'U+0136',
+                            'modulo' => '02',
+                            'op' => '+',
+                            'dest' => '01',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+0139',
+                            'srcEnd' => 'U+0147',
+                            'modulo' => '02',
+                            'op' => '+',
+                            'dest' => '01',
+                        ),
+                ),
+            3 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+014A',
+                            'srcEnd' => 'U+0176',
+                            'modulo' => '02',
+                            'op' => '+',
+                            'dest' => '01',
+                        ),
+                ),
+            4 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+0179',
+                            'srcEnd' => 'U+017D',
+                            'modulo' => '02',
+                            'op' => '+',
+                            'dest' => '01',
+                        ),
+                ),
+        ),
+    'latin-exta_uppercase' =>
+        array(
+            0 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+0101',
+                            'srcEnd' => 'U+012F',
+                            'modulo' => '02',
+                            'op' => '-',
+                            'dest' => '01',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+0133',
+                            'srcEnd' => 'U+0137',
+                            'modulo' => '02',
+                            'op' => '-',
+                            'dest' => '01',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+013A',
+                            'srcEnd' => 'U+0148',
+                            'modulo' => '02',
+                            'op' => '-',
+                            'dest' => '01',
+                        ),
+                ),
+            3 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+014B',
+                            'srcEnd' => 'U+0177',
+                            'modulo' => '02',
+                            'op' => '-',
+                            'dest' => '01',
+                        ),
+                ),
+            4 =>
+                array(
+                    'type' => 14,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+017A',
+                            'srcEnd' => 'U+017E',
+                            'modulo' => '02',
+                            'op' => '-',
+                            'dest' => '01',
+                        ),
+                ),
+        ),
+    'latin_lowercase' =>
+        array(
+            0 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0178',
+                            'dest' => 'U+00FF',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0218',
+                            'dest' => 'U+0219',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+021A',
+                            'dest' => 'U+021B',
+                        ),
+                ),
+        ),
+    'latin_uppercase' =>
+        array(
+            0 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00FF',
+                            'dest' => 'U+0178',
+                        ),
+                ),
+        ),
+    'latin1_diacritical' =>
+        array(
+            0 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00C0',
+                            'srcEnd' => 'U+00C4',
+                            'dest' => '"A"',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00E0',
+                            'srcEnd' => 'U+00E4',
+                            'dest' => '"a"',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00C8',
+                            'srcEnd' => 'U+00CB',
+                            'dest' => '"E"',
+                        ),
+                ),
+            3 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00E8',
+                            'srcEnd' => 'U+00EB',
+                            'dest' => '"e"',
+                        ),
+                ),
+            4 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00CC',
+                            'srcEnd' => 'U+00CF',
+                            'dest' => '"I"',
+                        ),
+                ),
+            5 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00EC',
+                            'srcEnd' => 'U+00EF',
+                            'dest' => '"i"',
+                        ),
+                ),
+            6 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00D2',
+                            'srcEnd' => 'U+00D6',
+                            'dest' => '"O"',
+                        ),
+                ),
+            7 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00F2',
+                            'srcEnd' => 'U+00F6',
+                            'dest' => '"o"',
+                        ),
+                ),
+            8 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00D9',
+                            'srcEnd' => 'U+00DC',
+                            'dest' => '"U"',
+                        ),
+                ),
+            9 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00F9',
+                            'srcEnd' => 'U+00FC',
+                            'dest' => '"u"',
+                        ),
+                ),
+            10 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00DD',
+                            'dest' => '"Y"',
+                        ),
+                ),
+            11 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+009F',
+                            'dest' => '"Y"',
+                        ),
+                ),
+            12 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00FD',
+                            'dest' => '"y"',
+                        ),
+                ),
+            13 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00FF',
+                            'dest' => '"y"',
+                        ),
+                ),
+            14 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00C7',
+                            'dest' => '"C"',
+                        ),
+                ),
+            15 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00E7',
+                            'dest' => '"c"',
+                        ),
+                ),
+            16 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00D0',
+                            'dest' => '"D"',
+                        ),
+                ),
+            17 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00F0',
+                            'dest' => '"d"',
+                        ),
+                ),
+            18 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00D1',
+                            'dest' => '"N"',
+                        ),
+                ),
+            19 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00F1',
+                            'dest' => '"n"',
+                        ),
+                ),
+            20 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00DE',
+                            'dest' => '"TH"',
+                        ),
+                ),
+            21 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00FE',
+                            'dest' => '"th"',
+                        ),
+                ),
+            22 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00DF',
+                            'dest' => '"ss"',
+                        ),
+                ),
+        ),
+    'latin-exta_diacritical' =>
+        array(
+            0 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0100',
+                            'dest' => '"A"',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0102',
+                            'dest' => '"A"',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0104',
+                            'dest' => '"A"',
+                        ),
+                ),
+            3 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0101',
+                            'dest' => '"a"',
+                        ),
+                ),
+            4 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0103',
+                            'dest' => '"a"',
+                        ),
+                ),
+            5 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0105',
+                            'dest' => '"a"',
+                        ),
+                ),
+            6 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0106',
+                            'dest' => '"C"',
+                        ),
+                ),
+            7 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0108',
+                            'dest' => '"C"',
+                        ),
+                ),
+            8 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+010A',
+                            'dest' => '"C"',
+                        ),
+                ),
+            9 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+010C',
+                            'dest' => '"C"',
+                        ),
+                ),
+            10 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0107',
+                            'dest' => '"c"',
+                        ),
+                ),
+            11 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0109',
+                            'dest' => '"c"',
+                        ),
+                ),
+            12 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+010B',
+                            'dest' => '"c"',
+                        ),
+                ),
+            13 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+010D',
+                            'dest' => '"c"',
+                        ),
+                ),
+            14 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+010E',
+                            'dest' => '"D"',
+                        ),
+                ),
+            15 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0110',
+                            'dest' => '"D"',
+                        ),
+                ),
+            16 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+010F',
+                            'dest' => '"d"',
+                        ),
+                ),
+            17 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0111',
+                            'dest' => '"d"',
+                        ),
+                ),
+            18 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0112',
+                            'dest' => '"E"',
+                        ),
+                ),
+            19 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0114',
+                            'dest' => '"E"',
+                        ),
+                ),
+            20 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0116',
+                            'dest' => '"E"',
+                        ),
+                ),
+            21 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0118',
+                            'dest' => '"E"',
+                        ),
+                ),
+            22 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+011A',
+                            'dest' => '"E"',
+                        ),
+                ),
+            23 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0113',
+                            'dest' => '"e"',
+                        ),
+                ),
+            24 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0115',
+                            'dest' => '"e"',
+                        ),
+                ),
+            25 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0117',
+                            'dest' => '"e"',
+                        ),
+                ),
+            26 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0119',
+                            'dest' => '"e"',
+                        ),
+                ),
+            27 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+011B',
+                            'dest' => '"e"',
+                        ),
+                ),
+            28 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+011C',
+                            'dest' => '"G"',
+                        ),
+                ),
+            29 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+011E',
+                            'dest' => '"G"',
+                        ),
+                ),
+            30 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0120',
+                            'dest' => '"G"',
+                        ),
+                ),
+            31 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0122',
+                            'dest' => '"G"',
+                        ),
+                ),
+            32 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+011D',
+                            'dest' => '"g"',
+                        ),
+                ),
+            33 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+011F',
+                            'dest' => '"g"',
+                        ),
+                ),
+            34 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0121',
+                            'dest' => '"g"',
+                        ),
+                ),
+            35 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0123',
+                            'dest' => '"g"',
+                        ),
+                ),
+            36 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0124',
+                            'dest' => '"H"',
+                        ),
+                ),
+            37 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0126',
+                            'dest' => '"H"',
+                        ),
+                ),
+            38 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0125',
+                            'dest' => '"h"',
+                        ),
+                ),
+            39 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0127',
+                            'dest' => '"h"',
+                        ),
+                ),
+            40 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0128',
+                            'dest' => '"I"',
+                        ),
+                ),
+            41 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+012A',
+                            'dest' => '"I"',
+                        ),
+                ),
+            42 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+012C',
+                            'dest' => '"I"',
+                        ),
+                ),
+            43 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+012E',
+                            'dest' => '"I"',
+                        ),
+                ),
+            44 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0130',
+                            'dest' => '"I"',
+                        ),
+                ),
+            45 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0129',
+                            'dest' => '"i"',
+                        ),
+                ),
+            46 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+012B',
+                            'dest' => '"i"',
+                        ),
+                ),
+            47 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+012D',
+                            'dest' => '"i"',
+                        ),
+                ),
+            48 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+012F',
+                            'dest' => '"i"',
+                        ),
+                ),
+            49 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0131',
+                            'dest' => '"i"',
+                        ),
+                ),
+            50 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0134',
+                            'dest' => '"J"',
+                        ),
+                ),
+            51 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0135',
+                            'dest' => '"j"',
+                        ),
+                ),
+            52 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0136',
+                            'dest' => '"K"',
+                        ),
+                ),
+            53 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0137',
+                            'dest' => '"k"',
+                        ),
+                ),
+            54 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0139',
+                            'dest' => '"L"',
+                        ),
+                ),
+            55 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+013B',
+                            'dest' => '"L"',
+                        ),
+                ),
+            56 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+013D',
+                            'dest' => '"L"',
+                        ),
+                ),
+            57 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+013F',
+                            'dest' => '"L"',
+                        ),
+                ),
+            58 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0141',
+                            'dest' => '"L"',
+                        ),
+                ),
+            59 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+013A',
+                            'dest' => '"l"',
+                        ),
+                ),
+            60 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+013C',
+                            'dest' => '"l"',
+                        ),
+                ),
+            61 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+013E',
+                            'dest' => '"l"',
+                        ),
+                ),
+            62 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0140',
+                            'dest' => '"l"',
+                        ),
+                ),
+            63 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0142',
+                            'dest' => '"l"',
+                        ),
+                ),
+            64 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0143',
+                            'dest' => '"N"',
+                        ),
+                ),
+            65 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0145',
+                            'dest' => '"N"',
+                        ),
+                ),
+            66 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0147',
+                            'dest' => '"N"',
+                        ),
+                ),
+            67 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0144',
+                            'dest' => '"n"',
+                        ),
+                ),
+            68 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0146',
+                            'dest' => '"n"',
+                        ),
+                ),
+            69 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0148',
+                            'dest' => '"n"',
+                        ),
+                ),
+            70 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+014C',
+                            'dest' => '"O"',
+                        ),
+                ),
+            71 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+014E',
+                            'dest' => '"O"',
+                        ),
+                ),
+            72 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0150',
+                            'dest' => '"O"',
+                        ),
+                ),
+            73 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+014D',
+                            'dest' => '"o"',
+                        ),
+                ),
+            74 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+014F',
+                            'dest' => '"o"',
+                        ),
+                ),
+            75 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0151',
+                            'dest' => '"o"',
+                        ),
+                ),
+            76 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0154',
+                            'dest' => '"R"',
+                        ),
+                ),
+            77 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0156',
+                            'dest' => '"R"',
+                        ),
+                ),
+            78 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0158',
+                            'dest' => '"R"',
+                        ),
+                ),
+            79 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0155',
+                            'dest' => '"r"',
+                        ),
+                ),
+            80 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0157',
+                            'dest' => '"r"',
+                        ),
+                ),
+            81 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0159',
+                            'dest' => '"r"',
+                        ),
+                ),
+            82 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+015A',
+                            'dest' => '"S"',
+                        ),
+                ),
+            83 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+015C',
+                            'dest' => '"S"',
+                        ),
+                ),
+            84 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+015E',
+                            'dest' => '"S"',
+                        ),
+                ),
+            85 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0160',
+                            'dest' => '"S"',
+                        ),
+                ),
+            86 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+015B',
+                            'dest' => '"s"',
+                        ),
+                ),
+            87 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+015D',
+                            'dest' => '"s"',
+                        ),
+                ),
+            88 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+015F',
+                            'dest' => '"s"',
+                        ),
+                ),
+            89 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0161',
+                            'dest' => '"s"',
+                        ),
+                ),
+            90 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0162',
+                            'dest' => '"T"',
+                        ),
+                ),
+            91 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0164',
+                            'dest' => '"T"',
+                        ),
+                ),
+            92 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0166',
+                            'dest' => '"T"',
+                        ),
+                ),
+            93 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0163',
+                            'dest' => '"t"',
+                        ),
+                ),
+            94 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0165',
+                            'dest' => '"t"',
+                        ),
+                ),
+            95 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0167',
+                            'dest' => '"t"',
+                        ),
+                ),
+            96 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0168',
+                            'dest' => '"U"',
+                        ),
+                ),
+            97 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+016A',
+                            'dest' => '"U"',
+                        ),
+                ),
+            98 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+016C',
+                            'dest' => '"U"',
+                        ),
+                ),
+            99 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+016E',
+                            'dest' => '"U"',
+                        ),
+                ),
+            100 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0170',
+                            'dest' => '"U"',
+                        ),
+                ),
+            101 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0172',
+                            'dest' => '"U"',
+                        ),
+                ),
+            102 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0169',
+                            'dest' => '"u"',
+                        ),
+                ),
+            103 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+016B',
+                            'dest' => '"u"',
+                        ),
+                ),
+            104 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+016D',
+                            'dest' => '"u"',
+                        ),
+                ),
+            105 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+016F',
+                            'dest' => '"u"',
+                        ),
+                ),
+            106 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0171',
+                            'dest' => '"u"',
+                        ),
+                ),
+            107 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0173',
+                            'dest' => '"u"',
+                        ),
+                ),
+            108 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0174',
+                            'dest' => '"W"',
+                        ),
+                ),
+            109 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0175',
+                            'dest' => '"w"',
+                        ),
+                ),
+            110 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0176',
+                            'dest' => '"Y"',
+                        ),
+                ),
+            111 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0177',
+                            'dest' => '"y"',
+                        ),
+                ),
+            112 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0178',
+                            'dest' => '"Y"',
+                        ),
+                ),
+            113 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0179',
+                            'dest' => '"Z"',
+                        ),
+                ),
+            114 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+017B',
+                            'dest' => '"Z"',
+                        ),
+                ),
+            115 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+017D',
+                            'dest' => '"Z"',
+                        ),
+                ),
+            116 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+017A',
+                            'dest' => '"z"',
+                        ),
+                ),
+            117 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+017C',
+                            'dest' => '"z"',
+                        ),
+                ),
+            118 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+017E',
+                            'dest' => '"z"',
+                        ),
+                ),
+            119 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0218',
+                            'dest' => '"S"',
+                        ),
+                ),
+            120 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0219',
+                            'dest' => '"s"',
+                        ),
+                ),
+            121 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+021A',
+                            'dest' => '"T"',
+                        ),
+                ),
+            122 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+021B',
+                            'dest' => '"t"',
+                        ),
+                ),
+        ),
+    'latin1_transliterate_ascii' =>
+        array(
+            0 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00E6',
+                            'dest' => '"ae"',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00C6',
+                            'dest' => '"AE"',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00E5',
+                            'dest' => '"aa"',
+                        ),
+                ),
+            3 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00C5',
+                            'dest' => '"AA"',
+                        ),
+                ),
+            4 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00F8',
+                            'dest' => '"oe"',
+                        ),
+                ),
+            5 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00D8',
+                            'dest' => '"OE"',
+                        ),
+                ),
+            6 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+009C',
+                            'dest' => '"oe"',
+                        ),
+                ),
+            7 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+008C',
+                            'dest' => '"OE"',
+                        ),
+                ),
+            8 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00AA',
+                            'dest' => '"a"',
+                        ),
+                ),
+            9 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00BA',
+                            'dest' => '"o"',
+                        ),
+                ),
+            10 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00E4',
+                            'dest' => '"ae"',
+                        ),
+                ),
+            11 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00F6',
+                            'dest' => '"oe"',
+                        ),
+                ),
+            12 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00FC',
+                            'dest' => '"ue"',
+                        ),
+                ),
+            13 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00C4',
+                            'dest' => '"Ae"',
+                        ),
+                ),
+            14 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00D6',
+                            'dest' => '"Oe"',
+                        ),
+                ),
+            15 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00DC',
+                            'dest' => '"Ue"',
+                        ),
+                ),
+        ),
+    'latin-exta_transliterate_ascii' =>
+        array(
+            0 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0132',
+                            'dest' => '"IJ"',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0133',
+                            'dest' => '"ij"',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0138',
+                            'dest' => '"k"',
+                        ),
+                ),
+            3 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0149',
+                            'dest' => '"\'n"',
+                        ),
+                ),
+            4 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+014A',
+                            'dest' => '"N"',
+                        ),
+                ),
+            5 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+014B',
+                            'dest' => '"n"',
+                        ),
+                ),
+            6 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0152',
+                            'dest' => '"AE"',
+                        ),
+                ),
+            7 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+0153',
+                            'dest' => '"ae"',
+                        ),
+                ),
+            8 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+017F',
+                            'dest' => '"s"',
+                        ),
+                ),
+        ),
+    'math_to_ascii' =>
+        array(
+            0 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00D7',
+                            'dest' => '"*"',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00F7',
+                            'dest' => '"/"',
+                        ),
+                ),
+        ),
+    'inverted_to_normal' =>
+        array(
+            0 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00BF',
+                            'dest' => 'U+003F',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00A1',
+                            'dest' => 'U+0021',
+                        ),
+                ),
+        ),
+    'latin_search_cleanup' =>
+        array(
+            0 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00BC',
+                            'srcEnd' => 'U+00BE',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            1 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+00A2',
+                            'srcEnd' => 'U+00A7',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            2 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00AC',
+                            'dest' => 'U+002D',
+                        ),
+                ),
+            3 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00AF',
+                            'dest' => 'U+002D',
+                        ),
+                ),
+            4 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00B5',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            5 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00B6',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            6 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00B7',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            7 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00B8',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            8 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00A6',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            9 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00A7',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            10 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00A8',
+                            'dest' => 'remove',
+                        ),
+                ),
+            11 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00B0',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            12 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00A9',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            13 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00AE',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            14 =>
+                array(
+                    'type' => 11,
+                    'data' =>
+                        array(
+                            'src' => 'U+00B4',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+            15 =>
+                array(
+                    'type' => 12,
+                    'data' =>
+                        array(
+                            'srcStart' => 'U+0080',
+                            'srcEnd' => 'U+009F',
+                            'dest' => 'U+0020',
+                        ),
+                ),
+        ),
 );
-
