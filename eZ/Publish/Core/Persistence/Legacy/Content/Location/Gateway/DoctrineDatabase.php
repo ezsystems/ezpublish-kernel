@@ -320,12 +320,15 @@ class DoctrineDatabase extends Gateway
                 $destinationNodeData['path_string'],
                 'prefix' . $row['path_string']
             );
+            $replace = rtrim($destinationNodeData['path_identification_string'], '/');
+            if (empty($oldParentPathIdentificationString)) {
+                $replace .= '/';
+            }
             $newPathIdentificationString = str_replace(
                 'prefix' . $oldParentPathIdentificationString,
-                $destinationNodeData['path_identification_string'] . '/',
+                $replace,
                 'prefix' . $row['path_identification_string']
             );
-
             $newParentId = $row['parent_node_id'];
             if ($row['path_string'] === $fromPathString) {
                 $newParentId = (int)implode('', array_slice(explode('/', $newPathString), -3, 1));
