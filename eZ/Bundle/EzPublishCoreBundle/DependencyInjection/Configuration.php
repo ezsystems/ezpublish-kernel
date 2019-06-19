@@ -63,6 +63,7 @@ class Configuration extends SiteAccessConfiguration
         $this->addRichTextSection($rootNode);
         $this->addUrlAliasSection($rootNode);
         $this->addImagePlaceholderSection($rootNode);
+        $this->addUrlWildcardsSection($rootNode);
 
         // Delegate SiteAccess config to configuration parsers
         $this->mainConfigParser->addSemanticConfig($this->generateScopeBaseNode($rootNode));
@@ -624,6 +625,35 @@ EOT;
                                     ->end()
                                 ->end()
                             ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+    }
+
+    /**
+     * Defines configuration for Url Wildcards.
+     *
+     * The configuration is available at:
+     * <code>
+     * ezpublish:
+     *     url_wildcards:
+     *         enabled: true
+     * </code>
+     *
+     * @param \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition $rootNode
+     *
+     * @return \Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition
+     */
+    private function addUrlWildcardsSection($rootNode): ArrayNodeDefinition
+    {
+        return $rootNode
+            ->children()
+                ->arrayNode('url_wildcards')
+                    ->children()
+                        ->booleanNode('enabled')
+                            ->info('Enable UrlWildcards support')
+                            ->defaultFalse()
                         ->end()
                     ->end()
                 ->end()

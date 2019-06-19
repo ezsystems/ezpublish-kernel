@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 
+use Doctrine\DBAL\FetchMode;
 use eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway;
 use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
 use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
@@ -161,5 +162,37 @@ class DoctrineDatabase extends Gateway
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Loads the UrlWildcard with given $sourceUrl.
+     *
+     * @param string $sourceUrl
+     *
+     * @return array
+     */
+    public function loadUrlWildcardBySourceUrl(string $sourceUrl): array
+    {
+        /** @var \Doctrine\DBAL\Connection $connection */
+        $connection = $this->dbHandler->getConnection();
+        $queryBuilder = $connection->createQueryBuilder();
+        $expr = $queryBuilder->expr();
+        $queryBuilder->select(
+            'id',
+            'destination_url',
+            'source_url',
+            'type'
+        )
+        ->from('ezurlwildcard')
+        ->where(
+            $expr->eq(
+                'source_url',
+                $queryBuilder->createNamedParameter($sourceUrl)
+            )
+        );
+
+        $result = $queryBuilder->execute()->fetch(FetchMode::ASSOCIATIVE);
+
+        return $result ?: [];
     }
 }

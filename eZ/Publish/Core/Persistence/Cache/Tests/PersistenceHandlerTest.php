@@ -151,9 +151,10 @@ class PersistenceHandlerTest extends AbstractBaseHandlerTest
      */
     public function testUrlWildcardHandler()
     {
-        $this->loggerMock->expects($this->once())->method('logUnCachedHandler');
-        $this->persistenceHandlerMock->expects($this->once())->method('urlWildcardHandler');
-        $this->persistenceCacheHandler->urlWildcardHandler();
+        $this->loggerMock->expects($this->never())->method($this->anything());
+        $handler = $this->persistenceCacheHandler->urlWildcardHandler();
+        $this->assertInstanceOf(SPIPersistence\Content\UrlWildcard\Handler::class, $handler);
+        $this->assertInstanceOf(Cache\UrlWildcardHandler::class, $handler);
     }
 
     /**

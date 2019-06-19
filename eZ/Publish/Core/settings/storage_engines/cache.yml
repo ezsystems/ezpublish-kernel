@@ -16,6 +16,7 @@ parameters:
     ezpublish.spi.persistence.cache.notificationHandler.class: eZ\Publish\Core\Persistence\Cache\NotificationHandler
     ezpublish.spi.persistence.cache.userPreferenceHandler.class: eZ\Publish\Core\Persistence\Cache\UserPreferenceHandler
     ezpublish.spi.persistence.cache.persistenceLogger.class: eZ\Publish\Core\Persistence\Cache\PersistenceLogger
+    ezpublish.spi.persistence.cache.urlWildcardHandler.class: eZ\Publish\Core\Persistence\Cache\UrlWildcardHandler
     # Make sure logging is only enabled for debug by default
     ezpublish.spi.persistence.cache.persistenceLogger.enableCallLogging: "%kernel.debug%"
     # Global in-memory settings, for meta data
@@ -160,6 +161,10 @@ services:
         class: "%ezpublish.spi.persistence.cache.userPreferenceHandler.class%"
         parent: ezpublish.spi.persistence.cache.abstractInMemoryPersistenceHandler
 
+    ezpublish.spi.persistence.cache.urlWildcardHandler:
+        class: "%ezpublish.spi.persistence.cache.urlWildcardHandler.class%"
+        parent: ezpublish.spi.persistence.cache.abstractHandler
+
     ezpublish.spi.persistence.cache:
         class: "%ezpublish.spi.persistence.cache.class%"
         arguments:
@@ -178,4 +183,5 @@ services:
             - "@ezpublish.spi.persistence.cache.bookmarkHandler"
             - '@ezpublish.spi.persistence.cache.notificationHandler'
             - '@ezpublish.spi.persistence.cache.userPreferenceHandler'
+            - "@ezpublish.spi.persistence.cache.urlWildcardHandler"
             - "@ezpublish.spi.persistence.cache.persistenceLogger"

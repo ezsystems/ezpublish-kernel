@@ -115,6 +115,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->registerImageMagickConfiguration($config, $container);
         $this->registerRichTextConfiguration($config, $container);
         $this->registerUrlAliasConfiguration($config, $container);
+        $this->registerUrlWildcardsConfiguration($config, $container);
 
         // Routing
         $this->handleRouting($config, $container, $loader);
@@ -127,6 +128,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $this->handleHelpers($config, $container, $loader);
         $this->handleImage($config, $container, $loader);
         $this->handleUrlChecker($config, $container, $loader);
+        $this->handleUrlWildcards($config, $container, $loader);
 
         // Map settings
         $processor = new ConfigurationProcessor($container, 'ezsettings');
@@ -631,6 +633,29 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         if ($fileSystem->exists($translationsPath)) {
             $container->prependExtensionConfig('framework', ['translator' => ['paths' => [$translationsPath]]]);
+        }
+    }
+
+    /**
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     */
+    private function registerUrlWildcardsConfiguration(array $config, ContainerBuilder $container): void
+    {
+        $container->setParameter('ezpublish.url_wildcards.enabled', $config['url_wildcards']['enabled'] ?? false);
+    }
+
+    /**
+     * Loads configuration for UrlWildcardsRouter service if enabled.
+     *
+     * @param array $config
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param \Symfony\Component\DependencyInjection\Loader\FileLoader $loader
+     */
+    private function handleUrlWildcards(array $config, ContainerBuilder $container, Loader\YamlFileLoader $loader)
+    {
+        if ($container->getParameter('ezpublish.url_wildcards.enabled')) {
+            $loader->load('url_wildcard.yml');
         }
     }
 }

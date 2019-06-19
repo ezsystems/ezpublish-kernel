@@ -49,4 +49,13 @@ abstract class Gateway
      * @return array
      */
     abstract public function loadUrlWildcardsData($offset = 0, $limit = -1);
+
+    /**
+     * Loads the UrlWildcard by source url $sourceUrl.
+     *
+     * @param string $sourceUrl
+     *
+     * @return array
+     */
+    abstract public function loadUrlWildcardBySourceUrl(string $sourceUrl): array;
 }
