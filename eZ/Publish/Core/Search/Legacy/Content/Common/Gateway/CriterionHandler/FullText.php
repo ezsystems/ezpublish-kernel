@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
+use eZ\Publish\Core\Search\Common\Exception\InvalidFullTextSearchString;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler;
 use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter;
 use eZ\Publish\Core\Persistence\TransformationProcessor;
@@ -179,6 +180,8 @@ class FullText extends CriterionHandler
      * @param string $string
      *
      * @return \eZ\Publish\Core\Persistence\Database\SelectQuery
+     *
+     * @throws \eZ\Publish\Core\Search\Common\Exception\InvalidFullTextSearchString On invalid $string
      */
     protected function getWordIdSubquery(SelectQuery $query, $string)
     {
@@ -186,6 +189,11 @@ class FullText extends CriterionHandler
         $tokens = $this->tokenizeString(
             $this->processor->transform($string, $this->configuration['commands'])
         );
+
+        if (empty($tokens)) {
+            throw new InvalidFullTextSearchString('string', 'Search query does not contain a valid FullText search string');
+        }
+
         $wordExpressions = array();
         foreach ($tokens as $token) {
             $wordExpressions[] = $this->getWordExpression($subQuery, $token);
@@ -217,6 +225,8 @@ class FullText extends CriterionHandler
      *
      * accept() must be called before calling this method.
      *
+     * @uses ::getWordIdSubquery() To get subquery to select relevant word IDs.
+     *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter $converter
      * @param \eZ\Publish\Core\Persistence\Database\SelectQuery $query
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $criterion
@@ -231,6 +241,7 @@ class FullText extends CriterionHandler
         array $languageSettings
     ) {
         $subSelect = $query->subSelect();
+
         $subSelect
             ->select(
                 $this->dbHandler->quoteColumn('contentobject_id')
