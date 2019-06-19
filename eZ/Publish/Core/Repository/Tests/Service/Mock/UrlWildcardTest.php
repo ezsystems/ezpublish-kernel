@@ -709,7 +709,7 @@ class UrlWildcardTest extends BaseServiceMockTest
             ->willReturn(new SPIURLWildcard([
                 'sourceUrl' => $createArray['sourceUrl'],
                 'destinationUrl' => $uri,
-                'forward' => $createArray['forward']
+                'forward' => $createArray['forward'],
             ]));
 
         $translationResult = $mockedService->translate($url);
@@ -746,7 +746,7 @@ class UrlWildcardTest extends BaseServiceMockTest
             ->with($trimmedUrl)
             ->willReturn(new SPIURLWildcard([
                 'destinationUrl' => '/long',
-                'forward' => false
+                'forward' => false,
             ]));
 
         $translationResult = $mockedService->translate($url);

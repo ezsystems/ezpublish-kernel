@@ -9,7 +9,6 @@ namespace eZ\Publish\Core\MVC\Symfony\Routing;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\API\Repository\URLWildcardService;
 use eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator;
-use Symfony\Bundle\FrameworkBundle\Controller\RedirectController;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Component\HttpFoundation\Request;
