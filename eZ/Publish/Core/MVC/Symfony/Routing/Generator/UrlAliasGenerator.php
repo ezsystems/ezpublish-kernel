@@ -125,7 +125,8 @@ class UrlAliasGenerator extends Generator
         } else {
             $path = $this->defaultRouter->generate(
                 self::INTERNAL_CONTENT_VIEW_ROUTE,
-                array('contentId' => $location->contentId, 'locationId' => $location->id)
+                array('contentId' => $location->contentId, 'locationId' => $location->id, 'ignoreSiteAccess' => true),
+                $this->defaultRouter::ABSOLUTE_PATH
             );
         }
 
