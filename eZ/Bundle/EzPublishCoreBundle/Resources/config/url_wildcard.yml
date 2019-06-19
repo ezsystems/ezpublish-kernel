@@ -1,0 +1,12 @@
+services:
+    ezpublish.urlwildcard_router:
+        class: eZ\Publish\Core\MVC\Symfony\Routing\UrlWildcardRouter
+        public: true
+        arguments:
+          - '@ezpublish.api.service.url_wildcard'
+          - '@ezpublish.urlalias_generator'
+          - '@router.request_context'
+        calls:
+          - [setLogger, ['@?logger']]
+        tags:
+          - { name: router, priority: 210 }

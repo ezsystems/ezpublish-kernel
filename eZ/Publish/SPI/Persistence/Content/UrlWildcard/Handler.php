@@ -8,6 +8,8 @@
  */
 namespace eZ\Publish\SPI\Persistence\Content\UrlWildcard;
 
+use eZ\Publish\SPI\Persistence\Content\UrlWildcard;
+
 /**
  * The UrlWildcard Handler interface provides nice urls with wildcards management.
  *
@@ -56,4 +58,24 @@ interface Handler
      * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard[]
      */
     public function loadAll($offset = 0, $limit = -1);
+
+    /**
+     * Performs lookup for given (source) URL.
+     *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the url wild card was not found
+     *
+     * @param string $sourceUrl
+     *
+     * @return \eZ\Publish\SPI\Persistence\Content\UrlWildcard
+     */
+    public function translate(string $sourceUrl): UrlWildcard;
+
+    /**
+     * Checks whether UrlWildcard with given source url exits.
+     *
+     * @param string $sourceUrl
+     *
+     * @return bool
+     */
+    public function exactSourceUrlExists(string $sourceUrl): bool;
 }
