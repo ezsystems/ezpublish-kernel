@@ -23,7 +23,7 @@ class PolicyCreateStruct extends APIPolicyCreateStruct
      *
      * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    protected $limitations = array();
+    protected $limitations = [];
 
     /**
      * Returns list of limitations added to policy.

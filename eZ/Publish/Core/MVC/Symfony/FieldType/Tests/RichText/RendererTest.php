@@ -37,10 +37,10 @@ class RendererTest extends TestCase
 
     public function testRenderTag()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'getTagTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'getTagTemplateName']);
         $name = 'tag';
         $templateName = 'templateName';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $result = 'result';
 
@@ -74,9 +74,9 @@ class RendererTest extends TestCase
 
     public function testRenderTagNoTemplateConfigured()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'getTagTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'getTagTemplateName']);
         $name = 'tag';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
 
         $renderer
@@ -105,10 +105,10 @@ class RendererTest extends TestCase
 
     public function testRenderTagNoTemplateFound()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'getTagTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'getTagTemplateName']);
         $name = 'tag';
         $templateName = 'templateName';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
 
         $renderer
@@ -139,94 +139,94 @@ class RendererTest extends TestCase
 
     public function providerForTestRenderTagWithTemplate()
     {
-        return array(
-            array(
+        return [
+            [
                 $tagName = 'tag1',
-                array(
-                    array('hasParameter', $namespace = "test.name.space.tag.{$tagName}", true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName1')),
-                ),
-                array(),
+                [
+                    ['hasParameter', $namespace = "test.name.space.tag.{$tagName}", true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName1']],
+                ],
+                [],
                 $templateName,
                 $templateName,
                 false,
                 'result',
-            ),
-            array(
+            ],
+            [
                 $tagName = 'tag2',
-                array(
-                    array('hasParameter', $namespace = "test.name.space.tag.{$tagName}", true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName2')),
-                ),
-                array(),
+                [
+                    ['hasParameter', $namespace = "test.name.space.tag.{$tagName}", true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName2']],
+                ],
+                [],
                 $templateName,
                 $templateName,
                 true,
                 'result',
-            ),
-            array(
+            ],
+            [
                 $tagName = 'tag3',
-                array(
-                    array('hasParameter', "test.name.space.tag.{$tagName}", false),
-                    array('hasParameter', $namespace = 'test.name.space.tag.default', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName3')),
-                ),
-                array(
-                    array('warning', "Template tag '{$tagName}' configuration was not found"),
-                ),
+                [
+                    ['hasParameter', "test.name.space.tag.{$tagName}", false],
+                    ['hasParameter', $namespace = 'test.name.space.tag.default', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName3']],
+                ],
+                [
+                    ['warning', "Template tag '{$tagName}' configuration was not found"],
+                ],
                 $templateName,
                 $templateName,
                 false,
                 'result',
-            ),
-            array(
+            ],
+            [
                 $tagName = 'tag4',
-                array(
-                    array('hasParameter', "test.name.space.tag.{$tagName}", false),
-                    array('hasParameter', $namespace = 'test.name.space.tag.default_inline', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName4')),
-                ),
-                array(
-                    array('warning', "Template tag '{$tagName}' configuration was not found"),
-                ),
+                [
+                    ['hasParameter', "test.name.space.tag.{$tagName}", false],
+                    ['hasParameter', $namespace = 'test.name.space.tag.default_inline', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName4']],
+                ],
+                [
+                    ['warning', "Template tag '{$tagName}' configuration was not found"],
+                ],
                 $templateName,
                 $templateName,
                 true,
                 'result',
-            ),
-            array(
+            ],
+            [
                 $tagName = 'tag5',
-                array(
-                    array('hasParameter', "test.name.space.tag.{$tagName}", false),
-                    array('hasParameter', $namespace = 'test.name.space.tag.default', false),
-                ),
-                array(
-                    array('warning', "Template tag '{$tagName}' configuration was not found"),
-                    array('warning', "Template tag '{$tagName}' default configuration was not found"),
-                    array('error', "Could not render template tag '{$tagName}': no template configured"),
-                ),
+                [
+                    ['hasParameter', "test.name.space.tag.{$tagName}", false],
+                    ['hasParameter', $namespace = 'test.name.space.tag.default', false],
+                ],
+                [
+                    ['warning', "Template tag '{$tagName}' configuration was not found"],
+                    ['warning', "Template tag '{$tagName}' default configuration was not found"],
+                    ['error', "Could not render template tag '{$tagName}': no template configured"],
+                ],
                 null,
                 null,
                 false,
                 null,
-            ),
-            array(
+            ],
+            [
                 $tagName = 'tag6',
-                array(
-                    array('hasParameter', "test.name.space.tag.{$tagName}", false),
-                    array('hasParameter', $namespace = 'test.name.space.tag.default_inline', false),
-                ),
-                array(
-                    array('warning', "Template tag '{$tagName}' configuration was not found"),
-                    array('warning', "Template tag '{$tagName}' default configuration was not found"),
-                    array('error', "Could not render template tag '{$tagName}': no template configured"),
-                ),
+                [
+                    ['hasParameter', "test.name.space.tag.{$tagName}", false],
+                    ['hasParameter', $namespace = 'test.name.space.tag.default_inline', false],
+                ],
+                [
+                    ['warning', "Template tag '{$tagName}' configuration was not found"],
+                    ['warning', "Template tag '{$tagName}' default configuration was not found"],
+                    ['error', "Could not render template tag '{$tagName}': no template configured"],
+                ],
                 null,
                 null,
                 true,
                 null,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -241,8 +241,8 @@ class RendererTest extends TestCase
         $isInline,
         $renderResult
     ) {
-        $renderer = $this->getMockedRenderer(array('render'));
-        $parameters = array('parameters');
+        $renderer = $this->getMockedRenderer(['render']);
+        $parameters = ['parameters'];
 
         if (!isset($renderTemplate)) {
             $renderer
@@ -312,11 +312,11 @@ class RendererTest extends TestCase
 
     public function testRenderContentEmbed()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkContentPermissions', 'getEmbedTemplateName']);
         $contentId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $isDenied = false;
         $result = 'result';
@@ -365,11 +365,11 @@ class RendererTest extends TestCase
 
     public function testRenderContentEmbedNoTemplateConfigured()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkContentPermissions', 'getEmbedTemplateName']);
         $contentId = 42;
         $viewType = 'embedTest';
         $templateName = null;
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $isDenied = false;
         $mainLocationId = 2;
@@ -413,11 +413,11 @@ class RendererTest extends TestCase
 
     public function testRenderContentEmbedNoTemplateFound()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkContentPermissions', 'getEmbedTemplateName']);
         $contentId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $isDenied = false;
         $mainLocationId = 2;
@@ -462,11 +462,11 @@ class RendererTest extends TestCase
 
     public function testRenderContentEmbedAccessDenied()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkContentPermissions', 'getEmbedTemplateName']);
         $contentId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $isDenied = true;
         $result = 'result';
@@ -519,7 +519,7 @@ class RendererTest extends TestCase
         $renderer = $this->getMockedRenderer(['checkContentPermissions']);
         $contentId = 42;
         $viewType = 'embedTest';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
 
         $contentInfoMock = $this->createMock(ContentInfo::class);
@@ -553,10 +553,10 @@ class RendererTest extends TestCase
 
     public function providerForTestRenderContentEmbedNotFound()
     {
-        return array(
-            array(new NotFoundException('Content', 42)),
-            array(new NotFoundHttpException()),
-        );
+        return [
+            [new NotFoundException('Content', 42)],
+            [new NotFoundHttpException()],
+        ];
     }
 
     /**
@@ -564,10 +564,10 @@ class RendererTest extends TestCase
      */
     public function testRenderContentEmbedNotFound(Exception $exception)
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkContentPermissions', 'getEmbedTemplateName']);
         $contentId = 42;
         $viewType = 'embedTest';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $result = null;
         $mainLocationId = 2;
@@ -614,7 +614,7 @@ class RendererTest extends TestCase
      */
     public function testRenderContentEmbedThrowsException()
     {
-        $renderer = $this->getMockedRenderer(array('checkContentPermissions'));
+        $renderer = $this->getMockedRenderer(['checkContentPermissions']);
         $contentId = 42;
         $mainLocationId = 2;
 
@@ -631,127 +631,127 @@ class RendererTest extends TestCase
             ->with($contentMock)
             ->will($this->throwException(new Exception('Something threw up')));
 
-        $renderer->renderContentEmbed($contentId, 'embedTest', array('parameters'), true);
+        $renderer->renderContentEmbed($contentId, 'embedTest', ['parameters'], true);
     }
 
     public function providerForTestRenderContentWithTemplate()
     {
         $contentId = 42;
 
-        return array(
-            array(
+        return [
+            [
                 false,
                 new AccessDeniedException(),
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.content_denied', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName1')),
-                ),
-                array(
-                    array('error', "Could not render embedded resource: access denied to embed Content #{$contentId}"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.content_denied', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName1']],
+                ],
+                [
+                    ['error', "Could not render embedded resource: access denied to embed Content #{$contentId}"],
+                ],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 true,
                 new AccessDeniedException(),
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.content_inline_denied', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName2')),
-                ),
-                array(
-                    array('error', "Could not render embedded resource: access denied to embed Content #{$contentId}"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.content_inline_denied', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName2']],
+                ],
+                [
+                    ['error', "Could not render embedded resource: access denied to embed Content #{$contentId}"],
+                ],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 false,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.content', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName3')),
-                ),
-                array(),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.content', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName3']],
+                ],
+                [],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 true,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.content_inline', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName4')),
-                ),
-                array(),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.content_inline', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName4']],
+                ],
+                [],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 false,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.content', false),
-                    array('hasParameter', $namespace2 = 'test.name.space.embed.default', true),
-                    array('getParameter', $namespace2, array('template' => $templateName = 'templateName5')),
-                ),
-                array(
-                    array('warning', "Embed tag configuration '{$namespace}' was not found"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.content', false],
+                    ['hasParameter', $namespace2 = 'test.name.space.embed.default', true],
+                    ['getParameter', $namespace2, ['template' => $templateName = 'templateName5']],
+                ],
+                [
+                    ['warning', "Embed tag configuration '{$namespace}' was not found"],
+                ],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 true,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.content_inline', false),
-                    array('hasParameter', $namespace2 = 'test.name.space.embed.default_inline', true),
-                    array('getParameter', $namespace2, array('template' => $templateName = 'templateName6')),
-                ),
-                array(
-                    array('warning', "Embed tag configuration '{$namespace}' was not found"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.content_inline', false],
+                    ['hasParameter', $namespace2 = 'test.name.space.embed.default_inline', true],
+                    ['getParameter', $namespace2, ['template' => $templateName = 'templateName6']],
+                ],
+                [
+                    ['warning', "Embed tag configuration '{$namespace}' was not found"],
+                ],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 false,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.content', false),
-                    array('hasParameter', $namespace2 = 'test.name.space.embed.default', false),
-                ),
-                array(
-                    array('warning', "Embed tag configuration '{$namespace}' was not found"),
-                    array('warning', "Embed tag default configuration '{$namespace2}' was not found"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.content', false],
+                    ['hasParameter', $namespace2 = 'test.name.space.embed.default', false],
+                ],
+                [
+                    ['warning', "Embed tag configuration '{$namespace}' was not found"],
+                    ['warning', "Embed tag default configuration '{$namespace2}' was not found"],
+                ],
                 null,
                 null,
                 null,
-            ),
-            array(
+            ],
+            [
                 true,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.content_inline', false),
-                    array('hasParameter', $namespace2 = 'test.name.space.embed.default_inline', false),
-                ),
-                array(
-                    array('warning', "Embed tag configuration '{$namespace}' was not found"),
-                    array('warning', "Embed tag default configuration '{$namespace2}' was not found"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.content_inline', false],
+                    ['hasParameter', $namespace2 = 'test.name.space.embed.default_inline', false],
+                ],
+                [
+                    ['warning', "Embed tag configuration '{$namespace}' was not found"],
+                    ['warning', "Embed tag default configuration '{$namespace2}' was not found"],
+                ],
                 null,
                 null,
                 null,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -766,10 +766,10 @@ class RendererTest extends TestCase
         $renderTemplate,
         $renderResult
     ) {
-        $renderer = $this->getMockedRenderer(array('render', 'checkContentPermissions'));
+        $renderer = $this->getMockedRenderer(['render', 'checkContentPermissions']);
         $contentId = 42;
         $viewType = 'embedTest';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $mainLocationId = 2;
 
         $contentMock = $this->getContentMock($mainLocationId);
@@ -861,11 +861,11 @@ class RendererTest extends TestCase
 
     public function testRenderLocationEmbed()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkLocation', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkLocation', 'getEmbedTemplateName']);
         $locationId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $isDenied = false;
         $result = 'result';
@@ -913,11 +913,11 @@ class RendererTest extends TestCase
 
     public function testRenderLocationEmbedNoTemplateConfigured()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkLocation', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkLocation', 'getEmbedTemplateName']);
         $locationId = 42;
         $viewType = 'embedTest';
         $templateName = null;
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $isDenied = false;
         $mockLocation = $this->createMock(Location::class);
@@ -960,11 +960,11 @@ class RendererTest extends TestCase
 
     public function testRenderLocationEmbedNoTemplateFound()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkLocation', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkLocation', 'getEmbedTemplateName']);
         $locationId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $isDenied = false;
         $mockLocation = $this->createMock(Location::class);
@@ -1009,11 +1009,11 @@ class RendererTest extends TestCase
 
     public function testRenderLocationEmbedAccessDenied()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkLocation', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkLocation', 'getEmbedTemplateName']);
         $locationId = 42;
         $viewType = 'embedTest';
         $templateName = 'templateName';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $isDenied = true;
         $result = 'result';
@@ -1055,10 +1055,10 @@ class RendererTest extends TestCase
 
     public function testRenderLocationEmbedInvisible()
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkLocation', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkLocation', 'getEmbedTemplateName']);
         $locationId = 42;
         $viewType = 'embedTest';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $mockLocation = $this->createMock(Location::class);
 
@@ -1098,10 +1098,10 @@ class RendererTest extends TestCase
 
     public function providerForTestRenderLocationEmbedNotFound()
     {
-        return array(
-            array(new NotFoundException('Location', 42)),
-            array(new NotFoundHttpException()),
-        );
+        return [
+            [new NotFoundException('Location', 42)],
+            [new NotFoundHttpException()],
+        ];
     }
 
     /**
@@ -1109,10 +1109,10 @@ class RendererTest extends TestCase
      */
     public function testRenderLocationEmbedNotFound(Exception $exception)
     {
-        $renderer = $this->getMockedRenderer(array('render', 'checkLocation', 'getEmbedTemplateName'));
+        $renderer = $this->getMockedRenderer(['render', 'checkLocation', 'getEmbedTemplateName']);
         $locationId = 42;
         $viewType = 'embedTest';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $isInline = true;
         $result = null;
 
@@ -1151,7 +1151,7 @@ class RendererTest extends TestCase
      */
     public function testRenderLocationEmbedThrowsException()
     {
-        $renderer = $this->getMockedRenderer(array('checkLocation'));
+        $renderer = $this->getMockedRenderer(['checkLocation']);
         $locationId = 42;
 
         $renderer
@@ -1160,127 +1160,127 @@ class RendererTest extends TestCase
             ->with($locationId)
             ->will($this->throwException(new Exception('Something threw up')));
 
-        $renderer->renderLocationEmbed($locationId, 'embedTest', array('parameters'), true);
+        $renderer->renderLocationEmbed($locationId, 'embedTest', ['parameters'], true);
     }
 
     public function providerForTestRenderLocationWithTemplate()
     {
         $locationId = 42;
 
-        return array(
-            array(
+        return [
+            [
                 false,
                 new AccessDeniedException(),
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.location_denied', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName1')),
-                ),
-                array(
-                    array('error', "Could not render embedded resource: access denied to embed Location #{$locationId}"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.location_denied', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName1']],
+                ],
+                [
+                    ['error', "Could not render embedded resource: access denied to embed Location #{$locationId}"],
+                ],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 true,
                 new AccessDeniedException(),
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.location_inline_denied', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName2')),
-                ),
-                array(
-                    array('error', "Could not render embedded resource: access denied to embed Location #{$locationId}"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.location_inline_denied', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName2']],
+                ],
+                [
+                    ['error', "Could not render embedded resource: access denied to embed Location #{$locationId}"],
+                ],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 false,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.location', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName3')),
-                ),
-                array(),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.location', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName3']],
+                ],
+                [],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 true,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.location_inline', true),
-                    array('getParameter', $namespace, array('template' => $templateName = 'templateName4')),
-                ),
-                array(),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.location_inline', true],
+                    ['getParameter', $namespace, ['template' => $templateName = 'templateName4']],
+                ],
+                [],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 false,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.location', false),
-                    array('hasParameter', $namespace2 = 'test.name.space.embed.default', true),
-                    array('getParameter', $namespace2, array('template' => $templateName = 'templateName5')),
-                ),
-                array(
-                    array('warning', "Embed tag configuration '{$namespace}' was not found"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.location', false],
+                    ['hasParameter', $namespace2 = 'test.name.space.embed.default', true],
+                    ['getParameter', $namespace2, ['template' => $templateName = 'templateName5']],
+                ],
+                [
+                    ['warning', "Embed tag configuration '{$namespace}' was not found"],
+                ],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 true,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.location_inline', false),
-                    array('hasParameter', $namespace2 = 'test.name.space.embed.default_inline', true),
-                    array('getParameter', $namespace2, array('template' => $templateName = 'templateName6')),
-                ),
-                array(
-                    array('warning', "Embed tag configuration '{$namespace}' was not found"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.location_inline', false],
+                    ['hasParameter', $namespace2 = 'test.name.space.embed.default_inline', true],
+                    ['getParameter', $namespace2, ['template' => $templateName = 'templateName6']],
+                ],
+                [
+                    ['warning', "Embed tag configuration '{$namespace}' was not found"],
+                ],
                 $templateName,
                 $templateName,
                 'result',
-            ),
-            array(
+            ],
+            [
                 false,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.location', false),
-                    array('hasParameter', $namespace2 = 'test.name.space.embed.default', false),
-                ),
-                array(
-                    array('warning', "Embed tag configuration '{$namespace}' was not found"),
-                    array('warning', "Embed tag default configuration '{$namespace2}' was not found"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.location', false],
+                    ['hasParameter', $namespace2 = 'test.name.space.embed.default', false],
+                ],
+                [
+                    ['warning', "Embed tag configuration '{$namespace}' was not found"],
+                    ['warning', "Embed tag default configuration '{$namespace2}' was not found"],
+                ],
                 null,
                 null,
                 null,
-            ),
-            array(
+            ],
+            [
                 true,
                 null,
-                array(
-                    array('hasParameter', $namespace = 'test.name.space.embed.location_inline', false),
-                    array('hasParameter', $namespace2 = 'test.name.space.embed.default_inline', false),
-                ),
-                array(
-                    array('warning', "Embed tag configuration '{$namespace}' was not found"),
-                    array('warning', "Embed tag default configuration '{$namespace2}' was not found"),
-                ),
+                [
+                    ['hasParameter', $namespace = 'test.name.space.embed.location_inline', false],
+                    ['hasParameter', $namespace2 = 'test.name.space.embed.default_inline', false],
+                ],
+                [
+                    ['warning', "Embed tag configuration '{$namespace}' was not found"],
+                    ['warning', "Embed tag default configuration '{$namespace2}' was not found"],
+                ],
                 null,
                 null,
                 null,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -1295,10 +1295,10 @@ class RendererTest extends TestCase
         $renderTemplate,
         $renderResult
     ) {
-        $renderer = $this->getMockedRenderer(array('render', 'checkLocation'));
+        $renderer = $this->getMockedRenderer(['render', 'checkLocation']);
         $locationId = 42;
         $viewType = 'embedTest';
-        $parameters = array('parameters');
+        $parameters = ['parameters'];
         $mockLocation = $this->createMock(Location::class);
 
         if (isset($deniedException)) {
@@ -1392,11 +1392,11 @@ class RendererTest extends TestCase
      *
      * @return \eZ\Publish\Core\MVC\Symfony\FieldType\RichText\Renderer|\PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getMockedRenderer(array $methods = array())
+    protected function getMockedRenderer(array $methods = [])
     {
         return $this->getMockBuilder(Renderer::class)
             ->setConstructorArgs(
-                array(
+                [
                     $this->repositoryMock,
                     $this->authorizationCheckerMock,
                     $this->configResolverMock,
@@ -1405,7 +1405,7 @@ class RendererTest extends TestCase
                     'test.name.space.style',
                     'test.name.space.embed',
                     $this->loggerMock,
-                )
+                ]
             )
             ->setMethods($methods)
             ->getMock();

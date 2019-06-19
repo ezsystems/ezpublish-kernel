@@ -57,7 +57,7 @@ class LegacyStorage extends Gateway
      */
     public function getIdUrlMap(array $ids)
     {
-        $map = array();
+        $map = [];
 
         if (!empty($ids)) {
             $q = $this->getConnection()->createSelectQuery();
@@ -87,7 +87,7 @@ class LegacyStorage extends Gateway
      */
     public function getUrlIdMap(array $urls)
     {
-        $map = array();
+        $map = [];
 
         if (!empty($urls)) {
             $q = $this->getConnection()->createSelectQuery();

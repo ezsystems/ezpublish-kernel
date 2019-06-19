@@ -52,20 +52,20 @@ class CountryIntegrationTest extends BaseIntegrationTest
     public function getCustomHandler()
     {
         $fieldType = new FieldType\Country\Type(
-            array(
-                'BE' => array(
+            [
+                'BE' => [
                     'Name' => 'Belgium',
                     'Alpha2' => 'BE',
                     'Alpha3' => 'BEL',
                     'IDC' => '32',
-                ),
-                'FR' => array(
+                ],
+                'FR' => [
                     'Name' => 'France',
                     'Alpha2' => 'FR',
                     'Alpha3' => 'FRA',
                     'IDC' => '33',
-                ),
-            )
+                ],
+            ]
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
@@ -97,23 +97,23 @@ class CountryIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezcountry field type does not have any special field definition
             // properties
-            array('fieldType', 'ezcountry'),
-            array(
+            ['fieldType', 'ezcountry'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldType\FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => false,
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -124,11 +124,11 @@ class CountryIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array('BE'),
+            [
+                'data' => ['BE'],
                 'externalData' => null,
                 'sortKey' => 'Belgium',
-            )
+            ]
         );
     }
 
@@ -142,11 +142,11 @@ class CountryIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array('FR'),
+            [
+                'data' => ['FR'],
                 'externalData' => null,
                 'sortKey' => 'France',
-            )
+            ]
         );
     }
 }

@@ -22,9 +22,9 @@ class OriginalRequestListener implements EventSubscriberInterface
 {
     public static function getSubscribedEvents()
     {
-        return array(
-            KernelEvents::REQUEST => array('onKernelRequest', 200),
-        );
+        return [
+            KernelEvents::REQUEST => ['onKernelRequest', 200],
+        ];
     }
 
     public function onKernelRequest(GetResponseEvent $event)
@@ -41,10 +41,10 @@ class OriginalRequestListener implements EventSubscriberInterface
         $originalRequest = Request::create(
             $request->getSchemeAndHttpHost() . $request->headers->get('x-fos-original-url'),
             'GET',
-            array(),
-            array(),
-            array(),
-            array('HTTP_ACCEPT' => $request->headers->get('x-fos-original-accept'))
+            [],
+            [],
+            [],
+            ['HTTP_ACCEPT' => $request->headers->get('x-fos-original-accept')]
         );
         $originalRequest->headers->set('user-agent', $request->headers->get('user-agent'));
         $originalRequest->headers->set('accept-language', $request->headers->get('accept-language'));

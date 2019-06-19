@@ -19,9 +19,9 @@ use ReflectionObject;
 
 class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 {
-    private $minimalConfig = array();
+    private $minimalConfig = [];
 
-    private $siteaccessConfig = array();
+    private $siteaccessConfig = [];
 
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension
@@ -38,33 +38,33 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
     protected function setUp()
     {
         $this->extension = new EzPublishCoreExtension();
-        $this->siteaccessConfig = array(
-            'siteaccess' => array(
+        $this->siteaccessConfig = [
+            'siteaccess' => [
                 'default_siteaccess' => 'ezdemo_site',
-                'list' => array('ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin'),
-                'groups' => array(
-                    'ezdemo_group' => array('ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin'),
-                    'ezdemo_frontend_group' => array('ezdemo_site', 'eng', 'fre'),
-                ),
-                'match' => array(
+                'list' => ['ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin'],
+                'groups' => [
+                    'ezdemo_group' => ['ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin'],
+                    'ezdemo_frontend_group' => ['ezdemo_site', 'eng', 'fre'],
+                ],
+                'match' => [
                     'URILElement' => 1,
-                    'Map\URI' => array('the_front' => 'ezdemo_site', 'the_back' => 'ezdemo_site_admin'),
-                ),
-            ),
-            'system' => array(
-                'ezdemo_site' => array(),
-                'eng' => array(),
-                'fre' => array(),
-                'ezdemo_site_admin' => array(),
-            ),
-        );
+                    'Map\URI' => ['the_front' => 'ezdemo_site', 'the_back' => 'ezdemo_site_admin'],
+                ],
+            ],
+            'system' => [
+                'ezdemo_site' => [],
+                'eng' => [],
+                'fre' => [],
+                'ezdemo_site_admin' => [],
+            ],
+        ];
 
         parent::setUp();
     }
 
     protected function getContainerExtensions()
     {
-        return array($this->extension);
+        return [$this->extension];
     }
 
     protected function getMinimalConfiguration()
@@ -83,7 +83,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $refParser->setAccessible(true);
         /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser $parser */
         $parser = $refParser->getValue($this->extension);
-        $parser->setConfigParsers(array(new Common(), new Content()));
+        $parser->setConfigParsers([new Common(), new Content()]);
 
         $this->load($this->siteaccessConfig);
         $this->assertContainerBuilderHasParameter(
@@ -96,18 +96,18 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         );
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups', $this->siteaccessConfig['siteaccess']['groups']);
 
-        $expectedMatchingConfig = array();
+        $expectedMatchingConfig = [];
         foreach ($this->siteaccessConfig['siteaccess']['match'] as $key => $val) {
             // Value is expected to always be an array (transformed by semantic configuration parser).
-            $expectedMatchingConfig[$key] = is_array($val) ? $val : array('value' => $val);
+            $expectedMatchingConfig[$key] = is_array($val) ? $val : ['value' => $val];
         }
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.match_config', $expectedMatchingConfig);
 
-        $groupsBySiteaccess = array();
+        $groupsBySiteaccess = [];
         foreach ($this->siteaccessConfig['siteaccess']['groups'] as $groupName => $groupMembers) {
             foreach ($groupMembers as $member) {
                 if (!isset($groupsBySiteaccess[$member])) {
-                    $groupsBySiteaccess[$member] = array();
+                    $groupsBySiteaccess[$member] = [];
                 }
 
                 $groupsBySiteaccess[$member][] = $groupName;
@@ -115,16 +115,16 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         }
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups_by_siteaccess', $groupsBySiteaccess);
 
-        $relatedSiteAccesses = array('ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin');
+        $relatedSiteAccesses = ['ezdemo_site', 'eng', 'fre', 'ezdemo_site_admin'];
         $this->assertContainerBuilderHasParameter(
             'ezpublish.siteaccess.relation_map',
-            array(
+            [
                 // Empty string is the default repository name
-                '' => array(
+                '' => [
                     // 2 is the default rootLocationId
                     2 => $relatedSiteAccesses,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site.related_siteaccesses', $relatedSiteAccesses);
@@ -135,10 +135,10 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
     public function testSiteAccessNoConfiguration()
     {
         $this->load();
-        $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.list', array('setup'));
+        $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.list', ['setup']);
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.default', 'setup');
-        $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups', array());
-        $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups_by_siteaccess', array());
+        $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups', []);
+        $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups_by_siteaccess', []);
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.match_config', null);
     }
 
@@ -187,12 +187,12 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         }
 
         $this->load(
-            array(
-                'imagemagick' => array(
+            [
+                'imagemagick' => [
                     'enabled' => true,
                     'path' => $_ENV['imagemagickConvertPath'],
-                ),
-            )
+                ],
+            ]
         );
         $this->assertContainerBuilderHasParameter('ezpublish.image.imagemagick.enabled', true);
         $this->assertContainerBuilderHasParameter('ezpublish.image.imagemagick.executable_path', dirname($_ENV['imagemagickConvertPath']));
@@ -205,18 +205,18 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
             $this->markTestSkipped('Missing or mis-configured Imagemagick convert path.');
         }
 
-        $customFilters = array(
+        $customFilters = [
             'foobar' => '-foobar',
             'wow' => '-amazing',
-        );
+        ];
         $this->load(
-            array(
-                'imagemagick' => array(
+            [
+                'imagemagick' => [
                     'enabled' => true,
                     'path' => $_ENV['imagemagickConvertPath'],
                     'filters' => $customFilters,
-                ),
-            )
+                ],
+            ]
         );
         $this->assertTrue($this->container->hasParameter('ezpublish.image.imagemagick.filters'));
         $filters = $this->container->getParameter('ezpublish.image.imagemagick.filters');
@@ -260,23 +260,23 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testEzPageConfiguration()
     {
-        $customLayouts = array(
-            'FoobarLayout' => array('name' => 'Foo layout', 'template' => 'foolayout.html.twig'),
-        );
-        $enabledLayouts = array('FoobarLayout', 'GlobalZoneLayout');
-        $customBlocks = array(
-            'FoobarBlock' => array('name' => 'Foo block'),
-        );
-        $enabledBlocks = array('FoobarBlock', 'DemoBlock');
+        $customLayouts = [
+            'FoobarLayout' => ['name' => 'Foo layout', 'template' => 'foolayout.html.twig'],
+        ];
+        $enabledLayouts = ['FoobarLayout', 'GlobalZoneLayout'];
+        $customBlocks = [
+            'FoobarBlock' => ['name' => 'Foo block'],
+        ];
+        $enabledBlocks = ['FoobarBlock', 'DemoBlock'];
         $this->load(
-            array(
-                'ezpage' => array(
+            [
+                'ezpage' => [
                     'layouts' => $customLayouts,
                     'blocks' => $customBlocks,
                     'enabledLayouts' => $enabledLayouts,
                     'enabledBlocks' => $enabledBlocks,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->assertTrue($this->container->hasParameter('ezpublish.ezpage.layouts'));
@@ -319,33 +319,33 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function cacheConfigurationProvider()
     {
-        return array(
-            array(array(), 'local'),
-            array(
-                array(
-                    'http_cache' => array('purge_type' => 'local'),
-                ),
+        return [
+            [[], 'local'],
+            [
+                [
+                    'http_cache' => ['purge_type' => 'local'],
+                ],
                 'local',
-            ),
-            array(
-                array(
-                    'http_cache' => array('purge_type' => 'multiple_http'),
-                ),
+            ],
+            [
+                [
+                    'http_cache' => ['purge_type' => 'multiple_http'],
+                ],
                 'http',
-            ),
-            array(
-                array(
-                    'http_cache' => array('purge_type' => 'single_http'),
-                ),
+            ],
+            [
+                [
+                    'http_cache' => ['purge_type' => 'single_http'],
+                ],
                 'http',
-            ),
-            array(
-                array(
-                    'http_cache' => array('purge_type' => 'http'),
-                ),
+            ],
+            [
+                [
+                    'http_cache' => ['purge_type' => 'http'],
+                ],
                 'http',
-            ),
-        );
+            ],
+        ];
     }
 
     public function testCacheConfigurationCustomPurgeService()
@@ -353,9 +353,9 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $serviceId = 'foobar';
         $this->setDefinition($serviceId, new Definition());
         $this->load(
-            array(
-                'http_cache' => array('purge_type' => 'foobar', 'timeout' => 12),
-            )
+            [
+                'http_cache' => ['purge_type' => 'foobar', 'timeout' => 12],
+            ]
         );
 
         $this->assertContainerBuilderHasParameter('ezpublish.http_cache.purge_type', 'foobar');
@@ -363,7 +363,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testLocaleConfiguration()
     {
-        $this->load(array('locale_conversion' => array('foo' => 'bar')));
+        $this->load(['locale_conversion' => ['foo' => 'bar']]);
         $conversionMap = $this->container->getParameter('ezpublish.locale.conversion_map');
         $this->assertArrayHasKey('foo', $conversionMap);
         $this->assertSame('bar', $conversionMap['foo']);
@@ -371,48 +371,48 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testRepositoriesConfiguration()
     {
-        $repositories = array(
-            'main' => array(
-                'storage' => array(
+        $repositories = [
+            'main' => [
+                'storage' => [
                     'engine' => 'legacy',
                     'connection' => 'default',
-                ),
-                'search' => array(
+                ],
+                'search' => [
                     'engine' => 'elasticsearch',
                     'connection' => 'blabla',
-                ),
-                'fields_groups' => array(
+                ],
+                'fields_groups' => [
                     'list' => ['content', 'metadata'],
                     'default' => '%ezsettings.default.content.field_groups.default%',
-                ),
+                ],
                 'options' => [
                     'default_version_archive_limit' => 5,
                 ],
-            ),
-            'foo' => array(
-                'storage' => array(
+            ],
+            'foo' => [
+                'storage' => [
                     'engine' => 'sqlng',
                     'connection' => 'default',
-                ),
-                'search' => array(
+                ],
+                'search' => [
                     'engine' => 'solr',
                     'connection' => 'lalala',
-                ),
-                'fields_groups' => array(
+                ],
+                'fields_groups' => [
                     'list' => ['content', 'metadata'],
                     'default' => '%ezsettings.default.content.field_groups.default%',
-                ),
+                ],
                 'options' => [
                     'default_version_archive_limit' => 5,
                 ],
-            ),
-        );
-        $this->load(array('repositories' => $repositories));
+            ],
+        ];
+        $this->load(['repositories' => $repositories]);
         $this->assertTrue($this->container->hasParameter('ezpublish.repositories'));
 
         foreach ($repositories as &$repositoryConfig) {
-            $repositoryConfig['storage']['config'] = array();
-            $repositoryConfig['search']['config'] = array();
+            $repositoryConfig['storage']['config'] = [];
+            $repositoryConfig['search']['config'] = [];
         }
         $this->assertSame($repositories, $this->container->getParameter('ezpublish.repositories'));
     }
@@ -557,31 +557,31 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testRepositoriesConfigurationEmpty()
     {
-        $repositories = array(
+        $repositories = [
             'main' => null,
-        );
-        $expectedRepositories = array(
-            'main' => array(
-                'storage' => array(
+        ];
+        $expectedRepositories = [
+            'main' => [
+                'storage' => [
                     'engine' => '%ezpublish.api.storage_engine.default%',
                     'connection' => null,
-                    'config' => array(),
-                ),
-                'search' => array(
+                    'config' => [],
+                ],
+                'search' => [
                     'engine' => '%ezpublish.api.search_engine.default%',
                     'connection' => null,
-                    'config' => array(),
-                ),
-                'fields_groups' => array(
+                    'config' => [],
+                ],
+                'fields_groups' => [
                     'list' => ['content', 'metadata'],
                     'default' => '%ezsettings.default.content.field_groups.default%',
-                ),
+                ],
                 'options' => [
                     'default_version_archive_limit' => 5,
                 ],
-            ),
-        );
-        $this->load(array('repositories' => $repositories));
+            ],
+        ];
+        $this->load(['repositories' => $repositories]);
         $this->assertTrue($this->container->hasParameter('ezpublish.repositories'));
 
         $this->assertSame(
@@ -592,36 +592,36 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testRepositoriesConfigurationStorageEmpty()
     {
-        $repositories = array(
-            'main' => array(
-                'search' => array(
+        $repositories = [
+            'main' => [
+                'search' => [
                     'engine' => 'fantasticfind',
                     'connection' => 'french',
-                ),
-            ),
-        );
-        $expectedRepositories = array(
-            'main' => array(
-                'search' => array(
+                ],
+            ],
+        ];
+        $expectedRepositories = [
+            'main' => [
+                'search' => [
                     'engine' => 'fantasticfind',
                     'connection' => 'french',
-                    'config' => array(),
-                ),
-                'storage' => array(
+                    'config' => [],
+                ],
+                'storage' => [
                     'engine' => '%ezpublish.api.storage_engine.default%',
                     'connection' => null,
-                    'config' => array(),
-                ),
-                'fields_groups' => array(
+                    'config' => [],
+                ],
+                'fields_groups' => [
                     'list' => ['content', 'metadata'],
                     'default' => '%ezsettings.default.content.field_groups.default%',
-                ),
+                ],
                 'options' => [
                     'default_version_archive_limit' => 5,
                 ],
-            ),
-        );
-        $this->load(array('repositories' => $repositories));
+            ],
+        ];
+        $this->load(['repositories' => $repositories]);
         $this->assertTrue($this->container->hasParameter('ezpublish.repositories'));
 
         $this->assertSame(
@@ -632,36 +632,36 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testRepositoriesConfigurationSearchEmpty()
     {
-        $repositories = array(
-            'main' => array(
-                'storage' => array(
+        $repositories = [
+            'main' => [
+                'storage' => [
                     'engine' => 'persistentprudence',
                     'connection' => 'yes',
-                ),
-            ),
-        );
-        $expectedRepositories = array(
-            'main' => array(
-                'storage' => array(
+                ],
+            ],
+        ];
+        $expectedRepositories = [
+            'main' => [
+                'storage' => [
                     'engine' => 'persistentprudence',
                     'connection' => 'yes',
-                    'config' => array(),
-                ),
-                'search' => array(
+                    'config' => [],
+                ],
+                'search' => [
                     'engine' => '%ezpublish.api.search_engine.default%',
                     'connection' => null,
-                    'config' => array(),
-                ),
-                'fields_groups' => array(
+                    'config' => [],
+                ],
+                'fields_groups' => [
                     'list' => ['content', 'metadata'],
                     'default' => '%ezsettings.default.content.field_groups.default%',
-                ),
+                ],
                 'options' => [
                     'default_version_archive_limit' => 5,
                 ],
-            ),
-        );
-        $this->load(array('repositories' => $repositories));
+            ],
+        ];
+        $this->load(['repositories' => $repositories]);
         $this->assertTrue($this->container->hasParameter('ezpublish.repositories'));
 
         $this->assertSame(
@@ -672,65 +672,65 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testRepositoriesConfigurationCompatibility()
     {
-        $repositories = array(
-            'main' => array(
+        $repositories = [
+            'main' => [
                 'engine' => 'legacy',
                 'connection' => 'default',
-                'search' => array(
+                'search' => [
                     'engine' => 'elasticsearch',
                     'connection' => 'blabla',
-                ),
-            ),
-            'foo' => array(
+                ],
+            ],
+            'foo' => [
                 'engine' => 'sqlng',
                 'connection' => 'default',
-                'search' => array(
+                'search' => [
                     'engine' => 'solr',
                     'connection' => 'lalala',
-                ),
-            ),
-        );
-        $expectedRepositories = array(
-            'main' => array(
-                'search' => array(
+                ],
+            ],
+        ];
+        $expectedRepositories = [
+            'main' => [
+                'search' => [
                     'engine' => 'elasticsearch',
                     'connection' => 'blabla',
-                    'config' => array(),
-                ),
-                'storage' => array(
+                    'config' => [],
+                ],
+                'storage' => [
                     'engine' => 'legacy',
                     'connection' => 'default',
-                    'config' => array(),
-                ),
-                'fields_groups' => array(
+                    'config' => [],
+                ],
+                'fields_groups' => [
                     'list' => ['content', 'metadata'],
                     'default' => '%ezsettings.default.content.field_groups.default%',
-                ),
+                ],
                 'options' => [
                     'default_version_archive_limit' => 5,
                 ],
-            ),
-            'foo' => array(
-                'search' => array(
+            ],
+            'foo' => [
+                'search' => [
                     'engine' => 'solr',
                     'connection' => 'lalala',
-                    'config' => array(),
-                ),
-                'storage' => array(
+                    'config' => [],
+                ],
+                'storage' => [
                     'engine' => 'sqlng',
                     'connection' => 'default',
-                    'config' => array(),
-                ),
-                'fields_groups' => array(
+                    'config' => [],
+                ],
+                'fields_groups' => [
                     'list' => ['content', 'metadata'],
                     'default' => '%ezsettings.default.content.field_groups.default%',
-                ),
+                ],
                 'options' => [
                     'default_version_archive_limit' => 5,
                 ],
-            ),
-        );
-        $this->load(array('repositories' => $repositories));
+            ],
+        ];
+        $this->load(['repositories' => $repositories]);
         $this->assertTrue($this->container->hasParameter('ezpublish.repositories'));
 
         $this->assertSame(
@@ -741,34 +741,34 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     public function testRepositoriesConfigurationCompatibility2()
     {
-        $repositories = array(
-            'main' => array(
+        $repositories = [
+            'main' => [
                 'engine' => 'legacy',
                 'connection' => 'default',
-            ),
-        );
-        $expectedRepositories = array(
-            'main' => array(
-                'storage' => array(
+            ],
+        ];
+        $expectedRepositories = [
+            'main' => [
+                'storage' => [
                     'engine' => 'legacy',
                     'connection' => 'default',
-                    'config' => array(),
-                ),
-                'search' => array(
+                    'config' => [],
+                ],
+                'search' => [
                     'engine' => '%ezpublish.api.search_engine.default%',
                     'connection' => null,
-                    'config' => array(),
-                ),
-                'fields_groups' => array(
+                    'config' => [],
+                ],
+                'fields_groups' => [
                     'list' => ['content', 'metadata'],
                     'default' => '%ezsettings.default.content.field_groups.default%',
-                ),
+                ],
                 'options' => [
                     'default_version_archive_limit' => 5,
                 ],
-            ),
-        );
-        $this->load(array('repositories' => $repositories));
+            ],
+        ];
+        $this->load(['repositories' => $repositories]);
         $this->assertTrue($this->container->hasParameter('ezpublish.repositories'));
 
         $this->assertSame(
@@ -784,39 +784,39 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $rootLocationId1 = 123;
         $rootLocationId2 = 456;
         $rootLocationId3 = 2;
-        $config = array(
-            'siteaccess' => array(
+        $config = [
+            'siteaccess' => [
                 'default_siteaccess' => 'ezdemo_site',
-                'list' => array('ezdemo_site', 'eng', 'fre', 'ezdemo_site2', 'eng2', 'ezdemo_site3', 'fre3'),
-                'groups' => array(
-                    'ezdemo_group' => array('ezdemo_site', 'eng', 'fre'),
-                    'ezdemo_group2' => array('ezdemo_site2', 'eng2'),
-                    'ezdemo_group3' => array('ezdemo_site3', 'fre3'),
-                ),
-                'match' => array(),
-            ),
-            'repositories' => array(
-                $mainRepo => array('engine' => 'legacy', 'connection' => 'default'),
-                $fooRepo => array('engine' => 'bar', 'connection' => 'blabla'),
-            ),
-            'system' => array(
-                'ezdemo_group' => array(
+                'list' => ['ezdemo_site', 'eng', 'fre', 'ezdemo_site2', 'eng2', 'ezdemo_site3', 'fre3'],
+                'groups' => [
+                    'ezdemo_group' => ['ezdemo_site', 'eng', 'fre'],
+                    'ezdemo_group2' => ['ezdemo_site2', 'eng2'],
+                    'ezdemo_group3' => ['ezdemo_site3', 'fre3'],
+                ],
+                'match' => [],
+            ],
+            'repositories' => [
+                $mainRepo => ['engine' => 'legacy', 'connection' => 'default'],
+                $fooRepo => ['engine' => 'bar', 'connection' => 'blabla'],
+            ],
+            'system' => [
+                'ezdemo_group' => [
                     'repository' => $mainRepo,
-                    'content' => array(
-                        'tree_root' => array('location_id' => $rootLocationId1),
-                    ),
-                ),
-                'ezdemo_group2' => array(
+                    'content' => [
+                        'tree_root' => ['location_id' => $rootLocationId1],
+                    ],
+                ],
+                'ezdemo_group2' => [
                     'repository' => $mainRepo,
-                    'content' => array(
-                        'tree_root' => array('location_id' => $rootLocationId2),
-                    ),
-                ),
-                'ezdemo_group3' => array(
+                    'content' => [
+                        'tree_root' => ['location_id' => $rootLocationId2],
+                    ],
+                ],
+                'ezdemo_group3' => [
                     'repository' => $fooRepo,
-                ),
-            ),
-        ) + $this->siteaccessConfig;
+                ],
+            ],
+        ] + $this->siteaccessConfig;
 
         // Injecting needed config parsers.
         $refExtension = new ReflectionObject($this->extension);
@@ -827,22 +827,22 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $refParser->setAccessible(true);
         /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigParser $parser */
         $parser = $refParser->getValue($this->extension);
-        $parser->setConfigParsers(array(new Common(), new Content()));
+        $parser->setConfigParsers([new Common(), new Content()]);
 
         $this->load($config);
 
-        $relatedSiteAccesses1 = array('ezdemo_site', 'eng', 'fre');
-        $relatedSiteAccesses2 = array('ezdemo_site2', 'eng2');
-        $relatedSiteAccesses3 = array('ezdemo_site3', 'fre3');
-        $expectedRelationMap = array(
-            $mainRepo => array(
+        $relatedSiteAccesses1 = ['ezdemo_site', 'eng', 'fre'];
+        $relatedSiteAccesses2 = ['ezdemo_site2', 'eng2'];
+        $relatedSiteAccesses3 = ['ezdemo_site3', 'fre3'];
+        $expectedRelationMap = [
+            $mainRepo => [
                 $rootLocationId1 => $relatedSiteAccesses1,
                 $rootLocationId2 => $relatedSiteAccesses2,
-            ),
-            $fooRepo => array(
+            ],
+            $fooRepo => [
                 $rootLocationId3 => $relatedSiteAccesses3,
-            ),
-        );
+            ],
+        ];
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.relation_map', $expectedRelationMap);
 
         $this->assertContainerBuilderHasParameter('ezsettings.ezdemo_site.related_siteaccesses', $relatedSiteAccesses1);

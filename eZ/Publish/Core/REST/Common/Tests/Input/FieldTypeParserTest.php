@@ -59,7 +59,7 @@ class FieldTypeParserTest extends TestCase
             ->with('23')
             ->will(
                 $this->returnValue(
-                    new ContentInfo(array('contentTypeId' => '42'))
+                    new ContentInfo(['contentTypeId' => '42'])
                 )
             );
 
@@ -82,9 +82,9 @@ class FieldTypeParserTest extends TestCase
             ->will(
                 $this->returnValue(
                     new FieldDefinition(
-                        array(
+                        [
                             'fieldTypeIdentifier' => 'some-fancy-field-type',
-                        )
+                        ]
                     )
                 )
             );
@@ -109,15 +109,15 @@ class FieldTypeParserTest extends TestCase
 
         $fieldTypeMock->expects($this->once())
             ->method('fromHash')
-            ->with($this->equalTo(array(1, 2, 3)))
-            ->will($this->returnValue(array('foo', 'bar')));
+            ->with($this->equalTo([1, 2, 3]))
+            ->will($this->returnValue(['foo', 'bar']));
 
         $this->assertEquals(
-            array('foo', 'bar'),
+            ['foo', 'bar'],
             $fieldTypeParser->parseFieldValue(
                 '23',
                 'my-field-definition',
-                array(1, 2, 3)
+                [1, 2, 3]
             )
         );
     }
@@ -146,14 +146,14 @@ class FieldTypeParserTest extends TestCase
 
         $fieldTypeMock->expects($this->once())
             ->method('fromHash')
-            ->with($this->equalTo(array(1, 2, 3)))
-            ->will($this->returnValue(array('foo', 'bar')));
+            ->with($this->equalTo([1, 2, 3]))
+            ->will($this->returnValue(['foo', 'bar']));
 
         $this->assertEquals(
-            array('foo', 'bar'),
+            ['foo', 'bar'],
             $fieldTypeParser->parseValue(
                 'some-fancy-field-type',
-                array(1, 2, 3)
+                [1, 2, 3]
             )
         );
     }
@@ -181,8 +181,8 @@ class FieldTypeParserTest extends TestCase
 
         $processor->expects($this->once())
             ->method('preProcessValueHash')
-            ->with(array(1, 2, 3))
-            ->will($this->returnValue(array(4, 5, 6)));
+            ->with([1, 2, 3])
+            ->will($this->returnValue([4, 5, 6]));
 
         $fieldTypeMock = $this->fieldTypeMock;
         $this->fieldTypeServiceMock->expects($this->once())
@@ -199,14 +199,14 @@ class FieldTypeParserTest extends TestCase
 
         $fieldTypeMock->expects($this->once())
             ->method('fromHash')
-            ->with($this->equalTo(array(4, 5, 6)))
-            ->will($this->returnValue(array('foo', 'bar')));
+            ->with($this->equalTo([4, 5, 6]))
+            ->will($this->returnValue(['foo', 'bar']));
 
         $this->assertEquals(
-            array('foo', 'bar'),
+            ['foo', 'bar'],
             $fieldTypeParser->parseValue(
                 'some-fancy-field-type',
-                array(1, 2, 3)
+                [1, 2, 3]
             )
         );
     }
@@ -230,14 +230,14 @@ class FieldTypeParserTest extends TestCase
 
         $fieldTypeMock->expects($this->once())
             ->method('fieldSettingsFromHash')
-            ->with($this->equalTo(array(1, 2, 3)))
-            ->will($this->returnValue(array('foo', 'bar')));
+            ->with($this->equalTo([1, 2, 3]))
+            ->will($this->returnValue(['foo', 'bar']));
 
         $this->assertEquals(
-            array('foo', 'bar'),
+            ['foo', 'bar'],
             $fieldTypeParser->parseFieldSettings(
                 'some-fancy-field-type',
-                array(1, 2, 3)
+                [1, 2, 3]
             )
         );
     }
@@ -265,8 +265,8 @@ class FieldTypeParserTest extends TestCase
 
         $processor->expects($this->once())
             ->method('preProcessFieldSettingsHash')
-            ->with(array(1, 2, 3))
-            ->will($this->returnValue(array(4, 5, 6)));
+            ->with([1, 2, 3])
+            ->will($this->returnValue([4, 5, 6]));
 
         $fieldTypeMock = $this->fieldTypeMock;
         $this->fieldTypeServiceMock->expects($this->once())
@@ -283,14 +283,14 @@ class FieldTypeParserTest extends TestCase
 
         $fieldTypeMock->expects($this->once())
             ->method('fieldSettingsFromHash')
-            ->with($this->equalTo(array(4, 5, 6)))
-            ->will($this->returnValue(array('foo', 'bar')));
+            ->with($this->equalTo([4, 5, 6]))
+            ->will($this->returnValue(['foo', 'bar']));
 
         $this->assertEquals(
-            array('foo', 'bar'),
+            ['foo', 'bar'],
             $fieldTypeParser->parseFieldSettings(
                 'some-fancy-field-type',
-                array(1, 2, 3)
+                [1, 2, 3]
             )
         );
     }
@@ -314,14 +314,14 @@ class FieldTypeParserTest extends TestCase
 
         $fieldTypeMock->expects($this->once())
             ->method('validatorConfigurationFromHash')
-            ->with($this->equalTo(array(1, 2, 3)))
-            ->will($this->returnValue(array('foo', 'bar')));
+            ->with($this->equalTo([1, 2, 3]))
+            ->will($this->returnValue(['foo', 'bar']));
 
         $this->assertEquals(
-            array('foo', 'bar'),
+            ['foo', 'bar'],
             $fieldTypeParser->parseValidatorConfiguration(
                 'some-fancy-field-type',
-                array(1, 2, 3)
+                [1, 2, 3]
             )
         );
     }
@@ -349,8 +349,8 @@ class FieldTypeParserTest extends TestCase
 
         $processor->expects($this->once())
             ->method('preProcessValidatorConfigurationHash')
-            ->with(array(1, 2, 3))
-            ->will($this->returnValue(array(4, 5, 6)));
+            ->with([1, 2, 3])
+            ->will($this->returnValue([4, 5, 6]));
 
         $fieldTypeMock = $this->fieldTypeMock;
         $this->fieldTypeServiceMock->expects($this->once())
@@ -367,14 +367,14 @@ class FieldTypeParserTest extends TestCase
 
         $fieldTypeMock->expects($this->once())
             ->method('validatorConfigurationFromHash')
-            ->with($this->equalTo(array(4, 5, 6)))
-            ->will($this->returnValue(array('foo', 'bar')));
+            ->with($this->equalTo([4, 5, 6]))
+            ->will($this->returnValue(['foo', 'bar']));
 
         $this->assertEquals(
-            array('foo', 'bar'),
+            ['foo', 'bar'],
             $fieldTypeParser->parseValidatorConfiguration(
                 'some-fancy-field-type',
-                array(1, 2, 3)
+                [1, 2, 3]
             )
         );
     }

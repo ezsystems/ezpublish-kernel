@@ -45,134 +45,134 @@ class RelationProcessorTest extends BaseServiceMockTest
 
     public function providerForTestAppendRelations()
     {
-        return array(
-            array(
-                array(Relation::FIELD => array(100)),
-                array(Relation::FIELD => array(42 => array(100 => 0))),
-            ),
-            array(
-                array(Relation::LINK => array('contentIds' => array(100))),
-                array(Relation::LINK => array(100 => 0)),
-            ),
-            array(
-                array(Relation::EMBED => array('contentIds' => array(100))),
-                array(Relation::EMBED => array(100 => 0)),
-            ),
-            array(
-                array(Relation::ASSET => array(100)),
-                array(Relation::ASSET => array(42 => array(100 => 0))),
-            ),
-            array(
-                array(
-                    Relation::FIELD => array(100),
-                    Relation::LINK => array('contentIds' => array(100)),
-                    Relation::EMBED => array('contentIds' => array(100)),
-                ),
-                array(
-                    Relation::FIELD => array(42 => array(100 => 0)),
-                    Relation::LINK => array(100 => 0),
-                    Relation::EMBED => array(100 => 0),
-                ),
-            ),
-            array(
-                array(Relation::LINK => array('locationIds' => array(100))),
-                array(Relation::LINK => array(200 => true)),
-            ),
-            array(
-                array(
-                    Relation::LINK => array(
-                        'locationIds' => array(100),
-                        'contentIds' => array(100),
-                    ),
-                ),
-                array(Relation::LINK => array(100 => 0, 200 => true)),
-            ),
-            array(
-                array(Relation::EMBED => array('locationIds' => array(100))),
-                array(Relation::EMBED => array(200 => true)),
-            ),
-            array(
-                array(
-                    Relation::EMBED => array(
-                        'locationIds' => array(100),
-                        'contentIds' => array(100),
-                    ),
-                ),
-                array(Relation::EMBED => array(100 => 0, 200 => true)),
-            ),
-            array(
-                array(
-                    Relation::LINK => array(
-                        'locationIds' => array(100),
-                        'contentIds' => array(100),
-                    ),
-                    Relation::EMBED => array(
-                        'locationIds' => array(101),
-                        'contentIds' => array(100),
-                    ),
-                ),
-                array(
-                    Relation::LINK => array(100 => 0, 200 => true),
-                    Relation::EMBED => array(100 => 0, 201 => true),
-                ),
-            ),
-            array(
-                array(
-                    Relation::FIELD => array(100),
-                    Relation::LINK => array(
-                        'locationIds' => array(100),
-                        'contentIds' => array(100),
-                    ),
-                    Relation::EMBED => array(
-                        'locationIds' => array(101),
-                        'contentIds' => array(100),
-                    ),
-                ),
-                array(
-                    Relation::FIELD => array(42 => array(100 => 0)),
-                    Relation::LINK => array(100 => 0, 200 => true),
-                    Relation::EMBED => array(100 => 0, 201 => true),
-                ),
-            ),
-            array(
-                array(
-                    Relation::ASSET => array(100),
-                    Relation::LINK => array(
-                        'locationIds' => array(100),
-                        'contentIds' => array(100),
-                    ),
-                    Relation::EMBED => array(
-                        'locationIds' => array(101),
-                        'contentIds' => array(100),
-                    ),
-                ),
-                array(
-                    Relation::ASSET => array(42 => array(100 => 0)),
-                    Relation::LINK => array(100 => 0, 200 => true),
-                    Relation::EMBED => array(100 => 0, 201 => true),
-                ),
-            ),
-            array(
-                array(
-                    Relation::FIELD => array(100),
-                    Relation::ASSET => array(100),
-                    Relation::LINK => array(
-                        'locationIds' => array(100),
-                        'contentIds' => array(100),
-                    ),
-                    Relation::EMBED => array(
-                        'locationIds' => array(101),
-                        'contentIds' => array(100),
-                    ),
-                ),
-                array(
-                    Relation::FIELD => array(42 => array(100 => 0)),
-                    Relation::ASSET => array(42 => array(100 => 0)),
-                    Relation::LINK => array(100 => 0, 200 => true),
-                    Relation::EMBED => array(100 => 0, 201 => true),
-                ),
-            ),
-        );
+        return [
+            [
+                [Relation::FIELD => [100]],
+                [Relation::FIELD => [42 => [100 => 0]]],
+            ],
+            [
+                [Relation::LINK => ['contentIds' => [100]]],
+                [Relation::LINK => [100 => 0]],
+            ],
+            [
+                [Relation::EMBED => ['contentIds' => [100]]],
+                [Relation::EMBED => [100 => 0]],
+            ],
+            [
+                [Relation::ASSET => [100]],
+                [Relation::ASSET => [42 => [100 => 0]]],
+            ],
+            [
+                [
+                    Relation::FIELD => [100],
+                    Relation::LINK => ['contentIds' => [100]],
+                    Relation::EMBED => ['contentIds' => [100]],
+                ],
+                [
+                    Relation::FIELD => [42 => [100 => 0]],
+                    Relation::LINK => [100 => 0],
+                    Relation::EMBED => [100 => 0],
+                ],
+            ],
+            [
+                [Relation::LINK => ['locationIds' => [100]]],
+                [Relation::LINK => [200 => true]],
+            ],
+            [
+                [
+                    Relation::LINK => [
+                        'locationIds' => [100],
+                        'contentIds' => [100],
+                    ],
+                ],
+                [Relation::LINK => [100 => 0, 200 => true]],
+            ],
+            [
+                [Relation::EMBED => ['locationIds' => [100]]],
+                [Relation::EMBED => [200 => true]],
+            ],
+            [
+                [
+                    Relation::EMBED => [
+                        'locationIds' => [100],
+                        'contentIds' => [100],
+                    ],
+                ],
+                [Relation::EMBED => [100 => 0, 200 => true]],
+            ],
+            [
+                [
+                    Relation::LINK => [
+                        'locationIds' => [100],
+                        'contentIds' => [100],
+                    ],
+                    Relation::EMBED => [
+                        'locationIds' => [101],
+                        'contentIds' => [100],
+                    ],
+                ],
+                [
+                    Relation::LINK => [100 => 0, 200 => true],
+                    Relation::EMBED => [100 => 0, 201 => true],
+                ],
+            ],
+            [
+                [
+                    Relation::FIELD => [100],
+                    Relation::LINK => [
+                        'locationIds' => [100],
+                        'contentIds' => [100],
+                    ],
+                    Relation::EMBED => [
+                        'locationIds' => [101],
+                        'contentIds' => [100],
+                    ],
+                ],
+                [
+                    Relation::FIELD => [42 => [100 => 0]],
+                    Relation::LINK => [100 => 0, 200 => true],
+                    Relation::EMBED => [100 => 0, 201 => true],
+                ],
+            ],
+            [
+                [
+                    Relation::ASSET => [100],
+                    Relation::LINK => [
+                        'locationIds' => [100],
+                        'contentIds' => [100],
+                    ],
+                    Relation::EMBED => [
+                        'locationIds' => [101],
+                        'contentIds' => [100],
+                    ],
+                ],
+                [
+                    Relation::ASSET => [42 => [100 => 0]],
+                    Relation::LINK => [100 => 0, 200 => true],
+                    Relation::EMBED => [100 => 0, 201 => true],
+                ],
+            ],
+            [
+                [
+                    Relation::FIELD => [100],
+                    Relation::ASSET => [100],
+                    Relation::LINK => [
+                        'locationIds' => [100],
+                        'contentIds' => [100],
+                    ],
+                    Relation::EMBED => [
+                        'locationIds' => [101],
+                        'contentIds' => [100],
+                    ],
+                ],
+                [
+                    Relation::FIELD => [42 => [100 => 0]],
+                    Relation::ASSET => [42 => [100 => 0]],
+                    Relation::LINK => [100 => 0, 200 => true],
+                    Relation::EMBED => [100 => 0, 201 => true],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -207,8 +207,8 @@ class RelationProcessorTest extends BaseServiceMockTest
             $locationCallCount
         );
 
-        $relations = array();
-        $locationIdToContentIdMapping = array();
+        $relations = [];
+        $locationIdToContentIdMapping = [];
 
         $relationProcessor->appendFieldRelations(
             $relations,
@@ -234,7 +234,7 @@ class RelationProcessorTest extends BaseServiceMockTest
                     ->will(
                         $this->returnValue(
                             new Location(
-                                array('contentId' => $locationId + 100)
+                                ['contentId' => $locationId + 100]
                             )
                         )
                     );
@@ -261,18 +261,18 @@ class RelationProcessorTest extends BaseServiceMockTest
             ->with($this->equalTo($fieldValueMock))
             ->will(
                 $this->returnValue(
-                    array(
-                        Relation::FIELD => array(100),
-                        Relation::ASSET => array(100),
-                        Relation::LINK => array(
-                            'locationIds' => array(100),
-                            'contentIds' => array(100),
-                        ),
-                        Relation::EMBED => array(
-                            'locationIds' => array(100),
-                            'contentIds' => array(100),
-                        ),
-                    )
+                    [
+                        Relation::FIELD => [100],
+                        Relation::ASSET => [100],
+                        Relation::LINK => [
+                            'locationIds' => [100],
+                            'contentIds' => [100],
+                        ],
+                        Relation::EMBED => [
+                            'locationIds' => [100],
+                            'contentIds' => [100],
+                        ],
+                    ]
                 )
             );
 
@@ -282,13 +282,13 @@ class RelationProcessorTest extends BaseServiceMockTest
             ->will(
                 $this->returnValue(
                     new Location(
-                        array('contentId' => 200)
+                        ['contentId' => 200]
                     )
                 )
             );
 
-        $relations = array();
-        $locationIdToContentIdMapping = array();
+        $relations = [];
+        $locationIdToContentIdMapping = [];
 
         $relationProcessor->appendFieldRelations(
             $relations,
@@ -299,12 +299,12 @@ class RelationProcessorTest extends BaseServiceMockTest
         );
 
         $this->assertEquals(
-            array(
-                Relation::ASSET => array(42 => array(100 => 0)),
-                Relation::FIELD => array(42 => array(100 => 0)),
-                Relation::LINK => array(100 => 0, 200 => true),
-                Relation::EMBED => array(100 => 0, 200 => true),
-            ),
+            [
+                Relation::ASSET => [42 => [100 => 0]],
+                Relation::FIELD => [42 => [100 => 0]],
+                Relation::LINK => [100 => 0, 200 => true],
+                Relation::EMBED => [100 => 0, 200 => true],
+            ],
             $relations
         );
     }
@@ -375,17 +375,17 @@ class RelationProcessorTest extends BaseServiceMockTest
         $contentTypeMock->expects($this->at(0))
             ->method('getFieldDefinition')
             ->with($this->equalTo('identifier42'))
-            ->will($this->returnValue(new FieldDefinition(array('id' => 42))));
+            ->will($this->returnValue(new FieldDefinition(['id' => 42])));
 
         $contentTypeMock->expects($this->at(1))
             ->method('getFieldDefinition')
             ->with($this->equalTo('identifier43'))
-            ->will($this->returnValue(new FieldDefinition(array('id' => 43))));
+            ->will($this->returnValue(new FieldDefinition(['id' => 43])));
 
         $contentHandlerMock->expects($this->never())->method('addRelation');
         $contentHandlerMock->expects($this->never())->method('removeRelation');
 
-        $existingRelations = array(
+        $existingRelations = [
             $this->getStubbedRelation(1, Relation::COMMON, null, 10),
             $this->getStubbedRelation(2, Relation::EMBED, null, 11),
             $this->getStubbedRelation(3, Relation::LINK, null, 12),
@@ -416,13 +416,13 @@ class RelationProcessorTest extends BaseServiceMockTest
                 17
             ),
             $this->getStubbedRelation(9, Relation::ASSET, 43, 18),
-        );
-        $inputRelations = array(
-            Relation::EMBED => array_flip(array(11, 14, 16, 17)),
-            Relation::LINK => array_flip(array(12, 15, 16, 17)),
-            Relation::FIELD => array(42 => array_flip(array(13))),
-            Relation::ASSET => array(43 => array_flip(array(18))),
-        );
+        ];
+        $inputRelations = [
+            Relation::EMBED => array_flip([11, 14, 16, 17]),
+            Relation::LINK => array_flip([12, 15, 16, 17]),
+            Relation::FIELD => [42 => array_flip([13])],
+            Relation::ASSET => [43 => array_flip([18])],
+        ];
 
         $relationProcessor->processFieldRelations(
             $inputRelations,
@@ -444,7 +444,7 @@ class RelationProcessorTest extends BaseServiceMockTest
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
         $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
 
-        $existingRelations = array(
+        $existingRelations = [
             $this->getStubbedRelation(1, Relation::COMMON, null, 10),
             $this->getStubbedRelation(2, Relation::EMBED, null, 11),
             $this->getStubbedRelation(3, Relation::LINK, null, 12),
@@ -467,13 +467,13 @@ class RelationProcessorTest extends BaseServiceMockTest
                 null,
                 16
             ),
-        );
-        $inputRelations = array(
-            Relation::EMBED => array_flip(array(11, 14, 16, 17)),
-            Relation::LINK => array_flip(array(12, 15, 16, 17)),
-            Relation::FIELD => array(42 => array_flip(array(13))),
-            Relation::ASSET => array(44 => array_flip(array(18))),
-        );
+        ];
+        $inputRelations = [
+            Relation::EMBED => array_flip([11, 14, 16, 17]),
+            Relation::LINK => array_flip([12, 15, 16, 17]),
+            Relation::FIELD => [42 => array_flip([13])],
+            Relation::ASSET => [44 => array_flip([18])],
+        ];
 
         $contentTypeMock->expects($this->never())->method('getFieldDefinition');
         $contentHandlerMock->expects($this->never())->method('removeRelation');
@@ -482,13 +482,13 @@ class RelationProcessorTest extends BaseServiceMockTest
             ->method('addRelation')
             ->with(
                 new CreateStruct(
-                    array(
+                    [
                         'sourceContentId' => 24,
                         'sourceContentVersionNo' => 2,
                         'sourceFieldDefinitionId' => null,
                         'destinationContentId' => 17,
                         'type' => Relation::EMBED,
-                    )
+                    ]
                 )
             );
 
@@ -496,13 +496,13 @@ class RelationProcessorTest extends BaseServiceMockTest
             ->method('addRelation')
             ->with(
                 new CreateStruct(
-                    array(
+                    [
                         'sourceContentId' => 24,
                         'sourceContentVersionNo' => 2,
                         'sourceFieldDefinitionId' => null,
                         'destinationContentId' => 17,
                         'type' => Relation::LINK,
-                    )
+                    ]
                 )
             );
 
@@ -510,13 +510,13 @@ class RelationProcessorTest extends BaseServiceMockTest
             ->method('addRelation')
             ->with(
                 new CreateStruct(
-                    array(
+                    [
                         'sourceContentId' => 24,
                         'sourceContentVersionNo' => 2,
                         'sourceFieldDefinitionId' => 42,
                         'destinationContentId' => 13,
                         'type' => Relation::FIELD,
-                    )
+                    ]
                 )
             );
 
@@ -524,13 +524,13 @@ class RelationProcessorTest extends BaseServiceMockTest
             ->method('addRelation')
             ->with(
                 new CreateStruct(
-                    array(
+                    [
                         'sourceContentId' => 24,
                         'sourceContentVersionNo' => 2,
                         'sourceFieldDefinitionId' => 44,
                         'destinationContentId' => 18,
                         'type' => Relation::ASSET,
-                    )
+                    ]
                 )
             );
 
@@ -554,7 +554,7 @@ class RelationProcessorTest extends BaseServiceMockTest
         $contentHandlerMock = $this->getPersistenceMockHandler('Content\\Handler');
         $contentTypeMock = $this->getMockForAbstractClass(ContentType::class);
 
-        $existingRelations = array(
+        $existingRelations = [
             $this->getStubbedRelation(1, Relation::COMMON, null, 10),
             $this->getStubbedRelation(2, Relation::EMBED, null, 11),
             $this->getStubbedRelation(3, Relation::LINK, null, 12),
@@ -585,23 +585,23 @@ class RelationProcessorTest extends BaseServiceMockTest
                 17
             ),
             $this->getStubbedRelation(9, Relation::FIELD, 44, 18),
-        );
-        $inputRelations = array(
-            Relation::EMBED => array_flip(array(11, 14, 17)),
-            Relation::LINK => array_flip(array(12, 15, 17)),
-        );
+        ];
+        $inputRelations = [
+            Relation::EMBED => array_flip([11, 14, 17]),
+            Relation::LINK => array_flip([12, 15, 17]),
+        ];
 
         $contentHandlerMock->expects($this->never())->method('addRelation');
 
         $contentTypeMock->expects($this->at(0))
             ->method('getFieldDefinition')
             ->with($this->equalTo('identifier42'))
-            ->will($this->returnValue(new FieldDefinition(array('id' => 42))));
+            ->will($this->returnValue(new FieldDefinition(['id' => 42])));
 
         $contentTypeMock->expects($this->at(1))
             ->method('getFieldDefinition')
             ->with($this->equalTo('identifier44'))
-            ->will($this->returnValue(new FieldDefinition(array('id' => 44))));
+            ->will($this->returnValue(new FieldDefinition(['id' => 44])));
 
         $contentHandlerMock->expects($this->at(0))
             ->method('removeRelation')
@@ -672,14 +672,14 @@ class RelationProcessorTest extends BaseServiceMockTest
     protected function getStubbedRelation($id, $type, $fieldDefinitionId, $contentId)
     {
         return new \eZ\Publish\Core\Repository\Values\Content\Relation(
-            array(
+            [
                 'id' => $id,
                 'type' => $type,
-                'destinationContentInfo' => new ContentInfo(array('id' => $contentId)),
+                'destinationContentInfo' => new ContentInfo(['id' => $contentId]),
                 'sourceFieldDefinitionIdentifier' => $fieldDefinitionId ?
                     'identifier' . $fieldDefinitionId :
                     null,
-            )
+            ]
         );
     }
 
@@ -697,9 +697,9 @@ class RelationProcessorTest extends BaseServiceMockTest
         return $this->getMockBuilder(RelationProcessor::class)
             ->setMethods($methods)
             ->setConstructorArgs(
-                array(
+                [
                     $this->getPersistenceMock(),
-                )
+                ]
             )
             ->getMock();
     }

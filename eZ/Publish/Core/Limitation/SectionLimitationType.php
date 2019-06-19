@@ -64,7 +64,7 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $id) {
             try {
                 $this->persistence->sectionHandler()->load($id);
@@ -72,10 +72,10 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
-                    array(
+                    [
                         'value' => $id,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -92,7 +92,7 @@ class SectionLimitationType extends AbstractPersistenceLimitationType implements
      */
     public function buildValue(array $limitationValues)
     {
-        return new APISectionLimitation(array('limitationValues' => $limitationValues));
+        return new APISectionLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

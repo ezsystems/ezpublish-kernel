@@ -68,16 +68,16 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $value) {
             if ($value !== 1) {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' must be 1 (owner)",
                     null,
-                    array(
+                    [
                         'value' => $value,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -94,7 +94,7 @@ class ParentUserGroupLimitationType extends AbstractPersistenceLimitationType im
      */
     public function buildValue(array $limitationValues)
     {
-        return new APIParentUserGroupLimitation(array('limitationValues' => $limitationValues));
+        return new APIParentUserGroupLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

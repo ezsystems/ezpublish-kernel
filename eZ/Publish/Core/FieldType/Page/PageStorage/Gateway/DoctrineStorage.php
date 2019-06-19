@@ -132,10 +132,10 @@ class DoctrineStorage extends Gateway
         }
 
         return $this->buildBlockItem(
-            $rows[0] + array(
+            $rows[0] + [
                 'block_id' => $block->id,
                 'ts_hidden' => 0,
-            )
+            ]
         );
     }
 
@@ -179,11 +179,11 @@ class DoctrineStorage extends Gateway
         $items = [];
         foreach ($rows as $row) {
             $items[] = $this->buildBlockItem(
-                $row + array(
+                $row + [
                     'block_id' => $block->id,
                     'ts_visible' => 0,
                     'ts_hidden' => 0,
-                )
+                ]
             );
         }
 

@@ -45,12 +45,12 @@ class ParentDepthLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentDepthLimitation(
-                array('limitationValues' => array(3))
+                ['limitationValues' => [3]]
             )
         );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array('limitationValues' => array($contentTypeId))
+                ['limitationValues' => [$contentTypeId]]
             )
         );
 
@@ -90,12 +90,12 @@ class ParentDepthLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentDepthLimitation(
-                array('limitationValues' => array(1, 2, 3, 4))
+                ['limitationValues' => [1, 2, 3, 4]]
             )
         );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array('limitationValues' => array($contentTypeId))
+                ['limitationValues' => [$contentTypeId]]
             )
         );
 
@@ -132,12 +132,12 @@ class ParentDepthLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentDepthLimitation(
-                array('limitationValues' => array(1, 2, 3, 4))
+                ['limitationValues' => [1, 2, 3, 4]]
             )
         );
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array('limitationValues' => array($contentTypeId))
+                ['limitationValues' => [$contentTypeId]]
             )
         );
 

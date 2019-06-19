@@ -37,7 +37,7 @@ class ParentLocationId extends Criterion
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::IN,
                 Specifications::FORMAT_ARRAY,
@@ -48,7 +48,7 @@ class ParentLocationId extends Criterion
                 Specifications::FORMAT_SINGLE,
                 Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
             ),
-        );
+        ];
     }
 
     /**

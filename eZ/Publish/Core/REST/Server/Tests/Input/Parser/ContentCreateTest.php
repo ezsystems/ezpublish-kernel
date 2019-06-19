@@ -26,33 +26,33 @@ class ContentCreateTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
+            ],
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array(),
-                    ),
-                    array(
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $result = $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -133,32 +133,32 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingLocationCreate()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
+            ],
             'mainLanguageCode' => 'eng-US',
-            'Section' => array(
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array(),
-                    ),
-                    array(
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -172,30 +172,30 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingContentType()
     {
-        $inputArray = array(
+        $inputArray = [
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array(),
-                    ),
-                    array(
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -209,31 +209,31 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidContentType()
     {
-        $inputArray = array(
-            'ContentType' => array(),
+        $inputArray = [
+            'ContentType' => [],
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array(),
-                    ),
-                    array(
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -247,32 +247,32 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingMainLanguageCode()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
-            'LocationCreate' => array(),
-            'Section' => array(
+            ],
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array(),
-                    ),
-                    array(
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -286,31 +286,31 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidSection()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
+            ],
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(),
+            'LocationCreate' => [],
+            'Section' => [],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array(),
-                    ),
-                    array(
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -324,31 +324,31 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidUser()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
+            ],
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(),
-            'fields' => array(
-                'field' => array(
-                    array(
+            'User' => [],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'subject',
-                        'fieldValue' => array(),
-                    ),
-                    array(
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -362,21 +362,21 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidFields()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
+            ],
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-        );
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -390,32 +390,32 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingFieldDefinitionIdentifier()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
+            ],
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
-                        'fieldValue' => array(),
-                    ),
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -429,33 +429,33 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidFieldDefinitionIdentifier()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
+            ],
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'unknown',
-                        'fieldValue' => array(),
-                    ),
-                    array(
+                        'fieldValue' => [],
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -469,32 +469,32 @@ class ContentCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingFieldValue()
     {
-        $inputArray = array(
-            'ContentType' => array(
+        $inputArray = [
+            'ContentType' => [
                 '_href' => '/content/types/13',
-            ),
+            ],
             'mainLanguageCode' => 'eng-US',
-            'LocationCreate' => array(),
-            'Section' => array(
+            'LocationCreate' => [],
+            'Section' => [
                 '_href' => '/content/sections/4',
-            ),
+            ],
             'alwaysAvailable' => 'true',
             'remoteId' => 'remoteId12345678',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
-            'fields' => array(
-                'field' => array(
-                    array(
+            ],
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'subject',
-                    ),
-                    array(
+                    ],
+                    [
                         'fieldDefinitionIdentifier' => 'author',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
-        );
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
+        ];
 
         $contentCreate = $this->getParser();
         $contentCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -525,19 +525,19 @@ class ContentCreateTest extends BaseTest
     {
         $fieldTypeParserMock = $this->getMockBuilder(FieldTypeParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->setConstructorArgs(
-                array(
+                [
                     $this->getContentServiceMock(),
                     $this->getContentTypeServiceMock(),
                     $this->createMock(FieldTypeService::class),
-                )
+                ]
             )
             ->getMock();
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseValue')
-            ->with('ezstring', array())
+            ->with('ezstring', [])
             ->will($this->returnValue('foo'));
 
         return $fieldTypeParserMock;
@@ -554,7 +554,7 @@ class ContentCreateTest extends BaseTest
 
         $locationCreateParserMock->expects($this->any())
             ->method('parse')
-            ->with(array(), $this->getParsingDispatcherMock())
+            ->with([], $this->getParsingDispatcherMock())
             ->will($this->returnValue(new LocationCreateStruct()));
 
         return $locationCreateParserMock;
@@ -579,10 +579,10 @@ class ContentCreateTest extends BaseTest
             ->will(
                 $this->returnValue(
                     new ContentCreateStruct(
-                        array(
+                        [
                             'contentType' => $contentType,
                             'mainLanguageCode' => 'eng-US',
-                        )
+                        ]
                     )
                 )
             );
@@ -609,11 +609,11 @@ class ContentCreateTest extends BaseTest
 
     public function getParseHrefExpectationsMap()
     {
-        return array(
-            array('/content/types/13', 'contentTypeId', 13),
-            array('/content/sections/4', 'sectionId', 4),
-            array('/user/users/14', 'userId', 14),
-        );
+        return [
+            ['/content/types/13', 'contentTypeId', 13],
+            ['/content/sections/4', 'sectionId', 4],
+            ['/user/users/14', 'userId', 14],
+        ];
     }
 
     /**
@@ -624,26 +624,26 @@ class ContentCreateTest extends BaseTest
     protected function getContentType()
     {
         return new ContentType(
-            array(
+            [
                 'id' => 13,
                 'identifier' => 'some_class',
-                'fieldDefinitions' => array(
+                'fieldDefinitions' => [
                     new FieldDefinition(
-                        array(
+                        [
                             'id' => 42,
                             'identifier' => 'subject',
                             'fieldTypeIdentifier' => 'ezstring',
-                        )
+                        ]
                     ),
                     new FieldDefinition(
-                        array(
+                        [
                             'id' => 43,
                             'identifier' => 'author',
                             'fieldTypeIdentifier' => 'ezstring',
-                        )
+                        ]
                     ),
-                ),
-            )
+                ],
+            ]
         );
     }
 }

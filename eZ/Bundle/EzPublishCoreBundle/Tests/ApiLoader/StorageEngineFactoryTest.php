@@ -22,11 +22,11 @@ class StorageEngineFactoryTest extends TestCase
         $repositoryConfigurationProvider = $this->createMock(RepositoryConfigurationProvider::class);
         $factory = new StorageEngineFactory($repositoryConfigurationProvider);
 
-        $storageEngines = array(
+        $storageEngines = [
             'foo' => $this->getPersistenceHandlerMock(),
             'bar' => $this->getPersistenceHandlerMock(),
             'baz' => $this->getPersistenceHandlerMock(),
-        );
+        ];
 
         foreach ($storageEngines as $identifier => $persistenceHandler) {
             $factory->registerStorageEngine($persistenceHandler, $identifier);
@@ -39,24 +39,24 @@ class StorageEngineFactoryTest extends TestCase
     {
         $configResolver = $this->getConfigResolverMock();
         $repositoryAlias = 'main';
-        $repositories = array(
-            $repositoryAlias => array(
-                'storage' => array(
+        $repositories = [
+            $repositoryAlias => [
+                'storage' => [
                     'engine' => 'foo',
-                ),
-            ),
-            'another' => array(
-                'storage' => array(
+                ],
+            ],
+            'another' => [
+                'storage' => [
                     'engine' => 'bar',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $expectedStorageEngine = $this->getPersistenceHandlerMock();
-        $storageEngines = array(
+        $storageEngines = [
             'foo' => $expectedStorageEngine,
             'bar' => $this->getPersistenceHandlerMock(),
             'baz' => $this->getPersistenceHandlerMock(),
-        );
+        ];
         $repositoryConfigurationProvider = new RepositoryConfigurationProvider($configResolver, $repositories);
         $factory = new StorageEngineFactory($repositoryConfigurationProvider);
         foreach ($storageEngines as $identifier => $persistenceHandler) {
@@ -79,24 +79,24 @@ class StorageEngineFactoryTest extends TestCase
     {
         $configResolver = $this->getConfigResolverMock();
         $repositoryAlias = 'main';
-        $repositories = array(
-            $repositoryAlias => array(
-                'storage' => array(
+        $repositories = [
+            $repositoryAlias => [
+                'storage' => [
                     'engine' => 'undefined_storage_engine',
-                ),
-            ),
-            'another' => array(
-                'storage' => array(
+                ],
+            ],
+            'another' => [
+                'storage' => [
                     'engine' => 'bar',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $storageEngines = array(
+        $storageEngines = [
             'foo' => $this->getPersistenceHandlerMock(),
             'bar' => $this->getPersistenceHandlerMock(),
             'baz' => $this->getPersistenceHandlerMock(),
-        );
+        ];
 
         $repositoryConfigurationProvider = new RepositoryConfigurationProvider($configResolver, $repositories);
         $factory = new StorageEngineFactory($repositoryConfigurationProvider);

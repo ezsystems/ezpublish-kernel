@@ -17,12 +17,12 @@ use Imagine\Exception\InvalidArgumentException;
  */
 class ScaleExactFilterLoader extends FilterLoaderWrapped
 {
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         if (count($options) < 2) {
             throw new InvalidArgumentException('Missing width and/or height options');
         }
 
-        return $this->innerLoader->load($image, array('size' => $options));
+        return $this->innerLoader->load($image, ['size' => $options]);
     }
 }

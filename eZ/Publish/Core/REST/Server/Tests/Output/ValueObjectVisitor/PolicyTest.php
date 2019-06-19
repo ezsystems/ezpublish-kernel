@@ -27,23 +27,23 @@ class PolicyTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $contentTypeLimitation = new \eZ\Publish\API\Repository\Values\User\Limitation\ContentTypeLimitation();
-        $contentTypeLimitation->limitationValues = array(1, 2, 3);
+        $contentTypeLimitation->limitationValues = [1, 2, 3];
 
         $policy = new User\Policy(
-            array(
+            [
                 'id' => 42,
                 'roleId' => '84',
                 'module' => 'content',
                 'function' => 'delete',
-                'limitations' => array(
+                'limitations' => [
                     'Class' => $contentTypeLimitation,
-                ),
-            )
+                ],
+            ]
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadPolicy',
-            array('roleId' => $policy->roleId, 'policyId' => $policy->id),
+            ['roleId' => $policy->roleId, 'policyId' => $policy->id],
             "/user/roles/{$policy->roleId}/policies/{$policy->id}"
         );
 
@@ -70,13 +70,13 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     public function testResultContainsPolicyElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Policy',
-                'children' => array(
+                'children' => [
                     'less_than' => 5,
                     'greater_than' => 2,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Policy> element.',
             false
@@ -93,13 +93,13 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     public function testResultContainsPolicyAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Policy',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Policy+xml',
                     'href' => '/user/roles/84/policies/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Policy> attributes.',
             false
@@ -116,10 +116,10 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIdValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'id',
                 'content' => '42',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Policy> id value element.',
             false
@@ -136,10 +136,10 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     public function testResultContainsModuleValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'module',
                 'content' => 'content',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Policy> module value element.',
             false
@@ -156,10 +156,10 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     public function testResultContainsFunctionValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'function',
                 'content' => 'delete',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Policy> function value element.',
             false
@@ -176,9 +176,9 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     public function testResultContainsLimitationsElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'limitations',
-            ),
+            ],
             $result,
             'Invalid <limitations> element.',
             false
@@ -195,9 +195,9 @@ class PolicyTest extends ValueObjectVisitorBaseTest
     public function testResultContainsLimitationsAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'limitations',
-            ),
+            ],
             $result,
             'Invalid <limitations> attributes.',
             false

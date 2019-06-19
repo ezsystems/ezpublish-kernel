@@ -45,11 +45,11 @@ class ScaleFilterLoaderTest extends TestCase
 
     public function loadInvalidProvider()
     {
-        return array(
-            array(array()),
-            array(array(123)),
-            array(array('foo' => 'bar')),
-        );
+        return [
+            [[]],
+            [[123]],
+            [['foo' => 'bar']],
+        ];
     }
 
     public function testLoadHeighten()
@@ -69,10 +69,10 @@ class ScaleFilterLoaderTest extends TestCase
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, $this->equalTo(array('heighten' => $height)))
+            ->with($image, $this->equalTo(['heighten' => $height]))
             ->will($this->returnValue($image));
 
-        $this->assertSame($image, $this->loader->load($image, array($width, $height)));
+        $this->assertSame($image, $this->loader->load($image, [$width, $height]));
     }
 
     public function testLoadWiden()
@@ -92,9 +92,9 @@ class ScaleFilterLoaderTest extends TestCase
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, $this->equalTo(array('widen' => $width)))
+            ->with($image, $this->equalTo(['widen' => $width]))
             ->will($this->returnValue($image));
 
-        $this->assertSame($image, $this->loader->load($image, array($width, $height)));
+        $this->assertSame($image, $this->loader->load($image, [$width, $height]));
     }
 }

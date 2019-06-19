@@ -40,31 +40,31 @@ class ViewTest extends TestCase
 
     public function matchBlockProvider()
     {
-        $data = array();
+        $data = [];
 
-        $data[] = array(
+        $data[] = [
             'foo',
             $this->generateBlockForView('foo'),
             true,
-        );
+        ];
 
-        $data[] = array(
+        $data[] = [
             'foo',
             $this->generateBlockForView('bar'),
             false,
-        );
+        ];
 
-        $data[] = array(
-            array('foo', 'baz'),
+        $data[] = [
+            ['foo', 'baz'],
             $this->generateBlockForView('bar'),
             false,
-        );
+        ];
 
-        $data[] = array(
-            array('foo', 'baz'),
+        $data[] = [
+            ['foo', 'baz'],
             $this->generateBlockForView('baz'),
             true,
-        );
+        ];
 
         return $data;
     }
@@ -77,7 +77,7 @@ class ViewTest extends TestCase
     private function generateBlockForView($view)
     {
         return new Block(
-            array('view' => $view)
+            ['view' => $view]
         );
     }
 }

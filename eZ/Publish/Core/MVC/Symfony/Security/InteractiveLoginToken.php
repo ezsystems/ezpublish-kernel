@@ -21,7 +21,7 @@ class InteractiveLoginToken extends UsernamePasswordToken
      */
     private $originalTokenType;
 
-    public function __construct(UserInterface $user, $originalTokenType, $credentials, $providerKey, array $roles = array())
+    public function __construct(UserInterface $user, $originalTokenType, $credentials, $providerKey, array $roles = [])
     {
         parent::__construct($user, $credentials, $providerKey, $roles);
         $this->originalTokenType = $originalTokenType;
@@ -37,7 +37,7 @@ class InteractiveLoginToken extends UsernamePasswordToken
 
     public function serialize()
     {
-        return serialize(array($this->originalTokenType, parent::serialize()));
+        return serialize([$this->originalTokenType, parent::serialize()]);
     }
 
     public function unserialize($serialized)

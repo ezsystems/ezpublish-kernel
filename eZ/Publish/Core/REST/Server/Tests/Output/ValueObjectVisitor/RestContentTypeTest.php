@@ -38,27 +38,27 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentType',
-            array('contentTypeId' => $restContentType->contentType->id),
+            ['contentTypeId' => $restContentType->contentType->id],
             "/content/types/{$restContentType->contentType->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $restContentType->contentType->creatorId),
+            ['userId' => $restContentType->contentType->creatorId],
             "/user/users/{$restContentType->contentType->creatorId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $restContentType->contentType->modifierId),
+            ['userId' => $restContentType->contentType->modifierId],
             "/user/users/{$restContentType->contentType->modifierId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadGroupsOfContentType',
-            array('contentTypeId' => $restContentType->contentType->id),
+            ['contentTypeId' => $restContentType->contentType->id],
             "/content/types/{$restContentType->contentType->id}/groups"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentTypeDraft',
-            array('contentTypeId' => $restContentType->contentType->id),
+            ['contentTypeId' => $restContentType->contentType->id],
             "/content/types/{$restContentType->contentType->id}/draft"
         );
 
@@ -82,7 +82,7 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
     {
         return new RestContentType(
             new Values\ContentType\ContentType(
-                array(
+                [
                     'id' => 'contentTypeId',
                     'status' => Values\ContentType\ContentType::STATUS_DEFINED,
                     'identifier' => 'contentTypeIdentifier',
@@ -99,14 +99,14 @@ class RestContentTypeTest extends ValueObjectVisitorBaseTest
                     'defaultSortField' => Values\Content\Location::SORT_FIELD_SECTION,
                     'defaultSortOrder' => Values\Content\Location::SORT_ORDER_DESC,
 
-                    'names' => array('eng-US' => 'Sindelfingen', 'eng-GB' => 'Bielefeld'),
-                    'descriptions' => array('eng-GB' => 'Sindelfingen', 'eng-US' => 'Bielefeld'),
+                    'names' => ['eng-US' => 'Sindelfingen', 'eng-GB' => 'Bielefeld'],
+                    'descriptions' => ['eng-GB' => 'Sindelfingen', 'eng-US' => 'Bielefeld'],
 
                     // "Mock"
-                    'fieldDefinitions' => array(),
-                )
+                    'fieldDefinitions' => [],
+                ]
             ),
-            array()
+            []
         );
     }
 

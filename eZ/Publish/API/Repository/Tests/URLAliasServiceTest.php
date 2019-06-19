@@ -91,7 +91,7 @@ class URLAliasServiceTest extends BaseTest
             $createdUrlAlias
         );
 
-        return array($createdUrlAlias, $location->id);
+        return [$createdUrlAlias, $location->id];
     }
 
     /**
@@ -106,16 +106,16 @@ class URLAliasServiceTest extends BaseTest
         $this->assertNotNull($createdUrlAlias->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'type' => URLAlias::LOCATION,
                 'destination' => $locationId,
                 'path' => '/Home/My-New-Site',
-                'languageCodes' => array('eng-US'),
+                'languageCodes' => ['eng-US'],
                 'alwaysAvailable' => false,
                 'isHistory' => false,
                 'isCustom' => true,
                 'forward' => false,
-            ),
+            ],
             $createdUrlAlias
         );
     }
@@ -148,7 +148,7 @@ class URLAliasServiceTest extends BaseTest
             $createdUrlAlias
         );
 
-        return array($createdUrlAlias, $location->id);
+        return [$createdUrlAlias, $location->id];
     }
 
     /**
@@ -163,16 +163,16 @@ class URLAliasServiceTest extends BaseTest
         $this->assertNotNull($createdUrlAlias->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'type' => URLAlias::LOCATION,
                 'destination' => $locationId,
                 'path' => '/Home/My-New-Site',
-                'languageCodes' => array('eng-US'),
+                'languageCodes' => ['eng-US'],
                 'alwaysAvailable' => false,
                 'isHistory' => false,
                 'isCustom' => true,
                 'forward' => true,
-            ),
+            ],
             $createdUrlAlias
         );
     }
@@ -204,7 +204,7 @@ class URLAliasServiceTest extends BaseTest
             $createdUrlAlias
         );
 
-        return array($createdUrlAlias, $location->id);
+        return [$createdUrlAlias, $location->id];
     }
 
     /**
@@ -219,16 +219,16 @@ class URLAliasServiceTest extends BaseTest
         $this->assertNotNull($createdUrlAlias->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'type' => URLAlias::LOCATION,
                 'destination' => $locationId,
                 'path' => '/Home/My-New-Site',
-                'languageCodes' => array('eng-US'),
+                'languageCodes' => ['eng-US'],
                 'alwaysAvailable' => true,
                 'isHistory' => false,
                 'isCustom' => true,
                 'forward' => false,
-            ),
+            ],
             $createdUrlAlias
         );
     }
@@ -296,16 +296,16 @@ class URLAliasServiceTest extends BaseTest
         $this->assertNotNull($createdUrlAlias->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'type' => URLAlias::RESOURCE,
                 'destination' => 'content/search?SearchText=eZ',
                 'path' => '/Home/My-New-Site',
-                'languageCodes' => array('eng-US'),
+                'languageCodes' => ['eng-US'],
                 'alwaysAvailable' => false,
                 'isHistory' => false,
                 'isCustom' => true,
                 'forward' => false,
-            ),
+            ],
             $createdUrlAlias
         );
     }
@@ -348,16 +348,16 @@ class URLAliasServiceTest extends BaseTest
         $this->assertNotNull($createdUrlAlias->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'type' => URLAlias::RESOURCE,
                 'destination' => 'content/search?SearchText=eZ',
                 'path' => '/Home/My-New-Site',
-                'languageCodes' => array('eng-US'),
+                'languageCodes' => ['eng-US'],
                 'alwaysAvailable' => false,
                 'isHistory' => false,
                 'isCustom' => true,
                 'forward' => true,
-            ),
+            ],
             $createdUrlAlias
         );
     }
@@ -401,16 +401,16 @@ class URLAliasServiceTest extends BaseTest
         $this->assertNotNull($createdUrlAlias->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'type' => URLAlias::RESOURCE,
                 'destination' => 'content/search?SearchText=eZ',
                 'path' => '/Home/My-New-Site',
-                'languageCodes' => array('eng-US'),
+                'languageCodes' => ['eng-US'],
                 'alwaysAvailable' => true,
                 'isHistory' => false,
                 'isCustom' => true,
                 'forward' => false,
-            ),
+            ],
             $createdUrlAlias
         );
     }
@@ -447,7 +447,7 @@ class URLAliasServiceTest extends BaseTest
             $createdUrlAlias
         );
 
-        return array($createdUrlAlias, $location->id);
+        return [$createdUrlAlias, $location->id];
     }
 
     /**
@@ -482,7 +482,7 @@ class URLAliasServiceTest extends BaseTest
             $createdUrlAlias
         );
 
-        return array($createdUrlAlias, $location->id);
+        return [$createdUrlAlias, $location->id];
     }
 
     /**
@@ -497,16 +497,16 @@ class URLAliasServiceTest extends BaseTest
         $this->assertNotNull($createdUrlAlias->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'type' => URLAlias::LOCATION,
                 'destination' => $locationId,
                 'path' => '/Home/My-New-Site-global',
-                'languageCodes' => array('eng-US'),
+                'languageCodes' => ['eng-US'],
                 'alwaysAvailable' => true,
                 'isHistory' => false,
                 'isCustom' => true,
                 'forward' => false,
-            ),
+            ],
             $createdUrlAlias
         );
     }
@@ -577,7 +577,7 @@ class URLAliasServiceTest extends BaseTest
         // Only 1 non-history alias
         $this->assertEquals(1, count($loadedAliases));
 
-        return array($loadedAliases, $location);
+        return [$loadedAliases, $location];
     }
 
     /**

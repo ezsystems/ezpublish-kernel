@@ -21,7 +21,7 @@ class FieldTypeMockTest extends TestCase
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
-            array(),
+            [],
             '',
             false
         );
@@ -41,12 +41,12 @@ class FieldTypeMockTest extends TestCase
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('getSettingsSchema')
+            ['getSettingsSchema']
         );
 
         $stub
@@ -54,36 +54,36 @@ class FieldTypeMockTest extends TestCase
             ->method('getSettingsSchema')
             ->will(
                 $this->returnValue(
-                    array(
-                        'true' => array(
+                    [
+                        'true' => [
                             'default' => true,
-                        ),
-                        'false' => array(
+                        ],
+                        'false' => [
                             'default' => false,
-                        ),
-                        'null' => array(
+                        ],
+                        'null' => [
                             'default' => null,
-                        ),
-                        'zero' => array(
+                        ],
+                        'zero' => [
                             'default' => 0,
-                        ),
-                        'int' => array(
+                        ],
+                        'int' => [
                             'default' => 42,
-                        ),
-                        'float' => array(
+                        ],
+                        'float' => [
                             'default' => 42.42,
-                        ),
-                        'string' => array(
+                        ],
+                        'string' => [
                             'default' => 'string',
-                        ),
-                        'emptystring' => array(
+                        ],
+                        'emptystring' => [
                             'default' => '',
-                        ),
-                        'emptyarray' => array(
-                            'default' => array(),
-                        ),
-                        'nodefault' => array(),
-                    )
+                        ],
+                        'emptyarray' => [
+                            'default' => [],
+                        ],
+                        'nodefault' => [],
+                    ]
                 )
             );
 
@@ -97,10 +97,10 @@ class FieldTypeMockTest extends TestCase
 
     public function providerForTestApplyDefaultSettings()
     {
-        return array(
-            array(
-                array(),
-                array(
+        return [
+            [
+                [],
+                [
                     'true' => true,
                     'false' => false,
                     'null' => null,
@@ -109,14 +109,14 @@ class FieldTypeMockTest extends TestCase
                     'float' => 42.42,
                     'string' => 'string',
                     'emptystring' => '',
-                    'emptyarray' => array(),
-                ),
-            ),
-            array(
-                array(
+                    'emptyarray' => [],
+                ],
+            ],
+            [
+                [
                     'true' => 'foo',
-                ),
-                array(
+                ],
+                [
                     'true' => 'foo',
                     'false' => false,
                     'null' => null,
@@ -125,14 +125,14 @@ class FieldTypeMockTest extends TestCase
                     'float' => 42.42,
                     'string' => 'string',
                     'emptystring' => '',
-                    'emptyarray' => array(),
-                ),
-            ),
-            array(
-                array(
+                    'emptyarray' => [],
+                ],
+            ],
+            [
+                [
                     'null' => 'foo',
-                ),
-                array(
+                ],
+                [
                     'null' => 'foo',
                     'true' => true,
                     'false' => false,
@@ -141,25 +141,25 @@ class FieldTypeMockTest extends TestCase
                     'float' => 42.42,
                     'string' => 'string',
                     'emptystring' => '',
-                    'emptyarray' => array(),
-                ),
-            ),
-            array(
-                $array = array(
+                    'emptyarray' => [],
+                ],
+            ],
+            [
+                $array = [
                     'false' => true,
-                    'emptystring' => array('foo'),
+                    'emptystring' => ['foo'],
                     'null' => 'notNull',
                     'additionalEntry' => 'baz',
                     'zero' => 10,
                     'int' => 'this is not an int',
                     'string' => null,
-                    'emptyarray' => array(array()),
+                    'emptyarray' => [[]],
                     'true' => false,
                     'float' => true,
-                ),
+                ],
                 $array,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -170,7 +170,7 @@ class FieldTypeMockTest extends TestCase
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
-            array(),
+            [],
             '',
             false
         );
@@ -185,19 +185,19 @@ class FieldTypeMockTest extends TestCase
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('getValidatorConfigurationSchema')
+            ['getValidatorConfigurationSchema']
         );
 
         $stub
             ->expects($this->any())
             ->method('getValidatorConfigurationSchema')
             ->will(
-                $this->returnValue(array())
+                $this->returnValue([])
             );
 
         $validatorConfiguration = null;
@@ -215,12 +215,12 @@ class FieldTypeMockTest extends TestCase
         /** @var \eZ\Publish\Core\FieldType\FieldType|\PHPUnit\Framework\MockObject\MockObject $stub */
         $stub = $this->getMockForAbstractClass(
             FieldType::class,
-            array(),
+            [],
             '',
             false,
             true,
             true,
-            array('getValidatorConfigurationSchema')
+            ['getValidatorConfigurationSchema']
         );
 
         $stub
@@ -228,16 +228,16 @@ class FieldTypeMockTest extends TestCase
             ->method('getValidatorConfigurationSchema')
             ->will(
                 $this->returnValue(
-                    array(
-                        'TestValidator' => array(
-                            'valueClick' => array(
+                    [
+                        'TestValidator' => [
+                            'valueClick' => [
                                 'default' => 1,
-                            ),
-                            'valueClack' => array(
+                            ],
+                            'valueClack' => [
                                 'default' => 0,
-                            ),
-                        ),
-                    )
+                            ],
+                        ],
+                    ]
                 )
             );
 
@@ -251,35 +251,35 @@ class FieldTypeMockTest extends TestCase
 
     public function providerForTestApplyDefaultValidatorConfiguration()
     {
-        $defaultConfiguration = array(
-            'TestValidator' => array(
+        $defaultConfiguration = [
+            'TestValidator' => [
                 'valueClick' => 1,
                 'valueClack' => 0,
-            ),
-        );
+            ],
+        ];
 
-        return array(
-            array(
+        return [
+            [
                 null,
                 $defaultConfiguration,
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 $defaultConfiguration,
-            ),
-            array(
-                array(
-                    'TestValidator' => array(
+            ],
+            [
+                [
+                    'TestValidator' => [
                         'valueClick' => 100,
-                    ),
-                ),
-                array(
-                    'TestValidator' => array(
+                    ],
+                ],
+                [
+                    'TestValidator' => [
                         'valueClick' => 100,
                         'valueClack' => 0,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 }

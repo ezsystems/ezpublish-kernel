@@ -69,16 +69,16 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $value) {
             if ($value !== 1) {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' must be 1 (owner)",
                     null,
-                    array(
+                    [
                         'value' => $value,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -95,7 +95,7 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
      */
     public function buildValue(array $limitationValues)
     {
-        return new APIUserGroupLimitation(array('limitationValues' => $limitationValues));
+        return new APIUserGroupLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**
@@ -192,7 +192,7 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
             );
         }
 
-        $groupIds = array();
+        $groupIds = [];
         $currentUserLocations = $this->persistence->locationHandler()->loadLocationsByContent($currentUser->getUserId());
         if (!empty($currentUserLocations)) {
             foreach ($currentUserLocations as $currentUserLocation) {

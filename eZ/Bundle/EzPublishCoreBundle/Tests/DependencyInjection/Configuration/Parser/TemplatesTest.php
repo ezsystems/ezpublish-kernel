@@ -19,11 +19,11 @@ class TemplatesTest extends AbstractParserTestCase
 
     protected function getContainerExtensions()
     {
-        return array(
+        return [
             new EzPublishCoreExtension(
-                array(new FieldTemplates(), new FieldDefinitionSettingsTemplates())
+                [new FieldTemplates(), new FieldDefinitionSettingsTemplates()]
             ),
-        );
+        ];
     }
 
     protected function getMinimalConfiguration()
@@ -41,7 +41,7 @@ class TemplatesTest extends AbstractParserTestCase
             'field_templates',
             array_merge(
                 // Adding default kernel value.
-                array(array('template' => '%ezplatform.default_templates.field_templates%', 'priority' => 0)),
+                [['template' => '%ezplatform.default_templates.field_templates%', 'priority' => 0]],
                 $groupFieldTemplates,
                 $demoSiteFieldTemplates
             ),
@@ -52,7 +52,7 @@ class TemplatesTest extends AbstractParserTestCase
             'field_templates',
             array_merge(
                 // Adding default kernel value.
-                array(array('template' => '%ezplatform.default_templates.field_templates%', 'priority' => 0)),
+                [['template' => '%ezplatform.default_templates.field_templates%', 'priority' => 0]],
                 $groupFieldTemplates
             ),
             'fre',
@@ -60,7 +60,7 @@ class TemplatesTest extends AbstractParserTestCase
         );
         $this->assertConfigResolverParameterValue(
             'field_templates',
-            array(array('template' => '%ezplatform.default_templates.field_templates%', 'priority' => 0)),
+            [['template' => '%ezplatform.default_templates.field_templates%', 'priority' => 0]],
             'ezdemo_site_admin',
             false
         );
@@ -95,7 +95,7 @@ class TemplatesTest extends AbstractParserTestCase
             'fielddefinition_settings_templates',
             array_merge(
                 // Adding default kernel value.
-                array(array('template' => '%ezplatform.default_templates.fielddefinition_settings_templates%', 'priority' => 0)),
+                [['template' => '%ezplatform.default_templates.fielddefinition_settings_templates%', 'priority' => 0]],
                 $groupFieldTemplates,
                 $demoSiteFieldTemplates
             ),
@@ -106,7 +106,7 @@ class TemplatesTest extends AbstractParserTestCase
             'fielddefinition_settings_templates',
             array_merge(
                 // Adding default kernel value.
-                array(array('template' => '%ezplatform.default_templates.fielddefinition_settings_templates%', 'priority' => 0)),
+                [['template' => '%ezplatform.default_templates.fielddefinition_settings_templates%', 'priority' => 0]],
                 $groupFieldTemplates
             ),
             'fre',
@@ -114,7 +114,7 @@ class TemplatesTest extends AbstractParserTestCase
         );
         $this->assertConfigResolverParameterValue(
             'fielddefinition_settings_templates',
-            array(array('template' => '%ezplatform.default_templates.fielddefinition_settings_templates%', 'priority' => 0)),
+            [['template' => '%ezplatform.default_templates.fielddefinition_settings_templates%', 'priority' => 0]],
             'ezdemo_site_admin',
             false
         );

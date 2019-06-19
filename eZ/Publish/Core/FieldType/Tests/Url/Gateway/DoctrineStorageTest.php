@@ -23,12 +23,12 @@ class DoctrineStorageTest extends TestCase
         $gateway = $this->getStorageGateway();
 
         $this->assertEquals(
-            array(
+            [
                 23 => '/content/view/sitemap/2',
                 24 => '/content/view/tagcloud/2',
-            ),
+            ],
             $gateway->getIdUrlMap(
-                array(23, 24, 'fake')
+                [23, 24, 'fake']
             )
         );
     }
@@ -40,16 +40,16 @@ class DoctrineStorageTest extends TestCase
         $gateway = $this->getStorageGateway();
 
         $this->assertEquals(
-            array(
+            [
                 '/content/view/sitemap/2' => 23,
                 '/content/view/tagcloud/2' => 24,
-            ),
+            ],
             $gateway->getUrlIdMap(
-                array(
+                [
                     '/content/view/sitemap/2',
                     '/content/view/tagcloud/2',
                     'fake',
-                )
+                ]
             )
         );
     }

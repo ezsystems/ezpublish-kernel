@@ -32,10 +32,10 @@ class DocbookToXhtml5OutputTest extends BaseTest
      */
     public function getFixtureSubdirectories()
     {
-        return array(
+        return [
             'input' => 'docbook',
             'output' => 'xhtml5/output',
-        );
+        ];
     }
 
     /**
@@ -72,16 +72,16 @@ class DocbookToXhtml5OutputTest extends BaseTest
      */
     protected function getCustomConversionTransformationStylesheets()
     {
-        return array(
-            array(
+        return [
+            [
                 'path' => __DIR__ . '/../../../../RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl',
                 'priority' => 100,
-            ),
-            array(
+            ],
+            [
                 'path' => __DIR__ . '/_fixtures/docbook/custom_stylesheets/youtube_xhtml5_output.xsl',
                 'priority' => 99,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -91,8 +91,8 @@ class DocbookToXhtml5OutputTest extends BaseTest
      */
     protected function getConversionValidationSchema()
     {
-        return array(
+        return [
             __DIR__ . '/_fixtures/xhtml5/output/custom_schemas/youtube.xsd',
-        );
+        ];
     }
 }

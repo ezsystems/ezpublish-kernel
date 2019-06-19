@@ -36,7 +36,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -46,7 +46,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,9 +56,9 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -68,7 +68,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -78,7 +78,7 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -88,9 +88,9 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -138,9 +138,9 @@ class RatingIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'isDisabled' => false,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -173,12 +173,12 @@ class RatingIntegrationTest extends BaseIntegrationTest
         $value = new RatingValue(true);
         $value->isDisabled = 'foo';
 
-        return array(
-            array(
+        return [
+            [
                 $value,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -205,9 +205,9 @@ class RatingIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'isDisabled' => true,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -255,9 +255,9 @@ class RatingIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'isDisabled' => false,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -286,12 +286,12 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new RatingValue(false),
                 0,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -303,12 +303,12 @@ class RatingIntegrationTest extends BaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 1,
                 new RatingValue(true),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -324,12 +324,12 @@ class RatingIntegrationTest extends BaseIntegrationTest
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(new RatingValue()),
-        );
+            ],
+            [new RatingValue()],
+        ];
     }
 
     /**

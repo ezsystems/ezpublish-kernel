@@ -70,7 +70,7 @@ class RequestEventListenerTest extends TestCase
 
         $this->request = $this
             ->getMockBuilder(Request::class)
-            ->setMethods(array('getSession', 'hasSession'))
+            ->setMethods(['getSession', 'hasSession'])
             ->getMock();
 
         $this->httpKernel = $this->createMock(HttpKernelInterface::class);
@@ -84,12 +84,12 @@ class RequestEventListenerTest extends TestCase
     public function testSubscribedEvents()
     {
         $this->assertSame(
-            array(
-                KernelEvents::REQUEST => array(
-                    array('onKernelRequestForward', 10),
-                    array('onKernelRequestRedirect', 0),
-                ),
-            ),
+            [
+                KernelEvents::REQUEST => [
+                    ['onKernelRequestForward', 10],
+                    ['onKernelRequestRedirect', 0],
+                ],
+            ],
             $this->requestEventListener->getSubscribedEvents()
         );
     }
@@ -106,8 +106,8 @@ class RequestEventListenerTest extends TestCase
 
     public function testOnKernelRequestForward()
     {
-        $queryParameters = array('some' => 'thing');
-        $cookieParameters = array('cookie' => 'value');
+        $queryParameters = ['some' => 'thing'];
+        $cookieParameters = ['cookie' => 'value'];
         $request = Request::create('/test_sa/foo/bar', 'GET', $queryParameters, $cookieParameters);
         $semanticPathinfo = '/foo/something';
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
@@ -140,8 +140,8 @@ class RequestEventListenerTest extends TestCase
 
     public function testOnKernelRequestRedirect()
     {
-        $queryParameters = array('some' => 'thing');
-        $cookieParameters = array('cookie' => 'value');
+        $queryParameters = ['some' => 'thing'];
+        $cookieParameters = ['cookie' => 'value'];
         $request = Request::create('/test_sa/foo/bar', 'GET', $queryParameters, $cookieParameters);
         $semanticPathinfo = '/foo/something';
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
@@ -161,8 +161,8 @@ class RequestEventListenerTest extends TestCase
 
     public function testOnKernelRequestRedirectWithLocationId()
     {
-        $queryParameters = array('some' => 'thing');
-        $cookieParameters = array('cookie' => 'value');
+        $queryParameters = ['some' => 'thing'];
+        $cookieParameters = ['cookie' => 'value'];
         $request = Request::create('/test_sa/foo/bar', 'GET', $queryParameters, $cookieParameters);
         $semanticPathinfo = '/foo/something';
         $request->attributes->set('semanticPathinfo', $semanticPathinfo);
@@ -184,8 +184,8 @@ class RequestEventListenerTest extends TestCase
 
     public function testOnKernelRequestRedirectPrependSiteaccess()
     {
-        $queryParameters = array('some' => 'thing');
-        $cookieParameters = array('cookie' => 'value');
+        $queryParameters = ['some' => 'thing'];
+        $cookieParameters = ['cookie' => 'value'];
         $siteaccessMatcher = $this->createMock(SiteAccess\URILexer::class);
         $siteaccess = new SiteAccess('test', 'foo', $siteaccessMatcher);
         $semanticPathinfo = '/foo/something';

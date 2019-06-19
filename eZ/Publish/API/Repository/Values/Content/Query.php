@@ -55,7 +55,7 @@ class Query extends ValueObject
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\SortClause[]
      */
-    public $sortClauses = array();
+    public $sortClauses = [];
 
     /**
      * An array of facet builders.
@@ -65,7 +65,7 @@ class Query extends ValueObject
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Query\FacetBuilder[]
      */
-    public $facetBuilders = array();
+    public $facetBuilders = [];
 
     /**
      * Query offset.

@@ -19,14 +19,14 @@ class InputHandlerPassTest extends TestCase
     public function testProcess()
     {
         $visitorDefinition = new Definition();
-        $visitorDefinition->addTag('ezpublish_rest.input.handler', array('format' => 'test'));
+        $visitorDefinition->addTag('ezpublish_rest.input.handler', ['format' => 'test']);
 
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions(
-            array(
+            [
                 'ezpublish_rest.input.dispatcher' => new Definition(),
                 'ezpublish_rest.input.handler.test' => $visitorDefinition,
-            )
+            ]
         );
 
         $compilerPass = new InputHandlerPass();

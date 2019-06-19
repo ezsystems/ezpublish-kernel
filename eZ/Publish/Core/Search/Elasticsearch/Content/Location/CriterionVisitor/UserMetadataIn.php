@@ -69,17 +69,17 @@ class UserMetadataIn extends CriterionVisitor
         }
 
         if (count($criterion->value) > 1) {
-            $filter = array(
-                'terms' => array(
+            $filter = [
+                'terms' => [
                     $fieldName => $criterion->value,
-                ),
-            );
+                ],
+            ];
         } else {
-            $filter = array(
-                'term' => array(
+            $filter = [
+                'term' => [
                     $fieldName => $criterion->value[0],
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;

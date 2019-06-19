@@ -55,9 +55,9 @@ class CsrfListenerTest extends EventListenerTest
 
     public function provideExpectedSubscribedEventTypes()
     {
-        return array(
-            array(array(KernelEvents::REQUEST)),
-        );
+        return [
+            [[KernelEvents::REQUEST]],
+        ];
     }
 
     public function testIsNotRestRequest()
@@ -111,11 +111,11 @@ class CsrfListenerTest extends EventListenerTest
 
     public function getIgnoredRequestMethods()
     {
-        return array(
-            array('GET'),
-            array('HEAD'),
-            array('OPTIONS'),
-        );
+        return [
+            ['GET'],
+            ['HEAD'],
+            ['OPTIONS'],
+        ];
     }
 
     /**

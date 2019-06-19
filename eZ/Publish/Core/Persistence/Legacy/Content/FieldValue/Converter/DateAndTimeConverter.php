@@ -62,10 +62,10 @@ class DateAndTimeConverter implements Converter
             return;
         }
 
-        $fieldValue->data = array(
+        $fieldValue->data = [
             'rfc850' => null,
             'timestamp' => $value->dataInt,
-        );
+        ];
         $fieldValue->sortKey = $value->sortKeyInt;
     }
 
@@ -99,21 +99,21 @@ class DateAndTimeConverter implements Converter
         $dateInterval = $this->getDateIntervalFromXML($storageDef->dataText5);
 
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'defaultType' => $storageDef->dataInt1,
                 'useSeconds' => $useSeconds,
                 'dateInterval' => $dateInterval,
-            )
+            ]
         );
 
         // Building default value
         switch ($fieldDef->fieldTypeConstraints->fieldSettings['defaultType']) {
             case DateAndTimeType::DEFAULT_CURRENT_DATE:
-                $data = array(
+                $data = [
                     'rfc850' => null,
                     'timestamp' => time(), // @deprecated timestamp is no longer used and will be removed in a future version.
                     'timestring' => 'now',
-                );
+                ];
                 break;
 
             case DateAndTimeType::DEFAULT_CURRENT_DATE_ADJUSTED:
@@ -122,11 +122,11 @@ class DateAndTimeConverter implements Converter
                 }
                 $date = new DateTime();
                 $date->add($dateInterval);
-                $data = array(
+                $data = [
                     'rfc850' => null,
                     'timestamp' => $date->getTimestamp(), // @deprecated timestamp is no longer used and will be removed in a future version.
                     'timestring' => $dateInterval->format('%y years, %m months, %d days, %h hours, %i minutes, %s seconds'),
-                );
+                ];
                 break;
 
             default:
@@ -212,14 +212,14 @@ class DateAndTimeConverter implements Converter
         }
 
         $xml = new SimpleXMLElement($xmlText);
-        $aIntervalString = array(
+        $aIntervalString = [
             (int)$xml->year['value'] . ' years',
             (int)$xml->month['value'] . ' months',
             (int)$xml->day['value'] . ' days',
             (int)$xml->hour['value'] . ' hours',
             (int)$xml->minute['value'] . ' minutes',
             (int)$xml->second['value'] . ' seconds',
-        );
+        ];
 
         return DateInterval::createFromDateString(implode(', ', $aIntervalString));
     }

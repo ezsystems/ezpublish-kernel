@@ -24,26 +24,26 @@ class DoctrineDatabaseTest extends TestCase
      */
     protected $gateway;
 
-    protected $fixtureData = array(
-        0 => array(
+    protected $fixtureData = [
+        0 => [
             'id' => '1',
             'source_url' => 'developer/*',
             'destination_url' => 'dev/{1}',
             'type' => '2',
-        ),
-        1 => array(
+        ],
+        1 => [
             'id' => '2',
             'source_url' => 'repository/*',
             'destination_url' => 'repo/{1}',
             'type' => '2',
-        ),
-        2 => array(
+        ],
+        2 => [
             'id' => '3',
             'source_url' => 'information/*',
             'destination_url' => 'info/{1}',
             'type' => '2',
-        ),
-    );
+        ],
+    ];
 
     /**
      * Test for the __construct() method.
@@ -111,10 +111,10 @@ class DoctrineDatabaseTest extends TestCase
         $row = $gateway->loadUrlWildcardsData(1);
 
         self::assertEquals(
-            array(
+            [
                 0 => $this->fixtureData[1],
                 1 => $this->fixtureData[2],
-            ),
+            ],
             $row
         );
     }
@@ -132,9 +132,9 @@ class DoctrineDatabaseTest extends TestCase
         $row = $gateway->loadUrlWildcardsData(1, 1);
 
         self::assertEquals(
-            array(
+            [
                 0 => $this->fixtureData[1],
-            ),
+            ],
             $row
         );
     }
@@ -152,21 +152,21 @@ class DoctrineDatabaseTest extends TestCase
 
         $id = $gateway->insertUrlWildcard(
             new UrlWildcard(
-                array(
+                [
                     'sourceUrl' => '/contact-information/*',
                     'destinationUrl' => '/contact/{1}',
                     'forward' => true,
-                )
+                ]
             )
         );
 
         self::assertEquals(
-            array(
+            [
                 'id' => $id,
                 'source_url' => 'contact-information/*',
                 'destination_url' => 'contact/{1}',
                 'type' => '1',
-            ),
+            ],
             $gateway->loadUrlWildcardData($id)
         );
     }

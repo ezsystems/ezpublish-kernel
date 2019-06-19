@@ -66,7 +66,7 @@ class ParentDepthLimitationType extends AbstractPersistenceLimitationType implem
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         return $validationErrors;
     }
@@ -80,7 +80,7 @@ class ParentDepthLimitationType extends AbstractPersistenceLimitationType implem
      */
     public function buildValue(array $limitationValues)
     {
-        return new APIParentDepthLimitation(array('limitationValues' => $limitationValues));
+        return new APIParentDepthLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

@@ -82,23 +82,23 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The eztext field type does not have any special field definition
             // properties
-            array('fieldType', 'eztext'),
-            array(
+            ['fieldType', 'eztext'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldType\FieldSettings(
-                            array(
+                            [
                                 'textRows' => 0,
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -109,11 +109,11 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => 'Some longish text…',
                 'externalData' => null,
                 'sortKey' => 'some longish text',
-            )
+            ]
         );
     }
 
@@ -127,11 +127,11 @@ class TextBlockIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => 'A different longish text now…',
                 'externalData' => null,
                 'sortKey' => 'a different longish text now',
-            )
+            ]
         );
     }
 }

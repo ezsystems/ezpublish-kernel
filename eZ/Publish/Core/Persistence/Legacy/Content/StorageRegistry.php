@@ -21,7 +21,7 @@ class StorageRegistry
      *
      * @var array
      */
-    protected $storageMap = array();
+    protected $storageMap = [];
 
     /**
      * Create field storage registry with converter map.

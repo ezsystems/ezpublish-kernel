@@ -91,62 +91,62 @@ class DomainMapperTest extends BaseServiceMockTest
 
     public function providerForBuildVersionInfo()
     {
-        return array(
-            array(
+        return [
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => 44,
                         'contentInfo' => new SPIContentInfo(),
-                    )
+                    ]
                 ),
-                array(),
-                array('status' => APIVersionInfo::STATUS_DRAFT),
-            ),
-            array(
+                [],
+                ['status' => APIVersionInfo::STATUS_DRAFT],
+            ],
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => SPIVersionInfo::STATUS_DRAFT,
                         'contentInfo' => new SPIContentInfo(),
-                    )
+                    ]
                 ),
-                array(),
-                array('status' => APIVersionInfo::STATUS_DRAFT),
-            ),
-            array(
+                [],
+                ['status' => APIVersionInfo::STATUS_DRAFT],
+            ],
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => SPIVersionInfo::STATUS_PENDING,
                         'contentInfo' => new SPIContentInfo(),
-                    )
+                    ]
                 ),
-                array(),
-                array('status' => APIVersionInfo::STATUS_DRAFT),
-            ),
-            array(
+                [],
+                ['status' => APIVersionInfo::STATUS_DRAFT],
+            ],
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => SPIVersionInfo::STATUS_ARCHIVED,
                         'contentInfo' => new SPIContentInfo(),
-                        'languageCodes' => array('eng-GB', 'nor-NB', 'fre-FR'),
-                    )
+                        'languageCodes' => ['eng-GB', 'nor-NB', 'fre-FR'],
+                    ]
                 ),
-                array(1 => 'eng-GB', 3 => 'nor-NB', 5 => 'fre-FR'),
-                array(
+                [1 => 'eng-GB', 3 => 'nor-NB', 5 => 'fre-FR'],
+                [
                     'status' => APIVersionInfo::STATUS_ARCHIVED,
-                    'languageCodes' => array('eng-GB', 'nor-NB', 'fre-FR'),
-                ),
-            ),
-            array(
+                    'languageCodes' => ['eng-GB', 'nor-NB', 'fre-FR'],
+                ],
+            ],
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => SPIVersionInfo::STATUS_PUBLISHED,
                         'contentInfo' => new SPIContentInfo(),
-                    )
+                    ]
                 ),
-                array(),
-                array('status' => APIVersionInfo::STATUS_PUBLISHED),
-            ),
-        );
+                [],
+                ['status' => APIVersionInfo::STATUS_PUBLISHED],
+            ],
+        ];
     }
 
     public function providerForBuildLocationDomainObjectsOnSearchResult()

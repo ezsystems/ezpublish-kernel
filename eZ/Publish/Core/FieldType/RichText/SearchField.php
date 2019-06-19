@@ -35,7 +35,7 @@ class SearchField implements Indexable
         $document = new DOMDocument();
         $document->loadXML($field->value->data);
 
-        return array(
+        return [
             new Search\Field(
                 'value',
                 self::extractShortText($document),
@@ -46,7 +46,7 @@ class SearchField implements Indexable
                 $this->extractText($document->documentElement),
                 new Search\FieldType\FullTextField()
             ),
-        );
+        ];
     }
 
     /**
@@ -111,9 +111,9 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'value' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     /**

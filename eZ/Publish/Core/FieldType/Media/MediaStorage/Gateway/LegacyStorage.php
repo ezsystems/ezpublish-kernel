@@ -35,32 +35,32 @@ class LegacyStorage extends BaseLegacyStorage
     protected function getPropertyMapping()
     {
         $propertyMap = parent::getPropertyMapping();
-        $propertyMap['has_controller'] = array(
+        $propertyMap['has_controller'] = [
             'name' => 'hasController',
             'cast' => function ($val) {
                 return (bool)$val;
             },
-        );
-        $propertyMap['is_autoplay'] = array(
+        ];
+        $propertyMap['is_autoplay'] = [
             'name' => 'autoplay',
             'cast' => function ($val) {
                 return (bool)$val;
             },
-        );
-        $propertyMap['is_loop'] = array(
+        ];
+        $propertyMap['is_loop'] = [
             'name' => 'loop',
             'cast' => function ($val) {
                 return (bool)$val;
             },
-        );
-        $propertyMap['width'] = array(
+        ];
+        $propertyMap['width'] = [
             'name' => 'width',
             'cast' => 'intval',
-        );
-        $propertyMap['height'] = array(
+        ];
+        $propertyMap['height'] = [
             'name' => 'height',
             'cast' => 'intval',
-        );
+        ];
 
         return $propertyMap;
     }

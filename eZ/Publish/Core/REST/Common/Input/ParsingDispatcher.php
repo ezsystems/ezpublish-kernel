@@ -31,14 +31,14 @@ class ParsingDispatcher
      *
      * @var \eZ\Publish\Core\REST\Common\Input\Parser[]
      */
-    protected $parsers = array();
+    protected $parsers = [];
 
     /**
      * Construct from optional parsers array.
      *
      * @param array $parsers
      */
-    public function __construct(array $parsers = array())
+    public function __construct(array $parsers = [])
     {
         foreach ($parsers as $mediaType => $parser) {
             $this->addParser($mediaType, $parser);

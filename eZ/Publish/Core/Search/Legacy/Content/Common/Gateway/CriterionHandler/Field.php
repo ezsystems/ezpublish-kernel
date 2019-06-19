@@ -100,7 +100,7 @@ class Field extends FieldBase
      */
     protected function getFieldsInformation($fieldIdentifier)
     {
-        $fieldMapArray = array();
+        $fieldMapArray = [];
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
 
         foreach ($fieldMap as $contentTypeIdentifier => $fieldIdentifierMap) {
@@ -158,7 +158,7 @@ class Field extends FieldBase
             $this->dbHandler->quoteTable('ezcontentobject_attribute')
         );
 
-        $whereExpressions = array();
+        $whereExpressions = [];
 
         foreach ($fieldsInformation as $fieldTypeIdentifier => $fieldsInfo) {
             if ($fieldsInfo['column'] === false) {

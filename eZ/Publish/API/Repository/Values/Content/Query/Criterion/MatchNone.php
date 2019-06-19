@@ -25,7 +25,7 @@ class MatchNone extends Criterion
 
     public function getSpecifications()
     {
-        return array();
+        return [];
     }
 
     /**

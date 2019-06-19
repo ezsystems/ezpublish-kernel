@@ -205,7 +205,7 @@ class LegacyStorage extends Gateway
         $statement = $q->prepare();
         $statement->execute();
 
-        $existingKeywordMap = array();
+        $existingKeywordMap = [];
 
         foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
             // filter out keywords that aren't the exact match (e.g. differ by case)
@@ -239,7 +239,7 @@ class LegacyStorage extends Gateway
     {
         $dbHandler = $this->getConnection();
 
-        $keywordIdMap = array();
+        $keywordIdMap = [];
 
         // Inserting keywords not yet registered
         if (!empty($keywordsToInsert)) {

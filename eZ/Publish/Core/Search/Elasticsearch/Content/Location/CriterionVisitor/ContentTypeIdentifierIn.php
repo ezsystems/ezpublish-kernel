@@ -65,22 +65,22 @@ class ContentTypeIdentifierIn extends CriterionVisitor
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         if (count($criterion->value) > 1) {
-            $idList = array();
+            $idList = [];
             foreach ($criterion->value as $identifier) {
                 $idList[] = $this->contentTypeHandler->loadByIdentifier($identifier)->id;
             }
 
-            $filter = array(
-                'terms' => array(
+            $filter = [
+                'terms' => [
                     'content_type_id' => $idList,
-                ),
-            );
+                ],
+            ];
         } else {
-            $filter = array(
-                'term' => array(
+            $filter = [
+                'term' => [
                     'content_type_id' => $this->contentTypeHandler->loadByIdentifier($criterion->value[0])->id,
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;

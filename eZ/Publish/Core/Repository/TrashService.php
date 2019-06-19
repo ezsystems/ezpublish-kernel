@@ -70,16 +70,16 @@ class TrashService implements TrashServiceInterface
         Handler $handler,
         Helper\NameSchemaService $nameSchemaService,
         PermissionCriterionResolver $permissionCriterionResolver,
-        array $settings = array()
+        array $settings = []
     ) {
         $this->permissionCriterionResolver = $permissionCriterionResolver;
         $this->repository = $repository;
         $this->persistenceHandler = $handler;
         $this->nameSchemaService = $nameSchemaService;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             //'defaultSetting' => array(),
-        );
+        ];
     }
 
     /**
@@ -338,7 +338,7 @@ class TrashService implements TrashServiceInterface
 
     protected function buildDomainTrashItems(array $spiTrashItems): array
     {
-        $trashItems = array();
+        $trashItems = [];
         // TODO: load content in bulk once API allows for it
         foreach ($spiTrashItems as $spiTrashItem) {
             try {
@@ -357,7 +357,7 @@ class TrashService implements TrashServiceInterface
     protected function buildDomainTrashItemObject(Trashed $spiTrashItem, Content $content): APITrashItem
     {
         return new TrashItem(
-            array(
+            [
                 'content' => $content,
                 'contentInfo' => $content->contentInfo,
                 'id' => $spiTrashItem->id,
@@ -371,7 +371,7 @@ class TrashService implements TrashServiceInterface
                 'sortField' => $spiTrashItem->sortField,
                 'sortOrder' => $spiTrashItem->sortOrder,
                 'trashed' => isset($spiTrashItem->trashed) ? new DateTime('@' . $spiTrashItem->trashed) : new DateTime('@0'),
-            )
+            ]
         );
     }
 
@@ -407,17 +407,17 @@ class TrashService implements TrashServiceInterface
             return (bool)$contentRemoveCriterion;
         }
         $query = new Query(
-            array(
+            [
                 'limit' => 0,
                 'filter' => new CriterionLogicalAnd(
-                    array(
+                    [
                         new CriterionSubtree($location->pathString),
                         new CriterionLogicalNot($contentRemoveCriterion),
-                    )
+                    ]
                 ),
-            )
+            ]
         );
-        $result = $this->repository->getSearchService()->findContent($query, array(), false);
+        $result = $this->repository->getSearchService()->findContent($query, [], false);
 
         return $result->totalCount == 0;
     }

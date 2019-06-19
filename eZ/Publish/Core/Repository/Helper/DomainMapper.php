@@ -131,12 +131,12 @@ class DomainMapper
         }
 
         return new Content(
-            array(
+            [
                 'internalFields' => $this->buildDomainFields($spiContent->fields, $contentType, $prioritizedLanguages, $fieldAlwaysAvailableLanguage),
                 'versionInfo' => $this->buildVersionInfoDomainObject($spiContent->versionInfo, $prioritizedLanguages),
                 'contentType' => $contentType,
                 'prioritizedFieldLanguageCode' => $prioritizedFieldLanguageCode,
-            )
+            ]
         );
     }
 
@@ -254,7 +254,7 @@ class DomainMapper
             $fieldDefinitionsMap[$fieldDefinition->id] = $fieldDefinition;
         }
 
-        $fieldInFilterLanguagesMap = array();
+        $fieldInFilterLanguagesMap = [];
         if (!empty($prioritizedLanguages) && $alwaysAvailableLanguage !== null) {
             foreach ($spiFields as $spiField) {
                 if (in_array($spiField->languageCode, $prioritizedLanguages)) {
@@ -263,7 +263,7 @@ class DomainMapper
             }
         }
 
-        $fields = array();
+        $fields = [];
         foreach ($spiFields as $spiField) {
             // We ignore fields in content not part of the content type
             if (!isset($fieldDefinitionsMap[$spiField->fieldDefinitionId])) {
@@ -287,14 +287,14 @@ class DomainMapper
             }
 
             $fields[$fieldDefinition->position][] = new Field(
-                array(
+                [
                     'id' => $spiField->id,
                     'value' => $this->fieldTypeRegistry->getFieldType($spiField->type)
                         ->fromPersistenceValue($spiField->value),
                     'languageCode' => $spiField->languageCode,
                     'fieldDefIdentifier' => $fieldDefinition->identifier,
                     'fieldTypeIdentifier' => $spiField->type,
-                )
+                ]
             );
         }
 
@@ -340,7 +340,7 @@ class DomainMapper
         }
 
         return new VersionInfo(
-            array(
+            [
                 'id' => $spiVersionInfo->id,
                 'versionNo' => $spiVersionInfo->versionNo,
                 'modificationDate' => $this->getDateTime($spiVersionInfo->modificationDate),
@@ -352,7 +352,7 @@ class DomainMapper
                 'names' => $spiVersionInfo->names,
                 'contentInfo' => $this->buildContentInfoDomainObject($spiVersionInfo->contentInfo),
                 'prioritizedNameLanguageCode' => $prioritizedNameLanguageCode,
-            )
+            ]
         );
     }
 
@@ -381,7 +381,7 @@ class DomainMapper
         }
 
         return new ContentInfo(
-            array(
+            [
                 'id' => $spiContentInfo->id,
                 'contentTypeId' => $spiContentInfo->contentTypeId,
                 'name' => $spiContentInfo->name,
@@ -401,7 +401,7 @@ class DomainMapper
                 'mainLocationId' => $spiContentInfo->mainLocationId,
                 'status' => $status,
                 'isHidden' => $spiContentInfo->isHidden,
-            )
+            ]
         );
     }
 
@@ -433,13 +433,13 @@ class DomainMapper
         }
 
         return new Relation(
-            array(
+            [
                 'id' => $spiRelation->id,
                 'sourceFieldDefinitionIdentifier' => $sourceFieldDefinitionIdentifier,
                 'type' => $spiRelation->type,
                 'sourceContentInfo' => $sourceContentInfo,
                 'destinationContentInfo' => $destinationContentInfo,
-            )
+            ]
         );
     }
 
@@ -547,7 +547,7 @@ class DomainMapper
     private function mapLocation(SPILocation $spiLocation, ContentInfo $contentInfo, APIContent $content): APILocation
     {
         return new Location(
-            array(
+            [
                 'content' => $content,
                 'contentInfo' => $contentInfo,
                 'id' => $spiLocation->id,
@@ -561,7 +561,7 @@ class DomainMapper
                 'depth' => $spiLocation->depth,
                 'sortField' => $spiLocation->sortField,
                 'sortOrder' => $spiLocation->sortOrder,
-            )
+            ]
         );
     }
 
@@ -722,7 +722,7 @@ class DomainMapper
         }
 
         return new SPILocationCreateStruct(
-            array(
+            [
                 'priority' => $locationCreateStruct->priority,
                 'hidden' => $locationCreateStruct->hidden,
                 // If we declare the new Location as hidden, it is automatically invisible
@@ -739,7 +739,7 @@ class DomainMapper
                 'sortField' => $locationCreateStruct->sortField !== null ? $locationCreateStruct->sortField : Location::SORT_FIELD_NAME,
                 'sortOrder' => $locationCreateStruct->sortOrder !== null ? $locationCreateStruct->sortOrder : Location::SORT_ORDER_ASC,
                 'parentId' => $locationCreateStruct->parentLocationId,
-            )
+            ]
         );
     }
 

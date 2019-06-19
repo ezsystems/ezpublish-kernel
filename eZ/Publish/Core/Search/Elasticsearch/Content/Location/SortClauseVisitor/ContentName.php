@@ -37,10 +37,10 @@ class ContentName extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return array(
-            'content_name_s' => array(
+        return [
+            'content_name_s' => [
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

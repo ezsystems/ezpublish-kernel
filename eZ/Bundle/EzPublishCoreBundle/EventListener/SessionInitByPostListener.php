@@ -32,9 +32,9 @@ class SessionInitByPostListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            MVCEvents::SITEACCESS => array('onSiteAccessMatch', 249),
-        );
+        return [
+            MVCEvents::SITEACCESS => ['onSiteAccessMatch', 249],
+        ];
     }
 
     public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)

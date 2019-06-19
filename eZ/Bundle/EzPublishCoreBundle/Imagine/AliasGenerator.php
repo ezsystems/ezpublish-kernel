@@ -86,7 +86,7 @@ class AliasGenerator implements VariationHandler
      * @throws \eZ\Publish\Core\MVC\Exception\SourceImageNotFoundException If source image cannot be found.
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidVariationException If a problem occurs with generated variation.
      */
-    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array())
+    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = [])
     {
         /** @var \eZ\Publish\Core\FieldType\Image\Value $imageValue */
         $imageValue = $field->value;

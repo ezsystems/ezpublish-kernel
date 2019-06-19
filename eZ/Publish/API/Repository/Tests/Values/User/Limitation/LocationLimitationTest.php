@@ -41,7 +41,7 @@ class LocationLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new LocationLimitation(
-                array('limitationValues' => array($parentLocationId))
+                ['limitationValues' => [$parentLocationId]]
             )
         );
 
@@ -81,7 +81,7 @@ class LocationLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new LocationLimitation(
-                array('limitationValues' => array($parentLocationId))
+                ['limitationValues' => [$parentLocationId]]
             )
         );
 

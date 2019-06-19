@@ -23,7 +23,7 @@ class Mapper
     public function mapRoute(Route $route)
     {
         $optionsRoute = clone $route;
-        $optionsRoute->setMethods(array('OPTIONS'));
+        $optionsRoute->setMethods(['OPTIONS']);
         $optionsRoute->setDefault(
             '_controller',
             'ezpublish_rest.controller.options:getRouteOptions'

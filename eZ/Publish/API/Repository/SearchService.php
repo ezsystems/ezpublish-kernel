@@ -119,7 +119,7 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true);
+    public function findContent(Query $query, array $languageFilter = [], $filterOnUserPermissions = true);
 
     /**
      * Finds contentInfo objects for the given query.
@@ -139,7 +139,7 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContentInfo(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true);
+    public function findContentInfo(Query $query, array $languageFilter = [], $filterOnUserPermissions = true);
 
     /**
      * Performs a query for a single content object.
@@ -156,7 +156,7 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array(), $filterOnUserPermissions = true);
+    public function findSingle(Criterion $filter, array $languageFilter = [], $filterOnUserPermissions = true);
 
     /**
      * Suggests a list of values for the given prefix.
@@ -166,7 +166,7 @@ interface SearchService
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null);
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null);
 
     /**
      * Finds Locations for the given query.
@@ -181,7 +181,7 @@ interface SearchService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true);
+    public function findLocations(LocationQuery $query, array $languageFilter = [], $filterOnUserPermissions = true);
 
     /**
      * Query for supported capability of currently configured search engine.

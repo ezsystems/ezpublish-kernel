@@ -140,10 +140,10 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $languageFilter = array())
+    public function findContent(Query $query, array $languageFilter = [])
     {
         if (!isset($languageFilter['languages'])) {
-            $languageFilter['languages'] = array();
+            $languageFilter['languages'] = [];
         }
 
         if (!isset($languageFilter['useAlwaysAvailable'])) {
@@ -156,7 +156,7 @@ class Handler implements SearchHandlerInterface
 
         // The legacy search does not know about scores, so that we just
         // combine the query with the filter
-        $filter = new Criterion\LogicalAnd(array($query->query, $query->filter));
+        $filter = new Criterion\LogicalAnd([$query->query, $query->filter]);
 
         $data = $this->gateway->find(
             $filter,
@@ -225,10 +225,10 @@ class Handler implements SearchHandlerInterface
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array())
+    public function findSingle(Criterion $filter, array $languageFilter = [])
     {
         if (!isset($languageFilter['languages'])) {
-            $languageFilter['languages'] = array();
+            $languageFilter['languages'] = [];
         }
 
         if (!isset($languageFilter['useAlwaysAvailable'])) {
@@ -258,10 +258,10 @@ class Handler implements SearchHandlerInterface
     /**
      * @see \eZ\Publish\SPI\Search\Handler::findLocations
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = array())
+    public function findLocations(LocationQuery $query, array $languageFilter = [])
     {
         if (!isset($languageFilter['languages'])) {
-            $languageFilter['languages'] = array();
+            $languageFilter['languages'] = [];
         }
 
         if (!isset($languageFilter['useAlwaysAvailable'])) {
@@ -275,7 +275,7 @@ class Handler implements SearchHandlerInterface
         // The legacy search does not know about scores, so we just
         // combine the query with the filter
         $data = $this->locationGateway->find(
-            new Criterion\LogicalAnd(array($query->query, $query->filter)),
+            new Criterion\LogicalAnd([$query->query, $query->filter]),
             $query->offset,
             $query->limit,
             $query->sortClauses,
@@ -312,7 +312,7 @@ class Handler implements SearchHandlerInterface
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      * @throws NotImplementedException
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
     {
         throw new NotImplementedException('Suggestions are not supported by legacy search engine.');
     }

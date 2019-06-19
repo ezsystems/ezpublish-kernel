@@ -20,10 +20,10 @@ class ViewInputOneDotOneTest extends BaseTest
      */
     public function testParseContentQuery()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'Query identifier',
             'ContentQuery' => [],
-        );
+        ];
 
         $parser = $this->getParser();
         $parsingDispatcher = $this->getParsingDispatcherMock();
@@ -47,10 +47,10 @@ class ViewInputOneDotOneTest extends BaseTest
      */
     public function testParseLocationQuery()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'Query identifier',
             'LocationQuery' => [],
-        );
+        ];
 
         $parser = $this->getParser();
         $parsingDispatcher = $this->getParsingDispatcherMock();

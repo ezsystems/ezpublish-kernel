@@ -205,10 +205,10 @@ class ServiceContainer implements Container
         }
 
         $content = $dumper->dump(
-            array(
+            [
                 'class' => $this->containerClassName,
                 'base_class' => 'Container',
-            )
+            ]
         );
 
         $cache->write($content, $this->innerContainer->getResources());

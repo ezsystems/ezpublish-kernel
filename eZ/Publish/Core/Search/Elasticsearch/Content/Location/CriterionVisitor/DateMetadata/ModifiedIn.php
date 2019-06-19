@@ -49,22 +49,22 @@ class ModifiedIn extends DateMetadata
     {
         if (count($criterion->value) > 1) {
             $that = $this;
-            $filter = array(
-                'terms' => array(
+            $filter = [
+                'terms' => [
                     'content_modified_dt' => array_map(
                         function ($timestamp) use ($that) {
                             return $that->getNativeTime($timestamp);
                         },
                         $criterion->value
                     ),
-                ),
-            );
+                ],
+            ];
         } else {
-            $filter = array(
-                'term' => array(
+            $filter = [
+                'term' => [
                     'content_modified_dt' => $this->getNativeTime($criterion->value[0]),
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;

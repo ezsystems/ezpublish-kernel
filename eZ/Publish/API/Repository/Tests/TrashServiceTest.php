@@ -66,7 +66,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         $location = $repository->getLocationService()
             ->loadLocationByRemoteId($mediaRemoteId);
 
-        $expected = array(
+        $expected = [
             'id' => $location->id,
             'depth' => $location->depth,
             'hidden' => $location->hidden,
@@ -77,7 +77,7 @@ class TrashServiceTest extends BaseTrashServiceTest
             'remoteId' => $location->remoteId,
             'sortField' => $location->sortField,
             'sortOrder' => $location->sortOrder,
-        );
+        ];
 
         $trashItem = $this->createTrashItem();
 
@@ -514,7 +514,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'remoteId' => $trashItem->remoteId,
                 'parentLocationId' => $homeLocationId,
                 // Not the full sub tree is restored
@@ -525,7 +525,7 @@ class TrashServiceTest extends BaseTrashServiceTest
                 'priority' => 0,
                 'sortField' => APILocation::SORT_FIELD_NAME,
                 'sortOrder' => APILocation::SORT_ORDER_ASC,
-            ),
+            ],
             $location
         );
 
@@ -639,10 +639,10 @@ class TrashServiceTest extends BaseTrashServiceTest
         $trashItem = $trashService->trash($location);
 
         $newParentLocation = new Location(
-            array(
+            [
                 'id' => 123456,
                 'parentLocationId' => 123455,
-            )
+            ]
         );
         $trashService->recover($trashItem, $newParentLocation);
     }
@@ -664,9 +664,9 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Create a search query for all trashed items
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
-            array(
+            [
                 new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            )
+            ]
         );
 
         // Load all trashed locations
@@ -700,9 +700,9 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Create a search query for all trashed items
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
-            array(
+            [
                 new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            )
+            ]
         );
 
         // Create a user in the Editor user group.
@@ -745,9 +745,9 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Create a search query for all trashed items
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
-            array(
+            [
                 new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            )
+            ]
         );
         // Load all trashed locations, search result should be empty
         $searchResult = $trashService->findTrashItems($query);
@@ -791,9 +791,9 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Create a search query for all trashed items
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd(
-            array(
+            [
                 new Criterion\Field('title', Criterion\Operator::LIKE, '*'),
-            )
+            ]
         );
 
         // Load all trashed locations, should only contain the Demo Design location
@@ -853,7 +853,7 @@ class TrashServiceTest extends BaseTrashServiceTest
         // Load the location service
         $locationService = $repository->getLocationService();
 
-        $remoteIds = array();
+        $remoteIds = [];
         $children = $locationService->loadLocationChildren($locationService->loadLocationByRemoteId($mediaRemoteId));
         foreach ($children->locations as $child) {
             $remoteIds[] = $child->remoteId;

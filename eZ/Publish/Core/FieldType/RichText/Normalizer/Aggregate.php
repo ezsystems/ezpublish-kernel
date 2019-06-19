@@ -22,12 +22,12 @@ class Aggregate extends Normalizer
      *
      * @var \eZ\Publish\Core\FieldType\RichText\Normalizer[]
      */
-    protected $normalizers = array();
+    protected $normalizers = [];
 
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Normalizer[] $normalizers An array of Normalizers, sorted by priority
      */
-    public function __construct(array $normalizers = array())
+    public function __construct(array $normalizers = [])
     {
         $this->normalizers = $normalizers;
     }

@@ -23,7 +23,7 @@ class BorderFilterLoader implements LoaderInterface
 {
     const DEFAULT_BORDER_COLOR = '#000';
 
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         $optionsCount = count($options);
         if ($optionsCount < 2) {

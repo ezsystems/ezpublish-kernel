@@ -33,10 +33,10 @@ class OptionsLoaderTest extends TestCase
 
     public function getResourceType()
     {
-        return array(
-            array('rest_options', true),
-            array('something else', false),
-        );
+        return [
+            ['rest_options', true],
+            ['something else', false],
+        ];
     }
 
     public function testLoad()
@@ -62,8 +62,8 @@ class OptionsLoaderTest extends TestCase
     protected function getOptionsLoader()
     {
         $mock = $this->getMockBuilder(OptionsLoader::class)
-            ->setConstructorArgs(array($this->getRouteCollectionMapperMock()))
-            ->setMethods(array('import'))
+            ->setConstructorArgs([$this->getRouteCollectionMapperMock()])
+            ->setMethods(['import'])
             ->getMock();
 
         $mock->expects($this->any())

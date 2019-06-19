@@ -23,7 +23,7 @@ class ConverterDispatcher
      *
      * @var \eZ\Publish\Core\FieldType\RichText\Converter[]
      */
-    protected $mapping = array();
+    protected $mapping = [];
 
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Converter[] $converterMap

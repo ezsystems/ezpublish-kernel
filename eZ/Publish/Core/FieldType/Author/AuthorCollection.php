@@ -20,7 +20,7 @@ class AuthorCollection extends ArrayObject
     /**
      * @param \eZ\Publish\Core\FieldType\Author\Author[] $elements
      */
-    public function __construct(array $elements = array())
+    public function __construct(array $elements = [])
     {
         // Call parent constructor without $elements because all author elements
         // must be given an id by $this->offsetSet()

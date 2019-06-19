@@ -40,7 +40,7 @@ class URLHandlerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.url_checker.handler_registry',
             'addHandler',
-            array($scheme, new Reference($serviceId))
+            [$scheme, new Reference($serviceId)]
         );
     }
 
@@ -60,7 +60,7 @@ class URLHandlerPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.url_checker.handler_registry',
             'addHandler',
-            array($scheme, new Reference($serviceId))
+            [$scheme, new Reference($serviceId)]
         );
     }
 }

@@ -35,47 +35,47 @@ class RestContentTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentType',
-            array('contentTypeId' => $restContent->contentInfo->contentTypeId),
+            ['contentTypeId' => $restContent->contentInfo->contentTypeId],
             "/content/types/{$restContent->contentInfo->contentTypeId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentVersions',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}/versions"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_redirectCurrentVersion',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}/currentversion"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadSection',
-            array('sectionId' => $restContent->contentInfo->sectionId),
+            ['sectionId' => $restContent->contentInfo->sectionId],
             "/content/sections/{$restContent->contentInfo->sectionId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array('locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')),
+            ['locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')],
             "/content/locations/{$locationPath}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationsForContent',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}/locations"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $restContent->contentInfo->ownerId),
+            ['userId' => $restContent->contentInfo->ownerId],
             "/user/users/{$restContent->contentInfo->ownerId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_getObjectStatesForContent',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}/objectstates"
         );
 
@@ -99,7 +99,7 @@ class RestContentTest extends ValueObjectVisitorBaseTest
     {
         return new RestContent(
             new ContentInfo(
-                array(
+                [
                     'id' => 'content23',
                     'name' => 'Sindelfingen',
                     'sectionId' => 'section23',
@@ -114,12 +114,12 @@ class RestContentTest extends ValueObjectVisitorBaseTest
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
                     'contentTypeId' => 'contentType23',
-                )
+                ]
             ),
             new Values\Content\Location(
-                array(
+                [
                     'pathString' => '/1/2/23',
-                )
+                ]
             ),
             null
         );
@@ -377,12 +377,12 @@ class RestContentTest extends ValueObjectVisitorBaseTest
 
         $restContent = $this->getBasicRestContent();
         $restContent->currentVersion = new Values\Content\Content(
-            array(
-                'versionInfo' => new Values\Content\VersionInfo(array('versionNo' => 5)),
-                'internalFields' => array(),
-            )
+            [
+                'versionInfo' => new Values\Content\VersionInfo(['versionNo' => 5]),
+                'internalFields' => [],
+            ]
         );
-        $restContent->relations = array();
+        $restContent->relations = [];
         $restContent->contentType = $this->getMockForAbstractClass(
             ContentType::class
         );
@@ -393,43 +393,43 @@ class RestContentTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentType',
-            array('contentTypeId' => $restContent->contentInfo->contentTypeId),
+            ['contentTypeId' => $restContent->contentInfo->contentTypeId],
             "/content/types/{$restContent->contentInfo->contentTypeId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentVersions',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}/versions"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_redirectCurrentVersion',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}/currentversion"
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadSection',
-            array('sectionId' => $restContent->contentInfo->sectionId),
+            ['sectionId' => $restContent->contentInfo->sectionId],
             "/content/sections/{$restContent->contentInfo->sectionId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array('locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')),
+            ['locationPath' => $locationPath = trim($restContent->mainLocation->pathString, '/')],
             "/content/locations/{$locationPath}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationsForContent',
-            array('contentId' => $restContent->contentInfo->id),
+            ['contentId' => $restContent->contentInfo->id],
             "/content/objects/{$restContent->contentInfo->id}/locations"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $restContent->contentInfo->ownerId),
+            ['userId' => $restContent->contentInfo->ownerId],
             "/user/users/{$restContent->contentInfo->ownerId}"
         );
 

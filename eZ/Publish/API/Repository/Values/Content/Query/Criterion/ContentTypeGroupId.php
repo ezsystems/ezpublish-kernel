@@ -39,7 +39,7 @@ class ContentTypeGroupId extends Criterion
     {
         $types = Specifications::TYPE_INTEGER | Specifications::TYPE_STRING;
 
-        return array(
+        return [
             new Specifications(
                 Operator::IN,
                 Specifications::FORMAT_ARRAY,
@@ -50,7 +50,7 @@ class ContentTypeGroupId extends Criterion
                 Specifications::FORMAT_SINGLE,
                 $types
             ),
-        );
+        ];
     }
 
     /**

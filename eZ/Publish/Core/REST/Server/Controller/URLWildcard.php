@@ -73,7 +73,7 @@ class URLWildcard extends RestController
     {
         $urlWildcardCreate = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );
@@ -89,9 +89,9 @@ class URLWildcard extends RestController
         }
 
         return new Values\CreatedURLWildcard(
-            array(
+            [
                 'urlWildcard' => $createdURLWildcard,
-            )
+            ]
         );
     }
 

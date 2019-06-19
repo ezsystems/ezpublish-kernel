@@ -31,9 +31,9 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
     public function testSearchContentSubtreeShouldThrowException($pathString)
     {
         $query = new Query(
-            array(
+            [
                 'filter' => new Criterion\Subtree($pathString),
-            )
+            ]
         );
 
         $result = $this->getRepository()->getSearchService()->findContent($query);
@@ -47,9 +47,9 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
     public function testSearchContentSubtree($pathString)
     {
         $query = new Query(
-            array(
+            [
                 'filter' => new Criterion\Subtree($pathString),
-            )
+            ]
         );
 
         $result = $this->getRepository()->getSearchService()->findContent($query);
@@ -57,31 +57,31 @@ class EZP22958SearchSubtreePathstringFormatTest extends BaseTest
 
     public function searchContentQueryProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 '/1/2/',
-            ),
-            array(
-                array('/1/2/', '/1/2/4/'),
-            ),
-            array(
+            ],
+            [
+                ['/1/2/', '/1/2/4/'],
+            ],
+            [
                 '/1/id0/',
-            ),
-        );
+            ],
+        ];
     }
 
     public function searchContentQueryWithInvalidDataProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 '/1/2',
-            ),
-            array(
-                array('/1/2/', '/1/2/4'),
-            ),
-            array(
+            ],
+            [
+                ['/1/2/', '/1/2/4'],
+            ],
+            [
                 '/1/id0',
-            ),
-        );
+            ],
+        ];
     }
 }

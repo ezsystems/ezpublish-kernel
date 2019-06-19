@@ -48,12 +48,12 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'defaultType' => array(
+        return [
+            'defaultType' => [
                 'type' => 'choice',
                 'default' => Type::DEFAULT_EMPTY,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -63,9 +63,9 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'defaultType' => Type::DEFAULT_EMPTY,
-        );
+        ];
     }
 
     /**
@@ -75,9 +75,9 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -87,7 +87,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -97,7 +97,7 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -107,9 +107,9 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 42),
-        );
+        return [
+            'unknown' => ['value' => 42],
+        ];
     }
 
     /**
@@ -149,9 +149,9 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'date' => new DateTime('@86400'),
-        );
+        ];
 
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -182,12 +182,12 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'Some unknown date format',
                 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -215,9 +215,9 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'date' => new DateTime('@86400'),
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -288,15 +288,15 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
         $timestamp = 186401;
         $dateTime = new DateTime("@{$timestamp}");
 
-        return array(
-            array(
+        return [
+            [
                 DateValue::fromTimestamp($timestamp),
-                array(
+                [
                     'timestamp' => $dateTime->setTime(0, 0, 0)->getTimestamp(),
                     'rfc850' => $dateTime->format(DateTime::RFC850),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -326,38 +326,38 @@ class DateIntegrationTest extends SearchBaseIntegrationTest
         $dateTime = new DateTime();
         $dateTime->setTimestamp($timestamp)->setTime(0, 0, 0);
 
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'timestamp' => $timestamp,
                     'rfc850' => ($rfc850 = $dateTime->format(DateTime::RFC850)),
-                ),
+                ],
                 DateValue::fromString($rfc850),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'timestamp' => $timestamp,
                     'rfc850' => null,
-                ),
+                ],
                 DateValue::fromTimestamp($timestamp),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new DateValue()),
-        );
+        return [
+            [new DateValue()],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()

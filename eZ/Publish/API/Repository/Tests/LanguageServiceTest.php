@@ -107,16 +107,16 @@ class LanguageServiceTest extends BaseTest
     public function testCreateLanguageSetsExpectedProperties($language)
     {
         $this->assertEquals(
-            array(
+            [
                 true,
                 'English (New Zealand)',
                 'eng-NZ',
-            ),
-            array(
+            ],
+            [
                 $language->enabled,
                 $language->name,
                 $language->languageCode,
-            )
+            ]
         );
     }
 
@@ -474,7 +474,7 @@ class LanguageServiceTest extends BaseTest
 
         $languageService = $repository->getContentLanguageService();
 
-        $this->assertSame(array(), $languageService->loadLanguages());
+        $this->assertSame([], $languageService->loadLanguages());
     }
 
     /**

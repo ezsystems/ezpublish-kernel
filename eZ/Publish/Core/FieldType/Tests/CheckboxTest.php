@@ -44,7 +44,7 @@ class CheckboxTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -54,7 +54,7 @@ class CheckboxTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -92,16 +92,16 @@ class CheckboxTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 23,
                 InvalidArgumentException::class,
-            ),
-            array(
+            ],
+            [
                 new CheckboxValue(42),
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -135,16 +135,16 @@ class CheckboxTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 false,
                 new CheckboxValue(false),
-            ),
-            array(
+            ],
+            [
                 true,
                 new CheckboxValue(true),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -184,16 +184,16 @@ class CheckboxTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new CheckboxValue(true),
                 true,
-            ),
-            array(
+            ],
+            [
                 new CheckboxValue(false),
                 false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -233,16 +233,16 @@ class CheckboxTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 true,
                 new CheckboxValue(true),
-            ),
-            array(
+            ],
+            [
                 false,
                 new CheckboxValue(false),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -294,15 +294,15 @@ class CheckboxTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array(
+        return [
+            [
                 new CheckboxValue(true),
                 '1',
-            ),
-            array(
+            ],
+            [
                 new CheckboxValue(false),
                 '0',
-            ),
-        );
+            ],
+        ];
     }
 }

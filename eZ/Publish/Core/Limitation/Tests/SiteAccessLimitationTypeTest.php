@@ -35,32 +35,32 @@ class SiteAccessLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValue()
     {
-        return array(
-            array(new SiteAccessLimitation()),
-            array(new SiteAccessLimitation(array())),
-            array(
+        return [
+            [new SiteAccessLimitation()],
+            [new SiteAccessLimitation([])],
+            [
                 new SiteAccessLimitation(
-                    array(
-                        'limitationValues' => array(
+                    [
+                        'limitationValues' => [
                             sprintf('%u', crc32('ezdemo_site')),
                             sprintf('%u', crc32('eng')),
                             sprintf('%u', crc32('fre')),
-                        ),
-                    )
+                        ],
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 new SiteAccessLimitation(
-                    array(
-                        'limitationValues' => array(
+                    [
+                        'limitationValues' => [
                             crc32('ezdemo_site'),
                             crc32('eng'),
                             crc32('fre'),
-                        ),
-                    )
+                        ],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -80,10 +80,10 @@ class SiteAccessLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValueException()
     {
-        return array(
-            array(new ObjectStateLimitation()),
-            array(new SiteAccessLimitation(array('limitationValues' => array(true)))),
-        );
+        return [
+            [new ObjectStateLimitation()],
+            [new SiteAccessLimitation(['limitationValues' => [true]])],
+        ];
     }
 
     /**
@@ -104,42 +104,42 @@ class SiteAccessLimitationTypeTest extends Base
      */
     public function providerForTestValidateError()
     {
-        return array(
-            array(new SiteAccessLimitation(), 0),
-            array(new SiteAccessLimitation(array()), 0),
-            array(
+        return [
+            [new SiteAccessLimitation(), 0],
+            [new SiteAccessLimitation([]), 0],
+            [
                 new SiteAccessLimitation(
-                    array(
-                        'limitationValues' => array('2339567439'),
-                    )
+                    [
+                        'limitationValues' => ['2339567439'],
+                    ]
                 ),
                 1,
-            ),
-            array(new SiteAccessLimitation(array('limitationValues' => array(true))), 1),
-            array(
+            ],
+            [new SiteAccessLimitation(['limitationValues' => [true]]), 1],
+            [
                 new SiteAccessLimitation(
-                    array(
-                        'limitationValues' => array(
+                    [
+                        'limitationValues' => [
                             '2339567439',
                             false,
-                        ),
-                    )
+                        ],
+                    ]
                 ),
                 2,
-            ),
-            array(
+            ],
+            [
                 new SiteAccessLimitation(
-                    array(
-                        'limitationValues' => array(
+                    [
+                        'limitationValues' => [
                             sprintf('%u', crc32('ezdemo_site')),
                             sprintf('%u', crc32('eng')),
                             sprintf('%u', crc32('fre')),
-                        ),
-                    )
+                        ],
+                    ]
                 ),
                 0,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -163,7 +163,7 @@ class SiteAccessLimitationTypeTest extends Base
      */
     public function testBuildValue(SiteAccessLimitationType $limitationType)
     {
-        $expected = array('test', 'test' => 9);
+        $expected = ['test', 'test' => 9];
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf('\eZ\Publish\API\Repository\Values\User\Limitation\SiteAccessLimitation', $value);
@@ -176,26 +176,26 @@ class SiteAccessLimitationTypeTest extends Base
      */
     public function providerForTestEvaluate()
     {
-        return array(
+        return [
             // SiteAccess, no access
-            array(
+            [
                 'limitation' => new SiteAccessLimitation(),
                 'object' => new SiteAccess('behat_site'),
                 'expected' => false,
-            ),
+            ],
             // SiteAccess, no access
-            array(
-                'limitation' => new SiteAccessLimitation(array('limitationValues' => array('2339567439'))),
+            [
+                'limitation' => new SiteAccessLimitation(['limitationValues' => ['2339567439']]),
                 'object' => new SiteAccess('behat_site'),
                 'expected' => false,
-            ),
+            ],
             // SiteAccess, with access
-            array(
-                'limitation' => new SiteAccessLimitation(array('limitationValues' => array('1817462202'))),
+            [
+                'limitation' => new SiteAccessLimitation(['limitationValues' => ['1817462202']]),
                 'object' => new SiteAccess('behat_site'),
                 'expected' => true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -226,18 +226,18 @@ class SiteAccessLimitationTypeTest extends Base
      */
     public function providerForTestEvaluateInvalidArgument()
     {
-        return array(
+        return [
             // invalid limitation
-            array(
+            [
                 'limitation' => new ObjectStateLimitation(),
                 'object' => new SiteAccess(),
-            ),
+            ],
             // invalid object
-            array(
+            [
                 'limitation' => new SiteAccessLimitation(),
                 'object' => new ObjectStateLimitation(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**

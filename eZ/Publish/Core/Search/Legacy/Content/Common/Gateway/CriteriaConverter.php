@@ -29,7 +29,7 @@ class CriteriaConverter
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler[] $handlers
      */
-    public function __construct(array $handlers = array())
+    public function __construct(array $handlers = [])
     {
         $this->handlers = $handlers;
     }

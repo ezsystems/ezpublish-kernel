@@ -27,17 +27,17 @@ class Type extends FieldType
      */
     const DEFAULT_CURRENT_TIME = 1;
 
-    protected $settingsSchema = array(
-        'useSeconds' => array(
+    protected $settingsSchema = [
+        'useSeconds' => [
             'type' => 'bool',
             'default' => false,
-        ),
+        ],
         // One of the DEFAULT_* class constants
-        'defaultType' => array(
+        'defaultType' => [
             'type' => 'choice',
             'default' => self::DEFAULT_EMPTY,
-        ),
-    );
+        ],
+    ];
 
     /**
      * Returns the field type identifier for this field type.
@@ -203,16 +203,16 @@ class Type extends FieldType
      */
     public function validateFieldSettings($fieldSettings)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($fieldSettings as $name => $value) {
             if (!isset($this->settingsSchema[$name])) {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
-                    array(
+                    [
                         '%setting%' => $name,
-                    ),
+                    ],
                     "[$name]"
                 );
                 continue;
@@ -224,25 +224,25 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' value must be of boolean type",
                             null,
-                            array(
+                            [
                                 '%setting%' => $name,
-                            ),
+                            ],
                             "[$name]"
                         );
                     }
                     break;
                 case 'defaultType':
-                    $definedTypes = array(
+                    $definedTypes = [
                         self::DEFAULT_EMPTY,
                         self::DEFAULT_CURRENT_TIME,
-                    );
+                    ];
                     if (!in_array($value, $definedTypes, true)) {
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' is of unknown type",
                             null,
-                            array(
+                            [
                                 '%setting%' => $name,
-                            ),
+                            ],
                             "[$name]"
                         );
                     }

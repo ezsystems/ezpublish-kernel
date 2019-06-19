@@ -81,7 +81,7 @@ class Item extends ValueObject
      *
      * @var array
      */
-    public $attributes = array();
+    public $attributes = [];
 
     /**
      * Returns available properties with their values as a simple hash.
@@ -90,7 +90,7 @@ class Item extends ValueObject
      */
     public function getState()
     {
-        $hash = array();
+        $hash = [];
 
         foreach ($this->getProperties() as $property) {
             $hash[$property] = $this->$property;

@@ -59,11 +59,11 @@ class CustomFieldRange extends CustomField
 
         $range = $this->getQueryRange($criterion->operator, $start, $end);
 
-        return array(
-            'query_string' => array(
+        return [
+            'query_string' => [
                 'query' => 'fields_doc.' . $criterion->target . ':' . $range,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -79,24 +79,24 @@ class CustomFieldRange extends CustomField
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $filter = array(
-            'nested' => array(
+        $filter = [
+            'nested' => [
                 'path' => 'fields_doc',
-                'filter' => array(
+                'filter' => [
                     'query' => $this->getCondition($criterion),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter !== null) {
-            $filter['nested']['filter'] = array(
-                'and' => array(
+            $filter['nested']['filter'] = [
+                'and' => [
                     $fieldFilter,
                     $filter['nested']['filter'],
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;

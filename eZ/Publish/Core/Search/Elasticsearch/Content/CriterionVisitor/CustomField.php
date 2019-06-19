@@ -38,34 +38,34 @@ abstract class CustomField extends FieldFilterBase
      */
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $query = array(
-            'bool' => array(
+        $query = [
+            'bool' => [
                 'should' => $this->getCondition($criterion),
                 'minimum_should_match' => 1,
-            ),
-        );
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter === null) {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
                     'query' => $query,
-                ),
-            );
+                ],
+            ];
         } else {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
-                    'query' => array(
-                        'filtered' => array(
+                    'query' => [
+                        'filtered' => [
                             'query' => $query,
                             'filter' => $fieldFilter,
-                        ),
-                    ),
-                ),
-            );
+                        ],
+                    ],
+                ],
+            ];
         }
 
         return $query;

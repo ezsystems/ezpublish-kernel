@@ -20,14 +20,14 @@ class FieldTypeCollectionFactory implements ContainerAwareInterface
      *
      * @var \Closure[]
      */
-    protected $fieldTypes = array();
+    protected $fieldTypes = [];
 
     /**
      * List of identifiers for "concrete" FieldTypes (i.e. not using NullFieldType).
      *
      * @var array
      */
-    private $concreteFieldTypesIdentifiers = array();
+    private $concreteFieldTypesIdentifiers = [];
 
     /**
      * Registers an eZ Publish field type.

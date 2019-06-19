@@ -42,11 +42,11 @@ class SecurityController
         return new Response(
             $this->templateEngine->render(
                 $this->configResolver->getParameter('security.login_template'),
-                array(
+                [
                     'last_username' => $this->authenticationUtils->getLastUsername(),
                     'error' => $this->authenticationUtils->getLastAuthenticationError(),
                     'layout' => $this->configResolver->getParameter('security.base_layout'),
-                )
+                ]
             )
         );
     }

@@ -48,7 +48,7 @@ class URLWildcardService implements URLWildcardServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler $urlWildcardHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $urlWildcardHandler, array $settings = array())
+    public function __construct(RepositoryInterface $repository, Handler $urlWildcardHandler, array $settings = [])
     {
         $this->repository = $repository;
         $this->urlWildcardHandler = $urlWildcardHandler;
@@ -167,7 +167,7 @@ class URLWildcardService implements URLWildcardServiceInterface
             $limit
         );
 
-        $urlWildcards = array();
+        $urlWildcards = [];
         foreach ($spiUrlWildcards as $spiUrlWildcard) {
             $urlWildcards[] = $this->buildUrlWildcardDomainObject($spiUrlWildcard);
         }
@@ -207,12 +207,12 @@ class URLWildcardService implements URLWildcardServiceInterface
     private function buildUrlWildcardDomainObject(SPIUrlWildcard $wildcard): URLWildcard
     {
         return new URLWildcard(
-            array(
+            [
                 'id' => $wildcard->id,
                 'destinationUrl' => $wildcard->destinationUrl,
                 'sourceUrl' => $wildcard->sourceUrl,
                 'forward' => $wildcard->forward,
-            )
+            ]
         );
     }
 

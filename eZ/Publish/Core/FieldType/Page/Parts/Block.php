@@ -72,5 +72,5 @@ class Block extends Base
     /**
      * @var \eZ\Publish\Core\FieldType\Page\Parts\Item[]
      */
-    protected $items = array();
+    protected $items = [];
 }

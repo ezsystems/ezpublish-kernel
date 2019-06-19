@@ -33,113 +33,113 @@ trait FacetedSearchProvider
         $queryClass = static::QUERY_CLASS;
         $fixtureDir = $this->getFixtureDir();
 
-        return array(
-            array(
+        return [
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
+                                [
                                     'name' => 'type',
-                                )
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetContentType.php',
-            ),
-            array(
+            ],
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
+                                [
                                     'name' => 'type',
                                     'minCount' => 3,
-                                )
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetContentTypeMinCount.php',
-            ),
-            array(
+            ],
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\ContentTypeFacetBuilder(
-                                array(
+                                [
                                     'name' => 'type',
                                     'limit' => 5,
-                                )
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetContentTypeMinLimit.php',
-            ),
-            array(
+            ],
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\SectionFacetBuilder(
-                                array(
+                                [
                                     'name' => 'section',
-                                )
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetSection.php',
-            ),
-            array(
+            ],
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\UserFacetBuilder(
-                                array(
+                                [
                                     'name' => 'creator',
-                                )
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetUser.php',
-            ),
-            array(
+            ],
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\TermFacetBuilder(),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetTerm.php',
-            ),
+            ],
             /* @todo: It needs to be defined how this one is supposed to work.
             array(
                 new $queryClass(
@@ -170,83 +170,83 @@ trait FacetedSearchProvider
                 ),
                 $fixtureDir . '/FacetDateRange.php',
             ), // */
-            array(
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
-                                )
+                                [
+                                    'fieldPaths' => ['article/title'],
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetFieldSimple.php',
-            ),
-            array(
+            ],
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
+                                [
+                                    'fieldPaths' => ['article/title'],
                                     'regex' => '(a|b|c)',
-                                )
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetFieldRegexp.php',
-            ),
-            array(
+            ],
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
+                                [
+                                    'fieldPaths' => ['article/title'],
                                     'regex' => '(a|b|c)',
                                     'sort' => FacetBuilder\FieldFacetBuilder::TERM_DESC,
-                                )
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetFieldRegexpSortTerm.php',
-            ),
-            array(
+            ],
+            [
                 new $queryClass(
-                    array(
-                        'filter' => new Criterion\SectionId(array(1)),
+                    [
+                        'filter' => new Criterion\SectionId([1]),
                         'offset' => 0,
                         'limit' => 10,
-                        'facetBuilders' => array(
+                        'facetBuilders' => [
                             new FacetBuilder\FieldFacetBuilder(
-                                array(
-                                    'fieldPaths' => array('article/title'),
+                                [
+                                    'fieldPaths' => ['article/title'],
                                     'regex' => '(a|b|c)',
                                     'sort' => FacetBuilder\FieldFacetBuilder::COUNT_DESC,
-                                )
+                                ]
                             ),
-                        ),
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        ],
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 ),
                 $fixtureDir . '/FacetFieldRegexpSortCount.php',
-            ),
+            ],
             /* @todo: Add sane ranges here:
             array(
                 new $queryClass(
@@ -264,6 +264,6 @@ trait FacetedSearchProvider
                 ),
                 $fixtureDir . '/FacetFieldRegexpSortCount.php',
             ), // */
-        );
+        ];
     }
 }

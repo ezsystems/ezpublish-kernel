@@ -45,7 +45,7 @@ class PageTest extends FieldTypeTest
             $this->pageServiceMock = $this->createMock(PageService::class);
             $this->pageServiceMock->expects($this->any())
                 ->method('getAvailableZoneLayouts')
-                ->will($this->returnValue(array('2ZonesLayout1', '2ZonesLayout2')));
+                ->will($this->returnValue(['2ZonesLayout1', '2ZonesLayout2']));
         }
 
         return $this->pageServiceMock;
@@ -76,25 +76,25 @@ class PageTest extends FieldTypeTest
     protected function getPageReference()
     {
         return new Parts\Page(
-            array(
+            [
                 'layout' => '2ZonesLayout1',
-                'zones' => array(
+                'zones' => [
                     new Parts\Zone(
-                        array(
+                        [
                             'id' => '6c7f907b831a819ed8562e3ddce5b264',
                             'identifier' => 'left',
-                            'blocks' => array(
+                            'blocks' => [
                                 new Parts\Block(
-                                    array(
+                                    [
                                         'id' => '1e1e355c8da3c92e80354f243c6dd37b',
                                         'name' => 'Campaign',
                                         'type' => 'Campaign',
                                         'view' => 'default',
                                         'overflowId' => '',
                                         'zoneId' => '6c7f907b831a819ed8562e3ddce5b264',
-                                        'items' => array(
+                                        'items' => [
                                             new Parts\Item(
-                                                array(
+                                                [
                                                     'contentId' => 10,
                                                     'locationId' => 20,
                                                     'priority' => 30,
@@ -105,41 +105,41 @@ class PageTest extends FieldTypeTest
                                                     'movedTo' => '67dd4d9b898d89733e776c714039ae33',
                                                     'action' => 'modify',
                                                     'blockId' => '594491ab539125dc271807a83724e608',
-                                                    'attributes' => array('name' => 'value'),
-                                                )
+                                                    'attributes' => ['name' => 'value'],
+                                                ]
                                             ),
-                                        ),
-                                        'attributes' => array('name2' => 'value2'),
-                                    )
+                                        ],
+                                        'attributes' => ['name2' => 'value2'],
+                                    ]
                                 ),
-                            ),
-                            'attributes' => array('name3' => 'value3'),
-                        )
+                            ],
+                            'attributes' => ['name3' => 'value3'],
+                        ]
                     ),
-                ),
-                'attributes' => array('name4' => 'value4'),
-            )
+                ],
+                'attributes' => ['name4' => 'value4'],
+            ]
         );
     }
 
     protected function getHashReference()
     {
-        return array(
+        return [
             'layout' => '2ZonesLayout1',
-            'zones' => array(
-                array(
+            'zones' => [
+                [
                     'id' => '6c7f907b831a819ed8562e3ddce5b264',
                     'identifier' => 'left',
-                    'blocks' => array(
-                        array(
+                    'blocks' => [
+                        [
                             'id' => '1e1e355c8da3c92e80354f243c6dd37b',
                             'name' => 'Campaign',
                             'type' => 'Campaign',
                             'view' => 'default',
                             'overflowId' => '',
                             'zoneId' => '6c7f907b831a819ed8562e3ddce5b264',
-                            'items' => array(
-                                array(
+                            'items' => [
+                                [
                                     'contentId' => 10,
                                     'locationId' => 20,
                                     'priority' => 30,
@@ -150,17 +150,17 @@ class PageTest extends FieldTypeTest
                                     'movedTo' => '67dd4d9b898d89733e776c714039ae33',
                                     'action' => 'modify',
                                     'blockId' => '594491ab539125dc271807a83724e608',
-                                    'attributes' => array('name' => 'value'),
-                                ),
-                            ),
-                            'attributes' => array('name2' => 'value2'),
-                        ),
-                    ),
-                    'attributes' => array('name3' => 'value3'),
-                ),
-            ),
-            'attributes' => array('name4' => 'value4'),
-        );
+                                    'attributes' => ['name' => 'value'],
+                                ],
+                            ],
+                            'attributes' => ['name2' => 'value2'],
+                        ],
+                    ],
+                    'attributes' => ['name3' => 'value3'],
+                ],
+            ],
+            'attributes' => ['name4' => 'value4'],
+        ];
     }
 
     /**
@@ -170,7 +170,7 @@ class PageTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -180,12 +180,12 @@ class PageTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array(
-            'defaultLayout' => array(
+        return [
+            'defaultLayout' => [
                 'type' => 'string',
                 'default' => '',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -221,12 +221,12 @@ class PageTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -260,20 +260,20 @@ class PageTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new PageValue(),
-            ),
-            array(
+            ],
+            [
                 new PageValue(),
                 new PageValue(),
-            ),
-            array(
+            ],
+            [
                 new PageValue(new Page()),
                 new PageValue(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -313,16 +313,16 @@ class PageTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new PageValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new PageValue($this->getPageReference()),
                 $this->getHashReference(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -362,16 +362,16 @@ class PageTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new PageValue(),
-            ),
-            array(
+            ],
+            [
                 $this->getHashReference(),
                 new PageValue($this->getPageReference()),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -401,14 +401,14 @@ class PageTest extends FieldTypeTest
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array('defaultLayout' => '2ZonesLayout1'),
-            ),
-        );
+        return [
+            [
+                [],
+            ],
+            [
+                ['defaultLayout' => '2ZonesLayout1'],
+            ],
+        ];
     }
 
     /**
@@ -439,16 +439,16 @@ class PageTest extends FieldTypeTest
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
+        return [
+            [
                 // non-existent setting
-                array('isMultiple' => true),
-            ),
-            array(
+                ['isMultiple' => true],
+            ],
+            [
                 // non-available layout
-                array('defaultLayout' => '2ZonesLayout3'),
-            ),
-        );
+                ['defaultLayout' => '2ZonesLayout3'],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -458,10 +458,10 @@ class PageTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new PageValue($this->getPageReference()), '2ZonesLayout1'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [new PageValue($this->getPageReference()), '2ZonesLayout1'],
+        ];
     }
 
     /**
@@ -492,10 +492,10 @@ class PageTest extends FieldTypeTest
      */
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new PageValue(), true),
-            array(new PageValue($this->getPageReference()), false),
-        );
+        return [
+            [new PageValue(), true],
+            [new PageValue($this->getPageReference()), false],
+        ];
     }
 
     /**

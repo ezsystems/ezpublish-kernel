@@ -30,7 +30,7 @@ class UrlWildcardTest extends BaseServiceMockTest
 
         self::assertAttributeSame($this->getRepositoryMock(), 'repository', $service);
         self::assertAttributeSame($this->getPersistenceMockHandler('Content\\UrlWildcard\\Handler'), 'urlWildcardHandler', $service);
-        self::assertAttributeSame(array(), 'settings', $service);
+        self::assertAttributeSame([], 'settings', $service);
     }
 
     /**
@@ -94,11 +94,11 @@ class UrlWildcardTest extends BaseServiceMockTest
 
     public function providerForTestCreateThrowsContentValidationException()
     {
-        return array(
-            array('fruit', 'food/{1}', true),
-            array('fruit/*', 'food/{2}', false),
-            array('fruit/*/*', 'food/{3}', true),
-        );
+        return [
+            ['fruit', 'food/{1}', true],
+            ['fruit/*', 'food/{2}', false],
+            ['fruit/*/*', 'food/{3}', true],
+        ];
     }
 
     /**
@@ -138,15 +138,15 @@ class UrlWildcardTest extends BaseServiceMockTest
 
     public function providerForTestCreate()
     {
-        return array(
-            array('fruit', 'food', true),
-            array(' /fruit/ ', ' /food/ ', true),
-            array('/fruit/*', '/food', false),
-            array('/fruit/*', '/food/{1}', true),
-            array('/fruit/*/*', '/food/{1}', true),
-            array('/fruit/*/*', '/food/{2}', true),
-            array('/fruit/*/*', '/food/{1}/{2}', true),
-        );
+        return [
+            ['fruit', 'food', true],
+            [' /fruit/ ', ' /food/ ', true],
+            ['/fruit/*', '/food', false],
+            ['/fruit/*', '/food/{1}', true],
+            ['/fruit/*/*', '/food/{1}', true],
+            ['/fruit/*/*', '/food/{2}', true],
+            ['/fruit/*/*', '/food/{1}/{2}', true],
+        ];
     }
 
     /**
@@ -197,12 +197,12 @@ class UrlWildcardTest extends BaseServiceMockTest
         )->will(
             $this->returnValue(
                 new SPIURLWildcard(
-                    array(
+                    [
                         'id' => 123456,
                         'sourceUrl' => $sourceUrl,
                         'destinationUrl' => $destinationUrl,
                         'forward' => $forward,
-                    )
+                    ]
                 )
             )
         );
@@ -211,12 +211,12 @@ class UrlWildcardTest extends BaseServiceMockTest
 
         $this->assertEquals(
             new URLWildcard(
-                array(
+                [
                     'id' => 123456,
                     'sourceUrl' => $sourceUrl,
                     'destinationUrl' => $destinationUrl,
                     'forward' => $forward,
-                )
+                ]
             ),
             $urlWildCard
         );
@@ -437,12 +437,12 @@ class UrlWildcardTest extends BaseServiceMockTest
         )->will(
             $this->returnValue(
                 new SPIURLWildcard(
-                    array(
+                    [
                         'id' => 'Luigi',
                         'sourceUrl' => 'this',
                         'destinationUrl' => 'that',
                         'forward' => true,
-                    )
+                    ]
                 )
             )
         );
@@ -451,12 +451,12 @@ class UrlWildcardTest extends BaseServiceMockTest
 
         $this->assertEquals(
             new URLWildcard(
-                array(
+                [
                     'id' => 'Luigi',
                     'sourceUrl' => 'this',
                     'destinationUrl' => 'that',
                     'forward' => true,
-                )
+                ]
             ),
             $urlWildcard
         );
@@ -482,7 +482,7 @@ class UrlWildcardTest extends BaseServiceMockTest
             $this->equalTo(0),
             $this->equalTo(-1)
         )->will(
-            $this->returnValue(array())
+            $this->returnValue([])
         );
 
         $mockedService->loadAll();
@@ -509,32 +509,32 @@ class UrlWildcardTest extends BaseServiceMockTest
             $this->equalTo(34)
         )->will(
             $this->returnValue(
-                array(
+                [
                     new SPIURLWildcard(
-                        array(
+                        [
                             'id' => 'Luigi',
                             'sourceUrl' => 'this',
                             'destinationUrl' => 'that',
                             'forward' => true,
-                        )
+                        ]
                     ),
-                )
+                ]
             )
         );
 
         $urlWildcards = $mockedService->loadAll(12, 34);
 
         $this->assertEquals(
-            array(
+            [
                 new URLWildcard(
-                    array(
+                    [
                         'id' => 'Luigi',
                         'sourceUrl' => 'this',
                         'destinationUrl' => 'that',
                         'forward' => true,
-                    )
+                    ]
                 ),
-            ),
+            ],
             $urlWildcards
         );
     }
@@ -544,40 +544,40 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     public function providerForTestTranslateThrowsNotFoundException()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'sourceUrl' => '/fruit',
                     'destinationUrl' => '/food',
                     'forward' => true,
-                ),
+                ],
                 '/vegetable',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/apricot',
                     'destinationUrl' => '/food/apricot',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/lemon',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*',
                     'destinationUrl' => '/food/{1}',
                     'forward' => true,
-                ),
+                ],
                 '/fruit',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*/*',
                     'destinationUrl' => '/food/{1}/{2}',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/citrus',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -610,80 +610,80 @@ class UrlWildcardTest extends BaseServiceMockTest
      */
     public function providerForTestTranslate()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'sourceUrl' => '/fruit/apricot',
                     'destinationUrl' => '/food/apricot',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/apricot',
                 '/food/apricot',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*',
                     'destinationUrl' => '/food/{1}',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/citrus',
                 '/food/citrus',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*',
                     'destinationUrl' => '/food/{1}',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/citrus/orange',
                 '/food/citrus/orange',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*/*',
                     'destinationUrl' => '/food/{2}',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/citrus/orange',
                 '/food/orange',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*/*',
                     'destinationUrl' => '/food/{1}/{2}',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/citrus/orange',
                 '/food/citrus/orange',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*/pamplemousse',
                     'destinationUrl' => '/food/weird',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/citrus/pamplemousse',
                 '/food/weird',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*/pamplemousse',
                     'destinationUrl' => '/food/weird/{1}',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/citrus/pamplemousse',
                 '/food/weird/citrus',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'sourceUrl' => '/fruit/*/pamplemousse',
                     'destinationUrl' => '/food/weird/{1}',
                     'forward' => true,
-                ),
+                ],
                 '/fruit/citrus/yellow/pamplemousse',
                 '/food/weird/citrus/yellow',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -716,10 +716,10 @@ class UrlWildcardTest extends BaseServiceMockTest
 
         $this->assertEquals(
             new URLWildcardTranslationResult(
-                array(
+                [
                     'uri' => $uri,
                     'forward' => $createArray['forward'],
-                )
+                ]
             ),
             $translationResult
         );
@@ -753,10 +753,10 @@ class UrlWildcardTest extends BaseServiceMockTest
 
         $this->assertEquals(
             new URLWildcardTranslationResult(
-                array(
+                [
                     'uri' => '/long',
                     'forward' => false,
-                )
+                ]
             ),
             $translationResult
         );
@@ -776,10 +776,10 @@ class UrlWildcardTest extends BaseServiceMockTest
         return $this->getMockBuilder(URLWildcardService::class)
             ->setMethods($methods)
             ->setConstructorArgs(
-                array(
+                [
                     $this->getRepositoryMock(),
                     $this->getPersistenceMock()->urlWildcardHandler(),
-                )
+                ]
             )
             ->getMock();
     }

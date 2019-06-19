@@ -36,109 +36,109 @@ class LanguageServiceTest extends ServiceTest
         $languageNewName = 'Elfique';
 
         $language = new Language(
-            array(
+            [
                 'id' => $languageId,
                 'languageCode' => $languageCode,
                 'name' => $languageName,
                 'enabled' => $languageEnabled,
-            )
+            ]
         );
 
         $languageCreateStruct = new LanguageCreateStruct();
 
         // string $method, array $parameters, mixed $return, int $emitNr, ?string $signalClass
-        return array(
-            array(
+        return [
+            [
                 'createLanguage',
-                array($languageCreateStruct),
+                [$languageCreateStruct],
                 $language,
                 1,
                 LanguageServiceSignals\CreateLanguageSignal::class,
-                array('languageId' => $languageId),
-            ),
-            array(
+                ['languageId' => $languageId],
+            ],
+            [
                 'updateLanguageName',
-                array($language, $languageNewName),
+                [$language, $languageNewName],
                 $language,
                 1,
                 LanguageServiceSignals\UpdateLanguageNameSignal::class,
-                array(
+                [
                     'languageId' => $languageId,
                     'newName' => $languageNewName,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'enableLanguage',
-                array($language),
+                [$language],
                 $language,
                 1,
                 LanguageServiceSignals\EnableLanguageSignal::class,
-                array(
+                [
                     'languageId' => $languageId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'disableLanguage',
-                array($language),
+                [$language],
                 $language,
                 1,
                 LanguageServiceSignals\DisableLanguageSignal::class,
-                array(
+                [
                     'languageId' => $languageId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'loadLanguage',
-                array($languageCode),
+                [$languageCode],
                 $language,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadLanguageListByCode',
                 [[$languageCode]],
                 [$languageCode => $language],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadLanguages',
-                array(),
-                array($language),
+                [],
+                [$language],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadLanguageById',
-                array($languageId),
+                [$languageId],
                 $language,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadLanguageListById',
                 [[$languageId]],
                 [$languageId => $language],
                 0,
-            ),
-            array(
+            ],
+            [
                 'deleteLanguage',
-                array($language),
+                [$language],
                 null,
                 1,
                 LanguageServiceSignals\DeleteLanguageSignal::class,
-                array(
+                [
                     'languageId' => $languageId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'getDefaultLanguageCode',
-                array(),
+                [],
                 $languageCode,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newLanguageCreateStruct',
-                array(),
+                [],
                 $languageCreateStruct,
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

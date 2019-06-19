@@ -27,7 +27,7 @@ class Unindexed implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -37,7 +37,7 @@ class Unindexed implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array();
+        return [];
     }
 
     /**

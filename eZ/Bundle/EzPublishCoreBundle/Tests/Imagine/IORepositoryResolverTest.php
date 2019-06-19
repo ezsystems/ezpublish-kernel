@@ -90,12 +90,12 @@ class IORepositoryResolverTest extends TestCase
 
     public function getFilePathProvider()
     {
-        return array(
-            array('Tardis/bigger/in-the-inside/RiverSong.jpg', 'thumbnail', 'Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg'),
-            array('Tardis/bigger/in-the-inside/RiverSong', 'foo', 'Tardis/bigger/in-the-inside/RiverSong_foo'),
-            array('CultOfScaro/Dalek-fisherman.png', 'so_ridiculous', 'CultOfScaro/Dalek-fisherman_so_ridiculous.png'),
-            array('CultOfScaro/Dalek-fisherman', 'so_ridiculous', 'CultOfScaro/Dalek-fisherman_so_ridiculous'),
-        );
+        return [
+            ['Tardis/bigger/in-the-inside/RiverSong.jpg', 'thumbnail', 'Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg'],
+            ['Tardis/bigger/in-the-inside/RiverSong', 'foo', 'Tardis/bigger/in-the-inside/RiverSong_foo'],
+            ['CultOfScaro/Dalek-fisherman.png', 'so_ridiculous', 'CultOfScaro/Dalek-fisherman_so_ridiculous.png'],
+            ['CultOfScaro/Dalek-fisherman', 'so_ridiculous', 'CultOfScaro/Dalek-fisherman_so_ridiculous'],
+        ];
     }
 
     public function testIsStoredImageExists()
@@ -152,7 +152,7 @@ class IORepositoryResolverTest extends TestCase
         $this->ioService
             ->expects($this->any())
             ->method('loadBinaryFile')
-            ->will($this->returnValue(new BinaryFile(array('uri' => $variationPath))));
+            ->will($this->returnValue(new BinaryFile(['uri' => $variationPath])));
 
         $this->variationPathGenerator
             ->expects($this->any())
@@ -195,57 +195,57 @@ class IORepositoryResolverTest extends TestCase
 
     public function resolveProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'Tardis/bigger/in-the-inside/RiverSong.jpg',
                 IORepositoryResolver::VARIATION_ORIGINAL,
                 '/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong.jpg',
                 null,
                 'http://localhost/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong.jpg',
-            ),
-            array(
+            ],
+            [
                 'Tardis/bigger/in-the-inside/RiverSong.jpg',
                 'thumbnail',
                 '/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg',
                 null,
                 'http://localhost/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg',
-            ),
-            array(
+            ],
+            [
                 'Tardis/bigger/in-the-inside/RiverSong.jpg',
                 'thumbnail',
                 '/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg',
                 'http://localhost',
                 'http://localhost/var/doctorwho/storage/images/Tardis/bigger/in-the-inside/RiverSong_thumbnail.jpg',
-            ),
-            array(
+            ],
+            [
                 'CultOfScaro/Dalek-fisherman.png',
                 'so_ridiculous',
                 '/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
                 'http://doctor.who:7890',
                 'http://doctor.who:7890/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
-            ),
-            array(
+            ],
+            [
                 'CultOfScaro/Dalek-fisherman.png',
                 'so_ridiculous',
                 '/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
                 'https://doctor.who',
                 'https://doctor.who/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
-            ),
-            array(
+            ],
+            [
                 'CultOfScaro/Dalek-fisherman.png',
                 'so_ridiculous',
                 '/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
                 'https://doctor.who:1234',
                 'https://doctor.who:1234/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman_so_ridiculous.png',
-            ),
-            array(
+            ],
+            [
                 'CultOfScaro/Dalek-fisherman.png',
                 IORepositoryResolver::VARIATION_ORIGINAL,
                 '/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman.png',
                 'https://doctor.who:1234',
                 'https://doctor.who:1234/var/doctorwho/storage/images/CultOfScaro/Dalek-fisherman.png',
-            ),
-        );
+            ],
+        ];
     }
 
     public function testStore()
@@ -271,7 +271,7 @@ class IORepositoryResolverTest extends TestCase
     public function testRemoveEmptyFilters()
     {
         $originalPath = 'foo/bar/test.jpg';
-        $filters = array('filter1' => true, 'filter2' => true, 'chaud_cacao' => true);
+        $filters = ['filter1' => true, 'filter2' => true, 'chaud_cacao' => true];
 
         $this->configResolver
             ->expects($this->once())
@@ -284,11 +284,11 @@ class IORepositoryResolverTest extends TestCase
             ->method('getVariationPath')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg '),
-                        array('foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg '),
-                        array('foo/bar/test.jpg', 'chaud_cacao', 'foo/bar/test_chaud_cacao.jpg'),
-                    )
+                    [
+                        ['foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg '],
+                        ['foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg '],
+                        ['foo/bar/test.jpg', 'chaud_cacao', 'foo/bar/test_chaud_cacao.jpg'],
+                    ]
                 )
             );
 
@@ -298,15 +298,15 @@ class IORepositoryResolverTest extends TestCase
             ->method('exists')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('foo/bar/test_filter1.jpg', false),
-                        array('foo/bar/test_filter2.jpg', false),
-                        array($fileToDelete, true),
-                    )
+                    [
+                        ['foo/bar/test_filter1.jpg', false],
+                        ['foo/bar/test_filter2.jpg', false],
+                        [$fileToDelete, true],
+                    ]
                 )
             );
 
-        $binaryFile = new BinaryFile(array('id' => $fileToDelete));
+        $binaryFile = new BinaryFile(['id' => $fileToDelete]);
         $this->ioService
             ->expects($this->once())
             ->method('loadBinaryFile')
@@ -318,30 +318,30 @@ class IORepositoryResolverTest extends TestCase
             ->method('deleteBinaryFile')
             ->with($binaryFile);
 
-        $this->imageResolver->remove(array($originalPath), array());
+        $this->imageResolver->remove([$originalPath], []);
     }
 
     public function testRemoveWithFilters()
     {
         $originalPath = 'foo/bar/test.jpg';
-        $filters = array('filter1', 'filter2', 'chaud_cacao');
+        $filters = ['filter1', 'filter2', 'chaud_cacao'];
 
         $this->configResolver
             ->expects($this->never())
             ->method('getParameter')
             ->with('image_variations')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->variationPathGenerator
             ->expects($this->exactly(count($filters)))
             ->method('getVariationPath')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg '),
-                        array('foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg '),
-                        array('foo/bar/test.jpg', 'chaud_cacao', 'foo/bar/test_chaud_cacao.jpg'),
-                    )
+                    [
+                        ['foo/bar/test.jpg', 'filter1', 'foo/bar/test_filter1.jpg '],
+                        ['foo/bar/test.jpg', 'filter2', 'foo/bar/test_filter2.jpg '],
+                        ['foo/bar/test.jpg', 'chaud_cacao', 'foo/bar/test_chaud_cacao.jpg'],
+                    ]
                 )
             );
 
@@ -351,15 +351,15 @@ class IORepositoryResolverTest extends TestCase
             ->method('exists')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('foo/bar/test_filter1.jpg', false),
-                        array('foo/bar/test_filter2.jpg', false),
-                        array($fileToDelete, true),
-                    )
+                    [
+                        ['foo/bar/test_filter1.jpg', false],
+                        ['foo/bar/test_filter2.jpg', false],
+                        [$fileToDelete, true],
+                    ]
                 )
             );
 
-        $binaryFile = new BinaryFile(array('id' => $fileToDelete));
+        $binaryFile = new BinaryFile(['id' => $fileToDelete]);
         $this->ioService
             ->expects($this->once())
             ->method('loadBinaryFile')
@@ -371,6 +371,6 @@ class IORepositoryResolverTest extends TestCase
             ->method('deleteBinaryFile')
             ->with($binaryFile);
 
-        $this->imageResolver->remove(array($originalPath), $filters);
+        $this->imageResolver->remove([$originalPath], $filters);
     }
 }

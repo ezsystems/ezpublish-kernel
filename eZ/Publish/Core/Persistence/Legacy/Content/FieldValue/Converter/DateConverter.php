@@ -59,10 +59,10 @@ class DateConverter implements Converter
             return;
         }
 
-        $fieldValue->data = array(
+        $fieldValue->data = [
             'timestamp' => $value->dataInt,
             'rfc850' => null,
-        );
+        ];
         $fieldValue->sortKey = $value->sortKeyInt;
     }
 
@@ -86,19 +86,19 @@ class DateConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'defaultType' => $storageDef->dataInt1,
-            )
+            ]
         );
 
         // Building default value
         switch ($fieldDef->fieldTypeConstraints->fieldSettings['defaultType']) {
             case DateType::DEFAULT_CURRENT_DATE:
-                $data = array(
+                $data = [
                     'timestamp' => time(), // @deprecated timestamp is no longer used and will be removed in a future version.
                     'rfc850' => null,
                     'timestring' => 'now',
-                );
+                ];
                 break;
             default:
                 $data = null;

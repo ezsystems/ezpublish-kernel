@@ -42,10 +42,10 @@ class IsMainLocation extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'term' => array(
+        return [
+            'term' => [
                 'is_main_location_b' => ($criterion->value[0] === Criterion\Location\IsMainLocation::MAIN),
-            ),
-        );
+            ],
+        ];
     }
 }

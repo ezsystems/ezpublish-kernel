@@ -46,13 +46,13 @@ class IsMainLocation extends Location
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::EQ,
                 Specifications::FORMAT_SINGLE,
                 Specifications::TYPE_INTEGER
             ),
-        );
+        ];
     }
 
     /**

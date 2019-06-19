@@ -48,268 +48,268 @@ class UserServiceTest extends ServiceTest
         $email = 'bugs@warnerbros.com';
         $mainLanguageCode = 'eng-US';
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 42,
                 'identifier' => 'rabbit',
-                'fieldDefinitions' => array(),
-            )
+                'fieldDefinitions' => [],
+            ]
         );
         $groupContentType = new ContentType(
-            array(
+            [
                 'id' => 43,
                 'identifier' => 'characters',
-                'fieldDefinitions' => array(),
-            )
+                'fieldDefinitions' => [],
+            ]
         );
 
         $userCreateStruct = new UserCreateStruct(
-            array(
+            [
                 'contentType' => $contentType,
                 'mainLanguageCode' => $mainLanguageCode,
                 'login' => $login,
                 'password' => $password,
                 'enabled' => true,
-                'fields' => array(),
-            )
+                'fields' => [],
+            ]
         );
         $userUpdateStruct = new UserUpdateStruct();
         $userGroupCreateStruct = new UserGroupCreateStruct(
-            array(
+            [
                 'mainLanguageCode' => $mainLanguageCode,
                 'contentType' => $contentType,
-            )
+            ]
         );
         $userGroupUpdateStruct = new UserGroupUpdateStruct();
         $passwordValidationContext = new PasswordValidationContext();
 
-        return array(
-            array(
+        return [
+            [
                 'createUserGroup',
-                array($userGroupCreateStruct, $parentGroup),
+                [$userGroupCreateStruct, $parentGroup],
                 $userGroup,
                 1,
                 UserServiceSignals\CreateUserGroupSignal::class,
-                array('userGroupId' => $userGroupId),
-            ),
-            array(
+                ['userGroupId' => $userGroupId],
+            ],
+            [
                 'loadUserGroup',
-                array($userGroupId, array()),
+                [$userGroupId, []],
                 $userGroup,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUserGroup',
-                array($userGroupId, array('eng-GB', 'eng-US')),
+                [$userGroupId, ['eng-GB', 'eng-US']],
                 $userGroup,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadSubUserGroups',
-                array($parentGroup, 1, 1, array()),
-                array($userGroup),
+                [$parentGroup, 1, 1, []],
+                [$userGroup],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadSubUserGroups',
-                array($parentGroup, 1, 1, array('eng-GB', 'eng-US')),
-                array($userGroup),
+                [$parentGroup, 1, 1, ['eng-GB', 'eng-US']],
+                [$userGroup],
                 0,
-            ),
-            array(
+            ],
+            [
                 'deleteUserGroup',
-                array($userGroup),
+                [$userGroup],
                 null,
                 1,
                 UserServiceSignals\DeleteUserGroupSignal::class,
-                array('userGroupId' => $userGroupId),
-            ),
-            array(
+                ['userGroupId' => $userGroupId],
+            ],
+            [
                 'moveUserGroup',
-                array($userGroup, $parentGroup2),
+                [$userGroup, $parentGroup2],
                 null,
                 1,
                 UserServiceSignals\MoveUserGroupSignal::class,
-                array(
+                [
                     'userGroupId' => $userGroupId,
                     'newParentId' => $parentGroup2Id,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'updateUserGroup',
-                array($userGroup, $userGroupUpdateStruct),
+                [$userGroup, $userGroupUpdateStruct],
                 $userGroup,
                 1,
                 UserServiceSignals\UpdateUserGroupSignal::class,
-                array('userGroupId' => $userGroupId),
-            ),
-            array(
+                ['userGroupId' => $userGroupId],
+            ],
+            [
                 'createUser',
-                array($userCreateStruct, array($userGroup)),
+                [$userCreateStruct, [$userGroup]],
                 $user,
                 1,
                 UserServiceSignals\CreateUserSignal::class,
-                array('userId' => $userId),
-            ),
-            array(
+                ['userId' => $userId],
+            ],
+            [
                 'loadUser',
-                array($userId, array()),
+                [$userId, []],
                 $user,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUser',
-                array($userId, array('eng-GB', 'eng-US')),
+                [$userId, ['eng-GB', 'eng-US']],
                 $user,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadAnonymousUser',
-                array(),
+                [],
                 $user,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUserByCredentials',
-                array('admin', 'with great power comes great responsibility', array()),
+                ['admin', 'with great power comes great responsibility', []],
                 $user,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUserByCredentials',
-                array('admin', 'with great power comes great responsibility', array('eng-GB', 'eng-US')),
+                ['admin', 'with great power comes great responsibility', ['eng-GB', 'eng-US']],
                 $user,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUserByLogin',
-                array('admin', array()),
+                ['admin', []],
                 $user,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUserByLogin',
-                array('admin', array('eng-GB', 'eng-US')),
+                ['admin', ['eng-GB', 'eng-US']],
                 $user,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUsersByEmail',
-                array('admin@ez.no', array()),
-                array($user),
+                ['admin@ez.no', []],
+                [$user],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUsersByEmail',
-                array('admin@ez.no', array('eng-GB', 'eng-US')),
-                array($user),
+                ['admin@ez.no', ['eng-GB', 'eng-US']],
+                [$user],
                 0,
-            ),
-            array(
+            ],
+            [
                 'deleteUser',
-                array($user),
+                [$user],
                 null,
                 1,
                 UserServiceSignals\DeleteUserSignal::class,
-                array('userId' => $userId),
-            ),
-            array(
+                ['userId' => $userId],
+            ],
+            [
                 'updateUser',
-                array($user, $userUpdateStruct),
+                [$user, $userUpdateStruct],
                 null,
                 1,
                 UserServiceSignals\UpdateUserSignal::class,
-                array('userId' => $userId),
-            ),
-            array(
+                ['userId' => $userId],
+            ],
+            [
                 'assignUserToUserGroup',
-                array($user, $parentGroup2),
+                [$user, $parentGroup2],
                 null,
                 1,
                 UserServiceSignals\AssignUserToUserGroupSignal::class,
-                array(
+                [
                     'userId' => $userId,
                     'userGroupId' => $parentGroup2Id,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'unassignUserFromUserGroup',
-                array($user, $parentGroup2),
+                [$user, $parentGroup2],
                 null,
                 1,
                 UserServiceSignals\UnAssignUserFromUserGroupSignal::class,
-                array(
+                [
                     'userId' => $userId,
                     'userGroupId' => $parentGroup2Id,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'loadUserGroupsOfUser',
-                array($user, 1, 1, array()),
-                array($userGroup),
+                [$user, 1, 1, []],
+                [$userGroup],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUserGroupsOfUser',
-                array($user, 1, 1, array('eng-GB', 'eng-US')),
-                array($userGroup),
+                [$user, 1, 1, ['eng-GB', 'eng-US']],
+                [$userGroup],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUsersOfUserGroup',
-                array($userGroup, 1, 1, array()),
-                array($user),
+                [$userGroup, 1, 1, []],
+                [$user],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadUsersOfUserGroup',
-                array($userGroup, 1, 1, array('eng-GB', 'eng-US')),
-                array($user),
+                [$userGroup, 1, 1, ['eng-GB', 'eng-US']],
+                [$user],
                 0,
-            ),
-            array(
+            ],
+            [
                 'isUser',
-                array($userGroup),
+                [$userGroup],
                 false,
                 0,
-            ),
-            array(
+            ],
+            [
                 'isUserGroup',
-                array($userGroup),
+                [$userGroup],
                 true,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newUserCreateStruct',
-                array(
+                [
                     $login, $email, $password, $mainLanguageCode, $contentType,
-                ),
+                ],
                 $userCreateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newUserGroupCreateStruct',
-                array($mainLanguageCode, $groupContentType),
+                [$mainLanguageCode, $groupContentType],
                 $userGroupCreateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newUserUpdateStruct',
-                array(),
+                [],
                 $userUpdateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newUserGroupUpdateStruct',
-                array(),
+                [],
                 $userGroupUpdateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'validatePassword',
-                array($password, $passwordValidationContext),
-                array(),
+                [$password, $passwordValidationContext],
+                [],
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

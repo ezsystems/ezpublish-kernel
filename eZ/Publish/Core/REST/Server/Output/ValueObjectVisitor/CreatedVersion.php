@@ -32,10 +32,10 @@ class CreatedVersion extends Version
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadContentInVersion',
-                array(
+                [
                     'contentId' => $data->version->content->id,
                     'versionNumber' => $data->version->content->getVersionInfo()->versionNo,
-                )
+                ]
             )
         );
         $visitor->setStatus(201);

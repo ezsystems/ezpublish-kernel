@@ -68,16 +68,16 @@ class ConsoleCommandListenerTest extends TestCase
         $this->listener->setSiteAccess($this->siteAccess);
         $this->dispatcher->addSubscriber($this->listener);
         $this->command = new Command('test:siteaccess');
-        $this->inputDefinition = new InputDefinition(array(new InputOption('siteaccess', null, InputOption::VALUE_OPTIONAL)));
+        $this->inputDefinition = new InputDefinition([new InputOption('siteaccess', null, InputOption::VALUE_OPTIONAL)]);
         $this->testOutput = new TestOutput(Output::VERBOSITY_QUIET, true);
     }
 
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(
-                ConsoleEvents::COMMAND => array(array('onConsoleCommand', -1)),
-            ),
+            [
+                ConsoleEvents::COMMAND => [['onConsoleCommand', -1]],
+            ],
             $this->listener->getSubscribedEvents()
         );
     }
@@ -90,7 +90,7 @@ class ConsoleCommandListenerTest extends TestCase
     {
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
-        $input = new ArrayInput(array('--siteaccess' => 'foo'), $this->inputDefinition);
+        $input = new ArrayInput(['--siteaccess' => 'foo'], $this->inputDefinition);
         $event = new ConsoleCommandEvent($this->command, $input, $this->testOutput);
         $this->listener->setDebug(true);
         $this->listener->onConsoleCommand($event);
@@ -104,7 +104,7 @@ class ConsoleCommandListenerTest extends TestCase
     {
         $this->dispatcher->expects($this->never())
             ->method('dispatch');
-        $input = new ArrayInput(array('--siteaccess' => 'foo'), $this->inputDefinition);
+        $input = new ArrayInput(['--siteaccess' => 'foo'], $this->inputDefinition);
         $event = new ConsoleCommandEvent($this->command, $input, $this->testOutput);
         $this->listener->setDebug(false);
         $this->listener->onConsoleCommand($event);
@@ -114,7 +114,7 @@ class ConsoleCommandListenerTest extends TestCase
     {
         $this->dispatcher->expects($this->once())
             ->method('dispatch');
-        $input = new ArrayInput(array('--siteaccess' => 'site1'), $this->inputDefinition);
+        $input = new ArrayInput(['--siteaccess' => 'site1'], $this->inputDefinition);
         $event = new ConsoleCommandEvent($this->command, $input, $this->testOutput);
         $this->listener->onConsoleCommand($event);
         $this->assertEquals(new SiteAccess('site1', 'cli'), $this->siteAccess);
@@ -124,7 +124,7 @@ class ConsoleCommandListenerTest extends TestCase
     {
         $this->dispatcher->expects($this->once())
             ->method('dispatch');
-        $input = new ArrayInput(array(), $this->inputDefinition);
+        $input = new ArrayInput([], $this->inputDefinition);
         $event = new ConsoleCommandEvent($this->command, $input, $this->testOutput);
         $this->listener->onConsoleCommand($event);
         $this->assertEquals(new SiteAccess('default', 'cli'), $this->siteAccess);

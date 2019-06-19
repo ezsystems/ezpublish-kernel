@@ -27,12 +27,12 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
     /**
      * @var array
      */
-    private $values = array();
+    private $values = [];
 
     /**
      * @var array
      */
-    private $where = array();
+    private $where = [];
 
     /**
      * Opens the query and sets the target table to $table.
@@ -116,7 +116,7 @@ class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
             throw new QueryException('Executing update without where clause is not allowed');
         }
 
-        $set = array();
+        $set = [];
 
         foreach ($this->values as $column => $expression) {
             $set[] = $column . ' = ' . $expression;

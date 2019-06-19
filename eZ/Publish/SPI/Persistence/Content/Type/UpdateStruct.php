@@ -34,7 +34,7 @@ class UpdateStruct extends ValueObject
      *
      * @var string[]
      */
-    public $description = array();
+    public $description = [];
 
     /**
      * String identifier of a type.

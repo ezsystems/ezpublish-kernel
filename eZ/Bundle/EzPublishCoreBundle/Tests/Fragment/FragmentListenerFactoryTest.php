@@ -47,14 +47,14 @@ class FragmentListenerFactoryTest extends TestCase
 
     public function buildFragmentListenerProvider()
     {
-        return array(
-            array('/foo/bar', false),
-            array('/foo', false),
-            array('/_fragment', true),
-            array('/my_siteaccess/_fragment', true),
-            array('/foo/_fragment/something', false),
-            array('/_fragment/something', false),
-        );
+        return [
+            ['/foo/bar', false],
+            ['/foo', false],
+            ['/_fragment', true],
+            ['/my_siteaccess/_fragment', true],
+            ['/foo/_fragment/something', false],
+            ['/_fragment/something', false],
+        ];
     }
 
     public function testBuildFragmentListenerNoRequest()

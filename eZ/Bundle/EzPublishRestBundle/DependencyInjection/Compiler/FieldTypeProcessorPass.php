@@ -30,7 +30,7 @@ class FieldTypeProcessorPass implements CompilerPassInterface
 
                 $definition->addMethodCall(
                     'registerProcessor',
-                    array($attribute['alias'], new Reference($id))
+                    [$attribute['alias'], new Reference($id)]
                 );
             }
         }

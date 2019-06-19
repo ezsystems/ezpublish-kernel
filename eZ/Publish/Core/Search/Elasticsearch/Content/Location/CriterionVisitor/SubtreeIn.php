@@ -44,14 +44,14 @@ class SubtreeIn extends CriterionVisitor
      */
     protected function getCondition(Criterion $criterion)
     {
-        $filters = array();
+        $filters = [];
 
         foreach ($criterion->value as $value) {
-            $filters[] = array(
-                'prefix' => array(
+            $filters[] = [
+                'prefix' => [
                     'path_string_id' => $value,
-                ),
-            );
+                ],
+            ];
         }
 
         return $filters;
@@ -68,9 +68,9 @@ class SubtreeIn extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
+        return [
             'or' => $this->getCondition($criterion),
-        );
+        ];
     }
 
     /**
@@ -84,11 +84,11 @@ class SubtreeIn extends CriterionVisitor
      */
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'bool' => array(
+        return [
+            'bool' => [
                 'should' => $this->getCondition($criterion),
                 'minimum_should_match' => 1,
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -41,16 +41,16 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(1, 0),
-                array(2, 0),
-                array(69, 0),
-                array(70, 0),
-            ),
+            [
+                [1, 0],
+                [2, 0],
+                [69, 0],
+                [70, 0],
+            ],
             $query
                 ->select('node_id', 'priority')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(1, 2, 69, 70, 71)))
+                ->where($query->expr->in('node_id', [1, 2, 69, 70, 71]))
         );
     }
 
@@ -65,9 +65,9 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(71, '/1/2/69/70/71/'),
-            ),
+            [
+                [71, '/1/2/69/70/71/'],
+            ],
             $query
                 ->select('node_id', 'path_string')
                 ->from('ezcontentobject_trash')
@@ -76,22 +76,22 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
     public static function getUntrashedLocationValues()
     {
-        return array(
-            array('contentobject_is_published', 1),
-            array('contentobject_version', 1),
-            array('depth', 4),
-            array('is_hidden', 0),
-            array('is_invisible', 0),
-            array('main_node_id', 228),
-            array('node_id', 228),
-            array('parent_node_id', 70),
-            array('path_identification_string', ''),
-            array('path_string', '/1/2/69/70/228/'),
-            array('priority', 0),
-            array('remote_id', '087adb763245e0cdcac593fb4a5996cf'),
-            array('sort_field', 1),
-            array('sort_order', 1),
-        );
+        return [
+            ['contentobject_is_published', 1],
+            ['contentobject_version', 1],
+            ['depth', 4],
+            ['is_hidden', 0],
+            ['is_invisible', 0],
+            ['main_node_id', 228],
+            ['node_id', 228],
+            ['parent_node_id', 70],
+            ['path_identification_string', ''],
+            ['path_string', '/1/2/69/70/228/'],
+            ['priority', 0],
+            ['remote_id', '087adb763245e0cdcac593fb4a5996cf'],
+            ['sort_field', 1],
+            ['sort_order', 1],
+        ];
     }
 
     /**
@@ -108,11 +108,11 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array($value)),
+            [[$value]],
             $query
                 ->select($property)
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('contentobject_id', array(69)))
+                ->where($query->expr->in('contentobject_id', [69]))
         );
     }
 
@@ -129,11 +129,11 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array('228', '1', '/1/228/')),
+            [['228', '1', '/1/228/']],
             $query
                 ->select('node_id', 'parent_node_id', 'path_string')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('contentobject_id', array(69)))
+                ->where($query->expr->in('contentobject_id', [69]))
         );
     }
 
@@ -179,22 +179,22 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
     public static function getLoadTrashValues()
     {
-        return array(
-            array('node_id', 71),
-            array('priority', 0),
-            array('is_hidden', 0),
-            array('is_invisible', 0),
-            array('remote_id', '087adb763245e0cdcac593fb4a5996cf'),
-            array('contentobject_id', 69),
-            array('parent_node_id', 70),
-            array('path_identification_string', 'products/software/os_type_i'),
-            array('path_string', '/1/2/69/70/71/'),
-            array('modified_subnode', 1311065013),
-            array('main_node_id', 71),
-            array('depth', 4),
-            array('sort_field', 1),
-            array('sort_order', 1),
-        );
+        return [
+            ['node_id', 71],
+            ['priority', 0],
+            ['is_hidden', 0],
+            ['is_invisible', 0],
+            ['remote_id', '087adb763245e0cdcac593fb4a5996cf'],
+            ['contentobject_id', 69],
+            ['parent_node_id', 70],
+            ['path_identification_string', 'products/software/os_type_i'],
+            ['path_string', '/1/2/69/70/71/'],
+            ['modified_subnode', 1311065013],
+            ['main_node_id', 71],
+            ['depth', 4],
+            ['sort_field', 1],
+            ['sort_order', 1],
+        ];
     }
 
     /**
@@ -225,8 +225,8 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $handler = $this->getLocationGateway();
 
         $this->assertEquals(
-            array(),
-            $handler->listTrashed(0, null, array())
+            [],
+            $handler->listTrashed(0, null, [])
         );
     }
 
@@ -254,7 +254,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             8,
-            count($handler->listTrashed(0, null, array()))
+            count($handler->listTrashed(0, null, []))
         );
     }
 
@@ -269,29 +269,29 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $this->assertEquals(
             5,
-            count($handler->listTrashed(0, 5, array()))
+            count($handler->listTrashed(0, 5, []))
         );
     }
 
     public static function getTrashValues()
     {
-        return array(
-            array('contentobject_id', 67),
-            array('contentobject_version', 1),
-            array('depth', 2),
-            array('is_hidden', 0),
-            array('is_invisible', 0),
-            array('main_node_id', 69),
-            array('modified_subnode', 1311065014),
-            array('node_id', 69),
-            array('parent_node_id', 2),
-            array('path_identification_string', 'products'),
-            array('path_string', '/1/2/69/'),
-            array('priority', 0),
-            array('remote_id', '9cec85d730eec7578190ee95ce5a36f5'),
-            array('sort_field', 2),
-            array('sort_order', 1),
-        );
+        return [
+            ['contentobject_id', 67],
+            ['contentobject_version', 1],
+            ['depth', 2],
+            ['is_hidden', 0],
+            ['is_invisible', 0],
+            ['main_node_id', 69],
+            ['modified_subnode', 1311065014],
+            ['node_id', 69],
+            ['parent_node_id', 2],
+            ['path_identification_string', 'products'],
+            ['path_string', '/1/2/69/'],
+            ['priority', 0],
+            ['remote_id', '9cec85d730eec7578190ee95ce5a36f5'],
+            ['sort_field', 2],
+            ['sort_order', 1],
+        ];
     }
 
     /**
@@ -304,7 +304,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $handler = $this->getLocationGateway();
         $this->trashSubtree();
 
-        $trashList = $handler->listTrashed(0, 1, array());
+        $trashList = $handler->listTrashed(0, 1, []);
         $this->assertEquals($value, $trashList[0][$key]);
     }
 
@@ -318,7 +318,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $this->trashSubtree();
 
         $this->assertEquals(
-            array(
+            [
                 '/1/2/69/76/',
                 '/1/2/69/72/75/',
                 '/1/2/69/72/74/',
@@ -327,7 +327,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
                 '/1/2/69/70/71/',
                 '/1/2/69/70/',
                 '/1/2/69/',
-            ),
+            ],
             array_map(
                 function ($trashItem) {
                     return $trashItem['path_string'];
@@ -335,9 +335,9 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
                 $trashList = $handler->listTrashed(
                     0,
                     null,
-                    array(
+                    [
                         new SortClause\Location\Path(Query::SORT_DESC),
-                    )
+                    ]
                 )
             )
         );
@@ -353,7 +353,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
         $this->trashSubtree();
 
         $this->assertEquals(
-            array(
+            [
                 '/1/2/69/',
                 '/1/2/69/76/',
                 '/1/2/69/72/',
@@ -362,7 +362,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
                 '/1/2/69/72/74/',
                 '/1/2/69/72/73/',
                 '/1/2/69/70/71/',
-            ),
+            ],
             array_map(
                 function ($trashItem) {
                     return $trashItem['path_string'];
@@ -370,10 +370,10 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
                 $trashList = $handler->listTrashed(
                     0,
                     null,
-                    array(
+                    [
                         new SortClause\Location\Depth(),
                         new SortClause\Location\Path(Query::SORT_DESC),
-                    )
+                    ]
                 )
             )
         );
@@ -391,7 +391,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(),
+            [],
             $query
                 ->select('*')
                 ->from('ezcontentobject_trash')
@@ -410,7 +410,7 @@ class DoctrineDatabaseTrashTest extends LanguageAwareTestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(),
+            [],
             $query
                 ->select('*')
                 ->from('ezcontentobject_trash')

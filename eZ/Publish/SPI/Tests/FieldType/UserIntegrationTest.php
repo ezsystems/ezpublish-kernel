@@ -91,12 +91,12 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The user field type does not have any special field definition
             // properties
-            array('fieldType', 'ezuser'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints()),
-        );
+            ['fieldType', 'ezuser'],
+            ['fieldTypeConstraints', new Content\FieldTypeConstraints()],
+        ];
     }
 
     /**
@@ -107,11 +107,11 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(),
+                'externalData' => [],
                 'sortKey' => 'user',
-            )
+            ]
         );
     }
 
@@ -126,7 +126,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function assertLoadedFieldDataCorrect(Field $field)
     {
-        $expectedValues = array(
+        $expectedValues = [
             'hasStoredLogin' => true,
             'contentId' => self::$contentId,
             'login' => 'hans',
@@ -135,7 +135,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             'passwordHashType' => 0,
             'enabled' => true,
             'maxLogin' => 1000,
-        );
+        ];
 
         foreach ($expectedValues as $key => $value) {
             $this->assertEquals($value, $field->value->externalData[$key]);
@@ -152,18 +152,18 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     'login' => 'change', // Change is intended to not get through
                     'email' => 'change', // Change is intended to not get through
                     'passwordHash' => 'change', // Change is intended to not get through
                     'passwordHashType' => 'change', // Change is intended to not get through
                     'enabled' => 'changed', // Change is intended to not get through
                     'maxLogin' => 'changed', // Change is intended to not get through
-                ),
+                ],
                 'sortKey' => 'user',
-            )
+            ]
         );
     }
 

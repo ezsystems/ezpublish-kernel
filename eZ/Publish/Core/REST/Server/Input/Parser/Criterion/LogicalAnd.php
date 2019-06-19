@@ -38,7 +38,7 @@ class LogicalAnd extends LogicalOperator
             throw new Exceptions\Parser('Invalid <' . static::TAG_NAME . '> format');
         }
 
-        $criteria = array();
+        $criteria = [];
 
         $flattenedCriteriaElements = $this->getFlattenedCriteriaData($data[static::TAG_NAME]);
         foreach ($flattenedCriteriaElements as $criterionElement) {

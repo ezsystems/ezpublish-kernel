@@ -54,7 +54,7 @@ class ObjectStateHandler extends LimitationHandler
         $hasStateGroup = false;
         $allWildCard = true;
         $someWildCard = false;
-        $map = array();
+        $map = [];
         foreach ($policy->limitations as $identifier => $limitationsValues) {
             if (strncmp($identifier, self::STATE_GROUP, 11) === 0) {
                 $hasStateGroup = true;
@@ -88,7 +88,7 @@ class ObjectStateHandler extends LimitationHandler
             }
         }
 
-        $policy->limitations[Limitation::STATE] = array();
+        $policy->limitations[Limitation::STATE] = [];
         foreach ($map as $limitationValues) {
             $policy->limitations[Limitation::STATE] = array_merge(
                 $policy->limitations[Limitation::STATE],
@@ -128,7 +128,7 @@ class ObjectStateHandler extends LimitationHandler
         $statement = $query->prepare();
         $statement->execute();
 
-        $map = array();
+        $map = [];
         $groupValues = $statement->fetchAll(\PDO::FETCH_ASSOC);
         foreach ($groupValues as $groupValue) {
             $map[self::STATE_GROUP . $groupValue['identifier']][] = (int)$groupValue['id'];

@@ -41,11 +41,11 @@ class AuthorTest extends TestCase
     {
         parent::setUp();
         $this->converter = new AuthorConverter();
-        $this->authors = array(
-            array('id' => 21, 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com'),
-            array('id' => 42, 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz'),
-            array('id' => 63, 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net'),
-        );
+        $this->authors = [
+            ['id' => 21, 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com'],
+            ['id' => 42, 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz'],
+            ['id' => 63, 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net'],
+        ];
     }
 
     protected function tearDown()
@@ -136,14 +136,14 @@ EOT;
         $storageFieldDef = new StorageFieldDefinition();
         $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'defaultAuthor' => AuthorType::DEFAULT_CURRENT_USER,
-            )
+            ]
         );
         $fieldDef = new SPIFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => $fieldTypeConstraints,
-            )
+            ]
         );
 
         $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
@@ -161,14 +161,14 @@ EOT;
         $storageFieldDef = new StorageFieldDefinition();
         $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'defaultAuthor' => AuthorType::DEFAULT_VALUE_EMPTY,
-            )
+            ]
         );
         $fieldDef = new SPIFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => $fieldTypeConstraints,
-            )
+            ]
         );
 
         $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);

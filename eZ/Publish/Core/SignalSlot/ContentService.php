@@ -247,15 +247,15 @@ class ContentService implements ContentServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array())
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = [])
     {
         $returnValue = $this->service->createContent($contentCreateStruct, $locationCreateStructs);
         $this->signalDispatcher->emit(
             new CreateContentSignal(
-                array(
+                [
                     'contentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
                     'versionNo' => $returnValue->getVersionInfo()->versionNo,
-                )
+                ]
             )
         );
 
@@ -280,9 +280,9 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateContentMetadataSignal(
-                array(
+                [
                     'contentId' => $contentInfo->id,
-                )
+                ]
             )
         );
 
@@ -303,10 +303,10 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->deleteContent($contentInfo);
         $this->signalDispatcher->emit(
             new DeleteContentSignal(
-                array(
+                [
                     'contentId' => $contentInfo->id,
                     'affectedLocationIds' => $returnValue,
-                )
+                ]
             )
         );
 
@@ -333,12 +333,12 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->createContentDraft($contentInfo, $versionInfo, $user);
         $this->signalDispatcher->emit(
             new CreateContentDraftSignal(
-                array(
+                [
                     'contentId' => $contentInfo->id,
                     'versionNo' => ($versionInfo !== null ? $versionInfo->versionNo : null),
                     'newVersionNo' => $returnValue->getVersionInfo()->versionNo,
                     'userId' => ($user !== null ? $user->id : null),
-                )
+                ]
             )
         );
 
@@ -386,11 +386,11 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->translateVersion($translationInfo, $translationValues, $user);
         $this->signalDispatcher->emit(
             new TranslateVersionSignal(
-                array(
+                [
                     'contentId' => $translationInfo->srcVersionInfo->contentInfo->id,
                     'versionNo' => $translationInfo->srcVersionInfo->versionNo,
                     'userId' => ($user !== null ? $user->id : null),
-                )
+                ]
             )
         );
 
@@ -416,10 +416,10 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->updateContent($versionInfo, $contentUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateContentSignal(
-                array(
+                [
                     'contentId' => $versionInfo->getContentInfo()->id,
                     'versionNo' => $versionInfo->versionNo,
-                )
+                ]
             )
         );
 
@@ -442,11 +442,11 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->publishVersion($versionInfo, $translations);
         $this->signalDispatcher->emit(
             new PublishVersionSignal(
-                array(
+                [
                     'contentId' => $versionInfo->getContentInfo()->id,
                     'versionNo' => $versionInfo->versionNo,
                     'affectedTranslations' => $translations,
-                )
+                ]
             )
         );
 
@@ -467,10 +467,10 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->deleteVersion($versionInfo);
         $this->signalDispatcher->emit(
             new DeleteVersionSignal(
-                array(
+                [
                     'contentId' => $versionInfo->contentInfo->id,
                     'versionNo' => $versionInfo->versionNo,
-                )
+                ]
             )
         );
 
@@ -510,13 +510,13 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo);
         $this->signalDispatcher->emit(
             new CopyContentSignal(
-                array(
+                [
                     'srcContentId' => $contentInfo->id,
                     'srcVersionNo' => ($versionInfo !== null ? $versionInfo->versionNo : null),
                     'dstContentId' => $returnValue->getVersionInfo()->getContentInfo()->id,
                     'dstVersionNo' => $returnValue->getVersionInfo()->versionNo,
                     'dstParentLocationId' => $destinationLocationCreateStruct->parentLocationId,
-                )
+                ]
             )
         );
 
@@ -572,11 +572,11 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->addRelation($sourceVersion, $destinationContent);
         $this->signalDispatcher->emit(
             new AddRelationSignal(
-                array(
+                [
                     'srcContentId' => $sourceVersion->contentInfo->id,
                     'srcVersionNo' => $sourceVersion->versionNo,
                     'dstContentId' => $destinationContent->id,
-                )
+                ]
             )
         );
 
@@ -598,11 +598,11 @@ class ContentService implements ContentServiceInterface
         $returnValue = $this->service->deleteRelation($sourceVersion, $destinationContent);
         $this->signalDispatcher->emit(
             new DeleteRelationSignal(
-                array(
+                [
                     'srcContentId' => $sourceVersion->contentInfo->id,
                     'srcVersionNo' => $sourceVersion->versionNo,
                     'dstContentId' => $destinationContent->id,
-                )
+                ]
             )
         );
 
@@ -624,7 +624,7 @@ class ContentService implements ContentServiceInterface
     {
         $returnValue = $this->service->addTranslationInfo($translationInfo);
         $this->signalDispatcher->emit(
-            new AddTranslationInfoSignal(array())
+            new AddTranslationInfoSignal([])
         );
 
         return $returnValue;
@@ -644,7 +644,7 @@ class ContentService implements ContentServiceInterface
      *
      * @since 5.0
      */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array())
+    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = [])
     {
         return $this->service->loadTranslationInfos($contentInfo, $filter);
     }

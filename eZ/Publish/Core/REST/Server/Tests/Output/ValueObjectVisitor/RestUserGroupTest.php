@@ -35,57 +35,57 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
         $userGroupPath = implode('/', $restUserGroup->mainLocation->path);
         $this->addRouteExpectation(
             'ezpublish_rest_loadUserGroup',
-            array('groupPath' => $userGroupPath),
+            ['groupPath' => $userGroupPath],
             "/user/groups/{$userGroupPath}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentType',
-            array('contentTypeId' => $restUserGroup->contentInfo->contentTypeId),
+            ['contentTypeId' => $restUserGroup->contentInfo->contentTypeId],
             "/content/types/{$restUserGroup->contentInfo->contentTypeId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentVersions',
-            array('contentId' => $restUserGroup->contentInfo->id),
+            ['contentId' => $restUserGroup->contentInfo->id],
             "/content/objects/{$restUserGroup->contentInfo->id}/versions"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadSection',
-            array('sectionId' => $restUserGroup->contentInfo->sectionId),
+            ['sectionId' => $restUserGroup->contentInfo->sectionId],
             "/content/sections/{$restUserGroup->contentInfo->sectionId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array('locationPath' => $userGroupPath),
+            ['locationPath' => $userGroupPath],
             "/content/locations/{$userGroupPath}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationsForContent',
-            array('contentId' => $restUserGroup->contentInfo->id),
+            ['contentId' => $restUserGroup->contentInfo->id],
             "/content/objects/{$restUserGroup->contentInfo->id}/locations"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $restUserGroup->contentInfo->ownerId),
+            ['userId' => $restUserGroup->contentInfo->ownerId],
             "/user/users/{$restUserGroup->contentInfo->ownerId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUserGroup',
-            array('groupPath' => '1/2'),
+            ['groupPath' => '1/2'],
             '/user/groups/1/2'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadSubUserGroups',
-            array('groupPath' => $userGroupPath),
+            ['groupPath' => $userGroupPath],
             "/user/groups/{$userGroupPath}/subgroups"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadUsersFromGroup',
-            array('groupPath' => $userGroupPath),
+            ['groupPath' => $userGroupPath],
             "/user/groups/{$userGroupPath}/users"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadRoleAssignmentsForUserGroup',
-            array('groupPath' => $userGroupPath),
+            ['groupPath' => $userGroupPath],
             "/user/groups/{$userGroupPath}/roles"
         );
 
@@ -111,7 +111,7 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
             new Values\User\UserGroup(),
             $this->getMockForAbstractClass(ContentType::class),
             new ContentInfo(
-                array(
+                [
                     'id' => 'content23',
                     'name' => 'Sindelfingen',
                     'sectionId' => 'section23',
@@ -125,15 +125,15 @@ class RestUserGroupTest extends ValueObjectVisitorBaseTest
                     'mainLanguageCode' => 'eng-US',
                     'mainLocationId' => 'location23',
                     'contentTypeId' => 'contentType23',
-                )
+                ]
             ),
             new Values\Content\Location(
-                array(
+                [
                     'pathString' => '/1/2/23',
-                    'path' => array(1, 2, 23),
-                )
+                    'path' => [1, 2, 23],
+                ]
             ),
-            array()
+            []
         );
     }
 

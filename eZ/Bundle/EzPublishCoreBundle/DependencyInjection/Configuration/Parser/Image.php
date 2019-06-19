@@ -48,30 +48,30 @@ class Image extends AbstractParser implements SuggestionCollectorAwareInterface
             ->arrayNode('image_variations')
                 ->info('Configuration for your image variations (aka "image aliases")')
                 ->example(
-                    array(
-                        'my_image_variation' => array(
+                    [
+                        'my_image_variation' => [
                             'reference' => '~',
-                            'filters' => array(
-                                array(
+                            'filters' => [
+                                [
                                     'name' => 'geometry/scaledownonly',
-                                    'params' => array(400, 350),
-                                ),
-                            ),
-                        ),
-                        'my_cropped_variation' => array(
+                                    'params' => [400, 350],
+                                ],
+                            ],
+                        ],
+                        'my_cropped_variation' => [
                             'reference' => 'my_image_variation',
-                            'filters' => array(
-                                array(
+                            'filters' => [
+                                [
                                     'name' => 'geometry/scalewidthdownonly',
-                                    'params' => array(300),
-                                ),
-                                array(
+                                    'params' => [300],
+                                ],
+                                [
                                     'name' => 'geometry/crop',
-                                    'params' => array(300, 300, 0, 0),
-                                ),
-                            ),
-                        ),
-                    )
+                                    'params' => [300, 300, 0, 0],
+                                ],
+                            ],
+                        ],
+                    ]
                 )
                 ->useAttributeAsKey('variation_name')
                 ->normalizeKeys(false)
@@ -79,7 +79,7 @@ class Image extends AbstractParser implements SuggestionCollectorAwareInterface
                     ->children()
                         ->scalarNode('reference')
                             ->info('Tells the system which original variation to use as reference image. Defaults to original')
-                            ->example(array('reference' => 'large'))
+                            ->example(['reference' => 'large'])
                         ->end()
                         ->arrayNode('filters')
                             ->info('A list of filters to run, each filter must be supported by the active image converters')

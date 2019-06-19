@@ -29,8 +29,8 @@ class ParameterProvider implements ParameterProviderInterface
 
     public function getViewParameters(Field $field)
     {
-        return array(
+        return [
             'pageService' => $this->pageService,
-        );
+        ];
     }
 }

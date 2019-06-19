@@ -36,7 +36,7 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $view = new RestExecutedView(
-            array(
+            [
                 'identifier' => 'test_view',
                 'searchResults' => new SearchResult([
                     'searchHits' => [
@@ -44,17 +44,17 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
                         $this->buildLocationSearchHit(),
                     ],
                 ]),
-            )
+            ]
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_views_load',
-            array('viewId' => $view->identifier),
+            ['viewId' => $view->identifier],
             "/content/views/{$view->identifier}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_views_load_results',
-            array('viewId' => $view->identifier),
+            ['viewId' => $view->identifier],
             "/content/views/{$view->identifier}/results"
         );
 
@@ -76,20 +76,20 @@ class RestExecutedViewTest extends ValueObjectVisitorBaseTest
 
     public function provideXpathAssertions()
     {
-        return array(
-            array('/View'),
-            array('/View[@media-type="application/vnd.ez.api.View+xml"]'),
-            array('/View[@href="/content/views/test_view"]'),
-            array('/View/identifier'),
-            array('/View/identifier[text()="test_view"]'),
-            array('/View/Query'),
-            array('/View/Query[@media-type="application/vnd.ez.api.Query+xml"]'),
-            array('/View/Result'),
-            array('/View/Result[@media-type="application/vnd.ez.api.ViewResult+xml"]'),
-            array('/View/Result[@href="/content/views/test_view/results"]'),
-            array('/View/Result/searchHits/searchHit[@score="0.123" and @index="alexandria"]'),
-            array('/View/Result/searchHits/searchHit[@score="0.234" and @index="waze"]'),
-        );
+        return [
+            ['/View'],
+            ['/View[@media-type="application/vnd.ez.api.View+xml"]'],
+            ['/View[@href="/content/views/test_view"]'],
+            ['/View/identifier'],
+            ['/View/identifier[text()="test_view"]'],
+            ['/View/Query'],
+            ['/View/Query[@media-type="application/vnd.ez.api.Query+xml"]'],
+            ['/View/Result'],
+            ['/View/Result[@media-type="application/vnd.ez.api.ViewResult+xml"]'],
+            ['/View/Result[@href="/content/views/test_view/results"]'],
+            ['/View/Result/searchHits/searchHit[@score="0.123" and @index="alexandria"]'],
+            ['/View/Result/searchHits/searchHit[@score="0.234" and @index="waze"]'],
+        ];
     }
 
     /**

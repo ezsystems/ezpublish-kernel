@@ -23,14 +23,14 @@ class FieldTypeRegistry
      *
      * @var mixed
      */
-    protected $coreFieldTypeMap = array();
+    protected $coreFieldTypeMap = [];
 
     /**
      * Map of FieldTypes where key is field type identifier and value is FieldType object.
      *
      * @var \eZ\Publish\SPI\Persistence\FieldType[]
      */
-    protected $fieldTypeMap = array();
+    protected $fieldTypeMap = [];
 
     /**
      * Creates FieldType registry.

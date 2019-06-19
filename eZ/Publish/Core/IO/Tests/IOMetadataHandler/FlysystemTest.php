@@ -49,10 +49,10 @@ class FlysystemTest extends TestCase
             ->with($spiCreateStruct->id)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'timestamp' => 1307155200,
                         'size' => 123,
-                    )
+                    ]
                 )
             );
 
@@ -81,10 +81,10 @@ class FlysystemTest extends TestCase
             ->with('prefix/my/file.png')
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'timestamp' => 1307155200,
                         'size' => 123,
-                    )
+                    ]
                 )
             );
 
@@ -105,9 +105,9 @@ class FlysystemTest extends TestCase
             ->with('prefix/my/file.png')
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'size' => 123,
-                    )
+                    ]
                 )
             );
 

@@ -207,11 +207,11 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function copySubtree($sourceId, $destinationParentId, $newOwnerId = null)
     {
-        $this->logger->logCall(__METHOD__, array(
+        $this->logger->logCall(__METHOD__, [
             'source' => $sourceId,
             'destination' => $destinationParentId,
             'newOwner' => $newOwnerId,
-        ));
+        ]);
 
         return $this->persistenceHandler->locationHandler()->copySubtree($sourceId, $destinationParentId, $newOwnerId);
     }
@@ -221,7 +221,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function move($sourceId, $destinationParentId)
     {
-        $this->logger->logCall(__METHOD__, array('source' => $sourceId, 'destination' => $destinationParentId));
+        $this->logger->logCall(__METHOD__, ['source' => $sourceId, 'destination' => $destinationParentId]);
         $return = $this->persistenceHandler->locationHandler()->move($sourceId, $destinationParentId);
 
         $this->cache->invalidateTags(['location-path-' . $sourceId]);
@@ -234,7 +234,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function markSubtreeModified($locationId, $timestamp = null)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'time' => $timestamp));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'time' => $timestamp]);
         $this->persistenceHandler->locationHandler()->markSubtreeModified($locationId, $timestamp);
     }
 
@@ -243,7 +243,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function hide($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->hide($locationId);
 
         $this->cache->invalidateTags(['location-path-data-' . $locationId]);
@@ -256,7 +256,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function unHide($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->unHide($locationId);
 
         $this->cache->invalidateTags(['location-path-data-' . $locationId]);
@@ -295,7 +295,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function swap($locationId1, $locationId2)
     {
-        $this->logger->logCall(__METHOD__, array('location1' => $locationId1, 'location2' => $locationId2));
+        $this->logger->logCall(__METHOD__, ['location1' => $locationId1, 'location2' => $locationId2]);
         $locationHandler = $this->persistenceHandler->locationHandler();
 
         $return = $locationHandler->swap($locationId1, $locationId2);
@@ -315,7 +315,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function update(UpdateStruct $struct, $locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'struct' => $struct]);
         $this->persistenceHandler->locationHandler()->update($struct, $locationId);
 
         $this->cache->invalidateTags(['location-data-' . $locationId]);
@@ -326,7 +326,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function create(CreateStruct $locationStruct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $locationStruct));
+        $this->logger->logCall(__METHOD__, ['struct' => $locationStruct]);
         $location = $this->persistenceHandler->locationHandler()->create($locationStruct);
 
         // need to clear loadLocationsByContent and similar collections involving locations data
@@ -341,7 +341,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function removeSubtree($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->removeSubtree($locationId);
 
         $this->cache->invalidateTags(['location-path-' . $locationId]);
@@ -354,7 +354,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function setSectionForSubtree($locationId, $sectionId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'section' => $sectionId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'section' => $sectionId]);
         $this->persistenceHandler->locationHandler()->setSectionForSubtree($locationId, $sectionId);
 
         $this->cache->invalidateTags(['location-path-' . $locationId]);
@@ -365,7 +365,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function changeMainLocation($contentId, $locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'content' => $contentId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'content' => $contentId]);
         $this->persistenceHandler->locationHandler()->changeMainLocation($contentId, $locationId);
 
         $this->cache->invalidateTags(['content-' . $contentId]);
@@ -393,7 +393,7 @@ class LocationHandler extends AbstractInMemoryPersistenceHandler implements Loca
      */
     public function loadAllLocations($offset, $limit)
     {
-        $this->logger->logCall(__METHOD__, array('offset' => $offset, 'limit' => $limit));
+        $this->logger->logCall(__METHOD__, ['offset' => $offset, 'limit' => $limit]);
 
         return $this->persistenceHandler->locationHandler()->loadAllLocations($offset, $limit);
     }

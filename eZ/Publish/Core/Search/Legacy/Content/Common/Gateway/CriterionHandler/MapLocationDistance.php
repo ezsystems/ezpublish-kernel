@@ -53,7 +53,7 @@ class MapLocationDistance extends FieldBase
      */
     protected function getFieldDefinitionIds($fieldIdentifier)
     {
-        $fieldDefinitionIdList = array();
+        $fieldDefinitionIdList = [];
         $fieldMap = $this->contentTypeHandler->getSearchableFieldMap();
 
         foreach ($fieldMap as $contentTypeIdentifier => $fieldIdentifierMap) {
@@ -182,7 +182,7 @@ class MapLocationDistance extends FieldBase
 
         // Calculate bounding box if possible
         // @todo consider covering operators EQ and IN as well
-        $boundingConstraints = array();
+        $boundingConstraints = [];
         switch ($criterion->operator) {
             case Criterion\Operator::LT:
             case Criterion\Operator::LTE:
@@ -204,7 +204,7 @@ class MapLocationDistance extends FieldBase
             ->innerJoin(
                 $this->dbHandler->quoteTable('ezgmaplocation'),
                 $subSelect->expr->lAnd(
-                    array(
+                    [
                         $subSelect->expr->eq(
                             $this->dbHandler->quoteColumn('contentobject_version', 'ezgmaplocation'),
                             $this->dbHandler->quoteColumn('version', 'ezcontentobject_attribute')
@@ -213,7 +213,7 @@ class MapLocationDistance extends FieldBase
                             $this->dbHandler->quoteColumn('contentobject_attribute_id', 'ezgmaplocation'),
                             $this->dbHandler->quoteColumn('id', 'ezcontentobject_attribute')
                         ),
-                    ),
+                    ],
                     $boundingConstraints
                 )
             )
@@ -251,7 +251,7 @@ class MapLocationDistance extends FieldBase
     {
         $boundingCoordinates = $this->getBoundingCoordinates($location, $distance);
 
-        return array(
+        return [
             $query->expr->gte(
                 $this->dbHandler->quoteColumn('latitude', 'ezgmaplocation'),
                 $query->bindValue($boundingCoordinates['lowLatitude'])
@@ -268,7 +268,7 @@ class MapLocationDistance extends FieldBase
                 $this->dbHandler->quoteColumn('longitude', 'ezgmaplocation'),
                 $query->bindValue($boundingCoordinates['highLongitude'])
             ),
-        );
+        ];
     }
 
     /**
@@ -296,23 +296,23 @@ class MapLocationDistance extends FieldBase
 
         // Check that bounding box does not include poles.
         if ($lowLatitudeRadians > -M_PI_2 && $highLatitudeRadians < M_PI_2) {
-            $boundingCoordinates = array(
+            $boundingCoordinates = [
                 'lowLatitude' => rad2deg($lowLatitudeRadians),
                 'lowLongitude' => rad2deg($radiansLongitude - $deltaLongitude),
                 'highLatitude' => rad2deg($highLatitudeRadians),
                 'highLongitude' => rad2deg($radiansLongitude + $deltaLongitude),
-            );
+            ];
         } else {
             // Handle the pole(s) being inside a bounding box, in this case we MUST cover
             // full circle of Earth's longitude and one or both poles.
             // Note that calculation for distances over the polar regions with flat Earth formula
             // will be VERY imprecise.
-            $boundingCoordinates = array(
+            $boundingCoordinates = [
                 'lowLatitude' => rad2deg(max($lowLatitudeRadians, -M_PI_2)),
                 'lowLongitude' => rad2deg(-M_PI),
                 'highLatitude' => rad2deg(min($highLatitudeRadians, M_PI_2)),
                 'highLongitude' => rad2deg(M_PI),
-            );
+            ];
         }
 
         return $boundingCoordinates;

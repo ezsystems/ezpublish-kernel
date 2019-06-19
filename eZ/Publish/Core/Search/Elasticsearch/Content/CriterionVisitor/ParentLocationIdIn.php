@@ -45,17 +45,17 @@ class ParentLocationIdIn extends CriterionVisitor
     protected function getCondition(Criterion $criterion)
     {
         if (count($criterion->value) > 1) {
-            return array(
-                'terms' => array(
+            return [
+                'terms' => [
                     'locations_doc.parent_id_id' => $criterion->value,
-                ),
-            );
+                ],
+            ];
         } else {
-            return array(
-                'term' => array(
+            return [
+                'term' => [
                     'locations_doc.parent_id_id' => $criterion->value[0],
-                ),
-            );
+                ],
+            ];
         }
     }
 
@@ -70,12 +70,12 @@ class ParentLocationIdIn extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'nested' => array(
+        return [
+            'nested' => [
                 'path' => 'locations_doc',
                 'filter' => $this->getCondition($criterion),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -89,11 +89,11 @@ class ParentLocationIdIn extends CriterionVisitor
      */
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'nested' => array(
+        return [
+            'nested' => [
                 'path' => 'locations_doc',
                 'query' => $this->getCondition($criterion),
-            ),
-        );
+            ],
+        ];
     }
 }

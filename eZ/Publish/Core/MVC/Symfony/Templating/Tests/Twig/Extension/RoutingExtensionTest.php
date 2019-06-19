@@ -19,9 +19,9 @@ class RoutingExtensionTest extends Twig_Test_IntegrationTestCase
 {
     protected function getExtensions()
     {
-        return array(
+        return [
             new RoutingExtension($this->getRouteReferenceGenerator()),
-        );
+        ];
     }
 
     protected function getFixturesDir()

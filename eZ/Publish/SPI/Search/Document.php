@@ -49,12 +49,12 @@ class Document extends ValueObject
      *
      * @var \eZ\Publish\SPI\Search\Field[]
      */
-    public $fields = array();
+    public $fields = [];
 
     /**
      * An array of sub-documents.
      *
      * @var \eZ\Publish\SPI\Search\Document[]
      */
-    public $documents = array();
+    public $documents = [];
 }

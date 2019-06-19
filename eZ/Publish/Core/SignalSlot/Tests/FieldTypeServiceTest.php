@@ -30,7 +30,7 @@ class FieldTypeServiceTest extends ServiceTest
     {
         return $this->getMockForAbstractClass(
             TransformationProcessor::class,
-            array(),
+            [],
             '',
             false,
             true,
@@ -42,25 +42,25 @@ class FieldTypeServiceTest extends ServiceTest
     {
         $fieldType = new Type($this->getTransformationProcessorMock());
 
-        return array(
-            array(
+        return [
+            [
                 'getFieldTypes',
-                array(),
-                array($fieldType),
+                [],
+                [$fieldType],
                 0,
-            ),
-            array(
+            ],
+            [
                 'getFieldType',
-                array('ezstring'),
+                ['ezstring'],
                 $fieldType,
                 0,
-            ),
-            array(
+            ],
+            [
                 'hasFieldType',
-                array('ezstring'),
+                ['ezstring'],
                 true,
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -27,9 +27,9 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
             ->method('has')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array($matcherServiceIdentifier, true),
-                    )
+                    [
+                        [$matcherServiceIdentifier, true],
+                    ]
                 )
             );
         $container
@@ -37,9 +37,9 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
             ->method('get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array($matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->createMock(MatcherInterface::class)),
-                    )
+                    [
+                        [$matcherServiceIdentifier, ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->createMock(MatcherInterface::class)],
+                    ]
                 )
             );
 
@@ -60,16 +60,16 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
             ->with('block_view')
             ->will(
                 $this->returnValue(
-                    array(
-                        'full' => array(
-                            'matchRule' => array(
+                    [
+                        'full' => [
+                            'matchRule' => [
                                 'template' => 'my_template.html.twig',
-                                'match' => array(
+                                'match' => [
                                     $matcherServiceIdentifier => 'someValue',
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
         $matcherFactory = new BlockMatcherFactory($resolverMock, $this->createMock(Repository::class));
@@ -84,37 +84,37 @@ class BlockMatcherFactoryTest extends BaseMatcherFactoryTest
         $container = $this->createMock(ContainerInterface::class);
 
         $siteAccessName = 'siteaccess_name';
-        $updatedMatchConfig = array(
-            'full' => array(
-                'matchRule2' => array(
+        $updatedMatchConfig = [
+            'full' => [
+                'matchRule2' => [
                     'template' => 'my_other_template.html.twig',
-                    'match' => array(
-                        'foo' => array('bar'),
-                    ),
-                ),
-            ),
-        );
+                    'match' => [
+                        'foo' => ['bar'],
+                    ],
+                ],
+            ],
+        ];
         $resolverMock
             ->expects($this->atLeastOnce())
             ->method('getParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array(
+                    [
+                        [
                             'block_view', null, null,
-                            array(
-                                'full' => array(
-                                    'matchRule' => array(
+                            [
+                                'full' => [
+                                    'matchRule' => [
                                         'template' => 'my_template.html.twig',
-                                        'match' => array(
+                                        'match' => [
                                             $matcherServiceIdentifier => 'someValue',
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                        array('block_view', 'ezsettings', $siteAccessName, $updatedMatchConfig),
-                    )
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        ['block_view', 'ezsettings', $siteAccessName, $updatedMatchConfig],
+                    ]
                 )
             );
         $matcherFactory = new BlockMatcherFactory($resolverMock, $this->createMock(Repository::class));

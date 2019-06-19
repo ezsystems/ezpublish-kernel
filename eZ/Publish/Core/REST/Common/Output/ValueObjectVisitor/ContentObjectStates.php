@@ -38,10 +38,10 @@ class ContentObjectStates extends ValueObjectVisitor
                 'href',
                 $this->router->generate(
                     'ezpublish_rest_loadObjectState',
-                    array(
+                    [
                         'objectStateGroupId' => $state->groupId,
                         'objectStateId' => $state->objectState->id,
-                    )
+                    ]
                 )
             );
             $generator->endAttribute('href');

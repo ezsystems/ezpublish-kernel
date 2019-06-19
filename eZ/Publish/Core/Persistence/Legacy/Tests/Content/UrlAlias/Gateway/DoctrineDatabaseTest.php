@@ -54,7 +54,7 @@ class DoctrineDatabaseTest extends TestCase
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_simple.php');
         $gateway = $this->getGateway();
 
-        $rows = $gateway->loadUrlAliasData(array(md5('tri')));
+        $rows = $gateway->loadUrlAliasData([md5('tri')]);
 
         self::assertEmpty($rows);
     }
@@ -69,10 +69,10 @@ class DoctrineDatabaseTest extends TestCase
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_simple.php');
         $gateway = $this->getGateway();
 
-        $row = $gateway->loadUrlAliasData(array(md5('jedan'), md5('dva')));
+        $row = $gateway->loadUrlAliasData([md5('jedan'), md5('dva')]);
 
         self::assertEquals(
-            array(
+            [
                 'ezurlalias_ml0_id' => '2',
                 'ezurlalias_ml0_link' => '2',
                 'ezurlalias_ml0_is_alias' => '0',
@@ -95,7 +95,7 @@ class DoctrineDatabaseTest extends TestCase
                 'text' => 'dva',
                 'parent' => '2',
                 'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
-            ),
+            ],
             $row
         );
     }
@@ -112,10 +112,10 @@ class DoctrineDatabaseTest extends TestCase
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/urlaliases_multilang.php');
         $gateway = $this->getGateway();
 
-        $row = $gateway->loadUrlAliasData(array(md5('jedan'), md5('dva')));
+        $row = $gateway->loadUrlAliasData([md5('jedan'), md5('dva')]);
 
         self::assertEquals(
-            array(
+            [
                 'ezurlalias_ml0_id' => '2',
                 'ezurlalias_ml0_link' => '2',
                 'ezurlalias_ml0_is_alias' => '0',
@@ -138,7 +138,7 @@ class DoctrineDatabaseTest extends TestCase
                 'text' => 'dva',
                 'parent' => '2',
                 'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
-            ),
+            ],
             $row
         );
     }
@@ -148,45 +148,45 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function providerForTestLoadPathData()
     {
-        return array(
-            array(
+        return [
+            [
                 2,
-                array(
-                    array(
-                        array('parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'),
-                    ),
-                ),
-            ),
-            array(
+                [
+                    [
+                        ['parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'],
+                    ],
+                ],
+            ],
+            [
                 3,
-                array(
-                    array(
-                        array('parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'),
-                    ),
-                    array(
-                        array('parent' => '2', 'lang_mask' => '5', 'text' => 'two'),
-                        array('parent' => '2', 'lang_mask' => '3', 'text' => 'dva'),
-                    ),
-                ),
-            ),
-            array(
+                [
+                    [
+                        ['parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'],
+                    ],
+                    [
+                        ['parent' => '2', 'lang_mask' => '5', 'text' => 'two'],
+                        ['parent' => '2', 'lang_mask' => '3', 'text' => 'dva'],
+                    ],
+                ],
+            ],
+            [
                 4,
-                array(
-                    array(
-                        array('parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'),
-                    ),
-                    array(
-                        array('parent' => '2', 'lang_mask' => '5', 'text' => 'two'),
-                        array('parent' => '2', 'lang_mask' => '3', 'text' => 'dva'),
-                    ),
-                    array(
-                        array('parent' => '3', 'lang_mask' => '9', 'text' => 'drei'),
-                        array('parent' => '3', 'lang_mask' => '5', 'text' => 'three'),
-                        array('parent' => '3', 'lang_mask' => '3', 'text' => 'tri'),
-                    ),
-                ),
-            ),
-        );
+                [
+                    [
+                        ['parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'],
+                    ],
+                    [
+                        ['parent' => '2', 'lang_mask' => '5', 'text' => 'two'],
+                        ['parent' => '2', 'lang_mask' => '3', 'text' => 'dva'],
+                    ],
+                    [
+                        ['parent' => '3', 'lang_mask' => '9', 'text' => 'drei'],
+                        ['parent' => '3', 'lang_mask' => '5', 'text' => 'three'],
+                        ['parent' => '3', 'lang_mask' => '3', 'text' => 'tri'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -213,42 +213,42 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function providerForTestLoadPathDataMultipleLanguages()
     {
-        return array(
-            array(
+        return [
+            [
                 2,
-                array(
-                    array(
-                        array('parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'),
-                    ),
-                ),
-            ),
-            array(
+                [
+                    [
+                        ['parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'],
+                    ],
+                ],
+            ],
+            [
                 3,
-                array(
-                    array(
-                        array('parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'),
-                    ),
-                    array(
-                        array('parent' => '2', 'lang_mask' => '6', 'text' => 'dva'),
-                    ),
-                ),
-            ),
-            array(
+                [
+                    [
+                        ['parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'],
+                    ],
+                    [
+                        ['parent' => '2', 'lang_mask' => '6', 'text' => 'dva'],
+                    ],
+                ],
+            ],
+            [
                 4,
-                array(
-                    array(
-                        array('parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'),
-                    ),
-                    array(
-                        array('parent' => '2', 'lang_mask' => '6', 'text' => 'dva'),
-                    ),
-                    array(
-                        array('parent' => '3', 'lang_mask' => '4', 'text' => 'three'),
-                        array('parent' => '3', 'lang_mask' => '2', 'text' => 'tri'),
-                    ),
-                ),
-            ),
-        );
+                [
+                    [
+                        ['parent' => '0', 'lang_mask' => '3', 'text' => 'jedan'],
+                    ],
+                    [
+                        ['parent' => '2', 'lang_mask' => '6', 'text' => 'dva'],
+                    ],
+                    [
+                        ['parent' => '3', 'lang_mask' => '4', 'text' => 'three'],
+                        ['parent' => '3', 'lang_mask' => '2', 'text' => 'tri'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -275,20 +275,20 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function providerForTestCleanupAfterPublishHistorize()
     {
-        return array(
-            array(
+        return [
+            [
                 'action' => 'eznode:314',
                 'languageId' => 2,
                 'parentId' => 0,
                 'textMD5' => '6896260129051a949051c3847c34466f',
-            ),
-            array(
+            ],
+            [
                 'action' => 'eznode:315',
                 'languageId' => 2,
                 'parentId' => 0,
                 'textMD5' => 'c67ed9a09ab136fae610b6a087d82e21',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -338,20 +338,20 @@ class DoctrineDatabaseTest extends TestCase
      */
     public function providerForTestCleanupAfterPublishRemovesLanguage()
     {
-        return array(
-            array(
+        return [
+            [
                 'action' => 'eznode:316',
                 'languageId' => 2,
                 'parentId' => 0,
                 'textMD5' => 'd2cfe69af2d64330670e08efb2c86df7',
-            ),
-            array(
+            ],
+            [
                 'action' => 'eznode:317',
                 'languageId' => 2,
                 'parentId' => 0,
                 'textMD5' => '538dca05643d220317ad233cd7be7a0a',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -391,7 +391,7 @@ class DoctrineDatabaseTest extends TestCase
         $gateway->reparent(2, 42);
 
         self::assertEquals(
-            array(
+            [
                 'action' => 'eznode:315',
                 'action_type' => 'eznode',
                 'alias_redirects' => '1',
@@ -403,7 +403,7 @@ class DoctrineDatabaseTest extends TestCase
                 'parent' => '42',
                 'text' => 'dva',
                 'text_md5' => 'c67ed9a09ab136fae610b6a087d82e21',
-            ),
+            ],
             $gateway->loadRow(42, 'c67ed9a09ab136fae610b6a087d82e21')
         );
     }

@@ -95,7 +95,7 @@ class URLAlias extends RestController
                 $this->urlAliasService->listLocationAliases($location, $custom),
                 $request->getPathInfo()
             ),
-            array('locationId' => $location->id)
+            ['locationId' => $location->id]
         );
     }
 
@@ -110,7 +110,7 @@ class URLAlias extends RestController
     {
         $urlAliasCreate = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );
@@ -151,9 +151,9 @@ class URLAlias extends RestController
         }
 
         return new Values\CreatedURLAlias(
-            array(
+            [
                 'urlAlias' => $createdURLAlias,
-            )
+            ]
         );
     }
 
@@ -167,9 +167,9 @@ class URLAlias extends RestController
     public function deleteURLAlias($urlAliasId)
     {
         $this->urlAliasService->removeAliases(
-            array(
+            [
                 $this->urlAliasService->load($urlAliasId),
-            )
+            ]
         );
 
         return new Values\NoContent();

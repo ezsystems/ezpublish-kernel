@@ -38,7 +38,7 @@ class ScaleHeightDownOnlyFilterLoaderTest extends TestCase
      */
     public function testLoadInvalid()
     {
-        $this->loader->load($this->createMock(ImageInterface::class), array());
+        $this->loader->load($this->createMock(ImageInterface::class), []);
     }
 
     public function testLoad()
@@ -48,9 +48,9 @@ class ScaleHeightDownOnlyFilterLoaderTest extends TestCase
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, $this->equalTo(array('size' => array(null, $height), 'mode' => ImageInterface::THUMBNAIL_INSET)))
+            ->with($image, $this->equalTo(['size' => [null, $height], 'mode' => ImageInterface::THUMBNAIL_INSET]))
             ->will($this->returnValue($image));
 
-        $this->assertSame($image, $this->loader->load($image, array($height)));
+        $this->assertSame($image, $this->loader->load($image, [$height]));
     }
 }

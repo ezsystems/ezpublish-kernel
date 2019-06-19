@@ -37,7 +37,7 @@ $requestParser = new Common\RequestParser\EzPublish();
 
 // FieldTypes to be used in integration tests. The field types are only used
 // in terms of conversions from and to hash values.
-$fieldTypes = array(
+$fieldTypes = [
     new Client\FieldType(new FieldType\Author\Type()),
     new Client\FieldType(new FieldType\Checkbox\Type()),
     new Client\FieldType(new FieldType\DateAndTime\Type()),
@@ -53,7 +53,7 @@ $fieldTypes = array(
     new Client\FieldType(new FieldType\Url\Type()),
     new Client\FieldType(new FieldType\User\Type()),
     new Client\FieldType(new FieldType\Null\Type('ezpage')),            // @todo FIXME: Add correct type
-);
+];
 
 // The IntegrationTestRepository is only meant for integration tests. It
 // handles sessions which run throughout a single test case run and submission
@@ -75,7 +75,7 @@ $repository = new Client\IntegrationTestRepository(
         // The parsing dispatcher is configured after the repository has been
         // created due to circular references
         $parsingDispatcher = new Common\Input\ParsingDispatcher(),
-        array(
+        [
             // Defines the available data format encoding handlers. used to
             // process the input data and convert it into an array structure
             // usable by the parsers.
@@ -84,7 +84,7 @@ $repository = new Client\IntegrationTestRepository(
             // encoding formats need to be supported.
             'json' => new Common\Input\Handler\Json(),
             'xml' => new Common\Input\Handler\Xml(),
-        )
+        ]
     ),
     new Common\Output\Visitor(
         // The generator defines what transport encoding format will be used.
@@ -97,7 +97,7 @@ $repository = new Client\IntegrationTestRepository(
         // the server extend this array. It always maps the class name of the
         // value object (or its parent class(es)) to the respective visitor
         // implementation instance.
-        array(
+        [
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionCreateStruct' => new Client\Output\ValueObjectVisitor\SectionCreateStruct($requestParser),
             '\\eZ\\Publish\\API\\Repository\\Values\\Content\\SectionUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionUpdateStruct($requestParser),
             '\\eZ\\Publish\\Core\\REST\\Common\\Values\\SectionIncludingContentMetadataUpdateStruct' => new Client\Output\ValueObjectVisitor\SectionIncludingContentMetadataUpdateStruct($requestParser),
@@ -111,7 +111,7 @@ $repository = new Client\IntegrationTestRepository(
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateGroupUpdateStruct' => new Client\Output\ValueObjectVisitor\ObjectStateGroupUpdateStruct($requestParser),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateCreateStruct' => new Client\Output\ValueObjectVisitor\ObjectStateCreateStruct($requestParser),
             '\\eZ\\Publish\\API\\Repository\\Values\\ObjectState\\ObjectStateUpdateStruct' => new Client\Output\ValueObjectVisitor\ObjectStateUpdateStruct($requestParser),
-        )
+        ]
     ),
     $requestParser,
     $fieldTypes,
@@ -135,7 +135,7 @@ $fieldTypeParser = new Common\Input\FieldTypeParser(
 //
 // For each mime type you specify an instance of the parser which
 // should be used to process the given mime type.
-$inputParsers = array(
+$inputParsers = [
     'application/vnd.ez.api.Version' => new Client\Input\Parser\Content(
         $parserTools,
         $repository->getContentService(),
@@ -187,7 +187,7 @@ $inputParsers = array(
         $parserTools
     ),
     'application/vnd.ez.api.ObjectStateList' => new Client\Input\Parser\ObjectStateList(),
-);
+];
 foreach ($inputParsers as $mimeType => $parser) {
     $parsingDispatcher->addParser($mimeType, $parser);
 }

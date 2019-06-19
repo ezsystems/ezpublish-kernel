@@ -132,7 +132,7 @@ class BinaryBaseStorage extends GatewayBasedStorage
 
         $this->gateway->removeFileReference($fieldId, $versionNo);
 
-        $fileCounts = $this->gateway->countFileReferences(array($fileReference['id']));
+        $fileCounts = $this->gateway->countFileReferences([$fileReference['id']]);
 
         if ($fileCounts[$fileReference['id']] === 0) {
             $binaryFile = $this->IOService->loadBinaryFile($fileReference['id']);

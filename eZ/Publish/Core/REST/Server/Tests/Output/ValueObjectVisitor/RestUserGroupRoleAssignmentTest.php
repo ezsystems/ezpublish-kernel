@@ -29,29 +29,29 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
 
         $userGroupRoleAssignment = new Values\RestUserGroupRoleAssignment(
             new User\UserGroupRoleAssignment(
-                array(
+                [
                     'role' => new User\Role(
-                        array(
+                        [
                             'id' => 42,
                             'identifier' => 'some-role',
-                        )
+                        ]
                     ),
-                )
+                ]
             ),
             '/1/5/14'
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadRoleAssignmentForUserGroup',
-            array(
+            [
                 'groupPath' => '1/5/14',
                 'roleId' => $userGroupRoleAssignment->roleAssignment->role->id,
-            ),
+            ],
             "/user/groups/1/5/14/roles/{$userGroupRoleAssignment->roleAssignment->role->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadRole',
-            array('roleId' => $userGroupRoleAssignment->roleAssignment->role->id),
+            ['roleId' => $userGroupRoleAssignment->roleAssignment->role->id],
             "/user/roles/{$userGroupRoleAssignment->roleAssignment->role->id}"
         );
 
@@ -78,12 +78,12 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRoleAssignmentElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'RoleAssignment',
-                'children' => array(
+                'children' => [
                     'count' => 1,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <RoleAssignment> element.',
             false
@@ -100,13 +100,13 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRoleAssignmentAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'RoleAssignment',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.RoleAssignment+xml',
                     'href' => '/user/groups/1/5/14/roles/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <RoleAssignment> attributes.',
             false
@@ -123,9 +123,9 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRoleElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Role',
-            ),
+            ],
             $result,
             'Invalid <Role> element.',
             false
@@ -142,13 +142,13 @@ class RestUserGroupRoleAssignmentTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRoleAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Role',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Role+xml',
                     'href' => '/user/roles/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Role> attributes.',
             false

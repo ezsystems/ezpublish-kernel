@@ -68,9 +68,9 @@ class PageConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'defaultLayout' => $storageDef->dataText1,
-            )
+            ]
         );
     }
 
@@ -347,8 +347,8 @@ class PageConverter implements Converter
      */
     public function restoreValueFromXmlString($xmlString)
     {
-        $zones = array();
-        $attributes = array();
+        $zones = [];
+        $attributes = [];
         $layout = null;
 
         if ($xmlString) {
@@ -383,11 +383,11 @@ class PageConverter implements Converter
         }
 
         return new Parts\Page(
-            array(
+            [
                 'zones' => $zones,
                 'layout' => $layout,
                 'attributes' => $attributes,
-            )
+            ]
         );
     }
 
@@ -403,8 +403,8 @@ class PageConverter implements Converter
         $zoneId = null;
         $zoneIdentifier = null;
         $action = null;
-        $blocks = array();
-        $attributes = array();
+        $blocks = [];
+        $attributes = [];
 
         if ($node->hasAttributes()) {
             foreach ($node->attributes as $attr) {
@@ -444,13 +444,13 @@ class PageConverter implements Converter
         }
 
         return new Parts\Zone(
-            array(
+            [
                 'id' => $zoneId,
                 'identifier' => $zoneIdentifier,
                 'attributes' => $attributes,
                 'action' => $action,
                 'blocks' => $blocks,
-            )
+            ]
         );
     }
 
@@ -464,10 +464,10 @@ class PageConverter implements Converter
     protected function restoreBlockFromXml(DOMElement $node)
     {
         $blockId = null;
-        $items = array();
+        $items = [];
         $rotation = null;
         $customAttributes = null;
-        $attributes = array();
+        $attributes = [];
         $name = null;
         $type = null;
         $view = null;
@@ -505,7 +505,7 @@ class PageConverter implements Converter
                     break;
                 case 'rotation':
                     if ($rotation === null) {
-                        $rotation = array();
+                        $rotation = [];
                     }
 
                     foreach ($node->childNodes as $subNode) {
@@ -518,7 +518,7 @@ class PageConverter implements Converter
                     break;
                 case 'custom_attributes':
                     if ($customAttributes === null) {
-                        $customAttributes = array();
+                        $customAttributes = [];
                     }
 
                     foreach ($node->childNodes as $subNode) {
@@ -546,7 +546,7 @@ class PageConverter implements Converter
         }
 
         return new Parts\Block(
-            array(
+            [
                 'id' => $blockId,
                 'action' => $action,
                 'items' => $items,
@@ -558,7 +558,7 @@ class PageConverter implements Converter
                 'view' => $view,
                 'overflowId' => $overflowId,
                 'zoneId' => $zoneId,
-            )
+            ]
         );
     }
 
@@ -571,7 +571,7 @@ class PageConverter implements Converter
      */
     protected function restoreItemFromXml(DOMElement $node)
     {
-        $item = array('attributes' => array());
+        $item = ['attributes' => []];
 
         if ($node->hasAttributes()) {
             foreach ($node->attributes as $attr) {

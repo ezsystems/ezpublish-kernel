@@ -21,12 +21,12 @@ class Type extends FieldType
     /**
      * @var array
      */
-    protected $settingsSchema = array(
-        'defaultLayout' => array(
+    protected $settingsSchema = [
+        'defaultLayout' => [
             'type' => 'string',
             'default' => '',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var \eZ\Publish\Core\FieldType\Page\PageService
@@ -67,7 +67,7 @@ class Type extends FieldType
      */
     public function validateFieldSettings($fieldSettings)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($fieldSettings as $name => $value) {
             if (isset($this->settingsSchema[$name])) {
@@ -77,9 +77,9 @@ class Type extends FieldType
                             $validationErrors[] = new ValidationError(
                                 "Layout '{$value}' for setting '%setting%' is not available",
                                 null,
-                                array(
+                                [
                                     '%setting%' => $name,
-                                ),
+                                ],
                                 "[$name]"
                             );
                         }
@@ -89,9 +89,9 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
-                    array(
+                    [
                         '%setting%' => $name,
-                    ),
+                    ],
                     "[$name]"
                 );
             }
@@ -193,11 +193,11 @@ class Type extends FieldType
     public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
-            array(
+            [
                 'data' => $value->page,
                 'externalData' => null,
                 'sortKey' => $this->getSortInfo($value),
-            )
+            ]
         );
     }
 

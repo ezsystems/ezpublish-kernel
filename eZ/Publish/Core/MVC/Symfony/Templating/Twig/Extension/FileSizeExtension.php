@@ -74,9 +74,9 @@ class FileSizeExtension extends Twig_Extension
      */
     public function getFilters()
     {
-        return array(
-            new Twig_SimpleFilter('ez_file_size', array($this, 'sizeFilter')),
-        );
+        return [
+            new Twig_SimpleFilter('ez_file_size', [$this, 'sizeFilter']),
+        ];
     }
 
     /**

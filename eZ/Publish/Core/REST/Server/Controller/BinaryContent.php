@@ -80,7 +80,7 @@ class BinaryContent extends RestController
 
             return new CachedValue(
                 $variation,
-                array('locationId' => $content->contentInfo->mainLocationId)
+                ['locationId' => $content->contentInfo->mainLocationId]
             );
         } catch (InvalidVariationException $e) {
             throw new Exceptions\NotFoundException("Invalid image variation $variationIdentifier");

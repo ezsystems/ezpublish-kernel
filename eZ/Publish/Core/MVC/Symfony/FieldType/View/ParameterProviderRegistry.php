@@ -12,7 +12,7 @@ use InvalidArgumentException;
 
 class ParameterProviderRegistry implements ParameterProviderRegistryInterface
 {
-    protected $providers = array();
+    protected $providers = [];
 
     /**
      * Checks if a parameter provider is set for a given field type identifier.

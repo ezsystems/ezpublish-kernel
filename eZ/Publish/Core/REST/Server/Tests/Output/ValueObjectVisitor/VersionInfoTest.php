@@ -44,7 +44,7 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $versionInfo = new Content\VersionInfo(
-            array(
+            [
                 'id' => 23,
                 'versionNo' => 5,
                 'status' => Content\VersionInfo::STATUS_PUBLISHED,
@@ -52,24 +52,24 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
                 'creatorId' => 14,
                 'modificationDate' => $this->modificationDate,
                 'initialLanguageCode' => 'eng-US',
-                'languageCodes' => array('eng-US', 'ger-DE'),
-                'names' => array(
+                'languageCodes' => ['eng-US', 'ger-DE'],
+                'names' => [
                     'eng-US' => 'Sindelfingen',
                     'eng-GB' => 'Bielefeld',
-                ),
-                'contentInfo' => new ContentInfo(array('id' => 42)),
-            )
+                ],
+                'contentInfo' => new ContentInfo(['id' => 42]),
+            ]
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $versionInfo->creatorId),
+            ['userId' => $versionInfo->creatorId],
             "/user/users/{$versionInfo->creatorId}"
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array('contentId' => $versionInfo->contentInfo->id),
+            ['contentId' => $versionInfo->contentInfo->id],
             "/content/objects/{$versionInfo->contentInfo->id}"
         );
 
@@ -94,13 +94,13 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testResultContainsVersionInfoChildren($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'VersionInfo',
-                'children' => array(
+                'children' => [
                     'less_than' => 11,
                     'greater_than' => 9,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <VersionInfo> element.',
             false
@@ -115,10 +115,10 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoIdElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'id',
                 'content' => '23',
-            ),
+            ],
             $result,
             'Invalid <id> value.',
             false
@@ -133,10 +133,10 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoVersionNoElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'versionNo',
                 'content' => '5',
-            ),
+            ],
             $result,
             'Invalid <versionNo> value.',
             false
@@ -151,10 +151,10 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoStatusElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'status',
                 'content' => 'PUBLISHED',
-            ),
+            ],
             $result,
             'Invalid <status> value.',
             false
@@ -169,10 +169,10 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoCreationDateElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'creationDate',
                 'content' => $this->creationDate->format('c'),
-            ),
+            ],
             $result,
             'Invalid <creationDate> value.',
             false
@@ -187,10 +187,10 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoModificationDateElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'modificationDate',
                 'content' => $this->modificationDate->format('c'),
-            ),
+            ],
             $result,
             'Invalid <modificationDate> value.',
             false
@@ -205,10 +205,10 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoInitialLanguageCodeElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'initialLanguageCode',
                 'content' => 'eng-US',
-            ),
+            ],
             $result,
             'Invalid <initialLanguageCode> value.',
             false
@@ -223,10 +223,10 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoLanguageCodesElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'languageCodes',
                 'content' => 'eng-US,ger-DE',
-            ),
+            ],
             $result,
             'Invalid <languageCodes> value.',
             false
@@ -241,13 +241,13 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoNamesElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'names',
-                'children' => array(
+                'children' => [
                     'less_than' => 3,
                     'greater_than' => 1,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <names> value.',
             false
@@ -262,13 +262,13 @@ class VersionInfoTest extends ValueObjectVisitorBaseTest
     public function testVersionInfoContentElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Content',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
                     'href' => '/content/objects/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <initialLanguageCode> value.',
             false

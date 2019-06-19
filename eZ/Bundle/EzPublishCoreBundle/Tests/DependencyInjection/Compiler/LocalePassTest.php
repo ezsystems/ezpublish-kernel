@@ -34,12 +34,12 @@ class LocalePassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'locale_listener',
             'setConfigResolver',
-            array(new Reference('ezpublish.config.resolver'))
+            [new Reference('ezpublish.config.resolver')]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'locale_listener',
             'setLocaleConverter',
-            array(new Reference('ezpublish.locale.converter'))
+            [new Reference('ezpublish.locale.converter')]
         );
     }
 }

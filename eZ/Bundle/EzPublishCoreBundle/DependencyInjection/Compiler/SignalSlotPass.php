@@ -31,7 +31,7 @@ class SignalSlotPass implements CompilerPassInterface
                     throw new LogicException("Could not find 'signal' attribute on '$id' service, which is mandatory for services tagged as 'ezpublish.api.slot'");
                 }
 
-                $signalDispatcherDef->addMethodCall('attach', array($attribute['signal'], new Reference($id)));
+                $signalDispatcherDef->addMethodCall('attach', [$attribute['signal'], new Reference($id)]);
             }
         }
     }

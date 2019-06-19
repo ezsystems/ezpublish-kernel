@@ -49,7 +49,7 @@ class IOServiceTest extends TestCase
             $this->metadataHandlerMock,
             $this->binarydataHandlerMock,
             $this->mimeTypeDetectorMock,
-            array('prefix' => self::PREFIX)
+            ['prefix' => self::PREFIX]
         );
     }
 
@@ -210,7 +210,7 @@ class IOServiceTest extends TestCase
 
         $binaryFile = $this->getIOService()->loadBinaryFile($id);
 
-        $expectedBinaryFile = new BinaryFile(array('id' => $id, 'size' => 12345, 'uri' => "/$spiId"));
+        $expectedBinaryFile = new BinaryFile(['id' => $id, 'size' => 12345, 'uri' => "/$spiId"]);
 
         self::assertEquals($expectedBinaryFile, $binaryFile);
 
@@ -423,7 +423,7 @@ class IOServiceTest extends TestCase
     public function testDeleteBinaryFileNotFound()
     {
         $binaryFile = new BinaryFile(
-            array('id' => __METHOD__)
+            ['id' => __METHOD__]
         );
 
         $prefixedId = $this->getPrefixedUri($binaryFile->id);

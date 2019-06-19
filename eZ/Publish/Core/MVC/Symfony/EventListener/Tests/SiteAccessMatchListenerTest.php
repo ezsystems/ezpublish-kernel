@@ -56,7 +56,7 @@ class SiteAccessMatchListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(KernelEvents::REQUEST => array('onKernelRequest', 45)),
+            [KernelEvents::REQUEST => ['onKernelRequest', 45]],
             SiteAccessMatchListener::getSubscribedEvents()
         );
     }
@@ -171,7 +171,7 @@ class SiteAccessMatchListenerTest extends TestCase
             ->will($this->returnValue(false));
 
         $simplifiedRequest = new SimplifiedRequest(
-            array(
+            [
                 'scheme' => $request->getScheme(),
                 'host' => $request->getHost(),
                 'port' => $request->getPort(),
@@ -179,7 +179,7 @@ class SiteAccessMatchListenerTest extends TestCase
                 'queryParams' => $request->query->all(),
                 'languages' => $request->getLanguages(),
                 'headers' => $request->headers->all(),
-            )
+            ]
         );
         $this->saRouter
             ->expects($this->once())
@@ -220,7 +220,7 @@ class SiteAccessMatchListenerTest extends TestCase
             ->will($this->returnValue(true));
 
         $simplifiedRequest = new SimplifiedRequest(
-            array(
+            [
                 'scheme' => $originalRequest->getScheme(),
                 'host' => $originalRequest->getHost(),
                 'port' => $originalRequest->getPort(),
@@ -228,7 +228,7 @@ class SiteAccessMatchListenerTest extends TestCase
                 'queryParams' => $originalRequest->query->all(),
                 'languages' => $originalRequest->getLanguages(),
                 'headers' => $originalRequest->headers->all(),
-            )
+            ]
         );
         $this->saRouter
             ->expects($this->once())

@@ -102,7 +102,7 @@ class LanguageLimitationType implements SPITargetAwareLimitationType
      */
     public function validate(APILimitationValue $limitationValue): array
     {
-        $validationErrors = array();
+        $validationErrors = [];
         $existingLanguages = $this->persistenceLanguageHandler->loadListByLanguageCodes(
             $limitationValue->limitationValues
         );

@@ -39,6 +39,6 @@ class CoreExtension extends Twig_Extension implements Twig_Extension_GlobalsInte
      */
     public function getGlobals()
     {
-        return array('ezpublish' => $this->globalHelper);
+        return ['ezpublish' => $this->globalHelper];
     }
 }

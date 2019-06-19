@@ -24,60 +24,60 @@ class Xml extends Handler
      *
      * @var array
      */
-    protected $forceList = array(
-        'ContentList' => array(
+    protected $forceList = [
+        'ContentList' => [
             'Content',
-        ),
-        'ContentTypeList' => array(
+        ],
+        'ContentTypeList' => [
             'ContentType',
-        ),
-        'ContentTypeGroupRefList' => array(
+        ],
+        'ContentTypeGroupRefList' => [
             'ContentTypeGroupRef',
-        ),
-        'SectionList' => array(
+        ],
+        'SectionList' => [
             'Section',
-        ),
-        'RoleList' => array(
+        ],
+        'RoleList' => [
             'Role',
-        ),
-        'PolicyList' => array(
+        ],
+        'PolicyList' => [
             'Policy',
-        ),
-        'LocationList' => array(
+        ],
+        'LocationList' => [
             'Location',
-        ),
-        'ContentObjectStates' => array(
+        ],
+        'ContentObjectStates' => [
             'ObjectState',
-        ),
-        'FieldDefinitions' => array(
+        ],
+        'FieldDefinitions' => [
             'FieldDefinition',
-        ),
-        'UserList' => array(
+        ],
+        'UserList' => [
             'User',
-        ),
-        'names' => array(
+        ],
+        'names' => [
             'value',
-        ),
-        'descriptions' => array(
+        ],
+        'descriptions' => [
             'value',
-        ),
-        'fields' => array(
+        ],
+        'fields' => [
             'field',
-        ),
-        'limitations' => array(
+        ],
+        'limitations' => [
             'limitation',
-        ),
-        'values' => array(
+        ],
+        'values' => [
             'ref',
-        ),
-    );
+        ],
+    ];
 
-    protected $fieldTypeHashElements = array(
+    protected $fieldTypeHashElements = [
         'fieldValue',
         'defaultValue',
         'fieldSettings',
         'validatorConfiguration',
-    );
+    ];
 
     /**
      * Converts the given string to an array structure.
@@ -127,7 +127,7 @@ class Xml extends Handler
     protected function convertDom(\DOMNode $node)
     {
         $isArray = false;
-        $current = array();
+        $current = [];
         $text = '';
 
         if ($node instanceof \DOMElement) {
@@ -148,17 +148,17 @@ class Xml extends Handler
                         if (isset($this->forceList[$parentTagName]) &&
                              in_array($tagName, $this->forceList[$parentTagName], true)) {
                             $isArray = true;
-                            $current[$tagName] = array(
+                            $current[$tagName] = [
                                 $this->convertDom($childNode),
-                            );
+                            ];
                         } else {
                             $current[$tagName] = $this->convertDom($childNode);
                         }
                     } elseif (!$isArray) {
-                        $current[$tagName] = array(
+                        $current[$tagName] = [
                             $current[$tagName],
                             $this->convertDom($childNode),
-                        );
+                        ];
                         $isArray = true;
                     } else {
                         $current[$tagName][] = $this->convertDom($childNode);
@@ -215,7 +215,7 @@ class Xml extends Handler
      */
     protected function parseFieldTypeValues(\DOMNodeList $valueNodes)
     {
-        $resultValues = array();
+        $resultValues = [];
         $resultString = '';
 
         foreach ($valueNodes as $valueNode) {

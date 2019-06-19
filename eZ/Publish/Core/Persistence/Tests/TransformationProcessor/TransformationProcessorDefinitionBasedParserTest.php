@@ -20,7 +20,7 @@ class TransformationProcessorDefinitionBasedParserTest extends TestCase
     {
         return array_map(
             function ($file) {
-                return array(realpath($file));
+                return [realpath($file)];
             },
             glob(__DIR__ . '/_fixtures/transformations/*.tr')
         );

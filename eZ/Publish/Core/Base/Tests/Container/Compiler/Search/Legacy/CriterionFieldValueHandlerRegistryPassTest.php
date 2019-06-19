@@ -43,7 +43,7 @@ class CriterionFieldValueHandlerRegistryPassTest extends AbstractCompilerPassTes
         $def = new Definition();
         $def->addTag(
             'ezpublish.search.legacy.gateway.criterion_field_value_handler',
-            array('alias' => $fieldTypeIdentifier)
+            ['alias' => $fieldTypeIdentifier]
         );
         $this->setDefinition($serviceId, $def);
 
@@ -52,7 +52,7 @@ class CriterionFieldValueHandlerRegistryPassTest extends AbstractCompilerPassTes
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.legacy.gateway.criterion_field_value_handler.registry',
             'register',
-            array($fieldTypeIdentifier, new Reference($serviceId))
+            [$fieldTypeIdentifier, new Reference($serviceId)]
         );
     }
 
@@ -72,7 +72,7 @@ class CriterionFieldValueHandlerRegistryPassTest extends AbstractCompilerPassTes
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.legacy.gateway.criterion_field_value_handler.registry',
             'register',
-            array($fieldTypeIdentifier, new Reference($serviceId))
+            [$fieldTypeIdentifier, new Reference($serviceId)]
         );
     }
 }
