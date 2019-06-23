@@ -87,8 +87,8 @@ class PageService
      */
     public function __construct(
         ContentService $contentService,
-        array $zoneDefinition = array(),
-        array $blockDefinition = array()
+        array $zoneDefinition = [],
+        array $blockDefinition = []
     ) {
         $this->contentService = $contentService;
         $this->zoneDefinition = $zoneDefinition;
@@ -97,7 +97,7 @@ class PageService
         $this->lastValidItems = new SplObjectStorage();
         $this->waitingBlockItems = new SplObjectStorage();
         $this->archivedBlockItems = new SplObjectStorage();
-        $this->blocksById = array();
+        $this->blocksById = [];
     }
 
     /**

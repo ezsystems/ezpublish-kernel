@@ -50,10 +50,10 @@ class FieldValueConverterRegistryPass implements CompilerPassInterface
 
                 $registry->addMethodCall(
                     'register',
-                    array(
+                    [
                         $attribute['alias'],
                         $converter,
-                    )
+                    ]
                 );
             }
         }

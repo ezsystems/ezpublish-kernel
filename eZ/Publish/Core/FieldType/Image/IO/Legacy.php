@@ -98,15 +98,15 @@ class Legacy implements IOServiceInterface
      */
     private function setPrefixes()
     {
-        $pathArray = array($this->optionsProvider->getVarDir());
+        $pathArray = [$this->optionsProvider->getVarDir()];
 
         // The storage dir itself might be null
         if ($storageDir = $this->optionsProvider->getStorageDir()) {
             $pathArray[] = $storageDir;
         }
 
-        $this->draftPrefix = implode('/', array_merge($pathArray, array($this->optionsProvider->getDraftImagesDir())));
-        $this->publishedPrefix = implode('/', array_merge($pathArray, array($this->optionsProvider->getPublishedImagesDir())));
+        $this->draftPrefix = implode('/', array_merge($pathArray, [$this->optionsProvider->getDraftImagesDir()]));
+        $this->publishedPrefix = implode('/', array_merge($pathArray, [$this->optionsProvider->getPublishedImagesDir()]));
     }
 
     public function getExternalPath($internalId)

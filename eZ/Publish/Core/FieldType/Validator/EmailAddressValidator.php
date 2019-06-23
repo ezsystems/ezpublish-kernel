@@ -20,16 +20,16 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class EmailAddressValidator extends Validator
 {
-    protected $constraints = array(
+    protected $constraints = [
         'Extent' => false,
-    );
+    ];
 
-    protected $constraintsSchema = array(
-        'Extent' => array(
+    protected $constraintsSchema = [
+        'Extent' => [
             'type' => 'string',
             'default' => 'regex',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @abstract
@@ -40,7 +40,7 @@ class EmailAddressValidator extends Validator
      */
     public function validateConstraints($constraints)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($constraints as $name => $value) {
             switch ($name) {
                 case 'Extent':
@@ -49,9 +49,9 @@ class EmailAddressValidator extends Validator
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be regex for now",
                             null,
-                            array(
+                            [
                                 '%parameter%' => $name,
-                            ),
+                            ],
                             "[EmailAddressValidator][$name]"
                         );
                     }
@@ -60,9 +60,9 @@ class EmailAddressValidator extends Validator
                     $validationErrors[] = new ValidationError(
                         "Validator parameter '%parameter%' is unknown",
                         null,
-                        array(
+                        [
                             '%parameter%' => $name,
-                        ),
+                        ],
                         "[EmailAddressValidator][$name]"
                     );
             }
@@ -97,7 +97,7 @@ class EmailAddressValidator extends Validator
         $this->errors[] = new ValidationError(
             'The value must be a valid email address.',
             null,
-            array(),
+            [],
             'email'
         );
 

@@ -21,23 +21,23 @@ class PageTest extends TestCase
      */
     public function testGetState()
     {
-        $zone1 = new Zone(array('id' => 'foo'));
-        $zone2 = new Zone(array('id' => 'bar'));
-        $zone3 = new Zone(array('id' => 'baz'));
-        $properties = array(
+        $zone1 = new Zone(['id' => 'foo']);
+        $zone2 = new Zone(['id' => 'bar']);
+        $zone3 = new Zone(['id' => 'baz']);
+        $properties = [
             'layout' => 'my_layout',
-            'zones' => array($zone1, $zone2, $zone3),
-        );
+            'zones' => [$zone1, $zone2, $zone3],
+        ];
         $page = new Page($properties);
         $this->assertEquals(
-            $properties + array(
-                'zonesById' => array(
+            $properties + [
+                'zonesById' => [
                     'foo' => $zone1,
                     'bar' => $zone2,
                     'baz' => $zone3,
-                ),
-                'attributes' => array(),
-            ),
+                ],
+                'attributes' => [],
+            ],
             $page->getState()
         );
     }

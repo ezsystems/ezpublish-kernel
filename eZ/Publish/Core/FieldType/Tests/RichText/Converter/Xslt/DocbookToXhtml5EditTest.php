@@ -32,10 +32,10 @@ class DocbookToXhtml5EditTest extends BaseTest
      */
     public function getFixtureSubdirectories()
     {
-        return array(
+        return [
             'input' => 'docbook',
             'output' => 'xhtml5/edit',
-        );
+        ];
     }
 
     /**
@@ -72,15 +72,15 @@ class DocbookToXhtml5EditTest extends BaseTest
      */
     protected function getCustomConversionTransformationStylesheets()
     {
-        return array(
-            array(
+        return [
+            [
                 'path' => __DIR__ . '/../../../../RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl',
                 'priority' => 100,
-            ),
-            array(
+            ],
+            [
                 'path' => __DIR__ . '/_fixtures/docbook/custom_stylesheets/youtube_xhtml5_edit.xsl',
                 'priority' => 99,
-            ),
-        );
+            ],
+        ];
     }
 }

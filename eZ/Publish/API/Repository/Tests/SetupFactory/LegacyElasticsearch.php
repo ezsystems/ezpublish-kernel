@@ -106,8 +106,8 @@ class LegacyElasticsearch extends Legacy
         $stmt = $query->prepare();
         $stmt->execute();
 
-        $contentObjects = array();
-        $locations = array();
+        $contentObjects = [];
+        $locations = [];
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $contentObjects[] = $persistenceHandler->contentHandler()->load(
                 $row['id'],

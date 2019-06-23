@@ -29,16 +29,16 @@ class Type extends FieldType
     const SELECTION_BROWSE = 0;
     const SELECTION_DROPDOWN = 1;
 
-    protected $settingsSchema = array(
-        'selectionMethod' => array(
+    protected $settingsSchema = [
+        'selectionMethod' => [
             'type' => 'int',
             'default' => self::SELECTION_BROWSE,
-        ),
-        'selectionRoot' => array(
+        ],
+        'selectionRoot' => [
             'type' => 'string',
             'default' => null,
-        ),
-    );
+        ],
+    ];
 
     /**
      * @see \eZ\Publish\Core\FieldType\FieldType::validateFieldSettings()
@@ -49,16 +49,16 @@ class Type extends FieldType
      */
     public function validateFieldSettings($fieldSettings)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($fieldSettings as $name => $value) {
             if (!isset($this->settingsSchema[$name])) {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
-                    array(
+                    [
                         '%setting%' => $name,
-                    ),
+                    ],
                     "[$name]"
                 );
                 continue;
@@ -70,11 +70,11 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' must be either %selection_browse% or %selection_dropdown%",
                             null,
-                            array(
+                            [
                                 '%setting%' => $name,
                                 '%selection_browse%' => self::SELECTION_BROWSE,
                                 '%selection_dropdown%' => self::SELECTION_DROPDOWN,
-                            ),
+                            ],
                             "[$name]"
                         );
                     }
@@ -84,9 +84,9 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' value must be of either null, string or integer",
                             null,
-                            array(
+                            [
                                 '%setting%' => $name,
-                            ),
+                            ],
                             "[$name]"
                         );
                     }
@@ -216,7 +216,7 @@ class Type extends FieldType
      */
     public function toHash(SPIValue $value)
     {
-        return array('destinationContentId' => $value->destinationContentId);
+        return ['destinationContentId' => $value->destinationContentId];
     }
 
     /**
@@ -256,9 +256,9 @@ class Type extends FieldType
      */
     public function getRelations(SPIValue $fieldValue)
     {
-        $relations = array();
+        $relations = [];
         if ($fieldValue->destinationContentId !== null) {
-            $relations[Relation::FIELD] = array($fieldValue->destinationContentId);
+            $relations[Relation::FIELD] = [$fieldValue->destinationContentId];
         }
 
         return $relations;

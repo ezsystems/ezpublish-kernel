@@ -28,7 +28,7 @@ class RichTextHtml5ConverterPass implements CompilerPassInterface
         $html5ConverterDefinition = $container->getDefinition('ezpublish.fieldType.ezrichtext.converter.output.xhtml5');
         $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.ezrichtext.converter.output.xhtml5');
 
-        $convertersByPriority = array();
+        $convertersByPriority = [];
         foreach ($taggedServiceIds as $id => $tags) {
             foreach ($tags as $tag) {
                 $priority = isset($tag['priority']) ? (int)$tag['priority'] : 0;
@@ -38,7 +38,7 @@ class RichTextHtml5ConverterPass implements CompilerPassInterface
 
         if (count($convertersByPriority) > 0) {
             $html5ConverterDefinition->setArguments(
-                array($this->sortConverters($convertersByPriority))
+                [$this->sortConverters($convertersByPriority)]
             );
         }
     }

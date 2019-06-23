@@ -110,7 +110,7 @@ class EzPublishCoreBundle extends Bundle
     {
         if (!isset($this->extension)) {
             $this->extension = new EzPublishCoreExtension(
-                array(
+                [
                     // LocationView config parser needs to be specified AFTER ContentView config
                     // parser since it is used to convert location view override rules to content
                     // view override rules. If it were specified before, ContentView provider would
@@ -129,7 +129,7 @@ class EzPublishCoreBundle extends Bundle
                     new ConfigParser\Page(),
                     new ConfigParser\Languages(),
                     new ConfigParser\IO(new ComplexSettingParser()),
-                )
+                ]
             );
 
             $this->extension->addPolicyProvider(new RepositoryPolicyProvider());

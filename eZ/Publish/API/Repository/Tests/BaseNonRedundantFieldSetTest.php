@@ -32,29 +32,29 @@ abstract class BaseNonRedundantFieldSetTest extends BaseTest
         $typeCreate->remoteId = '384b94a1bd6bc06826410e284dd9684887bf56fc';
         $typeCreate->urlAliasSchema = '<field1|field2|field3|field4>';
         $typeCreate->nameSchema = '<field1|field2|field3|field4>';
-        $typeCreate->names = array('eng-US' => 'Blog post');
-        $typeCreate->descriptions = array('eng-US' => 'A blog post');
+        $typeCreate->names = ['eng-US' => 'Blog post'];
+        $typeCreate->descriptions = ['eng-US' => 'A blog post'];
         $typeCreate->creatorId = $creatorId;
         $typeCreate->creationDate = $this->createDateTime();
 
-        $validatorConfiguration = array(
-            'StringLengthValidator' => array(
+        $validatorConfiguration = [
+            'StringLengthValidator' => [
                 'minStringLength' => null,
                 'maxStringLength' => null,
-            ),
-        );
+            ],
+        ];
 
         // Field #1
         $field1Create = $contentTypeService->newFieldDefinitionCreateStruct('field1', 'ezstring');
-        $field1Create->names = array('eng-US' => 'Field #1');
-        $field1Create->descriptions = array('eng-US' => 'Field #1 is not translatable and has empty default value');
+        $field1Create->names = ['eng-US' => 'Field #1'];
+        $field1Create->descriptions = ['eng-US' => 'Field #1 is not translatable and has empty default value'];
         $field1Create->fieldGroup = 'test';
         $field1Create->position = 1;
         $field1Create->isTranslatable = false;
         $field1Create->isRequired = false;
         $field1Create->isInfoCollector = false;
         $field1Create->validatorConfiguration = $validatorConfiguration;
-        $field1Create->fieldSettings = array();
+        $field1Create->fieldSettings = [];
         $field1Create->isSearchable = true;
         $field1Create->defaultValue = null;
 
@@ -62,15 +62,15 @@ abstract class BaseNonRedundantFieldSetTest extends BaseTest
 
         // Field #2
         $field2Create = $contentTypeService->newFieldDefinitionCreateStruct('field2', 'ezstring');
-        $field2Create->names = array('eng-US' => 'Field #2');
-        $field2Create->descriptions = array('eng-US' => 'Field #2 is not translatable and has non-empty default value');
+        $field2Create->names = ['eng-US' => 'Field #2'];
+        $field2Create->descriptions = ['eng-US' => 'Field #2 is not translatable and has non-empty default value'];
         $field2Create->fieldGroup = 'test';
         $field2Create->position = 2;
         $field2Create->isTranslatable = false;
         $field2Create->isRequired = false;
         $field2Create->isInfoCollector = false;
         $field2Create->validatorConfiguration = $validatorConfiguration;
-        $field2Create->fieldSettings = array();
+        $field2Create->fieldSettings = [];
         $field2Create->isSearchable = true;
         $field2Create->defaultValue = new TextLineValue('default value 2');
 
@@ -78,15 +78,15 @@ abstract class BaseNonRedundantFieldSetTest extends BaseTest
 
         // Field #3
         $field3Create = $contentTypeService->newFieldDefinitionCreateStruct('field3', 'ezstring');
-        $field3Create->names = array('eng-US' => 'Field #3');
-        $field3Create->descriptions = array('eng-US' => 'Field #3 is translatable and has empty default value');
+        $field3Create->names = ['eng-US' => 'Field #3'];
+        $field3Create->descriptions = ['eng-US' => 'Field #3 is translatable and has empty default value'];
         $field3Create->fieldGroup = 'test';
         $field3Create->position = 3;
         $field3Create->isTranslatable = true;
         $field3Create->isRequired = false;
         $field3Create->isInfoCollector = false;
         $field3Create->validatorConfiguration = $validatorConfiguration;
-        $field3Create->fieldSettings = array();
+        $field3Create->fieldSettings = [];
         $field3Create->isSearchable = true;
         $field3Create->defaultValue = null;
 
@@ -94,21 +94,21 @@ abstract class BaseNonRedundantFieldSetTest extends BaseTest
 
         // Field #4
         $field4Create = $contentTypeService->newFieldDefinitionCreateStruct('field4', 'ezstring');
-        $field4Create->names = array('eng-US' => 'Field #4');
-        $field4Create->descriptions = array('eng-US' => 'Field #4 is translatable and has non empty default value');
+        $field4Create->names = ['eng-US' => 'Field #4'];
+        $field4Create->descriptions = ['eng-US' => 'Field #4 is translatable and has non empty default value'];
         $field4Create->fieldGroup = 'test';
         $field4Create->position = 4;
         $field4Create->isTranslatable = true;
         $field4Create->isRequired = false;
         $field4Create->isInfoCollector = false;
         $field4Create->validatorConfiguration = $validatorConfiguration;
-        $field4Create->fieldSettings = array();
+        $field4Create->fieldSettings = [];
         $field4Create->isSearchable = true;
         $field4Create->defaultValue = new TextLineValue('default value 4');
 
         $typeCreate->addFieldDefinition($field4Create);
 
-        $groups = array($contentTypeService->loadContentTypeGroupByIdentifier('Content'));
+        $groups = [$contentTypeService->loadContentTypeGroupByIdentifier('Content')];
 
         $contentTypeDraft = $contentTypeService->createContentType($typeCreate, $groups);
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
@@ -147,36 +147,36 @@ abstract class BaseNonRedundantFieldSetTest extends BaseTest
 
     protected function createMultilingualTestContent()
     {
-        $fieldValues = array(
-            'field1' => array('eng-US' => 'value 1'),
-            'field2' => array('eng-US' => 'value 2'),
-            'field3' => array(
+        $fieldValues = [
+            'field1' => ['eng-US' => 'value 1'],
+            'field2' => ['eng-US' => 'value 2'],
+            'field3' => [
                 'eng-US' => 'value 3',
                 'eng-GB' => 'value 3 eng-GB',
-            ),
-            'field4' => array(
+            ],
+            'field4' => [
                 'eng-US' => 'value 4',
                 'eng-GB' => 'value 4 eng-GB',
-            ),
-        );
+            ],
+        ];
 
         return $this->createTestContent('eng-US', $fieldValues);
     }
 
     protected function createTestContentForUpdate()
     {
-        $fieldValues = array(
-            'field1' => array('eng-US' => 'value 1'),
-            'field2' => array('eng-US' => 'value 2'),
-            'field3' => array(
+        $fieldValues = [
+            'field1' => ['eng-US' => 'value 1'],
+            'field2' => ['eng-US' => 'value 2'],
+            'field3' => [
                 'eng-US' => 'value 3',
                 'eng-GB' => 'value 3 eng-GB',
-            ),
-            'field4' => array(
+            ],
+            'field4' => [
                 'eng-US' => 'value 4',
                 'eng-GB' => 'value 4 eng-GB',
-            ),
-        );
+            ],
+        ];
 
         return $this->createTestContent('eng-US', $fieldValues);
     }

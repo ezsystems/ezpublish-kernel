@@ -82,10 +82,10 @@ EOT
         $totalCount = $stmt->fetchColumn();
 
         $output->writeln(
-            array(
+            [
                 'Found total of Content objects for update: ' . $totalCount,
                 '',
-            )
+            ]
         );
 
         if ($totalCount == 0) {

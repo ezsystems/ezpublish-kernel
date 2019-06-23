@@ -30,7 +30,7 @@ class UserListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $userList = new UserList(array(), '/some/path');
+        $userList = new UserList([], '/some/path');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -55,9 +55,9 @@ class UserListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUserListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UserList',
-            ),
+            ],
             $result,
             'Invalid <UserList> element.',
             false
@@ -74,13 +74,13 @@ class UserListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUserListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UserList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UserList+xml',
                     'href' => '/some/path',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UserList> attributes.',
             false
@@ -98,30 +98,30 @@ class UserListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $userList = new UserList(
-            array(
+            [
                 new RestUser(
                     new Content(
-                        array(
-                            'internalFields' => array(),
-                        )
+                        [
+                            'internalFields' => [],
+                        ]
                     ),
                     $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
                     new ContentInfo(),
                     new Location(),
-                    array()
+                    []
                 ),
                 new RestUser(
                     new Content(
-                        array(
-                            'internalFields' => array(),
-                        )
+                        [
+                            'internalFields' => [],
+                        ]
                     ),
                     $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
                     new ContentInfo(),
                     new Location(),
-                    array()
+                    []
                 ),
-            ),
+            ],
             '/some/path'
         );
 

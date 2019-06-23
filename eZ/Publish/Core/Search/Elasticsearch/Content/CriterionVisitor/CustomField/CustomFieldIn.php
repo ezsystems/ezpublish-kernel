@@ -45,17 +45,17 @@ class CustomFieldIn extends CustomField
      */
     protected function getCondition(Criterion $criterion)
     {
-        $terms = array();
+        $terms = [];
         $values = (array)$criterion->value;
 
         foreach ($values as $value) {
-            $terms[] = array(
-                'match' => array(
-                    'fields_doc.' . $criterion->target => array(
+            $terms[] = [
+                'match' => [
+                    'fields_doc.' . $criterion->target => [
                         'query' => $value,
-                    ),
-                ),
-            );
+                    ],
+                ],
+            ];
         }
 
         return $terms;
@@ -74,31 +74,31 @@ class CustomFieldIn extends CustomField
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $filter = array(
-            'nested' => array(
+        $filter = [
+            'nested' => [
                 'path' => 'fields_doc',
-                'filter' => array(
-                    'query' => array(
-                        'bool' => array(
+                'filter' => [
+                    'query' => [
+                        'bool' => [
                             'should' => $this->getCondition($criterion),
                             'minimum_should_match' => 1,
-                        ),
-                    ),
-                ),
-            ),
-        );
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter !== null) {
-            $filter['nested']['filter'] = array(
-                'bool' => array(
-                    'must' => array(
+            $filter['nested']['filter'] = [
+                'bool' => [
+                    'must' => [
                         $fieldFilter,
                         $filter['nested']['filter'],
-                    ),
-                ),
-            );
+                    ],
+                ],
+            ];
         }
 
         return $filter;

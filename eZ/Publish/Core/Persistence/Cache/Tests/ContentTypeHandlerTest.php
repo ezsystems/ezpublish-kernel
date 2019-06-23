@@ -44,7 +44,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('createGroup')
             ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group\\CreateStruct'))
-            ->will($this->returnValue(new SPITypeGroup(array('id' => 55))));
+            ->will($this->returnValue(new SPITypeGroup(['id' => 55])));
 
         $cacheItemMock
             ->expects($this->once())
@@ -106,7 +106,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->method('get');
 
         $handler = $this->persistenceCacheHandler->contentTypeHandler();
-        $handler->updateGroup(new SPITypeGroupUpdateStruct(array('id' => 55)));
+        $handler->updateGroup(new SPITypeGroupUpdateStruct(['id' => 55]));
     }
 
     /**
@@ -272,7 +272,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadAllGroups')
             ->with()
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler = $this->persistenceCacheHandler->contentTypeHandler();
         $handler->loadAllGroups();
@@ -298,7 +298,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadContentTypes')
             ->with(55)
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler = $this->persistenceCacheHandler->contentTypeHandler();
         $handler->loadContentTypes(55);
@@ -327,7 +327,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPIType(
-                        array('id' => 55, 'name' => 'Forum', 'identifier' => 'forum')
+                        ['id' => 55, 'name' => 'Forum', 'identifier' => 'forum']
                     )
                 )
             );
@@ -372,7 +372,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPIType(
-                        array('id' => 55, 'name' => 'Forum', 'identifier' => 'forum')
+                        ['id' => 55, 'name' => 'Forum', 'identifier' => 'forum']
                     )
                 )
             );
@@ -420,7 +420,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPIType(
-                        array('id' => 55, 'name' => 'Forum', 'identifier' => 'forum')
+                        ['id' => 55, 'name' => 'Forum', 'identifier' => 'forum']
                     )
                 )
             );
@@ -466,7 +466,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadByIdentifier')
             ->with('forum')
-            ->will($this->returnValue(new SPIType(array('id' => 55, 'identifier' => 'forum'))));
+            ->will($this->returnValue(new SPIType(['id' => 55, 'identifier' => 'forum'])));
 
         $cacheItemMock
             ->expects($this->once())
@@ -559,7 +559,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPIType(
-                        array('id' => 55, 'name' => 'Forum', 'identifier' => 'forum')
+                        ['id' => 55, 'name' => 'Forum', 'identifier' => 'forum']
                     )
                 )
             );
@@ -631,7 +631,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPIType(
-                        array('id' => 55, 'name' => 'Forum', 'identifier' => 'forum', 'status' => SPIType::STATUS_DEFINED)
+                        ['id' => 55, 'name' => 'Forum', 'identifier' => 'forum', 'status' => SPIType::STATUS_DEFINED]
                     )
                 )
             );
@@ -667,7 +667,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->method('get');
 
         $handler = $this->persistenceCacheHandler->contentTypeHandler();
-        $handler->create(new SPITypeCreateStruct(array('status' => SPIType::STATUS_DEFINED)));
+        $handler->create(new SPITypeCreateStruct(['status' => SPIType::STATUS_DEFINED]));
     }
 
     /**
@@ -693,13 +693,13 @@ class ContentTypeHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPIType(
-                        array('id' => 55, 'name' => 'Forum', 'identifier' => 'forum')
+                        ['id' => 55, 'name' => 'Forum', 'identifier' => 'forum']
                     )
                 )
             );
 
         $handler = $this->persistenceCacheHandler->contentTypeHandler();
-        $handler->create(new SPITypeCreateStruct(array('status' => SPIType::STATUS_DRAFT)));
+        $handler->create(new SPITypeCreateStruct(['status' => SPIType::STATUS_DRAFT]));
     }
 
     /**
@@ -744,7 +744,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPIType(
-                        array('id' => 55, 'name' => 'Forum', 'identifier' => 'forum')
+                        ['id' => 55, 'name' => 'Forum', 'identifier' => 'forum']
                     )
                 )
             );
@@ -817,7 +817,7 @@ class ContentTypeHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPIType(
-                        array('id' => 55, 'name' => 'Forum', 'identifier' => 'forum')
+                        ['id' => 55, 'name' => 'Forum', 'identifier' => 'forum']
                     )
                 )
             );

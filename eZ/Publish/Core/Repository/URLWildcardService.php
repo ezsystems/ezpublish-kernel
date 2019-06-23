@@ -49,14 +49,14 @@ class URLWildcardService implements URLWildcardServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler $urlWildcardHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $urlWildcardHandler, array $settings = array())
+    public function __construct(RepositoryInterface $repository, Handler $urlWildcardHandler, array $settings = [])
     {
         $this->repository = $repository;
         $this->urlWildcardHandler = $urlWildcardHandler;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             //'defaultSetting' => array(),
-        );
+        ];
     }
 
     /**
@@ -186,7 +186,7 @@ class URLWildcardService implements URLWildcardServiceInterface
             $limit
         );
 
-        $urlWildcards = array();
+        $urlWildcards = [];
         foreach ($spiUrlWildcards as $spiUrlWildcard) {
             $urlWildcards[] = $this->buildUrlWildcardDomainObject($spiUrlWildcard);
         }
@@ -220,10 +220,10 @@ class URLWildcardService implements URLWildcardServiceInterface
         foreach ($spiUrlWildcards as $wildcard) {
             if ($uri = $this->match($url, $wildcard)) {
                 return new URLWildcardTranslationResult(
-                    array(
+                    [
                         'uri' => $uri,
                         'forward' => $wildcard->forward,
-                    )
+                    ]
                 );
             }
         }
@@ -293,12 +293,12 @@ class URLWildcardService implements URLWildcardServiceInterface
     private function buildUrlWildcardDomainObject(SPIUrlWildcard $wildcard)
     {
         return new URLWildcard(
-            array(
+            [
                 'id' => $wildcard->id,
                 'destinationUrl' => $wildcard->destinationUrl,
                 'sourceUrl' => $wildcard->sourceUrl,
                 'forward' => $wildcard->forward,
-            )
+            ]
         );
     }
 }

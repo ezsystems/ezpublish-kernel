@@ -28,15 +28,15 @@ abstract class SearchBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $searchService = $this->repository->getSearchService();
         $query = new Query(
-            array(
-                'filter' => new Criterion\ContentId(array(4)),
+            [
+                'filter' => new Criterion\ContentId([4]),
                 'offset' => 0,
-            )
+            ]
         );
 
         $searchResult = $searchService->findContent(
             $query,
-            array(),
+            [],
             false
         );
         /* END: Use Case */
@@ -64,15 +64,15 @@ abstract class SearchBase extends BaseServiceTest
         /* BEGIN: Use Case */
         $searchService = $this->repository->getSearchService();
         $query = new Query(
-            array(
-                'filter' => new Criterion\ContentId(array(4)),
+            [
+                'filter' => new Criterion\ContentId([4]),
                 'offset' => 0,
-            )
+            ]
         );
 
         $searchResult = $searchService->findContent(
             $query,
-            array('languages' => array('eng-US')),
+            ['languages' => ['eng-US']],
             false
         );
         /* END: Use Case */
@@ -103,8 +103,8 @@ abstract class SearchBase extends BaseServiceTest
 
         // Throws an exception because content with given id does not exist
         $searchResult = $searchService->findSingle(
-            new Criterion\ContentId(array(APIBaseTest::DB_INT_MAX)),
-            array('languages' => array('eng-US')),
+            new Criterion\ContentId([APIBaseTest::DB_INT_MAX]),
+            ['languages' => ['eng-US']],
             false
         );
         /* END: Use Case */
@@ -123,8 +123,8 @@ abstract class SearchBase extends BaseServiceTest
 
         // Throws an exception because more than one result was returned for the given query
         $searchResult = $searchService->findSingle(
-            new Criterion\ContentId(array(4, 10)),
-            array('languages' => array('eng-US'))
+            new Criterion\ContentId([4, 10]),
+            ['languages' => ['eng-US']]
         );
         /* END: Use Case */
     }

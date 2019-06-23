@@ -22,12 +22,12 @@ class FieldValueConverterRegistryTest extends TestCase
     public function testRegister()
     {
         $converter = $this->getFieldValueConverterMock();
-        $registry = new Registry(array('some-type' => $converter));
+        $registry = new Registry(['some-type' => $converter]);
 
         $this->assertAttributeSame(
-            array(
+            [
                 'some-type' => $converter,
-            ),
+            ],
             'converterMap',
             $registry
         );
@@ -39,7 +39,7 @@ class FieldValueConverterRegistryTest extends TestCase
     public function testGetStorage()
     {
         $converter = $this->getFieldValueConverterMock();
-        $registry = new Registry(array('some-type' => $converter));
+        $registry = new Registry(['some-type' => $converter]);
 
         $res = $registry->getConverter('some-type');
 
@@ -56,7 +56,7 @@ class FieldValueConverterRegistryTest extends TestCase
      */
     public function testGetNotFound()
     {
-        $registry = new Registry(array());
+        $registry = new Registry([]);
 
         $registry->getConverter('not-found');
     }

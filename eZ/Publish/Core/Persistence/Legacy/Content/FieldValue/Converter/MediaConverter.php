@@ -52,9 +52,9 @@ class MediaConverter extends BinaryFileConverter
     {
         parent::toFieldDefinition($storageDef, $fieldDef);
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'mediaType' => $storageDef->dataText1,
-            )
+            ]
         );
     }
 

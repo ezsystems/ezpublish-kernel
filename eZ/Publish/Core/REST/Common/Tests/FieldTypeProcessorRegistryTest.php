@@ -94,8 +94,8 @@ class FieldTypeProcessorRegistryTest extends BaseTest
     {
         return $this->getMock(
             'eZ\\Publish\\Core\\REST\\Common\\FieldTypeProcessor',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );

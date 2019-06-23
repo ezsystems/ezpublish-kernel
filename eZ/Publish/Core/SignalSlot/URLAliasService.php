@@ -72,9 +72,9 @@ class URLAliasService implements URLAliasServiceInterface
         $returnValue = $this->service->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
         $this->signalDispatcher->emit(
             new CreateUrlAliasSignal(
-                array(
+                [
                     'urlAliasId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -107,9 +107,9 @@ class URLAliasService implements URLAliasServiceInterface
         $returnValue = $this->service->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
         $this->signalDispatcher->emit(
             new CreateGlobalUrlAliasSignal(
-                array(
+                [
                     'urlAliasId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -172,9 +172,9 @@ class URLAliasService implements URLAliasServiceInterface
         $returnValue = $this->service->removeAliases($aliasList);
         $this->signalDispatcher->emit(
             new RemoveAliasesSignal(
-                array(
+                [
                     'aliasList' => $aliasList,
-                )
+                ]
             )
         );
 

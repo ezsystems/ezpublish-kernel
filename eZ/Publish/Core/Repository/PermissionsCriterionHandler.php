@@ -40,10 +40,10 @@ class PermissionsCriterionHandler extends PermissionCriterionResolver
             $criterion->criteria[] = $permissionCriterion;
         } else {
             $criterion = new LogicalAnd(
-                array(
+                [
                     $criterion,
                     $permissionCriterion,
-                )
+                ]
             );
         }
 

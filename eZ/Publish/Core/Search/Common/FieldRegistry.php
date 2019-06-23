@@ -20,14 +20,14 @@ class FieldRegistry
      *
      * @var array(string => Indexable)
      */
-    protected $types = array();
+    protected $types = [];
 
     /**
      * Construct from optional Indexable type array.
      *
      * @param \eZ\Publish\SPI\FieldType\Indexable[] $types
      */
-    public function __construct(array $types = array())
+    public function __construct(array $types = [])
     {
         foreach ($types as $name => $type) {
             $this->registerType($name, $type);

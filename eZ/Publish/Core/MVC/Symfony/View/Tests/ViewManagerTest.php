@@ -75,18 +75,18 @@ class ViewManagerTest extends TestCase
 
     public function testAddContentViewProvider()
     {
-        self::assertSame(array(), $this->viewManager->getAllContentViewProviders());
+        self::assertSame([], $this->viewManager->getAllContentViewProviders());
         $viewProvider = $this->getMock('eZ\Publish\Core\MVC\Symfony\View\ViewProvider');
         $this->viewManager->addContentViewProvider($viewProvider);
-        self::assertSame(array($viewProvider), $this->viewManager->getAllContentViewProviders());
+        self::assertSame([$viewProvider], $this->viewManager->getAllContentViewProviders());
     }
 
     public function testAddLocationViewProvider()
     {
-        self::assertSame(array(), $this->viewManager->getAllLocationViewProviders());
+        self::assertSame([], $this->viewManager->getAllLocationViewProviders());
         $viewProvider = $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider');
         $this->viewManager->addLocationViewProvider($viewProvider);
-        self::assertSame(array($viewProvider), $this->viewManager->getAllLocationViewProviders());
+        self::assertSame([$viewProvider], $this->viewManager->getAllLocationViewProviders());
     }
 
     public function testContentViewProvidersPriority()
@@ -96,7 +96,7 @@ class ViewManagerTest extends TestCase
         $this->viewManager->addContentViewProvider($high, 100);
         $this->viewManager->addContentViewProvider($low, -100);
         self::assertSame(
-            array($high, $medium, $low),
+            [$high, $medium, $low],
             $this->viewManager->getAllContentViewProviders()
         );
     }
@@ -108,7 +108,7 @@ class ViewManagerTest extends TestCase
         $this->viewManager->addLocationViewProvider($high, 100);
         $this->viewManager->addLocationViewProvider($low, -100);
         self::assertSame(
-            array($high, $medium, $low),
+            [$high, $medium, $low],
             $this->viewManager->getAllLocationViewProviders()
         );
     }
@@ -139,7 +139,7 @@ class ViewManagerTest extends TestCase
             ->method('render')
             ->with(
                 $templateIdentifier,
-                $params + array('content' => $content, 'viewbaseLayout' => $this->viewBaseLayout))
+                $params + ['content' => $content, 'viewbaseLayout' => $this->viewBaseLayout])
             ->will($this->returnValue($expectedTemplateResult));
 
         self::assertSame($expectedTemplateResult, $this->viewManager->renderContent($content, 'customViewType', $params));
@@ -168,7 +168,7 @@ class ViewManagerTest extends TestCase
             );
 
         // Configuring template engine behaviour
-        $params += array('content' => $content, 'viewbaseLayout' => $this->viewBaseLayout);
+        $params += ['content' => $content, 'viewbaseLayout' => $this->viewBaseLayout];
         $expectedTemplateResult = array_keys($params);
         $this->templateEngineMock
             ->expects($this->never())
@@ -188,7 +188,7 @@ class ViewManagerTest extends TestCase
 
         // Configuring view provider behaviour
         $templateIdentifier = 'foo:bar:baz';
-        $params = array('foo' => 'bar');
+        $params = ['foo' => 'bar'];
         $this->viewConfigurator
             ->expects($this->once())
             ->method('configure')
@@ -200,7 +200,7 @@ class ViewManagerTest extends TestCase
                 )
             );
 
-        $languages = array('eng-GB');
+        $languages = ['eng-GB'];
         $this->configResolverMock
             ->expects($this->any())
             ->method('getParameter')
@@ -224,7 +224,7 @@ class ViewManagerTest extends TestCase
         $this->templateEngineMock
             ->expects($this->once())
             ->method('render')
-            ->with($templateIdentifier, $params + array('location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout))
+            ->with($templateIdentifier, $params + ['location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout])
             ->will($this->returnValue($expectedTemplateResult));
 
         self::assertSame($expectedTemplateResult, $this->viewManager->renderLocation($location, 'customViewType', $params));
@@ -237,7 +237,7 @@ class ViewManagerTest extends TestCase
 
         // Configuring view provider behaviour
         $templateIdentifier = 'foo:bar:baz';
-        $params = array('foo' => 'bar', 'content' => $content);
+        $params = ['foo' => 'bar', 'content' => $content];
         $this->viewConfigurator
             ->expects($this->once())
             ->method('configure')
@@ -291,7 +291,7 @@ class ViewManagerTest extends TestCase
         $closure = function ($params) {
             return serialize(array_keys($params));
         };
-        $params = array('foo' => 'bar');
+        $params = ['foo' => 'bar'];
         $this->viewConfigurator
             ->expects($this->once())
             ->method('configure')
@@ -324,7 +324,7 @@ class ViewManagerTest extends TestCase
             );
 
         // Configuring template engine behaviour
-        $params += array('location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout);
+        $params += ['location' => $location, 'content' => $content, 'viewbaseLayout' => $this->viewBaseLayout];
         $this->templateEngineMock
             ->expects($this->never())
             ->method('render');
@@ -339,19 +339,19 @@ class ViewManagerTest extends TestCase
 
     private function createContentViewProviderMocks()
     {
-        return array(
+        return [
             $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
             $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
             $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
-        );
+        ];
     }
 
     private function createLocationViewProviderMocks()
     {
-        return array(
+        return [
             $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
             $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
             $this->getMock('eZ\\Publish\\Core\\MVC\\Symfony\\View\\ViewProvider'),
-        );
+        ];
     }
 }

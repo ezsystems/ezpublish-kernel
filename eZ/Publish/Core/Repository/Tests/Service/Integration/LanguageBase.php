@@ -30,12 +30,12 @@ abstract class LanguageBase extends BaseServiceTest
         $language = new Language();
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
                 'languageCode' => null,
                 'name' => null,
                 'enabled' => null,
-            ),
+            ],
             $language
         );
     }
@@ -92,7 +92,7 @@ abstract class LanguageBase extends BaseServiceTest
      */
     public function testUnsetProperty()
     {
-        $language = new Language(array('id' => 2));
+        $language = new Language(['id' => 2]);
         try {
             unset($language->id);
             self::fail('Unsetting read-only property succeeded');
@@ -120,11 +120,11 @@ abstract class LanguageBase extends BaseServiceTest
         self::assertGreaterThan(0, $newLanguage->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'languageCode' => $languageCreateStruct->languageCode,
                 'name' => $languageCreateStruct->name,
                 'enabled' => $languageCreateStruct->enabled,
-            ),
+            ],
             $newLanguage
         );
     }
@@ -163,12 +163,12 @@ abstract class LanguageBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language', $updatedLanguage);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $language->id,
                 'languageCode' => $language->languageCode,
                 'name' => 'English',
                 'enabled' => $language->enabled,
-            ),
+            ],
             $updatedLanguage
         );
     }
@@ -204,24 +204,24 @@ abstract class LanguageBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language', $updatedLanguage);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $language->id,
                 'languageCode' => $language->languageCode,
                 'name' => $language->name,
                 'enabled' => false,
-            ),
+            ],
             $updatedLanguage
         );
 
         $finalLanguage = $languageService->enableLanguage($updatedLanguage);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $updatedLanguage->id,
                 'languageCode' => $updatedLanguage->languageCode,
                 'name' => $updatedLanguage->name,
                 'enabled' => true,
-            ),
+            ],
             $finalLanguage
         );
     }
@@ -243,12 +243,12 @@ abstract class LanguageBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language', $updatedLanguage);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $language->id,
                 'languageCode' => $language->languageCode,
                 'name' => $language->name,
                 'enabled' => false,
-            ),
+            ],
             $updatedLanguage
         );
     }
@@ -266,11 +266,11 @@ abstract class LanguageBase extends BaseServiceTest
         self::assertGreaterThan(0, $language->id);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'languageCode' => 'eng-GB',
                 'name' => 'English (United Kingdom)',
                 'enabled' => true,
-            ),
+            ],
             $language
         );
     }
@@ -328,12 +328,12 @@ abstract class LanguageBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Language', $language);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 2,
                 'languageCode' => 'eng-US',
                 'name' => 'English (American)',
                 'enabled' => true,
-            ),
+            ],
             $language
         );
     }
@@ -410,11 +410,11 @@ abstract class LanguageBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LanguageCreateStruct', $languageCreateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'languageCode' => null,
                 'name' => null,
                 'enabled' => true,
-            ),
+            ],
             $languageCreateStruct
         );
     }

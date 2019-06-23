@@ -15,11 +15,11 @@ class QueryParserTest extends BaseTest
 {
     public function testParseEmptyQuery()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => [],
             'Criteria' => [],
             'Query' => [],
-        );
+        ];
 
         $parsingDispatcher = $this->getParsingDispatcherMock();
         $parser = $this->getParser();
@@ -33,11 +33,11 @@ class QueryParserTest extends BaseTest
 
     public function testDispatchOneFilter()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => ['ContentTypeIdentifierCriterion' => 'article'],
             'Criteria' => [],
             'Query' => [],
-        );
+        ];
 
         $parsingDispatcher = $this->getParsingDispatcherMock();
         $parsingDispatcher
@@ -58,11 +58,11 @@ class QueryParserTest extends BaseTest
 
     public function testDispatchMoreThanOneFilter()
     {
-        $inputArray = array(
+        $inputArray = [
             'Filter' => ['ContentTypeIdentifierCriterion' => 'article', 'ParentLocationIdCriterion' => 762],
             'Criteria' => [],
             'Query' => [],
-        );
+        ];
 
         $parsingDispatcher = $this->getParsingDispatcherMock();
         $parsingDispatcher
@@ -91,11 +91,11 @@ class QueryParserTest extends BaseTest
 
     public function testDispatchOneQueryItem()
     {
-        $inputArray = array(
+        $inputArray = [
             'Query' => ['ContentTypeIdentifierCriterion' => 'article'],
             'Criteria' => [],
             'Filter' => [],
-        );
+        ];
 
         $parsingDispatcher = $this->getParsingDispatcherMock();
         $parsingDispatcher
@@ -116,11 +116,11 @@ class QueryParserTest extends BaseTest
 
     public function testDispatchMoreThanOneQueryItem()
     {
-        $inputArray = array(
+        $inputArray = [
             'Query' => ['ContentTypeIdentifierCriterion' => 'article', 'ParentLocationIdCriterion' => 762],
             'Criteria' => [],
             'Filter' => [],
-        );
+        ];
 
         $parsingDispatcher = $this->getParsingDispatcherMock();
         $parsingDispatcher

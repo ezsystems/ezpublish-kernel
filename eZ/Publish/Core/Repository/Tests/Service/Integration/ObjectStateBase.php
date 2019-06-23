@@ -32,29 +32,29 @@ abstract class ObjectStateBase extends BaseServiceTest
         $objectState = new ObjectState();
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
                 'identifier' => null,
                 'priority' => null,
                 'defaultLanguageCode' => null,
                 'languageCodes' => null,
-                'names' => array(),
-                'descriptions' => array(),
-            ),
+                'names' => [],
+                'descriptions' => [],
+            ],
             $objectState
         );
 
         $objectStateGroup = new ObjectStateGroup();
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
                 'identifier' => null,
                 'defaultLanguageCode' => null,
                 'languageCodes' => null,
-                'names' => array(),
-                'descriptions' => array(),
-            ),
+                'names' => [],
+                'descriptions' => [],
+            ],
             $objectStateGroup
         );
     }
@@ -136,14 +136,14 @@ abstract class ObjectStateBase extends BaseServiceTest
      */
     public function testUnsetProperty()
     {
-        $objectState = new ObjectState(array('id' => 2));
+        $objectState = new ObjectState(['id' => 2]);
         try {
             unset($objectState->id);
             $this->fail('Unsetting read-only property succeeded');
         } catch (PropertyReadOnlyException $e) {
         }
 
-        $objectStateGroup = new ObjectStateGroup(array('id' => 2));
+        $objectStateGroup = new ObjectStateGroup(['id' => 2]);
         try {
             unset($objectStateGroup->id);
             $this->fail('Unsetting read-only property succeeded');
@@ -162,8 +162,8 @@ abstract class ObjectStateBase extends BaseServiceTest
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct('test');
         $groupCreateStruct->defaultLanguageCode = 'eng-GB';
-        $groupCreateStruct->names = array('eng-GB' => 'Test');
-        $groupCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $groupCreateStruct->names = ['eng-GB' => 'Test'];
+        $groupCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $createdGroup = $objectStateService->createObjectStateGroup($groupCreateStruct);
 
@@ -173,14 +173,14 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 3,
                 'identifier' => 'test',
                 'defaultLanguageCode' => 'eng-GB',
-                'languageCodes' => array('eng-GB'),
-                'names' => array('eng-GB' => 'Test'),
-                'descriptions' => array('eng-GB' => 'Test description'),
-            ),
+                'languageCodes' => ['eng-GB'],
+                'names' => ['eng-GB' => 'Test'],
+                'descriptions' => ['eng-GB' => 'Test description'],
+            ],
             $createdGroup
         );
     }
@@ -197,8 +197,8 @@ abstract class ObjectStateBase extends BaseServiceTest
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct('ez_lock');
         $groupCreateStruct->defaultLanguageCode = 'eng-GB';
-        $groupCreateStruct->names = array('eng-GB' => 'Test');
-        $groupCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $groupCreateStruct->names = ['eng-GB' => 'Test'];
+        $groupCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $objectStateService->createObjectStateGroup($groupCreateStruct);
     }
@@ -218,14 +218,14 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 2,
                 'identifier' => 'ez_lock',
                 'defaultLanguageCode' => 'eng-US',
-                'languageCodes' => array('eng-US'),
-                'names' => array('eng-US' => 'Lock'),
-                'descriptions' => array('eng-US' => ''),
-            ),
+                'languageCodes' => ['eng-US'],
+                'names' => ['eng-US' => 'Lock'],
+                'descriptions' => ['eng-US' => ''],
+            ],
             $group
         );
     }
@@ -300,8 +300,8 @@ abstract class ObjectStateBase extends BaseServiceTest
         $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
         $groupUpdateStruct->identifier = 'test';
         $groupUpdateStruct->defaultLanguageCode = 'eng-GB';
-        $groupUpdateStruct->names = array('eng-GB' => 'Test');
-        $groupUpdateStruct->descriptions = array('eng-GB' => 'Test description');
+        $groupUpdateStruct->names = ['eng-GB' => 'Test'];
+        $groupUpdateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $group = $objectStateService->loadObjectStateGroup(2);
 
@@ -313,14 +313,14 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 2,
                 'identifier' => 'test',
                 'defaultLanguageCode' => 'eng-GB',
-                'languageCodes' => array('eng-GB'),
-                'names' => array('eng-GB' => 'Test'),
-                'descriptions' => array('eng-GB' => 'Test description'),
-            ),
+                'languageCodes' => ['eng-GB'],
+                'names' => ['eng-GB' => 'Test'],
+                'descriptions' => ['eng-GB' => 'Test description'],
+            ],
             $updatedGroup
         );
     }
@@ -336,7 +336,7 @@ abstract class ObjectStateBase extends BaseServiceTest
 
         $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
         $groupUpdateStruct->defaultLanguageCode = 'eng-GB';
-        $groupUpdateStruct->names = array('eng-GB' => 'Test');
+        $groupUpdateStruct->names = ['eng-GB' => 'Test'];
 
         $group = $objectStateService->loadObjectStateGroup(2);
 
@@ -348,17 +348,17 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 2,
                 'identifier' => 'ez_lock',
                 'defaultLanguageCode' => 'eng-GB',
-                'languageCodes' => array('eng-GB'),
-                'names' => array('eng-GB' => 'Test'),
+                'languageCodes' => ['eng-GB'],
+                'names' => ['eng-GB' => 'Test'],
                 // descriptions array should have an empty value for eng-GB
                 // without the original descriptions
                 // since the descriptions were not in the update struct and we're changing default language
-                'descriptions' => array('eng-GB' => ''),
-            ),
+                'descriptions' => ['eng-GB' => ''],
+            ],
             $updatedGroup
         );
     }
@@ -375,8 +375,8 @@ abstract class ObjectStateBase extends BaseServiceTest
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct('test');
         $groupCreateStruct->defaultLanguageCode = 'eng-GB';
-        $groupCreateStruct->names = array('eng-GB' => 'Test');
-        $groupCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $groupCreateStruct->names = ['eng-GB' => 'Test'];
+        $groupCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $createdGroup = $objectStateService->createObjectStateGroup($groupCreateStruct);
 
@@ -435,8 +435,8 @@ abstract class ObjectStateBase extends BaseServiceTest
         $stateCreateStruct = $objectStateService->newObjectStateCreateStruct('test');
         $stateCreateStruct->priority = 2;
         $stateCreateStruct->defaultLanguageCode = 'eng-GB';
-        $stateCreateStruct->names = array('eng-GB' => 'Test');
-        $stateCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $stateCreateStruct->names = ['eng-GB' => 'Test'];
+        $stateCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $createdState = $objectStateService->createObjectState(
             $group,
@@ -449,15 +449,15 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 3,
                 'identifier' => 'test',
                 'priority' => 2,
                 'defaultLanguageCode' => 'eng-GB',
-                'languageCodes' => array('eng-GB'),
-                'names' => array('eng-GB' => 'Test'),
-                'descriptions' => array('eng-GB' => 'Test description'),
-            ),
+                'languageCodes' => ['eng-GB'],
+                'names' => ['eng-GB' => 'Test'],
+                'descriptions' => ['eng-GB' => 'Test description'],
+            ],
             $createdState
         );
 
@@ -480,16 +480,16 @@ abstract class ObjectStateBase extends BaseServiceTest
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct('test');
         $groupCreateStruct->defaultLanguageCode = 'eng-GB';
-        $groupCreateStruct->names = array('eng-GB' => 'Test');
-        $groupCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $groupCreateStruct->names = ['eng-GB' => 'Test'];
+        $groupCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $createdGroup = $objectStateService->createObjectStateGroup($groupCreateStruct);
 
         $stateCreateStruct = $objectStateService->newObjectStateCreateStruct('test');
         $stateCreateStruct->priority = 2;
         $stateCreateStruct->defaultLanguageCode = 'eng-GB';
-        $stateCreateStruct->names = array('eng-GB' => 'Test');
-        $stateCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $stateCreateStruct->names = ['eng-GB' => 'Test'];
+        $stateCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $createdState = $objectStateService->createObjectState(
             $createdGroup,
@@ -503,14 +503,14 @@ abstract class ObjectStateBase extends BaseServiceTest
 
         $this->assertNotNull($createdState->id);
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'test',
                 'priority' => 0,
                 'defaultLanguageCode' => 'eng-GB',
-                'languageCodes' => array('eng-GB'),
-                'names' => array('eng-GB' => 'Test'),
-                'descriptions' => array('eng-GB' => 'Test description'),
-            ),
+                'languageCodes' => ['eng-GB'],
+                'names' => ['eng-GB' => 'Test'],
+                'descriptions' => ['eng-GB' => 'Test description'],
+            ],
             $createdState
         );
 
@@ -538,8 +538,8 @@ abstract class ObjectStateBase extends BaseServiceTest
         $stateCreateStruct = $objectStateService->newObjectStateCreateStruct('not_locked');
         $stateCreateStruct->priority = 2;
         $stateCreateStruct->defaultLanguageCode = 'eng-GB';
-        $stateCreateStruct->names = array('eng-GB' => 'Test');
-        $stateCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $stateCreateStruct->names = ['eng-GB' => 'Test'];
+        $stateCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $objectStateService->createObjectState(
             $group,
@@ -562,15 +562,15 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'not_locked',
                 'priority' => 0,
                 'defaultLanguageCode' => 'eng-US',
-                'languageCodes' => array('eng-US'),
-                'names' => array('eng-US' => 'Not locked'),
-                'descriptions' => array('eng-US' => ''),
-            ),
+                'languageCodes' => ['eng-US'],
+                'names' => ['eng-US' => 'Not locked'],
+                'descriptions' => ['eng-US' => ''],
+            ],
             $state
         );
 
@@ -605,8 +605,8 @@ abstract class ObjectStateBase extends BaseServiceTest
         $stateUpdateStruct = $objectStateService->newObjectStateUpdateStruct();
         $stateUpdateStruct->identifier = 'test';
         $stateUpdateStruct->defaultLanguageCode = 'eng-GB';
-        $stateUpdateStruct->names = array('eng-GB' => 'Test');
-        $stateUpdateStruct->descriptions = array('eng-GB' => 'Test description');
+        $stateUpdateStruct->names = ['eng-GB' => 'Test'];
+        $stateUpdateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $state = $objectStateService->loadObjectState(1);
 
@@ -618,15 +618,15 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test',
                 'priority' => 0,
                 'defaultLanguageCode' => 'eng-GB',
-                'languageCodes' => array('eng-GB'),
-                'names' => array('eng-GB' => 'Test'),
-                'descriptions' => array('eng-GB' => 'Test description'),
-            ),
+                'languageCodes' => ['eng-GB'],
+                'names' => ['eng-GB' => 'Test'],
+                'descriptions' => ['eng-GB' => 'Test description'],
+            ],
             $updatedState
         );
 
@@ -649,7 +649,7 @@ abstract class ObjectStateBase extends BaseServiceTest
 
         $stateUpdateStruct = $objectStateService->newObjectStateUpdateStruct();
         $stateUpdateStruct->identifier = 'test';
-        $stateUpdateStruct->names = array('eng-US' => 'Test');
+        $stateUpdateStruct->names = ['eng-US' => 'Test'];
 
         $state = $objectStateService->loadObjectState(1);
 
@@ -661,16 +661,16 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test',
                 'priority' => 0,
                 'defaultLanguageCode' => 'eng-US',
-                'languageCodes' => array('eng-US'),
-                'names' => array('eng-US' => 'Test'),
+                'languageCodes' => ['eng-US'],
+                'names' => ['eng-US' => 'Test'],
                 // Original value of empty description for eng-US should be kept
-                'descriptions' => array('eng-US' => ''),
-            ),
+                'descriptions' => ['eng-US' => ''],
+            ],
             $updatedState
         );
 
@@ -787,16 +787,16 @@ abstract class ObjectStateBase extends BaseServiceTest
 
         $groupCreateStruct = $objectStateService->newObjectStateGroupCreateStruct('test');
         $groupCreateStruct->defaultLanguageCode = 'eng-GB';
-        $groupCreateStruct->names = array('eng-GB' => 'Test');
-        $groupCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $groupCreateStruct->names = ['eng-GB' => 'Test'];
+        $groupCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $createdGroup = $objectStateService->createObjectStateGroup($groupCreateStruct);
 
         $stateCreateStruct = $objectStateService->newObjectStateCreateStruct('test');
         $stateCreateStruct->priority = 2;
         $stateCreateStruct->defaultLanguageCode = 'eng-GB';
-        $stateCreateStruct->names = array('eng-GB' => 'Test');
-        $stateCreateStruct->descriptions = array('eng-GB' => 'Test description');
+        $stateCreateStruct->names = ['eng-GB' => 'Test'];
+        $stateCreateStruct->descriptions = ['eng-GB' => 'Test description'];
 
         $createdState = $objectStateService->createObjectState(
             $createdGroup,
@@ -830,15 +830,15 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'not_locked',
                 'priority' => 0,
                 'defaultLanguageCode' => 'eng-US',
-                'languageCodes' => array('eng-US'),
-                'names' => array('eng-US' => 'Not locked'),
-                'descriptions' => array('eng-US' => ''),
-            ),
+                'languageCodes' => ['eng-US'],
+                'names' => ['eng-US' => 'Not locked'],
+                'descriptions' => ['eng-US' => ''],
+            ],
             $objectState
         );
 
@@ -879,13 +879,13 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'test',
                 'priority' => false,
                 'defaultLanguageCode' => null,
                 'names' => null,
                 'descriptions' => null,
-            ),
+            ],
             $objectStateCreateStruct
         );
     }
@@ -905,12 +905,12 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => null,
                 'defaultLanguageCode' => null,
                 'names' => null,
                 'descriptions' => null,
-            ),
+            ],
             $objectStateUpdateStruct
         );
     }
@@ -930,12 +930,12 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'test',
                 'defaultLanguageCode' => null,
                 'names' => null,
                 'descriptions' => null,
-            ),
+            ],
             $objectStateGroupCreateStruct
         );
     }
@@ -955,12 +955,12 @@ abstract class ObjectStateBase extends BaseServiceTest
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => null,
                 'defaultLanguageCode' => null,
                 'names' => null,
                 'descriptions' => null,
-            ),
+            ],
             $objectStateGroupUpdateStruct
         );
     }

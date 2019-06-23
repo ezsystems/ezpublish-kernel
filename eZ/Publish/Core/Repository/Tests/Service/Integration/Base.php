@@ -46,18 +46,18 @@ abstract class Base extends PHPUnit_Framework_TestCase
     protected function getStubbedUser($id)
     {
         return new User(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array(
-                                'contentInfo' => new ContentInfo(array('id' => $id)),
-                            )
+                            [
+                                'contentInfo' => new ContentInfo(['id' => $id]),
+                            ]
                         ),
-                        'internalFields' => array(),
-                    )
+                        'internalFields' => [],
+                    ]
                 ),
-            )
+            ]
         );
     }
 
@@ -91,7 +91,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
         $group = $userService->loadUserGroup($editorsGroupId);
 
         // Create a new user instance.
-        $user = $userService->createUser($userCreate, array($group));
+        $user = $userService->createUser($userCreate, [$group]);
         /* END: Inline */
 
         return $user;
@@ -123,7 +123,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @param array $skipProperties
      */
-    protected function assertPropertiesCorrect(array $expectedValues, ValueObject $actualObject, array $skipProperties = array())
+    protected function assertPropertiesCorrect(array $expectedValues, ValueObject $actualObject, array $skipProperties = [])
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
             if (in_array($propertyName, $skipProperties)) {
@@ -138,7 +138,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
         array $propertiesNames,
         ValueObject $expectedValues,
         ValueObject $actualObject,
-        array $skipProperties = array(),
+        array $skipProperties = [],
         $equal = true
     ) {
         foreach ($propertiesNames as $propertyName) {
@@ -158,7 +158,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @param array $skipProperties
      */
-    protected function assertStructPropertiesCorrect(ValueObject $expectedValues, ValueObject $actualObject, array $skipProperties = array())
+    protected function assertStructPropertiesCorrect(ValueObject $expectedValues, ValueObject $actualObject, array $skipProperties = [])
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
             if (in_array($propertyName, $skipProperties)) {

@@ -33,7 +33,7 @@ class MapperTest extends LanguageAwareTestCase
         $this->assertStructsEqual(
             $this->getObjectStateFixture(),
             $result,
-            array('identifier', 'defaultLanguage', 'languageCodes', 'name', 'description')
+            ['identifier', 'defaultLanguage', 'languageCodes', 'name', 'description']
         );
     }
 
@@ -44,14 +44,14 @@ class MapperTest extends LanguageAwareTestCase
     {
         $mapper = $this->getMapper();
 
-        $rows = array($this->getObjectStateRowsFixture());
+        $rows = [$this->getObjectStateRowsFixture()];
 
         $result = $mapper->createObjectStateListFromData($rows);
 
         $this->assertStructsEqual(
             $this->getObjectStateFixture(),
             $result[0],
-            array('identifier', 'defaultLanguage', 'languageCodes', 'name', 'description')
+            ['identifier', 'defaultLanguage', 'languageCodes', 'name', 'description']
         );
     }
 
@@ -69,7 +69,7 @@ class MapperTest extends LanguageAwareTestCase
         $this->assertStructsEqual(
             $this->getObjectStateGroupFixture(),
             $result,
-            array('identifier', 'defaultLanguage', 'languageCodes', 'name', 'description')
+            ['identifier', 'defaultLanguage', 'languageCodes', 'name', 'description']
         );
     }
 
@@ -80,14 +80,14 @@ class MapperTest extends LanguageAwareTestCase
     {
         $mapper = $this->getMapper();
 
-        $rows = array($this->getObjectStateGroupRowsFixture());
+        $rows = [$this->getObjectStateGroupRowsFixture()];
 
         $result = $mapper->createObjectStateGroupListFromData($rows);
 
         $this->assertStructsEqual(
             $this->getObjectStateGroupFixture(),
             $result[0],
-            array('identifier', 'defaultLanguage', 'languageCodes', 'name', 'description')
+            ['identifier', 'defaultLanguage', 'languageCodes', 'name', 'description']
         );
     }
 
@@ -105,7 +105,7 @@ class MapperTest extends LanguageAwareTestCase
         $this->assertStructsEqual(
             $this->getObjectStateFixture(),
             $result,
-            array('identifier', 'defaultLanguage', 'languageCodes', 'name', 'description')
+            ['identifier', 'defaultLanguage', 'languageCodes', 'name', 'description']
         );
     }
 
@@ -123,7 +123,7 @@ class MapperTest extends LanguageAwareTestCase
         $this->assertStructsEqual(
             $this->getObjectStateGroupFixture(),
             $result,
-            array('identifier', 'defaultLanguage', 'languageCodes', 'name', 'description')
+            ['identifier', 'defaultLanguage', 'languageCodes', 'name', 'description']
         );
     }
 
@@ -146,8 +146,8 @@ class MapperTest extends LanguageAwareTestCase
      */
     protected function getObjectStateRowsFixture()
     {
-        return array(
-            array(
+        return [
+            [
                 'ezcobj_state_default_language_id' => 2,
                 'ezcobj_state_group_id' => 2,
                 'ezcobj_state_id' => 1,
@@ -157,8 +157,8 @@ class MapperTest extends LanguageAwareTestCase
                 'ezcobj_state_language_description' => '',
                 'ezcobj_state_language_language_id' => 3,
                 'ezcobj_state_language_name' => 'Not locked',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -168,8 +168,8 @@ class MapperTest extends LanguageAwareTestCase
      */
     protected function getObjectStateGroupRowsFixture()
     {
-        return array(
-            array(
+        return [
+            [
                 'ezcobj_state_group_default_language_id' => 2,
                 'ezcobj_state_group_id' => 1,
                 'ezcobj_state_group_identifier' => 'ez_lock',
@@ -178,8 +178,8 @@ class MapperTest extends LanguageAwareTestCase
                 'ezcobj_state_group_language_language_id' => 3,
                 'ezcobj_state_group_language_real_language_id' => 2,
                 'ezcobj_state_group_language_name' => 'Lock',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -192,9 +192,9 @@ class MapperTest extends LanguageAwareTestCase
         $objectState = new ObjectState();
         $objectState->identifier = 'not_locked';
         $objectState->defaultLanguage = 'eng-US';
-        $objectState->languageCodes = array('eng-US');
-        $objectState->name = array('eng-US' => 'Not locked');
-        $objectState->description = array('eng-US' => '');
+        $objectState->languageCodes = ['eng-US'];
+        $objectState->name = ['eng-US' => 'Not locked'];
+        $objectState->description = ['eng-US' => ''];
 
         return $objectState;
     }
@@ -209,9 +209,9 @@ class MapperTest extends LanguageAwareTestCase
         $group = new Group();
         $group->identifier = 'ez_lock';
         $group->defaultLanguage = 'eng-US';
-        $group->languageCodes = array('eng-US');
-        $group->name = array('eng-US' => 'Lock');
-        $group->description = array('eng-US' => '');
+        $group->languageCodes = ['eng-US'];
+        $group->name = ['eng-US' => 'Lock'];
+        $group->description = ['eng-US' => ''];
 
         return $group;
     }
@@ -227,8 +227,8 @@ class MapperTest extends LanguageAwareTestCase
 
         $inputStruct->defaultLanguage = 'eng-US';
         $inputStruct->identifier = 'not_locked';
-        $inputStruct->name = array('eng-US' => 'Not locked');
-        $inputStruct->description = array('eng-US' => '');
+        $inputStruct->name = ['eng-US' => 'Not locked'];
+        $inputStruct->description = ['eng-US' => ''];
 
         return $inputStruct;
     }
@@ -244,8 +244,8 @@ class MapperTest extends LanguageAwareTestCase
 
         $inputStruct->defaultLanguage = 'eng-US';
         $inputStruct->identifier = 'ez_lock';
-        $inputStruct->name = array('eng-US' => 'Lock');
-        $inputStruct->description = array('eng-US' => '');
+        $inputStruct->name = ['eng-US' => 'Lock'];
+        $inputStruct->description = ['eng-US' => ''];
 
         return $inputStruct;
     }

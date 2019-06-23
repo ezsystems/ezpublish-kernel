@@ -32,10 +32,10 @@ class CreatedPolicy extends Policy
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadPolicy',
-                array(
+                [
                     'roleId' => $data->policy->roleId,
                     'policyId' => $data->policy->id,
-                )
+                ]
             )
         );
         $visitor->setStatus(201);

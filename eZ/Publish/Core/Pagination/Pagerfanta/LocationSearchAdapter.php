@@ -24,7 +24,7 @@ class LocationSearchAdapter extends LocationSearchHitAdapter
      */
     public function getSlice($offset, $length)
     {
-        $list = array();
+        $list = [];
         foreach (parent::getSlice($offset, $length) as $hit) {
             $list[] = $hit->valueObject;
         }

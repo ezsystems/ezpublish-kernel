@@ -42,29 +42,29 @@ class CompoundAndTest extends TestCase
     private function buildMatcher()
     {
         return new LogicalAnd(
-            array(
-                array(
-                    'matchers' => array(
-                        'Map\\URI' => array('eng' => true),
-                        'Map\\Host' => array('fr.ezpublish.dev' => true),
-                    ),
+            [
+                [
+                    'matchers' => [
+                        'Map\\URI' => ['eng' => true],
+                        'Map\\Host' => ['fr.ezpublish.dev' => true],
+                    ],
                     'match' => 'fr_eng',
-                ),
-                array(
-                    'matchers' => array(
-                        'Map\\URI' => array('fre' => true),
-                        'Map\\Host' => array('us.ezpublish.dev' => true),
-                    ),
+                ],
+                [
+                    'matchers' => [
+                        'Map\\URI' => ['fre' => true],
+                        'Map\\Host' => ['us.ezpublish.dev' => true],
+                    ],
                     'match' => 'fr_us',
-                ),
-                array(
-                    'matchers' => array(
-                        'Map\\URI' => array('de' => true),
-                        'Map\\Host' => array('jp.ezpublish.dev' => true),
-                    ),
+                ],
+                [
+                    'matchers' => [
+                        'Map\\URI' => ['de' => true],
+                        'Map\\Host' => ['jp.ezpublish.dev' => true],
+                    ],
                     'match' => 'de_jp',
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -105,15 +105,15 @@ class CompoundAndTest extends TestCase
     public function testSetRequest()
     {
         $compoundMatcher = new LogicalAnd(
-            array(
-                array(
-                    'matchers' => array(
-                        'Map\\URI' => array('eng' => true),
-                        'Map\\Host' => array('fr.ezpublish.dev' => true),
-                    ),
+            [
+                [
+                    'matchers' => [
+                        'Map\\URI' => ['eng' => true],
+                        'Map\\Host' => ['fr.ezpublish.dev' => true],
+                    ],
                     'match' => 'fr_eng',
-                ),
-            )
+                ],
+            ]
         );
 
         $matcher1 = $this->getMock('eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher');
@@ -140,16 +140,16 @@ class CompoundAndTest extends TestCase
 
     public function matchProvider()
     {
-        return array(
-            array(SimplifiedRequest::fromUrl('http://fr.ezpublish.dev/eng'), 'fr_eng'),
-            array(SimplifiedRequest::fromUrl('http://ezpublish.dev/eng'), false),
-            array(SimplifiedRequest::fromUrl('http://fr.ezpublish.dev/fre'), false),
-            array(SimplifiedRequest::fromUrl('http://fr.ezpublish.dev/'), false),
-            array(SimplifiedRequest::fromUrl('http://us.ezpublish.dev/eng'), false),
-            array(SimplifiedRequest::fromUrl('http://us.ezpublish.dev/fre'), 'fr_us'),
-            array(SimplifiedRequest::fromUrl('http://ezpublish.dev/fr'), false),
-            array(SimplifiedRequest::fromUrl('http://jp.ezpublish.dev/de'), 'de_jp'),
-        );
+        return [
+            [SimplifiedRequest::fromUrl('http://fr.ezpublish.dev/eng'), 'fr_eng'],
+            [SimplifiedRequest::fromUrl('http://ezpublish.dev/eng'), false],
+            [SimplifiedRequest::fromUrl('http://fr.ezpublish.dev/fre'), false],
+            [SimplifiedRequest::fromUrl('http://fr.ezpublish.dev/'), false],
+            [SimplifiedRequest::fromUrl('http://us.ezpublish.dev/eng'), false],
+            [SimplifiedRequest::fromUrl('http://us.ezpublish.dev/fre'), 'fr_us'],
+            [SimplifiedRequest::fromUrl('http://ezpublish.dev/fr'), false],
+            [SimplifiedRequest::fromUrl('http://jp.ezpublish.dev/de'), 'de_jp'],
+        ];
     }
 
     public function testReverseMatchSiteAccessNotConfigured()
@@ -169,18 +169,18 @@ class CompoundAndTest extends TestCase
     {
         $request = $this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest');
         $siteAccessName = 'fr_eng';
-        $mapUriConfig = array('eng' => true);
-        $mapHostConfig = array('fr.ezpublish.dev' => true);
+        $mapUriConfig = ['eng' => true];
+        $mapHostConfig = ['fr.ezpublish.dev' => true];
         $compoundMatcher = new LogicalAnd(
-            array(
-                array(
-                    'matchers' => array(
+            [
+                [
+                    'matchers' => [
                         'Map\URI' => $mapUriConfig,
                         'Map\Host' => $mapHostConfig,
-                    ),
+                    ],
                     'match' => $siteAccessName,
-                ),
-            )
+                ],
+            ]
         );
         $compoundMatcher->setRequest($request);
 
@@ -191,10 +191,10 @@ class CompoundAndTest extends TestCase
             ->method('buildMatcher')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('Map\URI', $mapUriConfig, $request, $matcher1),
-                        array('Map\Host', $mapHostConfig, $request, $matcher2),
-                    )
+                    [
+                        ['Map\URI', $mapUriConfig, $request, $matcher1],
+                        ['Map\Host', $mapHostConfig, $request, $matcher2],
+                    ]
                 )
             );
 
@@ -215,18 +215,18 @@ class CompoundAndTest extends TestCase
     {
         $request = $this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest');
         $siteAccessName = 'fr_eng';
-        $mapUriConfig = array('eng' => true);
-        $mapHostConfig = array('fr.ezpublish.dev' => true);
+        $mapUriConfig = ['eng' => true];
+        $mapHostConfig = ['fr.ezpublish.dev' => true];
         $compoundMatcher = new LogicalAnd(
-            array(
-                array(
-                    'matchers' => array(
+            [
+                [
+                    'matchers' => [
                         'Map\URI' => $mapUriConfig,
                         'Map\Host' => $mapHostConfig,
-                    ),
+                    ],
                     'match' => $siteAccessName,
-                ),
-            )
+                ],
+            ]
         );
         $compoundMatcher->setRequest($request);
 
@@ -237,10 +237,10 @@ class CompoundAndTest extends TestCase
             ->method('buildMatcher')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('Map\URI', $mapUriConfig, $request, $matcher1),
-                        array('Map\Host', $mapHostConfig, $request, $matcher2),
-                    )
+                    [
+                        ['Map\URI', $mapUriConfig, $request, $matcher1],
+                        ['Map\Host', $mapHostConfig, $request, $matcher2],
+                    ]
                 )
             );
 
@@ -263,18 +263,18 @@ class CompoundAndTest extends TestCase
     {
         $request = $this->getMock('eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest');
         $siteAccessName = 'fr_eng';
-        $mapUriConfig = array('eng' => true);
-        $mapHostConfig = array('fr.ezpublish.dev' => true);
+        $mapUriConfig = ['eng' => true];
+        $mapHostConfig = ['fr.ezpublish.dev' => true];
         $compoundMatcher = new LogicalAnd(
-            array(
-                array(
-                    'matchers' => array(
+            [
+                [
+                    'matchers' => [
                         'Map\URI' => $mapUriConfig,
                         'Map\Host' => $mapHostConfig,
-                    ),
+                    ],
                     'match' => $siteAccessName,
-                ),
-            )
+                ],
+            ]
         );
         $compoundMatcher->setRequest($request);
 
@@ -285,10 +285,10 @@ class CompoundAndTest extends TestCase
             ->method('buildMatcher')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('Map\URI', $mapUriConfig, $request, $matcher1),
-                        array('Map\Host', $mapHostConfig, $request, $matcher2),
-                    )
+                    [
+                        ['Map\URI', $mapUriConfig, $request, $matcher1],
+                        ['Map\Host', $mapHostConfig, $request, $matcher2],
+                    ]
                 )
             );
 
@@ -315,12 +315,12 @@ class CompoundAndTest extends TestCase
 
     public function testSerialize()
     {
-        $matcher = new LogicalAnd(array());
-        $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => '/foo/bar')));
+        $matcher = new LogicalAnd([]);
+        $matcher->setRequest(new SimplifiedRequest(['pathinfo' => '/foo/bar']));
         $sa = new SiteAccess('test', 'test', $matcher);
         $serializedSA1 = serialize($sa);
 
-        $matcher->setRequest(new SimplifiedRequest(array('pathinfo' => '/foo/bar/baz')));
+        $matcher->setRequest(new SimplifiedRequest(['pathinfo' => '/foo/bar/baz']));
         $serializedSA2 = serialize($sa);
 
         $this->assertSame($serializedSA1, $serializedSA2);

@@ -104,5 +104,5 @@ class VersionInfo extends ValueObject
      *
      * @var int[]
      */
-    public $languageIds = array();
+    public $languageIds = [];
 }

@@ -96,7 +96,7 @@ class BinaryLoaderTest extends TestCase
         $path = 'something.jpg';
         $mimeType = 'foo/mime-type';
         $content = 'some content';
-        $binaryFile = new BinaryFile(array('id' => $path));
+        $binaryFile = new BinaryFile(['id' => $path]);
         $this->ioService
             ->expects($this->once())
             ->method('loadBinaryFile')

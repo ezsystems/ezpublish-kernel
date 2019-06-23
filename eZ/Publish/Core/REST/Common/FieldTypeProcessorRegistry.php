@@ -18,12 +18,12 @@ class FieldTypeProcessorRegistry
      *
      * @var \eZ\Publish\Core\REST\Common\FieldTypeProcessor[]
      */
-    private $processors = array();
+    private $processors = [];
 
     /**
      * @param \eZ\Publish\Core\REST\Common\FieldTypeProcessor[] $processors
      */
-    public function __construct(array $processors = array())
+    public function __construct(array $processors = [])
     {
         foreach ($processors as $fieldTypeIdentifier => $processor) {
             $this->registerProcessor($fieldTypeIdentifier, $processor);

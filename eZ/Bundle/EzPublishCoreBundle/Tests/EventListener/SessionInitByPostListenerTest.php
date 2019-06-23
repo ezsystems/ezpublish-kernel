@@ -38,9 +38,9 @@ class SessionInitByPostListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(
-                MVCEvents::SITEACCESS => array('onSiteAccessMatch', 249),
-            ),
+            [
+                MVCEvents::SITEACCESS => ['onSiteAccessMatch', 249],
+            ],
             SessionInitByPostListener::getSubscribedEvents()
         );
     }

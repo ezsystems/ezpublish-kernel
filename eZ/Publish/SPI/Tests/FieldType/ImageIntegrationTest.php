@@ -85,9 +85,9 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
             $fieldType,
             new Legacy\Content\FieldValue\Converter\ImageConverter($this->ioService, $urlRedecorator),
             new FieldType\Image\ImageStorage(
-                array(
+                [
                     'LegacyStorage' => new FieldType\Image\ImageStorage\Gateway\LegacyStorage($urlRedecorator),
-                ),
+                ],
                 $this->ioService,
                 new FieldType\Image\PathGenerator\LegacyPathGenerator(),
                 new IO\MetadataHandler\ImageSize(),
@@ -124,13 +124,13 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array(
-                'validators' => array(
-                    'FileSizeValidator' => array(
+            [
+                'validators' => [
+                    'FileSizeValidator' => [
                         'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
     }
 
@@ -143,23 +143,23 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezint field type does not have any special field definition
             // properties
-            array('fieldType', 'ezimage'),
-            array(
+            ['fieldType', 'ezimage'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
-                        'validators' => array(
-                            'FileSizeValidator' => array(
+                    [
+                        'validators' => [
+                            'FileSizeValidator' => [
                                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                            ),
-                        ),
-                    )
+                            ],
+                        ],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -170,15 +170,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 
@@ -211,17 +211,17 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     // should be ignored
                     'id' => 'some/value',
                     'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                     'fileName' => 'Blueish-Blue.jpg',
                     'alternativeText' => 'This blue is so blueish.',
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 
@@ -299,15 +299,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getDeprecatedIdPropertyValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     'id' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 

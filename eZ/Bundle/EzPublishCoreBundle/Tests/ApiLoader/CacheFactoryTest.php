@@ -35,11 +35,11 @@ class CacheFactoryTest extends TestCase
      */
     public function providerGetService()
     {
-        return array(
-            array('default', 'stash.default_cache'),
-            array('ez_site1', 'stash.ez_site1_cache'),
-            array('xyZ', 'stash.xyZ_cache'),
-        );
+        return [
+            ['default', 'stash.default_cache'],
+            ['ez_site1', 'stash.ez_site1_cache'],
+            ['xyZ', 'stash.xyZ_cache'],
+        ];
     }
 
     /**

@@ -33,24 +33,24 @@ class SecurityPass implements CompilerPassInterface
         $daoAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.dao');
         $daoAuthenticationProviderDef->addMethodCall(
             'setRepository',
-            array($repositoryReference)
+            [$repositoryReference]
         );
 
         $rememberMeAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.rememberme');
         $rememberMeAuthenticationProviderDef->addMethodCall(
             'setRepository',
-            array($repositoryReference)
+            [$repositoryReference]
         );
 
         $anonymousAuthenticationProviderDef = $container->findDefinition('security.authentication.provider.anonymous');
         $anonymousAuthenticationProviderDef->addMethodCall(
             'setRepository',
-            array($repositoryReference)
+            [$repositoryReference]
         );
 
         $anonymousAuthenticationProviderDef->addMethodCall(
             'setConfigResolver',
-            array($configResolverRef)
+            [$configResolverRef]
         );
 
         if (!$container->hasDefinition('security.http_utils')) {
@@ -60,7 +60,7 @@ class SecurityPass implements CompilerPassInterface
         $httpUtilsDef = $container->findDefinition('security.http_utils');
         $httpUtilsDef->addMethodCall(
             'setSiteAccess',
-            array(new Reference('ezpublish.siteaccess'))
+            [new Reference('ezpublish.siteaccess')]
         );
 
         if (!$container->hasDefinition('security.authentication.success_handler')) {
@@ -70,7 +70,7 @@ class SecurityPass implements CompilerPassInterface
         $successHandlerDef = $container->getDefinition('security.authentication.success_handler');
         $successHandlerDef->addMethodCall(
             'setConfigResolver',
-            array($configResolverRef)
+            [$configResolverRef]
         );
     }
 }

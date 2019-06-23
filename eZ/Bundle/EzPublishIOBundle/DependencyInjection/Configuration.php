@@ -18,12 +18,12 @@ class Configuration implements ConfigurationInterface
     /**
      * @var ConfigurationFactory[]|ArrayObject
      */
-    private $metadataHandlerFactories = array();
+    private $metadataHandlerFactories = [];
 
     /**
      * @var ConfigurationFactory[]|ArrayObject
      */
-    private $binarydataHandlerFactories = array();
+    private $binarydataHandlerFactories = [];
 
     public function setMetadataHandlerFactories(ArrayObject $factories)
     {

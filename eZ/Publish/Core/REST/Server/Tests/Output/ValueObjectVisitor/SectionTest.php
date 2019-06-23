@@ -27,16 +27,16 @@ class SectionTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $section = new Content\Section(
-            array(
+            [
                 'id' => 23,
                 'identifier' => 'some-section',
                 'name' => 'Some Section',
-            )
+            ]
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadSection',
-            array('sectionId' => $section->id),
+            ['sectionId' => $section->id],
             "/content/sections/{$section->id}"
         );
 
@@ -63,13 +63,13 @@ class SectionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSectionElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Section',
-                'children' => array(
+                'children' => [
                     'less_than' => 4,
                     'greater_than' => 2,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Section> element.',
             false
@@ -86,13 +86,13 @@ class SectionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSectionAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Section',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Section+xml',
                     'href' => '/content/sections/23',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Section> attributes.',
             false
@@ -109,10 +109,10 @@ class SectionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSectionIdValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'sectionId',
                 'content' => '23',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Section> sectionId value element.',
             false
@@ -129,10 +129,10 @@ class SectionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIdentifierValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'identifier',
                 'content' => 'some-section',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Section> identifier value element.',
             false
@@ -149,10 +149,10 @@ class SectionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsNameValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'name',
                 'content' => 'Some Section',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Section> name value element.',
             false

@@ -61,8 +61,8 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
         if (!isset($this->visitorMock)) {
             $this->visitorMock = $this->getMock(
                 '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );

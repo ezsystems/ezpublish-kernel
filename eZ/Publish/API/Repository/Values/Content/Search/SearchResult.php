@@ -20,14 +20,14 @@ class SearchResult extends ValueObject
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Search\Facet[]
      */
-    public $facets = array();
+    public $facets = [];
 
     /**
      * The value objects found for the query.
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Search\SearchHit[]
      */
-    public $searchHits = array();
+    public $searchHits = [];
 
     /**
      * If spellcheck is on this field contains a collated query suggestion where in the appropriate

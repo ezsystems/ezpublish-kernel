@@ -21,7 +21,7 @@ class InsertDoctrineQuery extends AbstractDoctrineQuery implements InsertQuery
     /**
      * @var array
      */
-    private $values = array();
+    private $values = [];
 
     /**
      * Opens the query and sets the target table to $table.

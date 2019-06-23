@@ -27,7 +27,7 @@ class Value extends BaseValue
      *
      * @param \eZ\Publish\Core\FieldType\Author\Author[] $authors
      */
-    public function __construct(array $authors = array())
+    public function __construct(array $authors = [])
     {
         $this->authors = new AuthorCollection($authors);
     }
@@ -41,7 +41,7 @@ class Value extends BaseValue
             return '';
         }
 
-        $authorNames = array();
+        $authorNames = [];
 
         if ($this->authors instanceof AuthorCollection) {
             foreach ($this->authors as $author) {

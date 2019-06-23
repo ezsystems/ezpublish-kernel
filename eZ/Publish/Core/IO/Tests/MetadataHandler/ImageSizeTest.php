@@ -22,7 +22,7 @@ class ImageSizeTest extends TestCase
         $metadataHandler = new ImageSizeMetadataHandler();
         $file = 'eZ/Publish/Core/Repository/Tests/Service/Integration/ezplogo.png';
         self::assertEquals(
-            array('width' => 189, 'height' => 200, 'mime' => 'image/png'),
+            ['width' => 189, 'height' => 200, 'mime' => 'image/png'],
             $metadataHandler->extract($file)
         );
     }

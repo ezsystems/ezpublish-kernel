@@ -94,7 +94,7 @@ class LocationService implements LocationServiceInterface
         Helper\DomainMapper $domainMapper,
         Helper\NameSchemaService $nameSchemaService,
         PermissionCriterionResolver $permissionCriterionResolver,
-        array $settings = array(),
+        array $settings = [],
         LoggerInterface $logger = null
     ) {
         $this->repository = $repository;
@@ -102,9 +102,9 @@ class LocationService implements LocationServiceInterface
         $this->domainMapper = $domainMapper;
         $this->nameSchemaService = $nameSchemaService;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             //'defaultSetting' => array(),
-        );
+        ];
         $this->permissionCriterionResolver = $permissionCriterionResolver;
         $this->logger = null !== $logger ? $logger : new NullLogger();
     }
@@ -146,17 +146,17 @@ class LocationService implements LocationServiceInterface
         } elseif ($contentReadCriterion !== true) {
             // Query if there are any content in subtree current user don't have access to
             $query = new Query(
-                array(
+                [
                     'limit' => 0,
                     'filter' => new CriterionLogicalAnd(
-                        array(
+                        [
                             new CriterionSubtree($loadedSubtree->pathString),
                             new CriterionLogicalNot($contentReadCriterion),
-                        )
+                        ]
                     ),
-                )
+                ]
             );
-            $result = $this->repository->getSearchService()->findContent($query, array(), false);
+            $result = $this->repository->getSearchService()->findContent($query, [], false);
             if ($result->totalCount > 0) {
                 throw new UnauthorizedException('content', 'read');
             }
@@ -296,17 +296,17 @@ class LocationService implements LocationServiceInterface
             throw new InvalidArgumentValue('limit', $limit);
         }
 
-        $childLocations = array();
+        $childLocations = [];
         $searchResult = $this->searchChildrenLocations($location, $offset, $limit);
         foreach ($searchResult->searchHits as $searchHit) {
             $childLocations[] = $searchHit->valueObject;
         }
 
         return new LocationList(
-            array(
+            [
                 'locations' => $childLocations,
                 'totalCount' => $searchResult->totalCount,
-            )
+            ]
         );
     }
 
@@ -614,17 +614,17 @@ class LocationService implements LocationServiceInterface
         } elseif ($contentReadCriterion !== true) {
             // Query if there are any content in subtree current user don't have access to
             $query = new Query(
-                array(
+                [
                     'limit' => 0,
                     'filter' => new CriterionLogicalAnd(
-                        array(
+                        [
                             new CriterionSubtree($location->pathString),
                             new CriterionLogicalNot($contentReadCriterion),
-                        )
+                        ]
                     ),
-                )
+                ]
             );
-            $result = $this->repository->getSearchService()->findContent($query, array(), false);
+            $result = $this->repository->getSearchService()->findContent($query, [], false);
             if ($result->totalCount > 0) {
                 throw new UnauthorizedException('content', 'read');
             }
@@ -693,17 +693,17 @@ class LocationService implements LocationServiceInterface
         } elseif ($contentReadCriterion !== true) {
             // Query if there are any content in subtree current user don't have access to
             $query = new Query(
-                array(
+                [
                     'limit' => 0,
                     'filter' => new CriterionLogicalAnd(
-                        array(
+                        [
                             new CriterionSubtree($location->pathString),
                             new CriterionLogicalNot($contentReadCriterion),
-                        )
+                        ]
                     ),
-                )
+                ]
             );
-            $result = $this->repository->getSearchService()->findContent($query, array(), false);
+            $result = $this->repository->getSearchService()->findContent($query, [], false);
             if ($result->totalCount > 0) {
                 throw new UnauthorizedException('content', 'remove');
             }

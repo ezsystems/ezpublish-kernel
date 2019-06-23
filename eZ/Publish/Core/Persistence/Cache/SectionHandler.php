@@ -23,7 +23,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function create($name, $identifier)
     {
-        $this->logger->logCall(__METHOD__, array('name' => $name, 'identifier' => $identifier));
+        $this->logger->logCall(__METHOD__, ['name' => $name, 'identifier' => $identifier]);
         $section = $this->persistenceHandler->sectionHandler()->create($name, $identifier);
         $this->cache->getItem('section', $section->id)->set($section)->save();
 
@@ -35,7 +35,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function update($id, $name, $identifier)
     {
-        $this->logger->logCall(__METHOD__, array('section' => $id, 'name' => $name, 'identifier' => $identifier));
+        $this->logger->logCall(__METHOD__, ['section' => $id, 'name' => $name, 'identifier' => $identifier]);
         $this->cache
             ->getItem('section', $id)
             ->set($section = $this->persistenceHandler->sectionHandler()->update($id, $name, $identifier))
@@ -52,7 +52,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
         $cache = $this->cache->getItem('section', $id);
         $section = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('section' => $id));
+            $this->logger->logCall(__METHOD__, ['section' => $id]);
             $cache->set($section = $this->persistenceHandler->sectionHandler()->load($id))->save();
         }
 
@@ -82,7 +82,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function loadByIdentifier($identifier)
     {
-        $this->logger->logCall(__METHOD__, array('section' => $identifier));
+        $this->logger->logCall(__METHOD__, ['section' => $identifier]);
 
         return $this->persistenceHandler->sectionHandler()->loadByIdentifier($identifier);
     }
@@ -92,7 +92,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function delete($id)
     {
-        $this->logger->logCall(__METHOD__, array('section' => $id));
+        $this->logger->logCall(__METHOD__, ['section' => $id]);
         $return = $this->persistenceHandler->sectionHandler()->delete($id);
 
         $this->cache->clear('section', $id);
@@ -105,7 +105,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function assign($sectionId, $contentId)
     {
-        $this->logger->logCall(__METHOD__, array('section' => $sectionId, 'content' => $contentId));
+        $this->logger->logCall(__METHOD__, ['section' => $sectionId, 'content' => $contentId]);
         $return = $this->persistenceHandler->sectionHandler()->assign($sectionId, $contentId);
 
         $this->cache->clear('content', $contentId);
@@ -124,7 +124,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function assignmentsCount($sectionId)
     {
-        $this->logger->logCall(__METHOD__, array('section' => $sectionId));
+        $this->logger->logCall(__METHOD__, ['section' => $sectionId]);
 
         return $this->persistenceHandler->sectionHandler()->assignmentsCount($sectionId);
     }
@@ -138,7 +138,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function policiesCount($sectionId)
     {
-        $this->logger->logCall(__METHOD__, array('section' => $sectionId));
+        $this->logger->logCall(__METHOD__, ['section' => $sectionId]);
 
         return $this->persistenceHandler->sectionHandler()->policiesCount($sectionId);
     }
@@ -148,7 +148,7 @@ class SectionHandler extends AbstractHandler implements SectionHandlerInterface
      */
     public function countRoleAssignmentsUsingSection($sectionId)
     {
-        $this->logger->logCall(__METHOD__, array('section' => $sectionId));
+        $this->logger->logCall(__METHOD__, ['section' => $sectionId]);
 
         return $this->persistenceHandler->sectionHandler()->countRoleAssignmentsUsingSection($sectionId);
     }

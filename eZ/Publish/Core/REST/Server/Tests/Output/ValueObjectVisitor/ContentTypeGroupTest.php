@@ -27,7 +27,7 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $contentTypeGroup = new ContentType\ContentTypeGroup(
-            array(
+            [
                 'id' => 42,
                 'identifier' => 'some-group',
                 'creationDate' => new \DateTime('2012-12-31 19:30 Europe/Zagreb'),
@@ -45,32 +45,32 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
                 ),
                 'mainLanguageCode' => 'eng-GB'
                 */
-            )
+            ]
         );
 
         $routerMock = $this->getRouterMock();
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentTypeGroup',
-            array('contentTypeGroupId' => $contentTypeGroup->id),
+            ['contentTypeGroupId' => $contentTypeGroup->id],
             "/content/typegroups/{$contentTypeGroup->id}"
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $contentTypeGroup->creatorId),
+            ['userId' => $contentTypeGroup->creatorId],
             "/user/users/{$contentTypeGroup->creatorId}"
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $contentTypeGroup->modifierId),
+            ['userId' => $contentTypeGroup->modifierId],
             "/user/users/{$contentTypeGroup->modifierId}"
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_listContentTypesForGroup',
-            array('contentTypeGroupId' => $contentTypeGroup->id),
+            ['contentTypeGroupId' => $contentTypeGroup->id],
             "/content/typegroups/{$contentTypeGroup->id}/types"
         );
 
@@ -97,12 +97,12 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentTypeGroupElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentTypeGroup',
-                'children' => array(
+                'children' => [
                     'count' => 7,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ContentTypeGroup> element.',
             false
@@ -119,13 +119,13 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentTypeGroupAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentTypeGroup',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ContentTypeGroup+xml',
                     'href' => '/content/typegroups/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ContentTypeGroup> attributes.',
             false
@@ -142,10 +142,10 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIdValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'id',
                 'content' => '42',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ContentTypeGroup> id value element.',
             false
@@ -162,10 +162,10 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIdentifierValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'identifier',
                 'content' => 'some-group',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ContentTypeGroup> identifier value element.',
             false
@@ -182,10 +182,10 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsCreatedValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'created',
                 'content' => '2012-12-31T19:30:00+01:00',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ContentTypeGroup> created value element.',
             false
@@ -202,10 +202,10 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsModifiedValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'modified',
                 'content' => '2012-12-31T19:35:00+01:00',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ContentTypeGroup> modified value element.',
             false
@@ -222,9 +222,9 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsCreatorElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Creator',
-            ),
+            ],
             $result,
             'Invalid <Creator> element.',
             false
@@ -241,13 +241,13 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsCreatorAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Creator',
-                'attributes' => array(
+                'attributes' => [
                     'href' => '/user/users/14',
                     'media-type' => 'application/vnd.ez.api.User+xml',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Creator> element attributes.',
             false
@@ -264,9 +264,9 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsModifierElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Modifier',
-            ),
+            ],
             $result,
             'Invalid <Modifier> element.',
             false
@@ -283,13 +283,13 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsModifierAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Modifier',
-                'attributes' => array(
+                'attributes' => [
                     'href' => '/user/users/13',
                     'media-type' => 'application/vnd.ez.api.User+xml',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Modifier> element attributes.',
             false
@@ -306,9 +306,9 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentTypesElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentTypes',
-            ),
+            ],
             $result,
             'Invalid <ContentTypes> element.',
             false
@@ -325,13 +325,13 @@ class ContentTypeGroupTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentTypesAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentTypes',
-                'attributes' => array(
+                'attributes' => [
                     'href' => '/content/typegroups/42/types',
                     'media-type' => 'application/vnd.ez.api.ContentTypeInfoList+xml',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ContentTypes> attributes.',
             false

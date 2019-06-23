@@ -60,7 +60,7 @@ class Mapper
      */
     public function createLocationsFromRows(array $rows, $prefix = '')
     {
-        $locations = array();
+        $locations = [];
 
         foreach ($rows as $row) {
             $id = $row[$prefix . 'node_id'];

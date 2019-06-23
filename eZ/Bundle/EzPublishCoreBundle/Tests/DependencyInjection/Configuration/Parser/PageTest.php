@@ -18,9 +18,9 @@ class PageTest extends AbstractParserTestCase
 
     protected function getContainerExtensions()
     {
-        return array(
-            new EzPublishCoreExtension(array(new Page())),
-        );
+        return [
+            new EzPublishCoreExtension([new Page()]),
+        ];
     }
 
     protected function getMinimalConfiguration()
@@ -32,12 +32,12 @@ class PageTest extends AbstractParserTestCase
     {
         $this->load();
 
-        $defaultConfig = array(
+        $defaultConfig = [
             'layouts' => $this->container->getParameter('ezpublish.ezpage.layouts'),
             'blocks' => $this->container->getParameter('ezpublish.ezpage.blocks'),
             'enabledLayouts' => $this->container->getParameter('ezpublish.ezpage.enabledLayouts'),
             'enabledBlocks' => $this->container->getParameter('ezpublish.ezpage.enabledBlocks'),
-        );
+        ];
         $this->assertSame($defaultConfig, $this->container->getParameter('ezsettings.default.ezpage'));
 
         // For each siteaccess we expect to only have enabled layout/blocks
@@ -49,33 +49,33 @@ class PageTest extends AbstractParserTestCase
     public function testSiteaccessPageConfig()
     {
         $this->load();
-        $defaultConfig = array(
+        $defaultConfig = [
             'layouts' => $this->container->getParameter('ezpublish.ezpage.layouts'),
             'blocks' => $this->container->getParameter('ezpublish.ezpage.blocks'),
             'enabledLayouts' => $this->container->getParameter('ezpublish.ezpage.enabledLayouts'),
             'enabledBlocks' => $this->container->getParameter('ezpublish.ezpage.enabledBlocks'),
-        );
+        ];
 
-        $customLayouts = array(
-            'FoobarLayout2' => array('name' => 'Foo layout 2', 'template' => 'foolayout2.html.twig'),
-        );
-        $enabledLayouts = array('FoobarLayout2', 'GlobalZoneLayout');
-        $customBlocks = array(
-            'FoobarBlock2' => array('name' => 'Foo block 2'),
-        );
-        $enabledBlocks = array('FoobarBlock2', 'DemoBlock');
-        $siteaccessConfig = array(
+        $customLayouts = [
+            'FoobarLayout2' => ['name' => 'Foo layout 2', 'template' => 'foolayout2.html.twig'],
+        ];
+        $enabledLayouts = ['FoobarLayout2', 'GlobalZoneLayout'];
+        $customBlocks = [
+            'FoobarBlock2' => ['name' => 'Foo block 2'],
+        ];
+        $enabledBlocks = ['FoobarBlock2', 'DemoBlock'];
+        $siteaccessConfig = [
             'layouts' => $customLayouts,
             'blocks' => $customBlocks,
             'enabledLayouts' => $enabledLayouts,
             'enabledBlocks' => $enabledBlocks,
-        );
+        ];
         $this->load(
-            array(
-                'system' => array(
-                    'fre' => array('ezpage' => $siteaccessConfig),
-                ),
-            )
+            [
+                'system' => [
+                    'fre' => ['ezpage' => $siteaccessConfig],
+                ],
+            ]
         );
 
         $expected = $this->getPageConfigForSiteaccessFromDefaults($defaultConfig, $siteaccessConfig);
@@ -90,14 +90,14 @@ class PageTest extends AbstractParserTestCase
      *
      * @return array
      */
-    private function getPageConfigForSiteaccessFromDefaults(array $defaultConfig, array $additionalConfig = array())
+    private function getPageConfigForSiteaccessFromDefaults(array $defaultConfig, array $additionalConfig = [])
     {
-        $pageConfigForSiteaccess = array(
-            'layouts' => array(),
-            'blocks' => array(),
+        $pageConfigForSiteaccess = [
+            'layouts' => [],
+            'blocks' => [],
             'enabledLayouts' => $defaultConfig['enabledLayouts'],
             'enabledBlocks' => $defaultConfig['enabledBlocks'],
-        );
+        ];
 
         // Default settings
         foreach ($defaultConfig['enabledLayouts'] as $enabledLayout) {

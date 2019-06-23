@@ -33,7 +33,7 @@ class CachedValue extends RestValue
      * @param array $cacheTags Tags to add to the cache (supported: locationId)
      * @throw InvalidArgumentException If invalid cache tags are provided
      */
-    public function __construct($value, array $cacheTags = array())
+    public function __construct($value, array $cacheTags = [])
     {
         $this->value = $value;
         $this->cacheTags = $this->checkCacheTags($cacheTags);
@@ -41,7 +41,7 @@ class CachedValue extends RestValue
 
     protected function checkCacheTags($tags)
     {
-        $invalidTags = array_diff(array_keys($tags), array('locationId'));
+        $invalidTags = array_diff(array_keys($tags), ['locationId']);
         if (count($invalidTags) > 0) {
             throw new InvalidArgumentException(
                 'cacheTags',

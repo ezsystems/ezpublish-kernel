@@ -175,7 +175,7 @@ class JsonTest extends GeneratorTest
 
         $generator->startHashElement('elements');
 
-        $generator->startValueElement('element', 'element value 1', array('attribute' => 'attribute value 1'));
+        $generator->startValueElement('element', 'element value 1', ['attribute' => 'attribute value 1']);
         $generator->endValueElement('element');
 
         $generator->endHashElement('elements');
@@ -265,8 +265,8 @@ class JsonTest extends GeneratorTest
             $this->generator = new Common\Output\Generator\Json(
                 $this->getMock(
                     'eZ\\Publish\\Core\\REST\\Common\\Output\\Generator\\Json\\FieldTypeHashGenerator',
-                    array(),
-                    array(),
+                    [],
+                    [],
                     '',
                     false
                 )

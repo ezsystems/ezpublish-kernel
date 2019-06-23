@@ -22,14 +22,14 @@ abstract class BaseFlysystemTest extends ConfigurationFactoryTest
     {
         $this->setDefinition($this->flysystemAdapterServiceId, new Definition());
 
-        return array(
+        return [
             'adapter' => 'test',
-        );
+        ];
     }
 
     public function provideParentServiceDefinition()
     {
-        return new Definition(null, array(null));
+        return new Definition(null, [null]);
     }
 
     public function validateConfiguredHandler($handlerDefinitionId)

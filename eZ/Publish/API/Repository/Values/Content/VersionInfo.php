@@ -113,5 +113,5 @@ abstract class VersionInfo extends ValueObject
      *
      * @var string[]
      */
-    protected $languageCodes = array();
+    protected $languageCodes = [];
 }

@@ -43,7 +43,7 @@ class UserTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -53,7 +53,7 @@ class UserTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -89,12 +89,12 @@ class UserTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 23,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -128,21 +128,21 @@ class UserTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new UserValue(),
-            ),
-            array(
-                array(),
-                new UserValue(array()),
-            ),
-            array(
-                new UserValue(array('login' => 'sindelfingen')),
-                new UserValue(array('login' => 'sindelfingen')),
-            ),
-            array(
-                $userData = array(
+            ],
+            [
+                [],
+                new UserValue([]),
+            ],
+            [
+                new UserValue(['login' => 'sindelfingen']),
+                new UserValue(['login' => 'sindelfingen']),
+            ],
+            [
+                $userData = [
                     'hasStoredLogin' => true,
                     'contentId' => 23,
                     'login' => 'sindelfingen',
@@ -151,12 +151,12 @@ class UserTest extends FieldTypeTest
                     'passwordHashType' => 'md5',
                     'enabled' => true,
                     'maxLogin' => 1000,
-                ),
+                ],
                 new UserValue($userData),
-            ),
-            array(
+            ],
+            [
                 new UserValue(
-                    $userData = array(
+                    $userData = [
                         'hasStoredLogin' => true,
                         'contentId' => 23,
                         'login' => 'sindelfingen',
@@ -165,11 +165,11 @@ class UserTest extends FieldTypeTest
                         'passwordHashType' => 'md5',
                         'enabled' => true,
                         'maxLogin' => 1000,
-                    )
+                    ]
                 ),
                 new UserValue($userData),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -211,14 +211,14 @@ class UserTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new UserValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new UserValue(
-                    $userData = array(
+                    $userData = [
                         'hasStoredLogin' => true,
                         'contentId' => 23,
                         'login' => 'sindelfingen',
@@ -227,11 +227,11 @@ class UserTest extends FieldTypeTest
                         'passwordHashType' => 'md5',
                         'enabled' => true,
                         'maxLogin' => 1000,
-                    )
+                    ]
                 ),
                 $userData,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -273,13 +273,13 @@ class UserTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new UserValue(),
-            ),
-            array(
-                $userData = array(
+            ],
+            [
+                $userData = [
                     'hasStoredLogin' => true,
                     'contentId' => 23,
                     'login' => 'sindelfingen',
@@ -288,10 +288,10 @@ class UserTest extends FieldTypeTest
                     'passwordHashType' => 'md5',
                     'enabled' => true,
                     'maxLogin' => 1000,
-                ),
+                ],
                 new UserValue($userData),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -301,9 +301,9 @@ class UserTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new UserValue(array('login' => 'johndoe')), 'johndoe'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [new UserValue(['login' => 'johndoe']), 'johndoe'],
+        ];
     }
 }

@@ -27,17 +27,17 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $urlWildcard = new Content\URLWildcard(
-            array(
+            [
                 'id' => 42,
                 'sourceUrl' => '/source/url',
                 'destinationUrl' => '/destination/url',
                 'forward' => true,
-            )
+            ]
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadURLWildcard',
-            array('urlWildcardId' => $urlWildcard->id),
+            ['urlWildcardId' => $urlWildcard->id],
             "/content/urlwildcards/{$urlWildcard->id}"
         );
 
@@ -64,13 +64,13 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlWildcardElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlWildcard',
-                'children' => array(
+                'children' => [
                     'less_than' => 4,
                     'greater_than' => 2,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UrlWildcard> element.',
             false
@@ -87,14 +87,14 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlWildcardAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlWildcard',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UrlWildcard+xml',
                     'href' => '/content/urlwildcards/42',
                     'id' => '42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UrlWildcard> attributes.',
             false
@@ -111,10 +111,10 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSourceUrlValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'sourceUrl',
                 'content' => '/source/url',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlWildcard> sourceUrl value element.',
             false
@@ -131,10 +131,10 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
     public function testResultContainsDestinationUrlValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'destinationUrl',
                 'content' => '/destination/url',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlWildcard> destinationUrl value element.',
             false
@@ -151,10 +151,10 @@ class URLWildcardTest extends ValueObjectVisitorBaseTest
     public function testResultContainsForwardValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'forward',
                 'content' => 'true',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlWildcard> forward value element.',
             false

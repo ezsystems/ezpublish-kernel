@@ -80,7 +80,7 @@ class PreviewController
         $this->previewHelper->setPreviewActive(true);
 
         try {
-            $content = $this->contentService->loadContent($contentId, array($language), $versionNo);
+            $content = $this->contentService->loadContent($contentId, [$language], $versionNo);
             $location = $this->locationProvider->loadMainLocation($contentId);
 
             if (!$location instanceof Location) {
@@ -93,7 +93,7 @@ class PreviewController
             throw new AccessDeniedException();
         }
 
-        if (!$this->authorizationChecker->isGranted(new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content)))) {
+        if (!$this->authorizationChecker->isGranted(new AuthorizationAttribute('content', 'versionread', ['valueObject' => $content]))) {
             throw new AccessDeniedException();
         }
 
@@ -144,27 +144,27 @@ EOF;
      */
     protected function getForwardRequest(Location $location, Content $content, SiteAccess $previewSiteAccess, Request $request, $language)
     {
-        $forwardRequestParameters = array(
+        $forwardRequestParameters = [
             '_controller' => UrlAliasRouter::VIEW_ACTION,
             // specify a route for RouteReference generator
             '_route' => UrlAliasGenerator::INTERNAL_CONTENT_VIEW_ROUTE,
-            '_route_params' => array(
+            '_route_params' => [
                 'contentId' => $content->id,
                 'locationId' => $location->id,
-            ),
+            ],
             'location' => $location,
             'content' => $content,
             'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
             'layout' => true,
-            'params' => array(
+            'params' => [
                 'content' => $content,
                 'location' => $location,
                 'isPreview' => true,
                 'language' => $language,
-            ),
+            ],
             'siteaccess' => $previewSiteAccess,
             'semanticPathinfo' => $request->attributes->get('semanticPathinfo'),
-        );
+        ];
 
         if ($this->controllerChecker->usesCustomController($content, $location)) {
             $forwardRequestParameters = [

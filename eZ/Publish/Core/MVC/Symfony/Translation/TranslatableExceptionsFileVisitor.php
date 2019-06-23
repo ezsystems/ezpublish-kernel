@@ -72,10 +72,10 @@ class TranslatableExceptionsFileVisitor implements LoggerAwareInterface, FileVis
      *
      * @var array method => position of the "domain" parameter
      */
-    protected $exceptionsToExtractFrom = array(
+    protected $exceptionsToExtractFrom = [
         'contentvalidationexception',
         'forbiddenexception',
-    );
+    ];
 
     /**
      * DefaultPhpFileExtractor constructor.

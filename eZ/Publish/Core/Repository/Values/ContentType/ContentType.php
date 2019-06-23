@@ -78,7 +78,7 @@ class ContentType extends APIContentType
      */
     protected $fieldDefinitionsById;
 
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
         foreach ($data as $propertyName => $propertyValue) {
             $this->$propertyName = $propertyValue;

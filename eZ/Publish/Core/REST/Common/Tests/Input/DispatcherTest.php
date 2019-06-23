@@ -35,9 +35,9 @@ class DispatcherTest extends TestCase
     public function testParseInvalidContentType()
     {
         $message = new Common\Message(
-            array(
+            [
                 'Content-Type' => 'text/html',
-            )
+            ]
         );
 
         $parsingDispatcher = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher');
@@ -52,9 +52,9 @@ class DispatcherTest extends TestCase
     public function testParseMissingFormatHandler()
     {
         $message = new Common\Message(
-            array(
+            [
                 'Content-Type' => 'text/html+unknown',
-            )
+            ]
         );
 
         $parsingDispatcher = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\ParsingDispatcher');
@@ -66,9 +66,9 @@ class DispatcherTest extends TestCase
     public function testParse()
     {
         $message = new Common\Message(
-            array(
+            [
                 'Content-Type' => 'text/html+format',
-            ),
+            ],
             'Hello world!'
         );
 
@@ -76,7 +76,7 @@ class DispatcherTest extends TestCase
         $parsingDispatcher
             ->expects($this->at(0))
             ->method('parse')
-            ->with(array(42), 'text/html')
+            ->with([42], 'text/html')
             ->will($this->returnValue(23));
 
         $handler = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler');
@@ -84,9 +84,9 @@ class DispatcherTest extends TestCase
             ->expects($this->at(0))
             ->method('convert')
             ->with('Hello world!')
-            ->will($this->returnValue(array(array(42))));
+            ->will($this->returnValue([[42]]));
 
-        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, array('format' => $handler));
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, ['format' => $handler]);
 
         $this->assertSame(
             23,
@@ -101,10 +101,10 @@ class DispatcherTest extends TestCase
     public function testParseSpecialUrlHeader()
     {
         $message = new Common\Message(
-            array(
+            [
                 'Content-Type' => 'text/html+format',
                 'Url' => '/foo/bar',
-            ),
+            ],
             'Hello world!'
         );
 
@@ -112,7 +112,7 @@ class DispatcherTest extends TestCase
         $parsingDispatcher
             ->expects($this->at(0))
             ->method('parse')
-            ->with(array('someKey' => 'someValue', '__url' => '/foo/bar'), 'text/html')
+            ->with(['someKey' => 'someValue', '__url' => '/foo/bar'], 'text/html')
             ->will($this->returnValue(23));
 
         $handler = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Input\\Handler');
@@ -122,15 +122,15 @@ class DispatcherTest extends TestCase
             ->with('Hello world!')
             ->will(
                 $this->returnValue(
-                    array(
-                        array(
+                    [
+                        [
                             'someKey' => 'someValue',
-                        ),
-                    )
+                        ],
+                    ]
                 )
             );
 
-        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, array('format' => $handler));
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, ['format' => $handler]);
 
         $this->assertSame(
             23,
@@ -141,10 +141,10 @@ class DispatcherTest extends TestCase
     public function testParseMediaTypeCharset()
     {
         $message = new Common\Message(
-            array(
+            [
                 'Content-Type' => 'text/html+format; version=1.1; charset=UTF-8',
                 'Url' => '/foo/bar',
-            ),
+            ],
             'Hello world!'
         );
 
@@ -158,9 +158,9 @@ class DispatcherTest extends TestCase
         $handler
             ->expects($this->any())
             ->method('convert')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
-        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, array('format' => $handler));
+        $dispatcher = new Common\Input\Dispatcher($parsingDispatcher, ['format' => $handler]);
 
         $dispatcher->parse($message);
     }

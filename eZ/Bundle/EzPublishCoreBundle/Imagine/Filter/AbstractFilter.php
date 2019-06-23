@@ -18,7 +18,7 @@ abstract class AbstractFilter implements FilterInterface
      */
     private $options;
 
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this->options = $options;
     }

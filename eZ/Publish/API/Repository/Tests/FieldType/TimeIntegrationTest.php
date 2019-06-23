@@ -37,16 +37,16 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'useSeconds' => array(
+        return [
+            'useSeconds' => [
                 'type' => 'bool',
                 'default' => false,
-            ),
-            'defaultType' => array(
+            ],
+            'defaultType' => [
                 'type' => 'choice',
                 'default' => 0,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -56,10 +56,10 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'useSeconds' => false,
             'defaultType' => 0,
-        );
+        ];
     }
 
     /**
@@ -69,9 +69,9 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -81,7 +81,7 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -91,7 +91,7 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -101,9 +101,9 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 42),
-        );
+        return [
+            'unknown' => ['value' => 42],
+        ];
     }
 
     /**
@@ -143,9 +143,9 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'time' => 3661,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -175,11 +175,11 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'Some unknown date format', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -207,9 +207,9 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
         );
 
         $dateTime = new DateTime();
-        $expectedData = array(
+        $expectedData = [
             'time' => $dateTime->setTimestamp(12345678)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp(),
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -252,11 +252,11 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function testUpdateContentFails($failingValue, $expectedException)
     {
-        return array(
-            array(
+        return [
+            [
                 'Some unknown date format', 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -274,9 +274,9 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'time' => 3661,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -307,12 +307,12 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
     {
         $dateTime = new DateTime();
 
-        return array(
-            array(
+        return [
+            [
                 TimeValue::fromTimestamp(123456),
                 $dateTime->setTimestamp(123456)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -324,28 +324,28 @@ class TimeIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 3661,
                 new TimeValue(3661),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new TimeValue()),
-        );
+        return [
+            [new TimeValue()],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()

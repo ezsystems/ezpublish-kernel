@@ -53,16 +53,16 @@ class Visibility extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'nested' => array(
+        return [
+            'nested' => [
                 'path' => 'locations_doc',
-                'filter' => array(
-                    'term' => array(
+                'filter' => [
+                    'term' => [
                         'invisible_b' => $this->getInternalValue($criterion),
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -76,15 +76,15 @@ class Visibility extends CriterionVisitor
      */
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'nested' => array(
+        return [
+            'nested' => [
                 'path' => 'locations_doc',
-                'query' => array(
-                    'term' => array(
+                'query' => [
+                    'term' => [
                         'invisible_b' => $this->getInternalValue($criterion),
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 }

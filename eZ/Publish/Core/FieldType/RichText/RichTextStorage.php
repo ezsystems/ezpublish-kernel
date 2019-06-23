@@ -27,7 +27,7 @@ class RichTextStorage extends GatewayBasedStorage
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(array $gateways = array(), LoggerInterface $logger = null)
+    public function __construct(array $gateways = [], LoggerInterface $logger = null)
     {
         parent::__construct($gateways);
         $this->logger = $logger;
@@ -57,9 +57,9 @@ class RichTextStorage extends GatewayBasedStorage
             return false;
         }
 
-        $urlSet = array();
-        $remoteIdSet = array();
-        $linksInfo = array();
+        $urlSet = [];
+        $remoteIdSet = [];
+        $linksInfo = [];
 
         /** @var \DOMElement $link */
         foreach ($links as $index => $link) {
@@ -79,7 +79,7 @@ class RichTextStorage extends GatewayBasedStorage
 
         $urlIdMap = $gateway->getUrlIdMap(array_keys($urlSet));
         $contentIds = $gateway->getContentIds(array_keys($remoteIdSet));
-        $urlLinkSet = array();
+        $urlLinkSet = [];
 
         foreach ($links as $index => $link) {
             list(, $scheme, $url, $fragment) = $linksInfo[$index];
@@ -138,8 +138,8 @@ class RichTextStorage extends GatewayBasedStorage
             return;
         }
 
-        $urlIdSet = array();
-        $urlInfo = array();
+        $urlIdSet = [];
+        $urlInfo = [];
 
         /** @var \DOMElement $link */
         foreach ($links as $index => $link) {

@@ -59,27 +59,27 @@ class FieldIn extends Field
             );
         }
 
-        $fields = array();
+        $fields = [];
         foreach ($fieldNames as $name) {
             $fields[] = 'fields_doc.' . $name;
         }
 
-        $terms = array();
+        $terms = [];
         foreach ($values as $value) {
-            $terms[] = array(
-                'multi_match' => array(
+            $terms[] = [
+                'multi_match' => [
                     'query' => $value,
                     'fields' => $fields,
-                ),
-            );
+                ],
+            ];
         }
 
-        return array(
-            'bool' => array(
+        return [
+            'bool' => [
                 'should' => $terms,
                 'minimum_should_match' => 1,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -95,26 +95,26 @@ class FieldIn extends Field
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $filter = array(
-            'nested' => array(
+        $filter = [
+            'nested' => [
                 'path' => 'fields_doc',
-                'filter' => array(
+                'filter' => [
                     'query' => $this->getCondition($criterion),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($languageFilter !== null) {
-            $filter['nested']['filter'] = array(
-                'bool' => array(
-                    'must' => array(
+            $filter['nested']['filter'] = [
+                'bool' => [
+                    'must' => [
                         $fieldFilter,
                         $filter['nested']['filter'],
-                    ),
-                ),
-            );
+                    ],
+                ],
+            ];
         }
 
         return $filter;
@@ -136,24 +136,24 @@ class FieldIn extends Field
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter === null) {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
                     'query' => $this->getCondition($criterion),
-                ),
-            );
+                ],
+            ];
         } else {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
-                    'query' => array(
-                        'filtered' => array(
+                    'query' => [
+                        'filtered' => [
                             'query' => $this->getCondition($criterion),
                             'filter' => $fieldFilter,
-                        ),
-                    ),
-                ),
-            );
+                        ],
+                    ],
+                ],
+            ];
         }
 
         return $query;

@@ -27,7 +27,7 @@ class SectionListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $sectionList = new SectionList(array(), '/content/sections');
+        $sectionList = new SectionList([], '/content/sections');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -52,9 +52,9 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSectionListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'SectionList',
-            ),
+            ],
             $result,
             'Invalid <SectionList> element.',
             false
@@ -71,13 +71,13 @@ class SectionListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSectionListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'SectionList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.SectionList+xml',
                     'href' => '/content/sections',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <SectionList> attributes.',
             false
@@ -95,10 +95,10 @@ class SectionListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $sectionList = new SectionList(
-            array(
+            [
                 new Content\Section(),
                 new Content\Section(),
-            ),
+            ],
             '/content/sections'
         );
 

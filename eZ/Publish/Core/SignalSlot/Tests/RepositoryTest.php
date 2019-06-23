@@ -39,73 +39,73 @@ class RepositoryTest extends TestCase
 
     public function serviceMethods()
     {
-        return array(
-            array(
+        return [
+            [
                 'getContentService',
                 '\eZ\Publish\API\Repository\ContentService',
                 '\eZ\Publish\Core\SignalSlot\ContentService',
-            ),
-            array(
+            ],
+            [
                 'getContentLanguageService',
                 '\eZ\Publish\API\Repository\LanguageService',
                 '\eZ\Publish\Core\SignalSlot\LanguageService',
-            ),
-            array(
+            ],
+            [
                 'getContentTypeService',
                 '\eZ\Publish\API\Repository\ContentTypeService',
                 '\eZ\Publish\Core\SignalSlot\ContentTypeService',
-            ),
-            array(
+            ],
+            [
                 'getLocationService',
                 '\eZ\Publish\API\Repository\LocationService',
                 '\eZ\Publish\Core\SignalSlot\LocationService',
-            ),
-            array(
+            ],
+            [
                 'getTrashService',
                 '\eZ\Publish\API\Repository\TrashService',
                 '\eZ\Publish\Core\SignalSlot\TrashService',
-            ),
-            array(
+            ],
+            [
                 'getSectionService',
                 '\eZ\Publish\API\Repository\SectionService',
                 '\eZ\Publish\Core\SignalSlot\SectionService',
-            ),
-            array(
+            ],
+            [
                 'getUserService',
                 '\eZ\Publish\API\Repository\UserService',
                 '\eZ\Publish\Core\SignalSlot\UserService',
-            ),
-            array(
+            ],
+            [
                 'getURLAliasService',
                 '\eZ\Publish\API\Repository\URLAliasService',
                 '\eZ\Publish\Core\SignalSlot\URLAliasService',
-            ),
-            array(
+            ],
+            [
                 'getURLWildcardService',
                 '\eZ\Publish\API\Repository\URLWildcardService',
                 '\eZ\Publish\Core\SignalSlot\URLWildcardService',
-            ),
-            array(
+            ],
+            [
                 'getObjectStateService',
                 '\eZ\Publish\API\Repository\ObjectStateService',
                 '\eZ\Publish\Core\SignalSlot\ObjectStateService',
-            ),
-            array(
+            ],
+            [
                 'getRoleService',
                 '\eZ\Publish\API\Repository\RoleService',
                 '\eZ\Publish\Core\SignalSlot\RoleService',
-            ),
-            array(
+            ],
+            [
                 'getSearchService',
                 '\eZ\Publish\API\Repository\SearchService',
                 '\eZ\Publish\Core\SignalSlot\SearchService',
-            ),
-            array(
+            ],
+            [
                 'getFieldTypeService',
                 '\eZ\Publish\API\Repository\FieldTypeService',
                 '\eZ\Publish\Core\SignalSlot\FieldTypeService',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -120,7 +120,7 @@ class RepositoryTest extends TestCase
             ->method($method)
             ->will(
                 $this->returnValueMap(
-                    array(array_merge($parameters, array($return)))
+                    [array_merge($parameters, [$return])]
                 )
             );
         $repository = new Repository(
@@ -128,7 +128,7 @@ class RepositoryTest extends TestCase
             $this->getMock('eZ\\Publish\\Core\\SignalSlot\\SignalDispatcher')
         );
 
-        $result = call_user_func_array(array($repository, $method), $parameters);
+        $result = call_user_func_array([$repository, $method], $parameters);
         $this->assertTrue($result === $return);
     }
 
@@ -138,47 +138,47 @@ class RepositoryTest extends TestCase
         $dt = new \DateTime();
         $dt->setTimestamp($ts);
 
-        return array(
-            array(
+        return [
+            [
                 'getCurrentUser',
-                array(),
+                [],
                 new User(),
-            ),
-            array(
+            ],
+            [
                 'setCurrentUser',
-                array(new User()),
+                [new User()],
                 null,
-            ),
-            array(
+            ],
+            [
                 'hasAccess',
-                array('module', 'function', new User()),
-                array('limitations'),
-            ),
-            array(
+                ['module', 'function', new User()],
+                ['limitations'],
+            ],
+            [
                 'canUser',
-                array('module', 'function', new User(), new Location()),
+                ['module', 'function', new User(), new Location()],
                 false,
-            ),
-            array(
+            ],
+            [
                 'beginTransaction',
-                array(),
+                [],
                 true,
-            ),
-            array(
+            ],
+            [
                 'commit',
-                array(),
+                [],
                 true,
-            ),
-            array(
+            ],
+            [
                 'rollback',
-                array(),
+                [],
                 true,
-            ),
-            array(
+            ],
+            [
                 'createDateTime',
-                array($ts),
+                [$ts],
                 $dt,
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -588,12 +588,12 @@ class DoctrineDatabase extends Gateway
                     $paths
                 ),
                 'array_merge_recursive',
-                array()
+                []
             )
         );
 
         if (empty($nodeIDs)) {
-            return array();
+            return [];
         }
 
         $query = $this->handler->createSelectQuery();
@@ -911,8 +911,8 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $limitationIdsSet = array();
-        $limitationValuesSet = array();
+        $limitationIdsSet = [];
+        $limitationValuesSet = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             if ($row['ezpolicy_limitation_id'] !== null) {
                 $limitationIdsSet[$row['ezpolicy_limitation_id']] = true;

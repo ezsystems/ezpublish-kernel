@@ -27,22 +27,22 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $urlAlias = new Content\URLAlias(
-            array(
+            [
                 'id' => 'some-id',
                 'type' => 1,
                 'destination' => '/destination/url',
                 'path' => '/some/path',
-                'languageCodes' => array('eng-GB', 'eng-US'),
+                'languageCodes' => ['eng-GB', 'eng-US'],
                 'alwaysAvailable' => true,
                 'isHistory' => true,
                 'isCustom' => false,
                 'forward' => false,
-            )
+            ]
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadURLAlias',
-            array('urlAliasId' => $urlAlias->id),
+            ['urlAliasId' => $urlAlias->id],
             "/content/urlaliases/{$urlAlias->id}"
         );
 
@@ -69,13 +69,13 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlAliasElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlAlias',
-                'children' => array(
+                'children' => [
                     'less_than' => 8,
                     'greater_than' => 6,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UrlAlias> element.',
             false
@@ -92,15 +92,15 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlAliasAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlAlias',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UrlAlias+xml',
                     'href' => '/content/urlaliases/some-id',
                     'id' => 'some-id',
                     'type' => 'RESOURCE',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UrlAlias> attributes.',
             false
@@ -117,10 +117,10 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'resource',
                 'content' => '/destination/url',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlAlias> url value element.',
             false
@@ -137,10 +137,10 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsPathValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'path',
                 'content' => '/some/path',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlAlias> path value element.',
             false
@@ -157,10 +157,10 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsLanguageCodesValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'languageCodes',
                 'content' => 'eng-GB,eng-US',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlAlias> languageCodes value element.',
             false
@@ -177,10 +177,10 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsAlwaysAvailableValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'alwaysAvailable',
                 'content' => 'true',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlAlias> alwaysAvailable value element.',
             false
@@ -197,10 +197,10 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIsHistoryValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'isHistory',
                 'content' => 'true',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlAlias> isHistory value element.',
             false
@@ -217,10 +217,10 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsForwardValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'forward',
                 'content' => 'false',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlAlias> forward value element.',
             false
@@ -237,10 +237,10 @@ class URLAliasTest extends ValueObjectVisitorBaseTest
     public function testResultContainsCustomValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'custom',
                 'content' => 'false',
-            ),
+            ],
             $result,
             'Invalid or non-existing <UrlAlias> custom value element.',
             false

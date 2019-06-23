@@ -37,23 +37,23 @@ class ContentViewTest extends TestCase
 
     public function constructProvider()
     {
-        return array(
-            array('some:valid:identifier', array('foo' => 'bar')),
-            array('another::identifier', array()),
-            array('oops:i_did_it:again', array('singer' => 'Britney Spears')),
-            array(
+        return [
+            ['some:valid:identifier', ['foo' => 'bar']],
+            ['another::identifier', []],
+            ['oops:i_did_it:again', ['singer' => 'Britney Spears']],
+            [
                 function () {
                     return true;
                 },
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 function () {
                     return true;
                 },
-                array('truc' => 'muche'),
-            ),
-        );
+                ['truc' => 'muche'],
+            ],
+        ];
     }
 
     /**
@@ -68,11 +68,11 @@ class ContentViewTest extends TestCase
 
     public function constructFailProvider()
     {
-        return array(
-            array(123),
-            array(new \stdClass()),
-            array(array(1, 2, 3)),
-        );
+        return [
+            [123],
+            [new \stdClass()],
+            [[1, 2, 3]],
+        ];
     }
 
     /**
@@ -82,7 +82,7 @@ class ContentViewTest extends TestCase
      */
     public function testGetSetParameters()
     {
-        $params = array('bar' => 'baz', 'fruit' => 'apple');
+        $params = ['bar' => 'baz', 'fruit' => 'apple'];
         $contentView = new ContentView('foo');
         $contentView->setParameters($params);
         self::assertSame($this->valueParams + $params, $contentView->getParameters());
@@ -95,10 +95,10 @@ class ContentViewTest extends TestCase
      */
     public function testAddParameters()
     {
-        $params = array('bar' => 'baz', 'fruit' => 'apple');
+        $params = ['bar' => 'baz', 'fruit' => 'apple'];
         $contentView = new ContentView('foo', $params);
 
-        $additionalParams = array('truc' => 'muche', 'laurel' => 'hardy');
+        $additionalParams = ['truc' => 'muche', 'laurel' => 'hardy'];
         $contentView->addParameters($additionalParams);
         self::assertSame($this->valueParams + $params + $additionalParams, $contentView->getParameters());
     }
@@ -110,7 +110,7 @@ class ContentViewTest extends TestCase
      */
     public function testHasParameter()
     {
-        $contentView = new ContentView(__METHOD__, array('foo' => 'bar'));
+        $contentView = new ContentView(__METHOD__, ['foo' => 'bar']);
         self::assertTrue($contentView->hasParameter('foo'));
         self::assertFalse($contentView->hasParameter('nonExistent'));
 
@@ -156,14 +156,14 @@ class ContentViewTest extends TestCase
 
     public function goodTemplateIdentifierProvider()
     {
-        return array(
-            array('foo:bar:baz.html.twig'),
-            array(
+        return [
+            ['foo:bar:baz.html.twig'],
+            [
                 function () {
                     return 'foo';
                 },
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -181,11 +181,11 @@ class ContentViewTest extends TestCase
 
     public function badTemplateIdentifierProvider()
     {
-        return array(
-            array(123),
-            array(true),
-            array(new \stdClass()),
-            array(array('foo', 'bar')),
-        );
+        return [
+            [123],
+            [true],
+            [new \stdClass()],
+            [['foo', 'bar']],
+        ];
     }
 }

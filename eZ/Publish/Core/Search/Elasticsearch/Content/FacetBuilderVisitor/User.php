@@ -40,10 +40,10 @@ class User extends FacetBuilderVisitor
     public function map($name, $data)
     {
         return new Facet\UserFacet(
-            array(
+            [
                 'name' => (string)substr($name, 6),
                 'entries' => $this->mapData($data),
-            )
+            ]
         );
     }
 
@@ -68,14 +68,14 @@ class User extends FacetBuilderVisitor
      */
     public function visit(FacetBuilder $facetBuilder)
     {
-        return array(
-            "user__{$facetBuilder->name}" => array(
-                'terms' => array(
+        return [
+            "user__{$facetBuilder->name}" => [
+                'terms' => [
                     'field' => 'creator_id',
                     'min_doc_count' => $facetBuilder->minCount,
                     'size' => $facetBuilder->limit,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

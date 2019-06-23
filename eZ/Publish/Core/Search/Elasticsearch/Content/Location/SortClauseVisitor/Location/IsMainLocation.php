@@ -37,10 +37,10 @@ class IsMainLocation extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return array(
-            'is_main_location_b' => array(
+        return [
+            'is_main_location_b' => [
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

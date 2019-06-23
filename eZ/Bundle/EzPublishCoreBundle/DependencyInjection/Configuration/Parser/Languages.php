@@ -14,7 +14,7 @@ use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 
 class Languages extends AbstractParser
 {
-    private $siteAccessesByLanguages = array();
+    private $siteAccessesByLanguages = [];
 
     /**
      * Adds semantic configuration definition.
@@ -27,12 +27,12 @@ class Languages extends AbstractParser
             ->arrayNode('languages')
                 ->requiresAtLeastOneElement()
                 ->info('Available languages, in order of precedence')
-                ->example(array('fre-FR', 'eng-GB'))
+                ->example(['fre-FR', 'eng-GB'])
                 ->prototype('scalar')->end()
             ->end()
             ->arrayNode('translation_siteaccesses')
                 ->info('List of "translation siteaccesses" which can be used by language switcher.')
-                ->example(array('french_siteaccess', 'english_siteaccess'))
+                ->example(['french_siteaccess', 'english_siteaccess'])
                 ->prototype('scalar')->end()
             ->end();
     }

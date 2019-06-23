@@ -45,7 +45,7 @@ class RatingTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        array();
+        [];
     }
 
     /**
@@ -55,7 +55,7 @@ class RatingTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -93,20 +93,20 @@ class RatingTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 'sindelfingen',
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
+            ],
+            [
                 new Value('sindelfingen'),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -140,24 +140,24 @@ class RatingTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 false,
                 new Value(false),
-            ),
-            array(
+            ],
+            [
                 true,
                 new Value(true),
-            ),
-            array(
+            ],
+            [
                 new Value(),
                 new Value(false),
-            ),
-            array(
+            ],
+            [
                 new Value(true),
                 new Value(true),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -197,16 +197,16 @@ class RatingTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new Value(true),
                 true,
-            ),
-            array(
+            ],
+            [
                 new Value(false),
                 false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -246,16 +246,16 @@ class RatingTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 true,
                 new Value(true),
-            ),
-            array(
+            ],
+            [
                 false,
                 new Value(false),
-            ),
-        );
+            ],
+        ];
     }
 
     public function testEmptyValueIsEmpty()
@@ -373,8 +373,8 @@ class RatingTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+        ];
     }
 }

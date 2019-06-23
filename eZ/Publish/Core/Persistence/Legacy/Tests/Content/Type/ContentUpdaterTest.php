@@ -102,7 +102,7 @@ class ContentUpdaterTest extends TestCase
         $actions = $updater->determineActions($fromType, $toType);
 
         $this->assertEquals(
-            array(
+            [
                 new ContentUpdater\Action\RemoveField(
                     $this->getContentGatewayMock(),
                     $fromType->fieldDefinitions[0],
@@ -116,7 +116,7 @@ class ContentUpdaterTest extends TestCase
                     $this->getContentStorageHandlerMock(),
                     $this->getContentMapperMock()
                 ),
-            ),
+            ],
             $actions
         );
     }
@@ -127,7 +127,7 @@ class ContentUpdaterTest extends TestCase
 
         $actionA = $this->getMockForAbstractClass(
             '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action',
-            array(),
+            [],
             '',
             false
         );
@@ -139,7 +139,7 @@ class ContentUpdaterTest extends TestCase
             ->with(22);
         $actionB = $this->getMockForAbstractClass(
             '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action',
-            array(),
+            [],
             '',
             false
         );
@@ -150,14 +150,14 @@ class ContentUpdaterTest extends TestCase
             ->method('apply')
             ->with(22);
 
-        $actions = array($actionA, $actionB);
+        $actions = [$actionA, $actionB];
 
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('getContentIdsByContentTypeId')
             ->with(23)
             ->will(
-                $this->returnValue(array(11, 22))
+                $this->returnValue([11, 22])
             );
 
         $updater->applyUpdates(23, $actions);
@@ -180,9 +180,9 @@ class ContentUpdaterTest extends TestCase
         $fieldB->id = 2;
         $fieldB->fieldType = 'ezstring';
 
-        $type->fieldDefinitions = array(
+        $type->fieldDefinitions = [
             $fieldA, $fieldB,
-        );
+        ];
 
         return $type;
     }
@@ -233,8 +233,8 @@ class ContentUpdaterTest extends TestCase
         if (!isset($this->converterRegistryMock)) {
             $this->converterRegistryMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\ConverterRegistry',
-                array(),
-                array(array())
+                [],
+                [[]]
             );
         }
 
@@ -251,8 +251,8 @@ class ContentUpdaterTest extends TestCase
         if (!isset($this->contentStorageHandlerMock)) {
             $this->contentStorageHandlerMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );
@@ -271,8 +271,8 @@ class ContentUpdaterTest extends TestCase
         if (!isset($this->contentMapperMock)) {
             $this->contentMapperMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );

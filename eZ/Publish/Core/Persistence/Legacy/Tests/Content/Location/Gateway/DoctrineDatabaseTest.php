@@ -38,22 +38,22 @@ class DoctrineDatabaseTest extends TestCase
 
     public static function getLoadLocationValues()
     {
-        return array(
-            array('node_id', 77),
-            array('priority', 0),
-            array('is_hidden', 0),
-            array('is_invisible', 0),
-            array('remote_id', 'dbc2f3c8716c12f32c379dbf0b1cb133'),
-            array('contentobject_id', 75),
-            array('parent_node_id', 2),
-            array('path_identification_string', 'solutions'),
-            array('path_string', '/1/2/77/'),
-            array('modified_subnode', 1311065017),
-            array('main_node_id', 77),
-            array('depth', 2),
-            array('sort_field', 2),
-            array('sort_order', 1),
-        );
+        return [
+            ['node_id', 77],
+            ['priority', 0],
+            ['is_hidden', 0],
+            ['is_invisible', 0],
+            ['remote_id', 'dbc2f3c8716c12f32c379dbf0b1cb133'],
+            ['contentobject_id', 75],
+            ['parent_node_id', 2],
+            ['path_identification_string', 'solutions'],
+            ['path_string', '/1/2/77/'],
+            ['modified_subnode', 1311065017],
+            ['main_node_id', 77],
+            ['depth', 2],
+            ['sort_field', 2],
+            ['sort_order', 1],
+        ];
     }
 
     /**
@@ -150,34 +150,34 @@ class DoctrineDatabaseTest extends TestCase
         $this->insertDatabaseFixture(__DIR__ . '/_fixtures/full_example_tree.php');
         $handler = $this->getLocationGateway();
         $handler->moveSubtreeNodes(
-            array(
+            [
                 'path_string' => '/1/2/69/',
                 'path_identification_string' => 'products',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
-            ),
-            array(
+            ],
+            [
                 'path_string' => '/1/2/77/',
                 'path_identification_string' => 'solutions',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
-            )
+            ]
         );
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(65, '/1/2/', '', 1, 1, 0, 0),
-                array(67, '/1/2/77/69/', 'solutions/products', 77, 3, 0, 0),
-                array(69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 0),
-                array(73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 0),
-                array(75, '/1/2/77/', 'solutions', 2, 2, 0, 0),
-            ),
+            [
+                [65, '/1/2/', '', 1, 1, 0, 0],
+                [67, '/1/2/77/69/', 'solutions/products', 77, 3, 0, 0],
+                [69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 0],
+                [73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 0],
+                [75, '/1/2/77/', 'solutions', 2, 2, 0, 0],
+            ],
             $query
                 ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(69, 71, 75, 77, 2)))
+                ->where($query->expr->in('node_id', [69, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
     }
@@ -188,34 +188,34 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->hideSubtree('/1/2/77/');
         $handler->moveSubtreeNodes(
-            array(
+            [
                 'path_string' => '/1/2/69/',
                 'path_identification_string' => 'products',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
-            ),
-            array(
+            ],
+            [
                 'path_string' => '/1/2/77/',
                 'path_identification_string' => 'solutions',
                 'is_hidden' => 1,
                 'is_invisible' => 1,
-            )
+            ]
         );
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(65, '/1/2/', '', 1, 1, 0, 0),
-                array(67, '/1/2/77/69/', 'solutions/products', 77, 3, 0, 1),
-                array(69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 1),
-                array(73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 1),
-                array(75, '/1/2/77/', 'solutions', 2, 2, 1, 1),
-            ),
+            [
+                [65, '/1/2/', '', 1, 1, 0, 0],
+                [67, '/1/2/77/69/', 'solutions/products', 77, 3, 0, 1],
+                [69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 1],
+                [73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 1],
+                [75, '/1/2/77/', 'solutions', 2, 2, 1, 1],
+            ],
             $query
                 ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(69, 71, 75, 77, 2)))
+                ->where($query->expr->in('node_id', [69, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
     }
@@ -226,34 +226,34 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->hideSubtree('/1/2/69/');
         $handler->moveSubtreeNodes(
-            array(
+            [
                 'path_string' => '/1/2/69/',
                 'path_identification_string' => 'products',
                 'is_hidden' => 1,
                 'is_invisible' => 1,
-            ),
-            array(
+            ],
+            [
                 'path_string' => '/1/2/77/',
                 'path_identification_string' => 'solutions',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
-            )
+            ]
         );
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(65, '/1/2/', '', 1, 1, 0, 0),
-                array(67, '/1/2/77/69/', 'solutions/products', 77, 3, 1, 1),
-                array(69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 1),
-                array(73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 1),
-                array(75, '/1/2/77/', 'solutions', 2, 2, 0, 0),
-            ),
+            [
+                [65, '/1/2/', '', 1, 1, 0, 0],
+                [67, '/1/2/77/69/', 'solutions/products', 77, 3, 1, 1],
+                [69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 1],
+                [73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 1],
+                [75, '/1/2/77/', 'solutions', 2, 2, 0, 0],
+            ],
             $query
                 ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(69, 71, 75, 77, 2)))
+                ->where($query->expr->in('node_id', [69, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
     }
@@ -265,35 +265,35 @@ class DoctrineDatabaseTest extends TestCase
         $handler->hideSubtree('/1/2/69/70/');
 
         $handler->moveSubtreeNodes(
-            array(
+            [
                 'path_string' => '/1/2/69/',
                 'path_identification_string' => 'products',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
-            ),
-            array(
+            ],
+            [
                 'path_string' => '/1/2/77/',
                 'path_identification_string' => 'solutions',
                 'is_hidden' => 0,
                 'is_invisible' => 0,
-            )
+            ]
         );
 
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(65, '/1/2/', '', 1, 1, 0, 0),
-                array(67, '/1/2/77/69/', 'solutions/products', 77, 3, 0, 0),
-                array(68, '/1/2/77/69/70/', 'solutions/products/software', 69, 4, 1, 1),
-                array(69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 1),
-                array(73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 0),
-                array(75, '/1/2/77/', 'solutions', 2, 2, 0, 0),
-            ),
+            [
+                [65, '/1/2/', '', 1, 1, 0, 0],
+                [67, '/1/2/77/69/', 'solutions/products', 77, 3, 0, 0],
+                [68, '/1/2/77/69/70/', 'solutions/products/software', 69, 4, 1, 1],
+                [69, '/1/2/77/69/70/71/', 'solutions/products/software/os_type_i', 70, 5, 0, 1],
+                [73, '/1/2/77/69/72/75/', 'solutions/products/boxes/cd_dvd_box_iii', 72, 5, 0, 0],
+                [75, '/1/2/77/', 'solutions', 2, 2, 0, 0],
+            ],
             $query
                 ->select('contentobject_id', 'path_string', 'path_identification_string', 'parent_node_id', 'depth', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(69, 70, 71, 75, 77, 2)))
+                ->where($query->expr->in('node_id', [69, 70, 71, 75, 77, 2]))
                 ->orderBy('contentobject_id')
         );
     }
@@ -306,9 +306,9 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(67, 1, 0, 53, 1, 5, 77, '9cec85d730eec7578190ee95ce5a36f5', 0, 2, 1, 0, 0),
-            ),
+            [
+                [67, 1, 0, 53, 1, 5, 77, '9cec85d730eec7578190ee95ce5a36f5', 0, 2, 1, 0, 0],
+            ],
             $query
                 ->select('*')
                 ->from('eznode_assignment')
@@ -325,11 +325,11 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array('/1/'),
-                array('/1/2/'),
-                array('/1/2/69/'),
-            ),
+            [
+                ['/1/'],
+                ['/1/2/'],
+                ['/1/2/69/'],
+            ],
             $query
                 ->select('path_string')
                 ->from('ezcontentobject_tree')
@@ -346,16 +346,16 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(1, 0, 0),
-                array(2, 0, 0),
-                array(69, 1, 1),
-                array(75, 0, 1),
-            ),
+            [
+                [1, 0, 0],
+                [2, 0, 0],
+                [69, 1, 1],
+                [75, 0, 1],
+            ],
             $query
                 ->select('node_id', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(1, 2, 69, 75)))
+                ->where($query->expr->in('node_id', [1, 2, 69, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -372,16 +372,16 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(1, 0, 0),
-                array(2, 0, 0),
-                array(69, 0, 0),
-                array(75, 0, 0),
-            ),
+            [
+                [1, 0, 0],
+                [2, 0, 0],
+                [69, 0, 0],
+                [75, 0, 0],
+            ],
             $query
                 ->select('node_id', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(1, 2, 69, 75)))
+                ->where($query->expr->in('node_id', [1, 2, 69, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -399,18 +399,18 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(1, 0, 0),
-                array(2, 0, 0),
-                array(69, 0, 0),
-                array(70, 1, 1),
-                array(71, 0, 1),
-                array(75, 0, 0),
-            ),
+            [
+                [1, 0, 0],
+                [2, 0, 0],
+                [69, 0, 0],
+                [70, 1, 1],
+                [71, 0, 1],
+                [75, 0, 0],
+            ],
             $query
                 ->select('node_id', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(1, 2, 69, 70, 71, 75)))
+                ->where($query->expr->in('node_id', [1, 2, 69, 70, 71, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -428,18 +428,18 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(1, 0, 0),
-                array(2, 0, 0),
-                array(69, 1, 1),
-                array(70, 0, 1),
-                array(71, 0, 1),
-                array(75, 0, 1),
-            ),
+            [
+                [1, 0, 0],
+                [2, 0, 0],
+                [69, 1, 1],
+                [70, 0, 1],
+                [71, 0, 1],
+                [75, 0, 1],
+            ],
             $query
                 ->select('node_id', 'is_hidden', 'is_invisible')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(1, 2, 69, 70, 71, 75)))
+                ->where($query->expr->in('node_id', [1, 2, 69, 70, 71, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -452,14 +452,14 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(70, 76),
-                array(78, 68),
-            ),
+            [
+                [70, 76],
+                [78, 68],
+            ],
             $query
                 ->select('node_id', 'contentobject_id')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(70, 78)))
+                ->where($query->expr->in('node_id', [70, 78]))
                 ->orderBy('node_id')
         );
     }
@@ -470,29 +470,29 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->create(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'remoteId' => 'some_id',
-                )
+                ]
             ),
-            array(
+            [
                 'node_id' => '77',
                 'depth' => '2',
                 'path_string' => '/1/2/77/',
-            )
+            ]
         );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(70, '/1/2/69/70/'),
-                array(77, '/1/2/77/'),
-                array(228, '/1/2/77/228/'),
-            ),
+            [
+                [70, '/1/2/69/70/'],
+                [77, '/1/2/77/'],
+                [228, '/1/2/77/228/'],
+            ],
             $query
                 ->select('node_id', 'path_string')
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('contentobject_id', array(68, 75)))
+                ->where($query->expr->in('contentobject_id', [68, 75]))
                 ->orderBy('node_id')
         );
     }
@@ -506,21 +506,21 @@ class DoctrineDatabaseTest extends TestCase
         // $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
 
-        $parentLocationData = array(
+        $parentLocationData = [
             'node_id' => '77',
             'depth' => '2',
             'path_string' => '/1/2/77/',
-        );
+        ];
 
         // main location
         $mainLocation = $handler->create(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'remoteId' => 'some_id',
                     'mainLocationId' => true,
-                )
+                ]
             ),
             $parentLocationData
         );
@@ -528,12 +528,12 @@ class DoctrineDatabaseTest extends TestCase
         // secondary location
         $handler->create(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'remoteId' => 'some_id',
                     'mainLocationId' => $mainLocation->id,
-                )
+                ]
             ),
             $parentLocationData
         );
@@ -546,21 +546,21 @@ class DoctrineDatabaseTest extends TestCase
 
     public static function getCreateLocationValues()
     {
-        return array(
-            array('contentobject_id', 68),
-            array('contentobject_is_published', 1),
-            array('contentobject_version', 1),
-            array('depth', 3),
-            array('is_hidden', 0),
-            array('is_invisible', 0),
-            array('main_node_id', 42),
-            array('parent_node_id', 77),
-            array('path_identification_string', ''),
-            array('priority', 1),
-            array('remote_id', 'some_id'),
-            array('sort_field', 1),
-            array('sort_order', 1),
-        );
+        return [
+            ['contentobject_id', 68],
+            ['contentobject_is_published', 1],
+            ['contentobject_version', 1],
+            ['depth', 3],
+            ['is_hidden', 0],
+            ['is_invisible', 0],
+            ['main_node_id', 42],
+            ['parent_node_id', 77],
+            ['path_identification_string', ''],
+            ['priority', 1],
+            ['remote_id', 'some_id'],
+            ['sort_field', 1],
+            ['sort_order', 1],
+        ];
     }
 
     /**
@@ -577,7 +577,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->create(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => 42,
@@ -585,18 +585,18 @@ class DoctrineDatabaseTest extends TestCase
                     'remoteId' => 'some_id',
                     'sortField' => 1,
                     'sortOrder' => 1,
-                )
+                ]
             ),
-            array(
+            [
                 'node_id' => '77',
                 'depth' => '2',
                 'path_string' => '/1/2/77/',
-            )
+            ]
         );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array($value)),
+            [[$value]],
             $query
                 ->select($field)
                 ->from('ezcontentobject_tree')
@@ -606,20 +606,20 @@ class DoctrineDatabaseTest extends TestCase
 
     public static function getCreateLocationReturnValues()
     {
-        return array(
-            array('id', 228),
-            array('priority', 1),
-            array('hidden', false),
-            array('invisible', false),
-            array('remoteId', 'some_id'),
-            array('contentId', '68'),
-            array('parentId', '77'),
-            array('pathIdentificationString', ''),
-            array('pathString', '/1/2/77/228/'),
-            array('depth', 3),
-            array('sortField', 1),
-            array('sortOrder', 1),
-        );
+        return [
+            ['id', 228],
+            ['priority', 1],
+            ['hidden', false],
+            ['invisible', false],
+            ['remoteId', 'some_id'],
+            ['contentId', '68'],
+            ['parentId', '77'],
+            ['pathIdentificationString', ''],
+            ['pathString', '/1/2/77/228/'],
+            ['depth', 3],
+            ['sortField', 1],
+            ['sortOrder', 1],
+        ];
     }
 
     /**
@@ -636,7 +636,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $location = $handler->create(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => true,
@@ -644,13 +644,13 @@ class DoctrineDatabaseTest extends TestCase
                     'remoteId' => 'some_id',
                     'sortField' => 1,
                     'sortOrder' => 1,
-                )
+                ]
             ),
-            array(
+            [
                 'node_id' => '77',
                 'depth' => '2',
                 'path_string' => '/1/2/77/',
-            )
+            ]
         );
 
         $this->assertTrue($location instanceof Location);
@@ -659,12 +659,12 @@ class DoctrineDatabaseTest extends TestCase
 
     public static function getUpdateLocationData()
     {
-        return array(
-            array('priority', 23),
-            array('remote_id', 'someNewHash'),
-            array('sort_field', 4),
-            array('sort_order', 4),
-        );
+        return [
+            ['priority', 23],
+            ['remote_id', 'someNewHash'],
+            ['sort_field', 4],
+            ['sort_order', 4],
+        ];
     }
 
     /**
@@ -676,43 +676,43 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->update(
             new Location\UpdateStruct(
-                array(
+                [
                     'priority' => 23,
                     'remoteId' => 'someNewHash',
                     'sortField' => 4,
                     'sortOrder' => 4,
-                )
+                ]
             ),
             70
         );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array($value)),
+            [[$value]],
             $query
                 ->select($field)
                 ->from('ezcontentobject_tree')
-                ->where($query->expr->in('node_id', array(70)))
+                ->where($query->expr->in('node_id', [70]))
         );
     }
 
     public static function getNodeAssignmentValues()
     {
-        return array(
-            array('contentobject_version', 1),
-            array('from_node_id', 0),
-            array('id', 215),
-            array('is_main', 0),
-            array('op_code', 3),
-            array('parent_node', 77),
-            array('parent_remote_id', 'some_id'),
-            array('remote_id', '0'),
-            array('sort_field', 2),
-            array('sort_order', 0),
-            array('is_main', 0),
-            array('priority', 1),
-            array('is_hidden', 1),
-        );
+        return [
+            ['contentobject_version', 1],
+            ['from_node_id', 0],
+            ['id', 215],
+            ['is_main', 0],
+            ['op_code', 3],
+            ['parent_node', 77],
+            ['parent_remote_id', 'some_id'],
+            ['remote_id', '0'],
+            ['sort_field', 2],
+            ['sort_order', 0],
+            ['is_main', 0],
+            ['priority', 1],
+            ['is_hidden', 1],
+        ];
     }
 
     /**
@@ -725,7 +725,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->createNodeAssignment(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => 1,
@@ -734,7 +734,7 @@ class DoctrineDatabaseTest extends TestCase
                     'sortField' => 2,
                     'sortOrder' => 0,
                     'hidden' => 1,
-                )
+                ]
             ),
             '77',
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
@@ -742,7 +742,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array($value)),
+            [[$value]],
             $query
                 ->select($field)
                 ->from('eznode_assignment')
@@ -764,7 +764,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->createNodeAssignment(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => true,
@@ -772,7 +772,7 @@ class DoctrineDatabaseTest extends TestCase
                     'remoteId' => 'some_id',
                     'sortField' => 1,
                     'sortOrder' => 1,
-                )
+                ]
             ),
             '77',
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
@@ -780,7 +780,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(1)),
+            [[1]],
             $query
                 ->select('is_main')
                 ->from('eznode_assignment')
@@ -803,26 +803,26 @@ class DoctrineDatabaseTest extends TestCase
 
         $gateway->create(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 4096,
                     'remoteId' => 'some_id',
                     'contentVersion' => 1,
-                )
+                ]
             ),
-            array(
+            [
                 'node_id' => '77',
                 'depth' => '2',
                 'path_string' => '/1/2/77/',
-            )
+            ]
         );
 
         $gateway->updateLocationsContentVersionNo(4096, 2);
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(
-                array(2),
-            ),
+            [
+                [2],
+            ],
             $query->select(
                 'contentobject_version'
             )->from(
@@ -848,7 +848,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(0)),
+            [[0]],
             $query
                 ->select('count(*)')
                 ->from('eznode_assignment')
@@ -885,7 +885,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array($nodeAssignmentsCount - 1)),
+            [[$nodeAssignmentsCount - 1]],
             $query
                 ->select('count(*)')
                 ->from('eznode_assignment')
@@ -899,24 +899,24 @@ class DoctrineDatabaseTest extends TestCase
 
     public static function getConvertNodeAssignmentsLocationValues()
     {
-        return array(
-            array('contentobject_id', '68'),
-            array('contentobject_is_published', '1'),
-            array('contentobject_version', '1'),
-            array('depth', '3'),
-            array('is_hidden', '1'),
-            array('is_invisible', '1'),
-            array('main_node_id', '70'),
-            array('modified_subnode', time()),
-            array('node_id', '228'),
-            array('parent_node_id', '77'),
-            array('path_identification_string', null),
-            array('path_string', '/1/2/77/228/'),
-            array('priority', '101'),
-            array('remote_id', 'some_id'),
-            array('sort_field', '1'),
-            array('sort_order', '1'),
-        );
+        return [
+            ['contentobject_id', '68'],
+            ['contentobject_is_published', '1'],
+            ['contentobject_version', '1'],
+            ['depth', '3'],
+            ['is_hidden', '1'],
+            ['is_invisible', '1'],
+            ['main_node_id', '70'],
+            ['modified_subnode', time()],
+            ['node_id', '228'],
+            ['parent_node_id', '77'],
+            ['path_identification_string', null],
+            ['path_string', '/1/2/77/228/'],
+            ['priority', '101'],
+            ['remote_id', 'some_id'],
+            ['sort_field', '1'],
+            ['sort_order', '1'],
+        ];
     }
 
     /**
@@ -930,7 +930,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->createNodeAssignment(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => false,
@@ -942,7 +942,7 @@ class DoctrineDatabaseTest extends TestCase
                     // Note: not stored in node assignment, will be calculated from parent
                     // visibility upon Location creation from node assignment
                     'invisible' => false,
-                )
+                ]
             ),
             '77',
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
@@ -968,7 +968,7 @@ class DoctrineDatabaseTest extends TestCase
             $this->assertGreaterThanOrEqual($value, $result);
         } else {
             $this->assertQueryResult(
-                array(array($value)),
+                [[$value]],
                 $query
             );
         }
@@ -984,7 +984,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->createNodeAssignment(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => true,
@@ -996,7 +996,7 @@ class DoctrineDatabaseTest extends TestCase
                     // Note: not stored in node assignment, will be calculated from parent
                     // visibility upon Location creation from node assignment
                     'invisible' => false,
-                )
+                ]
             ),
             '77',
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
@@ -1006,7 +1006,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(228)),
+            [[228]],
             $query
                 ->select('main_node_id')
                 ->from('ezcontentobject_tree')
@@ -1029,7 +1029,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->createNodeAssignment(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => true,
@@ -1041,7 +1041,7 @@ class DoctrineDatabaseTest extends TestCase
                     // Note: not stored in node assignment, will be calculated from parent
                     // visibility upon Location creation from node assignment
                     'invisible' => false,
-                )
+                ]
             ),
             '224',
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
@@ -1051,7 +1051,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(0, 1)),
+            [[0, 1]],
             $query
                 ->select('is_hidden, is_invisible')
                 ->from('ezcontentobject_tree')
@@ -1074,7 +1074,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->createNodeAssignment(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => true,
@@ -1086,7 +1086,7 @@ class DoctrineDatabaseTest extends TestCase
                     // Note: not stored in node assignment, will be calculated from parent
                     // visibility upon Location creation from node assignment
                     'invisible' => false,
-                )
+                ]
             ),
             '225',
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
@@ -1096,7 +1096,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(0, 1)),
+            [[0, 1]],
             $query
                 ->select('is_hidden, is_invisible')
                 ->from('ezcontentobject_tree')
@@ -1119,7 +1119,7 @@ class DoctrineDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->createNodeAssignment(
             new CreateStruct(
-                array(
+                [
                     'contentId' => 68,
                     'contentVersion' => 1,
                     'mainLocationId' => 1,
@@ -1127,7 +1127,7 @@ class DoctrineDatabaseTest extends TestCase
                     'remoteId' => 'some_id',
                     'sortField' => 1,
                     'sortOrder' => 1,
-                )
+                ]
             ),
             '77',
             DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
@@ -1137,7 +1137,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP)),
+            [[DoctrineDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP]],
             $query
                 ->select('op_code')
                 ->from('eznode_assignment')
@@ -1163,7 +1163,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(68), array(69)),
+            [[68], [69]],
             $query
                 ->select('id')
                 ->from('ezcontentobject')
@@ -1211,7 +1211,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(228), array(228)),
+            [[228], [228]],
             $query->select(
                 'main_node_id'
             )->from(
@@ -1223,7 +1223,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(1)),
+            [[1]],
             $query->select(
                 'is_main'
             )->from(
@@ -1239,7 +1239,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array(0)),
+            [[0]],
             $query->select(
                 'is_main'
             )->from(
@@ -1323,10 +1323,10 @@ class DoctrineDatabaseTest extends TestCase
 
     public function providerForTestUpdatePathIdentificationString()
     {
-        return array(
-            array(77, 2, 'new_solutions', 'new_solutions'),
-            array(75, 69, 'stylesheets', 'products/stylesheets'),
-        );
+        return [
+            [77, 2, 'new_solutions', 'new_solutions'],
+            [75, 69, 'stylesheets', 'products/stylesheets'],
+        ];
     }
 
     /**
@@ -1344,7 +1344,7 @@ class DoctrineDatabaseTest extends TestCase
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array(array($expected)),
+            [[$expected]],
             $query->select(
                 'path_identification_string'
             )->from(

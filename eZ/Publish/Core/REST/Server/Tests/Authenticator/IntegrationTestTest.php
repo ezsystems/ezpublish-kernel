@@ -62,8 +62,8 @@ class IntegrationTestTest extends BaseTest
         if (!isset($this->repositoryMock)) {
             $this->repositoryMock = $this->getMock(
                 '\\eZ\\Publish\\API\\Repository\\Repository',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );
@@ -92,8 +92,8 @@ class IntegrationTestTest extends BaseTest
         if (!isset($this->userServiceMock)) {
             $this->userServiceMock = $this->getMock(
                 '\\eZ\\Publish\\API\\Repository\\UserService',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );

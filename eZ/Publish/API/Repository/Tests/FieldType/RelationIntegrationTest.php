@@ -42,16 +42,16 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
     {
         $contentService = $this->getRepository()->getContentService();
 
-        return array(
+        return [
             new Relation(
-                array(
+                [
                     'sourceFieldDefinitionIdentifier' => 'data',
                     'type' => Relation::FIELD,
                     'sourceContentInfo' => $content->contentInfo,
                     'destinationContentInfo' => $contentService->loadContentInfo(4),
-                )
+                ]
             ),
-        );
+        ];
     }
 
     /**
@@ -63,16 +63,16 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
     {
         $contentService = $this->getRepository()->getContentService();
 
-        return array(
+        return [
             new Relation(
-                array(
+                [
                     'sourceFieldDefinitionIdentifier' => 'data',
                     'type' => Relation::FIELD,
                     'sourceContentInfo' => $content->contentInfo,
                     'destinationContentInfo' => $contentService->loadContentInfo(49),
-                )
+                ]
             ),
-        );
+        ];
     }
 
     /**
@@ -80,16 +80,16 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'selectionMethod' => array(
+        return [
+            'selectionMethod' => [
                 'type' => 'int',
                 'default' => 0,
-            ),
-            'selectionRoot' => array(
+            ],
+            'selectionRoot' => [
                 'type' => 'string',
                 'default' => '',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -97,7 +97,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -109,7 +109,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array('selectionMethod' => 0, 'selectionRoot' => '1');
+        return ['selectionMethod' => 0, 'selectionRoot' => '1'];
     }
 
     /**
@@ -121,7 +121,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -133,7 +133,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array('selectionMethod' => 'a', 'selectionRoot' => true, 'unknownSetting' => false);
+        return ['selectionMethod' => 'a', 'selectionRoot' => true, 'unknownSetting' => false];
     }
 
     /**
@@ -145,7 +145,7 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array('noValidator' => true);
+        return ['noValidator' => true];
     }
 
     /**
@@ -183,9 +183,9 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'destinationContentId' => 4,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -215,12 +215,12 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
-                new RelationValue(array()),
+        return [
+            [
+                new RelationValue([]),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -247,9 +247,9 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'destinationContentId' => 49,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -297,9 +297,9 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'destinationContentId' => 4,
-        );
+        ];
 
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -329,14 +329,14 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new RelationValue(4),
-                array(
+                [
                     'destinationContentId' => 4,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -348,28 +348,28 @@ class RelationIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
-                array('destinationContentId' => 4),
+        return [
+            [
+                ['destinationContentId' => 4],
                 new RelationValue(4),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new RelationValue()),
-        );
+        return [
+            [new RelationValue()],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()

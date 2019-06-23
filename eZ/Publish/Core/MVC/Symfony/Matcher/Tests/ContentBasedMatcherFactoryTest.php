@@ -22,16 +22,16 @@ abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
     {
         $matcherFactory = new $this->matcherFactoryClass(
             $this->getRepositoryMock(),
-            array(
-                'full' => array(
-                    'test' => array(
+            [
+                'full' => [
+                    'test' => [
                         'template' => 'foo.html.twig',
-                        'match' => array(
+                        'match' => [
                             '\\eZ\Publish\Core\MVC\Symfony\Matcher\Block\\Type' => true,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
         $matcherFactory->match($this->getMatchableValueObject(), 'full');
     }

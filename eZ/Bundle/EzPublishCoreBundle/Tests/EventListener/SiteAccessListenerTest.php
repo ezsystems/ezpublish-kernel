@@ -58,29 +58,29 @@ class SiteAccessListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(
-                MVCEvents::SITEACCESS => array('onSiteAccessMatch', 255),
-            ),
+            [
+                MVCEvents::SITEACCESS => ['onSiteAccessMatch', 255],
+            ],
             $this->listener->getSubscribedEvents()
         );
     }
 
     public function siteAccessMatchProvider()
     {
-        return array(
-            array('/foo/bar', '/foo/bar', '', array()),
-            array('/my_siteaccess/foo/bar', '/foo/bar', '', array()),
-            array('/foo/bar/(some)/thing', '/foo/bar', '/(some)/thing', array('some' => 'thing')),
-            array('/foo/bar/(some)/thing/(other)', '/foo/bar', '/(some)/thing/(other)', array('some' => 'thing', 'other' => '')),
-            array('/foo/bar/(some)/thing/orphan', '/foo/bar', '/(some)/thing/orphan', array('some' => 'thing/orphan')),
-            array('/foo/bar/(some)/thing//orphan', '/foo/bar', '/(some)/thing//orphan', array('some' => 'thing/orphan')),
-            array('/foo/bar/(some)/thing/orphan/(something)/else', '/foo/bar', '/(some)/thing/orphan/(something)/else', array('some' => 'thing/orphan', 'something' => 'else')),
-            array('/foo/bar/(some)/thing/orphan/(something)/else/(other)', '/foo/bar', '/(some)/thing/orphan/(something)/else/(other)', array('some' => 'thing/orphan', 'something' => 'else', 'other' => '')),
-            array('/foo/bar/(some)/thing/orphan/(other)', '/foo/bar', '/(some)/thing/orphan/(other)', array('some' => 'thing/orphan', 'other' => '')),
-            array('/my_siteaccess/foo/bar/(some)/thing', '/foo/bar', '/(some)/thing', array('some' => 'thing')),
-            array('/foo/bar/(some)/thing/(toto_titi)/tata_tutu', '/foo/bar', '/(some)/thing/(toto_titi)/tata_tutu', array('some' => 'thing', 'toto_titi' => 'tata_tutu')),
-            array('/foo/%E8%B5%A4/%28some%29/thing', '/foo/赤', '/(some)/thing', array('some' => 'thing')),
-        );
+        return [
+            ['/foo/bar', '/foo/bar', '', []],
+            ['/my_siteaccess/foo/bar', '/foo/bar', '', []],
+            ['/foo/bar/(some)/thing', '/foo/bar', '/(some)/thing', ['some' => 'thing']],
+            ['/foo/bar/(some)/thing/(other)', '/foo/bar', '/(some)/thing/(other)', ['some' => 'thing', 'other' => '']],
+            ['/foo/bar/(some)/thing/orphan', '/foo/bar', '/(some)/thing/orphan', ['some' => 'thing/orphan']],
+            ['/foo/bar/(some)/thing//orphan', '/foo/bar', '/(some)/thing//orphan', ['some' => 'thing/orphan']],
+            ['/foo/bar/(some)/thing/orphan/(something)/else', '/foo/bar', '/(some)/thing/orphan/(something)/else', ['some' => 'thing/orphan', 'something' => 'else']],
+            ['/foo/bar/(some)/thing/orphan/(something)/else/(other)', '/foo/bar', '/(some)/thing/orphan/(something)/else/(other)', ['some' => 'thing/orphan', 'something' => 'else', 'other' => '']],
+            ['/foo/bar/(some)/thing/orphan/(other)', '/foo/bar', '/(some)/thing/orphan/(other)', ['some' => 'thing/orphan', 'other' => '']],
+            ['/my_siteaccess/foo/bar/(some)/thing', '/foo/bar', '/(some)/thing', ['some' => 'thing']],
+            ['/foo/bar/(some)/thing/(toto_titi)/tata_tutu', '/foo/bar', '/(some)/thing/(toto_titi)/tata_tutu', ['some' => 'thing', 'toto_titi' => 'tata_tutu']],
+            ['/foo/%E8%B5%A4/%28some%29/thing', '/foo/赤', '/(some)/thing', ['some' => 'thing']],
+        ];
     }
 
     /**

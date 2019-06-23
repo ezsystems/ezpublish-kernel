@@ -45,7 +45,7 @@ class DateTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -55,12 +55,12 @@ class DateTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array(
-            'defaultType' => array(
+        return [
+            'defaultType' => [
                 'type' => 'choice',
                 'default' => Date::DEFAULT_EMPTY,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -96,12 +96,12 @@ class DateTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
-                array(),
+        return [
+            [
+                [],
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -135,30 +135,30 @@ class DateTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new DateValue(),
-            ),
-            array(
+            ],
+            [
                 ($dateString = '2012-08-28 12:20 EST'),
                 new DateValue(new DateTime($dateString)),
-            ),
-            array(
+            ],
+            [
                 ($timestamp = 1346149200),
                 new DateValue(
                     new DateTime("@{$timestamp}")
                 ),
-            ),
-            array(
+            ],
+            [
                 DateValue::fromTimestamp($timestamp = 1372895999),
                 new DateValue(new DateTime("@{$timestamp}")),
-            ),
-            array(
+            ],
+            [
                 ($dateTime = new DateTime()),
                 new DateValue($dateTime),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -198,19 +198,19 @@ class DateTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new DateValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new DateValue($dateTime = new DateTime()),
-                array(
+                [
                     'timestamp' => $dateTime->setTime(0, 0, 0)->getTimestamp(),
                     'rfc850' => $dateTime->format(DateTime::RFC850),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -252,30 +252,30 @@ class DateTest extends FieldTypeTest
     {
         $dateTime = new DateTime();
 
-        return array(
-            array(
+        return [
+            [
                 null,
                 new DateValue(),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'timestamp' => ($timestamp = 1362614400),
-                ),
+                ],
                 new DateValue(new DateTime("@{$timestamp}")),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     // Timezone is not abbreviated because PHP converts it to non-abbreviated local name,
                     // but this is sufficient to test conversion
                     'rfc850' => 'Thursday, 04-Jul-13 23:59:59 Europe/Zagreb',
-                ),
+                ],
                 new DateValue(
                     $dateTime
                         ->setTimeZone(new DateTimeZone('Europe/Zagreb'))
                         ->setTimestamp(1372896000)
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -302,21 +302,21 @@ class DateTest extends FieldTypeTest
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
                     'defaultType' => Date::DEFAULT_EMPTY,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'defaultType' => Date::DEFAULT_CURRENT_DATE,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -344,20 +344,20 @@ class DateTest extends FieldTypeTest
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     // non-existent setting
                     'useSeconds' => 23,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     // defaultType must be constant
                     'defaultType' => 42,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -367,15 +367,15 @@ class DateTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getEmptyValueExpectation(),
                 '',
-            ),
-            array(
+            ],
+            [
                 new DateValue(new DateTime('11/24/1983')),
                 'Thursday 24 November 1983',
-            ),
-        );
+            ],
+        ];
     }
 }

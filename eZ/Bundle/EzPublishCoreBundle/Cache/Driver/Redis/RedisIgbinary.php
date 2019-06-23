@@ -28,7 +28,7 @@ class RedisIgbinary extends StashRedis
 
     public function storeData($key, $data, $expiration)
     {
-        $store = igbinary_serialize(array('data' => $data, 'expiration' => $expiration));
+        $store = igbinary_serialize(['data' => $data, 'expiration' => $expiration]);
         if (null === $expiration) {
             return $this->redis->set($this->makeKeyString($key), $store);
         } else {

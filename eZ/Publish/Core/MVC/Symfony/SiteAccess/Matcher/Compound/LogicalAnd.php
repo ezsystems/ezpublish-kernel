@@ -40,7 +40,7 @@ class LogicalAnd extends Compound implements VersatileMatcher
     {
         foreach ($this->config as $i => $rule) {
             if ($rule['match'] === $siteAccessName) {
-                $subMatchers = array();
+                $subMatchers = [];
                 foreach ($this->matchersMap[$i] as $subMatcher) {
                     if (!$subMatcher instanceof VersatileMatcher) {
                         return null;

@@ -39,31 +39,31 @@ class LegacyPathGeneratorTest extends TestCase
 
     public function provideStoragePathForFieldData()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'fieldId' => 42,
                     'versionNo' => 1,
                     'languageCode' => 'eng-US',
-                ),
+                ],
                 '2/4/0/0/42-1-eng-US',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'fieldId' => 23,
                     'versionNo' => 42,
                     'languageCode' => 'ger-DE',
-                ),
+                ],
                 '3/2/0/0/23-42-ger-DE',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'fieldId' => 123456,
                     'versionNo' => 2,
                     'languageCode' => 'eng-GB',
-                ),
+                ],
                 '6/5/4/3/123456-2-eng-GB',
-            ),
-        );
+            ],
+        ];
     }
 }

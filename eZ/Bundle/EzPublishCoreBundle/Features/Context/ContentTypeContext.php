@@ -170,7 +170,7 @@ class ContentTypeContext implements Context
 
         $contentTypeCreateStruct = $contentTypeService->newContentTypeCreateStruct($identifier);
         $contentTypeCreateStruct->mainLanguageCode = self::DEFAULT_LANGUAGE;
-        $contentTypeCreateStruct->names = array(self::DEFAULT_LANGUAGE => $contentTypeName);
+        $contentTypeCreateStruct->names = [self::DEFAULT_LANGUAGE => $contentTypeName];
 
         $fieldPosition = 0;
         foreach ($fields as $field) {
@@ -179,7 +179,7 @@ class ContentTypeContext implements Context
 
             $fieldCreateStruct = $contentTypeService
                 ->newFieldDefinitionCreateStruct($field['identifier'], $field['type']);
-            $fieldCreateStruct->names = array(self::DEFAULT_LANGUAGE => $field['name']);
+            $fieldCreateStruct->names = [self::DEFAULT_LANGUAGE => $field['name']];
             $fieldCreateStruct->position = $fieldPosition;
             if (isset($field['required'])) {
                 $fieldCreateStruct->isRequired = ($field['required'] === 'true');
@@ -195,7 +195,7 @@ class ContentTypeContext implements Context
 
         $contentTypeDraft = $contentTypeService->createContentType(
             $contentTypeCreateStruct,
-            array($contentTypeGroup)
+            [$contentTypeGroup]
         );
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 

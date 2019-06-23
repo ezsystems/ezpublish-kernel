@@ -41,7 +41,7 @@ class SelectionTest extends TestCase
     public function testToStorageValue()
     {
         $fieldValue = new FieldValue();
-        $fieldValue->data = array(1, 3);
+        $fieldValue->data = [1, 3];
         $fieldValue->sortKey = '1-3';
 
         $expectedStorageFieldValue = new StorageFieldValue();
@@ -66,7 +66,7 @@ class SelectionTest extends TestCase
     public function testToStorageValueEmpty()
     {
         $fieldValue = new FieldValue();
-        $fieldValue->data = array();
+        $fieldValue->data = [];
         $fieldValue->sortKey = '';
 
         $expectedStorageFieldValue = new StorageFieldValue();
@@ -95,7 +95,7 @@ class SelectionTest extends TestCase
         $storageFieldValue->sortKeyString = '1-3';
 
         $expectedFieldValue = new FieldValue();
-        $expectedFieldValue->data = array(1, 3);
+        $expectedFieldValue->data = [1, 3];
         $expectedFieldValue->sortKey = '1-3';
 
         $actualFieldValue = new FieldValue();
@@ -120,7 +120,7 @@ class SelectionTest extends TestCase
         $storageFieldValue->sortKeyString = '';
 
         $expectedFieldValue = new FieldValue();
-        $expectedFieldValue->data = array();
+        $expectedFieldValue->data = [];
         $expectedFieldValue->sortKey = '';
 
         $actualFieldValue = new FieldValue();
@@ -141,22 +141,22 @@ class SelectionTest extends TestCase
     public function testToStorageFieldDefinitionMultiple()
     {
         $fieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => true,
-                                'options' => array(
+                                'options' => [
                                     0 => 'First',
                                     1 => 'Second',
                                     2 => 'Third',
-                                ),
-                            )
+                                ],
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         $expectedStorageFieldDefinition = new StorageFieldDefinition();
@@ -182,20 +182,20 @@ EOT;
     public function testToStorageFieldDefinitionSingle()
     {
         $fieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => false,
-                                'options' => array(
+                                'options' => [
                                     0 => 'First',
-                                ),
-                            )
+                                ],
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         $expectedStorageFieldDefinition = new StorageFieldDefinition();
@@ -234,28 +234,28 @@ EOT;
 EOT;
 
         $expectedFieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => true,
-                                'options' => array(
+                                'options' => [
                                     0 => 'First',
                                     1 => 'Second',
                                     2 => 'Third',
-                                ),
-                            )
+                                ],
+                            ]
                         ),
-                    )
+                    ]
                 ),
                 'defaultValue' => new FieldValue(
-                    array(
-                        'data' => array(),
+                    [
+                        'data' => [],
                         'sortKey' => '',
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         $actualFieldDefinition = new PersistenceFieldDefinition();
@@ -283,19 +283,19 @@ EOT;
 EOT;
 
         $expectedFieldDefinition = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => false,
-                                'options' => array(),
-                            )
+                                'options' => [],
+                            ]
                         ),
-                    )
+                    ]
                 ),
-                'defaultValue' => new FieldValue(array('data' => array())),
-            )
+                'defaultValue' => new FieldValue(['data' => []]),
+            ]
         );
 
         $actualFieldDefinition = new PersistenceFieldDefinition();

@@ -24,21 +24,21 @@ class XmlTest extends TestCase
         $handler = new Common\Input\Handler\Xml();
 
         $this->assertSame(
-            array(
+            [
                 'text' => 'Hello world!',
-            ),
+            ],
             $handler->convert('{"text":"Hello world!"}')
         );
     }
 
     public static function getXmlFixtures()
     {
-        $fixtures = array();
+        $fixtures = [];
         foreach (glob(__DIR__ . '/_fixtures/*.xml') as $xmlFile) {
-            $fixtures[] = array(
+            $fixtures[] = [
                 file_get_contents($xmlFile),
                 is_file($xmlFile . '.php') ? include $xmlFile . '.php' : null,
-            );
+            ];
         }
 
         return $fixtures;

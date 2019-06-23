@@ -56,7 +56,7 @@ abstract class BaseContentServiceTest extends BaseTest
         $contentCreate->alwaysAvailable = true;
 
         // Create a draft
-        $draft = $contentService->createContent($contentCreate, array($locationCreate));
+        $draft = $contentService->createContent($contentCreate, [$locationCreate]);
 
         $content = $contentService->publishVersion($draft->getVersionInfo());
         /* END: Inline */
@@ -112,7 +112,7 @@ abstract class BaseContentServiceTest extends BaseTest
         }
 
         // Create a draft
-        $draft = $contentService->createContent($contentCreate, array($locationCreate));
+        $draft = $contentService->createContent($contentCreate, [$locationCreate]);
         /* END: Inline */
 
         return $draft;
@@ -215,7 +215,7 @@ abstract class BaseContentServiceTest extends BaseTest
 
         // Load the Admin Group
         $userAdminGroup = $userService->loadUserGroup('12');
-        $userAdmin2 = $userService->createUser($newUserCreateStruct, array($userAdminGroup));
+        $userAdmin2 = $userService->createUser($newUserCreateStruct, [$userAdminGroup]);
 
         /* BEGIN: Inline */
         $draftVersion2 = $this->createContentDraftVersion2();
@@ -235,7 +235,7 @@ abstract class BaseContentServiceTest extends BaseTest
         );
         /* END: Inline */
 
-        return array($draftVersion2, $userAdmin2->id);
+        return [$draftVersion2, $userAdmin2->id];
     }
 
     /**

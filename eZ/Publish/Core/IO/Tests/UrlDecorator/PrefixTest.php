@@ -51,22 +51,22 @@ class PrefixTest extends TestCase
 
     public function provideData()
     {
-        return array(
-            array(
+        return [
+            [
                 'images/file.png',
                 'var/storage',
                 'var/storage/images/file.png',
-            ),
-            array(
+            ],
+            [
                 'images/file.png',
                 'var/storage/',
                 'var/storage/images/file.png',
-            ),
-            array(
+            ],
+            [
                 'images/file.png',
                 'http://static.example.com',
                 'http://static.example.com/images/file.png',
-            ),
-        );
+            ],
+        ];
     }
 }

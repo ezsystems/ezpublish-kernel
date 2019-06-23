@@ -31,7 +31,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
     {
         $def = new Definition();
         $fieldTypeIdentifier = 'field_type_identifier';
-        $def->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
+        $def->addTag('ezpublish.fieldType.externalStorageHandler', ['alias' => $fieldTypeIdentifier]);
         $serviceId = 'some_service_id';
         $this->setDefinition($serviceId, $def);
 
@@ -40,7 +40,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
-            array($serviceId, $fieldTypeIdentifier)
+            [$serviceId, $fieldTypeIdentifier]
         );
     }
 
@@ -60,7 +60,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
-            array($serviceId, $fieldTypeIdentifier)
+            [$serviceId, $fieldTypeIdentifier]
         );
     }
 
@@ -71,7 +71,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
             'eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler'
         );
         $fieldTypeIdentifier = 'field_type_identifier';
-        $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
+        $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', ['alias' => $fieldTypeIdentifier]);
         $storageHandlerServiceId = 'external_storage_handler_id';
         $this->setDefinition($storageHandlerServiceId, $handlerDef);
 
@@ -79,7 +79,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $gatewayIdentifier = 'LegacyStorage';
         $gatewayDef->addTag(
             'ezpublish.fieldType.externalStorageHandler.gateway',
-            array('alias' => $fieldTypeIdentifier, 'identifier' => $gatewayIdentifier)
+            ['alias' => $fieldTypeIdentifier, 'identifier' => $gatewayIdentifier]
         );
         $gatewayServiceId = 'gateway_service';
         $this->setDefinition($gatewayServiceId, $gatewayDef);
@@ -89,13 +89,13 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
-            array($storageHandlerServiceId, $fieldTypeIdentifier)
+            [$storageHandlerServiceId, $fieldTypeIdentifier]
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             $storageHandlerServiceId,
             'addGateway',
-            array($gatewayIdentifier, new Reference($gatewayServiceId))
+            [$gatewayIdentifier, new Reference($gatewayServiceId)]
         );
     }
 
@@ -109,7 +109,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
             'eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler'
         );
         $fieldTypeIdentifier = 'field_type_identifier';
-        $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
+        $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', ['alias' => $fieldTypeIdentifier]);
         $storageHandlerServiceId = 'external_storage_handler_id';
         $this->setDefinition($storageHandlerServiceId, $handlerDef);
 
@@ -118,7 +118,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
-            array($storageHandlerServiceId, $fieldTypeIdentifier)
+            [$storageHandlerServiceId, $fieldTypeIdentifier]
         );
     }
 
@@ -132,7 +132,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
             'eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler'
         );
         $fieldTypeIdentifier = 'field_type_identifier';
-        $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
+        $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', ['alias' => $fieldTypeIdentifier]);
         $storageHandlerServiceId = 'external_storage_handler_id';
         $this->setDefinition($storageHandlerServiceId, $handlerDef);
 
@@ -147,7 +147,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
-            array($storageHandlerServiceId, $fieldTypeIdentifier)
+            [$storageHandlerServiceId, $fieldTypeIdentifier]
         );
     }
 
@@ -161,7 +161,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
             'eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GatewayBasedStorageHandler'
         );
         $fieldTypeIdentifier = 'field_type_identifier';
-        $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', array('alias' => $fieldTypeIdentifier));
+        $handlerDef->addTag('ezpublish.fieldType.externalStorageHandler', ['alias' => $fieldTypeIdentifier]);
         $storageHandlerServiceId = 'external_storage_handler_id';
         $this->setDefinition($storageHandlerServiceId, $handlerDef);
 
@@ -169,7 +169,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $gatewayIdentifier = 'LegacyStorage';
         $gatewayDef->addTag(
             'ezpublish.fieldType.externalStorageHandler.gateway',
-            array('alias' => $fieldTypeIdentifier)
+            ['alias' => $fieldTypeIdentifier]
         );
         $gatewayServiceId = 'gateway_service';
         $this->setDefinition($gatewayServiceId, $gatewayDef);
@@ -179,7 +179,7 @@ class ExternalStorageRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.external_storage_registry.factory',
             'registerExternalStorageHandler',
-            array($storageHandlerServiceId, $fieldTypeIdentifier)
+            [$storageHandlerServiceId, $fieldTypeIdentifier]
         );
     }
 }

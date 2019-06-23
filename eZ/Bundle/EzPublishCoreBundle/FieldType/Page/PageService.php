@@ -23,7 +23,7 @@ class PageService extends BasePageService
      */
     public function getValidBlockItemsAsContentInfo(Block $block)
     {
-        $contentInfoObjects = array();
+        $contentInfoObjects = [];
         foreach ($this->getValidBlockItems($block) as $item) {
             try {
                 $contentInfoObjects[] = $this->contentService->loadContentInfo($item->contentId);

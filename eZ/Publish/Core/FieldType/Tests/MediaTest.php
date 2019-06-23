@@ -43,62 +43,62 @@ class MediaTest extends BinaryBaseTest
 
     protected function getSettingsSchemaExpectation()
     {
-        return array(
-            'mediaType' => array(
+        return [
+            'mediaType' => [
                 'type' => 'choice',
                 'default' => MediaType::TYPE_HTML5_VIDEO,
-            ),
-        );
+            ],
+        ];
     }
 
     public function provideInvalidInputForAcceptValue()
     {
         $baseInput = parent::provideInvalidInputForAcceptValue();
-        $binaryFileInput = array(
-            array(
-                new MediaValue(array('id' => '/foo/bar')),
+        $binaryFileInput = [
+            [
+                new MediaValue(['id' => '/foo/bar']),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new MediaValue(array('hasController' => 'yes')),
+            ],
+            [
+                new MediaValue(['hasController' => 'yes']),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new MediaValue(array('autoplay' => 'yes')),
+            ],
+            [
+                new MediaValue(['autoplay' => 'yes']),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new MediaValue(array('loop' => 'yes')),
+            ],
+            [
+                new MediaValue(['loop' => 'yes']),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new MediaValue(array('height' => array())),
+            ],
+            [
+                new MediaValue(['height' => []]),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                new MediaValue(array('width' => array())),
+            ],
+            [
+                new MediaValue(['width' => []]),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
 
         return array_merge($baseInput, $binaryFileInput);
     }
 
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new MediaValue(),
-            ),
-            array(
+            ],
+            [
                 new MediaValue(),
                 new MediaValue(),
-            ),
-            array(
+            ],
+            [
                 __FILE__,
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -108,13 +108,13 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array('inputUri' => __FILE__),
+            ],
+            [
+                ['inputUri' => __FILE__],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -124,16 +124,16 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'inputUri' => __FILE__,
                     'fileSize' => 23,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => 23,
@@ -143,16 +143,16 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'inputUri' => __FILE__,
                     'mimeType' => 'application/text+php',
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -163,16 +163,16 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'inputUri' => __FILE__,
                     'hasController' => true,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -182,16 +182,16 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'inputUri' => __FILE__,
                     'autoplay' => true,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -201,16 +201,16 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'inputUri' => __FILE__,
                     'loop' => true,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -220,16 +220,16 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'inputUri' => __FILE__,
                     'width' => 23,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -239,16 +239,16 @@ class MediaTest extends BinaryBaseTest
                         'width' => 23,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'inputUri' => __FILE__,
                     'height' => 42,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -258,14 +258,14 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 42,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
+            ],
             // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
-            array(
-                array('id' => __FILE__),
+            [
+                ['id' => __FILE__],
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -275,10 +275,10 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -320,14 +320,14 @@ class MediaTest extends BinaryBaseTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new MediaValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new MediaValue(
-                    array(
+                    [
                         'inputUri' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -338,9 +338,9 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => 'http://' . basename(__FILE__),
-                    )
+                    ]
                 ),
-                array(
+                [
                     'id' => null,
                     'inputUri' => __FILE__,
                     'path' => __FILE__,
@@ -353,12 +353,12 @@ class MediaTest extends BinaryBaseTest
                     'width' => 0,
                     'height' => 0,
                     'uri' => 'http://' . basename(__FILE__),
-                ),
-            ),
+                ],
+            ],
             // BC with 5.0 (EZP-20948). Path can be used as input instead of inputUri.
-            array(
+            [
                 new MediaValue(
-                    array(
+                    [
                         'path' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -369,9 +369,9 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => 'http://' . basename(__FILE__),
-                    )
+                    ]
                 ),
-                array(
+                [
                     'id' => null,
                     'inputUri' => __FILE__,
                     'path' => __FILE__,
@@ -384,12 +384,12 @@ class MediaTest extends BinaryBaseTest
                     'width' => 0,
                     'height' => 0,
                     'uri' => 'http://' . basename(__FILE__),
-                ),
-            ),
+                ],
+            ],
             // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
-            array(
+            [
                 new MediaValue(
-                    array(
+                    [
                         'id' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -400,9 +400,9 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => 'http://' . basename(__FILE__),
-                    )
+                    ]
                 ),
-                array(
+                [
                     'id' => null,
                     'inputUri' => __FILE__,
                     'path' => __FILE__,
@@ -415,12 +415,12 @@ class MediaTest extends BinaryBaseTest
                     'width' => 0,
                     'height' => 0,
                     'uri' => 'http://' . basename(__FILE__),
-                ),
-            ),
+                ],
+            ],
             // BC with 5.2 (EZP-22808). Id is recognized as such if not pointing to existing file.
-            array(
+            [
                 new MediaValue(
-                    array(
+                    [
                         'id' => 'application/asdf1234.pdf',
                         'fileName' => 'asdf1234.pdf',
                         'fileSize' => 12345,
@@ -431,9 +431,9 @@ class MediaTest extends BinaryBaseTest
                         'width' => 0,
                         'height' => 0,
                         'uri' => 'http://asdf1234.pdf',
-                    )
+                    ]
                 ),
-                array(
+                [
                     'id' => 'application/asdf1234.pdf',
                     'inputUri' => null,
                     'path' => null,
@@ -446,9 +446,9 @@ class MediaTest extends BinaryBaseTest
                     'width' => 0,
                     'height' => 0,
                     'uri' => 'http://asdf1234.pdf',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -490,13 +490,13 @@ class MediaTest extends BinaryBaseTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new MediaValue(),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'id' => __FILE__,
                     'fileName' => basename(__FILE__),
                     'fileSize' => filesize(__FILE__),
@@ -506,9 +506,9 @@ class MediaTest extends BinaryBaseTest
                     'loop' => true,
                     'width' => 0,
                     'height' => 0,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'id' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -518,12 +518,12 @@ class MediaTest extends BinaryBaseTest
                         'loop' => true,
                         'width' => 0,
                         'height' => 0,
-                    )
+                    ]
                 ),
-            ),
+            ],
             // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
-            array(
-                array(
+            [
+                [
                     'path' => __FILE__,
                     'fileName' => basename(__FILE__),
                     'fileSize' => filesize(__FILE__),
@@ -533,9 +533,9 @@ class MediaTest extends BinaryBaseTest
                     'loop' => true,
                     'width' => 0,
                     'height' => 0,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'id' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
@@ -545,12 +545,12 @@ class MediaTest extends BinaryBaseTest
                         'loop' => true,
                         'width' => 0,
                         'height' => 0,
-                    )
+                    ]
                 ),
-            ),
+            ],
             // BC with 5.2 (EZP-22808). Id can be used as input instead of inputUri.
-            array(
-                array(
+            [
+                [
                     'id' => __FILE__,
                     'fileName' => basename(__FILE__),
                     'fileSize' => filesize(__FILE__),
@@ -560,9 +560,9 @@ class MediaTest extends BinaryBaseTest
                     'loop' => true,
                     'width' => 0,
                     'height' => 0,
-                ),
+                ],
                 new MediaValue(
-                    array(
+                    [
                         'id' => null,
                         'inputUri' => __FILE__,
                         'path' => __FILE__,
@@ -574,11 +574,11 @@ class MediaTest extends BinaryBaseTest
                         'loop' => true,
                         'width' => 0,
                         'height' => 0,
-                    )
+                    ]
                 ),
-            ),
+            ],
             // @todo: Test for REST upload hash
-        );
+        ];
     }
 
     /**
@@ -605,21 +605,21 @@ class MediaTest extends BinaryBaseTest
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
                     'mediaType' => MediaType::TYPE_FLASH,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'mediaType' => MediaType::TYPE_REALPLAYER,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -647,19 +647,19 @@ class MediaTest extends BinaryBaseTest
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'not-existing' => 23,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 // mediaType must be constant
-                array(
+                [
                     'mediaType' => 23,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -669,15 +669,15 @@ class MediaTest extends BinaryBaseTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array(
+        return [
+            [
                 new MediaValue(),
                 '',
-            ),
-            array(
-                new MediaValue(array('fileName' => 'sindelfingen.jpg')),
+            ],
+            [
+                new MediaValue(['fileName' => 'sindelfingen.jpg']),
                 'sindelfingen.jpg',
-            ),
-        );
+            ],
+        ];
     }
 }

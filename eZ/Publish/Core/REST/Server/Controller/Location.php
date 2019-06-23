@@ -82,9 +82,9 @@ class Location extends RestController
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_loadLocation',
-                array(
+                [
                     'locationPath' => trim($location->pathString, '/'),
-                )
+                ]
             )
         );
     }
@@ -102,7 +102,7 @@ class Location extends RestController
     {
         $locationCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );
@@ -115,7 +115,7 @@ class Location extends RestController
             throw new ForbiddenException($e->getMessage());
         }
 
-        return new Values\CreatedLocation(array('restLocation' => new Values\RestLocation($createdLocation, 0)));
+        return new Values\CreatedLocation(['restLocation' => new Values\RestLocation($createdLocation, 0)]);
     }
 
     /**
@@ -142,7 +142,7 @@ class Location extends RestController
                 $location,
                 $this->locationService->getLocationChildCount($location)
             ),
-            array('locationId' => $location->id)
+            ['locationId' => $location->id]
         );
     }
 
@@ -190,9 +190,9 @@ class Location extends RestController
         return new Values\ResourceCreated(
             $this->router->generate(
                 'ezpublish_rest_loadLocation',
-                array(
+                [
                     'locationPath' => trim($newLocation->pathString, '/'),
-                )
+                ]
             )
         );
     }
@@ -230,9 +230,9 @@ class Location extends RestController
             return new Values\ResourceCreated(
                 $this->router->generate(
                     'ezpublish_rest_loadLocation',
-                    array(
+                    [
                         'locationPath' => trim($locationToMove->pathString, '/'),
-                    )
+                    ]
                 )
             );
         } catch (Exceptions\InvalidArgumentException $e) {
@@ -249,7 +249,7 @@ class Location extends RestController
                     return new Values\ResourceCreated(
                         $this->router->generate(
                             'ezpublish_rest_loadTrashItem',
-                            array('trashItemId' => $trashItem->id)
+                            ['trashItemId' => $trashItem->id]
                         )
                     );
                 } else {
@@ -300,14 +300,14 @@ class Location extends RestController
     public function loadLocationByRemoteId(Request $request)
     {
         return new Values\LocationList(
-            array(
+            [
                 new Values\RestLocation(
                     $location = $this->locationService->loadLocationByRemoteId(
                         $request->query->get('remoteId')
                     ),
                     $this->locationService->getLocationChildCount($location)
                 ),
-            ),
+            ],
             $request->getPathInfo()
         );
     }
@@ -321,7 +321,7 @@ class Location extends RestController
      */
     public function loadLocationsForContent($contentId, Request $request)
     {
-        $restLocations = array();
+        $restLocations = [];
         $contentInfo = $this->contentService->loadContentInfo($contentId);
         foreach ($this->locationService->loadLocations($contentInfo) as $location) {
             $restLocations[] = new Values\RestLocation(
@@ -333,7 +333,7 @@ class Location extends RestController
 
         return new Values\CachedValue(
             new Values\LocationList($restLocations, $request->getPathInfo()),
-            array('locationId' => $contentInfo->mainLocationId)
+            ['locationId' => $contentInfo->mainLocationId]
         );
     }
 
@@ -349,7 +349,7 @@ class Location extends RestController
         $offset = $request->query->has('offset') ? (int)$request->query->get('offset') : 0;
         $limit = $request->query->has('limit') ? (int)$request->query->get('limit') : 10;
 
-        $restLocations = array();
+        $restLocations = [];
         $locationId = $this->extractLocationIdFromPath($locationPath);
         $children = $this->locationService->loadLocationChildren(
             $this->locationService->loadLocation($locationId),
@@ -365,7 +365,7 @@ class Location extends RestController
 
         return new Values\CachedValue(
             new Values\LocationList($restLocations, $request->getPathInfo()),
-            array('locationId' => $locationId)
+            ['locationId' => $locationId]
         );
     }
 
@@ -394,7 +394,7 @@ class Location extends RestController
     {
         $locationUpdate = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );

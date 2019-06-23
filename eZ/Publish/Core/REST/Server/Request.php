@@ -25,27 +25,27 @@ class Request extends RMFRequest
      *
      * @return \eZ\Publish\Core\REST\Server\Request
      */
-    public function __construct(array $handlers = array())
+    public function __construct(array $handlers = [])
     {
         $this->addHandler('body', new PropertyHandler\RawBody());
 
         $this->addHandler(
             'contentType',
             new PropertyHandler\Override(
-                array(
+                [
                     new PropertyHandler\Server('CONTENT_TYPE'),
                     new PropertyHandler\Server('HTTP_CONTENT_TYPE'),
-                )
+                ]
             )
         );
 
         $this->addHandler(
             'method',
             new PropertyHandler\Override(
-                array(
+                [
                     new PropertyHandler\Server('HTTP_X_HTTP_METHOD_OVERRIDE'),
                     new PropertyHandler\Server('REQUEST_METHOD'),
-                )
+                ]
             )
         );
 

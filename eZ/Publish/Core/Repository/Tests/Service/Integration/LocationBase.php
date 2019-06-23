@@ -32,7 +32,7 @@ abstract class LocationBase extends BaseServiceTest
         $location = new Location();
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
                 'priority' => null,
                 'hidden' => null,
@@ -40,11 +40,11 @@ abstract class LocationBase extends BaseServiceTest
                 'remoteId' => null,
                 'parentLocationId' => null,
                 'pathString' => null,
-                'path' => array(),
+                'path' => [],
                 'depth' => null,
                 'sortField' => null,
                 'sortOrder' => null,
-            ),
+            ],
             $location
         );
     }
@@ -101,7 +101,7 @@ abstract class LocationBase extends BaseServiceTest
      */
     public function testUnsetProperty()
     {
-        $location = new Location(array('id' => 2));
+        $location = new Location(['id' => 2]);
         try {
             unset($location->id);
             self::fail('Unsetting read-only property succeeded');
@@ -128,18 +128,18 @@ abstract class LocationBase extends BaseServiceTest
         $contentCreate->remoteId = md5(uniqid(get_class($this), true));
         $contentCreate->alwaysAvailable = true;
 
-        $locationCreates = array(
+        $locationCreates = [
             new LocationCreateStruct(
-                array(
+                [
                     //priority = 0
                     //hidden = false
                     'remoteId' => md5(uniqid(get_class($this), true)),
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
                     'parentLocationId' => $parentLocationId,
-                )
+                ]
             ),
-        );
+        ];
 
         return $contentService->publishVersion(
             $contentService->createContent(
@@ -163,15 +163,15 @@ abstract class LocationBase extends BaseServiceTest
         $newLocation = $locationService->createLocation(
             $contentInfo,
             new LocationCreateStruct(
-                array(
+                [
                     'remoteId' => md5(uniqid(get_class($this), true)),
                     'parentLocationId' => $parentLocationId,
-                )
+                ]
             )
         );
         $contentService->updateContentMetadata(
             $contentInfo,
-            new ContentMetadataUpdateStruct(array('mainLocationId' => $newLocation->id))
+            new ContentMetadataUpdateStruct(['mainLocationId' => $newLocation->id])
         );
 
         return $newLocation->id;
@@ -318,7 +318,7 @@ abstract class LocationBase extends BaseServiceTest
 
         $locationCreateStruct = $locationService->newLocationCreateStruct(5);
 
-        return $contentService->createContent($contentCreateStruct, array($locationCreateStruct));
+        return $contentService->createContent($contentCreateStruct, [$locationCreateStruct]);
     }
 
     /**
@@ -461,7 +461,7 @@ abstract class LocationBase extends BaseServiceTest
         $createdPath[] = $createdLocation->id;
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'priority' => $locationCreateStruct->priority,
                 'hidden' => $locationCreateStruct->hidden,
                 'invisible' => $locationCreateStruct->hidden,
@@ -472,7 +472,7 @@ abstract class LocationBase extends BaseServiceTest
                 'depth' => $parentLocation->depth + 1,
                 'sortField' => $locationCreateStruct->sortField,
                 'sortOrder' => $locationCreateStruct->sortOrder,
-            ),
+            ],
             $createdLocation
         );
 
@@ -549,12 +549,12 @@ abstract class LocationBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $location);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'priority' => $locationUpdateStruct->priority,
                 'sortField' => $locationUpdateStruct->sortField,
                 'sortOrder' => $locationUpdateStruct->sortOrder,
                 'remoteId' => $locationUpdateStruct->remoteId,
-            ),
+            ],
             $location
         );
     }
@@ -672,14 +672,14 @@ abstract class LocationBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationCreateStruct', $locationCreateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'priority' => 0,
                 'hidden' => false,
                 'remoteId' => null,
                 'sortField' => Location::SORT_FIELD_NAME,
                 'sortOrder' => Location::SORT_ORDER_ASC,
                 'parentLocationId' => 2,
-            ),
+            ],
             $locationCreateStruct
         );
     }
@@ -697,12 +697,12 @@ abstract class LocationBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\LocationUpdateStruct', $locationUpdateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'priority' => null,
                 'remoteId' => null,
                 'sortField' => null,
                 'sortOrder' => null,
-            ),
+            ],
             $locationUpdateStruct
         );
     }

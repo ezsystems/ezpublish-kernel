@@ -184,7 +184,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function getAdditionallyIndexedFieldData()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -277,9 +277,9 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         return $contentService->publishVersion(
             $contentService->createContent(
                 $createStruct,
-                array(
+                [
                     $locationCreateStruct,
-                )
+                ]
             )->versionInfo
         );
     }
@@ -305,7 +305,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
         $contentType = $this->testCreateContentType();
 
-        $context = array(
+        $context = [
             $repository,
             $this->createTestSearchContent(
                 $this->getValidSearchValueOne(),
@@ -317,7 +317,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
                 $repository,
                 $contentType
             )->id,
-        );
+        ];
 
         $this->refreshSearch($repository);
 
@@ -334,19 +334,19 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     public function findProvider()
     {
         $additionalFields = $this->getAdditionallyIndexedFieldData();
-        $additionalFields[] = array(
+        $additionalFields[] = [
             null,
             $this->getSearchTargetValueOne(),
             $this->getSearchTargetValueTwo(),
-        );
-        $templates = array(
-            array(true, true),
-            array(true, false),
-            array(false, true),
-            array(false, false),
-        );
+        ];
+        $templates = [
+            [true, true],
+            [true, false],
+            [false, true],
+            [false, false],
+        ];
 
-        $fixture = array();
+        $fixture = [];
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
@@ -451,7 +451,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindInOne($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
-        $criteria = new Field('data', Operator::IN, array($valueOne));
+        $criteria = new Field('data', Operator::IN, [$valueOne]);
 
         $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
     }
@@ -471,7 +471,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     public function testFindNotInOne($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
         $criteria = new LogicalNot(
-            new Field('data', Operator::IN, array($valueOne))
+            new Field('data', Operator::IN, [$valueOne])
         );
 
         $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
@@ -491,7 +491,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     public function testFindInTwo($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
-        $criteria = new Field('data', Operator::IN, array($valueTwo));
+        $criteria = new Field('data', Operator::IN, [$valueTwo]);
 
         $this->assertFindResult($context, $criteria, false, true, $filter, $content, $modifyField);
     }
@@ -511,7 +511,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     public function testFindNotInTwo($valueOne, $valueTwo, $filter, $content, $modifyField, array $context)
     {
         $criteria = new LogicalNot(
-            new Field('data', Operator::IN, array($valueTwo))
+            new Field('data', Operator::IN, [$valueTwo])
         );
 
         $this->assertFindResult($context, $criteria, true, false, $filter, $content, $modifyField);
@@ -534,10 +534,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $criteria = new Field(
             'data',
             Operator::IN,
-            array(
+            [
                 $valueOne,
                 $valueTwo,
-            )
+            ]
         );
 
         $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
@@ -561,10 +561,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             new Field(
                 'data',
                 Operator::IN,
-                array(
+                [
                     $valueOne,
                     $valueTwo,
-                )
+                ]
             )
         );
 
@@ -892,10 +892,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $criteria = new Field(
             'data',
             Operator::BETWEEN,
-            array(
+            [
                 $valueOne,
                 $valueTwo,
-            )
+            ]
         );
 
         $this->assertFindResult($context, $criteria, true, true, $filter, $content, $modifyField);
@@ -919,10 +919,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             new Field(
                 'data',
                 Operator::BETWEEN,
-                array(
+                [
                     $valueOne,
                     $valueTwo,
-                )
+                ]
             )
         );
 
@@ -946,10 +946,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $criteria = new Field(
             'data',
             Operator::BETWEEN,
-            array(
+            [
                 $valueTwo,
                 $valueOne,
-            )
+            ]
         );
 
         $this->assertFindResult($context, $criteria, false, false, $filter, $content, $modifyField);
@@ -973,10 +973,10 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             new Field(
                 'data',
                 Operator::BETWEEN,
-                array(
+                [
                     $valueTwo,
                     $valueOne,
-                )
+                ]
             )
         );
 
@@ -1085,7 +1085,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             $fieldName
         );
         $resolvedFieldName = reset($resolvedFieldNames);
-        $criterion = array($criterion);
+        $criterion = [$criterion];
 
         $this->doModifyField($criterion, $resolvedFieldName);
     }
@@ -1113,7 +1113,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
             'data',
             $fieldName
         );
-        $sortClause = array($sortClause);
+        $sortClause = [$sortClause];
 
         $this->doModifyField($sortClause, $resolvedFieldName);
     }
@@ -1145,14 +1145,14 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
     {
         $additionalFields = $this->getAdditionallyIndexedFieldData();
         $additionalFields[] = null;
-        $templates = array(
-            array(true, true),
-            array(true, false),
-            array(false, true),
-            array(false, false),
-        );
+        $templates = [
+            [true, true],
+            [true, false],
+            [false, true],
+            [false, false],
+        ];
 
-        $fixture = array();
+        $fixture = [];
 
         foreach ($additionalFields as $additionalField) {
             foreach ($templates as $template) {
@@ -1195,14 +1195,14 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
 
     public function fullTextFindProvider()
     {
-        $templates = array(
-            array(true, true),
-            array(true, false),
-            array(false, true),
-            array(false, false),
-        );
+        $templates = [
+            [true, true],
+            [true, false],
+            [false, true],
+            [false, false],
+        ];
 
-        $fixture = array();
+        $fixture = [];
 
         foreach ($this->getFullTextIndexedFieldData() as $valueSet) {
             foreach ($templates as $template) {
@@ -1262,14 +1262,14 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         }
 
         $query = new Query(
-            array(
+            [
                 $criteriaProperty => new Criterion\LogicalAnd(
-                    array(
+                    [
                         new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
                         $criterion,
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         return $searchService->findContent($query);
@@ -1288,12 +1288,12 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $searchService = $repository->getSearchService();
 
         $query = new Query(
-            array(
+            [
                 'filter' => new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
-                'sortClauses' => array(
+                'sortClauses' => [
                     $sortClause,
-                ),
-            )
+                ],
+            ]
         );
 
         return $searchService->findContent($query);
@@ -1320,14 +1320,14 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         }
 
         $query = new LocationQuery(
-            array(
+            [
                 $criteriaProperty => new Criterion\LogicalAnd(
-                    array(
+                    [
                         new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
                         $criterion,
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         return $searchService->findLocations($query);
@@ -1347,12 +1347,12 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
         $searchService = $repository->getSearchService();
 
         $query = new LocationQuery(
-            array(
+            [
                 'filter' => new Criterion\ContentTypeIdentifier('test-' . $this->getTypeName()),
-                'sortClauses' => array(
+                'sortClauses' => [
                     $sortClause,
-                ),
-            )
+                ],
+            ]
         );
 
         return $searchService->findLocations($query);
@@ -1367,7 +1367,7 @@ abstract class SearchBaseIntegrationTest extends BaseIntegrationTest
      */
     protected function getResultContentIdList(SearchResult $searchResult)
     {
-        $contentIdList = array();
+        $contentIdList = [];
 
         foreach ($searchResult->searchHits as $searchHit) {
             $valueObject = $searchHit->valueObject;

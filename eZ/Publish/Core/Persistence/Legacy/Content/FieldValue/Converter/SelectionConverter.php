@@ -55,7 +55,7 @@ class SelectionConverter implements Converter
                 explode('-', $value->dataText)
             );
         } else {
-            $fieldValue->data = array();
+            $fieldValue->data = [];
         }
         $fieldValue->sortKey = $value->sortKeyString;
     }
@@ -101,7 +101,7 @@ class SelectionConverter implements Converter
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
-        $options = array();
+        $options = [];
         $simpleXml = simplexml_load_string($storageDef->dataText5);
 
         if ($simpleXml !== false) {
@@ -111,15 +111,15 @@ class SelectionConverter implements Converter
         }
 
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'isMultiple' => !empty($storageDef->dataInt1) ? (bool)$storageDef->dataInt1 : false,
                 'options' => $options,
-            )
+            ]
         );
 
         // @todo: Can Selection store a default value in the DB?
         $fieldDef->defaultValue = new FieldValue();
-        $fieldDef->defaultValue->data = array();
+        $fieldDef->defaultValue->data = [];
         $fieldDef->defaultValue->sortKey = '';
     }
 

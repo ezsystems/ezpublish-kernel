@@ -35,14 +35,14 @@ abstract class UserBase extends BaseServiceTest
         $user = new User();
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'login' => null,
                 'email' => null,
                 'passwordHash' => null,
                 'hashAlgorithm' => null,
                 'maxLogin' => null,
                 'enabled' => null,
-            ),
+            ],
             $user
         );
 
@@ -51,10 +51,10 @@ abstract class UserBase extends BaseServiceTest
         self::assertEquals(null, $group->subGroupCount);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'parentId' => null,
                 'subGroupCount' => null,
-            ),
+            ],
             $group
         );
     }
@@ -136,14 +136,14 @@ abstract class UserBase extends BaseServiceTest
      */
     public function testUnsetProperty()
     {
-        $user = new User(array('login' => 'admin'));
+        $user = new User(['login' => 'admin']);
         try {
             unset($user->login);
             self::fail('Unsetting read-only property succeeded');
         } catch (PropertyReadOnlyException $e) {
         }
 
-        $userGroup = new UserGroup(array('parentId' => 1));
+        $userGroup = new UserGroup(['parentId' => 1]);
         try {
             unset($userGroup->parentId);
             self::fail('Unsetting read-only property succeeded');
@@ -266,16 +266,16 @@ abstract class UserBase extends BaseServiceTest
         $userService = $this->repository->getUserService();
 
         $parentGroup = new UserGroup(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array('contentInfo' => new ContentInfo(array('id' => APIBaseTest::DB_INT_MAX)))
+                            ['contentInfo' => new ContentInfo(['id' => APIBaseTest::DB_INT_MAX])]
                         ),
-                        'internalFields' => array(),
-                    )
+                        'internalFields' => [],
+                    ]
                 ),
-            )
+            ]
         );
         $userService->loadSubUserGroups($parentGroup);
     }
@@ -310,16 +310,16 @@ abstract class UserBase extends BaseServiceTest
         $userService = $this->repository->getUserService();
 
         $userGroup = new UserGroup(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array('contentInfo' => new ContentInfo(array('id' => APIBaseTest::DB_INT_MAX)))
+                            ['contentInfo' => new ContentInfo(['id' => APIBaseTest::DB_INT_MAX])]
                         ),
-                        'internalFields' => array(),
-                    )
+                        'internalFields' => [],
+                    ]
                 ),
-            )
+            ]
         );
         $userService->deleteUserGroup($userGroup);
     }
@@ -358,28 +358,28 @@ abstract class UserBase extends BaseServiceTest
         $userService = $this->repository->getUserService();
 
         $userGroupToMove = new UserGroup(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array('contentInfo' => new ContentInfo(array('id' => APIBaseTest::DB_INT_MAX)))
+                            ['contentInfo' => new ContentInfo(['id' => APIBaseTest::DB_INT_MAX])]
                         ),
-                        'internalFields' => array(),
-                    )
+                        'internalFields' => [],
+                    ]
                 ),
-            )
+            ]
         );
         $parentUserGroup = new UserGroup(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array('contentInfo' => new ContentInfo(array('id' => APIBaseTest::DB_INT_MAX)))
+                            ['contentInfo' => new ContentInfo(['id' => APIBaseTest::DB_INT_MAX])]
                         ),
-                        'internalFields' => array(),
-                    )
+                        'internalFields' => [],
+                    ]
                 ),
-            )
+            ]
         );
         $userService->moveUserGroup($userGroupToMove, $parentUserGroup);
     }
@@ -441,7 +441,7 @@ abstract class UserBase extends BaseServiceTest
         $userCreateStruct->setField('last_name', 'User', 'eng-GB');
 
         $parentGroup = $userService->loadUserGroup(42);
-        $createdUser = $userService->createUser($userCreateStruct, array($parentGroup));
+        $createdUser = $userService->createUser($userCreateStruct, [$parentGroup]);
 
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\User', $createdUser);
         self::assertEquals('New', $createdUser->getFieldValue('first_name'));
@@ -465,20 +465,20 @@ abstract class UserBase extends BaseServiceTest
         $userCreateStruct->setField('last_name', 'User');
 
         $parentGroup = new UserGroup(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array(
-                                'contentInfo' => new ContentInfo(array('id' => APIBaseTest::DB_INT_MAX)),
-                            )
+                            [
+                                'contentInfo' => new ContentInfo(['id' => APIBaseTest::DB_INT_MAX]),
+                            ]
                         ),
-                        'internalFields' => array(),
-                    )
+                        'internalFields' => [],
+                    ]
                 ),
-            )
+            ]
         );
-        $userService->createUser($userCreateStruct, array($parentGroup));
+        $userService->createUser($userCreateStruct, [$parentGroup]);
     }
 
     /**
@@ -496,7 +496,7 @@ abstract class UserBase extends BaseServiceTest
         $userCreateStruct->setField('last_name', '', 'eng-GB');
 
         $parentGroup = $userService->loadUserGroup(12);
-        $userService->createUser($userCreateStruct, array($parentGroup));
+        $userService->createUser($userCreateStruct, [$parentGroup]);
     }
 
     /**
@@ -514,7 +514,7 @@ abstract class UserBase extends BaseServiceTest
         $userCreateStruct->setField('last_name', '', 'eng-GB');
 
         $parentGroup = $userService->loadUserGroup(12);
-        $userService->createUser($userCreateStruct, array($parentGroup));
+        $userService->createUser($userCreateStruct, [$parentGroup]);
     }
 
     /**
@@ -573,7 +573,7 @@ abstract class UserBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\User', $loadedUser);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 14,
                 'login' => 'admin',
                 'email' => 'spam@ez.no',
@@ -581,7 +581,7 @@ abstract class UserBase extends BaseServiceTest
                 'hashAlgorithm' => User::PASSWORD_HASH_MD5_USER,
                 'enabled' => true,
                 'maxLogin' => 10,
-            ),
+            ],
             $loadedUser
         );
     }
@@ -802,7 +802,7 @@ abstract class UserBase extends BaseServiceTest
             $user->getVersionInfo()->getContentInfo()
         );
 
-        $groupLocationIds = array();
+        $groupLocationIds = [];
         foreach ($userLocations as $userLocation) {
             if ($userLocation->parentLocationId !== null) {
                 $groupLocationIds[] = $userLocation->parentLocationId;
@@ -861,14 +861,14 @@ abstract class UserBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\UserCreateStruct', $userCreateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'mainLanguageCode' => 'eng-GB',
                 'login' => 'admin',
                 'email' => 'admin@ez.no',
                 'password' => 'password',
                 'enabled' => true,
-                'fields' => array(),
-            ),
+                'fields' => [],
+            ],
             $userCreateStruct
         );
     }
@@ -907,12 +907,12 @@ abstract class UserBase extends BaseServiceTest
         self::assertNull($userUpdateStruct->contentMetadataUpdateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'email' => null,
                 'password' => null,
                 'enabled' => null,
                 'maxLogin' => null,
-            ),
+            ],
             $userUpdateStruct
         );
     }

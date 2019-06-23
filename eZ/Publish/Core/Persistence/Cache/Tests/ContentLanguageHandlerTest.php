@@ -42,7 +42,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPILanguage(
-                        array('id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB')
+                        ['id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB']
                     )
                 )
             );
@@ -132,7 +132,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPILanguage(
-                        array('id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB')
+                        ['id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB']
                     )
                 )
             );
@@ -171,7 +171,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPILanguage(
-                        array('id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB')
+                        ['id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB']
                     )
                 )
             );
@@ -212,7 +212,7 @@ class ContentLanguageHandlerTest extends HandlerTest
         $innerHandler
             ->expects($this->once())
             ->method('loadAll')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler = $this->persistenceCacheHandler->contentLanguageHandler();
         $handler->loadAll();
@@ -241,7 +241,7 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPILanguage(
-                        array('id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB')
+                        ['id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB']
                     )
                 )
             );
@@ -275,12 +275,12 @@ class ContentLanguageHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPILanguage(
-                        array('id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB')
+                        ['id' => 2, 'name' => 'English (UK)', 'languageCode' => 'eng-GB']
                     )
                 )
             );
 
         $handler = $this->persistenceCacheHandler->contentLanguageHandler();
-        $handler->update(new SPILanguage(array('id' => 2)));
+        $handler->update(new SPILanguage(['id' => 2]));
     }
 }

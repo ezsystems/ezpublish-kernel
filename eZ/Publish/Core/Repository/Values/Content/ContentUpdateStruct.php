@@ -25,7 +25,7 @@ class ContentUpdateStruct extends APIContentUpdateStruct
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Field[]
      */
-    public $fields = array();
+    public $fields = [];
 
     /**
      * Adds a field to the field collection.
@@ -40,11 +40,11 @@ class ContentUpdateStruct extends APIContentUpdateStruct
     public function setField($fieldDefIdentifier, $value, $language = null)
     {
         $this->fields[] = new Field(
-            array(
+            [
                 'fieldDefIdentifier' => $fieldDefIdentifier,
                 'value' => $value,
                 'languageCode' => $language,
-            )
+            ]
         );
     }
 }

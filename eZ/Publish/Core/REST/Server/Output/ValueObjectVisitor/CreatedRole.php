@@ -32,7 +32,7 @@ class CreatedRole extends Role
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadRole',
-                array('roleId' => $data->role->id)
+                ['roleId' => $data->role->id]
             )
         );
         $visitor->setStatus(201);

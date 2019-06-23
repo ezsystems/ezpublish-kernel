@@ -27,28 +27,28 @@ class UserHandlerTest extends HandlerTest
      */
     public function providerForUnCachedMethods()
     {
-        return array(
+        return [
             //array( 'create', array( new User ) ),
-            array('load', array(14)),
-            array('loadByLogin', array('admin')),
-            array('loadByEmail', array('admin@ez.no')),
+            ['load', [14]],
+            ['loadByLogin', ['admin']],
+            ['loadByEmail', ['admin@ez.no']],
             //array( 'update', array( new User ) ),
             //array( 'delete', array( 14 ) ),
             //array( 'createRole', array( new Role ) ),
             //array( 'loadRole', array( 22 ) ),
-            array('loadRoleByIdentifier', array('users')),
-            array('loadRoles', array()),
-            array('loadRoleAssignmentsByRoleId', array(22)),
+            ['loadRoleByIdentifier', ['users']],
+            ['loadRoles', []],
+            ['loadRoleAssignmentsByRoleId', [22]],
             //array( 'loadRoleAssignmentsByGroupId', array( 44, true ) ),
             //array( 'updateRole', array( new RoleUpdateStruct ) ),
             //array( 'deleteRole', array( 22 ) ),
             //array( 'addPolicy', array( 22, new Policy ) ),
             //array( 'updatePolicy', array( new Policy ) ),
             //array( 'deletePolicy', array( 22, 66 ) ),
-            array('loadPoliciesByUserId', array(14)),
+            ['loadPoliciesByUserId', [14]],
             //array( 'assignRole', array( 44, 22, array( 42 ) ) ),
             //array( 'unassignRole', array( 44, 22 ) ),
-        );
+        ];
     }
 
     /**
@@ -83,7 +83,7 @@ class UserHandlerTest extends HandlerTest
         $expects->will($this->returnValue(null));
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        call_user_func_array(array($handler, $method), $arguments);
+        call_user_func_array([$handler, $method], $arguments);
     }
 
     /**
@@ -114,7 +114,7 @@ class UserHandlerTest extends HandlerTest
             ->will($this->returnValue(true));
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->create(new User(array('id' => 42)));
+        $handler->create(new User(['id' => 42]));
     }
 
     /**
@@ -145,7 +145,7 @@ class UserHandlerTest extends HandlerTest
             ->will($this->returnValue(true));
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->update(new User(array('id' => 42)));
+        $handler->update(new User(['id' => 42]));
     }
 
     /**
@@ -316,9 +316,9 @@ class UserHandlerTest extends HandlerTest
             ->with(42, false)
             ->will(
                 $this->returnValue(
-                    array(
-                        new RoleAssignment(array('roleId' => 33)),
-                    )
+                    [
+                        new RoleAssignment(['roleId' => 33]),
+                    ]
                 )
             );
 
@@ -359,7 +359,7 @@ class UserHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('get')
             ->will(
-                $this->returnValue(array(new RoleAssignment(array('roleId' => 33))))
+                $this->returnValue([new RoleAssignment(['roleId' => 33])])
             );
 
         $cacheItemMock
@@ -418,7 +418,7 @@ class UserHandlerTest extends HandlerTest
             ->method('loadRoleAssignmentsByGroupId')
             ->with(42, true)
             ->will(
-                $this->returnValue(array(new RoleAssignment(array('roleId' => 33))))
+                $this->returnValue([new RoleAssignment(['roleId' => 33])])
             );
 
         $cacheItemMock
@@ -458,7 +458,7 @@ class UserHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('get')
             ->will(
-                $this->returnValue(array(new RoleAssignment(array('roleId' => 33))))
+                $this->returnValue([new RoleAssignment(['roleId' => 33])])
             );
 
         $cacheItemMock
@@ -893,7 +893,7 @@ class UserHandlerTest extends HandlerTest
             ->method('updatePolicy')
             ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\User\\Policy'))
             ->will(
-                $this->returnValue(new Policy(array('roleId' => 33)))
+                $this->returnValue(new Policy(['roleId' => 33]))
             );
 
         $this->cacheMock
@@ -903,7 +903,7 @@ class UserHandlerTest extends HandlerTest
             ->will($this->returnValue(true));
 
         $handler = $this->persistenceCacheHandler->userHandler();
-        $handler->updatePolicy(new Policy(array('roleId' => 33)));
+        $handler->updatePolicy(new Policy(['roleId' => 33]));
     }
 
     /**

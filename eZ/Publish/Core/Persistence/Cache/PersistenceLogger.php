@@ -30,12 +30,12 @@ class PersistenceLogger
     /**
      * @var array
      */
-    protected $calls = array();
+    protected $calls = [];
 
     /**
      * @var array
      */
-    protected $unCachedHandlers = array();
+    protected $unCachedHandlers = [];
 
     /**
      * @param bool $logCalls Flag to enable logging of calls or not, should be disabled in prod
@@ -51,14 +51,14 @@ class PersistenceLogger
      * @param string $method
      * @param array $arguments
      */
-    public function logCall($method, array $arguments = array())
+    public function logCall($method, array $arguments = [])
     {
         ++$this->count;
         if ($this->logCalls) {
-            $this->calls[] = array(
+            $this->calls[] = [
                 'method' => $method,
                 'arguments' => $arguments,
-            );
+            ];
         }
     }
 

@@ -37,10 +37,10 @@ class Visibility extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return array(
-            'invisible_b' => array(
+        return [
+            'invisible_b' => [
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -31,25 +31,25 @@ class UserRefListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $UserRefList = new UserRefList(
-            array(
+            [
                 new RestUser(
                     new User(),
                     $this->getMockForAbstractClass('eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentType'),
                     new ContentInfo(
-                        array(
+                        [
                             'id' => 14,
-                        )
+                        ]
                     ),
                     new Location(),
-                    array()
+                    []
                 ),
-            ),
+            ],
             '/some/path'
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $UserRefList->users[0]->contentInfo->id),
+            ['userId' => $UserRefList->users[0]->contentInfo->id],
             "/user/users/{$UserRefList->users[0]->contentInfo->id}"
         );
 

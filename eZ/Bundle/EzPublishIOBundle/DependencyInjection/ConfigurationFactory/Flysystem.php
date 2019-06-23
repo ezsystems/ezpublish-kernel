@@ -73,7 +73,7 @@ abstract class Flysystem implements ConfigurationFactory, ContainerAwareInterfac
             $filesystemId,
             new DefinitionDecorator('ezpublish.core.io.flysystem.base_filesystem')
         );
-        $definition->setArguments(array(new Reference($adapterId)));
+        $definition->setArguments([new Reference($adapterId)]);
 
         return $filesystemId;
     }

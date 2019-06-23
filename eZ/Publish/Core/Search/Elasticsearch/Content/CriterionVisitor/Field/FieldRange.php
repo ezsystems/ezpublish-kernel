@@ -67,17 +67,17 @@ class FieldRange extends Field
             $start = null;
         }
 
-        $fields = array();
+        $fields = [];
         foreach ($fieldNames as $name) {
             $fields[] = 'fields_doc.' . $name;
         }
 
-        return array(
-            'query_string' => array(
+        return [
+            'query_string' => [
                 'fields' => $fields,
                 'query' => $this->getQueryRange($criterion->operator, $start, $end),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -93,24 +93,24 @@ class FieldRange extends Field
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $filter = array(
-            'nested' => array(
+        $filter = [
+            'nested' => [
                 'path' => 'fields_doc',
-                'filter' => array(
+                'filter' => [
                     'query' => $this->getCondition($criterion),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter !== null) {
-            $filter['nested']['filter'] = array(
-                'and' => array(
+            $filter['nested']['filter'] = [
+                'and' => [
                     $fieldFilter,
                     $filter['nested']['filter'],
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;
@@ -129,34 +129,34 @@ class FieldRange extends Field
      */
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $query = array(
-            'bool' => array(
+        $query = [
+            'bool' => [
                 'should' => $this->getCondition($criterion),
                 'minimum_should_match' => 1,
-            ),
-        );
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter === null) {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
                     'query' => $this->getCondition($criterion),
-                ),
-            );
+                ],
+            ];
         } else {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
-                    'query' => array(
-                        'filtered' => array(
+                    'query' => [
+                        'filtered' => [
                             'query' => $this->getCondition($criterion),
                             'filter' => $fieldFilter,
-                        ),
-                    ),
-                ),
-            );
+                        ],
+                    ],
+                ],
+            ];
         }
 
         return $query;

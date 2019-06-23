@@ -148,7 +148,7 @@ class SectionHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPISection(
-                        array('id' => 33, 'name' => 'Intranet', 'identifier' => 'intranet')
+                        ['id' => 33, 'name' => 'Intranet', 'identifier' => 'intranet']
                     )
                 )
             );
@@ -241,7 +241,7 @@ class SectionHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPISection(
-                        array('id' => 33, 'name' => 'Intranet', 'identifier' => 'intranet')
+                        ['id' => 33, 'name' => 'Intranet', 'identifier' => 'intranet']
                     )
                 )
             );
@@ -294,7 +294,7 @@ class SectionHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPISection(
-                        array('id' => 33, 'name' => 'Intranet', 'identifier' => 'intranet')
+                        ['id' => 33, 'name' => 'Intranet', 'identifier' => 'intranet']
                     )
                 )
             );
@@ -326,7 +326,7 @@ class SectionHandlerTest extends HandlerTest
         $innerHandler
             ->expects($this->once())
             ->method('loadAll')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $handler = $this->persistenceCacheHandler->sectionHandler();
         $handler->loadAll();
@@ -355,7 +355,7 @@ class SectionHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPISection(
-                        array('id' => 33, 'name' => 'Intranet', 'identifier' => 'intranet')
+                        ['id' => 33, 'name' => 'Intranet', 'identifier' => 'intranet']
                     )
                 )
             );
@@ -384,7 +384,7 @@ class SectionHandlerTest extends HandlerTest
             ->will(
                 $this->returnValue(
                     new SPISection(
-                        array('id' => 33, 'name' => 'Old Intranet', 'identifier' => 'old_intranet')
+                        ['id' => 33, 'name' => 'Old Intranet', 'identifier' => 'old_intranet']
                     )
                 )
             );

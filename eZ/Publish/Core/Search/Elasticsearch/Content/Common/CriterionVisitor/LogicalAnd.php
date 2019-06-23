@@ -41,14 +41,14 @@ class LogicalAnd extends CriterionVisitor
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
-        return array(
+        return [
             'and' => array_map(
                 function ($value) use ($dispatcher, $languageFilter) {
                     return $dispatcher->dispatch($value, Dispatcher::CONTEXT_FILTER, $languageFilter);
                 },
                 $criterion->criteria
             ),
-        );
+        ];
     }
 
     /**
@@ -63,17 +63,17 @@ class LogicalAnd extends CriterionVisitor
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
-        return array(
-            'bool' => array(
-                'must' => array(
+        return [
+            'bool' => [
+                'must' => [
                     array_map(
                         function ($value) use ($dispatcher, $languageFilter) {
                             return $dispatcher->dispatch($value, Dispatcher::CONTEXT_QUERY, $languageFilter);
                         },
                         $criterion->criteria
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

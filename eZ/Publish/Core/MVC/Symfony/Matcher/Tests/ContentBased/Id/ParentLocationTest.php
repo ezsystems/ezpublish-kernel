@@ -43,28 +43,28 @@ class ParentLocationTest extends BaseTest
 
     public function matchLocationProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 123,
-                $this->getLocationMock(array('parentLocationId' => 123)),
+                $this->getLocationMock(['parentLocationId' => 123]),
                 true,
-            ),
-            array(
+            ],
+            [
                 123,
-                $this->getLocationMock(array('parentLocationId' => 456)),
+                $this->getLocationMock(['parentLocationId' => 456]),
                 false,
-            ),
-            array(
-                array(123, 789),
-                $this->getLocationMock(array('parentLocationId' => 456)),
+            ],
+            [
+                [123, 789],
+                $this->getLocationMock(['parentLocationId' => 456]),
                 false,
-            ),
-            array(
-                array(123, 789),
-                $this->getLocationMock(array('parentLocationId' => 789)),
+            ],
+            [
+                [123, 789],
+                $this->getLocationMock(['parentLocationId' => 789]),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -83,34 +83,34 @@ class ParentLocationTest extends BaseTest
         $this->matcher->setMatchingConfig($matchingConfig);
         $this->assertSame(
             $expectedResult,
-            $this->matcher->matchContentInfo($this->getContentInfoMock(array('mainLocationId' => 42)))
+            $this->matcher->matchContentInfo($this->getContentInfoMock(['mainLocationId' => 42]))
         );
     }
 
     public function matchContentInfoProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 123,
                 $this->generateRepositoryMockForParentLocationId(123),
                 true,
-            ),
-            array(
+            ],
+            [
                 123,
                 $this->generateRepositoryMockForParentLocationId(456),
                 false,
-            ),
-            array(
-                array(123, 789),
+            ],
+            [
+                [123, 789],
                 $this->generateRepositoryMockForParentLocationId(456),
                 false,
-            ),
-            array(
-                array(123, 789),
+            ],
+            [
+                [123, 789],
                 $this->generateRepositoryMockForParentLocationId(789),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -131,7 +131,7 @@ class ParentLocationTest extends BaseTest
             ->with(42)
             ->will(
                 $this->returnValue(
-                    $this->getLocationMock(array('parentLocationId' => $parentLocationId))
+                    $this->getLocationMock(['parentLocationId' => $parentLocationId])
                 )
             );
 

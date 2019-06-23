@@ -20,13 +20,13 @@ class HashGeneratorTest extends TestCase
     public function testSetIdentityDefiner()
     {
         $hashGenerator = new HashGenerator();
-        $identityDefiners = array(
+        $identityDefiners = [
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-        );
+        ];
 
         foreach ($identityDefiners as $definer) {
             $hashGenerator->setIdentityDefiner($definer);
@@ -59,13 +59,13 @@ class HashGeneratorTest extends TestCase
         $hashGenerator = new HashGenerator();
         $identity = $this->getMock('eZ\\Publish\\SPI\\User\\Identity');
         $hashGenerator->setIdentity($identity);
-        $identityDefiners = array(
+        $identityDefiners = [
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
             $this->getMock('eZ\\Publish\\SPI\\User\\IdentityAware'),
-        );
+        ];
 
         /** @var $definer \PHPUnit_Framework_MockObject_MockObject */
         foreach ($identityDefiners as $definer) {

@@ -71,9 +71,9 @@ class FullText extends FieldFilterBase
     protected function getCondition(Criterion $criterion)
     {
         // Add field document custom _all field
-        $queryFields = array(
+        $queryFields = [
             'fields_doc.meta_all_*',
-        );
+        ];
 
         // Add boosted fields if any
         /** @var \eZ\Publish\API\Repository\Values\Content\Query\Criterion\FullText $criterion */
@@ -85,8 +85,8 @@ class FullText extends FieldFilterBase
             }
         }
 
-        $condition = array(
-            'query_string' => array(
+        $condition = [
+            'query_string' => [
                 'query' => $criterion->value . ($criterion->fuzziness < 1 ? '~' : ''),
                 'fields' => $queryFields,
                 'fuzziness' => $criterion->fuzziness,
@@ -96,8 +96,8 @@ class FullText extends FieldFilterBase
                 'minimum_should_match' => 1,
                 // Default is OR, changed per FullText criterion spec
                 'default_operator' => 'OR',
-            ),
-        );
+            ],
+        ];
 
         return $condition;
     }
@@ -115,26 +115,26 @@ class FullText extends FieldFilterBase
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $filter = array(
-            'nested' => array(
+        $filter = [
+            'nested' => [
                 'path' => 'fields_doc',
-                'filter' => array(
+                'filter' => [
                     'query' => $this->getCondition($criterion),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($languageFilter !== null) {
-            $filter['nested']['filter'] = array(
-                'bool' => array(
-                    'must' => array(
+            $filter['nested']['filter'] = [
+                'bool' => [
+                    'must' => [
                         $fieldFilter,
                         $filter['nested']['filter'],
-                    ),
-                ),
-            );
+                    ],
+                ],
+            ];
         }
 
         return $filter;
@@ -156,24 +156,24 @@ class FullText extends FieldFilterBase
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter === null) {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
                     'query' => $this->getCondition($criterion),
-                ),
-            );
+                ],
+            ];
         } else {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
-                    'query' => array(
-                        'filtered' => array(
+                    'query' => [
+                        'filtered' => [
                             'query' => $this->getCondition($criterion),
                             'filter' => $fieldFilter,
-                        ),
-                    ),
-                ),
-            );
+                        ],
+                    ],
+                ],
+            ];
         }
 
         return $query;

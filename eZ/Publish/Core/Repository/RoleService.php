@@ -86,40 +86,40 @@ class RoleService implements RoleServiceInterface
         Handler $userHandler,
         Helper\LimitationService $limitationService,
         Helper\RoleDomainMapper $roleDomainMapper,
-        array $settings = array()
+        array $settings = []
     ) {
         $this->repository = $repository;
         $this->userHandler = $userHandler;
         $this->limitationService = $limitationService;
         $this->roleDomainMapper = $roleDomainMapper;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
-            'policyMap' => array(
-                'content' => array(
-                    'read' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
-                    'diff' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                    'view_embed' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                    'create' => array('Class' => true, 'Section' => true, 'ParentOwner' => true, 'ParentGroup' => true, 'ParentClass' => true, 'ParentDepth' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'edit' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true),
-                    'manage_locations' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Subtree' => true),
-                    'hide' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'translate' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'Language' => true),
-                    'remove' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'State' => true),
-                    'versionread' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true),
-                    'versionremove' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true),
-                    'pdf' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true),
-                ),
-                'section' => array(
-                    'assign' => array('Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true),
-                ),
-                'state' => array(
-                    'assign' => array('Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true),
-                ),
-                'user' => array(
-                    'login' => array('SiteAccess' => true),
-                ),
-            ),
-        );
+        $this->settings = $settings + [
+            'policyMap' => [
+                'content' => [
+                    'read' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true],
+                    'diff' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true],
+                    'view_embed' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true],
+                    'create' => ['Class' => true, 'Section' => true, 'ParentOwner' => true, 'ParentGroup' => true, 'ParentClass' => true, 'ParentDepth' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
+                    'edit' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true, 'State' => true],
+                    'manage_locations' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Subtree' => true],
+                    'hide' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
+                    'translate' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'Language' => true],
+                    'remove' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true, 'State' => true],
+                    'versionread' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true],
+                    'versionremove' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Status' => true, 'Node' => true, 'Subtree' => true],
+                    'pdf' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Node' => true, 'Subtree' => true],
+                ],
+                'section' => [
+                    'assign' => ['Class' => true, 'Section' => true, 'Owner' => true, 'NewSection' => true],
+                ],
+                'state' => [
+                    'assign' => ['Class' => true, 'Section' => true, 'Owner' => true, 'Group' => true, 'Node' => true, 'Subtree' => true, 'State' => true, 'NewState' => true],
+                ],
+                'user' => [
+                    'login' => ['SiteAccess' => true],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -311,10 +311,10 @@ class RoleService implements RoleServiceInterface
         try {
             $this->userHandler->updateRole(
                 new SPIRoleUpdateStruct(
-                    array(
+                    [
                         'id' => $loadedRoleDraft->id,
                         'identifier' => $roleUpdateStruct->identifier ?: $loadedRoleDraft->identifier,
-                    )
+                    ]
                 )
             );
             $this->repository->commit();
@@ -586,10 +586,10 @@ class RoleService implements RoleServiceInterface
         try {
             $this->userHandler->updateRole(
                 new SPIRoleUpdateStruct(
-                    array(
+                    [
                         'id' => $loadedRole->id,
                         'identifier' => $roleUpdateStruct->identifier ?: $loadedRole->identifier,
-                    )
+                    ]
                 )
             );
             $this->repository->commit();
@@ -850,7 +850,7 @@ class RoleService implements RoleServiceInterface
 
         $spiRoles = $this->userHandler->loadRoles();
 
-        $roles = array();
+        $roles = [];
         foreach ($spiRoles as $spiRole) {
             $roles[] = $this->roleDomainMapper->buildDomainRoleObject($spiRole);
         }
@@ -896,7 +896,7 @@ class RoleService implements RoleServiceInterface
     {
         $spiPolicies = $this->userHandler->loadPoliciesByUserId($userId);
 
-        $policies = array();
+        $policies = [];
         foreach ($spiPolicies as $spiPolicy) {
             $policies[] = $this->roleDomainMapper->buildDomainPolicyObject($spiPolicy);
         }
@@ -933,7 +933,7 @@ class RoleService implements RoleServiceInterface
                 throw new LimitationValidationException($limitationValidationErrors);
             }
 
-            $limitation = array($roleLimitation->getIdentifier() => $roleLimitation->limitationValues);
+            $limitation = [$roleLimitation->getIdentifier() => $roleLimitation->limitationValues];
         }
 
         // Check if objects exists
@@ -1022,7 +1022,7 @@ class RoleService implements RoleServiceInterface
                 throw new LimitationValidationException($limitationValidationErrors);
             }
 
-            $limitation = array($roleLimitation->getIdentifier() => $roleLimitation->limitationValues);
+            $limitation = [$roleLimitation->getIdentifier() => $roleLimitation->limitationValues];
         }
 
         // Check if objects exists
@@ -1174,7 +1174,7 @@ class RoleService implements RoleServiceInterface
 
         $userService = $this->repository->getUserService();
         $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByRoleId($role->id);
-        $roleAssignments = array();
+        $roleAssignments = [];
 
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
             // First check if the Role is assigned to a User
@@ -1212,7 +1212,7 @@ class RoleService implements RoleServiceInterface
             throw new UnauthorizedException('role', 'read');
         }
 
-        $roleAssignments = array();
+        $roleAssignments = [];
         $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId($user->id, $inherited);
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
             $role = $this->loadRole($spiRoleAssignment->roleId);
@@ -1250,7 +1250,7 @@ class RoleService implements RoleServiceInterface
             throw new UnauthorizedException('role', 'read');
         }
 
-        $roleAssignments = array();
+        $roleAssignments = [];
         $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId($userGroup->id);
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
             $role = $this->loadRole($spiRoleAssignment->roleId);
@@ -1274,10 +1274,10 @@ class RoleService implements RoleServiceInterface
     public function newRoleCreateStruct($name)
     {
         return new RoleCreateStruct(
-            array(
+            [
                 'identifier' => $name,
-                'policies' => array(),
-            )
+                'policies' => [],
+            ]
         );
     }
 
@@ -1292,11 +1292,11 @@ class RoleService implements RoleServiceInterface
     public function newPolicyCreateStruct($module, $function)
     {
         return new PolicyCreateStruct(
-            array(
+            [
                 'module' => $module,
                 'function' => $function,
-                'limitations' => array(),
-            )
+                'limitations' => [],
+            ]
         );
     }
 
@@ -1308,9 +1308,9 @@ class RoleService implements RoleServiceInterface
     public function newPolicyUpdateStruct()
     {
         return new PolicyUpdateStruct(
-            array(
-                'limitations' => array(),
-            )
+            [
+                'limitations' => [],
+            ]
         );
     }
 
@@ -1359,10 +1359,10 @@ class RoleService implements RoleServiceInterface
     public function getLimitationTypesByModuleFunction($module, $function)
     {
         if (empty($this->settings['policyMap'][$module][$function])) {
-            return array();
+            return [];
         }
 
-        $types = array();
+        $types = [];
         try {
             foreach (array_keys($this->settings['policyMap'][$module][$function]) as $identifier) {
                 $types[$identifier] = $this->limitationService->getLimitationType($identifier);
@@ -1389,7 +1389,7 @@ class RoleService implements RoleServiceInterface
      */
     protected function validateRoleCreateStruct(APIRoleCreateStruct $roleCreateStruct)
     {
-        $allErrors = array();
+        $allErrors = [];
         foreach ($roleCreateStruct->getPolicies() as $key => $policyCreateStruct) {
             $errors = $this->validatePolicy(
                 $policyCreateStruct->module,
@@ -1420,7 +1420,7 @@ class RoleService implements RoleServiceInterface
     protected function validatePolicy($module, $function, array $limitations)
     {
         if ($module !== '*' && $function !== '*' && !empty($limitations)) {
-            $limitationSet = array();
+            $limitationSet = [];
             foreach ($limitations as $limitation) {
                 if (isset($limitationSet[$limitation->getIdentifier()])) {
                     throw new InvalidArgumentException(

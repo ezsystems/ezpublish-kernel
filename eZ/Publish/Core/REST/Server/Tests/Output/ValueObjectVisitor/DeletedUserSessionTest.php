@@ -24,10 +24,10 @@ class DeletedUserSessionTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $generatedResponse = new Response();
-        $responseHeaders = array(
+        $responseHeaders = [
             'foo' => 'bar',
             'some' => 'thing',
-        );
+        ];
         $cookie = new Cookie('cookie_name', 'cookie_value');
         $generatedResponse->headers->add($responseHeaders);
         $generatedResponse->headers->setCookie($cookie);
@@ -47,7 +47,7 @@ class DeletedUserSessionTest extends ValueObjectVisitorBaseTest
         $this->assertTrue($generator->isEmpty());
         $this->assertSame('bar', $this->getResponseMock()->headers->get('foo'));
         $this->assertSame('thing', $this->getResponseMock()->headers->get('some'));
-        $this->assertSame(array($cookie), $this->getResponseMock()->headers->getCookies());
+        $this->assertSame([$cookie], $this->getResponseMock()->headers->getCookies());
     }
 
     protected function internalGetVisitor()

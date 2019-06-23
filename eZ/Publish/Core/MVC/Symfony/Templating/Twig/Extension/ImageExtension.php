@@ -36,13 +36,13 @@ class ImageExtension extends Twig_Extension
 
     public function getFunctions()
     {
-        return array(
+        return [
             new Twig_SimpleFunction(
                 'ez_image_alias',
-                array($this, 'getImageVariation'),
-                array('is_safe' => array('html'))
+                [$this, 'getImageVariation'],
+                ['is_safe' => ['html']]
             ),
-        );
+        ];
     }
 
     /**

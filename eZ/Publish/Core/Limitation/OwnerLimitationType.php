@@ -66,16 +66,16 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $value) {
             if ($value !== 1 && $value !== 2) {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' must be either 1 (owner) or 2 (session)",
                     null,
-                    array(
+                    [
                         'value' => $value,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -92,7 +92,7 @@ class OwnerLimitationType extends AbstractPersistenceLimitationType implements S
      */
     public function buildValue(array $limitationValues)
     {
-        return new APIOwnerLimitation(array('limitationValues' => $limitationValues));
+        return new APIOwnerLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

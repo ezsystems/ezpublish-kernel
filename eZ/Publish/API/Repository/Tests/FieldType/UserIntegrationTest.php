@@ -36,7 +36,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -46,7 +46,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,9 +56,9 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -68,7 +68,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -78,7 +78,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -88,9 +88,9 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 23),
-        );
+        return [
+            'unknown' => ['value' => 23],
+        ];
     }
 
     /**
@@ -100,7 +100,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new UserValue(array('login' => 'hans'));
+        return new UserValue(['login' => 'hans']);
     }
 
     /**
@@ -128,14 +128,14 @@ class UserIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'hasStoredLogin' => true,
             'login' => 'hans',
             'email' => 'hans@example.com',
             'passwordHash' => '680869a9873105e365d39a6d14e68e46',
             'passwordHashType' => 2,
             'enabled' => true,
-        );
+        ];
 
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -168,7 +168,7 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array();
+        return [];
     }
 
     public function testCreateContentFails($failingValue = null, $expectedException = null)
@@ -184,13 +184,13 @@ class UserIntegrationTest extends BaseIntegrationTest
     public function getValidUpdateFieldData()
     {
         return new UserValue(
-            array(
+            [
                 'login' => 'change', // Change is intended to not get through
                 'email' => 'change', // Change is intended to not get through
                 'passwordHash' => 'change', // Change is intended to not get through
                 'passwordHashType' => 'change', // Change is intended to not get through
                 'enabled' => 'change', // Change is intended to not get through
-            )
+            ]
         );
     }
 
@@ -230,13 +230,13 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function provideInvalidUpdateFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentValidationException',
-            ),
+            ],
             // @todo: Define more failure cases ...
-        );
+        ];
     }
 
     /**
@@ -254,7 +254,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'hasStoredLogin' => false,
             'contentId' => null,
             'login' => null,
@@ -263,7 +263,7 @@ class UserIntegrationTest extends BaseIntegrationTest
             'passwordHashType' => null,
             'enabled' => false,
             'maxLogin' => null,
-        );
+        ];
 
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -293,10 +293,10 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
-                new UserValue(array('login' => 'hans')),
-                array(
+        return [
+            [
+                new UserValue(['login' => 'hans']),
+                [
                     'login' => 'hans',
                     'hasStoredLogin' => null,
                     'contentId' => null,
@@ -305,9 +305,9 @@ class UserIntegrationTest extends BaseIntegrationTest
                     'passwordHashType' => null,
                     'enabled' => null,
                     'maxLogin' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -332,12 +332,12 @@ class UserIntegrationTest extends BaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
-                array('login' => 'hans'),
-                new UserValue(array('login' => 'hans')),
-            ),
-        );
+        return [
+            [
+                ['login' => 'hans'],
+                new UserValue(['login' => 'hans']),
+            ],
+        ];
     }
 
     /**
@@ -371,7 +371,7 @@ class UserIntegrationTest extends BaseIntegrationTest
         $group = $userService->loadUserGroup(13);
 
         // Create a new user instance.
-        $user = $userService->createUser($userCreate, array($group));
+        $user = $userService->createUser($userCreate, [$group]);
 
         // Create draft from user content object
         $contentService = $repository->getContentService();
@@ -386,19 +386,19 @@ class UserIntegrationTest extends BaseIntegrationTest
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new UserValue()),
-            array(new UserValue(array())),
-        );
+        return [
+            [new UserValue()],
+            [new UserValue([])],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     public function testRemoveFieldDefinition()

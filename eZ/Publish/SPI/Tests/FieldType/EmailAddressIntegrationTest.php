@@ -82,21 +82,21 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezstring field type does not have any special field definition
             // properties
-            array('fieldType', 'ezemail'),
-            array(
+            ['fieldType', 'ezemail'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
-                        'validators' => array(
-                            'EmailAddressValidator' => array(),
-                        ),
-                    )
+                    [
+                        'validators' => [
+                            'EmailAddressValidator' => [],
+                        ],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -107,11 +107,11 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => 'nospam@ez.no',
                 'externalData' => null,
                 'sortKey' => 'nospam@ez.no',
-            )
+            ]
         );
     }
 
@@ -125,11 +125,11 @@ class EmailAddressIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => 'no-spam@example.com',
                 'externalData' => null,
                 'sortKey' => 'no-spam@example.com',
-            )
+            ]
         );
     }
 }

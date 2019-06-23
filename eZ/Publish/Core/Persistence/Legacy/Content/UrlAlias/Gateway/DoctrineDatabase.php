@@ -35,8 +35,8 @@ class DoctrineDatabase extends Gateway
      *
      * @todo remove after testing
      */
-    protected $columns = array(
-        'ezurlalias_ml' => array(
+    protected $columns = [
+        'ezurlalias_ml' => [
             'action',
             'action_type',
             'alias_redirects',
@@ -48,8 +48,8 @@ class DoctrineDatabase extends Gateway
             'parent',
             'text',
             'text_md5',
-        ),
-    );
+        ],
+    ];
 
     /**
      * Doctrine database handler.
@@ -875,7 +875,7 @@ class DoctrineDatabase extends Gateway
      */
     public function loadPathData($id)
     {
-        $pathData = array();
+        $pathData = [];
 
         while ($id != 0) {
             /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
@@ -940,7 +940,7 @@ class DoctrineDatabase extends Gateway
         /** @var $query \eZ\Publish\Core\Persistence\Database\SelectQuery */
         $query = $this->dbHandler->createSelectQuery();
 
-        $hierarchyConditions = array();
+        $hierarchyConditions = [];
         foreach ($hierarchyData as $levelData) {
             $hierarchyConditions[] = $query->expr->lAnd(
                 $query->expr->eq(
@@ -984,7 +984,7 @@ class DoctrineDatabase extends Gateway
         $statement->execute();
 
         $rows = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        $rowsMap = array();
+        $rowsMap = [];
         foreach ($rows as $row) {
             $rowsMap[$row['action']][] = $row;
         }
@@ -993,7 +993,7 @@ class DoctrineDatabase extends Gateway
             throw new \RuntimeException('The path is corrupted.');
         }
 
-        $data = array();
+        $data = [];
         foreach ($hierarchyData as $levelData) {
             $data[] = $rowsMap[$levelData['action']];
         }

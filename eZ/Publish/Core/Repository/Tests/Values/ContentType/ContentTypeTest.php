@@ -18,7 +18,7 @@ class ContentTypeTest extends TestCase
      */
     public function testObjectProperties()
     {
-        $object = new ContentType(array('fieldDefinitions' => array()));
+        $object = new ContentType(['fieldDefinitions' => []]);
         $properties = $object->attributes();
         self::assertNotContains('internalFields', $properties, 'Internal property found ');
         self::assertContains('contentTypeGroups', $properties, 'Property not found');
@@ -40,7 +40,7 @@ class ContentTypeTest extends TestCase
         self::assertContains('defaultSortOrder', $properties, 'Property not found');
 
         // check for duplicates and double check existence of property
-        $propertiesHash = array();
+        $propertiesHash = [];
         foreach ($properties as $property) {
             if (isset($propertiesHash[$property])) {
                 self::fail("Property '{$property}' exists several times in properties list");

@@ -209,8 +209,8 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
         if (!isset($this->contentTypeHandlerMock)) {
             $this->contentTypeHandlerMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\MemoryCachingHandler',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );
@@ -229,8 +229,8 @@ class TransactionHandlerTest extends \PHPUnit\Framework\TestCase
         if (!isset($this->languageHandlerMock)) {
             $this->languageHandlerMock = $this->getMock(
                 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );

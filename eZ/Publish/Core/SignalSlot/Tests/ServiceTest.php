@@ -59,9 +59,9 @@ abstract class ServiceTest extends TestCase
                      ->method($method)
                      ->will(
                          $this->returnValueMap(
-                             array(
-                                 array_merge($parameters, array($return)),
-                             )
+                             [
+                                 array_merge($parameters, [$return]),
+                             ]
                          )
                      );
 
@@ -96,7 +96,7 @@ abstract class ServiceTest extends TestCase
             );
         }
         $service = $this->getSignalSlotService($innerService, $dispatcher);
-        $result = call_user_func_array(array($service, $method), $parameters);
+        $result = call_user_func_array([$service, $method], $parameters);
 
         $this->assertTrue($result === $return);
     }
@@ -112,7 +112,7 @@ abstract class ServiceTest extends TestCase
     protected function getContentInfo($contentId, $remoteId)
     {
         return new ContentInfo(
-            array('id' => $contentId, 'remoteId' => $remoteId)
+            ['id' => $contentId, 'remoteId' => $remoteId]
         );
     }
 
@@ -127,10 +127,10 @@ abstract class ServiceTest extends TestCase
     protected function getVersionInfo(ContentInfo $contentInfo, $versionNo)
     {
         return new VersionInfo(
-            array(
+            [
                 'contentInfo' => $contentInfo,
                 'versionNo' => $versionNo,
-            )
+            ]
         );
     }
 
@@ -144,10 +144,10 @@ abstract class ServiceTest extends TestCase
     protected function getContent(VersionInfo $versionInfo)
     {
         return new Content(
-            array(
+            [
                 'versionInfo' => $versionInfo,
-                'internalFields' => array(),
-            )
+                'internalFields' => [],
+            ]
         );
     }
 
@@ -163,14 +163,14 @@ abstract class ServiceTest extends TestCase
     protected function getUser($userId, $userRemoteId, $userVersionNo)
     {
         return new User(
-            array(
+            [
                 'content' => $this->getContent(
                     $this->getVersionInfo(
                         $this->getContentInfo($userId, $userRemoteId),
                         $userVersionNo
                     )
                 ),
-            )
+            ]
         );
     }
 
@@ -186,14 +186,14 @@ abstract class ServiceTest extends TestCase
     protected function getUserGroup($groupId, $groupRemoteId, $groupVersioNo)
     {
         return new UserGroup(
-            array(
+            [
                 'content' => $this->getContent(
                     $this->getVersionInfo(
                         $this->getContentInfo($groupId, $groupRemoteId),
                         $groupVersioNo
                     )
                 ),
-            )
+            ]
         );
     }
 }

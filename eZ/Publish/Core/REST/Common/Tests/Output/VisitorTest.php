@@ -41,12 +41,12 @@ class VisitorTest extends TestCase
 
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
+            ['visitValueObject'],
+            [$generator, $this->getValueObjectDispatcherMock()]
         );
 
         $this->assertEquals(
-            new Response('Hello world!', 200, array()),
+            new Response('Hello world!', 200, []),
             $visitor->visit($data)
         );
     }
@@ -72,12 +72,12 @@ class VisitorTest extends TestCase
 
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
+            ['visitValueObject'],
+            [$generator, $this->getValueObjectDispatcherMock()]
         );
 
         $this->assertEquals(
-            new Response(null, 200, array()),
+            new Response(null, 200, []),
             $visitor->visit($data)
         );
     }
@@ -106,8 +106,8 @@ class VisitorTest extends TestCase
         $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
+            ['visitValueObject'],
+            [$generator, $this->getValueObjectDispatcherMock()]
         );
 
         $visitor->setHeader('Content-Type', 'text/xml');
@@ -115,9 +115,9 @@ class VisitorTest extends TestCase
             new Response(
                 null,
                 200,
-                array(
+                [
                     'Content-Type' => 'text/xml',
-                )
+                ]
             ),
             $visitor->visit($data)
         );
@@ -135,8 +135,8 @@ class VisitorTest extends TestCase
         $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
+            ['visitValueObject'],
+            [$generator, $this->getValueObjectDispatcherMock()]
         );
 
         $visitor->setHeader('Content-Type', 'text/xml');
@@ -145,9 +145,9 @@ class VisitorTest extends TestCase
             new Response(
                 null,
                 200,
-                array(
+                [
                     'Content-Type' => 'text/xml',
-                )
+                ]
             ),
             $visitor->visit($data)
         );
@@ -160,8 +160,8 @@ class VisitorTest extends TestCase
         $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
+            ['visitValueObject'],
+            [$generator, $this->getValueObjectDispatcherMock()]
         );
 
         $visitor->setHeader('Content-Type', 'text/xml');
@@ -170,9 +170,9 @@ class VisitorTest extends TestCase
             new Response(
                 null,
                 200,
-                array(
+                [
                     'Content-Type' => 'text/xml',
-                )
+                ]
             ),
             $visitor->visit($data)
         );
@@ -185,8 +185,8 @@ class VisitorTest extends TestCase
         $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
+            ['visitValueObject'],
+            [$generator, $this->getValueObjectDispatcherMock()]
         );
 
         $visitor->setHeader('Content-Type', 'text/xml');
@@ -198,7 +198,7 @@ class VisitorTest extends TestCase
             new Response(
                 null,
                 200,
-                array()
+                []
             ),
             $result
         );
@@ -211,8 +211,8 @@ class VisitorTest extends TestCase
         $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
+            ['visitValueObject'],
+            [$generator, $this->getValueObjectDispatcherMock()]
         );
 
         $visitor->setStatus(201);
@@ -232,8 +232,8 @@ class VisitorTest extends TestCase
         $generator = $this->getMock('\\eZ\\Publish\\Core\\REST\\Common\\Output\\Generator');
         $visitor = $this->getMock(
             '\\eZ\\Publish\\Core\\REST\\Common\\Output\\Visitor',
-            array('visitValueObject'),
-            array($generator, $this->getValueObjectDispatcherMock())
+            ['visitValueObject'],
+            [$generator, $this->getValueObjectDispatcherMock()]
         );
 
         $visitor->setStatus(201);

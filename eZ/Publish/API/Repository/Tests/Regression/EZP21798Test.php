@@ -51,7 +51,7 @@ class EZP21798Test extends BaseTest
         $contentCreateStructFolder->setField('name', 'News');
 
         $locationCreateStructFolder = $locationService->newLocationCreateStruct(2);
-        $draftFolder = $contentService->createContent($contentCreateStructFolder, array($locationCreateStructFolder));
+        $draftFolder = $contentService->createContent($contentCreateStructFolder, [$locationCreateStructFolder]);
         $contentFolder = $contentService->publishVersion($draftFolder->versionInfo);
 
         // Create a new article, inside the folder
@@ -72,7 +72,7 @@ class EZP21798Test extends BaseTest
         $locationNews = $locationService->loadLocation($newsLocation->destination);
 
         $locationCreateStructArticle = $locationService->newLocationCreateStruct($locationNews->id);
-        $draftArticle = $contentService->createContent($contentCreateStructArticle, array($locationCreateStructArticle));
+        $draftArticle = $contentService->createContent($contentCreateStructArticle, [$locationCreateStructArticle]);
         $contentArticle = $contentService->publishVersion($draftArticle->versionInfo);
 
         // Assign the article to the Private Section
@@ -100,7 +100,7 @@ class EZP21798Test extends BaseTest
         $newPolicy = $roleService->newPolicyUpdateStruct();
         $newLimitation = new \eZ\Publish\API\Repository\Values\User\Limitation\SectionLimitation();
         $section = $sectionService->loadSectionByIdentifier('private');
-        $newLimitation->limitationValues = array(1, $section->id);
+        $newLimitation->limitationValues = [1, $section->id];
         $newPolicy->addLimitation($newLimitation);
 
         $roleService->updatePolicy($policies[$numPolicies], $newPolicy);

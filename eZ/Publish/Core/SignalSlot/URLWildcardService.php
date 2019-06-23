@@ -68,9 +68,9 @@ class URLWildcardService implements URLWildcardServiceInterface
         $returnValue = $this->service->create($sourceUrl, $destinationUrl, $forward);
         $this->signalDispatcher->emit(
             new CreateSignal(
-                array(
+                [
                     'urlWildcardId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -89,9 +89,9 @@ class URLWildcardService implements URLWildcardServiceInterface
         $returnValue = $this->service->remove($urlWildcard);
         $this->signalDispatcher->emit(
             new RemoveSignal(
-                array(
+                [
                     'urlWildcardId' => $urlWildcard->id,
-                )
+                ]
             )
         );
 
@@ -143,9 +143,9 @@ class URLWildcardService implements URLWildcardServiceInterface
         $returnValue = $this->service->translate($url);
         $this->signalDispatcher->emit(
             new TranslateSignal(
-                array(
+                [
                     'url' => $url,
-                )
+                ]
             )
         );
 

@@ -55,7 +55,7 @@ EOT
                     ->then(
                         // Adding one 'block' level in order to match the other view internal config structure.
                         function ($v) {
-                            return array('block' => $v);
+                            return ['block' => $v];
                         }
                     )
                 ->end()

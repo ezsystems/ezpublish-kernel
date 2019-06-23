@@ -31,8 +31,8 @@ class ImageTest extends FieldTypeTest
         if (!isset($this->mimeTypeDetectorMock)) {
             $this->mimeTypeDetectorMock = $this->getMock(
                 'eZ\\Publish\\SPI\\FieldType\\BinaryBase\\MimeTypeDetector',
-                array(),
-                array(),
+                [],
+                [],
                 '',
                 false
             );
@@ -67,14 +67,14 @@ class ImageTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array(
-            'FileSizeValidator' => array(
-                'maxFileSize' => array(
+        return [
+            'FileSizeValidator' => [
+                'maxFileSize' => [
                     'type' => 'int',
                     'default' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -84,7 +84,7 @@ class ImageTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -122,50 +122,50 @@ class ImageTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 'foo',
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
+            ],
+            [
                 new ImageValue(
-                    array(
+                    [
                         'id' => 'non/existent/path',
-                    )
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
+            ],
+            [
                 new ImageValue(
-                    array(
+                    [
                         'id' => __FILE__,
-                        'fileName' => array(),
-                    )
+                        'fileName' => [],
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
+            ],
+            [
                 new ImageValue(
-                    array(
+                    [
                         'id' => __FILE__,
                         'fileName' => 'ImageTest.php',
                         'fileSize' => 'truebar',
-                    )
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
+            ],
+            [
                 new ImageValue(
-                    array(
+                    [
                         'id' => __FILE__,
                         'fileName' => 'ImageTest.php',
                         'fileSize' => 23,
-                        'alternativeText' => array(),
-                    )
+                        'alternativeText' => [],
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -199,63 +199,63 @@ class ImageTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new ImageValue(),
-            ),
-            array(
-                array(),
+            ],
+            [
+                [],
                 new ImageValue(),
-            ),
-            array(
+            ],
+            [
                 new ImageValue(),
                 new ImageValue(),
-            ),
-            array(
+            ],
+            [
                 $this->getImageInputPath(),
                 new ImageValue(
-                    array(
+                    [
                         'inputUri' => $this->getImageInputPath(),
                         'fileName' => basename($this->getImageInputPath()),
                         'fileSize' => filesize($this->getImageInputPath()),
                         'alternativeText' => null,
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'id' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
                     'uri' => 'http://' . $this->getImageInputPath(),
-                ),
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'id' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
                         'uri' => 'http://' . $this->getImageInputPath(),
-                    )
+                    ]
                 ),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'inputUri' => $this->getImageInputPath(),
                     'fileName' => 'My Fancy Filename',
                     'fileSize' => 123,
-                ),
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'inputUri' => $this->getImageInputPath(),
                         'fileName' => 'My Fancy Filename',
                         'fileSize' => filesize($this->getImageInputPath()),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -295,14 +295,14 @@ class ImageTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new ImageValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new ImageValue(
-                    array(
+                    [
                         'id' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
@@ -311,9 +311,9 @@ class ImageTest extends FieldTypeTest
                         'uri' => 'http://' . $this->getImageInputPath(),
                         'width' => 123,
                         'height' => 456,
-                    )
+                    ]
                 ),
-                array(
+                [
                     'id' => $this->getImageInputPath(),
                     'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
@@ -324,21 +324,21 @@ class ImageTest extends FieldTypeTest
                     'inputUri' => null,
                     'width' => 123,
                     'height' => 456,
-                ),
-            ),
+                ],
+            ],
             // BC with 5.0 (EZP-20948). Path can be used as input instead of $inputUri.
-            array(
+            [
                 new ImageValue(
-                    array(
+                    [
                         'path' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
                         'imageId' => '123-12345',
                         'uri' => 'http://' . $this->getImageInputPath(),
-                    )
+                    ]
                 ),
-                array(
+                [
                     'id' => null,
                     'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
@@ -349,9 +349,9 @@ class ImageTest extends FieldTypeTest
                     'inputUri' => $this->getImageInputPath(),
                     'width' => null,
                     'height' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -391,50 +391,50 @@ class ImageTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new ImageValue(),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'id' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
                     'uri' => 'http://' . $this->getImageInputPath(),
-                ),
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'id' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
                         'uri' => 'http://' . $this->getImageInputPath(),
-                    )
+                    ]
                 ),
-            ),
+            ],
             // BC with 5.0 (EZP-20948). Path can be used as input instead of ID.
-            array(
-                array(
+            [
+                [
                     'path' => $this->getImageInputPath(),
                     'fileName' => 'Sindelfingen-Squirrels.jpg',
                     'fileSize' => 23,
                     'alternativeText' => 'This is so Sindelfingen!',
                     'uri' => 'http://' . $this->getImageInputPath(),
-                ),
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'inputUri' => $this->getImageInputPath(),
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'fileSize' => 23,
                         'alternativeText' => 'This is so Sindelfingen!',
                         'uri' => 'http://' . $this->getImageInputPath(),
-                    )
+                    ]
                 ),
-            ),
+            ],
             // @todo: Provide REST upload tests
-        );
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -444,32 +444,32 @@ class ImageTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(
-                new ImageValue(array('fileName' => 'Sindelfingen-Squirrels.jpg')),
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [
+                new ImageValue(['fileName' => 'Sindelfingen-Squirrels.jpg']),
                 'Sindelfingen-Squirrels.jpg',
-            ),
+            ],
             // Alternative text has priority
-            array(
+            [
                 new ImageValue(
-                    array(
+                    [
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'alternativeText' => 'This is so Sindelfingen!',
-                    )
+                    ]
                 ),
                 'This is so Sindelfingen!',
-            ),
-            array(
+            ],
+            [
                 new ImageValue(
-                    array(
+                    [
                         'fileName' => 'Sindelfingen-Squirrels.jpg',
                         'alternativeText' => 'This is so Sindelfingen!',
-                    )
+                    ]
                 ),
                 'This is so Sindelfingen!',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -519,26 +519,26 @@ class ImageTest extends FieldTypeTest
      */
     public function provideValidDataForValidate()
     {
-        return array(
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'FileSizeValidator' => array(
+        return [
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
                             'maxFileSize' => 1,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'id' => $this->getImageInputPath(),
                         'fileName' => basename($this->getImageInputPath()),
                         'fileSize' => filesize($this->getImageInputPath()),
                         'alternativeText' => null,
                         'uri' => '',
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -607,140 +607,140 @@ class ImageTest extends FieldTypeTest
      */
     public function provideInvalidDataForValidate()
     {
-        return array(
+        return [
             // File is too large
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'FileSizeValidator' => array(
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
                             'maxFileSize' => 0.01,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'id' => $this->getImageInputPath(),
                         'fileName' => basename($this->getImageInputPath()),
                         'fileSize' => filesize($this->getImageInputPath()),
                         'alternativeText' => null,
                         'uri' => '',
-                    )
+                    ]
                 ),
-                array(
+                [
                     new ValidationError(
                         'The file size cannot exceed %size% byte.',
                         'The file size cannot exceed %size% bytes.',
-                        array(
+                        [
                             '%size%' => 0.01,
-                        ),
+                        ],
                         'fileSize'
                     ),
-                ),
-            ),
+                ],
+            ],
 
             // file is not an image file
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'FileSizeValidator' => array(
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
                             'maxFileSize' => 1,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'id' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
                         'alternativeText' => null,
                         'uri' => '',
-                    )
+                    ]
                 ),
-                array(
-                    new ValidationError('A valid image file is required.', null, array(), 'id'),
-                ),
-            ),
+                [
+                    new ValidationError('A valid image file is required.', null, [], 'id'),
+                ],
+            ],
 
             // file is too large and invalid
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'FileSizeValidator' => array(
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
                             'maxFileSize' => 0.01,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'id' => __FILE__,
                         'fileName' => basename(__FILE__),
                         'fileSize' => filesize(__FILE__),
                         'alternativeText' => null,
                         'uri' => '',
-                    )
+                    ]
                 ),
-                array(
-                    new ValidationError('A valid image file is required.', null, array(), 'id'),
+                [
+                    new ValidationError('A valid image file is required.', null, [], 'id'),
                     new ValidationError(
                         'The file size cannot exceed %size% byte.',
                         'The file size cannot exceed %size% bytes.',
-                        array(
+                        [
                             '%size%' => 0.01,
-                        ),
+                        ],
                         'fileSize'
                     ),
-                ),
-            ),
+                ],
+            ],
 
             // file is an image file but filename ends with .php
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'FileSizeValidator' => array(
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
                             'maxFileSize' => 1,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'id' => __DIR__ . '/phppng.php',
                         'fileName' => basename(__DIR__ . '/phppng.php'),
                         'fileSize' => filesize(__DIR__ . '/phppng.php'),
                         'alternativeText' => null,
                         'uri' => '',
-                    )
+                    ]
                 ),
-                array(
+                [
                     new ValidationError(
                         'A valid image file is required.', null, [], 'id'
                     ),
-                ),
-            ),
+                ],
+            ],
 
             // file is an image file but filename ends with .PHP (upper case)
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'FileSizeValidator' => array(
+            [
+                [
+                    'validatorConfiguration' => [
+                        'FileSizeValidator' => [
                             'maxFileSize' => 1,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new ImageValue(
-                    array(
+                    [
                         'id' => __DIR__ . '/phppng2.PHP',
                         'fileName' => basename(__DIR__ . '/phppng2.PHP'),
                         'fileSize' => filesize(__DIR__ . '/phppng2.PHP'),
                         'alternativeText' => null,
                         'uri' => '',
-                    )
+                    ]
                 ),
-                array(
+                [
                     new ValidationError(
                         'A valid image file is required.', null, [], 'id'
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

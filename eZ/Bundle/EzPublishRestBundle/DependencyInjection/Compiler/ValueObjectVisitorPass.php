@@ -34,7 +34,7 @@ class ValueObjectVisitorPass implements CompilerPassInterface
 
                 $definition->addMethodCall(
                     'addVisitor',
-                    array($attribute['type'], new Reference($id))
+                    [$attribute['type'], new Reference($id)]
                 );
             }
         }

@@ -278,13 +278,13 @@ class Handler implements BaseContentHandler
         foreach ($relations as $relation) {
             $this->contentGateway->insertRelation(
                 new RelationCreateStruct(
-                    array(
+                    [
                         'sourceContentId' => $contentId,
                         'sourceContentVersionNo' => $content->versionInfo->versionNo,
                         'sourceFieldDefinitionId' => $relation['ezcontentobject_link_contentclassattribute_id'],
                         'destinationContentId' => $relation['ezcontentobject_link_to_contentobject_id'],
                         'type' => (int)$relation['ezcontentobject_link_relation_type'],
-                    )
+                    ]
                 )
             );
         }
@@ -462,7 +462,7 @@ class Handler implements BaseContentHandler
 
         $versionInfo = $this->mapper->extractVersionInfoListFromRows(
             $rows,
-            $this->contentGateway->loadVersionedNameData(array(array('id' => $contentId, 'version' => $versionNo)))
+            $this->contentGateway->loadVersionedNameData([['id' => $contentId, 'version' => $versionNo]])
         );
 
         return reset($versionInfo);
@@ -479,15 +479,15 @@ class Handler implements BaseContentHandler
     {
         $rows = $this->contentGateway->listVersionsForUser($userId, VersionInfo::STATUS_DRAFT);
         if (empty($rows)) {
-            return array();
+            return [];
         }
 
         $idVersionPairs = array_map(
             function ($row) {
-                return array(
+                return [
                     'id' => $row['ezcontentobject_version_contentobject_id'],
                     'version' => $row['ezcontentobject_version_version'],
-                );
+                ];
             },
             $rows
         );

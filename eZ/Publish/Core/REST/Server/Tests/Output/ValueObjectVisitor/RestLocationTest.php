@@ -30,7 +30,7 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
 
         $location = new RestLocation(
             new Location(
-                array(
+                [
                     'id' => 42,
                     'priority' => 0,
                     'hidden' => false,
@@ -42,13 +42,13 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
                     'sortField' => Location::SORT_FIELD_PATH,
                     'sortOrder' => Location::SORT_ORDER_ASC,
                     'contentInfo' => new ContentInfo(
-                        array(
+                        [
                             'id' => 42,
                             'contentTypeId' => 4,
                             'name' => 'A Node, long lost',
-                        )
+                        ]
                     ),
-                )
+                ]
             ),
             // Dummy value for ChildCount
             0
@@ -56,34 +56,34 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array('locationPath' => '1/2/21/42'),
+            ['locationPath' => '1/2/21/42'],
             '/content/locations/1/2/21/42'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocation',
-            array('locationPath' => '1/2/21'),
+            ['locationPath' => '1/2/21'],
             '/content/locations/1/2/21'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadLocationChildren',
-            array('locationPath' => '1/2/21/42'),
+            ['locationPath' => '1/2/21/42'],
             '/content/locations/1/2/21/42/children'
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array('contentId' => $location->location->contentId),
+            ['contentId' => $location->location->contentId],
             "/content/objects/{$location->location->contentId}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_listLocationURLAliases',
-            array('locationPath' => '1/2/21/42'),
+            ['locationPath' => '1/2/21/42'],
             '/content/objects/1/2/21/42/urlaliases'
         );
 
         // Expected twice, second one here for ContentInfo
         $this->addRouteExpectation(
             'ezpublish_rest_loadContent',
-            array('contentId' => $location->location->contentId),
+            ['contentId' => $location->location->contentId],
             "/content/objects/{$location->location->contentId}"
         );
 
@@ -114,9 +114,9 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsLocationElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Location',
-            ),
+            ],
             $result,
             'Invalid <Location> element.',
             false
@@ -133,13 +133,13 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsLocationAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Location',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Location+xml',
                     'href' => '/content/locations/1/2/21/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Location> attributes.',
             false
@@ -156,9 +156,9 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentInfoElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentInfo',
-            ),
+            ],
             $result,
             'Invalid <ContentInfo> element.',
             false
@@ -175,13 +175,13 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentInfoAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentInfo',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ContentInfo+xml',
                     'href' => '/content/objects/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ContentInfo> attributes.',
             false
@@ -198,10 +198,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIdValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'id',
                 'content' => '42',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> id value element.',
             false
@@ -218,10 +218,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsPriorityValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'priority',
                 'content' => '0',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> priority value element.',
             false
@@ -238,10 +238,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsHiddenValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'hidden',
                 'content' => 'false',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> hidden value element.',
             false
@@ -258,10 +258,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsInvisibleValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'invisible',
                 'content' => 'true',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> invisible value element.',
             false
@@ -278,10 +278,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRemoteIdValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'remoteId',
                 'content' => 'remote-id',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> remoteId value element.',
             false
@@ -298,9 +298,9 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsChildrenElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Children',
-            ),
+            ],
             $result,
             'Invalid <Children> element.',
             false
@@ -317,13 +317,13 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsChildrenAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Children',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.LocationList+xml',
                     'href' => '/content/locations/1/2/21/42/children',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Children> attributes.',
             false
@@ -340,9 +340,9 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsParentLocationElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ParentLocation',
-            ),
+            ],
             $result,
             'Invalid <ParentLocation> element.',
             false
@@ -359,13 +359,13 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsParentLocationAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ParentLocation',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Location+xml',
                     'href' => '/content/locations/1/2/21',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ParentLocation> attributes.',
             false
@@ -382,9 +382,9 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Content',
-            ),
+            ],
             $result,
             'Invalid <Content> element.',
             false
@@ -401,13 +401,13 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Content',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Content+xml',
                     'href' => '/content/objects/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Content> attributes.',
             false
@@ -424,10 +424,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsPathStringValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'pathString',
                 'content' => '/1/2/21/42/',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> pathString value element.',
             false
@@ -444,10 +444,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsDepthValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'depth',
                 'content' => '3',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> depth value element.',
             false
@@ -464,10 +464,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSortFieldValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'sortField',
                 'content' => 'PATH',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> sortField value element.',
             false
@@ -484,10 +484,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSortOrderValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'sortOrder',
                 'content' => 'ASC',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> sortOrder value element.',
             false
@@ -504,10 +504,10 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsChildCountValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'childCount',
                 'content' => '0',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Location> childCount value element.',
             false
@@ -524,9 +524,9 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlAliasesTag($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlAliases',
-            ),
+            ],
             $result,
             'Invalid <UrlAliases> element.',
             false
@@ -543,13 +543,13 @@ class RestLocationTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlAliasesTagAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlAliases',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UrlAliasRefList+xml',
                     'href' => '/content/objects/1/2/21/42/urlaliases',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UrlAliases> attributes.',
             false

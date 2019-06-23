@@ -34,7 +34,7 @@ abstract class TrashBase extends BaseServiceTest
         $trashItem = new TrashItem();
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
                 'priority' => null,
                 'hidden' => null,
@@ -45,7 +45,7 @@ abstract class TrashBase extends BaseServiceTest
                 'depth' => null,
                 'sortField' => null,
                 'sortOrder' => null,
-            ),
+            ],
             $trashItem
         );
     }
@@ -102,7 +102,7 @@ abstract class TrashBase extends BaseServiceTest
      */
     public function testUnsetProperty()
     {
-        $trashItem = new TrashItem(array('id' => 2));
+        $trashItem = new TrashItem(['id' => 2]);
         try {
             unset($trashItem->id);
             self::fail('Unsetting read-only property succeeded');
@@ -126,7 +126,7 @@ abstract class TrashBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem', $trashItem);
 
         self::assertSameClassPropertiesCorrect(
-            array(
+            [
                 'id',
                 'priority',
                 'hidden',
@@ -137,7 +137,7 @@ abstract class TrashBase extends BaseServiceTest
                 'depth',
                 'sortField',
                 'sortOrder',
-            ),
+            ],
             $trashItem,
             $loadedTrashItem
         );
@@ -171,7 +171,7 @@ abstract class TrashBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\TrashItem', $trashItem);
 
         self::assertSameClassPropertiesCorrect(
-            array(
+            [
                 'id',
                 'priority',
                 'hidden',
@@ -182,7 +182,7 @@ abstract class TrashBase extends BaseServiceTest
                 'depth',
                 'sortField',
                 'sortOrder',
-            ),
+            ],
             $location,
             $trashItem
         );
@@ -204,7 +204,7 @@ abstract class TrashBase extends BaseServiceTest
         // Create additional location that will become new main location
         $location = $locationService->createLocation(
             $contentInfo,
-            new LocationCreateStruct(array('parentLocationId' => 2))
+            new LocationCreateStruct(['parentLocationId' => 2])
         );
 
         $trashService->trash(
@@ -231,7 +231,7 @@ abstract class TrashBase extends BaseServiceTest
         // Create additional location to trash
         $location = $locationService->createLocation(
             $contentService->loadContentInfo(42),
-            new LocationCreateStruct(array('parentLocationId' => 2))
+            new LocationCreateStruct(['parentLocationId' => 2])
         );
 
         $trashItem = $trashService->trash($location);
@@ -257,7 +257,7 @@ abstract class TrashBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $recoveredLocation);
 
         self::assertSameClassPropertiesCorrect(
-            array(
+            [
                 'priority',
                 'hidden',
                 'invisible',
@@ -266,7 +266,7 @@ abstract class TrashBase extends BaseServiceTest
                 'depth',
                 'sortField',
                 'sortOrder',
-            ),
+            ],
             $location,
             $recoveredLocation
         );
@@ -321,7 +321,7 @@ abstract class TrashBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Location', $recoveredLocation);
 
         self::assertSameClassPropertiesCorrect(
-            array(
+            [
                 'priority',
                 'hidden',
                 'invisible',
@@ -329,10 +329,10 @@ abstract class TrashBase extends BaseServiceTest
                 'depth',
                 'sortField',
                 'sortOrder',
-            ),
+            ],
             $location,
             $recoveredLocation,
-            array('depth')
+            ['depth']
         );
 
         $parentLocation = $locationService->loadLocation($recoveredLocation->parentLocationId);
@@ -359,10 +359,10 @@ abstract class TrashBase extends BaseServiceTest
         $trashItem = $trashService->trash($location);
 
         $newParentLocation = new Location(
-            array(
+            [
                 'id' => APIBaseTest::DB_INT_MAX,
                 'parentLocationId' => APIBaseTest::DB_INT_MAX,
-            )
+            ]
         );
         $trashService->recover($trashItem, $newParentLocation);
     }
@@ -455,18 +455,18 @@ abstract class TrashBase extends BaseServiceTest
         $contentCreate->remoteId = md5(uniqid(get_class($this), true));
         $contentCreate->alwaysAvailable = true;
 
-        $locationCreates = array(
+        $locationCreates = [
             new LocationCreateStruct(
-                array(
+                [
                     //priority = 0
                     //hidden = false
                     'remoteId' => md5(uniqid(get_class($this), true)),
                     //sortField = Location::SORT_FIELD_NAME
                     //sortOrder = Location::SORT_ORDER_ASC
                     'parentLocationId' => $parentLocationId,
-                )
+                ]
             ),
-        );
+        ];
 
         return $contentService->publishVersion(
             $contentService->createContent(

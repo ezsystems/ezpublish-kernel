@@ -106,7 +106,7 @@ class SudoMainLocationLoaderTest extends TestCase
                 ->setMethods(
                     array_diff(
                         get_class_methods($repositoryClass),
-                        array('sudo')
+                        ['sudo']
                     )
                 )
                 ->getMock();

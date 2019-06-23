@@ -52,10 +52,10 @@ class UrlConverter implements Converter
      */
     public function toFieldValue(StorageFieldValue $value, FieldValue $fieldValue)
     {
-        $fieldValue->data = array(
+        $fieldValue->data = [
             'urlId' => $value->dataInt,
             'text' => $value->dataText,
-        );
+        ];
         $fieldValue->sortKey = false;
     }
 
@@ -79,7 +79,7 @@ class UrlConverter implements Converter
     {
         // @todo: Is it possible to store a default value in the DB?
         $fieldDef->defaultValue = new FieldValue();
-        $fieldDef->defaultValue->data = array('text' => null);
+        $fieldDef->defaultValue->data = ['text' => null];
     }
 
     /**

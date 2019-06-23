@@ -106,13 +106,13 @@ class SectionHandlerTest extends TestCase
                 $this->equalTo(23)
             )->will(
                 $this->returnValue(
-                    array(
-                        array(
+                    [
+                        [
                             'id' => '23',
                             'identifier' => 'new_section',
                             'name' => 'New Section',
-                        ),
-                    )
+                        ],
+                    ]
                 )
             );
 
@@ -144,18 +144,18 @@ class SectionHandlerTest extends TestCase
         ->method('loadAllSectionData')
         ->will(
             $this->returnValue(
-                array(
-                    array(
+                [
+                    [
                         'id' => '23',
                         'identifier' => 'new_section',
                         'name' => 'New Section',
-                    ),
-                    array(
+                    ],
+                    [
                         'id' => '46',
                         'identifier' => 'new_section2',
                         'name' => 'New Section2',
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
@@ -172,7 +172,7 @@ class SectionHandlerTest extends TestCase
         $result = $handler->loadAll();
 
         $this->assertEquals(
-            array($sectionRef, $sectionRef2),
+            [$sectionRef, $sectionRef2],
             $result
         );
     }
@@ -193,13 +193,13 @@ class SectionHandlerTest extends TestCase
                 $this->equalTo('new_section')
             )->will(
                 $this->returnValue(
-                    array(
-                        array(
+                    [
+                        [
                             'id' => '23',
                             'identifier' => 'new_section',
                             'name' => 'New Section',
-                        ),
-                    )
+                        ],
+                    ]
                 )
             );
 

@@ -136,7 +136,7 @@ class MaskGenerator
     public function extractLanguageIdsFromMask($languageMask)
     {
         $exp = 2;
-        $result = array();
+        $result = [];
 
         // Decomposition of $languageMask into its binary components.
         while ($exp <= $languageMask) {
@@ -159,7 +159,7 @@ class MaskGenerator
      */
     public function extractLanguageCodesFromMask($languageMask)
     {
-        $languageCodes = array();
+        $languageCodes = [];
 
         foreach ($this->extractLanguageIdsFromMask($languageMask) as $languageId) {
             $languageCodes[] = $this->languageHandler->load($languageId)->languageCode;

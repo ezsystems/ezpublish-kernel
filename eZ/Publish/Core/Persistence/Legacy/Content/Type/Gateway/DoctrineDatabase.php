@@ -32,8 +32,8 @@ class DoctrineDatabase extends Gateway
      *
      * @var array
      */
-    protected $columns = array(
-        'ezcontentclass' => array(
+    protected $columns = [
+        'ezcontentclass' => [
             'id',
             'always_available',
             'contentobject_name',
@@ -52,8 +52,8 @@ class DoctrineDatabase extends Gateway
             'sort_order',
             'url_alias_name',
             'version',
-        ),
-        'ezcontentclass_attribute' => array(
+        ],
+        'ezcontentclass_attribute' => [
             'id',
             'can_translate',
             'category',
@@ -80,8 +80,8 @@ class DoctrineDatabase extends Gateway
             'serialized_data_text',
             'serialized_description_list',
             'serialized_name_list',
-        ),
-    );
+        ],
+    ];
 
     /**
      * DoctrineDatabase handler.

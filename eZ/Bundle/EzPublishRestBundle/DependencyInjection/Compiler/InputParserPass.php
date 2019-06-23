@@ -36,7 +36,7 @@ class InputParserPass implements CompilerPassInterface
 
                 $definition->addMethodCall(
                     'addParser',
-                    array($attribute['mediaType'], new Reference($id))
+                    [$attribute['mediaType'], new Reference($id)]
                 );
             }
         }

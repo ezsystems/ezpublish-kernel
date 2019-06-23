@@ -42,14 +42,14 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
             'publishing'
         );
         $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
-        $objectStateGroupCreate->names = array(
+        $objectStateGroupCreate->names = [
             'eng-US' => 'Publishing',
             'eng-GB' => 'Sindelfingen',
-        );
-        $objectStateGroupCreate->descriptions = array(
+        ];
+        $objectStateGroupCreate->descriptions = [
             'eng-US' => 'Put something online',
             'eng-GB' => 'Put something ton Sindelfingen.',
-        );
+        ];
 
         // Throws unauthorized exception, since the anonymous user must not
         // create object state groups
@@ -90,12 +90,12 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
         $groupUpdateStruct->identifier = 'sindelfingen';
         $groupUpdateStruct->defaultLanguageCode = 'ger-DE';
-        $groupUpdateStruct->names = array(
+        $groupUpdateStruct->names = [
             'ger-DE' => 'Sindelfingen',
-        );
-        $groupUpdateStruct->descriptions = array(
+        ];
+        $groupUpdateStruct->descriptions = [
             'ger-DE' => 'Sindelfingen ist nicht nur eine Stadt',
-        );
+        ];
 
         // Throws unauthorized exception, since the anonymous user must not
         // update object state groups
@@ -173,12 +173,12 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         );
         $objectStateCreateStruct->priority = 23;
         $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
-        $objectStateCreateStruct->names = array(
+        $objectStateCreateStruct->names = [
             'eng-US' => 'Locked and Unlocked',
-        );
-        $objectStateCreateStruct->descriptions = array(
+        ];
+        $objectStateCreateStruct->descriptions = [
             'eng-US' => 'A state between locked and unlocked.',
-        );
+        ];
 
         // Throws unauthorized exception, since the anonymous user must not
         // create object states
@@ -219,14 +219,14 @@ class ObjectStateServiceAuthorizationTest extends BaseTest
         $updateStateStruct = $objectStateService->newObjectStateUpdateStruct();
         $updateStateStruct->identifier = 'somehow_locked';
         $updateStateStruct->defaultLanguageCode = 'ger-DE';
-        $updateStateStruct->names = array(
+        $updateStateStruct->names = [
             'eng-US' => 'Somehow locked',
             'ger-DE' => 'Irgendwie gelockt',
-        );
-        $updateStateStruct->descriptions = array(
+        ];
+        $updateStateStruct->descriptions = [
             'eng-US' => 'The object is somehow locked',
             'ger-DE' => 'Sindelfingen',
-        );
+        ];
 
         // Throws unauthorized exception, since the anonymous user must not
         // update object states

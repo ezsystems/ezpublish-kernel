@@ -32,7 +32,7 @@ class CreatedUser extends RestUser
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadUser',
-                array('userId' => $data->user->contentInfo->id)
+                ['userId' => $data->user->contentInfo->id]
             )
         );
         $visitor->setStatus(201);

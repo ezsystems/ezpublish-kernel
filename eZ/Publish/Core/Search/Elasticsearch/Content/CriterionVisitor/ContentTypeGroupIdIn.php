@@ -47,17 +47,17 @@ class ContentTypeGroupIdIn extends CriterionVisitor
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         if (count($criterion->value) > 1) {
-            $filter = array(
-                'terms' => array(
+            $filter = [
+                'terms' => [
                     'group_mid' => $criterion->value,
-                ),
-            );
+                ],
+            ];
         } else {
-            $filter = array(
-                'term' => array(
+            $filter = [
+                'term' => [
                     'group_mid' => $criterion->value[0],
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;

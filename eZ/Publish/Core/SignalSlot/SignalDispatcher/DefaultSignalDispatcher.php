@@ -40,18 +40,18 @@ class DefaultSignalDispatcher extends SignalDispatcher
      *
      * @var array
      */
-    protected $signalSlotMap = array();
+    protected $signalSlotMap = [];
 
     /**
      * Construct from factory.
      *
      * @param array $signalSlotMap
      */
-    public function __construct(array $signalSlotMap = array())
+    public function __construct(array $signalSlotMap = [])
     {
         $this->signalSlotMap = $signalSlotMap;
         if (!isset($this->signalSlotMap['*'])) {
-            $this->signalSlotMap['*'] = array();
+            $this->signalSlotMap['*'] = [];
         }
     }
 
@@ -66,7 +66,7 @@ class DefaultSignalDispatcher extends SignalDispatcher
     {
         $signalName = get_class($signal);
         if (!isset($this->signalSlotMap[$signalName])) {
-            $this->signalSlotMap[$signalName] = array();
+            $this->signalSlotMap[$signalName] = [];
         }
 
         foreach (array_merge($this->signalSlotMap['*'], $this->signalSlotMap[$signalName]) as $slot) {

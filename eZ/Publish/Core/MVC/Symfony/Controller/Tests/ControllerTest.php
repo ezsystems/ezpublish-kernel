@@ -50,7 +50,7 @@ class ControllerTest extends TestCase
     public function testRender()
     {
         $view = 'some:valid:view.html.twig';
-        $params = array('foo' => 'bar', 'truc' => 'muche');
+        $params = ['foo' => 'bar', 'truc' => 'muche'];
         $tplResult = "I'm a template result";
         $this->templateEngineMock
             ->expects($this->once())
@@ -66,7 +66,7 @@ class ControllerTest extends TestCase
     {
         $response = new Response();
         $view = 'some:valid:view.html.twig';
-        $params = array('foo' => 'bar', 'truc' => 'muche');
+        $params = ['foo' => 'bar', 'truc' => 'muche'];
         $tplResult = "I'm a template result";
         $this->templateEngineMock
             ->expects($this->once())

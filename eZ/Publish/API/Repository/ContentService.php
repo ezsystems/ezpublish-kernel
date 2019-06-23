@@ -187,7 +187,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array());
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = []);
 
     /**
      * Updates the metadata.
@@ -414,7 +414,7 @@ interface ContentService
      *
      * @since 5.0
      */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array());
+    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = []);
 
     /**
      * Instantiates a new content create struct object.

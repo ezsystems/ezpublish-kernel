@@ -60,7 +60,7 @@ class Collection extends Handler
                 $quotedColumn = $this->dbHandler->quoteColumn($column);
                 $value = $this->lowerCase($criterion->value);
                 $filter = $query->expr->lOr(
-                    array(
+                    [
                         $query->expr->eq(
                             $quotedColumn,
                             $query->bindValue($value, null, \PDO::PARAM_STR)
@@ -89,7 +89,7 @@ class Collection extends Handler
                                 \PDO::PARAM_STR
                             )
                         ),
-                    )
+                    ]
                 );
                 break;
 

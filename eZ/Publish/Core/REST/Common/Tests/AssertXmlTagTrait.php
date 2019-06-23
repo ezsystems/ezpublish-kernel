@@ -28,13 +28,13 @@ trait AssertXmlTagTrait
     public static function assertXMLTag($matcher, $actualXml, $message = '')
     {
         // Provide default values.
-        $matcher += array('attributes' => array());
+        $matcher += ['attributes' => []];
 
         // Create an XPath query that selects the xml tag.
         $query = '//' . $matcher['tag'];
 
         // Append XPath selectors for the attributes and content text.
-        $selectors = array();
+        $selectors = [];
         foreach ($matcher['attributes'] as $attribute => $value) {
             $selectors[] = "@$attribute='$value'";
         }

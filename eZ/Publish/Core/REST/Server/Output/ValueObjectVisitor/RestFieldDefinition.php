@@ -59,10 +59,10 @@ class RestFieldDefinition extends RestContentTypeBase
             'href',
             $this->router->generate(
                 "ezpublish_rest_loadContentType{$urlTypeSuffix}FieldDefinition",
-                array(
+                [
                     'contentTypeId' => $contentType->id,
                     'fieldDefinitionId' => $fieldDefinition->id,
-                )
+                ]
             )
         );
         $generator->endAttribute('href');

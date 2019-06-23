@@ -88,22 +88,22 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // properties
-            array('fieldType', 'ezpage'),
-            array(
+            ['fieldType', 'ezpage'],
+            [
                 'fieldTypeConstraints',
                 new FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'defaultLayout' => '',
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -114,11 +114,11 @@ class PageIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => $this->getPage(),
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 
@@ -132,11 +132,11 @@ class PageIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => $this->getPage(),
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 
@@ -147,21 +147,21 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     protected function getPage()
     {
-        $blockData = array(
+        $blockData = [
             'name' => 'Block 1',
             'id' => '50dc64c82efa83cfe53959240e159915',
-        );
+        ];
         $block = new Block($blockData);
-        $zoneData = array(
+        $zoneData = [
             'id' => '8386907d951657e087507f49a92bb06c',
             'identifier' => 'Zone 1',
-            'blocks' => array($block),
-        );
+            'blocks' => [$block],
+        ];
         $zone = new Zone($zoneData);
-        $pageData = array(
-            'zones' => array($zone),
+        $pageData = [
+            'zones' => [$zone],
             'layout' => 'my_layout',
-        );
+        ];
 
         return new Page($pageData);
     }

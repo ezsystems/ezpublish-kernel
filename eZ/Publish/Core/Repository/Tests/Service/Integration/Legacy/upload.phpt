@@ -28,7 +28,7 @@ chdir(__DIR__ . '/../../../../../../../');
 require_once 'bootstrap.php';
 require_once 'PHPUnit/Autoload.php';
 
-$repository = \eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy\IOUploadPHPT::getRepository(array());
+$repository = \eZ\Publish\Core\Repository\Tests\Service\Integration\Legacy\IOUploadPHPT::getRepository([]);
 
 $binaryCreateStruct = $repository->getIOService()->newBinaryCreateStructFromUploadedFile($_FILES['file']);
 

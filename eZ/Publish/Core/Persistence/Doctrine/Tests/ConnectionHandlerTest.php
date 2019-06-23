@@ -20,40 +20,40 @@ class ConnectionHandlerTest extends TestCase
      */
     public static function dataDsn()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'driver' => 'pdo_pgsql',
                     'user' => 'postgres',
                     'host' => 'localhost',
                     'dbname' => 'eztest',
-                ),
+                ],
                 'pgsql://postgres@localhost/eztest',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'driver' => 'pdo_mysql',
                     'user' => 'root',
                     'host' => 'localhost',
                     'dbname' => 'eztest',
-                ),
+                ],
                 'mysql://root@localhost/eztest',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'driver' => 'pdo_sqlite',
                     'memory' => true,
-                ),
+                ],
                 'sqlite://:memory:',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'driver' => 'pdo_sqlite',
                     'path' => 'foo.db',
-                ),
+                ],
                 'sqlite:///foo.db',
-            ),
-        );
+            ],
+        ];
     }
 
     public function testSqliteConnectionSubtype()

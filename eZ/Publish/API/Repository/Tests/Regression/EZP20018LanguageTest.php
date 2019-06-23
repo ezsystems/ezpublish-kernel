@@ -70,7 +70,7 @@ class EZP20018LanguageTest extends BaseTest
         }
 
         $query = new Query();
-        $query->filter = new LanguageCode(array('nor-NO'));
+        $query->filter = new LanguageCode(['nor-NO']);
         $this->getRepository()->getSearchService()->findContent($query);
     }
 
@@ -80,7 +80,7 @@ class EZP20018LanguageTest extends BaseTest
     public function testSearchOnUsedLanguageGivesOneResult()
     {
         $query = new Query();
-        $query->filter = new LanguageCode(array('por-PT'), false);
+        $query->filter = new LanguageCode(['por-PT'], false);
         $results = $this->getRepository()->getSearchService()->findContent($query);
 
         $this->assertEquals(1, $results->totalCount);
@@ -93,7 +93,7 @@ class EZP20018LanguageTest extends BaseTest
     public function testSearchOnStandardLanguageGivesManyResult()
     {
         $query = new Query();
-        $query->filter = new LanguageCode(array('eng-US'), false);
+        $query->filter = new LanguageCode(['eng-US'], false);
         $query->limit = 50;
         $results = $this->getRepository()->getSearchService()->findContent($query);
 
@@ -107,7 +107,7 @@ class EZP20018LanguageTest extends BaseTest
     public function testSearchOnNotUsedInstalledLanguageGivesNoResult()
     {
         $query = new Query();
-        $query->filter = new LanguageCode(array('eng-GB'), false);
+        $query->filter = new LanguageCode(['eng-GB'], false);
         $results = $this->getRepository()->getSearchService()->findContent($query);
 
         $this->assertEquals(2, $results->totalCount);

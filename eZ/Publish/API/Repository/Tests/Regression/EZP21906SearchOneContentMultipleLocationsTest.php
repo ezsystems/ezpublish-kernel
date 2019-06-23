@@ -36,7 +36,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
         $contentCreateStruct1->setField('name', 'EZP-21906-1');
         $draft1 = $contentService->createContent(
             $contentCreateStruct1,
-            array($locationService->newLocationCreateStruct(2))
+            [$locationService->newLocationCreateStruct(2)]
         );
         $folder1 = $contentService->publishVersion($draft1->versionInfo);
         $locationsFolder1 = $locationService->loadLocations($folder1->contentInfo);
@@ -48,7 +48,7 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
         $contentCreateStruct2->setField('name', 'EZP-21906-2');
         $draft2 = $contentService->createContent(
             $contentCreateStruct2,
-            array($locationService->newLocationCreateStruct(2))
+            [$locationService->newLocationCreateStruct(2)]
         );
         $folder2 = $contentService->publishVersion($draft2->versionInfo);
         $locationsFolder2 = $locationService->loadLocations($folder2->contentInfo);
@@ -74,151 +74,151 @@ class EZP21906SearchOneContentMultipleLocationsTest extends BaseTest
 
     public function searchContentQueryProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
                 1,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                        'sortClauses' => array(new SortClause\ContentName()),
-                    )
+                        'sortClauses' => [new SortClause\ContentName()],
+                    ]
                 ),
                 1,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
                 1,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                        'sortClauses' => array(new SortClause\ContentName(Query::SORT_DESC)),
-                    )
+                        'sortClauses' => [new SortClause\ContentName(Query::SORT_DESC)],
+                    ]
                 ),
                 1,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('feedback_form'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
                 1,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('folder'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                        'sortClauses' => array(new SortClause\ContentName()),
-                    )
+                        'sortClauses' => [new SortClause\ContentName()],
+                    ]
                 ),
                 2,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('folder'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                        'sortClauses' => array(new SortClause\ContentName(Query::SORT_DESC)),
-                    )
+                        'sortClauses' => [new SortClause\ContentName(Query::SORT_DESC)],
+                    ]
                 ),
                 2,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('folder'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
                 2,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('folder'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
                 2,
-            ),
-            array(
+            ],
+            [
                 new Query(
-                    array(
+                    [
                         'query' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\Subtree('/1/2/'),
                                 new Criterion\ContentTypeIdentifier('product'),
                                 new Criterion\Visibility(Criterion\Visibility::VISIBLE),
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

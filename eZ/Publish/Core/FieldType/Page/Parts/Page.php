@@ -18,19 +18,19 @@ class Page extends Base
     /**
      * @var \eZ\Publish\Core\FieldType\Page\Parts\Zone[]
      */
-    protected $zones = array();
+    protected $zones = [];
 
     /**
      * @var array
      */
-    protected $zonesById = array();
+    protected $zonesById = [];
 
     /**
      * @var string
      */
     protected $layout;
 
-    public function __construct(array $properties = array())
+    public function __construct(array $properties = [])
     {
         parent::__construct($properties);
 

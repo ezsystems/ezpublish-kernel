@@ -20,7 +20,7 @@ use eZ\Publish\Core\FieldType\RichText\Value as RichTextValue;
  */
 abstract class ContentTypeBase extends BaseServiceTest
 {
-    protected $contentTypeGroups = array();
+    protected $contentTypeGroups = [];
 
     /**
      * Test for the newContentTypeGroupCreateStruct() method.
@@ -58,7 +58,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testNewContentTypeGroupCreateStructValues($createStruct)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'new-group',
                 'creatorId' => null,
                 'creationDate' => null,
@@ -66,7 +66,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 //'mainLanguageCode' => null,
                 //'names' => null,
                 //'descriptions' => null
-            ),
+            ],
             $createStruct
         );
     }
@@ -101,10 +101,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $group
         );
 
-        return array(
+        return [
             'expected' => $groupCreate,
             'actual' => $group,
-        );
+        ];
     }
 
     /**
@@ -119,11 +119,11 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testCreateContentTypeGroupStructValues(array $data)
     {
-        $notImplemented = array(
+        $notImplemented = [
             'names',
             'descriptions',
             'mainLanguageCode',
-        );
+        ];
 
         $this->assertStructPropertiesCorrect(
             $data['expected'],
@@ -228,10 +228,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $loadedGroup
         );
 
-        return array(
+        return [
             'expected' => $storedGroup,
             'actual' => $loadedGroup,
-        );
+        ];
     }
 
     /**
@@ -286,10 +286,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $loadedGroup
         );
 
-        return array(
+        return [
             'expected' => $storedGroup,
             'actual' => $loadedGroup,
-        );
+        ];
     }
 
     /**
@@ -316,14 +316,14 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $storedGroup = $data['expected'];
         $loadedGroup = $data['actual'];
-        $notImplemented = array(
+        $notImplemented = [
             'mainLanguageCode',
             'names',
             'descriptions',
-        );
+        ];
 
         $this->assertSameClassPropertiesCorrect(
-            array(
+            [
                 'id',
                 'identifier',
                 'creationDate',
@@ -333,7 +333,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'mainLanguageCode',
                 'names',
                 'descriptions',
-            ),
+            ],
             $storedGroup,
             $loadedGroup,
             $notImplemented
@@ -382,10 +382,10 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         foreach ($loadedGroups as $loadedGroup) {
             $this->assertContentTypeGroupsEqual(
-                array(
+                [
                     'expected' => $contentTypeService->loadContentTypeGroup($loadedGroup->id),
                     'actual' => $loadedGroup,
-                )
+                ]
             );
         }
 
@@ -402,24 +402,24 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypeGroupsIdentifiers(array $groups)
     {
-        $expectedIdentifiers = array(
+        $expectedIdentifiers = [
             'Content' => true,
             'Users' => true,
             'Media' => true,
             'Setup' => true,
-        );
+        ];
 
         $this->assertEquals(
             count($expectedIdentifiers),
             count($groups)
         );
 
-        $actualIdentifiers = array(
+        $actualIdentifiers = [
             'Content' => false,
             'Users' => false,
             'Media' => false,
             'Setup' => false,
-        );
+        ];
 
         foreach ($groups as $group) {
             $actualIdentifiers[$group->identifier] = true;
@@ -493,11 +493,11 @@ abstract class ContentTypeBase extends BaseServiceTest
             $groupUpdate
         );
 
-        return array(
+        return [
             'originalGroup' => $group,
             'updateStruct' => $groupUpdate,
             'updatedGroup' => $updatedGroup,
-        );
+        ];
     }
 
     /**
@@ -516,13 +516,13 @@ abstract class ContentTypeBase extends BaseServiceTest
         $updateStruct = $data['updateStruct'];
         $updatedGroup = $data['updatedGroup'];
 
-        $notImplemented = array(
+        $notImplemented = [
             'mainLanguageCode',
             'names',
             'descriptions',
-        );
+        ];
 
-        $expectedValues = array(
+        $expectedValues = [
             'identifier' => $updateStruct->identifier,
             'creationDate' => $originalGroup->creationDate,
             'modificationDate' => $updateStruct->modificationDate,
@@ -532,7 +532,7 @@ abstract class ContentTypeBase extends BaseServiceTest
             //'mainLanguageCode' => $updateStruct->mainLanguageCode,
             //'names' => $updateStruct->names,
             //'descriptions' => $updateStruct->descriptions,
-        );
+        ];
 
         $this->assertPropertiesCorrect(
             $expectedValues,
@@ -807,7 +807,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testNewContentTypeCreateStructValues($contentTypeCreateStruct)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'new-type',
                 'mainLanguageCode' => null,
                 'remoteId' => null,
@@ -821,8 +821,8 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'descriptions' => null,
                 'creatorId' => null,
                 'creationDate' => null,
-                'fieldDefinitions' => array(),
-            ),
+                'fieldDefinitions' => [],
+            ],
             $contentTypeCreateStruct
         );
     }
@@ -864,7 +864,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     public function testNewFieldDefinitionCreateStructValues($fieldDefinitionCreateStruct)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'fieldTypeIdentifier' => 'new-fieldtype-identifier',
                 'identifier' => 'new-identifier',
                 'names' => null,
@@ -878,7 +878,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'fieldSettings' => null,
                 'defaultValue' => null,
                 'isSearchable' => null,
-            ),
+            ],
             $fieldDefinitionCreateStruct
         );
     }
@@ -942,14 +942,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'new-type'
         );
-        $typeCreateStruct->names = array(
+        $typeCreateStruct->names = [
             'eng-US' => 'American type title',
             'eng-GB' => 'British type title',
-        );
-        $typeCreateStruct->descriptions = array(
+        ];
+        $typeCreateStruct->descriptions = [
             'eng-US' => 'American type description',
             'eng-GB' => 'British type description',
-        );
+        ];
         $typeCreateStruct->remoteId = 'new-remoteid';
         $typeCreateStruct->creatorId = $creatorId;
         $typeCreateStruct->creationDate = new \DateTime();
@@ -961,14 +961,14 @@ abstract class ContentTypeBase extends BaseServiceTest
             'title',
             'ezstring'
         );
-        $titleFieldCreate->names = array(
+        $titleFieldCreate->names = [
             'eng-US' => 'American title field name',
             'eng-GB' => 'British title field name',
-        );
-        $titleFieldCreate->descriptions = array(
+        ];
+        $titleFieldCreate->descriptions = [
             'eng-US' => 'American title field description',
             'eng-GB' => 'British title field description',
-        );
+        ];
         $titleFieldCreate->fieldGroup = 'blog-content';
         $titleFieldCreate->position = 1;
         $titleFieldCreate->isTranslatable = true;
@@ -976,12 +976,12 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->isSearchable = true;
         $titleFieldCreate->defaultValue = 'New text line';
-        $titleFieldCreate->validatorConfiguration = array(
-            'StringLengthValidator' => array(
+        $titleFieldCreate->validatorConfiguration = [
+            'StringLengthValidator' => [
                 'maxStringLength' => 255,
                 'minStringLength' => 128,
-            ),
-        );
+            ],
+        ];
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition($titleFieldCreate);
 
@@ -989,14 +989,14 @@ abstract class ContentTypeBase extends BaseServiceTest
             'body',
             'eztext'
         );
-        $bodyFieldCreate->names = array(
+        $bodyFieldCreate->names = [
             'eng-US' => 'American body field name',
             'eng-GB' => 'British body field name',
-        );
-        $bodyFieldCreate->descriptions = array(
+        ];
+        $bodyFieldCreate->descriptions = [
             'eng-US' => 'American body field description',
             'eng-GB' => 'British body field description',
-        );
+        ];
         $bodyFieldCreate->fieldGroup = 'blog-content';
         $bodyFieldCreate->position = 2;
         $bodyFieldCreate->isTranslatable = true;
@@ -1005,9 +1005,9 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isSearchable = false;
         $bodyFieldCreate->defaultValue = '';
         //$bodyFieldCreate->validatorConfiguration
-        $bodyFieldCreate->fieldSettings = array(
+        $bodyFieldCreate->fieldSettings = [
             'textRows' => 80,
-        );
+        ];
         $typeCreateStruct->addFieldDefinition($bodyFieldCreate);
 
         $groups = $this->createGroups();
@@ -1060,14 +1060,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'new-type'
         );
-        $typeCreateStruct->names = array(
+        $typeCreateStruct->names = [
             'eng-US' => 'American type title',
             'eng-GB' => 'British type title',
-        );
-        $typeCreateStruct->descriptions = array(
+        ];
+        $typeCreateStruct->descriptions = [
             'eng-US' => 'American type description',
             'eng-GB' => 'British type description',
-        );
+        ];
         $typeCreateStruct->remoteId = 'new-remoteid';
         $typeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
         $typeCreateStruct->creationDate = new \DateTime();
@@ -1079,14 +1079,14 @@ abstract class ContentTypeBase extends BaseServiceTest
             'title',
             'ezstring'
         );
-        $titleFieldCreate->names = array(
+        $titleFieldCreate->names = [
             'eng-US' => 'American title field name',
             'eng-GB' => 'British title field name',
-        );
-        $titleFieldCreate->descriptions = array(
+        ];
+        $titleFieldCreate->descriptions = [
             'eng-US' => 'American title field description',
             'eng-GB' => 'British title field description',
-        );
+        ];
         $titleFieldCreate->fieldGroup = 'blog-content';
         $titleFieldCreate->position = 1;
         $titleFieldCreate->isTranslatable = true;
@@ -1094,11 +1094,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->isSearchable = true;
         $titleFieldCreate->defaultValue = 'New text line';
-        $titleFieldCreate->validatorConfiguration = array(
-            'StringLengthValidator' => array(
+        $titleFieldCreate->validatorConfiguration = [
+            'StringLengthValidator' => [
                 'maxStringLength' => 128,
-            ),
-        );
+            ],
+        ];
         //$titleFieldCreate->fieldSettings
         $typeCreateStruct->addFieldDefinition($titleFieldCreate);
 
@@ -1106,14 +1106,14 @@ abstract class ContentTypeBase extends BaseServiceTest
             'body',
             'eztext'
         );
-        $bodyFieldCreate->names = array(
+        $bodyFieldCreate->names = [
             'eng-US' => 'American body field name',
             'eng-GB' => 'British body field name',
-        );
-        $bodyFieldCreate->descriptions = array(
+        ];
+        $bodyFieldCreate->descriptions = [
             'eng-US' => 'American body field description',
             'eng-GB' => 'British body field description',
-        );
+        ];
         $bodyFieldCreate->fieldGroup = 'blog-content';
         $bodyFieldCreate->position = 2;
         $bodyFieldCreate->isTranslatable = true;
@@ -1122,9 +1122,9 @@ abstract class ContentTypeBase extends BaseServiceTest
         $bodyFieldCreate->isSearchable = false;
         $bodyFieldCreate->defaultValue = '';
         //$bodyFieldCreate->validatorConfiguration
-        $bodyFieldCreate->fieldSettings = array(
+        $bodyFieldCreate->fieldSettings = [
             'textRows' => 20,
-        );
+        ];
         $typeCreateStruct->addFieldDefinition($bodyFieldCreate);
 
         $groups = $this->createGroups();
@@ -1140,11 +1140,11 @@ abstract class ContentTypeBase extends BaseServiceTest
             $type
         );
 
-        return array(
+        return [
             'expected' => $typeCreateStruct,
             'actual' => $type,
             'groups' => $groups,
-        );
+        ];
     }
 
     /**
@@ -1313,10 +1313,10 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         foreach ($expectedGroups as $index => $expectedGroup) {
             $this->assertContentTypeGroupsEqual(
-                array(
+                [
                     'expected' => $expectedGroup,
                     'actual' => $actualGroups[$index],
-                )
+                ]
             );
         }
     }
@@ -1338,7 +1338,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         );
 
         // Thrown an exception because array of content type groups is empty
-        $type = $contentTypeService->createContentType($typeCreateStruct, array());
+        $type = $contentTypeService->createContentType($typeCreateStruct, []);
         /* END: Use Case */
     }
 
@@ -1365,8 +1365,8 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
         $typeCreateStruct->creationDate = new \DateTime();
         $typeCreateStruct->mainLanguageCode = 'eng-US';
-        $typeCreateStruct->names = array('eng-US' => 'A name.');
-        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
+        $typeCreateStruct->names = ['eng-US' => 'A name.'];
+        $typeCreateStruct->descriptions = ['eng-US' => 'A description.'];
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('test', 'eztext');
         $typeCreateStruct->addFieldDefinition($fieldCreate);
@@ -1374,10 +1374,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         // Throws an exception because content type with identifier "new-type" already exists
         $type = $contentTypeService->createContentType(
             $typeCreateStruct,
-            array(
+            [
                 // "Content" group
                 $contentTypeService->loadContentTypeGroup(1),
-            )
+            ]
         );
         /* END: Use Case */
     }
@@ -1404,8 +1404,8 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
         $typeCreateStruct->creationDate = new \DateTime();
         $typeCreateStruct->mainLanguageCode = 'eng-US';
-        $typeCreateStruct->names = array('eng-US' => 'A name.');
-        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
+        $typeCreateStruct->names = ['eng-US' => 'A name.'];
+        $typeCreateStruct->descriptions = ['eng-US' => 'A description.'];
 
         $fieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('test', 'eztext');
         $typeCreateStruct->addFieldDefinition($fieldCreate);
@@ -1413,10 +1413,10 @@ abstract class ContentTypeBase extends BaseServiceTest
         // Throws an exception because content type with remoteId "new-remoteid" already exists
         $type = $contentTypeService->createContentType(
             $typeCreateStruct,
-            array(
+            [
                 // "Content" group
                 $contentTypeService->loadContentTypeGroup(1),
-            )
+            ]
         );
         /* END: Use Case */
     }
@@ -1442,18 +1442,18 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
         $typeCreateStruct->creationDate = new \DateTime();
         $typeCreateStruct->mainLanguageCode = 'eng-US';
-        $typeCreateStruct->names = array('eng-US' => 'A name.');
-        $typeCreateStruct->descriptions = array('eng-US' => 'A description.');
+        $typeCreateStruct->names = ['eng-US' => 'A name.'];
+        $typeCreateStruct->descriptions = ['eng-US' => 'A description.'];
 
         // Throws an exception because content type create struct does not have any field definition create structs set
         self::assertInstanceOf(
             'eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft',
             $contentTypeService->createContentType(
                 $typeCreateStruct,
-                array(
+                [
                     // "Content" group
                     $contentTypeService->loadContentTypeGroup(1),
-                )
+                ]
             )
         );
         /* END: Use Case */
@@ -1476,14 +1476,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'new-type'
         );
-        $typeCreateStruct->names = array(
+        $typeCreateStruct->names = [
             'eng-US' => 'American type title',
             'eng-GB' => 'British type title',
-        );
-        $typeCreateStruct->descriptions = array(
+        ];
+        $typeCreateStruct->descriptions = [
             'eng-US' => 'American type description',
             'eng-GB' => 'British type description',
-        );
+        ];
         $typeCreateStruct->remoteId = 'new-remoteid';
         $typeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
         $typeCreateStruct->creationDate = new \DateTime();
@@ -1495,14 +1495,14 @@ abstract class ContentTypeBase extends BaseServiceTest
             'title',
             'ezstring'
         );
-        $titleFieldCreate->names = array(
+        $titleFieldCreate->names = [
             'eng-US' => 'American title field name',
             'eng-GB' => 'British title field name',
-        );
-        $titleFieldCreate->descriptions = array(
+        ];
+        $titleFieldCreate->descriptions = [
             'eng-US' => 'American title field description',
             'eng-GB' => 'British title field description',
-        );
+        ];
         $titleFieldCreate->fieldGroup = 'blog-content';
         $titleFieldCreate->position = 1;
         $titleFieldCreate->isTranslatable = true;
@@ -1510,11 +1510,11 @@ abstract class ContentTypeBase extends BaseServiceTest
         $titleFieldCreate->isInfoCollector = false;
         $titleFieldCreate->isSearchable = true;
         $titleFieldCreate->defaultValue = 'New text line';
-        $titleFieldCreate->validatorConfiguration = array(
-            'StringLengthValidator' => array(
+        $titleFieldCreate->validatorConfiguration = [
+            'StringLengthValidator' => [
                 'maxStringLength' => 128,
-            ),
-        );
+            ],
+        ];
         //$titleFieldCreate->fieldSettings
 
         $typeCreateStruct->addFieldDefinition($titleFieldCreate);
@@ -1559,10 +1559,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $loadedContentType
         );
 
-        return array(
+        return [
             'expected' => $storedContentType,
             'actual' => $loadedContentType,
-        );
+        ];
     }
 
     /**
@@ -1585,14 +1585,14 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @param array $properties
      * @param array $fieldProperties
      */
-    protected function compareContentTypes(array $data, array $properties = array(), array $fieldProperties = array())
+    protected function compareContentTypes(array $data, array $properties = [], array $fieldProperties = [])
     {
         /** @var $storedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
         $storedContentType = $data['expected'];
         /** @var $loadedContentType \eZ\Publish\Core\Repository\Values\ContentType\ContentType */
         $loadedContentType = $data['actual'];
 
-        $propertiesNames = array(
+        $propertiesNames = [
             // Virtual properties
             'names',
             'descriptions',
@@ -1614,23 +1614,23 @@ abstract class ContentTypeBase extends BaseServiceTest
             'defaultAlwaysAvailable',
             'defaultSortField',
             'defaultSortOrder',
-        );
+        ];
 
         $this->assertSameClassPropertiesCorrect(
             array_diff(
                 $propertiesNames,
-                isset($properties['notEqual']) ? $properties['notEqual'] : array()
+                isset($properties['notEqual']) ? $properties['notEqual'] : []
             ),
             $storedContentType,
             $loadedContentType,
-            isset($properties['skip']) ? $properties['skip'] : array()
+            isset($properties['skip']) ? $properties['skip'] : []
         );
 
         $this->assertSameClassPropertiesCorrect(
-            isset($properties['notEqual']) ? $properties['notEqual'] : array(),
+            isset($properties['notEqual']) ? $properties['notEqual'] : [],
             $storedContentType,
             $loadedContentType,
-            isset($properties['skip']) ? $properties['skip'] : array(),
+            isset($properties['skip']) ? $properties['skip'] : [],
             false
         );
 
@@ -1661,9 +1661,9 @@ abstract class ContentTypeBase extends BaseServiceTest
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $actualFieldDefinition
      * @param array $properties Array of field names to skip or compare as not equal
      */
-    protected function compareFieldDefinitions($expectedFieldDefinition, $actualFieldDefinition, $properties = array())
+    protected function compareFieldDefinitions($expectedFieldDefinition, $actualFieldDefinition, $properties = [])
     {
-        $propertiesNames = array(
+        $propertiesNames = [
             'names',
             'descriptions',
             'fieldSettings',
@@ -1679,23 +1679,23 @@ abstract class ContentTypeBase extends BaseServiceTest
             // Do not compare defaultValue as they may have different representations
             //"defaultValue",
             'isSearchable',
-        );
+        ];
 
         $this->assertSameClassPropertiesCorrect(
             array_diff(
                 $propertiesNames,
-                isset($properties['notEqual']) ? $properties['notEqual'] : array()
+                isset($properties['notEqual']) ? $properties['notEqual'] : []
             ),
             $expectedFieldDefinition,
             $actualFieldDefinition,
-            isset($properties['skip']) ? $properties['skip'] : array()
+            isset($properties['skip']) ? $properties['skip'] : []
         );
 
         $this->assertSameClassPropertiesCorrect(
-            isset($properties['notEqual']) ? $properties['notEqual'] : array(),
+            isset($properties['notEqual']) ? $properties['notEqual'] : [],
             $expectedFieldDefinition,
             $actualFieldDefinition,
-            isset($properties['skip']) ? $properties['skip'] : array(),
+            isset($properties['skip']) ? $properties['skip'] : [],
             false
         );
     }
@@ -1741,10 +1741,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $loadedContentType
         );
 
-        return array(
+        return [
             'expected' => $storedContentType,
             'actual' => $loadedContentType,
-        );
+        ];
     }
 
     /**
@@ -1801,10 +1801,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $loadedContentType
         );
 
-        return array(
+        return [
             'expected' => $storedContentType,
             'actual' => $loadedContentType,
-        );
+        ];
     }
 
     /**
@@ -1861,10 +1861,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $loadedContentTypeDraft
         );
 
-        return array(
+        return [
             'expected' => $storedContentTypeDraft,
             'actual' => $loadedContentTypeDraft,
-        );
+        ];
     }
 
     /**
@@ -1968,7 +1968,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     {
         $contentTypeService = $this->repository->getContentTypeService();
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct('new-type');
-        $typeCreateStruct->names = array('eng-GB' => 'Type title');
+        $typeCreateStruct->names = ['eng-GB' => 'Type title'];
         $typeCreateStruct->mainLanguageCode = 'eng-GB';
         $type = $contentTypeService->createContentType(
             $typeCreateStruct,
@@ -1991,9 +1991,9 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'new-type'
         );
-        $typeCreateStruct->names = array(
+        $typeCreateStruct->names = [
             'eng-GB' => 'Type title',
-        );
+        ];
         $typeCreateStruct->mainLanguageCode = 'eng-GB';
 
         $titleFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
@@ -2065,14 +2065,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'test-type-1'
         );
-        $typeCreateStruct->names = array(
+        $typeCreateStruct->names = [
             'eng-US' => 'American type title',
             'eng-GB' => 'British type title',
-        );
-        $typeCreateStruct->descriptions = array(
+        ];
+        $typeCreateStruct->descriptions = [
             'eng-US' => 'American type description',
             'eng-GB' => 'British type description',
-        );
+        ];
         $typeCreateStruct->remoteId = 'test-remoteid-1';
         $typeCreateStruct->creatorId = $this->repository->getCurrentUserReference()->getUserId();
         $typeCreateStruct->creationDate = new \DateTime();
@@ -2084,14 +2084,14 @@ abstract class ContentTypeBase extends BaseServiceTest
             'title',
             'ezstring'
         );
-        $titleFieldCreate->names = array(
+        $titleFieldCreate->names = [
             'eng-US' => 'American title field name',
             'eng-GB' => 'British title field name',
-        );
-        $titleFieldCreate->descriptions = array(
+        ];
+        $titleFieldCreate->descriptions = [
             'eng-US' => 'American title field description',
             'eng-GB' => 'British title field description',
-        );
+        ];
         $titleFieldCreate->fieldGroup = 'blog-content';
         $titleFieldCreate->position = 1;
         $titleFieldCreate->isTranslatable = true;
@@ -2105,7 +2105,7 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         $type1 = $contentTypeService->createContentType(
             $typeCreateStruct,
-            array($group)
+            [$group]
         );
         $contentTypeService->publishContentTypeDraft($type1);
 
@@ -2113,7 +2113,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeCreateStruct->remoteId = 'test-remoteid-2';
         $type2 = $contentTypeService->createContentType(
             $typeCreateStruct,
-            array($group)
+            [$group]
         );
         $contentTypeService->publishContentTypeDraft($type2);
 
@@ -2139,11 +2139,11 @@ abstract class ContentTypeBase extends BaseServiceTest
      */
     public function testLoadContentTypesIdentifiers(array $types)
     {
-        $expectedIdentifiers = array('test-type-1' => true, 'test-type-2' => true);
+        $expectedIdentifiers = ['test-type-1' => true, 'test-type-2' => true];
 
         $this->assertEquals(count($expectedIdentifiers), count($types));
 
-        $actualIdentifiers = array('test-type-1' => false, 'test-type-2' => false);
+        $actualIdentifiers = ['test-type-1' => false, 'test-type-2' => false];
 
         foreach ($types as $type) {
             $actualIdentifiers[$type->identifier] = true;
@@ -2180,10 +2180,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $draftType
         );
 
-        return array(
+        return [
             'expected' => $publishedType,
             'actual' => $draftType,
-        );
+        ];
     }
 
     /**
@@ -2201,13 +2201,13 @@ abstract class ContentTypeBase extends BaseServiceTest
         /** @var $draftType \eZ\Publish\Core\Repository\Values\ContentType\ContentTypeDraft */
         $draftType = $data['actual'];
 
-        $typeProperties = array(
-            'skip' => array(
+        $typeProperties = [
+            'skip' => [
                 'id',
                 'status',
                 'modificationDate',
-            ),
-        );
+            ],
+        ];
         $this->compareContentTypes(
             $data,
             $typeProperties
@@ -2295,14 +2295,14 @@ abstract class ContentTypeBase extends BaseServiceTest
         $typeUpdate->modificationDate = new \DateTime();
         $typeUpdate->defaultSortField = Location::SORT_FIELD_PUBLISHED;
         $typeUpdate->defaultSortOrder = Location::SORT_ORDER_ASC;
-        $typeUpdate->names = array(
+        $typeUpdate->names = [
             'eng-US' => 'News article',
             'eng-GB' => 'Nachrichten-Artikel',
-        );
-        $typeUpdate->descriptions = array(
+        ];
+        $typeUpdate->descriptions = [
             'eng-US' => 'A news article',
             'eng-GB' => 'Ein Nachrichten-Artikel',
-        );
+        ];
 
         $contentTypeService->updateContentTypeDraft($contentTypeDraft, $typeUpdate);
         /* END: Use Case */
@@ -2316,11 +2316,11 @@ abstract class ContentTypeBase extends BaseServiceTest
             $updatedType
         );
 
-        return array(
+        return [
             'originalType' => $contentTypeDraft,
             'updateStruct' => $typeUpdate,
             'updatedType' => $updatedType,
-        );
+        ];
     }
 
     /**
@@ -2338,7 +2338,7 @@ abstract class ContentTypeBase extends BaseServiceTest
         $updatedType = $data['updatedType'];
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $originalType->id,
                 'names' => $updateStruct->names,
                 'descriptions' => $updateStruct->descriptions,
@@ -2353,7 +2353,7 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'mainLanguageCode' => $updateStruct->mainLanguageCode,
                 'contentTypeGroups' => $originalType->contentTypeGroups,
                 //'fieldDefinitions' => $originalType->fieldDefinitions,
-            ),
+            ],
             $updatedType
         );
 
@@ -2548,12 +2548,12 @@ abstract class ContentTypeBase extends BaseServiceTest
         $copiedCommentType = $contentTypeService->copyContentType($commentType);
         /* END: Use Case */
 
-        return array(
+        return [
             'originalType' => $commentType,
             'copiedType' => $copiedCommentType,
             'time' => $time,
             'userId' => $this->repository->getCurrentUserReference()->getUserId(),
-        );
+        ];
     }
 
     /**
@@ -2577,12 +2577,12 @@ abstract class ContentTypeBase extends BaseServiceTest
         $copiedCommentType = $contentTypeService->copyContentType($commentType, $user);
         /* END: Use Case */
 
-        return array(
+        return [
             'originalType' => $commentType,
             'copiedType' => $copiedCommentType,
             'time' => $time,
             'userId' => $user->id,
-        );
+        ];
     }
 
     /**
@@ -2600,29 +2600,29 @@ abstract class ContentTypeBase extends BaseServiceTest
         $time = $data['time'];
 
         $this->compareContentTypes(
-            array(
+            [
                 'expected' => $originalType,
                 'actual' => $copiedType,
-            ),
-            array(
-                'notEqual' => array(
+            ],
+            [
+                'notEqual' => [
                     'id',
                     'identifier',
                     'creationDate',
                     'modificationDate',
                     'remoteId',
-                ),
-                'skip' => array(
+                ],
+                'skip' => [
                     'creatorId',
                     'modifierId',
                     'status',
-                ),
-            ),
-            array(
-                'notEqual' => array(
+                ],
+            ],
+            [
+                'notEqual' => [
                     'id',
-                ),
-            )
+                ],
+            ]
         );
 
         $this->assertGreaterThanOrEqual($time, $copiedType->creationDate->getTimestamp());
@@ -2871,26 +2871,26 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeService = $this->repository->getContentTypeService();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct('tags', 'ezstring');
-        $fieldDefCreate->names = array(
+        $fieldDefCreate->names = [
             'eng-US' => 'Tags',
             'ger-DE' => 'Schlagworte',
-        );
-        $fieldDefCreate->descriptions = array(
+        ];
+        $fieldDefCreate->descriptions = [
             'eng-US' => 'Tags of the blog post',
             'ger-DE' => 'Schlagworte des Blog-Eintrages',
-        );
+        ];
         $fieldDefCreate->fieldGroup = 'blog-meta';
         $fieldDefCreate->position = 1;
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->defaultValue = 'New tags text line';
-        $fieldDefCreate->validatorConfiguration = array(
-            'StringLengthValidator' => array(
+        $fieldDefCreate->validatorConfiguration = [
+            'StringLengthValidator' => [
                 'maxStringLength' => 255,
                 'minStringLength' => 128,
-            ),
-        );
+            ],
+        ];
         $fieldDefCreate->fieldSettings = null;
         $fieldDefCreate->isSearchable = true;
 
@@ -2921,24 +2921,24 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeService = $this->repository->getContentTypeService();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct('body2', 'ezrichtext');
-        $fieldDefCreate->names = array(
+        $fieldDefCreate->names = [
             'eng-US' => 'Body',
             'ger-DE' => 'Körper',
-        );
-        $fieldDefCreate->descriptions = array(
+        ];
+        $fieldDefCreate->descriptions = [
             'eng-US' => 'Body of the blog post',
             'ger-DE' => 'Körper der den Blog-Post',
-        );
+        ];
         $fieldDefCreate->fieldGroup = 'blog-content';
         $fieldDefCreate->position = 1;
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = false;
         $fieldDefCreate->isInfoCollector = false;
         $fieldDefCreate->defaultValue = new RichTextValue();
-        $fieldDefCreate->validatorConfiguration = array();
-        $fieldDefCreate->fieldSettings = array(
+        $fieldDefCreate->validatorConfiguration = [];
+        $fieldDefCreate->fieldSettings = [
             'numRows' => 10,
-        );
+        ];
         $fieldDefCreate->isSearchable = true;
 
         $contentTypeService->addFieldDefinition($contentTypeDraft, $fieldDefCreate);
@@ -3007,8 +3007,8 @@ abstract class ContentTypeBase extends BaseServiceTest
         $contentTypeService = $this->repository->getContentTypeService();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct('tags', 'ezstring');
-        $fieldDefCreate->names = array('eng-US' => 'Tags');
-        $fieldDefCreate->descriptions = array('eng-US' => 'Tags of the blog post');
+        $fieldDefCreate->names = ['eng-US' => 'Tags'];
+        $fieldDefCreate->descriptions = ['eng-US' => 'Tags of the blog post'];
         $fieldDefCreate->fieldGroup = 'blog-meta';
         $fieldDefCreate->position = 1;
         $fieldDefCreate->isTranslatable = true;
@@ -3056,10 +3056,10 @@ abstract class ContentTypeBase extends BaseServiceTest
             $loadedType
         );
 
-        return array(
+        return [
             'removedFieldDefinition' => $bodyField,
             'loadedType' => $loadedType,
-        );
+        ];
     }
 
     /**
@@ -3173,14 +3173,14 @@ abstract class ContentTypeBase extends BaseServiceTest
 
         $fieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
         $fieldDefinitionUpdateStruct->identifier = $fieldDefinition->identifier . 'changed';
-        $fieldDefinitionUpdateStruct->names = array(
+        $fieldDefinitionUpdateStruct->names = [
             'eng-US' => $fieldDefinition->getName('eng-US') . 'changed',
             'ger-DE' => $fieldDefinition->getName('ger-DE') . 'changed',
-        );
-        $fieldDefinitionUpdateStruct->descriptions = array(
+        ];
+        $fieldDefinitionUpdateStruct->descriptions = [
             'eng-US' => $fieldDefinition->getDescription('eng-US') . 'changed',
             'ger-DE' => $fieldDefinition->getDescription('ger-DE') . 'changed',
-        );
+        ];
         $fieldDefinitionUpdateStruct->fieldGroup = $fieldDefinition->fieldGroup . 'changed';
         $fieldDefinitionUpdateStruct->position = $fieldDefinition->position + 1;
         $fieldDefinitionUpdateStruct->isTranslatable = !$fieldDefinition->isTranslatable;
@@ -3188,9 +3188,9 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefinitionUpdateStruct->isInfoCollector = !$fieldDefinition->isInfoCollector;
         $fieldDefinitionUpdateStruct->defaultValue = (string)$fieldDefinition->defaultValue . 'changed';
         //$fieldDefinitionUpdateStruct->validators
-        $fieldDefinitionUpdateStruct->fieldSettings = array(
+        $fieldDefinitionUpdateStruct->fieldSettings = [
             'textRows' => $fieldDefinition->fieldSettings['textRows'] + 1,
-        );
+        ];
         $fieldDefinitionUpdateStruct->isSearchable = $fieldDefinition->isSearchable;
 
         $contentTypeService->updateFieldDefinition(
@@ -3229,12 +3229,12 @@ abstract class ContentTypeBase extends BaseServiceTest
         $fieldDefinition = $contentTypeDraft->getFieldDefinition('title');
 
         $fieldDefinitionUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
-        $fieldDefinitionUpdateStruct->validatorConfiguration = array(
-            'StringLengthValidator' => array(
+        $fieldDefinitionUpdateStruct->validatorConfiguration = [
+            'StringLengthValidator' => [
                 'minStringLength' => (int)$fieldDefinition->validatorConfiguration['StringLengthValidator']['minStringLength'] + 1,
                 'maxStringLength' => (int)$fieldDefinition->validatorConfiguration['StringLengthValidator']['maxStringLength'] + 1,
-            ),
-        );
+            ],
+        ];
 
         $contentTypeService->updateFieldDefinition(
             $contentTypeDraft,
@@ -3286,7 +3286,7 @@ abstract class ContentTypeBase extends BaseServiceTest
     protected function assertUpdateFieldDefinitionStructValues($originalField, $updatedField, $updateStruct)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $originalField->id,
                 'fieldTypeIdentifier' => $originalField->fieldTypeIdentifier,
                 'identifier' => $updateStruct->identifier === null ?
@@ -3319,10 +3319,10 @@ abstract class ContentTypeBase extends BaseServiceTest
                 'isSearchable' => $updateStruct->isSearchable === null ?
                     $originalField->isSearchable :
                     $updateStruct->isSearchable,
-            ),
+            ],
             $updatedField,
             // Do not compare defaultValue as they may have different representations
-            array('defaultValue')
+            ['defaultValue']
         );
 
         $expectedFieldSettings = (array)$updateStruct->fieldSettings;

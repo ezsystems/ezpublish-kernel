@@ -19,10 +19,10 @@ class ViewInputTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'Query identifier',
             'Query' => [],
-        );
+        ];
 
         $parser = $this->getParser();
         $parsingDispatcher = $this->getParsingDispatcherMock();

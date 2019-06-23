@@ -65,22 +65,22 @@ class ImageConverter implements Converter
     {
         return $this->fillXml(
             array_merge(
-                array(
+                [
                     'uri' => '',
                     'path' => '',
                     'width' => '',
                     'height' => '',
                     'mime' => '',
                     'alternativeText' => '',
-                ),
+                ],
                 $contentMetaData
             ),
-            array(
+            [
                 'basename' => '',
                 'extension' => '',
                 'dirname' => '',
                 'filename' => '',
-            ),
+            ],
             time()
         );
     }
@@ -180,7 +180,7 @@ EOT;
      */
     protected function parseLegacyXml($xml)
     {
-        $extractedData = array();
+        $extractedData = [];
 
         $dom = new \DOMDocument();
         $dom->loadXml($xml);
@@ -237,15 +237,15 @@ EOT;
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints = new FieldTypeConstraints(
-            array(
-                'validators' => array(
-                    'FileSizeValidator' => array(
+            [
+                'validators' => [
+                    'FileSizeValidator' => [
                         'maxFileSize' => ($storageDef->dataInt1 != 0
                             ? (int)$storageDef->dataInt1 * 1024 * 1024
                             : null),
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
     }
 

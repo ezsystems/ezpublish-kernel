@@ -57,7 +57,7 @@ abstract class BinaryInputProcessorTest extends TestCase
     {
         $processor = $this->getProcessor();
 
-        $inputHash = array('foo' => 'bar');
+        $inputHash = ['foo' => 'bar'];
 
         $outputHash = $processor->preProcessValueHash($inputHash);
 
@@ -73,7 +73,7 @@ abstract class BinaryInputProcessorTest extends TestCase
 
         $fileContent = '42';
 
-        $inputHash = array('data' => base64_encode($fileContent));
+        $inputHash = ['data' => base64_encode($fileContent)];
 
         $outputHash = $processor->preProcessValueHash($inputHash);
 

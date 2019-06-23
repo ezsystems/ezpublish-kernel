@@ -76,13 +76,13 @@ class SecurityListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(
-                SecurityEvents::INTERACTIVE_LOGIN => array(
-                    array('onInteractiveLogin', 10),
-                    array('checkSiteAccessPermission', 9),
-                ),
-                KernelEvents::REQUEST => array('onKernelRequest', 7),
-            ),
+            [
+                SecurityEvents::INTERACTIVE_LOGIN => [
+                    ['onInteractiveLogin', 10],
+                    ['checkSiteAccessPermission', 9],
+                ],
+                KernelEvents::REQUEST => ['onKernelRequest', 7],
+            ],
             SecurityListener::getSubscribedEvents()
         );
     }
@@ -132,11 +132,11 @@ class SecurityListenerTest extends TestCase
         $token
             ->expects($this->once())
             ->method('getRoles')
-            ->will($this->returnValue(array('ROLE_USER')));
+            ->will($this->returnValue(['ROLE_USER']));
         $token
             ->expects($this->once())
             ->method('getAttributes')
-            ->will($this->returnValue(array('foo' => 'bar')));
+            ->will($this->returnValue(['foo' => 'bar']));
 
         $event = new BaseInteractiveLoginEvent(new Request(), $token);
 
@@ -191,7 +191,7 @@ class SecurityListenerTest extends TestCase
         $this->authChecker
             ->expects($this->once())
             ->method('isGranted')
-            ->with($this->equalTo(new Attribute('user', 'login', array('valueObject' => $siteAccess))))
+            ->with($this->equalTo(new Attribute('user', 'login', ['valueObject' => $siteAccess])))
             ->will($this->returnValue(false));
 
         $this->listener->checkSiteAccessPermission(new BaseInteractiveLoginEvent($request, $token));
@@ -213,7 +213,7 @@ class SecurityListenerTest extends TestCase
         $this->authChecker
             ->expects($this->once())
             ->method('isGranted')
-            ->with($this->equalTo(new Attribute('user', 'login', array('valueObject' => $siteAccess))))
+            ->with($this->equalTo(new Attribute('user', 'login', ['valueObject' => $siteAccess])))
             ->will($this->returnValue(true));
 
         // Nothing should happen or should be returned.

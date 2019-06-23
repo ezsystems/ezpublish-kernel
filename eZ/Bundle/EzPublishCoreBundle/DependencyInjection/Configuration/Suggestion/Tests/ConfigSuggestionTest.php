@@ -17,14 +17,14 @@ class ConfigSuggestionTest extends TestCase
     {
         $suggestion = new ConfigSuggestion();
         $this->assertNull($suggestion->getMessage());
-        $this->assertSame(array(), $suggestion->getSuggestion());
+        $this->assertSame([], $suggestion->getSuggestion());
         $this->assertFalse($suggestion->isMandatory());
     }
 
     public function testConfigSuggestion()
     {
         $message = 'some message';
-        $configArray = array('foo' => 'bar');
+        $configArray = ['foo' => 'bar'];
 
         $suggestion = new ConfigSuggestion($message, $configArray);
         $this->assertSame($message, $suggestion->getMessage());
@@ -35,7 +35,7 @@ class ConfigSuggestionTest extends TestCase
         $suggestion->setMessage($newMessage);
         $this->assertSame($newMessage, $suggestion->getMessage());
 
-        $newConfigArray = array('ez' => 'publish');
+        $newConfigArray = ['ez' => 'publish'];
         $suggestion->setSuggestion($newConfigArray);
         $this->assertSame($newConfigArray, $suggestion->getSuggestion());
 

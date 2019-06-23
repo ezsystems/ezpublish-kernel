@@ -36,19 +36,19 @@ class ConfigScopeListenerTest extends TestCase
         parent::setUp();
         $this->configResolver = $this->getMock('eZ\Publish\Core\MVC\Symfony\Configuration\VersatileScopeInterface');
         $this->viewManager = $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewManager');
-        $this->viewProviders = array(
+        $this->viewProviders = [
             $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
             $this->getMock('eZ\Bundle\EzPublishCoreBundle\Tests\EventListener\Stubs\ViewProvider'),
-        );
+        ];
     }
 
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(
-                MVCEvents::CONFIG_SCOPE_CHANGE => array('onConfigScopeChange', 100),
-                MVCEvents::CONFIG_SCOPE_RESTORE => array('onConfigScopeChange', 100),
-            ),
+            [
+                MVCEvents::CONFIG_SCOPE_CHANGE => ['onConfigScopeChange', 100],
+                MVCEvents::CONFIG_SCOPE_RESTORE => ['onConfigScopeChange', 100],
+            ],
             ConfigScopeListener::getSubscribedEvents()
         );
     }

@@ -99,9 +99,9 @@ class Native extends Gateway
             'POST',
             "/{$this->indexName}/{$document->type}/{$document->id}",
             new Message(
-                array(
+                [
                     'Content-Type' => 'application/json',
-                ),
+                ],
                 $json = $this->serializer->getIndexDocument($document)
             )
         );
@@ -136,9 +136,9 @@ class Native extends Gateway
             'POST',
             "/{$this->indexName}/_bulk",
             new Message(
-                array(
+                [
                     'Content-Type' => 'application/json',
-                ),
+                ],
                 $payload
             )
         );
@@ -161,48 +161,48 @@ class Native extends Gateway
      *
      * @return mixed
      */
-    public function find(Query $query, $type, array $languageFilter = array())
+    public function find(Query $query, $type, array $languageFilter = [])
     {
         $aggregationList = array_map(
-            array($this->facetBuilderVisitor, 'visit'),
+            [$this->facetBuilderVisitor, 'visit'],
             $query->facetBuilders
         );
 
-        $aggregations = array();
+        $aggregations = [];
         foreach ($aggregationList as $aggregation) {
             $aggregations[key($aggregation)] = reset($aggregation);
         }
 
-        $ast = array(
-            'query' => array(
-                'filtered' => array(
-                    'query' => array(
+        $ast = [
+            'query' => [
+                'filtered' => [
+                    'query' => [
                         $this->criterionVisitorDispatcher->dispatch(
                             $query->query,
                             CriterionVisitorDispatcher::CONTEXT_QUERY,
                             $languageFilter
                         ),
-                    ),
-                    'filter' => array(
+                    ],
+                    'filter' => [
                         $this->criterionVisitorDispatcher->dispatch(
                             $query->filter,
                             CriterionVisitorDispatcher::CONTEXT_FILTER,
                             $languageFilter
                         ),
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             // Filters are added through 'filtered' query, because aggregations operate in query scope
             //"filter" => ...
             'aggregations' => empty($aggregations) ? new ArrayObject() : $aggregations,
             'sort' => array_map(
-                array($this->sortClauseVisitor, 'visit'),
+                [$this->sortClauseVisitor, 'visit'],
                 $query->sortClauses
             ),
             'track_scores' => true,
             'from' => $query->offset,
             'size' => $query->limit,
-        );
+        ];
 
         $response = $this->findRaw(json_encode($ast), $type);
 
@@ -226,9 +226,9 @@ class Native extends Gateway
             'GET',
             "/{$this->indexName}/{$type}/_search",
             new Message(
-                array(
+                [
                     'Content-Type' => 'application/json',
-                ),
+                ],
                 $query
             )
         );
@@ -277,9 +277,9 @@ class Native extends Gateway
             'DELETE',
             "/{$this->indexName}/{$type}/_query",
             new Message(
-                array(
+                [
                     'Content-Type' => 'application/json',
-                ),
+                ],
                 $query
             )
         );

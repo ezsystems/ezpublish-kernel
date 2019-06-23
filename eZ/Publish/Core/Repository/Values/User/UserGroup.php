@@ -101,7 +101,7 @@ class UserGroup extends APIUserGroup
      *
      * @return array
      */
-    protected function getProperties($dynamicProperties = array('id', 'contentInfo'))
+    protected function getProperties($dynamicProperties = ['id', 'contentInfo'])
     {
         return parent::getProperties($dynamicProperties);
     }

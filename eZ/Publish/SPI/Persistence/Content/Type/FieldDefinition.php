@@ -37,7 +37,7 @@ class FieldDefinition extends ValueObject
      *
      * @var string[]
      */
-    public $description = array();
+    public $description = [];
 
     /**
      * Readable string identifier of a field definition.
@@ -115,7 +115,7 @@ class FieldDefinition extends ValueObject
     /**
      * Constructor.
      */
-    public function __construct(array $properties = array())
+    public function __construct(array $properties = [])
     {
         $this->fieldTypeConstraints = new FieldTypeConstraints();
         $this->defaultValue = new FieldValue();

@@ -26,7 +26,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $cache = $this->cache->getItem('location', $locationId);
         $location = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('location' => $locationId));
+            $this->logger->logCall(__METHOD__, ['location' => $locationId]);
             $cache->set($location = $this->persistenceHandler->locationHandler()->load($locationId))->save();
         }
 
@@ -42,7 +42,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $locationIds = $cache->get();
 
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('location' => $locationId));
+            $this->logger->logCall(__METHOD__, ['location' => $locationId]);
             $cache->set(
                 $locationIds = $this->persistenceHandler->locationHandler()->loadSubtreeIds($locationId)
             )->save();
@@ -63,17 +63,17 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         }
         $locationIds = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId, 'root' => $rootLocationId));
+            $this->logger->logCall(__METHOD__, ['content' => $contentId, 'root' => $rootLocationId]);
             $locations = $this->persistenceHandler->locationHandler()->loadLocationsByContent($contentId, $rootLocationId);
 
-            $locationIds = array();
+            $locationIds = [];
             foreach ($locations as $location) {
                 $locationIds[] = $location->id;
             }
 
             $cache->set($locationIds)->save();
         } else {
-            $locations = array();
+            $locations = [];
             foreach ($locationIds as $locationId) {
                 $locations[] = $this->load($locationId);
             }
@@ -90,17 +90,17 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
         $cache = $this->cache->getItem('content', 'locations', $contentId, 'parentLocationsForDraftContent');
         $locationIds = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('content' => $contentId));
+            $this->logger->logCall(__METHOD__, ['content' => $contentId]);
             $locations = $this->persistenceHandler->locationHandler()->loadParentLocationsForDraftContent($contentId);
 
-            $locationIds = array();
+            $locationIds = [];
             foreach ($locations as $location) {
                 $locationIds[] = $location->id;
             }
 
             $cache->set($locationIds)->save();
         } else {
-            $locations = array();
+            $locations = [];
             foreach ($locationIds as $locationId) {
                 $locations[] = $this->load($locationId);
             }
@@ -114,7 +114,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadByRemoteId($remoteId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $remoteId));
+        $this->logger->logCall(__METHOD__, ['location' => $remoteId]);
 
         return $this->persistenceHandler->locationHandler()->loadByRemoteId($remoteId);
     }
@@ -124,11 +124,11 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function copySubtree($sourceId, $destinationParentId, $newOwnerId = null)
     {
-        $this->logger->logCall(__METHOD__, array(
+        $this->logger->logCall(__METHOD__, [
             'source' => $sourceId,
             'destination' => $destinationParentId,
             'newOwner' => $newOwnerId,
-        ));
+        ]);
 
         return $this->persistenceHandler->locationHandler()->copySubtree($sourceId, $destinationParentId, $newOwnerId);
     }
@@ -138,7 +138,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function move($sourceId, $destinationParentId)
     {
-        $this->logger->logCall(__METHOD__, array('source' => $sourceId, 'destination' => $destinationParentId));
+        $this->logger->logCall(__METHOD__, ['source' => $sourceId, 'destination' => $destinationParentId]);
         $return = $this->persistenceHandler->locationHandler()->move($sourceId, $destinationParentId);
 
         $this->cache->clear('location');//TIMBER! (path[Identification]String)
@@ -153,7 +153,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function markSubtreeModified($locationId, $timestamp = null)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'time' => $timestamp));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'time' => $timestamp]);
         $this->persistenceHandler->locationHandler()->markSubtreeModified($locationId, $timestamp);
     }
 
@@ -162,7 +162,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function hide($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->hide($locationId);
 
         $this->cache->clear('location');//TIMBER! (visibility)
@@ -175,7 +175,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function unHide($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->unHide($locationId);
 
         $this->cache->clear('location');//TIMBER! (visibility)
@@ -188,7 +188,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function swap($locationId1, $locationId2)
     {
-        $this->logger->logCall(__METHOD__, array('location1' => $locationId1, 'location2' => $locationId2));
+        $this->logger->logCall(__METHOD__, ['location1' => $locationId1, 'location2' => $locationId2]);
         $locationHandler = $this->persistenceHandler->locationHandler();
 
         $return = $locationHandler->swap($locationId1, $locationId2);
@@ -215,7 +215,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function update(UpdateStruct $struct, $locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'struct' => $struct]);
         $this->persistenceHandler->locationHandler()->update($struct, $locationId);
         $this->cache->clear('location', $locationId);
         $this->cache->clear('location', 'subtree');
@@ -226,7 +226,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function create(CreateStruct $locationStruct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $locationStruct));
+        $this->logger->logCall(__METHOD__, ['struct' => $locationStruct]);
         $location = $this->persistenceHandler->locationHandler()->create($locationStruct);
 
         $this->cache->getItem('location', $location->id)->set($location)->save();
@@ -245,7 +245,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function removeSubtree($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->locationHandler()->removeSubtree($locationId);
 
         $this->cache->clear('location');//TIMBER!
@@ -260,7 +260,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function setSectionForSubtree($locationId, $sectionId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'section' => $sectionId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'section' => $sectionId]);
         $this->persistenceHandler->locationHandler()->setSectionForSubtree($locationId, $sectionId);
         $this->cache->clear('content');//TIMBER!
     }
@@ -270,7 +270,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function changeMainLocation($contentId, $locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId, 'content' => $contentId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId, 'content' => $contentId]);
         $this->persistenceHandler->locationHandler()->changeMainLocation($contentId, $locationId);
         $this->cache->clear('content', $contentId);
         $this->cache->clear('content', 'info', $contentId);
@@ -299,7 +299,7 @@ class LocationHandler extends AbstractHandler implements LocationHandlerInterfac
      */
     public function loadAllLocations($offset, $limit)
     {
-        $this->logger->logCall(__METHOD__, array('offset' => $offset, 'limit' => $limit));
+        $this->logger->logCall(__METHOD__, ['offset' => $offset, 'limit' => $limit]);
 
         return $this->persistenceHandler->locationHandler()->loadAllLocations($offset, $limit);
     }

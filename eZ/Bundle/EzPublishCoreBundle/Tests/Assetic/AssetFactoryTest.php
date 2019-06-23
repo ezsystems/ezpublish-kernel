@@ -50,25 +50,25 @@ class AssetFactoryTest extends BaseTest
     public function testParseInputArray()
     {
         $assetFactory = $this->getAssetFactory();
-        $fooValues = array('bar', 'baz');
+        $fooValues = ['bar', 'baz'];
         $input = '$foo$';
         $this->parser
             ->expects($this->any())
             ->method('isDynamicSetting')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('$foo$', true),
-                        array($fooValues[0], false),
-                        array($fooValues[1], false),
-                    )
+                    [
+                        ['$foo$', true],
+                        [$fooValues[0], false],
+                        [$fooValues[1], false],
+                    ]
                 )
             );
         $this->parser
             ->expects($this->once())
             ->method('parseDynamicSetting')
             ->with($input)
-            ->will($this->returnValue(array('param' => 'foo', 'namespace' => null, 'scope' => null)));
+            ->will($this->returnValue(['param' => 'foo', 'namespace' => null, 'scope' => null]));
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -78,7 +78,7 @@ class AssetFactoryTest extends BaseTest
         $refFactory = new ReflectionObject($assetFactory);
         $refMethod = $refFactory->getMethod('parseInput');
         $refMethod->setAccessible(true);
-        $parseInputResult = $refMethod->invoke($assetFactory, $input, array('vars' => array()));
+        $parseInputResult = $refMethod->invoke($assetFactory, $input, ['vars' => []]);
 
         $this->assertInstanceOf('\Assetic\Asset\AssetCollectionInterface', $parseInputResult);
         $this->assertCount(count($fooValues), $parseInputResult->all());
@@ -94,17 +94,17 @@ class AssetFactoryTest extends BaseTest
             ->method('isDynamicSetting')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('$foo$', true),
-                        array('bar', false),
-                    )
+                    [
+                        ['$foo$', true],
+                        ['bar', false],
+                    ]
                 )
             );
         $this->parser
             ->expects($this->once())
             ->method('parseDynamicSetting')
             ->with($input)
-            ->will($this->returnValue(array('param' => 'foo', 'namespace' => null, 'scope' => null)));
+            ->will($this->returnValue(['param' => 'foo', 'namespace' => null, 'scope' => null]));
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -114,7 +114,7 @@ class AssetFactoryTest extends BaseTest
         $refFactory = new ReflectionObject($assetFactory);
         $refMethod = $refFactory->getMethod('parseInput');
         $refMethod->setAccessible(true);
-        $parseInputResult = $refMethod->invoke($assetFactory, $input, array('vars' => array()));
+        $parseInputResult = $refMethod->invoke($assetFactory, $input, ['vars' => []]);
 
         $this->assertInstanceOf('\Assetic\Asset\AssetInterface', $parseInputResult);
     }

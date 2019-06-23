@@ -43,21 +43,21 @@ class ScaleDownOnlyFilterLoaderTest extends TestCase
 
     public function loadInvalidProvider()
     {
-        return array(
-            array(array()),
-            array(array(123)),
-            array(array('foo' => 'bar')),
-        );
+        return [
+            [[]],
+            [[123]],
+            [['foo' => 'bar']],
+        ];
     }
 
     public function testLoad()
     {
-        $options = array(123, 456);
+        $options = [123, 456];
         $image = $this->getMock('\Imagine\Image\ImageInterface');
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, $this->equalTo(array('size' => $options, 'mode' => ImageInterface::THUMBNAIL_INSET)))
+            ->with($image, $this->equalTo(['size' => $options, 'mode' => ImageInterface::THUMBNAIL_INSET]))
             ->will($this->returnValue($image));
 
         $this->assertSame($image, $this->loader->load($image, $options));

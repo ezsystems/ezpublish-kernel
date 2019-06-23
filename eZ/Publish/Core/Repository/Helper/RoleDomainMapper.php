@@ -52,18 +52,18 @@ class RoleDomainMapper
      */
     public function buildDomainRoleObject(SPIRole $role)
     {
-        $rolePolicies = array();
+        $rolePolicies = [];
         foreach ($role->policies as $spiPolicy) {
             $rolePolicies[] = $this->buildDomainPolicyObject($spiPolicy);
         }
 
         return new Role(
-            array(
+            [
                 'id' => $role->id,
                 'identifier' => $role->identifier,
                 'status' => $role->status,
                 'policies' => $rolePolicies,
-            )
+            ]
         );
     }
 
@@ -78,9 +78,9 @@ class RoleDomainMapper
     public function buildDomainRoleDraftObject(SPIRole $spiRole)
     {
         return new RoleDraft(
-            array(
+            [
                 'innerRole' => $this->buildDomainRoleObject($spiRole),
-            )
+            ]
         );
     }
 
@@ -93,7 +93,7 @@ class RoleDomainMapper
      */
     public function buildDomainPolicyObject(SPIPolicy $spiPolicy)
     {
-        $policyLimitations = array();
+        $policyLimitations = [];
         if ($spiPolicy->module !== '*' && $spiPolicy->function !== '*' && $spiPolicy->limitations !== '*') {
             foreach ($spiPolicy->limitations as $identifier => $values) {
                 $policyLimitations[] = $this->limitationService->getLimitationType($identifier)->buildValue($values);
@@ -101,13 +101,13 @@ class RoleDomainMapper
         }
 
         $policy = new Policy(
-            array(
+            [
                 'id' => $spiPolicy->id,
                 'roleId' => $spiPolicy->roleId,
                 'module' => $spiPolicy->module,
                 'function' => $spiPolicy->function,
                 'limitations' => $policyLimitations,
-            )
+            ]
         );
 
         // Original ID is set on SPI policy, which means that it's a draft.
@@ -138,12 +138,12 @@ class RoleDomainMapper
         }
 
         return new UserRoleAssignment(
-            array(
+            [
                 'id' => $spiRoleAssignment->id,
                 'limitation' => $limitation,
                 'role' => $role,
                 'user' => $user,
-            )
+            ]
         );
     }
 
@@ -167,12 +167,12 @@ class RoleDomainMapper
         }
 
         return new UserGroupRoleAssignment(
-            array(
+            [
                 'id' => $spiRoleAssignment->id,
                 'limitation' => $limitation,
                 'role' => $role,
                 'userGroup' => $userGroup,
-            )
+            ]
         );
     }
 
@@ -185,7 +185,7 @@ class RoleDomainMapper
      */
     public function buildPersistenceRoleCreateStruct(APIRoleCreateStruct $roleCreateStruct)
     {
-        $policiesToCreate = array();
+        $policiesToCreate = [];
         foreach ($roleCreateStruct->getPolicies() as $policyCreateStruct) {
             $policiesToCreate[] = $this->buildPersistencePolicyObject(
                 $policyCreateStruct->module,
@@ -195,10 +195,10 @@ class RoleDomainMapper
         }
 
         return new SPIRoleCreateStruct(
-            array(
+            [
                 'identifier' => $roleCreateStruct->identifier,
                 'policies' => $policiesToCreate,
-            )
+            ]
         );
     }
 
@@ -215,18 +215,18 @@ class RoleDomainMapper
     {
         $limitationsToCreate = '*';
         if ($module !== '*' && $function !== '*' && !empty($limitations)) {
-            $limitationsToCreate = array();
+            $limitationsToCreate = [];
             foreach ($limitations as $limitation) {
                 $limitationsToCreate[$limitation->getIdentifier()] = $limitation->limitationValues;
             }
         }
 
         return new SPIPolicy(
-            array(
+            [
                 'module' => $module,
                 'function' => $function,
                 'limitations' => $limitationsToCreate,
-            )
+            ]
         );
     }
 }

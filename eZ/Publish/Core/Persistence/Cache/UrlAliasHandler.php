@@ -36,13 +36,13 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     ) {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'location' => $locationId,
                 'parent' => $parentLocationId,
                 'name' => $name,
                 'language' => $languageCode,
                 'alwaysAvailable' => $alwaysAvailable,
-            )
+            ]
         );
 
         // we need to clear all because we are unable to clear cache for children
@@ -66,13 +66,13 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'location' => $locationId,
                 '$path' => $path,
                 '$forwarding' => $forwarding,
                 'language' => $languageCode,
                 'alwaysAvailable' => $alwaysAvailable,
-            )
+            ]
         );
 
         $urlAlias = $this->persistenceHandler->urlAliasHandler()->createCustomUrlAlias(
@@ -87,7 +87,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $cache = $this->cache->getItem('urlAlias', 'location', $urlAlias->destination, 'custom');
         $urlAliasIds = $cache->get();
         if ($cache->isMiss()) {
-            $urlAliasIds = array();
+            $urlAliasIds = [];
         }
 
         $urlAliasIds[] = $urlAlias->id;
@@ -103,13 +103,13 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'resource' => $resource,
                 'path' => $path,
                 'forwarding' => $forwarding,
                 'language' => $languageCode,
                 'alwaysAvailable' => $alwaysAvailable,
-            )
+            ]
         );
 
         $urlAlias = $this->persistenceHandler->urlAliasHandler()->createGlobalUrlAlias(
@@ -130,7 +130,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
      */
     public function listGlobalURLAliases($languageCode = null, $offset = 0, $limit = -1)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $languageCode, 'offset' => $offset, 'limit' => $limit));
+        $this->logger->logCall(__METHOD__, ['language' => $languageCode, 'offset' => $offset, 'limit' => $limit]);
 
         return $this->persistenceHandler->urlAliasHandler()->listGlobalURLAliases($languageCode, $offset, $limit);
     }
@@ -148,10 +148,10 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         }
         $urlAliasIds = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('location' => $locationId, 'custom' => $custom));
+            $this->logger->logCall(__METHOD__, ['location' => $locationId, 'custom' => $custom]);
             $urlAliases = $this->persistenceHandler->urlAliasHandler()->listURLAliasesForLocation($locationId, $custom);
 
-            $urlAliasIds = array();
+            $urlAliasIds = [];
             foreach ($urlAliases as $urlAlias) {
                 $urlAliasIds[] = $urlAlias->id;
             }
@@ -159,7 +159,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
             $cache->set($urlAliasIds)->save();
         } else {
             // Reuse loadUrlAlias for the url alias object cache
-            $urlAliases = array();
+            $urlAliases = [];
             foreach ($urlAliasIds as $urlAliasId) {
                 $urlAliases[] = $this->loadUrlAlias($urlAliasId);
             }
@@ -173,7 +173,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
      */
     public function removeURLAliases(array $urlAliases)
     {
-        $this->logger->logCall(__METHOD__, array('aliases' => $urlAliases));
+        $this->logger->logCall(__METHOD__, ['aliases' => $urlAliases]);
         $return = $this->persistenceHandler->urlAliasHandler()->removeURLAliases($urlAliases);
 
         $this->cache->clear('urlAlias', 'url');//TIMBER! (no easy way to do reverse lookup of urls)
@@ -210,7 +210,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
 
             // Also cache "not found" as this function is heavliy used and hance should be cached
             try {
-                $this->logger->logCall(__METHOD__, array('url' => $url));
+                $this->logger->logCall(__METHOD__, ['url' => $url]);
                 $urlAlias = $this->persistenceHandler->urlAliasHandler()->lookup($url);
 
                 if ($urlAlias->isHistory) {
@@ -242,7 +242,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
         $cache = $this->cache->getItem('urlAlias', $id);
         $urlAlias = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('alias' => $id));
+            $this->logger->logCall(__METHOD__, ['alias' => $id]);
             $urlAlias = $this->persistenceHandler->urlAliasHandler()->loadUrlAlias($id);
             $cache->set($urlAlias)->save();
         }
@@ -257,11 +257,11 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'location' => $locationId,
                 'oldParent' => $oldParentId,
                 'newParent' => $newParentId,
-            )
+            ]
         );
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationMoved($locationId, $oldParentId, $newParentId);
@@ -277,11 +277,11 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
     {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'oldLocation' => $locationId,
                 'newLocation' => $newLocationId,
                 'newParent' => $newParentId,
-            )
+            ]
         );
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationCopied(
@@ -299,7 +299,7 @@ class UrlAliasHandler extends AbstractHandler implements UrlAliasHandlerInterfac
      */
     public function locationDeleted($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->urlAliasHandler()->locationDeleted($locationId);
 
         $this->clearLocation($locationId);

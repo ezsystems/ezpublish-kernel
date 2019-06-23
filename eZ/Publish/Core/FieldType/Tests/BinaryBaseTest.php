@@ -17,33 +17,33 @@ abstract class BinaryBaseTest extends FieldTypeTest
 {
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array(
-            'FileSizeValidator' => array(
-                'maxFileSize' => array(
+        return [
+            'FileSizeValidator' => [
+                'maxFileSize' => [
                     'type' => 'int',
                     'default' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getMockForAbstractClass('eZ\Publish\Core\FieldType\Value'),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                array('id' => '/foo/bar'),
+            ],
+            [
+                ['id' => '/foo/bar'],
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -76,25 +76,25 @@ abstract class BinaryBaseTest extends FieldTypeTest
      */
     public function provideValidValidatorConfiguration()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
-                    'FileSizeValidator' => array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
+                    'FileSizeValidator' => [
                         'maxFileSize' => 2342,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'FileSizeValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'FileSizeValidator' => [
                         'maxFileSize' => null,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -141,26 +141,26 @@ abstract class BinaryBaseTest extends FieldTypeTest
      */
     public function provideInvalidValidatorConfiguration()
     {
-        return array(
-            array(
-                array(
-                    'NonExistingValidator' => array(),
-                ),
-            ),
-            array(
+        return [
+            [
+                [
+                    'NonExistingValidator' => [],
+                ],
+            ],
+            [
                 // maxFileSize must be int or bool
-                array(
-                    'FileSizeValidator' => array(
+                [
+                    'FileSizeValidator' => [
                         'maxFileSize' => 'foo',
-                    ),
-                ),
-            ),
-            array(
+                    ],
+                ],
+            ],
+            [
                 // maxFileSize is required for this validator
-                array(
-                    'FileSizeValidator' => array(),
-                ),
-            ),
-        );
+                [
+                    'FileSizeValidator' => [],
+                ],
+            ],
+        ];
     }
 }

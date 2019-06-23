@@ -71,9 +71,9 @@ class CsrfListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::REQUEST => 'onKernelRequest',
-        );
+        ];
     }
 
     /**
@@ -124,7 +124,7 @@ class CsrfListener implements EventSubscriberInterface
      */
     protected function isMethodSafe($method)
     {
-        return in_array($method, array('GET', 'HEAD', 'OPTIONS'));
+        return in_array($method, ['GET', 'HEAD', 'OPTIONS']);
     }
 
     /**

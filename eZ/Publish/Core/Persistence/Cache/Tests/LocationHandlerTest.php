@@ -50,7 +50,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('load')
             ->with(33)
-            ->will($this->returnValue(new Location(array('id' => 33))));
+            ->will($this->returnValue(new Location(['id' => 33])));
 
         $cacheItemMock
             ->expects($this->once())
@@ -83,7 +83,7 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(new Location(array('id' => 33))));
+            ->will($this->returnValue(new Location(['id' => 33])));
 
         $cacheItemMock
             ->expects($this->once())
@@ -135,12 +135,12 @@ class LocationHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadLocationsByContent')
             ->with(44)
-            ->will($this->returnValue(array(new Location(array('id' => 33)))));
+            ->will($this->returnValue([new Location(['id' => 33])]));
 
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(33))
+            ->with([33])
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -173,7 +173,7 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(array(33)));
+            ->will($this->returnValue([33]));
 
         $cacheItemMock
             ->expects($this->once())
@@ -195,7 +195,7 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(new Location(array('id' => 33))));
+            ->will($this->returnValue(new Location(['id' => 33])));
 
         $cacheItemMock2
             ->expects($this->once())
@@ -243,12 +243,12 @@ class LocationHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadParentLocationsForDraftContent')
             ->with(44)
-            ->will($this->returnValue(array(new Location(array('id' => 33)))));
+            ->will($this->returnValue([new Location(['id' => 33])]));
 
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(33))
+            ->with([33])
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -281,7 +281,7 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(array(33)));
+            ->will($this->returnValue([33]));
 
         $cacheItemMock
             ->expects($this->once())
@@ -303,7 +303,7 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(new Location(array('id' => 33))));
+            ->will($this->returnValue(new Location(['id' => 33])));
 
         $cacheItemMock2
             ->expects($this->once())
@@ -351,12 +351,12 @@ class LocationHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadLocationsByContent')
             ->with(44, 2)
-            ->will($this->returnValue(array(new Location(array('id' => 33)))));
+            ->will($this->returnValue([new Location(['id' => 33])]));
 
         $cacheItemMock
             ->expects($this->once())
             ->method('set')
-            ->with(array(33))
+            ->with([33])
             ->will($this->returnValue($cacheItemMock));
 
         $cacheItemMock
@@ -389,7 +389,7 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(array(33)));
+            ->will($this->returnValue([33]));
 
         $cacheItemMock
             ->expects($this->once())
@@ -411,7 +411,7 @@ class LocationHandlerTest extends HandlerTest
         $cacheItemMock2
             ->expects($this->once())
             ->method('get')
-            ->will($this->returnValue(new Location(array('id' => 33))));
+            ->will($this->returnValue(new Location(['id' => 33])));
 
         $cacheItemMock2
             ->expects($this->once())
@@ -446,7 +446,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('loadByRemoteId')
             ->with('sve45gdy4e')
-            ->will($this->returnValue(new Location(array('id' => 33))));
+            ->will($this->returnValue(new Location(['id' => 33])));
 
         $handler = $this->persistenceCacheHandler->locationHandler();
         $handler->loadByRemoteId('sve45gdy4e');
@@ -727,7 +727,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('update')
             ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\UpdateStruct'), 33)
-            ->will($this->returnValue(new Location(array('id' => 33))));
+            ->will($this->returnValue(new Location(['id' => 33])));
 
         $cacheItemMock
             ->expects($this->never())
@@ -760,7 +760,7 @@ class LocationHandlerTest extends HandlerTest
             ->expects($this->once())
             ->method('create')
             ->with($this->isInstanceOf('eZ\\Publish\\SPI\\Persistence\\Content\\Location\\CreateStruct'))
-            ->will($this->returnValue(new Location(array('id' => 33, 'contentId' => 2))));
+            ->will($this->returnValue(new Location(['id' => 33, 'contentId' => 2])));
 
         $cacheItemMock
             ->expects($this->once())

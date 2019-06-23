@@ -63,7 +63,7 @@ class ContentTypeLimitationType extends AbstractPersistenceLimitationType implem
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $id) {
             try {
                 $this->persistence->contentTypeHandler()->load($id);
@@ -71,10 +71,10 @@ class ContentTypeLimitationType extends AbstractPersistenceLimitationType implem
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
-                    array(
+                    [
                         'value' => $id,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -91,7 +91,7 @@ class ContentTypeLimitationType extends AbstractPersistenceLimitationType implem
      */
     public function buildValue(array $limitationValues)
     {
-        return new APIContentTypeLimitation(array('limitationValues' => $limitationValues));
+        return new APIContentTypeLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

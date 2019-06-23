@@ -37,7 +37,7 @@ class InputHandlerPass implements CompilerPassInterface
 
                 $definition->addMethodCall(
                     'addHandler',
-                    array($attribute['format'], new Reference($id))
+                    [$attribute['format'], new Reference($id)]
                 );
             }
         }

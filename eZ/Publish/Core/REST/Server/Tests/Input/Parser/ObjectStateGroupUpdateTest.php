@@ -18,26 +18,26 @@ class ObjectStateGroupUpdateTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-group',
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateGroupUpdate = $this->getParser();
         $result = $objectStateGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -61,13 +61,13 @@ class ObjectStateGroupUpdateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array('eng-GB' => 'Test group'),
+            ['eng-GB' => 'Test group'],
             $result->names,
             'ObjectStateGroupUpdateStruct names property not created correctly.'
         );
 
         $this->assertEquals(
-            array('eng-GB' => 'Test group description'),
+            ['eng-GB' => 'Test group description'],
             $result->descriptions,
             'ObjectStateGroupUpdateStruct descriptions property not created correctly.'
         );
@@ -81,19 +81,19 @@ class ObjectStateGroupUpdateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidNames()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-group',
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+            'names' => [],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test group description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateGroupUpdate = $this->getParser();
         $objectStateGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -121,8 +121,8 @@ class ObjectStateGroupUpdateTest extends BaseTest
     {
         $objectStateServiceMock = $this->getMock(
             'eZ\\Publish\\Core\\Repository\\ObjectStateService',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );

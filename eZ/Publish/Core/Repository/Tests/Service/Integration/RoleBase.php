@@ -32,24 +32,24 @@ abstract class RoleBase extends BaseServiceTest
     public function testNewClass()
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
                 'identifier' => null,
                 // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 // 'mainLanguageCode' => null,
-                'policies' => array(),
-            ),
+                'policies' => [],
+            ],
             new Role()
         );
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => null,
                 'roleId' => null,
                 'module' => null,
                 'function' => null,
-                'limitations' => array(),
-            ),
+                'limitations' => [],
+            ],
             new Policy()
         );
     }
@@ -131,14 +131,14 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testUnsetProperty()
     {
-        $role = new Role(array('id' => 1));
+        $role = new Role(['id' => 1]);
         try {
             unset($role->id);
             self::fail('Unsetting read-only property succeeded');
         } catch (PropertyReadOnlyException $e) {
         }
 
-        $policy = new Policy(array('id' => 1));
+        $policy = new Policy(['id' => 1]);
         try {
             unset($policy->id);
             self::fail('Unsetting read-only property succeeded');
@@ -182,10 +182,10 @@ abstract class RoleBase extends BaseServiceTest
         */
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => $roleCreateStruct->identifier,
-                'policies' => array(),
-            ),
+                'policies' => [],
+            ],
             $createdRole
         );
     }
@@ -219,16 +219,16 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $limitation1 = new Limitation\ContentTypeLimitation();
-        $limitation1->limitationValues = array('1', '3', '13');
+        $limitation1->limitationValues = ['1', '3', '13'];
 
         $limitation2 = new Limitation\SectionLimitation();
-        $limitation2->limitationValues = array('2', '3');
+        $limitation2->limitationValues = ['2', '3'];
 
         $limitation3 = new Limitation\OwnerLimitation();
-        $limitation3->limitationValues = array('1', '2');
+        $limitation3->limitationValues = ['1', '2'];
 
         $limitation4 = new Limitation\UserGroupLimitation();
-        $limitation4->limitationValues = array('1');
+        $limitation4->limitationValues = ['1'];
 
         $policyCreateStruct1 = $roleService->newPolicyCreateStruct('content', 'read');
         $policyCreateStruct1->addLimitation($limitation1);
@@ -270,9 +270,9 @@ abstract class RoleBase extends BaseServiceTest
         */
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => $roleCreateStruct->identifier,
-            ),
+            ],
             $createdRole
         );
 
@@ -361,11 +361,11 @@ abstract class RoleBase extends BaseServiceTest
                 );
         */
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $role->id,
                 'identifier' => $roleUpdateStruct->identifier,
                 'policies' => $role->getPolicies(),
-            ),
+            ],
             $updatedRole
         );
     }
@@ -401,10 +401,10 @@ abstract class RoleBase extends BaseServiceTest
         $policyCount = count($role->getPolicies());
 
         $limitation1 = new Limitation\ContentTypeLimitation();
-        $limitation1->limitationValues = array('1', '3', '13');
+        $limitation1->limitationValues = ['1', '3', '13'];
 
         $limitation2 = new Limitation\SectionLimitation();
-        $limitation2->limitationValues = array('2', '3');
+        $limitation2->limitationValues = ['2', '3'];
 
         $policyCreateStruct = $roleService->newPolicyCreateStruct('content', 'read');
         $policyCreateStruct->addLimitation($limitation1);
@@ -460,7 +460,7 @@ abstract class RoleBase extends BaseServiceTest
         self::assertEquals('read', $policy->function);
 
         $limitation = new Limitation\ContentTypeLimitation();
-        $limitation->limitationValues = array('1', '3', '13');
+        $limitation->limitationValues = ['1', '3', '13'];
 
         $policyUpdateStruct = $roleService->newPolicyUpdateStruct();
         $policyUpdateStruct->addLimitation($limitation);
@@ -468,12 +468,12 @@ abstract class RoleBase extends BaseServiceTest
         $updatedPolicy = $roleService->updatePolicy($policy, $policyUpdateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $policy->id,
                 'roleId' => $policy->roleId,
                 'module' => $policy->module,
                 'function' => $policy->function,
-            ),
+            ],
             $updatedPolicy
         );
 
@@ -498,10 +498,10 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $role);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'Anonymous',
-            ),
+            ],
             $role
         );
     }
@@ -532,10 +532,10 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\Role', $role);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'Anonymous',
-            ),
+            ],
             $role
         );
     }
@@ -840,13 +840,13 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleCreateStruct', $roleCreateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'Ultimate permissions',
                 // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 // 'mainLanguageCode' => null,
                 // 'names' => null,
                 // 'descriptions' => null
-            ),
+            ],
             $roleCreateStruct
         );
 
@@ -869,10 +869,10 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\PolicyCreateStruct', $policyCreateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'module' => 'content',
                 'function' => 'read',
-            ),
+            ],
             $policyCreateStruct
         );
 
@@ -894,13 +894,13 @@ abstract class RoleBase extends BaseServiceTest
         self::assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\User\\RoleUpdateStruct', $roleUpdateStruct);
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => null,
                 // @todo uncomment when support for multilingual names and descriptions is added EZP-24776
                 // 'mainLanguageCode' => null,
                 // 'names' => null,
                 // 'descriptions' => null
-            ),
+            ],
             $roleUpdateStruct
         );
     }

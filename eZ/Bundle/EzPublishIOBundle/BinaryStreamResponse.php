@@ -47,7 +47,7 @@ class BinaryStreamResponse extends Response
      * @param bool                $autoEtag           Whether the ETag header should be automatically set
      * @param bool                $autoLastModified   Whether the Last-Modified header should be automatically set
      */
-    public function __construct(BinaryFile $binaryFile, IOServiceInterface $ioService, $status = 200, $headers = array(), $public = true, $contentDisposition = null, $autoLastModified = true)
+    public function __construct(BinaryFile $binaryFile, IOServiceInterface $ioService, $status = 200, $headers = [], $public = true, $contentDisposition = null, $autoLastModified = true)
     {
         $this->ioService = $ioService;
 
@@ -161,7 +161,7 @@ class BinaryStreamResponse extends Response
                 $range = $request->headers->get('Range');
                 $fileSize = $this->file->size;
 
-                list($start, $end) = explode('-', substr($range, 6), 2) + array(0);
+                list($start, $end) = explode('-', substr($range, 6), 2) + [0];
 
                 $end = ('' === $end) ? $fileSize - 1 : (int)$end;
 
