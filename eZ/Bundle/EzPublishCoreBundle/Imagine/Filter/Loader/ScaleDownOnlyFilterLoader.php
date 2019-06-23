@@ -27,7 +27,7 @@ class ScaleDownOnlyFilterLoader extends FilterLoaderWrapped
      *
      * @return ImageInterface
      */
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         if (count($options) < 2) {
             throw new InvalidArgumentException('Missing width and/or height options');
@@ -35,10 +35,10 @@ class ScaleDownOnlyFilterLoader extends FilterLoaderWrapped
 
         return $this->innerLoader->load(
             $image,
-            array(
+            [
                 'size' => $options,
                 'mode' => ImageInterface::THUMBNAIL_INSET,
-            )
+            ]
         );
     }
 }

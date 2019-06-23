@@ -203,11 +203,11 @@ class Type extends FieldType
     public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
-            array(
+            [
                 'data' => null,
                 'externalData' => $this->toHash($value),
                 'sortKey' => null,
-            )
+            ]
         );
     }
 

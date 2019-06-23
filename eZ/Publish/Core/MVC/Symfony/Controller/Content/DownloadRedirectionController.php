@@ -49,11 +49,11 @@ class DownloadRedirectionController extends Controller
         $content = $this->contentService->loadContent($contentId);
         $field = $this->findFieldInContent($fieldId, $content);
 
-        $params = array(
+        $params = [
             'content' => $content,
             'fieldIdentifier' => $field->fieldDefIdentifier,
             'language' => $field->languageCode,
-        );
+        ];
 
         if ($request->query->has('version')) {
             $params['version'] = $request->query->get('version');

@@ -29,7 +29,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
      */
     protected $siteAccess;
 
-    protected $nonSiteAccessAwareRoutes = array();
+    protected $nonSiteAccessAwareRoutes = [];
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
@@ -75,7 +75,7 @@ class DefaultRouter extends Router implements RequestMatcherInterface, SiteAcces
         return $this->match($request->attributes->get('semanticPathinfo', $request->getPathInfo()));
     }
 
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
         $siteAccess = $this->siteAccess;
         $originalContext = $context = $this->getContext();

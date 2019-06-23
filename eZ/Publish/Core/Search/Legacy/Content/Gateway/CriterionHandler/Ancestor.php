@@ -48,7 +48,7 @@ class Ancestor extends CriterionHandler
         Criterion $criterion,
         array $languageSettings
     ) {
-        $idSet = array();
+        $idSet = [];
         foreach ($criterion->value as $value) {
             foreach (explode('/', trim($value, '/')) as $id) {
                 $idSet[$id] = true;

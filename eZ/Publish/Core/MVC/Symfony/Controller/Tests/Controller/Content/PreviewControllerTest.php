@@ -93,7 +93,7 @@ class PreviewControllerTest extends TestCase
         $this->contentService
             ->expects($this->once())
             ->method('loadContent')
-            ->with($contentId, array($lang), $versionNo)
+            ->with($contentId, [$lang], $versionNo)
             ->will($this->throwException(new UnauthorizedException('foo', 'bar')));
         $controller->previewContentAction(new Request(), $contentId, $versionNo, $lang, 'test');
     }
@@ -108,7 +108,7 @@ class PreviewControllerTest extends TestCase
         $versionNo = 3;
         $content = $this->createMock(Content::class);
         $contentInfo = $this->getMockBuilder(ContentInfo::class)
-            ->setConstructorArgs(array(array('id' => $contentId)))
+            ->setConstructorArgs([['id' => $contentId]])
             ->getMockForAbstractClass();
 
         $this->locationProvider
@@ -119,12 +119,12 @@ class PreviewControllerTest extends TestCase
         $this->contentService
             ->expects($this->once())
             ->method('loadContent')
-            ->with($contentId, array($lang), $versionNo)
+            ->with($contentId, [$lang], $versionNo)
             ->will($this->returnValue($content));
         $this->authorizationChecker
             ->expects($this->once())
             ->method('isGranted')
-            ->with($this->equalTo(new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))))
+            ->with($this->equalTo(new AuthorizationAttribute('content', 'versionread', ['valueObject' => $content])))
             ->will($this->returnValue(false));
 
         $controller->previewContentAction(new Request(), $contentId, $versionNo, $lang, 'test');
@@ -138,7 +138,7 @@ class PreviewControllerTest extends TestCase
         $locationId = 456;
         $content = $this->createMock(Content::class);
         $location = $this->getMockBuilder(Location::class)
-            ->setConstructorArgs(array(array('id' => $locationId)))
+            ->setConstructorArgs([['id' => $locationId]])
             ->getMockForAbstractClass();
 
         // Repository expectations
@@ -150,12 +150,12 @@ class PreviewControllerTest extends TestCase
         $this->contentService
             ->expects($this->once())
             ->method('loadContent')
-            ->with($contentId, array($lang), $versionNo)
+            ->with($contentId, [$lang], $versionNo)
             ->will($this->returnValue($content));
         $this->authorizationChecker
             ->expects($this->once())
             ->method('isGranted')
-            ->with($this->equalTo(new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))))
+            ->with($this->equalTo(new AuthorizationAttribute('content', 'versionread', ['valueObject' => $content])))
             ->will($this->returnValue(true));
 
         $previewSiteAccessName = 'test';
@@ -163,7 +163,7 @@ class PreviewControllerTest extends TestCase
         $previousSiteAccessName = 'foo';
         $previousSiteAccess = new SiteAccess($previousSiteAccessName);
         $request = $this->getMockBuilder(Request::class)
-            ->setMethods(array('duplicate'))
+            ->setMethods(['duplicate'])
             ->getMock();
 
         // PreviewHelper expectations
@@ -172,10 +172,10 @@ class PreviewControllerTest extends TestCase
             ->method('setPreviewActive')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array(true, null),
-                        array(false, null),
-                    )
+                    [
+                        [true, null],
+                        [false, null],
+                    ]
                 )
             );
         $this->previewHelper
@@ -229,7 +229,7 @@ class PreviewControllerTest extends TestCase
         $locationId = 456;
         $content = $this->createMock(Content::class);
         $location = $this->getMockBuilder(Location::class)
-            ->setConstructorArgs(array(array('id' => $locationId)))
+            ->setConstructorArgs([['id' => $locationId]])
             ->getMockForAbstractClass();
 
         // Repository expectations
@@ -241,18 +241,18 @@ class PreviewControllerTest extends TestCase
         $this->contentService
             ->expects($this->once())
             ->method('loadContent')
-            ->with($contentId, array($lang), $versionNo)
+            ->with($contentId, [$lang], $versionNo)
             ->will($this->returnValue($content));
         $this->authorizationChecker
             ->expects($this->once())
             ->method('isGranted')
-            ->with($this->equalTo(new AuthorizationAttribute('content', 'versionread', array('valueObject' => $content))))
+            ->with($this->equalTo(new AuthorizationAttribute('content', 'versionread', ['valueObject' => $content])))
             ->will($this->returnValue(true));
 
         $previousSiteAccessName = 'foo';
         $previousSiteAccess = new SiteAccess($previousSiteAccessName);
         $request = $this->getMockBuilder(Request::class)
-            ->setMethods(array('duplicate'))
+            ->setMethods(['duplicate'])
             ->getMock();
 
         $this->previewHelper
@@ -296,19 +296,19 @@ class PreviewControllerTest extends TestCase
     {
         $duplicatedRequest = new Request();
         $duplicatedRequest->attributes->add(
-            array(
+            [
                 '_controller' => 'ez_content:viewLocation',
                 'location' => $location,
                 'viewType' => ViewManagerInterface::VIEW_TYPE_FULL,
                 'layout' => true,
                 'semanticPathinfo' => '/foo/bar',
-                'params' => array(
+                'params' => [
                     'content' => $content,
                     'location' => $location,
                     'isPreview' => true,
                     'siteaccess' => $previewSiteAccess,
-                ),
-            )
+                ],
+            ]
         );
 
         return $duplicatedRequest;

@@ -21,33 +21,33 @@ class ConfigResolverParameterPassTest extends TestCase
     public function testProcess()
     {
         $container = new ContainerBuilder();
-        $container->setParameter('ezpublish.config_resolver.updateable_services', array());
-        $updateableServices = array();
+        $container->setParameter('ezpublish.config_resolver.updateable_services', []);
+        $updateableServices = [];
         $def1Arg1 = 'foo';
         $def1Arg2 = new Reference('foo.bar');
-        $def1 = new Definition('stdClass', array($def1Arg1, $def1Arg2));
-        $def2 = new Definition('stdClass', array('$bar;some_namespace$', array()));
-        $def3 = new Definition('stdClass', array('$content.default_ttl;ezsettings;ezdemo_site_admin$'));
-        $def4 = new Definition('stdClass', array('$languages$'));
+        $def1 = new Definition('stdClass', [$def1Arg1, $def1Arg2]);
+        $def2 = new Definition('stdClass', ['$bar;some_namespace$', []]);
+        $def3 = new Definition('stdClass', ['$content.default_ttl;ezsettings;ezdemo_site_admin$']);
+        $def4 = new Definition('stdClass', ['$languages$']);
         $def5Arg1 = new Reference('def3');
-        $def5 = new Definition('stdClass', array($def5Arg1));
+        $def5 = new Definition('stdClass', [$def5Arg1]);
         $def6Arg1 = new Reference('def1');
         $def6Arg2 = new Reference('def4');
-        $def6 = new Definition('stdClass', array($def6Arg1, $def6Arg2));
-        $def7MethodCalls = array(
-            array('setFoo', array('something', new Reference('def1'))),
-            array('setBar', array(array('baz'))),
-        );
+        $def6 = new Definition('stdClass', [$def6Arg1, $def6Arg2]);
+        $def7MethodCalls = [
+            ['setFoo', ['something', new Reference('def1')]],
+            ['setBar', [['baz']]],
+        ];
         $def7 = new Definition('stdClass');
         $def7->setMethodCalls($def7MethodCalls);
-        $def8MethodCalls = array(
-            array('setFoo', array('$foo$')),
-            array('setBar', array('$bar;baz$')),
-        );
+        $def8MethodCalls = [
+            ['setFoo', ['$foo$']],
+            ['setBar', ['$bar;baz$']],
+        ];
         $def8 = new Definition('stdClass');
         $def8->setMethodCalls($def8MethodCalls);
         $container->setDefinitions(
-            array(
+            [
                 'def1' => $def1,
                 'def2' => $def2,
                 'def3' => $def3,
@@ -56,7 +56,7 @@ class ConfigResolverParameterPassTest extends TestCase
                 'def6' => $def6,
                 'def7' => $def7,
                 'def8' => $def8,
-            )
+            ]
         );
 
         $configResolverPass = new ConfigResolverParameterPass(new DynamicSettingParser());
@@ -79,7 +79,7 @@ class ConfigResolverParameterPassTest extends TestCase
         self::assertInstanceOf(Expression::class, $def2arg1);
         self::assertSame('service("ezpublish.config.resolver").getParameter("bar", "some_namespace", null)', (string)$def2arg1);
         // Also check 2nd argument
-        self::assertSame(array(), $def2->getArgument(1));
+        self::assertSame([], $def2->getArgument(1));
 
         $def3arg1 = $def3->getArgument(0);
         self::assertInstanceOf(Expression::class, $def3arg1);
@@ -99,14 +99,14 @@ class ConfigResolverParameterPassTest extends TestCase
         self::assertInstanceOf(Expression::class, $def8Calls[1][1][0]);
         $exprSetBar = 'service("ezpublish.config.resolver").getParameter("bar", "baz", null)';
         self::assertSame($exprSetBar, (string)$def8Calls[1][1][0]);
-        $updateableServices['def8'] = array(
-            array('setFoo', $exprSetFoo),
-            array('setBar', $exprSetBar),
-        );
+        $updateableServices['def8'] = [
+            ['setFoo', $exprSetFoo],
+            ['setBar', $exprSetBar],
+        ];
 
         self::assertTrue($container->hasParameter('ezpublish.config_resolver.resettable_services'));
         self::assertEquals(
-            array('def2', 'def3', 'def4', 'def5', 'def6'),
+            ['def2', 'def3', 'def4', 'def5', 'def6'],
             $container->getParameter('ezpublish.config_resolver.resettable_services')
         );
         self::assertEquals(

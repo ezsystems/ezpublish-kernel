@@ -199,7 +199,7 @@ abstract class FileSearchBaseIntegrationTest extends SearchBaseIntegrationTest
         $type = $this->createContentType(
             $this->getValidFieldSettings(),
             $this->getValidValidatorConfiguration(),
-            array()
+            []
         );
 
         $repository = $this->getRepository();

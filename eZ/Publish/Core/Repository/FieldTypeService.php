@@ -28,7 +28,7 @@ class FieldTypeService implements FieldTypeServiceInterface
      *
      * @var \eZ\Publish\API\Repository\FieldType[]
      */
-    protected $fieldTypes = array();
+    protected $fieldTypes = [];
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler.

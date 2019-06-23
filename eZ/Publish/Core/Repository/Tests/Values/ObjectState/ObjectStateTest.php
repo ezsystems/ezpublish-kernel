@@ -130,7 +130,7 @@ class ObjectStateTest extends TestCase
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\PropertyReadOnlyException::class);
 
-        $objectState = new ObjectState(array('id' => 2));
+        $objectState = new ObjectState(['id' => 2]);
         unset($objectState->id);
         $this->fail('Unsetting read-only property succeeded');
     }

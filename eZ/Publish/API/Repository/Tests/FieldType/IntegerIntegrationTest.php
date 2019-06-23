@@ -36,7 +36,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -46,7 +46,7 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,9 +56,9 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -68,18 +68,18 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array(
-            'IntegerValueValidator' => array(
-                'minIntegerValue' => array(
+        return [
+            'IntegerValueValidator' => [
+                'minIntegerValue' => [
                     'type' => 'int',
                     'default' => null,
-                ),
-                'maxIntegerValue' => array(
+                ],
+                'maxIntegerValue' => [
                     'type' => 'int',
                     'default' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -89,12 +89,12 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array(
-            'IntegerValueValidator' => array(
+        return [
+            'IntegerValueValidator' => [
                 'minIntegerValue' => 23,
                 'maxIntegerValue' => 42,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -104,11 +104,11 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'IntegerValueValidator' => array(
+        return [
+            'IntegerValueValidator' => [
                 'minStringLength' => new \stdClass(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -146,9 +146,9 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'value' => 23,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -178,20 +178,20 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 new IntegerValue(5),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-            array(
+            ],
+            [
                 new IntegerValue(127),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -218,9 +218,9 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'value' => 42,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -268,9 +268,9 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'value' => 23,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -299,12 +299,12 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new IntegerValue(23),
                 23,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -316,30 +316,30 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 42,
                 new IntegerValue(42),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new IntegerValue()),
-        );
+        return [
+            [new IntegerValue()],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(new IntegerValue(0)),
-            array(new IntegerValue(0.0)),
-        );
+            ],
+            [new IntegerValue(0)],
+            [new IntegerValue(0.0)],
+        ];
     }
 
     protected function getValidSearchValueOne()
@@ -354,8 +354,8 @@ class IntegerIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getFullTextIndexedFieldData()
     {
-        return array(
-            array('25', '26'),
-        );
+        return [
+            ['25', '26'],
+        ];
     }
 }

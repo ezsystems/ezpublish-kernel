@@ -157,7 +157,7 @@ class AliasGeneratorTest extends TestCase
     {
         $this->expectException(\InvalidArgumentException::class);
 
-        $field = new Field(array('value' => $this->createMock(FieldTypeValue::class)));
+        $field = new Field(['value' => $this->createMock(FieldTypeValue::class)]);
         $this->aliasGenerator->getVariation($field, new VersionInfo(), 'foo');
     }
 
@@ -170,7 +170,7 @@ class AliasGeneratorTest extends TestCase
     {
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'my_variation';
-        $this->filterConfiguration->set($variationName, array());
+        $this->filterConfiguration->set($variationName, []);
         $imageId = '123-45';
         $imageWidth = 300;
         $imageHeight = 300;
@@ -248,7 +248,7 @@ class AliasGeneratorTest extends TestCase
             ->will($this->returnValue($expectedUrl));
 
         $expected = new ImageVariation(
-            array(
+            [
                 'name' => $variationName,
                 'fileName' => 'image.jpg',
                 'dirPath' => 'http://localhost/foo/bar',
@@ -256,7 +256,7 @@ class AliasGeneratorTest extends TestCase
                 'imageId' => $imageId,
                 'height' => $imageHeight,
                 'width' => $imageWidth,
-            )
+            ]
         );
         $this->assertEquals($expected, $this->decoratedAliasGenerator->getVariation($field, new VersionInfo(), $variationName));
     }
@@ -272,9 +272,9 @@ class AliasGeneratorTest extends TestCase
         $variationName = 'my_variation';
         $reference1 = 'reference1';
         $reference2 = 'reference2';
-        $configVariation = array('reference' => $reference1);
-        $configReference1 = array('reference' => $reference2);
-        $configReference2 = array();
+        $configVariation = ['reference' => $reference1];
+        $configReference1 = ['reference' => $reference2];
+        $configReference2 = [];
         $this->filterConfiguration->set($variationName, $configVariation);
         $this->filterConfiguration->set($reference1, $configReference1);
         $this->filterConfiguration->set($reference2, $configReference2);
@@ -385,7 +385,7 @@ class AliasGeneratorTest extends TestCase
             ->method('find')
             ->will($this->throwException(new NotLoadableException()));
 
-        $field = new Field(array('value' => new ImageValue()));
+        $field = new Field(['value' => new ImageValue()]);
         $this->aliasGenerator->getVariation($field, new VersionInfo(), 'foo');
     }
 
@@ -396,8 +396,8 @@ class AliasGeneratorTest extends TestCase
         $originalPath = 'foo/bar/image.jpg';
         $variationName = 'my_variation';
         $imageId = '123-45';
-        $imageValue = new ImageValue(array('id' => $originalPath, 'imageId' => $imageId));
-        $field = new Field(array('value' => $imageValue));
+        $imageValue = new ImageValue(['id' => $originalPath, 'imageId' => $imageId]);
+        $field = new Field(['value' => $imageValue]);
 
         $this->ioResolver
             ->expects($this->once())

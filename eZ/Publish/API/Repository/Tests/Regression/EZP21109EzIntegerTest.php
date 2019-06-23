@@ -59,7 +59,7 @@ class EZP21109EzIntegerTest extends BaseTest
 
         $location = $locationService->newLocationCreateStruct(2);
 
-        $draft = $contentService->createContent($contentCreateStruct, array($location));
+        $draft = $contentService->createContent($contentCreateStruct, [$location]);
 
         $contentService->publishVersion($draft->versionInfo);
 
@@ -77,13 +77,13 @@ class EZP21109EzIntegerTest extends BaseTest
 
     public function validIntegerValues()
     {
-        return array(
-            array(0),
-            array(1),
-            array(-1),
-            array(2147483647),
-            array(-2147483647),
-        );
+        return [
+            [0],
+            [1],
+            [-1],
+            [2147483647],
+            [-2147483647],
+        ];
     }
 
     /**
@@ -102,9 +102,9 @@ class EZP21109EzIntegerTest extends BaseTest
         $contentType = $contentTypeService->newContentTypeCreateStruct($this->classShortName);
         $contentType->creatorId = $repository->getCurrentUser()->id;
         $contentType->mainLanguageCode = 'eng-GB';
-        $contentType->names = array(
+        $contentType->names = [
             'eng-GB' => $this->classShortName,
-        );
+        ];
         $contentType->nameSchema = '<test>';
         $contentType->urlAliasSchema = '<test>';
         $contentType->isContainer = false;
@@ -112,13 +112,13 @@ class EZP21109EzIntegerTest extends BaseTest
 
         // Field: IntegerTest
         $field = $contentTypeService->newFieldDefinitionCreateStruct('test', 'ezinteger');
-        $field->names = array(
+        $field->names = [
             'eng-GB' => 'Test',
-        );
+        ];
         $field->position = 10;
         $contentType->addFieldDefinition($field);
 
-        $draft = $contentTypeService->createContentType($contentType, array($typeGroup));
+        $draft = $contentTypeService->createContentType($contentType, [$typeGroup]);
 
         $contentTypeService->publishContentTypeDraft($draft);
 

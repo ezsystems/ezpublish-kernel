@@ -66,9 +66,9 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->createLanguage($languageCreateStruct);
         $this->signalDispatcher->emit(
             new CreateLanguageSignal(
-                array(
+                [
                     'languageId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -90,10 +90,10 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->updateLanguageName($language, $newName);
         $this->signalDispatcher->emit(
             new UpdateLanguageNameSignal(
-                array(
+                [
                     'languageId' => $language->id,
                     'newName' => $newName,
-                )
+                ]
             )
         );
 
@@ -114,9 +114,9 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->enableLanguage($language);
         $this->signalDispatcher->emit(
             new EnableLanguageSignal(
-                array(
+                [
                     'languageId' => $language->id,
-                )
+                ]
             )
         );
 
@@ -137,9 +137,9 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->disableLanguage($language);
         $this->signalDispatcher->emit(
             new DisableLanguageSignal(
-                array(
+                [
                     'languageId' => $language->id,
-                )
+                ]
             )
         );
 
@@ -215,9 +215,9 @@ class LanguageService implements LanguageServiceInterface
         $returnValue = $this->service->deleteLanguage($language);
         $this->signalDispatcher->emit(
             new DeleteLanguageSignal(
-                array(
+                [
                     'languageId' => $language->id,
-                )
+                ]
             )
         );
 

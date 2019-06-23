@@ -98,7 +98,7 @@ class ContentTest extends BaseServiceMockTest
     public function testLoadVersionInfoById()
     {
         $repository = $this->getRepositoryMock();
-        $contentServiceMock = $this->getPartlyMockedContentService(array('loadContentInfo'));
+        $contentServiceMock = $this->getPartlyMockedContentService(['loadContentInfo']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
@@ -113,7 +113,7 @@ class ContentTest extends BaseServiceMockTest
             ->with($this->equalTo(42))
             ->will(
                 $this->returnValue(
-                    new ContentInfo(array('currentVersionNo' => 24))
+                    new ContentInfo(['currentVersionNo' => 24])
                 )
             );
 
@@ -153,7 +153,7 @@ class ContentTest extends BaseServiceMockTest
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFoundException::class);
 
-        $contentServiceMock = $this->getPartlyMockedContentService(array('loadContentInfo'));
+        $contentServiceMock = $this->getPartlyMockedContentService(['loadContentInfo']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandler */
         $contentHandler = $this->getPersistenceMock()->contentHandler();
 
@@ -166,10 +166,10 @@ class ContentTest extends BaseServiceMockTest
                 $this->throwException(
                     new NotFoundException(
                         'Content',
-                        array(
+                        [
                             'contentId' => 42,
                             'versionNo' => 24,
-                        )
+                        ]
                     )
                 )
             );
@@ -325,7 +325,7 @@ class ContentTest extends BaseServiceMockTest
     public function testLoadVersionInfo()
     {
         $contentServiceMock = $this->getPartlyMockedContentService(
-            array('loadVersionInfoById')
+            ['loadVersionInfoById']
         );
         $contentServiceMock->expects(
             $this->once()
@@ -339,7 +339,7 @@ class ContentTest extends BaseServiceMockTest
         );
 
         $result = $contentServiceMock->loadVersionInfo(
-            new ContentInfo(array('id' => 42)),
+            new ContentInfo(['id' => 42]),
             7
         );
 
@@ -349,7 +349,7 @@ class ContentTest extends BaseServiceMockTest
     public function testLoadContent()
     {
         $repository = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContent'));
+        $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $versionInfo = $this->createMock(APIVersionInfo::class);
         $content
@@ -379,7 +379,7 @@ class ContentTest extends BaseServiceMockTest
     public function testLoadContentNonPublished()
     {
         $repository = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContent'));
+        $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $versionInfo = $this
             ->getMockBuilder(APIVersionInfo::class)
@@ -400,10 +400,10 @@ class ContentTest extends BaseServiceMockTest
             ->method('canUser')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('content', 'read', $content, null, true),
-                        array('content', 'versionread', $content, null, true),
-                    )
+                    [
+                        ['content', 'read', $content, null, true],
+                        ['content', 'versionread', $content, null, true],
+                    ]
                 )
             );
 
@@ -415,7 +415,7 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContent'));
+        $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $contentId = 123;
         $contentService
@@ -438,7 +438,7 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContent'));
+        $contentService = $this->getPartlyMockedContentService(['internalLoadContent']);
         $content = $this->createMock(APIContent::class);
         $versionInfo = $this
             ->getMockBuilder(APIVersionInfo::class)
@@ -459,10 +459,10 @@ class ContentTest extends BaseServiceMockTest
             ->method('canUser')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('content', 'read', $content, null, true),
-                        array('content', 'versionread', $content, null, false),
-                    )
+                    [
+                        ['content', 'read', $content, null, true],
+                        ['content', 'versionread', $content, null, false],
+                    ]
                 )
             );
 
@@ -481,14 +481,14 @@ class ContentTest extends BaseServiceMockTest
 
         if ($isRemoteId) {
             $realId = 123;
-            $spiContentInfo = new SPIContentInfo(array('currentVersionNo' => $versionNo ?: 7, 'id' => $realId));
+            $spiContentInfo = new SPIContentInfo(['currentVersionNo' => $versionNo ?: 7, 'id' => $realId]);
             $contentHandler
                 ->expects($this->once())
                 ->method('loadContentInfoByRemoteId')
                 ->with($id)
                 ->will($this->returnValue($spiContentInfo));
         } elseif (!empty($languages) && $useAlwaysAvailable) {
-            $spiContentInfo = new SPIContentInfo(array('alwaysAvailable' => false));
+            $spiContentInfo = new SPIContentInfo(['alwaysAvailable' => false]);
             $contentHandler
                 ->expects($this->once())
                 ->method('loadContentInfo')
@@ -517,23 +517,23 @@ class ContentTest extends BaseServiceMockTest
 
     public function internalLoadContentProvider()
     {
-        return array(
-            array(123, null, null, false, false),
-            array(123, null, 456, false, false),
-            array(456, null, 123, false, true),
-            array(456, null, 2, false, false),
-            array(456, array('eng-GB'), 2, false, true),
-            array(456, array('eng-GB', 'fre-FR'), null, false, false),
-            array(456, array('eng-GB', 'fre-FR', 'nor-NO'), 2, false, false),
+        return [
+            [123, null, null, false, false],
+            [123, null, 456, false, false],
+            [456, null, 123, false, true],
+            [456, null, 2, false, false],
+            [456, ['eng-GB'], 2, false, true],
+            [456, ['eng-GB', 'fre-FR'], null, false, false],
+            [456, ['eng-GB', 'fre-FR', 'nor-NO'], 2, false, false],
             // With remoteId
-            array(123, null, null, true, false),
-            array('someRemoteId', null, 456, true, false),
-            array(456, null, 123, true, false),
-            array('someRemoteId', null, 2, true, false),
-            array('someRemoteId', array('eng-GB'), 2, true, false),
-            array(456, array('eng-GB', 'fre-FR'), null, true, false),
-            array('someRemoteId', array('eng-GB', 'fre-FR', 'nor-NO'), 2, true, false),
-        );
+            [123, null, null, true, false],
+            ['someRemoteId', null, 456, true, false],
+            [456, null, 123, true, false],
+            ['someRemoteId', null, 2, true, false],
+            ['someRemoteId', ['eng-GB'], 2, true, false],
+            [456, ['eng-GB', 'fre-FR'], null, true, false],
+            ['someRemoteId', ['eng-GB', 'fre-FR', 'nor-NO'], 2, true, false],
+        ];
     }
 
     public function testInternalLoadContentNotFound()
@@ -567,7 +567,7 @@ class ContentTest extends BaseServiceMockTest
     public function testLoadContentByContentInfo()
     {
         $contentServiceMock = $this->getPartlyMockedContentService(
-            array('loadContent')
+            ['loadContent']
         );
         $contentServiceMock->expects(
             $this->once()
@@ -575,7 +575,7 @@ class ContentTest extends BaseServiceMockTest
             'loadContent'
         )->with(
             $this->equalTo(42),
-            $this->equalTo(array('cro-HR')),
+            $this->equalTo(['cro-HR']),
             $this->equalTo(7),
             $this->equalTo(false)
         )->will(
@@ -583,8 +583,8 @@ class ContentTest extends BaseServiceMockTest
         );
 
         $result = $contentServiceMock->loadContentByContentInfo(
-            new ContentInfo(array('id' => 42)),
-            array('cro-HR'),
+            new ContentInfo(['id' => 42]),
+            ['cro-HR'],
             7
         );
 
@@ -599,7 +599,7 @@ class ContentTest extends BaseServiceMockTest
     public function testLoadContentByVersionInfo()
     {
         $contentServiceMock = $this->getPartlyMockedContentService(
-            array('loadContent')
+            ['loadContent']
         );
         $contentServiceMock->expects(
             $this->once()
@@ -607,7 +607,7 @@ class ContentTest extends BaseServiceMockTest
             'loadContent'
         )->with(
             $this->equalTo(42),
-            $this->equalTo(array('cro-HR')),
+            $this->equalTo(['cro-HR']),
             $this->equalTo(7),
             $this->equalTo(false)
         )->will(
@@ -616,12 +616,12 @@ class ContentTest extends BaseServiceMockTest
 
         $result = $contentServiceMock->loadContentByVersionInfo(
             new VersionInfo(
-                array(
-                    'contentInfo' => new ContentInfo(array('id' => 42)),
+                [
+                    'contentInfo' => new ContentInfo(['id' => 42]),
                     'versionNo' => 7,
-                )
+                ]
             ),
-            array('cro-HR')
+            ['cro-HR']
         );
 
         $this->assertEquals('result', $result);
@@ -637,7 +637,7 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
+        $contentService = $this->getPartlyMockedContentService(['internalLoadContentInfo']);
         $contentInfo = $this->createMock(APIContentInfo::class);
 
         $contentInfo->expects($this->any())
@@ -673,7 +673,7 @@ class ContentTest extends BaseServiceMockTest
             ->with('content', 'remove')
             ->will($this->returnValue(true));
 
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
+        $contentService = $this->getPartlyMockedContentService(['internalLoadContentInfo']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $urlAliasHandler */
         $urlAliasHandler = $this->getPersistenceMock()->urlAliasHandler();
         /** @var \PHPUnit\Framework\MockObject\MockObject $locationHandler */
@@ -695,10 +695,10 @@ class ContentTest extends BaseServiceMockTest
 
         $repository->expects($this->once())->method('beginTransaction');
 
-        $spiLocations = array(
-            new SPILocation(array('id' => 1)),
-            new SPILocation(array('id' => 2)),
-        );
+        $spiLocations = [
+            new SPILocation(['id' => 1]),
+            new SPILocation(['id' => 2]),
+        ];
         $locationHandler->expects($this->once())
             ->method('loadLocationsByContent')
             ->with(42)
@@ -736,7 +736,7 @@ class ContentTest extends BaseServiceMockTest
             ->with('content', 'remove')
             ->will($this->returnValue(true));
 
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
+        $contentService = $this->getPartlyMockedContentService(['internalLoadContentInfo']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $locationHandler */
         $locationHandler = $this->getPersistenceMock()->locationHandler();
 
@@ -801,10 +801,10 @@ class ContentTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('versionNo', 123),
-                        array('contentInfo', $contentInfo),
-                    )
+                    [
+                        ['versionNo', 123],
+                        ['contentInfo', $contentInfo],
+                    ]
                 )
             );
         $versionInfo
@@ -816,7 +816,7 @@ class ContentTest extends BaseServiceMockTest
             ->expects($this->once())
             ->method('listVersions')
             ->with(42)
-            ->will($this->returnValue(array('version')));
+            ->will($this->returnValue(['version']));
 
         /* @var \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo */
         $contentService->deleteVersion($versionInfo);
@@ -833,7 +833,7 @@ class ContentTest extends BaseServiceMockTest
         $this->expectExceptionMessage('Argument \'$contentCreateStruct\' is invalid: \'mainLanguageCode\' property must be set');
 
         $mockedService = $this->getPartlyMockedContentService();
-        $mockedService->createContent(new ContentCreateStruct(), array());
+        $mockedService->createContent(new ContentCreateStruct(), []);
     }
 
     /**
@@ -848,8 +848,8 @@ class ContentTest extends BaseServiceMockTest
 
         $mockedService = $this->getPartlyMockedContentService();
         $mockedService->createContent(
-            new ContentCreateStruct(array('mainLanguageCode' => 'eng-US')),
-            array()
+            new ContentCreateStruct(['mainLanguageCode' => 'eng-US']),
+            []
         );
     }
 
@@ -866,18 +866,18 @@ class ContentTest extends BaseServiceMockTest
         $mockedService = $this->getPartlyMockedContentService();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 123,
-                'fieldDefinitions' => array(),
-            )
+                'fieldDefinitions' => [],
+            ]
         );
         $contentCreateStruct = new ContentCreateStruct(
-            array(
+            [
                 'ownerId' => 169,
                 'alwaysAvailable' => false,
                 'mainLanguageCode' => 'eng-US',
                 'contentType' => $contentType,
-            )
+            ]
         );
 
         $repositoryMock->expects($this->once())
@@ -899,17 +899,17 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo('content'),
                 $this->equalTo('create'),
                 $this->isInstanceOf(get_class($contentCreateStruct)),
-                $this->equalTo(array())
+                $this->equalTo([])
             )->will($this->returnValue(false));
 
         $mockedService->createContent(
             new ContentCreateStruct(
-                array(
+                [
                     'mainLanguageCode' => 'eng-US',
                     'contentType' => $contentType,
-                )
+                ]
             ),
-            array()
+            []
         );
     }
 
@@ -924,22 +924,22 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
 
         $repositoryMock = $this->getRepositoryMock();
-        $mockedService = $this->getPartlyMockedContentService(array('loadContentByRemoteId'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContentByRemoteId']);
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 123,
-                'fieldDefinitions' => array(),
-            )
+                'fieldDefinitions' => [],
+            ]
         );
         $contentCreateStruct = new ContentCreateStruct(
-            array(
+            [
                 'ownerId' => 169,
                 'alwaysAvailable' => false,
                 'remoteId' => 'faraday',
                 'mainLanguageCode' => 'eng-US',
                 'contentType' => $contentType,
-            )
+            ]
         );
 
         $repositoryMock->expects($this->once())
@@ -961,7 +961,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo('content'),
                 $this->equalTo('create'),
                 $this->isInstanceOf(get_class($contentCreateStruct)),
-                $this->equalTo(array())
+                $this->equalTo([])
             )->will($this->returnValue(true));
 
         $mockedService->expects($this->once())
@@ -971,13 +971,13 @@ class ContentTest extends BaseServiceMockTest
 
         $mockedService->createContent(
             new ContentCreateStruct(
-                array(
+                [
                     'remoteId' => 'faraday',
                     'mainLanguageCode' => 'eng-US',
                     'contentType' => $contentType,
-                )
+                ]
             ),
-            array()
+            []
         );
     }
 
@@ -990,12 +990,12 @@ class ContentTest extends BaseServiceMockTest
      */
     protected function mapStructFieldsForCreate($mainLanguageCode, $structFields, $fieldDefinitions)
     {
-        $mappedFieldDefinitions = array();
+        $mappedFieldDefinitions = [];
         foreach ($fieldDefinitions as $fieldDefinition) {
             $mappedFieldDefinitions[$fieldDefinition->identifier] = $fieldDefinition;
         }
 
-        $mappedStructFields = array();
+        $mappedStructFields = [];
         foreach ($structFields as $structField) {
             if ($structField->languageCode === null) {
                 $languageCode = $mainLanguageCode;
@@ -1034,7 +1034,7 @@ class ContentTest extends BaseServiceMockTest
             $fieldDefinitions
         );
 
-        $values = array();
+        $values = [];
 
         foreach ($fieldDefinitions as $fieldDefinition) {
             $identifier = $fieldDefinition->identifier;
@@ -1068,7 +1068,7 @@ class ContentTest extends BaseServiceMockTest
      */
     protected function determineLanguageCodesForCreate($mainLanguageCode, array $structFields)
     {
-        $languageCodes = array();
+        $languageCodes = [];
 
         foreach ($structFields as $field) {
             if ($field->languageCode === null || isset($languageCodes[$field->languageCode])) {
@@ -1102,7 +1102,7 @@ class ContentTest extends BaseServiceMockTest
         array $structFields,
         array $spiFields,
         array $fieldDefinitions,
-        array $locationCreateStructs = array(),
+        array $locationCreateStructs = [],
         $withObjectStates = false,
         $execute = true
     ) {
@@ -1122,21 +1122,21 @@ class ContentTest extends BaseServiceMockTest
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $languageCodes = $this->determineLanguageCodesForCreate($mainLanguageCode, $structFields);
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 123,
                 'fieldDefinitions' => $fieldDefinitions,
                 'nameSchema' => '<nameSchema>',
-            )
+            ]
         );
         $contentCreateStruct = new ContentCreateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'mainLanguageCode' => $mainLanguageCode,
                 'contentType' => $contentType,
                 'alwaysAvailable' => false,
                 'ownerId' => 169,
                 'sectionId' => 1,
-            )
+            ]
         );
 
         $languageHandlerMock->expects($this->any())
@@ -1145,7 +1145,7 @@ class ContentTest extends BaseServiceMockTest
             ->will(
                 $this->returnCallback(
                     function () {
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -1225,7 +1225,7 @@ class ContentTest extends BaseServiceMockTest
 
         $fieldTypeMock->expects($this->any())
             ->method('validate')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
@@ -1255,7 +1255,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo($contentType),
                 $this->equalTo($values),
                 $this->equalTo($languageCodes)
-            )->will($this->returnValue(array()));
+            )->will($this->returnValue([]));
 
         $relationProcessorMock->expects($this->any())
             ->method('processFieldRelations')
@@ -1264,19 +1264,19 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo(42),
                 $this->isType('int'),
                 $this->equalTo($contentType),
-                $this->equalTo(array())
+                $this->equalTo([])
             );
 
         if (!$withObjectStates) {
             $objectStateHandlerMock->expects($this->once())
                 ->method('loadAllGroups')
-                ->will($this->returnValue(array()));
+                ->will($this->returnValue([]));
         }
 
         if ($execute) {
             $spiContentCreateStruct = new SPIContentCreateStruct(
-                array(
-                    'name' => array(),
+                [
+                    'name' => [],
                     'typeId' => 123,
                     'sectionId' => 1,
                     'ownerId' => 169,
@@ -1284,20 +1284,20 @@ class ContentTest extends BaseServiceMockTest
                     'fields' => $spiFields,
                     'modified' => time(),
                     'initialLanguageId' => 4242,
-                )
+                ]
             );
             $spiContentCreateStruct2 = clone $spiContentCreateStruct;
             ++$spiContentCreateStruct2->modified;
 
             $spiContent = new SPIContent(
-                array(
+                [
                     'versionInfo' => new SPIContent\VersionInfo(
-                        array(
-                            'contentInfo' => new SPIContent\ContentInfo(array('id' => 42)),
+                        [
+                            'contentInfo' => new SPIContent\ContentInfo(['id' => 42]),
                             'versionNo' => 7,
-                        )
+                        ]
                     ),
-                )
+                ]
             );
 
             $contentHandlerMock->expects($this->once())
@@ -1313,7 +1313,7 @@ class ContentTest extends BaseServiceMockTest
                     $this->equalTo($contentType)
                 );
 
-            $mockedService->createContent($contentCreateStruct, array());
+            $mockedService->createContent($contentCreateStruct, []);
         }
 
         return $contentCreateStruct;
@@ -1321,47 +1321,47 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestCreateContentNonRedundantFieldSet1()
     {
-        $spiFields = array(
+        $spiFields = [
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue',
                     'languageCode' => 'eng-US',
-                )
+                ]
             ),
-        );
+        ];
 
-        return array(
+        return [
             // 0. Without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields,
-            ),
+            ],
             // 1. Without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -1378,18 +1378,18 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testCreateContentNonRedundantFieldSet1($mainLanguageCode, $structFields, $spiFields)
     {
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
 
         $this->assertForTestCreateContentNonRedundantFieldSet(
             $mainLanguageCode,
@@ -1401,69 +1401,69 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestCreateContentNonRedundantFieldSet2()
     {
-        $spiFields = array(
+        $spiFields = [
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1',
                     'languageCode' => 'eng-US',
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue2',
                     'languageCode' => 'ger-DE',
-                )
+                ]
             ),
-        );
+        ];
 
-        return array(
+        return [
             // 0. With language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue2',
                             'languageCode' => 'ger-DE',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields,
-            ),
+            ],
             // 1. Without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue2',
                             'languageCode' => 'ger-DE',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -1480,28 +1480,28 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testCreateContentNonRedundantFieldSet2($mainLanguageCode, $structFields, $spiFields)
     {
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId1',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId2',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
-        );
+        ];
 
         $this->assertForTestCreateContentNonRedundantFieldSet(
             $mainLanguageCode,
@@ -1513,169 +1513,169 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestCreateContentNonRedundantFieldSetComplex()
     {
-        $spiFields0 = array(
+        $spiFields0 = [
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue2',
                     'languageCode' => 'eng-US',
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue4',
                     'languageCode' => 'eng-US',
-                )
+                ]
             ),
-        );
-        $spiFields1 = array(
+        ];
+        $spiFields1 = [
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1',
                     'languageCode' => 'ger-DE',
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue2',
                     'languageCode' => 'ger-DE',
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue2',
                     'languageCode' => 'eng-US',
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue4',
                     'languageCode' => 'eng-US',
-                )
+                ]
             ),
-        );
+        ];
 
-        return array(
+        return [
             // 0. Creating by default values only
-            array(
+            [
                 'eng-US',
-                array(),
+                [],
                 $spiFields0,
-            ),
+            ],
             // 1. Multiple languages with language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'ger-DE',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier4',
                             'value' => 'newValue4',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 2. Multiple languages without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'ger-DE',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue2',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier4',
                             'value' => 'newValue4',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
-        );
+            ],
+        ];
     }
 
     protected function fixturesForTestCreateContentNonRedundantFieldSetComplex()
     {
-        return array(
+        return [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId1',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId2',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue2',
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId3',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier3',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId4',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier4',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue4',
-                )
+                ]
             ),
-        );
+        ];
     }
 
     /**
@@ -1704,32 +1704,32 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestCreateContentWithInvalidLanguage()
     {
-        return array(
-            array(
+        return [
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'Klingon',
-                        )
+                        ]
                     ),
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'Klingon',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -1751,20 +1751,20 @@ class ContentTest extends BaseServiceMockTest
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $domainMapperMock = $this->getDomainMapperMock();
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 123,
-                'fieldDefinitions' => array(),
-            )
+                'fieldDefinitions' => [],
+            ]
         );
         $contentCreateStruct = new ContentCreateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'mainLanguageCode' => $mainLanguageCode,
                 'contentType' => $contentType,
                 'alwaysAvailable' => false,
                 'ownerId' => 169,
                 'sectionId' => 1,
-            )
+            ]
         );
 
         $languageHandlerMock->expects($this->any())
@@ -1777,7 +1777,7 @@ class ContentTest extends BaseServiceMockTest
                             throw new NotFoundException('Language', 'Klingon');
                         }
 
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -1798,7 +1798,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo('content'),
                 $this->equalTo('create'),
                 $this->isInstanceOf(APIContentCreateStruct::class),
-                $this->equalTo(array())
+                $this->equalTo([])
             )->will(
                 $this->returnCallback(
                     function () use ($that, $contentCreateStruct) {
@@ -1822,32 +1822,32 @@ class ContentTest extends BaseServiceMockTest
                 )
             );
 
-        $mockedService->createContent($contentCreateStruct, array());
+        $mockedService->createContent($contentCreateStruct, []);
     }
 
     protected function assertForCreateContentContentValidationException(
         $mainLanguageCode,
         $structFields,
-        $fieldDefinitions = array()
+        $fieldDefinitions = []
     ) {
         $repositoryMock = $this->getRepositoryMock();
-        $mockedService = $this->getPartlyMockedContentService(array('loadContentByRemoteId'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContentByRemoteId']);
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 123,
                 'fieldDefinitions' => $fieldDefinitions,
-            )
+            ]
         );
         $contentCreateStruct = new ContentCreateStruct(
-            array(
+            [
                 'ownerId' => 169,
                 'alwaysAvailable' => false,
                 'remoteId' => 'faraday',
                 'mainLanguageCode' => $mainLanguageCode,
                 'fields' => $structFields,
                 'contentType' => $contentType,
-            )
+            ]
         );
 
         $contentTypeServiceMock->expects($this->once())
@@ -1865,7 +1865,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo('content'),
                 $this->equalTo('create'),
                 $this->isInstanceOf(get_class($contentCreateStruct)),
-                $this->equalTo(array())
+                $this->equalTo([])
             )->will($this->returnValue(true));
 
         $mockedService->expects($this->once())
@@ -1875,25 +1875,25 @@ class ContentTest extends BaseServiceMockTest
                 $this->throwException(new NotFoundException('Content', 'faraday'))
             );
 
-        $mockedService->createContent($contentCreateStruct, array());
+        $mockedService->createContent($contentCreateStruct, []);
     }
 
     public function providerForTestCreateContentThrowsContentValidationExceptionFieldDefinition()
     {
-        return array(
-            array(
+        return [
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -1912,26 +1912,26 @@ class ContentTest extends BaseServiceMockTest
         $this->assertForCreateContentContentValidationException(
             $mainLanguageCode,
             $structFields,
-            array()
+            []
         );
     }
 
     public function providerForTestCreateContentThrowsContentValidationExceptionTranslation()
     {
-        return array(
-            array(
+        return [
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -1947,18 +1947,18 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
         $this->expectExceptionMessage('A value is set for non translatable field definition \'identifier\' with language \'eng-US\'');
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId1',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
-        );
+        ];
 
         $this->assertForCreateContentContentValidationException(
             $mainLanguageCode,
@@ -1990,21 +1990,21 @@ class ContentTest extends BaseServiceMockTest
         $domainMapperMock = $this->getDomainMapperMock();
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 123,
                 'fieldDefinitions' => $fieldDefinitions,
                 'nameSchema' => '<nameSchema>',
-            )
+            ]
         );
         $contentCreateStruct = new ContentCreateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'mainLanguageCode' => $mainLanguageCode,
                 'contentType' => $contentType,
                 'alwaysAvailable' => false,
                 'ownerId' => 169,
                 'sectionId' => 1,
-            )
+            ]
         );
 
         $languageHandlerMock->expects($this->any())
@@ -2013,7 +2013,7 @@ class ContentTest extends BaseServiceMockTest
             ->will(
                 $this->returnCallback(
                     function () {
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -2034,7 +2034,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo('content'),
                 $this->equalTo('create'),
                 $this->isInstanceOf(APIContentCreateStruct::class),
-                $this->equalTo(array())
+                $this->equalTo([])
             )->will(
                 $this->returnCallback(
                     function () use ($that, $contentCreateStruct) {
@@ -2081,7 +2081,7 @@ class ContentTest extends BaseServiceMockTest
 
         $fieldTypeMock->expects($this->any())
             ->method('validate')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
@@ -2092,22 +2092,22 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestCreateContentThrowsContentValidationExceptionRequiredField()
     {
-        return array(
-            array(
+        return [
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 'identifier',
                 'eng-US',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -2126,18 +2126,18 @@ class ContentTest extends BaseServiceMockTest
     ) {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => true,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
         $contentCreateStruct = $this->assertForTestCreateContentRequiredField(
             $mainLanguageCode,
             $structFields,
@@ -2147,7 +2147,7 @@ class ContentTest extends BaseServiceMockTest
         $mockedService = $this->getPartlyMockedContentService();
 
         try {
-            $mockedService->createContent($contentCreateStruct, array());
+            $mockedService->createContent($contentCreateStruct, []);
         } catch (ContentValidationException $e) {
             $this->assertEquals(
                 "Value for required field definition '{$identifier}' with language '{$languageCode}' is empty",
@@ -2183,21 +2183,21 @@ class ContentTest extends BaseServiceMockTest
         $fieldTypeMock = $this->createMock(SPIFieldType::class);
         $languageCodes = $this->determineLanguageCodesForCreate($mainLanguageCode, $structFields);
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 123,
                 'fieldDefinitions' => $fieldDefinitions,
                 'nameSchema' => '<nameSchema>',
-            )
+            ]
         );
         $contentCreateStruct = new ContentCreateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'mainLanguageCode' => $mainLanguageCode,
                 'contentType' => $contentType,
                 'alwaysAvailable' => false,
                 'ownerId' => 169,
                 'sectionId' => 1,
-            )
+            ]
         );
 
         $languageHandlerMock->expects($this->any())
@@ -2206,7 +2206,7 @@ class ContentTest extends BaseServiceMockTest
             ->will(
                 $this->returnCallback(
                     function () {
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -2227,7 +2227,7 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo('content'),
                 $this->equalTo('create'),
                 $this->isInstanceOf(APIContentCreateStruct::class),
-                $this->equalTo(array())
+                $this->equalTo([])
             )->will(
                 $this->returnCallback(
                     function () use ($that, $contentCreateStruct) {
@@ -2272,7 +2272,7 @@ class ContentTest extends BaseServiceMockTest
             $fieldDefinitions,
             $languageCodes
         );
-        $allFieldErrors = array();
+        $allFieldErrors = [];
         $validateCount = 0;
         $emptyValue = self::EMPTY_FIELD_VALUE;
         foreach ($contentType->getFieldDefinitions() as $fieldDefinition) {
@@ -2312,7 +2312,7 @@ class ContentTest extends BaseServiceMockTest
             }
         }
 
-        return array($contentCreateStruct, $allFieldErrors);
+        return [$contentCreateStruct, $allFieldErrors];
     }
 
     public function providerForTestCreateContentThrowsContentFieldValidationException()
@@ -2361,36 +2361,36 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testCreateContentWithLocations()
     {
-        $spiFields = array(
+        $spiFields = [
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue',
                     'languageCode' => 'eng-US',
-                )
+                ]
             ),
-        );
-        $fieldDefinitions = array(
+        ];
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
 
         // Set up a simple case that will pass
-        $locationCreateStruct1 = new LocationCreateStruct(array('parentLocationId' => 321));
-        $locationCreateStruct2 = new LocationCreateStruct(array('parentLocationId' => 654));
-        $locationCreateStructs = array($locationCreateStruct1, $locationCreateStruct2);
+        $locationCreateStruct1 = new LocationCreateStruct(['parentLocationId' => 321]);
+        $locationCreateStruct2 = new LocationCreateStruct(['parentLocationId' => 654]);
+        $locationCreateStructs = [$locationCreateStruct1, $locationCreateStruct2];
         $contentCreateStruct = $this->assertForTestCreateContentNonRedundantFieldSet(
             'eng-US',
-            array(),
+            [],
             $spiFields,
             $fieldDefinitions,
             $locationCreateStructs,
@@ -2406,7 +2406,7 @@ class ContentTest extends BaseServiceMockTest
         $handlerMock = $this->getPersistenceMock()->contentHandler();
         $domainMapperMock = $this->getDomainMapperMock();
         $spiLocationCreateStruct = new SPILocation\CreateStruct();
-        $parentLocation = new Location(array('contentInfo' => new ContentInfo(array('sectionId' => 1))));
+        $parentLocation = new Location(['contentInfo' => new ContentInfo(['sectionId' => 1])]);
 
         $locationServiceMock->expects($this->at(0))
             ->method('loadLocation')
@@ -2443,8 +2443,8 @@ class ContentTest extends BaseServiceMockTest
             )->will($this->returnValue($spiLocationCreateStruct));
 
         $spiContentCreateStruct = new SPIContentCreateStruct(
-            array(
-                'name' => array(),
+            [
+                'name' => [],
                 'typeId' => 123,
                 'sectionId' => 1,
                 'ownerId' => 169,
@@ -2452,21 +2452,21 @@ class ContentTest extends BaseServiceMockTest
                 'fields' => $spiFields,
                 'modified' => time(),
                 'initialLanguageId' => 4242,
-                'locations' => array($spiLocationCreateStruct, $spiLocationCreateStruct),
-            )
+                'locations' => [$spiLocationCreateStruct, $spiLocationCreateStruct],
+            ]
         );
         $spiContentCreateStruct2 = clone $spiContentCreateStruct;
         ++$spiContentCreateStruct2->modified;
 
         $spiContent = new SPIContent(
-            array(
+            [
                 'versionInfo' => new SPIContent\VersionInfo(
-                    array(
-                        'contentInfo' => new SPIContent\ContentInfo(array('id' => 42)),
+                    [
+                        'contentInfo' => new SPIContent\ContentInfo(['id' => 42]),
                         'versionNo' => 7,
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         $handlerMock->expects($this->once())
@@ -2500,18 +2500,18 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\InvalidArgumentException::class);
         $this->expectExceptionMessage('Multiple LocationCreateStructs with the same parent Location \'321\' are given');
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
 
         $repositoryMock = $this->getRepositoryMock();
         $mockedService = $this->getPartlyMockedContentService();
@@ -2521,25 +2521,25 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $spiLocationCreateStruct = new SPILocation\CreateStruct();
-        $parentLocation = new Location(array('id' => 321));
-        $locationCreateStruct = new LocationCreateStruct(array('parentLocationId' => 321));
-        $locationCreateStructs = array($locationCreateStruct, clone $locationCreateStruct);
+        $parentLocation = new Location(['id' => 321]);
+        $locationCreateStruct = new LocationCreateStruct(['parentLocationId' => 321]);
+        $locationCreateStructs = [$locationCreateStruct, clone $locationCreateStruct];
         $contentType = new ContentType(
-            array(
+            [
                 'id' => 123,
                 'fieldDefinitions' => $fieldDefinitions,
                 'nameSchema' => '<nameSchema>',
-            )
+            ]
         );
         $contentCreateStruct = new ContentCreateStruct(
-            array(
-                'fields' => array(),
+            [
+                'fields' => [],
                 'mainLanguageCode' => 'eng-US',
                 'contentType' => $contentType,
                 'alwaysAvailable' => false,
                 'ownerId' => 169,
                 'sectionId' => 1,
-            )
+            ]
         );
 
         $languageHandlerMock->expects($this->any())
@@ -2548,7 +2548,7 @@ class ContentTest extends BaseServiceMockTest
             ->will(
                 $this->returnCallback(
                     function () {
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -2628,40 +2628,40 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testCreateContentObjectStates()
     {
-        $spiFields = array(
+        $spiFields = [
             new SPIField(
-                array(
+                [
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue',
                     'languageCode' => 'eng-US',
-                )
+                ]
             ),
-        );
-        $fieldDefinitions = array(
+        ];
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
-        $objectStateGroups = array(
-            new SPIObjectStateGroup(array('id' => 10)),
-            new SPIObjectStateGroup(array('id' => 20)),
-        );
+        ];
+        $objectStateGroups = [
+            new SPIObjectStateGroup(['id' => 10]),
+            new SPIObjectStateGroup(['id' => 20]),
+        ];
 
         // Set up a simple case that will pass
         $contentCreateStruct = $this->assertForTestCreateContentNonRedundantFieldSet(
             'eng-US',
-            array(),
+            [],
             $spiFields,
             $fieldDefinitions,
-            array(),
+            [],
             true,
             // Do not execute
             false
@@ -2679,8 +2679,8 @@ class ContentTest extends BaseServiceMockTest
         $this->mockSetDefaultObjectStates();
 
         $spiContentCreateStruct = new SPIContentCreateStruct(
-            array(
-                'name' => array(),
+            [
+                'name' => [],
                 'typeId' => 123,
                 'sectionId' => 1,
                 'ownerId' => 169,
@@ -2688,21 +2688,21 @@ class ContentTest extends BaseServiceMockTest
                 'fields' => $spiFields,
                 'modified' => $timestamp,
                 'initialLanguageId' => 4242,
-                'locations' => array(),
-            )
+                'locations' => [],
+            ]
         );
         $spiContentCreateStruct2 = clone $spiContentCreateStruct;
         ++$spiContentCreateStruct2->modified;
 
         $spiContent = new SPIContent(
-            array(
+            [
                 'versionInfo' => new SPIContent\VersionInfo(
-                    array(
-                        'contentInfo' => new SPIContent\ContentInfo(array('id' => 42)),
+                    [
+                        'contentInfo' => new SPIContent\ContentInfo(['id' => 42]),
                         'versionNo' => 7,
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         $handlerMock->expects($this->once())
@@ -2720,7 +2720,7 @@ class ContentTest extends BaseServiceMockTest
         $repositoryMock->expects($this->once())->method('commit');
 
         // Execute
-        $mockedService->createContent($contentCreateStruct, array());
+        $mockedService->createContent($contentCreateStruct, []);
     }
 
     /**
@@ -2737,26 +2737,26 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Store failed');
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
 
         // Setup a simple case that will pass
         $contentCreateStruct = $this->assertForTestCreateContentNonRedundantFieldSet(
             'eng-US',
-            array(),
-            array(),
+            [],
+            [],
             $fieldDefinitions,
-            array(),
+            [],
             false,
             // Do not execute test
             false
@@ -2774,15 +2774,15 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->throwException(new \Exception('Store failed')));
 
         // Execute
-        $this->partlyMockedContentService->createContent($contentCreateStruct, array());
+        $this->partlyMockedContentService->createContent($contentCreateStruct, []);
     }
 
     public function providerForTestUpdateContentThrowsBadStateException()
     {
-        return array(
-            array(VersionInfo::STATUS_PUBLISHED),
-            array(VersionInfo::STATUS_ARCHIVED),
-        );
+        return [
+            [VersionInfo::STATUS_PUBLISHED],
+            [VersionInfo::STATUS_ARCHIVED],
+        ];
     }
 
     /**
@@ -2795,20 +2795,20 @@ class ContentTest extends BaseServiceMockTest
     {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\BadStateException::class);
 
-        $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent']);
         $contentUpdateStruct = new ContentUpdateStruct();
         $versionInfo = new VersionInfo(
-            array(
-                'contentInfo' => new ContentInfo(array('id' => 42)),
+            [
+                'contentInfo' => new ContentInfo(['id' => 42]),
                 'versionNo' => 7,
                 'status' => $status,
-            )
+            ]
         );
         $content = new Content(
-            array(
+            [
                 'versionInfo' => $versionInfo,
-                'internalFields' => array(),
-            )
+                'internalFields' => [],
+            ]
         );
 
         $mockedService->expects($this->once())
@@ -2834,20 +2834,20 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\UnauthorizedException::class);
 
         $permissionResolverMock = $this->getPermissionResolverMock();
-        $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent']);
         $contentUpdateStruct = new ContentUpdateStruct();
         $versionInfo = new VersionInfo(
-            array(
-                'contentInfo' => new ContentInfo(array('id' => 42)),
+            [
+                'contentInfo' => new ContentInfo(['id' => 42]),
                 'versionNo' => 7,
                 'status' => VersionInfo::STATUS_DRAFT,
-            )
+            ]
         );
         $content = new Content(
-            array(
+            [
                 'versionInfo' => $versionInfo,
-                'internalFields' => array(),
-            )
+                'internalFields' => [],
+            ]
         );
 
         $mockedService->expects($this->once())
@@ -2909,12 +2909,12 @@ class ContentTest extends BaseServiceMockTest
     {
         $initialLanguageCode = $initialLanguageCode ?: $mainLanguageCode;
 
-        $mappedFieldDefinitions = array();
+        $mappedFieldDefinitions = [];
         foreach ($fieldDefinitions as $fieldDefinition) {
             $mappedFieldDefinitions[$fieldDefinition->identifier] = $fieldDefinition;
         }
 
-        $mappedStructFields = array();
+        $mappedStructFields = [];
         foreach ($structFields as $structField) {
             $identifier = $structField->fieldDefIdentifier;
 
@@ -2960,7 +2960,7 @@ class ContentTest extends BaseServiceMockTest
             $fieldDefinitions
         );
 
-        $values = array();
+        $values = [];
 
         foreach ($fieldDefinitions as $fieldDefinition) {
             $identifier = $fieldDefinition->identifier;
@@ -3025,7 +3025,7 @@ class ContentTest extends BaseServiceMockTest
     ) {
         $repositoryMock = $this->getRepositoryMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
-        $mockedService = $this->getPartlyMockedContentService(array('loadContent', 'loadRelations'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent', 'loadRelations']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $contentHandlerMock */
         $contentHandlerMock = $this->getPersistenceMock()->contentHandler();
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
@@ -3048,26 +3048,26 @@ class ContentTest extends BaseServiceMockTest
             $existingLanguageCodes
         );
         $versionInfo = new VersionInfo(
-            array(
+            [
                 'contentInfo' => new ContentInfo(
-                    array(
+                    [
                         'id' => 42,
                         'contentTypeId' => 24,
                         'mainLanguageCode' => 'eng-GB',
-                    )
+                    ]
                 ),
                 'versionNo' => 7,
                 'languageCodes' => $existingLanguageCodes,
                 'status' => VersionInfo::STATUS_DRAFT,
-            )
+            ]
         );
         $content = new Content(
-            array(
+            [
                 'versionInfo' => $versionInfo,
                 'internalFields' => $existingFields,
-            )
+            ]
         );
-        $contentType = new ContentType(array('fieldDefinitions' => $fieldDefinitions));
+        $contentType = new ContentType(['fieldDefinitions' => $fieldDefinitions]);
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -3075,7 +3075,7 @@ class ContentTest extends BaseServiceMockTest
             ->will(
                 $this->returnCallback(
                     function () {
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -3147,7 +3147,7 @@ class ContentTest extends BaseServiceMockTest
 
         $fieldTypeMock->expects($this->any())
             ->method('validate')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->getFieldTypeRegistryMock()->expects($this->any())
             ->method('getFieldType')
@@ -3177,9 +3177,9 @@ class ContentTest extends BaseServiceMockTest
                 $this->equalTo($content),
                 $this->equalTo($values),
                 $this->equalTo($languageCodes)
-            )->will($this->returnValue(array()));
+            )->will($this->returnValue([]));
 
-        $existingRelations = array('RELATIONS!!!');
+        $existingRelations = ['RELATIONS!!!'];
         $mockedService->expects($this->once())
             ->method('loadRelations')
             ->with($content->versionInfo)
@@ -3195,20 +3195,20 @@ class ContentTest extends BaseServiceMockTest
             );
 
         $contentUpdateStruct = new ContentUpdateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'initialLanguageCode' => $initialLanguageCode,
-            )
+            ]
         );
 
         if ($execute) {
             $spiContentUpdateStruct = new SPIContentUpdateStruct(
-                array(
+                [
                     'creatorId' => 169,
                     'fields' => $spiFields,
                     'modificationDate' => time(),
                     'initialLanguageId' => 4242,
-                )
+                ]
             );
 
             // During code coverage runs, timestamp might differ 1-3 seconds
@@ -3222,14 +3222,14 @@ class ContentTest extends BaseServiceMockTest
             ++$spiContentUpdateStructTs3->modificationDate;
 
             $spiContent = new SPIContent(
-                array(
+                [
                     'versionInfo' => new SPIContent\VersionInfo(
-                        array(
-                            'contentInfo' => new SPIContent\ContentInfo(array('id' => 42)),
+                        [
+                            'contentInfo' => new SPIContent\ContentInfo(['id' => 42]),
                             'versionNo' => 7,
-                        )
+                        ]
                     ),
-                )
+                ]
             );
 
             $contentHandlerMock->expects($this->once())
@@ -3252,60 +3252,60 @@ class ContentTest extends BaseServiceMockTest
             $mockedService->updateContent($content->versionInfo, $contentUpdateStruct);
         }
 
-        return array($content->versionInfo, $contentUpdateStruct);
+        return [$content->versionInfo, $contentUpdateStruct];
     }
 
     public function providerForTestUpdateContentNonRedundantFieldSet1()
     {
-        $spiFields = array(
+        $spiFields = [
             new SPIField(
-                array(
+                [
                     'id' => '100',
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
+        ];
 
-        return array(
+        return [
             // With languages set
-            array(
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields,
-            ),
+            ],
             // Without languages set
-            array(
+            [
                 null,
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields,
-            ),
+            ],
             // Adding new language without fields
-            array(
+            [
                 'eng-US',
-                array(),
-                array(),
-            ),
-        );
+                [],
+                [],
+            ],
+        ];
     }
 
     /**
@@ -3320,29 +3320,29 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testUpdateContentNonRedundantFieldSet1($initialLanguageCode, $structFields, $spiFields)
     {
-        $existingFields = array(
+        $existingFields = [
             new Field(
-                array(
+                [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier',
                     'value' => 'initialValue',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
-        );
+        ];
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
 
         $this->assertForTestUpdateContentNonRedundantFieldSet(
             $initialLanguageCode,
@@ -3355,170 +3355,170 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestUpdateContentNonRedundantFieldSet2()
     {
-        $spiFields0 = array(
+        $spiFields0 = [
             new SPIField(
-                array(
+                [
                     'id' => '100',
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields1 = array(
+        ];
+        $spiFields1 = [
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields2 = array(
+        ];
+        $spiFields2 = [
             new SPIField(
-                array(
+                [
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue2',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
+        ];
 
-        return array(
+        return [
             // 0. With languages set
-            array(
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 1. Without languages set
-            array(
+            [
                 null,
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 2. New language with language set
-            array(
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 3. New language without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 4. New language and existing language with language set
-            array(
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue1',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields2,
-            ),
+            ],
             // 5. New language and existing language without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue1',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields2,
-            ),
+            ],
             // 6. Adding new language without fields
-            array(
+            [
                 'eng-US',
-                array(),
-                array(
+                [],
+                [
                     new SPIField(
-                        array(
+                        [
                             'id' => null,
                             'fieldDefinitionId' => 'fieldDefinitionId',
                             'type' => 'fieldTypeIdentifier',
                             'value' => 'defaultValue',
                             'languageCode' => 'eng-US',
                             'versionNo' => 7,
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -3533,29 +3533,29 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testUpdateContentNonRedundantFieldSet2($initialLanguageCode, $structFields, $spiFields)
     {
-        $existingFields = array(
+        $existingFields = [
             new Field(
-                array(
+                [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier',
                     'value' => 'initialValue',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
-        );
+        ];
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
 
         $this->assertForTestUpdateContentNonRedundantFieldSet(
             $initialLanguageCode,
@@ -3568,219 +3568,219 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestUpdateContentNonRedundantFieldSet3()
     {
-        $spiFields0 = array(
+        $spiFields0 = [
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields1 = array(
+        ];
+        $spiFields1 = [
             new SPIField(
-                array(
+                [
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue2',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields2 = array(
+        ];
+        $spiFields2 = [
             new SPIField(
-                array(
+                [
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue2',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => 101,
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue3',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields3 = array(
+        ];
+        $spiFields3 = [
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue1',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
+        ];
 
-        return array(
+        return [
             // 0. ew language with language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 1. New language without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 2. New language and existing language with language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 3. New language and existing language without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 4. New language and existing language with untranslatable field, with language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue3',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields2,
-            ),
+            ],
             // 5. New language and existing language with untranslatable field, without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue3',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields2,
-            ),
+            ],
             // 6. Adding new language without fields
-            array(
+            [
                 'eng-US',
-                array(),
+                [],
                 $spiFields3,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -3795,47 +3795,47 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testUpdateContentNonRedundantFieldSet3($initialLanguageCode, $structFields, $spiFields)
     {
-        $existingFields = array(
+        $existingFields = [
             new Field(
-                array(
+                [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier1',
                     'value' => 'initialValue1',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'id' => '101',
                     'fieldDefIdentifier' => 'identifier2',
                     'value' => 'initialValue2',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
-        );
+        ];
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId1',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue1',
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId2',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue2',
-                )
+                ]
             ),
-        );
+        ];
 
         $this->assertForTestUpdateContentNonRedundantFieldSet(
             $initialLanguageCode,
@@ -3848,244 +3848,244 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestUpdateContentNonRedundantFieldSet4()
     {
-        $spiFields0 = array(
+        $spiFields0 = [
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields1 = array(
+        ];
+        $spiFields1 = [
             new SPIField(
-                array(
+                [
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => self::EMPTY_FIELD_VALUE,
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields2 = array(
+        ];
+        $spiFields2 = [
             new SPIField(
-                array(
+                [
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => self::EMPTY_FIELD_VALUE,
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
+        ];
 
-        return array(
+        return [
             // 0. New translation with empty field by default
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 1. New translation with empty field by default, without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 2. New translation with empty field given
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 3. New translation with empty field given, without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 4. Updating existing language with empty value
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 5. Updating existing language with empty value, without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 6. Updating existing language with empty value and adding new language with empty value
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields2,
-            ),
+            ],
             // 7. Updating existing language with empty value and adding new language with empty value,
             // without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields2,
-            ),
+            ],
             // 8. Adding new language with no fields given
-            array(
+            [
                 'eng-US',
-                array(),
-                array(),
-            ),
+                [],
+                [],
+            ],
             // 9. Adding new language with fields
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
-                array(),
-            ),
+                ],
+                [],
+            ],
             // 10. Adding new language with fields, without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
-                array(),
-            ),
-        );
+                ],
+                [],
+            ],
+        ];
     }
 
     /**
@@ -4100,47 +4100,47 @@ class ContentTest extends BaseServiceMockTest
      */
     public function testUpdateContentNonRedundantFieldSet4($initialLanguageCode, $structFields, $spiFields)
     {
-        $existingFields = array(
+        $existingFields = [
             new Field(
-                array(
+                [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier1',
                     'value' => 'initialValue1',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'id' => '101',
                     'fieldDefIdentifier' => 'identifier2',
                     'value' => 'initialValue2',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
-        );
+        ];
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId1',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId2',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
-        );
+        ];
 
         $this->assertForTestUpdateContentNonRedundantFieldSet(
             $initialLanguageCode,
@@ -4158,314 +4158,314 @@ class ContentTest extends BaseServiceMockTest
      */
     public function providerForTestUpdateContentNonRedundantFieldSetComplex()
     {
-        $spiFields0 = array(
+        $spiFields0 = [
             new SPIField(
-                array(
+                [
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1-eng-GB',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue4',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields1 = array(
+        ];
+        $spiFields1 = [
             new SPIField(
-                array(
+                [
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1-eng-GB',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue2',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue4',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
-        $spiFields2 = array(
+        ];
+        $spiFields2 = [
             new SPIField(
-                array(
+                [
                     'id' => 100,
                     'fieldDefinitionId' => 'fieldDefinitionId1',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue1-eng-GB',
                     'languageCode' => 'eng-GB',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId2',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'newValue2',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue4',
                     'languageCode' => 'ger-DE',
                     'versionNo' => 7,
-                )
+                ]
             ),
             new SPIField(
-                array(
+                [
                     'id' => null,
                     'fieldDefinitionId' => 'fieldDefinitionId4',
                     'type' => 'fieldTypeIdentifier',
                     'value' => 'defaultValue4',
                     'languageCode' => 'eng-US',
                     'versionNo' => 7,
-                )
+                ]
             ),
-        );
+        ];
 
-        return array(
+        return [
             // 0. Add new language and update existing
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier4',
                             'value' => 'newValue4',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1-eng-GB',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 1. Add new language and update existing, without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier4',
                             'value' => 'newValue4',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1-eng-GB',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields0,
-            ),
+            ],
             // 2. Add new language and update existing variant
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1-eng-GB',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 3. Add new language and update existing variant, without language set
-            array(
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue2',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1-eng-GB',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields1,
-            ),
+            ],
             // 4. Update with multiple languages
-            array(
+            [
                 'ger-DE',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1-eng-GB',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields2,
-            ),
+            ],
             // 5. Update with multiple languages without language set
-            array(
+            [
                 'ger-DE',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier2',
                             'value' => 'newValue2',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier1',
                             'value' => 'newValue1-eng-GB',
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $spiFields2,
-            ),
-        );
+            ],
+        ];
     }
 
     protected function fixturesForTestUpdateContentNonRedundantFieldSetComplex()
     {
-        $existingFields = array(
+        $existingFields = [
             new Field(
-                array(
+                [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier1',
                     'value' => 'initialValue1',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'id' => '101',
                     'fieldDefIdentifier' => 'identifier2',
                     'value' => 'initialValue2',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'id' => '102',
                     'fieldDefIdentifier' => 'identifier3',
                     'value' => 'initialValue3',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
             new Field(
-                array(
+                [
                     'id' => '103',
                     'fieldDefIdentifier' => 'identifier4',
                     'value' => 'initialValue4',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
-        );
+        ];
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId1',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier1',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId2',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier2',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId3',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier3',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue3',
-                )
+                ]
             ),
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId4',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier4',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue4',
-                )
+                ]
             ),
-        );
+        ];
 
-        return array($existingFields, $fieldDefinitions);
+        return [$existingFields, $fieldDefinitions];
     }
 
     /**
@@ -4493,32 +4493,32 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestUpdateContentWithInvalidLanguage()
     {
-        return array(
-            array(
+        return [
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'Klingon',
-                        )
+                        ]
                     ),
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'Klingon',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -4535,28 +4535,28 @@ class ContentTest extends BaseServiceMockTest
 
         $repositoryMock = $this->getRepositoryMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
-        $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $versionInfo = new VersionInfo(
-            array(
+            [
                 'contentInfo' => new ContentInfo(
-                    array(
+                    [
                         'id' => 42,
                         'contentTypeId' => 24,
                         'mainLanguageCode' => 'eng-GB',
-                    )
+                    ]
                 ),
                 'versionNo' => 7,
-                'languageCodes' => array('eng-GB'),
+                'languageCodes' => ['eng-GB'],
                 'status' => VersionInfo::STATUS_DRAFT,
-            )
+            ]
         );
         $content = new Content(
-            array(
+            [
                 'versionInfo' => $versionInfo,
-                'internalFields' => array(),
-            )
+                'internalFields' => [],
+            ]
         );
 
         $languageHandlerMock->expects($this->any())
@@ -4569,7 +4569,7 @@ class ContentTest extends BaseServiceMockTest
                             throw new NotFoundException('Language', 'Klingon');
                         }
 
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -4594,10 +4594,10 @@ class ContentTest extends BaseServiceMockTest
             )->will($this->returnValue(true));
 
         $contentUpdateStruct = new ContentUpdateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'initialLanguageCode' => $initialLanguageCode,
-            )
+            ]
         );
 
         $mockedService->updateContent($content->versionInfo, $contentUpdateStruct);
@@ -4606,35 +4606,35 @@ class ContentTest extends BaseServiceMockTest
     protected function assertForUpdateContentContentValidationException(
         $initialLanguageCode,
         $structFields,
-        $fieldDefinitions = array()
+        $fieldDefinitions = []
     ) {
         $repositoryMock = $this->getRepositoryMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
-        $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
         $versionInfo = new VersionInfo(
-            array(
+            [
                 'contentInfo' => new ContentInfo(
-                    array(
+                    [
                         'id' => 42,
                         'contentTypeId' => 24,
                         'mainLanguageCode' => 'eng-GB',
-                    )
+                    ]
                 ),
                 'versionNo' => 7,
-                'languageCodes' => array('eng-GB'),
+                'languageCodes' => ['eng-GB'],
                 'status' => VersionInfo::STATUS_DRAFT,
-            )
+            ]
         );
         $content = new Content(
-            array(
+            [
                 'versionInfo' => $versionInfo,
-                'internalFields' => array(),
-            )
+                'internalFields' => [],
+            ]
         );
-        $contentType = new ContentType(array('fieldDefinitions' => $fieldDefinitions));
+        $contentType = new ContentType(['fieldDefinitions' => $fieldDefinitions]);
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -4646,7 +4646,7 @@ class ContentTest extends BaseServiceMockTest
                             throw new NotFoundException('Language', 'Klingon');
                         }
 
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -4680,10 +4680,10 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($contentTypeServiceMock));
 
         $contentUpdateStruct = new ContentUpdateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'initialLanguageCode' => $initialLanguageCode,
-            )
+            ]
         );
 
         $mockedService->updateContent($content->versionInfo, $contentUpdateStruct);
@@ -4691,20 +4691,20 @@ class ContentTest extends BaseServiceMockTest
 
     public function providerForTestUpdateContentThrowsContentValidationExceptionFieldDefinition()
     {
-        return array(
-            array(
+        return [
+            [
                 'eng-GB',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-GB',
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -4723,26 +4723,26 @@ class ContentTest extends BaseServiceMockTest
         $this->assertForUpdateContentContentValidationException(
             $initialLanguageCode,
             $structFields,
-            array()
+            []
         );
     }
 
     public function providerForTestUpdateContentThrowsContentValidationExceptionTranslation()
     {
-        return array(
-            array(
+        return [
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => 'newValue',
                             'languageCode' => 'eng-US',
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -4758,18 +4758,18 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentValidationException::class);
         $this->expectExceptionMessage('A value is set for non translatable field definition \'identifier\' with language \'eng-US\'');
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId1',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => self::EMPTY_FIELD_VALUE,
-                )
+                ]
             ),
-        );
+        ];
 
         $this->assertForUpdateContentContentValidationException(
             $initialLanguageCode,
@@ -4786,7 +4786,7 @@ class ContentTest extends BaseServiceMockTest
     ) {
         $repositoryMock = $this->getRepositoryMock();
         $permissionResolver = $this->getPermissionResolverMock();
-        $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
@@ -4799,26 +4799,26 @@ class ContentTest extends BaseServiceMockTest
             $existingFields
         );
         $versionInfo = new VersionInfo(
-            array(
+            [
                 'contentInfo' => new ContentInfo(
-                    array(
+                    [
                         'id' => 42,
                         'contentTypeId' => 24,
                         'mainLanguageCode' => 'eng-GB',
-                    )
+                    ]
                 ),
                 'versionNo' => 7,
                 'languageCodes' => $existingLanguageCodes,
                 'status' => VersionInfo::STATUS_DRAFT,
-            )
+            ]
         );
         $content = new Content(
-            array(
+            [
                 'versionInfo' => $versionInfo,
                 'internalFields' => $existingFields,
-            )
+            ]
         );
-        $contentType = new ContentType(array('fieldDefinitions' => $fieldDefinitions));
+        $contentType = new ContentType(['fieldDefinitions' => $fieldDefinitions]);
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -4826,7 +4826,7 @@ class ContentTest extends BaseServiceMockTest
             ->will(
                 $this->returnCallback(
                     function () {
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -4892,33 +4892,33 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($fieldTypeMock));
 
         $contentUpdateStruct = new ContentUpdateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'initialLanguageCode' => $initialLanguageCode,
-            )
+            ]
         );
 
-        return array($content->versionInfo, $contentUpdateStruct);
+        return [$content->versionInfo, $contentUpdateStruct];
     }
 
     public function providerForTestUpdateContentRequiredField()
     {
-        return array(
-            array(
+        return [
+            [
                 'eng-US',
-                array(
+                [
                     new Field(
-                        array(
+                        [
                             'fieldDefIdentifier' => 'identifier',
                             'value' => self::EMPTY_FIELD_VALUE,
                             'languageCode' => null,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 'identifier',
                 'eng-US',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -4937,28 +4937,28 @@ class ContentTest extends BaseServiceMockTest
     ) {
         $this->expectException(\eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException::class);
 
-        $existingFields = array(
+        $existingFields = [
             new Field(
-                array(
+                [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier',
                     'value' => 'initialValue',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
-        );
-        $fieldDefinitions = array(
+        ];
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => true,
                     'identifier' => 'identifier',
                     'isRequired' => true,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
         list($versionInfo, $contentUpdateStruct) =
             $this->assertForTestUpdateContentRequiredField(
                 $initialLanguageCode,
@@ -4987,7 +4987,7 @@ class ContentTest extends BaseServiceMockTest
     ) {
         $repositoryMock = $this->getRepositoryMock();
         $permissionResolverMock = $this->getPermissionResolverMock();
-        $mockedService = $this->getPartlyMockedContentService(array('loadContent'));
+        $mockedService = $this->getPartlyMockedContentService(['loadContent']);
         /** @var \PHPUnit\Framework\MockObject\MockObject $languageHandlerMock */
         $languageHandlerMock = $this->getPersistenceMock()->contentLanguageHandler();
         $contentTypeServiceMock = $this->getContentTypeServiceMock();
@@ -5004,26 +5004,26 @@ class ContentTest extends BaseServiceMockTest
             $existingLanguageCodes
         );
         $versionInfo = new VersionInfo(
-            array(
+            [
                 'contentInfo' => new ContentInfo(
-                    array(
+                    [
                         'id' => 42,
                         'contentTypeId' => 24,
                         'mainLanguageCode' => 'eng-GB',
-                    )
+                    ]
                 ),
                 'versionNo' => 7,
                 'languageCodes' => $existingLanguageCodes,
                 'status' => VersionInfo::STATUS_DRAFT,
-            )
+            ]
         );
         $content = new Content(
-            array(
+            [
                 'versionInfo' => $versionInfo,
                 'internalFields' => $existingFields,
-            )
+            ]
         );
-        $contentType = new ContentType(array('fieldDefinitions' => $fieldDefinitions));
+        $contentType = new ContentType(['fieldDefinitions' => $fieldDefinitions]);
 
         $languageHandlerMock->expects($this->any())
             ->method('loadByLanguageCode')
@@ -5031,7 +5031,7 @@ class ContentTest extends BaseServiceMockTest
             ->will(
                 $this->returnCallback(
                     function () {
-                        return new Language(array('id' => 4242));
+                        return new Language(['id' => 4242]);
                     }
                 )
             );
@@ -5071,7 +5071,7 @@ class ContentTest extends BaseServiceMockTest
             $fieldDefinitions,
             $languageCodes
         );
-        $allFieldErrors = array();
+        $allFieldErrors = [];
         $emptyValue = self::EMPTY_FIELD_VALUE;
 
         $fieldTypeMock->expects($this->exactly(count($fieldValues) * count($languageCodes)))
@@ -5104,13 +5104,13 @@ class ContentTest extends BaseServiceMockTest
             ->will($this->returnValue($fieldTypeMock));
 
         $contentUpdateStruct = new ContentUpdateStruct(
-            array(
+            [
                 'fields' => $structFields,
                 'initialLanguageCode' => $initialLanguageCode,
-            )
+            ]
         );
 
-        return array($content->versionInfo, $contentUpdateStruct, $allFieldErrors);
+        return [$content->versionInfo, $contentUpdateStruct, $allFieldErrors];
     }
 
     public function providerForTestUpdateContentThrowsContentFieldValidationException()
@@ -5277,35 +5277,35 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Store failed');
 
-        $existingFields = array(
+        $existingFields = [
             new Field(
-                array(
+                [
                     'id' => '100',
                     'fieldDefIdentifier' => 'identifier',
                     'value' => 'initialValue',
                     'languageCode' => 'eng-GB',
-                )
+                ]
             ),
-        );
+        ];
 
-        $fieldDefinitions = array(
+        $fieldDefinitions = [
             new FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId',
                     'fieldTypeIdentifier' => 'fieldTypeIdentifier',
                     'isTranslatable' => false,
                     'identifier' => 'identifier',
                     'isRequired' => false,
                     'defaultValue' => 'defaultValue',
-                )
+                ]
             ),
-        );
+        ];
 
         // Setup a simple case that will pass
         list($versionInfo, $contentUpdateStruct) = $this->assertForTestUpdateContentNonRedundantFieldSet(
             'eng-US',
-            array(),
-            array(),
+            [],
+            [],
             $existingFields,
             $fieldDefinitions,
             // Do not execute test
@@ -5340,7 +5340,7 @@ class ContentTest extends BaseServiceMockTest
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\UnauthorizedException::class);
 
         $repository = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array('internalLoadContentInfo'));
+        $contentService = $this->getPartlyMockedContentService(['internalLoadContentInfo']);
         $contentInfo = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
         $location = new Location(['id' => $locationCreateStruct->parentLocationId]);
@@ -5388,11 +5388,11 @@ class ContentTest extends BaseServiceMockTest
     public function testCopyContent()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array(
+        $contentService = $this->getPartlyMockedContentService([
             'internalLoadContentInfo',
             'internalLoadContent',
             'getUnixTimestamp',
-        ));
+        ]);
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
@@ -5429,9 +5429,9 @@ class ContentTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('versionNo', 123),
-                    )
+                    [
+                        ['versionNo', 123],
+                    ]
                 )
             );
 
@@ -5459,14 +5459,14 @@ class ContentTest extends BaseServiceMockTest
             )
             ->will($this->returnValue(true));
 
-        $spiContentInfo = new SPIContentInfo(array('id' => 42));
+        $spiContentInfo = new SPIContentInfo(['id' => 42]);
         $spiVersionInfo = new SPIVersionInfo(
-            array(
+            [
                 'contentInfo' => $spiContentInfo,
                 'creationDate' => 123456,
-            )
+            ]
         );
-        $spiContent = new SPIContent(array('versionInfo' => $spiVersionInfo));
+        $spiContent = new SPIContent(['versionInfo' => $spiVersionInfo]);
         $contentHandlerMock->expects($this->once())
             ->method('copy')
             ->with(42, null)
@@ -5514,11 +5514,11 @@ class ContentTest extends BaseServiceMockTest
     public function testCopyContentWithVersionInfo()
     {
         $repositoryMock = $this->getRepositoryMock();
-        $contentService = $this->getPartlyMockedContentService(array(
+        $contentService = $this->getPartlyMockedContentService([
             'internalLoadContentInfo',
             'internalLoadContent',
             'getUnixTimestamp',
-        ));
+        ]);
         $locationServiceMock = $this->getLocationServiceMock();
         $contentInfoMock = $this->createMock(APIContentInfo::class);
         $locationCreateStruct = new LocationCreateStruct();
@@ -5555,9 +5555,9 @@ class ContentTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('versionNo', 123),
-                    )
+                    [
+                        ['versionNo', 123],
+                    ]
                 )
             );
         $versionInfoMock->expects($this->once())
@@ -5583,14 +5583,14 @@ class ContentTest extends BaseServiceMockTest
             )
             ->will($this->returnValue(true));
 
-        $spiContentInfo = new SPIContentInfo(array('id' => 42));
+        $spiContentInfo = new SPIContentInfo(['id' => 42]);
         $spiVersionInfo = new SPIVersionInfo(
-            array(
+            [
                 'contentInfo' => $spiContentInfo,
                 'creationDate' => 123456,
-            )
+            ]
         );
-        $spiContent = new SPIContent(array('versionInfo' => $spiVersionInfo));
+        $spiContent = new SPIContent(['versionInfo' => $spiVersionInfo]);
         $contentHandlerMock->expects($this->once())
             ->method('copy')
             ->with(42, 123)
@@ -5746,10 +5746,10 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $objectStateHandlerMock */
         $objectStateHandlerMock = $this->getPersistenceMock()->objectStateHandler();
 
-        $objectStateGroups = array(
-            new SPIObjectStateGroup(array('id' => 10)),
-            new SPIObjectStateGroup(array('id' => 20)),
-        );
+        $objectStateGroups = [
+            new SPIObjectStateGroup(['id' => 10]),
+            new SPIObjectStateGroup(['id' => 20]),
+        ];
 
         /* @var \PHPUnit\Framework\MockObject\MockObject $objectStateHandlerMock */
         $objectStateHandlerMock->expects($this->once())
@@ -5761,10 +5761,10 @@ class ContentTest extends BaseServiceMockTest
             ->with($this->equalTo(10))
             ->will(
                 $this->returnValue(
-                    array(
-                        new SPIObjectState(array('id' => 11, 'groupId' => 10)),
-                        new SPIObjectState(array('id' => 12, 'groupId' => 10)),
-                    )
+                    [
+                        new SPIObjectState(['id' => 11, 'groupId' => 10]),
+                        new SPIObjectState(['id' => 12, 'groupId' => 10]),
+                    ]
                 )
             );
 
@@ -5773,10 +5773,10 @@ class ContentTest extends BaseServiceMockTest
             ->with($this->equalTo(20))
             ->will(
                 $this->returnValue(
-                    array(
-                        new SPIObjectState(array('id' => 21, 'groupId' => 20)),
-                        new SPIObjectState(array('id' => 22, 'groupId' => 20)),
-                    )
+                    [
+                        new SPIObjectState(['id' => 21, 'groupId' => 20]),
+                        new SPIObjectState(['id' => 22, 'groupId' => 20]),
+                    ]
                 )
             );
     }
@@ -5786,10 +5786,10 @@ class ContentTest extends BaseServiceMockTest
         /** @var \PHPUnit\Framework\MockObject\MockObject $objectStateHandlerMock */
         $objectStateHandlerMock = $this->getPersistenceMock()->objectStateHandler();
 
-        $defaultObjectStates = array(
-            new SPIObjectState(array('id' => 11, 'groupId' => 10)),
-            new SPIObjectState(array('id' => 21, 'groupId' => 20)),
-        );
+        $defaultObjectStates = [
+            new SPIObjectState(['id' => 11, 'groupId' => 10]),
+            new SPIObjectState(['id' => 21, 'groupId' => 20]),
+        ];
         foreach ($defaultObjectStates as $index => $objectState) {
             $objectStateHandlerMock->expects($this->at($index + 3))
                 ->method('setContentState')
@@ -5852,10 +5852,10 @@ class ContentTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('alwaysAvailable', true),
-                        array('mainLanguageCode', 'eng-GB'),
-                    )
+                    [
+                        ['alwaysAvailable', true],
+                        ['mainLanguageCode', 'eng-GB'],
+                    ]
                 )
             );
 
@@ -5903,7 +5903,7 @@ class ContentTest extends BaseServiceMockTest
             ->with('parentLocationId')
             ->will($this->returnValue(456));
 
-        $urlAliasNames = array('eng-GB' => 'hello');
+        $urlAliasNames = ['eng-GB' => 'hello'];
         $nameSchemaServiceMock->expects($this->once())
             ->method('resolveUrlAliasSchema')
             ->with($content)
@@ -5912,7 +5912,7 @@ class ContentTest extends BaseServiceMockTest
         $locationServiceMock->expects($this->once())
             ->method('loadLocations')
             ->with($content->getVersionInfo()->getContentInfo())
-            ->will($this->returnValue(array($location)));
+            ->will($this->returnValue([$location]));
 
         $urlAliasHandlerMock->expects($this->once())
             ->method('publishUrlAliasForLocation')
@@ -6023,15 +6023,15 @@ class ContentTest extends BaseServiceMockTest
             $this->partlyMockedContentService = $this->getMockBuilder(ContentService::class)
                 ->setMethods($methods)
                 ->setConstructorArgs(
-                    array(
+                    [
                         $this->getRepositoryMock(),
                         $this->getPersistenceMock(),
                         $this->getDomainMapperMock(),
                         $this->getRelationProcessorMock(),
                         $this->getNameSchemaServiceMock(),
                         $this->getFieldTypeRegistryMock(),
-                        array(),
-                    )
+                        [],
+                    ]
                 )
                 ->getMock();
         }

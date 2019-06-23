@@ -26,12 +26,12 @@ class RoutingExtension extends AbstractExtension
 
     public function getFunctions()
     {
-        return array(
+        return [
             new TwigFunction(
                 'ez_route',
-                array($this, 'getRouteReference')
+                [$this, 'getRouteReference']
             ),
-        );
+        ];
     }
 
     public function getName()
@@ -45,7 +45,7 @@ class RoutingExtension extends AbstractExtension
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Routing\RouteReference
      */
-    public function getRouteReference($resource = null, $params = array())
+    public function getRouteReference($resource = null, $params = [])
     {
         return $this->routeReferenceGenerator->generate($resource, $params);
     }

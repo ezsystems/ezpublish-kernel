@@ -37,18 +37,18 @@ class RichTextExtension extends AbstractExtension
 
     public function getFilters()
     {
-        return array(
+        return [
             new TwigFilter(
                 'richtext_to_html5',
-                array($this, 'richTextToHtml5'),
-                array('is_safe' => array('html'))
+                [$this, 'richTextToHtml5'],
+                ['is_safe' => ['html']]
             ),
             new TwigFilter(
                 'richtext_to_html5_edit',
-                array($this, 'richTextToHtml5Edit'),
-                array('is_safe' => array('html'))
+                [$this, 'richTextToHtml5Edit'],
+                ['is_safe' => ['html']]
             ),
-        );
+        ];
     }
 
     /**

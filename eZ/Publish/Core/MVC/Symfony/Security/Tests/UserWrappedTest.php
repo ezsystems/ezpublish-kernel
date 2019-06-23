@@ -74,14 +74,14 @@ class UserWrappedTest extends TestCase
 
     public function advancedUserProvider()
     {
-        return array(
-            array('foo', 'password', array('ROLE_USER'), true, true, true, true),
-            array('foo', 'password', array('ROLE_USER'), true, false, true, false),
-            array('foo', 'password', array('ROLE_USER'), false, true, false, true),
-            array('bar', 'secret', array('ROLE_TEST'), true, true, true, true),
-            array('bar', 'secret', array('ROLE_TEST'), false, false, false, false),
-            array('Jérôme', 'NoThisIsNotMyRealPassword', array('ROLE_ADMIN'), true, true, true, true),
-        );
+        return [
+            ['foo', 'password', ['ROLE_USER'], true, true, true, true],
+            ['foo', 'password', ['ROLE_USER'], true, false, true, false],
+            ['foo', 'password', ['ROLE_USER'], false, true, false, true],
+            ['bar', 'secret', ['ROLE_TEST'], true, true, true, true],
+            ['bar', 'secret', ['ROLE_TEST'], false, false, false, false],
+            ['Jérôme', 'NoThisIsNotMyRealPassword', ['ROLE_ADMIN'], true, true, true, true],
+        ];
     }
 
     public function testRegularUser()
@@ -102,7 +102,7 @@ class UserWrappedTest extends TestCase
 
         $username = 'lolautruche';
         $password = 'NoThisIsNotMyRealPassword';
-        $roles = array('ROLE_USER', 'ROLE_TEST');
+        $roles = ['ROLE_USER', 'ROLE_TEST'];
         $salt = md5(microtime(true));
         $originalUser
             ->expects($this->exactly(2))

@@ -20,8 +20,8 @@ class RichTextStorageTest extends TestCase
 {
     public function providerForTestGetFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para>
@@ -41,10 +41,10 @@ class RichTextStorageTest extends TestCase
     </para>
 </section>
 ',
-                array(123, 456),
-                array(123 => 'http://www.ez.no'),
-            ),
-            array(
+                [123, 456],
+                [123 => 'http://www.ez.no'],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para>Oh links, where art thou?</para>
@@ -54,10 +54,10 @@ class RichTextStorageTest extends TestCase
     <para>Oh links, where art thou?</para>
 </section>
 ',
-                array(),
-                array(),
-            ),
-        );
+                [],
+                [],
+            ],
+        ];
     }
 
     /**
@@ -93,8 +93,8 @@ class RichTextStorageTest extends TestCase
         }
 
         $versionInfo = new VersionInfo();
-        $value = new FieldValue(array('data' => $xmlString));
-        $field = new Field(array('value' => $value));
+        $value = new FieldValue(['data' => $xmlString]);
+        $field = new Field(['value' => $value]);
 
         $storage = $this->getPartlyMockedStorage($gateway);
         $storage->getFieldData(
@@ -111,8 +111,8 @@ class RichTextStorageTest extends TestCase
 
     public function providerForTestStoreFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para>
@@ -150,14 +150,14 @@ class RichTextStorageTest extends TestCase
     </para>
 </section>
 ',
-                array('http://www.ez.no', 'http://share.ez.no'),
-                array('http://www.ez.no' => 123),
-                array('http://share.ez.no' => 456),
-                array('abcdef789'),
-                array('abcdef789' => 7575),
+                ['http://www.ez.no', 'http://share.ez.no'],
+                ['http://www.ez.no' => 123],
+                ['http://share.ez.no' => 456],
+                ['abcdef789'],
+                ['abcdef789' => 7575],
                 true,
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para>Oh links, where art thou?</para>
@@ -167,14 +167,14 @@ class RichTextStorageTest extends TestCase
     <para>Oh links, where art thou?</para>
 </section>
 ',
-                array(),
-                array(),
-                array(),
-                array(),
-                array(),
+                [],
+                [],
+                [],
+                [],
+                [],
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -191,9 +191,9 @@ class RichTextStorageTest extends TestCase
         $isUpdated
     ) {
         $gatewayCallIndex = 0;
-        $versionInfo = new VersionInfo(array('versionNo' => 24));
-        $value = new FieldValue(array('data' => $xmlString));
-        $field = new Field(array('id' => 42, 'value' => $value));
+        $versionInfo = new VersionInfo(['versionNo' => 24]);
+        $value = new FieldValue(['data' => $xmlString]);
+        $field = new Field(['id' => 42, 'value' => $value]);
         $gateway = $this->getGatewayMock();
 
         $gateway
@@ -248,8 +248,8 @@ class RichTextStorageTest extends TestCase
 
     public function providerForTestStoreFieldDataThrowsNotFoundException()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
     <para>
@@ -257,13 +257,13 @@ class RichTextStorageTest extends TestCase
     </para>
 </section>
 ',
-                array(),
-                array(),
-                array(),
-                array('abcdef789'),
-                array(),
-            ),
-        );
+                [],
+                [],
+                [],
+                ['abcdef789'],
+                [],
+            ],
+        ];
     }
 
     /**
@@ -304,8 +304,8 @@ class RichTextStorageTest extends TestCase
         }
 
         $versionInfo = new VersionInfo();
-        $value = new FieldValue(array('data' => $xmlString));
-        $field = new Field(array('value' => $value));
+        $value = new FieldValue(['data' => $xmlString]);
+        $field = new Field(['value' => $value]);
 
         $storage = $this->getPartlyMockedStorage($gateway);
         $storage->storeFieldData(
@@ -317,8 +317,8 @@ class RichTextStorageTest extends TestCase
 
     public function testDeleteFieldData()
     {
-        $versionInfo = new VersionInfo(array('versionNo' => 42));
-        $fieldIds = array(12, 23);
+        $versionInfo = new VersionInfo(['versionNo' => 42]);
+        $fieldIds = [12, 23];
         $gateway = $this->getGatewayMock();
         $storage = $this->getPartlyMockedStorage($gateway);
         $gateway
@@ -360,7 +360,7 @@ class RichTextStorageTest extends TestCase
      */
     protected function getContext()
     {
-        return array('context');
+        return ['context'];
     }
 
     /**

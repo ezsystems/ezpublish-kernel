@@ -84,49 +84,49 @@ class DomainMapperTest extends BaseServiceMockTest
 
     public function providerForBuildVersionInfo()
     {
-        return array(
-            array(
+        return [
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => 44,
                         'contentInfo' => new SPIContentInfo(),
-                    )
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => SPIVersionInfo::STATUS_DRAFT,
                         'contentInfo' => new SPIContentInfo(),
-                    )
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => SPIVersionInfo::STATUS_PENDING,
                         'contentInfo' => new SPIContentInfo(),
-                    )
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => SPIVersionInfo::STATUS_ARCHIVED,
                         'contentInfo' => new SPIContentInfo(),
-                        'languageCodes' => array('eng-GB', 'nor-NB', 'fre-FR'),
-                    )
+                        'languageCodes' => ['eng-GB', 'nor-NB', 'fre-FR'],
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 new SPIVersionInfo(
-                    array(
+                    [
                         'status' => SPIVersionInfo::STATUS_PUBLISHED,
                         'contentInfo' => new SPIContentInfo(),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForBuildLocationDomainObjectsOnSearchResult()

@@ -30,5 +30,5 @@ interface VariationHandler
      *
      * @return \eZ\Publish\SPI\Variation\Values\Variation
      */
-    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = array());
+    public function getVariation(Field $field, VersionInfo $versionInfo, $variationName, array $parameters = []);
 }

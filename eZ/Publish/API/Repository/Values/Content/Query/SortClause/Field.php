@@ -31,7 +31,7 @@ class Field extends SortClause implements CustomFieldInterface
      *
      * @var array
      */
-    protected $customFields = array();
+    protected $customFields = [];
 
     /**
      * Constructs a new Field SortClause on Type $typeIdentifier and Field $fieldIdentifier.

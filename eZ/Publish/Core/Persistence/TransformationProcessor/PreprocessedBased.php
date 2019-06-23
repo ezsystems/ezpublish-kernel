@@ -22,7 +22,7 @@ class PreprocessedBased extends TransformationProcessor
      * @param string $installDir Base dir for rule loading
      * @param array $ruleFiles
      */
-    public function __construct(PcreCompiler $compiler, array $ruleFiles = array())
+    public function __construct(PcreCompiler $compiler, array $ruleFiles = [])
     {
         parent::__construct($compiler, $ruleFiles);
     }
@@ -35,7 +35,7 @@ class PreprocessedBased extends TransformationProcessor
     protected function getRules()
     {
         if ($this->compiledRules === null) {
-            $rules = array();
+            $rules = [];
 
             foreach ($this->ruleFiles as $file) {
                 $rules += require $file;

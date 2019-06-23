@@ -77,14 +77,14 @@ class BlockingLimitationType implements SPILimitationTypeInterface
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         if (empty($limitationValue->limitationValues)) {
             $validationErrors[] = new ValidationError(
                 "\$limitationValue->limitationValues => '%value%' can not be empty",
                 null,
-                array(
+                [
                     'value' => $limitationValue->limitationValues,
-                )
+                ]
             );
         }
 

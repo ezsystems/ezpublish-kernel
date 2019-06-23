@@ -49,14 +49,14 @@ class LanguageService implements LanguageServiceInterface
      * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $languageHandler
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, Handler $languageHandler, array $settings = array())
+    public function __construct(RepositoryInterface $repository, Handler $languageHandler, array $settings = [])
     {
         $this->repository = $repository;
         $this->languageHandler = $languageHandler;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
-            'languages' => array('eng-GB'),
-        );
+        $this->settings = $settings + [
+            'languages' => ['eng-GB'],
+        ];
     }
 
     /**
@@ -96,11 +96,11 @@ class LanguageService implements LanguageServiceInterface
         }
 
         $createStruct = new CreateStruct(
-            array(
+            [
                 'languageCode' => $languageCreateStruct->languageCode,
                 'name' => $languageCreateStruct->name,
                 'isEnabled' => $languageCreateStruct->enabled,
-            )
+            ]
         );
 
         $this->repository->beginTransaction();
@@ -140,12 +140,12 @@ class LanguageService implements LanguageServiceInterface
         $loadedLanguage = $this->loadLanguageById($language->id);
 
         $updateLanguageStruct = new SPILanguage(
-            array(
+            [
                 'id' => $loadedLanguage->id,
                 'languageCode' => $loadedLanguage->languageCode,
                 'name' => $newName,
                 'isEnabled' => $loadedLanguage->enabled,
-            )
+            ]
         );
 
         $this->repository->beginTransaction();
@@ -178,12 +178,12 @@ class LanguageService implements LanguageServiceInterface
         $loadedLanguage = $this->loadLanguageById($language->id);
 
         $updateLanguageStruct = new SPILanguage(
-            array(
+            [
                 'id' => $loadedLanguage->id,
                 'languageCode' => $loadedLanguage->languageCode,
                 'name' => $loadedLanguage->name,
                 'isEnabled' => true,
-            )
+            ]
         );
 
         $this->repository->beginTransaction();
@@ -216,12 +216,12 @@ class LanguageService implements LanguageServiceInterface
         $loadedLanguage = $this->loadLanguageById($language->id);
 
         $updateLanguageStruct = new SPILanguage(
-            array(
+            [
                 'id' => $loadedLanguage->id,
                 'languageCode' => $loadedLanguage->languageCode,
                 'name' => $loadedLanguage->name,
                 'isEnabled' => false,
-            )
+            ]
         );
 
         $this->repository->beginTransaction();
@@ -267,7 +267,7 @@ class LanguageService implements LanguageServiceInterface
     {
         $languages = $this->languageHandler->loadAll();
 
-        $returnArray = array();
+        $returnArray = [];
         foreach ($languages as $language) {
             $returnArray[] = $this->buildDomainObject($language);
         }
@@ -298,7 +298,7 @@ class LanguageService implements LanguageServiceInterface
     {
         $languages = $this->languageHandler->loadListByLanguageCodes($languageCodes);
 
-        $returnArray = array();
+        $returnArray = [];
         foreach ($languages as $language) {
             $returnArray[$language->languageCode] = $this->buildDomainObject($language);
         }
@@ -313,7 +313,7 @@ class LanguageService implements LanguageServiceInterface
     {
         $languages = $this->languageHandler->loadList($languageIds);
 
-        $returnArray = array();
+        $returnArray = [];
         foreach ($languages as $language) {
             $returnArray[$language->id] = $this->buildDomainObject($language);
         }
@@ -393,12 +393,12 @@ class LanguageService implements LanguageServiceInterface
     protected function buildDomainObject(SPILanguage $spiLanguage)
     {
         return new Language(
-            array(
+            [
                 'id' => $spiLanguage->id,
                 'languageCode' => $spiLanguage->languageCode,
                 'name' => $spiLanguage->name,
                 'enabled' => $spiLanguage->isEnabled,
-            )
+            ]
         );
     }
 }

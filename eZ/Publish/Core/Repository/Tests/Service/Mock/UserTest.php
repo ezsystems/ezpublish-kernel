@@ -28,7 +28,7 @@ class UserTest extends BaseServiceMockTest
     public function testDeleteUser()
     {
         $repository = $this->getRepositoryMock();
-        $userService = $this->getPartlyMockedUserService(array('loadUser'));
+        $userService = $this->getPartlyMockedUserService(['loadUser']);
         $contentService = $this->createMock(APIContentService::class);
         $userHandler = $this->getPersistenceMock()->userHandler();
 
@@ -91,7 +91,7 @@ class UserTest extends BaseServiceMockTest
         $this->expectException(\Exception::class);
 
         $repository = $this->getRepositoryMock();
-        $userService = $this->getPartlyMockedUserService(array('loadUser'));
+        $userService = $this->getPartlyMockedUserService(['loadUser']);
         $contentService = $this->createMock(APIContentService::class);
 
         $user = $this->createMock(APIUser::class);
@@ -148,10 +148,10 @@ class UserTest extends BaseServiceMockTest
         return $this->getMockBuilder(UserService::class)
             ->setMethods($methods)
             ->setConstructorArgs(
-                array(
+                [
                     $this->getRepositoryMock(),
                     $this->getPersistenceMock()->userHandler(),
-                )
+                ]
             )
             ->getMock();
     }

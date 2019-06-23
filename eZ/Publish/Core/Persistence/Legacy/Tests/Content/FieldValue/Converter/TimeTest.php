@@ -85,15 +85,15 @@ class TimeTest extends TestCase
         $storageFieldDef = new StorageFieldDefinition();
         $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'useSeconds' => true,
                 'defaultType' => TimeType::DEFAULT_EMPTY,
-            )
+            ]
         );
         $fieldDef = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => $fieldTypeConstraints,
-            )
+            ]
         );
 
         $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
@@ -109,15 +109,15 @@ class TimeTest extends TestCase
         $storageFieldDef = new StorageFieldDefinition();
         $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'useSeconds' => false,
                 'defaultType' => TimeType::DEFAULT_CURRENT_TIME,
-            )
+            ]
         );
         $fieldDef = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => $fieldTypeConstraints,
-            )
+            ]
         );
 
         $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
@@ -132,20 +132,20 @@ class TimeTest extends TestCase
     {
         $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
-            array(
+            [
                 'dataInt2' => 1,
                 'dataInt1' => TimeType::DEFAULT_EMPTY,
-            )
+            ]
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
         self::assertNull($fieldDef->defaultValue->data);
         self::assertEquals(
             new FieldSettings(
-                array(
+                [
                     'useSeconds' => true,
                     'defaultType' => TimeType::DEFAULT_EMPTY,
-                )
+                ]
             ),
             $fieldDef->fieldTypeConstraints->fieldSettings
         );
@@ -158,10 +158,10 @@ class TimeTest extends TestCase
     {
         $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
-            array(
+            [
                 'dataInt2' => 0,
                 'dataInt1' => TimeType::DEFAULT_CURRENT_TIME,
-            )
+            ]
         );
 
         $dateTime = new DateTime();
@@ -170,10 +170,10 @@ class TimeTest extends TestCase
         self::assertSame(time() - $dateTime->getTimestamp(), $fieldDef->defaultValue->data);
         self::assertEquals(
             new FieldSettings(
-                array(
+                [
                     'useSeconds' => false,
                     'defaultType' => TimeType::DEFAULT_CURRENT_TIME,
-                )
+                ]
             ),
             $fieldDef->fieldTypeConstraints->fieldSettings
         );

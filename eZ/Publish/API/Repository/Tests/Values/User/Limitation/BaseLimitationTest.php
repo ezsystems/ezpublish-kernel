@@ -79,7 +79,7 @@ abstract class BaseLimitationTest extends BaseTest
         // Create a draft
         $draft = $contentService->createContent(
             $wikiPageCreate,
-            array($locationCreate)
+            [$locationCreate]
         );
         /* END: Inline */
 

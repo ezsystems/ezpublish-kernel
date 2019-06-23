@@ -16,7 +16,7 @@ class RouteReferenceTest extends TestCase
     public function testConstruct()
     {
         $route = 'my_route';
-        $params = array('foo' => 'bar', 'some' => 'thing');
+        $params = ['foo' => 'bar', 'some' => 'thing'];
         $reference = new RouteReference($route, $params);
         $this->assertSame($route, $reference->getRoute());
         $this->assertSame($params, $reference->getParams());
@@ -36,7 +36,7 @@ class RouteReferenceTest extends TestCase
     public function testGetSetParams()
     {
         $reference = new RouteReference('foo');
-        $this->assertSame(array(), $reference->getParams());
+        $this->assertSame([], $reference->getParams());
 
         $reference->set('foo', 'bar');
         $this->assertSame('bar', $reference->get('foo'));
@@ -46,7 +46,7 @@ class RouteReferenceTest extends TestCase
         $reference->set('bool', true);
         $this->assertTrue($reference->get('bool'));
         $this->assertSame(
-            array('foo' => 'bar', 'object' => $obj, 'bool' => true),
+            ['foo' => 'bar', 'object' => $obj, 'bool' => true],
             $reference->getParams()
         );
 

@@ -93,18 +93,18 @@ class UserContext implements Context
      */
     public function searchUserGroups($name, $parentLocationId = null)
     {
-        $criterionArray = array(
+        $criterionArray = [
             new Criterion\Subtree(self::USERGROUP_ROOT_SUBTREE),
             new Criterion\ContentTypeIdentifier(self::USERGROUP_CONTENT_IDENTIFIER),
             new Criterion\Field('name', Criterion\Operator::EQ, $name),
-        );
+        ];
         if ($parentLocationId) {
             $criterionArray[] = new Criterion\ParentLocationId($parentLocationId);
         }
         $query = new Query();
         $query->filter = new Criterion\LogicalAnd($criterionArray);
 
-        $result = $this->searchService->findContent($query, array(), false);
+        $result = $this->searchService->findContent($query, [], false);
 
         return $result->searchHits;
     }
@@ -119,7 +119,7 @@ class UserContext implements Context
      *
      * @return eZ\Publish\API\Repository\Values\User\User
      */
-    protected function createUser($username, $email, $password, $parentGroup = null, $fields = array())
+    protected function createUser($username, $email, $password, $parentGroup = null, $fields = [])
     {
         $userCreateStruct = $this->userService->newUserCreateStruct(
             $username,
@@ -145,7 +145,7 @@ class UserContext implements Context
             $parentGroup = $this->userService->loadUserGroup(self::USERGROUP_ROOT_CONTENT_ID);
         }
 
-        $user = $this->userService->createUser($userCreateStruct, array($parentGroup));
+        $user = $this->userService->createUser($userCreateStruct, [$parentGroup]);
 
         return $user;
     }
@@ -519,7 +519,7 @@ class UserContext implements Context
         $user = $this->userService->loadUserByLogin($username);
         $fieldsTable = $table->getTable();
         array_shift($fieldsTable);
-        $updateFields = array();
+        $updateFields = [];
         foreach ($fieldsTable as $fieldRow) {
             $fieldName = $fieldRow[0];
             $expectedValue = $fieldRow[1];

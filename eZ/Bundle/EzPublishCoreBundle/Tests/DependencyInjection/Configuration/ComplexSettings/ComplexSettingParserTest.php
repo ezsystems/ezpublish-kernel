@@ -40,43 +40,43 @@ class ComplexSettingParserTest extends TestCase
     public function provideSettings()
     {
         // array( setting, array( isDynamicSetting, containsDynamicSettings ) )
-        return array(
-            array(
+        return [
+            [
                 '%container_var%',
-                array(false, array()),
-            ),
-            array(
+                [false, []],
+            ],
+            [
                 '$somestring',
-                array(false, array()),
-            ),
-            array(
+                [false, []],
+            ],
+            [
                 '$setting$',
-                array(true, array('$setting$')),
-            ),
-            array(
+                [true, ['$setting$']],
+            ],
+            [
                 '$setting;scope$',
-                array(true, array('$setting;scope$')),
-            ),
-            array(
+                [true, ['$setting;scope$']],
+            ],
+            [
                 '$setting;namespace;scope$',
-                array(true, array('$setting;namespace;scope$')),
-            ),
-            array(
+                [true, ['$setting;namespace;scope$']],
+            ],
+            [
                 'a_string_before$setting;namespace;scope$',
-                array(true, array('$setting;namespace;scope$')),
-            ),
-            array(
+                [true, ['$setting;namespace;scope$']],
+            ],
+            [
                 '$setting;namespace;scope$a_string_after',
-                array(true, array('$setting;namespace;scope$')),
-            ),
-            array(
+                [true, ['$setting;namespace;scope$']],
+            ],
+            [
                 'a_string_before$setting;namespace;scope$a_string_after',
-                array(true, array('$setting;namespace;scope$')),
-            ),
-            array(
+                [true, ['$setting;namespace;scope$']],
+            ],
+            [
                 '$setting;one$somethingelse$setting;two$',
-                array(true, array('$setting;one$', '$setting;two$')),
-            ),
-        );
+                [true, ['$setting;one$', '$setting;two$']],
+            ],
+        ];
     }
 }

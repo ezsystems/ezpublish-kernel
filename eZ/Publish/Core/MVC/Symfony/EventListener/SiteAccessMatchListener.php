@@ -45,10 +45,10 @@ class SiteAccessMatchListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             // Should take place just after FragmentListener (priority 48) in order to get rebuilt request attributes in case of subrequest
-            KernelEvents::REQUEST => array('onKernelRequest', 45),
-        );
+            KernelEvents::REQUEST => ['onKernelRequest', 45],
+        ];
     }
 
     /**
@@ -90,7 +90,7 @@ class SiteAccessMatchListener implements EventSubscriberInterface
     {
         return $this->siteAccessRouter->match(
             new SimplifiedRequest(
-                array(
+                [
                     'scheme' => $request->getScheme(),
                     'host' => $request->getHost(),
                     'port' => $request->getPort(),
@@ -98,7 +98,7 @@ class SiteAccessMatchListener implements EventSubscriberInterface
                     'queryParams' => $request->query->all(),
                     'languages' => $request->getLanguages(),
                     'headers' => $request->headers->all(),
-                )
+                ]
             )
         );
     }

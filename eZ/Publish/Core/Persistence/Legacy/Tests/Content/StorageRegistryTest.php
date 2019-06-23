@@ -26,7 +26,7 @@ class StorageRegistryTest extends TestCase
     public function testRegister(): void
     {
         $storage = $this->getStorageMock();
-        $registry = new StorageRegistry(array(self::TYPE_NAME => $storage));
+        $registry = new StorageRegistry([self::TYPE_NAME => $storage]);
 
         $this->assertSame($storage, $registry->getStorage(self::TYPE_NAME));
     }
@@ -37,7 +37,7 @@ class StorageRegistryTest extends TestCase
     public function testGetStorage()
     {
         $storage = $this->getStorageMock();
-        $registry = new StorageRegistry(array(self::TYPE_NAME => $storage));
+        $registry = new StorageRegistry([self::TYPE_NAME => $storage]);
 
         $res = $registry->getStorage(self::TYPE_NAME);
 
@@ -53,7 +53,7 @@ class StorageRegistryTest extends TestCase
      */
     public function testGetNotFound()
     {
-        $registry = new StorageRegistry(array());
+        $registry = new StorageRegistry([]);
         self::assertInstanceOf(
             NullStorage::class,
             $registry->getStorage('not-found')

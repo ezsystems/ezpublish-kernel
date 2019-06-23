@@ -30,38 +30,38 @@ class SimplifiedRequestTest extends TestCase
 
     public function fromUrlProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'http://www.example.com/foo/bar',
                 new SimplifiedRequest(
-                    array(
+                    [
                         'scheme' => 'http',
                         'host' => 'www.example.com',
                         'pathinfo' => '/foo/bar',
-                    )
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 'https://www.example.com/',
                 new SimplifiedRequest(
-                    array(
+                    [
                         'scheme' => 'https',
                         'host' => 'www.example.com',
                         'pathinfo' => '/',
-                    )
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 'http://www.example.com/foo?param=value&this=that',
                 new SimplifiedRequest(
-                    array(
+                    [
                         'scheme' => 'http',
                         'host' => 'www.example.com',
                         'pathinfo' => '/foo',
-                        'queryParams' => array('param' => 'value', 'this' => 'that'),
-                    )
+                        'queryParams' => ['param' => 'value', 'this' => 'that'],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 }

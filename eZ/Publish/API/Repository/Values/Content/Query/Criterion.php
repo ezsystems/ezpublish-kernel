@@ -92,7 +92,7 @@ abstract class Criterion implements CriterionInterface
             if ($operatorSpecifications->valueTypes !== null) {
                 $callback = $this->getValueTypeCheckCallback($operatorSpecifications->valueTypes);
                 if (!is_array($value)) {
-                    $value = array($value);
+                    $value = [$value];
                 }
                 foreach ($value as $item) {
                     if ($callback($item) === false) {

@@ -111,10 +111,10 @@ class LocationHandlerTest extends TestCase
             ->with(77, true)
             ->will(
                 $this->returnValue(
-                    array(
-                        array(77 => 100),
-                        array(78 => 101),
-                    )
+                    [
+                        [77 => 100],
+                        [78 => 101],
+                    ]
                 )
             );
 
@@ -131,16 +131,16 @@ class LocationHandlerTest extends TestCase
             ->with('abc123')
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 77,
-                    )
+                    ]
                 )
             );
 
         $this->locationMapper
             ->expects($this->once())
             ->method('createLocationFromRow')
-            ->with(array('node_id' => 77))
+            ->with(['node_id' => 77])
             ->will($this->returnValue(new \eZ\Publish\SPI\Persistence\Content\Location()));
 
         $location = $handler->loadByRemoteId('abc123');
@@ -158,15 +158,15 @@ class LocationHandlerTest extends TestCase
             ->with(23, 42)
             ->will(
                 $this->returnValue(
-                    array()
+                    []
                 )
             );
 
         $this->locationMapper
             ->expects($this->once())
             ->method('createLocationsFromRows')
-            ->with(array())
-            ->will($this->returnValue(array('a', 'b')));
+            ->with([])
+            ->will($this->returnValue(['a', 'b']));
 
         $locations = $handler->loadLocationsByContent(23, 42);
 
@@ -183,15 +183,15 @@ class LocationHandlerTest extends TestCase
             ->with(23)
             ->will(
                 $this->returnValue(
-                    array()
+                    []
                 )
             );
 
         $this->locationMapper
             ->expects($this->once())
             ->method('createLocationsFromRows')
-            ->with(array())
-            ->will($this->returnValue(array('a', 'b')));
+            ->with([])
+            ->will($this->returnValue(['a', 'b']));
 
         $locations = $handler->loadParentLocationsForDraftContent(23);
 
@@ -202,23 +202,23 @@ class LocationHandlerTest extends TestCase
     {
         $handler = $this->getLocationHandler();
 
-        $sourceData = array(
+        $sourceData = [
             'node_id' => 69,
             'path_string' => '/1/2/69/',
             'parent_node_id' => 2,
             'contentobject_id' => 67,
-        );
+        ];
         $this->locationGateway
             ->expects($this->at(0))
             ->method('getBasicNodeData')
             ->with(69)
             ->will($this->returnValue($sourceData));
 
-        $destinationData = array(
+        $destinationData = [
             'node_id' => 77,
             'path_string' => '/1/2/77/',
             'contentobject_id' => 68,
-        );
+        ];
         $this->locationGateway
             ->expects($this->at(1))
             ->method('getBasicNodeData')
@@ -241,10 +241,10 @@ class LocationHandlerTest extends TestCase
             ->with($sourceData['node_id'])
             ->will($this->returnValue(
                 new Location(
-                    array(
+                    [
                         'id' => $sourceData['node_id'],
                         'contentId' => $sourceData['contentobject_id'],
-                    )
+                    ]
                 )
             ));
 
@@ -252,19 +252,19 @@ class LocationHandlerTest extends TestCase
             ->expects($this->at(1))
             ->method('loadLocation')
             ->with($destinationData['node_id'])
-            ->will($this->returnValue(new Location(array('contentId' => $destinationData['contentobject_id']))));
+            ->will($this->returnValue(new Location(['contentId' => $destinationData['contentobject_id']])));
 
         $this->contentHandler
             ->expects($this->at(0))
             ->method('loadContentInfo')
             ->with($destinationData['contentobject_id'])
-            ->will($this->returnValue(new ContentInfo(array('sectionId' => 12345))));
+            ->will($this->returnValue(new ContentInfo(['sectionId' => 12345])));
 
         $this->contentHandler
             ->expects($this->at(1))
             ->method('loadContentInfo')
             ->with($sourceData['contentobject_id'])
-            ->will($this->returnValue(new ContentInfo(array('mainLocationId' => 69))));
+            ->will($this->returnValue(new ContentInfo(['mainLocationId' => 69])));
 
         $this->treeHandler
             ->expects($this->once())
@@ -284,11 +284,11 @@ class LocationHandlerTest extends TestCase
             ->with(69)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 69,
                         'path_string' => '/1/2/69/',
                         'contentobject_id' => 67,
-                    )
+                    ]
                 )
             );
 
@@ -313,11 +313,11 @@ class LocationHandlerTest extends TestCase
             ->with(69)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 69,
                         'path_string' => '/1/2/69/',
                         'contentobject_id' => 67,
-                    )
+                    ]
                 )
             );
 
@@ -354,10 +354,10 @@ class LocationHandlerTest extends TestCase
             ->with(77)
             ->will(
                 $this->returnValue(
-                    $parentInfo = array(
+                    $parentInfo = [
                         'node_id' => 77,
                         'path_string' => '/1/2/77/',
-                    )
+                    ]
                 )
             );
 
@@ -412,11 +412,11 @@ class LocationHandlerTest extends TestCase
             ->with(69)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 69,
                         'path_string' => '/1/2/69/',
                         'contentobject_id' => 67,
-                    )
+                    ]
                 )
             );
 
@@ -468,25 +468,25 @@ class LocationHandlerTest extends TestCase
     public function testCopySubtree()
     {
         $handler = $this->getPartlyMockedHandler(
-            array(
+            [
                 'load',
                 'changeMainLocation',
                 'setSectionForSubtree',
                 'create',
-            )
+            ]
         );
-        $subtreeContentRows = array(
-            array('node_id' => 10, 'main_node_id' => 1, 'parent_node_id' => 3, 'contentobject_id' => 21, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_10', 'sort_field' => 2, 'sort_order' => 1),
-            array('node_id' => 11, 'main_node_id' => 11, 'parent_node_id' => 10, 'contentobject_id' => 211, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_11', 'sort_field' => 2, 'sort_order' => 1),
-            array('node_id' => 12, 'main_node_id' => 15, 'parent_node_id' => 10, 'contentobject_id' => 215, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_12', 'sort_field' => 2, 'sort_order' => 1),
-            array('node_id' => 13, 'main_node_id' => 2, 'parent_node_id' => 10, 'contentobject_id' => 22, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_13', 'sort_field' => 2, 'sort_order' => 1),
-            array('node_id' => 14, 'main_node_id' => 11, 'parent_node_id' => 13, 'contentobject_id' => 211, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_14', 'sort_field' => 2, 'sort_order' => 1),
-            array('node_id' => 15, 'main_node_id' => 15, 'parent_node_id' => 13, 'contentobject_id' => 215, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_15', 'sort_field' => 2, 'sort_order' => 1),
-            array('node_id' => 16, 'main_node_id' => 16, 'parent_node_id' => 15, 'contentobject_id' => 216, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_16', 'sort_field' => 2, 'sort_order' => 1),
-        );
-        $destinationData = array('node_id' => 5, 'main_node_id' => 5, 'parent_node_id' => 4, 'contentobject_id' => 200, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 1, 'path_identification_string' => 'test_destination');
-        $mainLocationsMap = array(true, true, true, true, 1011, 1012, true);
-        $updateMainLocationsMap = array(1215 => 1015);
+        $subtreeContentRows = [
+            ['node_id' => 10, 'main_node_id' => 1, 'parent_node_id' => 3, 'contentobject_id' => 21, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_10', 'sort_field' => 2, 'sort_order' => 1],
+            ['node_id' => 11, 'main_node_id' => 11, 'parent_node_id' => 10, 'contentobject_id' => 211, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_11', 'sort_field' => 2, 'sort_order' => 1],
+            ['node_id' => 12, 'main_node_id' => 15, 'parent_node_id' => 10, 'contentobject_id' => 215, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_12', 'sort_field' => 2, 'sort_order' => 1],
+            ['node_id' => 13, 'main_node_id' => 2, 'parent_node_id' => 10, 'contentobject_id' => 22, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_13', 'sort_field' => 2, 'sort_order' => 1],
+            ['node_id' => 14, 'main_node_id' => 11, 'parent_node_id' => 13, 'contentobject_id' => 211, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_14', 'sort_field' => 2, 'sort_order' => 1],
+            ['node_id' => 15, 'main_node_id' => 15, 'parent_node_id' => 13, 'contentobject_id' => 215, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_15', 'sort_field' => 2, 'sort_order' => 1],
+            ['node_id' => 16, 'main_node_id' => 16, 'parent_node_id' => 15, 'contentobject_id' => 216, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 0, 'priority' => 0, 'path_identification_string' => 'test_16', 'sort_field' => 2, 'sort_order' => 1],
+        ];
+        $destinationData = ['node_id' => 5, 'main_node_id' => 5, 'parent_node_id' => 4, 'contentobject_id' => 200, 'contentobject_version' => 1, 'is_hidden' => 0, 'is_invisible' => 1, 'path_identification_string' => 'test_destination'];
+        $mainLocationsMap = [true, true, true, true, 1011, 1012, true];
+        $updateMainLocationsMap = [1215 => 1015];
         $offset = 1000;
 
         $this->locationGateway
@@ -505,10 +505,10 @@ class LocationHandlerTest extends TestCase
             ->method('loadAllGroups')
             ->will(
                 $this->returnValue(
-                    array(
-                        new ObjectStateGroup(array('id' => 10)),
-                        new ObjectStateGroup(array('id' => 20)),
-                    )
+                    [
+                        new ObjectStateGroup(['id' => 10]),
+                        new ObjectStateGroup(['id' => 20]),
+                    ]
                 )
             );
         $this->objectStateHandler->expects($this->at($objectStateHandlerCall++))
@@ -516,10 +516,10 @@ class LocationHandlerTest extends TestCase
             ->with($this->equalTo(10))
             ->will(
                 $this->returnValue(
-                    array(
-                        new ObjectState(array('id' => 11, 'groupId' => 10)),
-                        new ObjectState(array('id' => 12, 'groupId' => 10)),
-                    )
+                    [
+                        new ObjectState(['id' => 11, 'groupId' => 10]),
+                        new ObjectState(['id' => 12, 'groupId' => 10]),
+                    ]
                 )
             );
         $this->objectStateHandler->expects($this->at($objectStateHandlerCall++))
@@ -527,16 +527,16 @@ class LocationHandlerTest extends TestCase
             ->with($this->equalTo(20))
             ->will(
                 $this->returnValue(
-                    array(
-                        new ObjectState(array('id' => 21, 'groupId' => 20)),
-                        new ObjectState(array('id' => 22, 'groupId' => 20)),
-                    )
+                    [
+                        new ObjectState(['id' => 21, 'groupId' => 20]),
+                        new ObjectState(['id' => 22, 'groupId' => 20]),
+                    ]
                 )
             );
-        $defaultObjectStates = array(
-            new ObjectState(array('id' => 11, 'groupId' => 10)),
-            new ObjectState(array('id' => 21, 'groupId' => 20)),
-        );
+        $defaultObjectStates = [
+            new ObjectState(['id' => 11, 'groupId' => 10]),
+            new ObjectState(['id' => 21, 'groupId' => 20]),
+        ];
 
         $contentIds = array_values(
             array_unique(
@@ -551,18 +551,18 @@ class LocationHandlerTest extends TestCase
                 ->will(
                     $this->returnValue(
                         new Content(
-                            array(
+                            [
                                 'versionInfo' => new VersionInfo(
-                                    array(
+                                    [
                                         'contentInfo' => new ContentInfo(
-                                            array(
+                                            [
                                                 'id' => $contentId + $offset,
                                                 'currentVersionNo' => 1,
-                                            )
+                                            ]
                                         ),
-                                    )
+                                    ]
                                 ),
-                            )
+                            ]
                         )
                     )
                 );
@@ -588,24 +588,24 @@ class LocationHandlerTest extends TestCase
                 ->will(
                     $this->returnValue(
                         new Content(
-                            array(
+                            [
                                 'versionInfo' => new VersionInfo(
-                                    array(
+                                    [
                                         'contentInfo' => new ContentInfo(
-                                            array(
+                                            [
                                                 'id' => ($contentId + $offset),
-                                            )
+                                            ]
                                         ),
-                                    )
+                                    ]
                                 ),
-                            )
+                            ]
                         )
                     )
                 );
         }
         $lastContentHandlerIndex = $index * 2 + 1;
 
-        $pathStrings = array($destinationData['node_id'] => $destinationData['path_identification_string']);
+        $pathStrings = [$destinationData['node_id'] => $destinationData['path_identification_string']];
         foreach ($subtreeContentRows as $index => $row) {
             $mapper = new Mapper();
             $createStruct = $mapper->getLocationCreateStruct($row);
@@ -629,13 +629,13 @@ class LocationHandlerTest extends TestCase
                 ->will(
                     $this->returnValue(
                         new Location(
-                            array(
+                            [
                                 'id' => $row['node_id'] + $offset,
                                 'contentId' => $row['contentobject_id'],
                                 'hidden' => false,
                                 'invisible' => true,
                                 'pathIdentificationString' => $createStruct->pathIdentificationString,
-                            )
+                            ]
                         )
                     )
                 );
@@ -652,19 +652,19 @@ class LocationHandlerTest extends TestCase
             ->expects($this->once())
             ->method('load')
             ->with($destinationData['node_id'])
-            ->will($this->returnValue(new Location(array('contentId' => $destinationData['contentobject_id']))));
+            ->will($this->returnValue(new Location(['contentId' => $destinationData['contentobject_id']])));
 
         $this->contentHandler
             ->expects($this->at($lastContentHandlerIndex + 1))
             ->method('loadContentInfo')
             ->with($destinationData['contentobject_id'])
-            ->will($this->returnValue(new ContentInfo(array('sectionId' => 12345))));
+            ->will($this->returnValue(new ContentInfo(['sectionId' => 12345])));
 
         $this->contentHandler
             ->expects($this->at($lastContentHandlerIndex + 2))
             ->method('loadContentInfo')
             ->with(21)
-            ->will($this->returnValue(new ContentInfo(array('mainLocationId' => 1010))));
+            ->will($this->returnValue(new ContentInfo(['mainLocationId' => 1010])));
 
         $handler
             ->expects($this->once())
@@ -689,13 +689,13 @@ class LocationHandlerTest extends TestCase
         return $this->getMockBuilder(LocationHandler::class)
             ->setMethods($methods)
             ->setConstructorArgs(
-                array(
+                [
                     $this->locationGateway = $this->createMock(Gateway::class),
                     $this->locationMapper = $this->createMock(Mapper::class),
                     $this->contentHandler = $this->createMock(ContentHandler::class),
                     $this->objectStateHandler = $this->createMock(ObjectStateHandler::class),
                     $this->treeHandler = $this->createMock(TreeHandler::class),
-                )
+                ]
             )
             ->getMock();
     }

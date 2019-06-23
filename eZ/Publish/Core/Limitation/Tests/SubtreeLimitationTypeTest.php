@@ -68,11 +68,11 @@ class SubtreeLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValue()
     {
-        return array(
-            array(new SubtreeLimitation()),
-            array(new SubtreeLimitation(array())),
-            array(new SubtreeLimitation(array('limitationValues' => array('', 'true', '2', 's3fdaf32r')))),
-        );
+        return [
+            [new SubtreeLimitation()],
+            [new SubtreeLimitation([])],
+            [new SubtreeLimitation(['limitationValues' => ['', 'true', '2', 's3fdaf32r']])],
+        ];
     }
 
     /**
@@ -92,13 +92,13 @@ class SubtreeLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValueException()
     {
-        return array(
-            array(new ObjectStateLimitation()),
-            array(new SubtreeLimitation(array('limitationValues' => array(true)))),
-            array(new SubtreeLimitation(array('limitationValues' => array(1)))),
-            array(new SubtreeLimitation(array('limitationValues' => array(0)))),
-            array(new SubtreeLimitation(array('limitationValues' => '/1/2/'))),
-        );
+        return [
+            [new ObjectStateLimitation()],
+            [new SubtreeLimitation(['limitationValues' => [true]])],
+            [new SubtreeLimitation(['limitationValues' => [1]])],
+            [new SubtreeLimitation(['limitationValues' => [0]])],
+            [new SubtreeLimitation(['limitationValues' => '/1/2/'])],
+        ];
     }
 
     /**
@@ -120,11 +120,11 @@ class SubtreeLimitationTypeTest extends Base
      */
     public function providerForTestValidatePass()
     {
-        return array(
-            array(new SubtreeLimitation()),
-            array(new SubtreeLimitation(array())),
-            array(new SubtreeLimitation(array('limitationValues' => array('/1/2/')))),
-        );
+        return [
+            [new SubtreeLimitation()],
+            [new SubtreeLimitation([])],
+            [new SubtreeLimitation(['limitationValues' => ['/1/2/']])],
+        ];
     }
 
     /**
@@ -148,7 +148,7 @@ class SubtreeLimitationTypeTest extends Base
                     ->with(end($pathArray))
                     ->will(
                         $this->returnValue(
-                            new SPILocation(array('pathString' => $value))
+                            new SPILocation(['pathString' => $value])
                         )
                     );
             }
@@ -166,11 +166,11 @@ class SubtreeLimitationTypeTest extends Base
      */
     public function providerForTestValidateError()
     {
-        return array(
-            array(new SubtreeLimitation(), 0),
-            array(new SubtreeLimitation(array('limitationValues' => array('/1/777/'))), 1),
-            array(new SubtreeLimitation(array('limitationValues' => array('/1/888/', '/1/999/'))), 2),
-        );
+        return [
+            [new SubtreeLimitation(), 0],
+            [new SubtreeLimitation(['limitationValues' => ['/1/777/']]), 1],
+            [new SubtreeLimitation(['limitationValues' => ['/1/888/', '/1/999/']]), 2],
+        ];
     }
 
     /**
@@ -210,7 +210,7 @@ class SubtreeLimitationTypeTest extends Base
 
     public function testValidateErrorWrongPath()
     {
-        $limitation = new SubtreeLimitation(array('limitationValues' => array('/1/2/42/')));
+        $limitation = new SubtreeLimitation(['limitationValues' => ['/1/2/42/']]);
 
         $this->getPersistenceMock()
             ->expects($this->any())
@@ -225,7 +225,7 @@ class SubtreeLimitationTypeTest extends Base
                 ->with(end($pathArray))
                 ->will(
                     $this->returnValue(
-                        new SPILocation(array('pathString' => '/1/5/42'))
+                        new SPILocation(['pathString' => '/1/5/42'])
                     )
                 );
         }
@@ -244,7 +244,7 @@ class SubtreeLimitationTypeTest extends Base
      */
     public function testBuildValue(SubtreeLimitationType $limitationType)
     {
-        $expected = array('test', 'test' => '/1/999/');
+        $expected = ['test', 'test' => '/1/999/'];
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(SubtreeLimitation::class, $value);
@@ -278,120 +278,120 @@ class SubtreeLimitationTypeTest extends Base
             ->method('getContentInfo')
             ->willReturn(new ContentInfo(['published' => true, 'status' => ContentInfo::STATUS_PUBLISHED]));
 
-        return array(
+        return [
             // ContentInfo, with targets, no access
-            array(
+            [
                 'limitation' => new SubtreeLimitation(),
                 'object' => new ContentInfo(['published' => true, 'status' => ContentInfo::STATUS_PUBLISHED]),
-                'targets' => array(new Location()),
-                'persistence' => array(),
+                'targets' => [new Location()],
+                'persistence' => [],
                 'expected' => LimitationType::ACCESS_DENIED,
-            ),
+            ],
             // ContentInfo, with targets, no access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
                 'object' => new ContentInfo(['published' => true, 'status' => ContentInfo::STATUS_PUBLISHED]),
-                'targets' => array(new Location(array('pathString' => '/1/55/'))),
-                'persistence' => array(),
+                'targets' => [new Location(['pathString' => '/1/55/'])],
+                'persistence' => [],
                 'expected' => LimitationType::ACCESS_DENIED,
-            ),
+            ],
             // ContentInfo, with targets, with access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
                 'object' => new ContentInfo(['published' => true, 'status' => ContentInfo::STATUS_PUBLISHED]),
-                'targets' => array(new Location(array('pathString' => '/1/2/'))),
-                'persistence' => array(),
+                'targets' => [new Location(['pathString' => '/1/2/'])],
+                'persistence' => [],
                 'expected' => LimitationType::ACCESS_GRANTED,
-            ),
+            ],
             // ContentInfo, no targets, with access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
                 'object' => new ContentInfo(['published' => true, 'status' => ContentInfo::STATUS_PUBLISHED]),
                 'targets' => null,
-                'persistence' => array(new Location(array('pathString' => '/1/2/'))),
+                'persistence' => [new Location(['pathString' => '/1/2/'])],
                 'expected' => LimitationType::ACCESS_GRANTED,
-            ),
+            ],
             // ContentInfo, no targets, no access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/', '/1/43/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/', '/1/43/']]),
                 'object' => new ContentInfo(['published' => true, 'status' => ContentInfo::STATUS_PUBLISHED]),
                 'targets' => null,
-                'persistence' => array(new Location(array('pathString' => '/1/55/'))),
+                'persistence' => [new Location(['pathString' => '/1/55/'])],
                 'expected' => LimitationType::ACCESS_DENIED,
-            ),
+            ],
             // ContentInfo, no targets, un-published, with access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
                 'object' => new ContentInfo(['published' => false, 'status' => ContentInfo::STATUS_DRAFT]),
                 'targets' => null,
-                'persistence' => array(new Location(array('pathString' => '/1/2/'))),
+                'persistence' => [new Location(['pathString' => '/1/2/'])],
                 'expected' => LimitationType::ACCESS_GRANTED,
-            ),
+            ],
             // ContentInfo, no targets, un-published, no access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/', '/1/43/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/', '/1/43/']]),
                 'object' => new ContentInfo(['published' => false, 'status' => ContentInfo::STATUS_DRAFT]),
                 'targets' => null,
-                'persistence' => array(new Location(array('pathString' => '/1/55/'))),
+                'persistence' => [new Location(['pathString' => '/1/55/'])],
                 'expected' => LimitationType::ACCESS_DENIED,
-            ),
+            ],
             // Content, with targets, with access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
                 'object' => $contentMock,
-                'targets' => array(new Location(array('pathString' => '/1/2/'))),
-                'persistence' => array(),
+                'targets' => [new Location(['pathString' => '/1/2/'])],
+                'persistence' => [],
                 'expected' => LimitationType::ACCESS_GRANTED,
-            ),
+            ],
             // VersionInfo, with targets, with access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
                 'object' => $versionInfoMock2,
-                'targets' => array(new Location(array('pathString' => '/1/2/'))),
-                'persistence' => array(),
+                'targets' => [new Location(['pathString' => '/1/2/'])],
+                'persistence' => [],
                 'expected' => LimitationType::ACCESS_GRANTED,
-            ),
+            ],
             // ContentCreateStruct, no targets, no access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/']]),
                 'object' => new ContentCreateStruct(),
-                'targets' => array(),
-                'persistence' => array(),
+                'targets' => [],
+                'persistence' => [],
                 'expected' => LimitationType::ACCESS_DENIED,
-            ),
+            ],
             // ContentCreateStruct, with targets, no access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/', '/1/43/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/', '/1/43/']]),
                 'object' => new ContentCreateStruct(),
-                'targets' => array(new LocationCreateStruct(array('parentLocationId' => 55))),
-                'persistence' => array(new Location(array('pathString' => '/1/55/'))),
+                'targets' => [new LocationCreateStruct(['parentLocationId' => 55])],
+                'persistence' => [new Location(['pathString' => '/1/55/'])],
                 'expected' => LimitationType::ACCESS_DENIED,
-            ),
+            ],
             // ContentCreateStruct, with targets, with access
-            array(
-                'limitation' => new SubtreeLimitation(array('limitationValues' => array('/1/2/', '/1/43/'))),
+            [
+                'limitation' => new SubtreeLimitation(['limitationValues' => ['/1/2/', '/1/43/']]),
                 'object' => new ContentCreateStruct(),
-                'targets' => array(new LocationCreateStruct(array('parentLocationId' => 43))),
-                'persistence' => array(new Location(array('pathString' => '/1/43/'))),
+                'targets' => [new LocationCreateStruct(['parentLocationId' => 43])],
+                'persistence' => [new Location(['pathString' => '/1/43/'])],
                 'expected' => LimitationType::ACCESS_GRANTED,
-            ),
+            ],
             // invalid object
-            array(
+            [
                 'limitation' => new SubtreeLimitation(),
                 'object' => new ObjectStateLimitation(),
-                'targets' => array(new LocationCreateStruct(array('parentLocationId' => 43))),
-                'persistence' => array(),
+                'targets' => [new LocationCreateStruct(['parentLocationId' => 43])],
+                'persistence' => [],
                 'expected' => LimitationType::ACCESS_ABSTAIN,
-            ),
+            ],
             // invalid target
-            array(
+            [
                 'limitation' => new SubtreeLimitation(),
                 'object' => new ContentInfo(['published' => true, 'status' => ContentInfo::STATUS_PUBLISHED]),
-                'targets' => array(new ObjectStateLimitation()),
-                'persistence' => array(),
+                'targets' => [new ObjectStateLimitation()],
+                'persistence' => [],
                 'expected' => LimitationType::ACCESS_ABSTAIN,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -458,22 +458,22 @@ class SubtreeLimitationTypeTest extends Base
      */
     public function providerForTestEvaluateInvalidArgument()
     {
-        return array(
+        return [
             // invalid limitation
-            array(
+            [
                 'limitation' => new ObjectStateLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array(new Location()),
-                'persistence' => array(),
-            ),
+                'targets' => [new Location()],
+                'persistence' => [],
+            ],
             // invalid target when using ContentCreateStruct
-            array(
+            [
                 'limitation' => new SubtreeLimitation(),
                 'object' => new ContentCreateStruct(),
-                'targets' => array(new Location()),
-                'persistence' => array(),
-            ),
-        );
+                'targets' => [new Location()],
+                'persistence' => [],
+            ],
+        ];
     }
 
     /**
@@ -519,7 +519,7 @@ class SubtreeLimitationTypeTest extends Base
         $this->expectException(\RuntimeException::class);
 
         $limitationType->getCriterion(
-            new SubtreeLimitation(array()),
+            new SubtreeLimitation([]),
             $this->getUserMock()
         );
     }
@@ -532,7 +532,7 @@ class SubtreeLimitationTypeTest extends Base
     public function testGetCriterionSingleValue(SubtreeLimitationType $limitationType)
     {
         $criterion = $limitationType->getCriterion(
-            new SubtreeLimitation(array('limitationValues' => array('/1/9/'))),
+            new SubtreeLimitation(['limitationValues' => ['/1/9/']]),
             $this->getUserMock()
         );
 
@@ -542,7 +542,7 @@ class SubtreeLimitationTypeTest extends Base
         self::assertIsArray($criterion->value);
         self::assertIsString($criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
-        self::assertEquals(array('/1/9/'), $criterion->value);
+        self::assertEquals(['/1/9/'], $criterion->value);
     }
 
     /**
@@ -553,7 +553,7 @@ class SubtreeLimitationTypeTest extends Base
     public function testGetCriterionMultipleValues(SubtreeLimitationType $limitationType)
     {
         $criterion = $limitationType->getCriterion(
-            new SubtreeLimitation(array('limitationValues' => array('/1/9/', '/1/55/'))),
+            new SubtreeLimitation(['limitationValues' => ['/1/9/', '/1/55/']]),
             $this->getUserMock()
         );
 
@@ -563,7 +563,7 @@ class SubtreeLimitationTypeTest extends Base
         self::assertIsArray($criterion->value);
         self::assertIsString($criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);
-        self::assertEquals(array('/1/9/', '/1/55/'), $criterion->value);
+        self::assertEquals(['/1/9/', '/1/55/'], $criterion->value);
     }
 
     /**

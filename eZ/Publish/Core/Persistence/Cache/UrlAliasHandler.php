@@ -36,13 +36,13 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     ) {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'location' => $locationId,
                 'parent' => $parentLocationId,
                 'name' => $name,
                 'language' => $languageCode,
                 'alwaysAvailable' => $alwaysAvailable,
-            )
+            ]
         );
 
         $this->persistenceHandler->urlAliasHandler()->publishUrlAliasForLocation(
@@ -64,13 +64,13 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'location' => $locationId,
                 '$path' => $path,
                 '$forwarding' => $forwarding,
                 'language' => $languageCode,
                 'alwaysAvailable' => $alwaysAvailable,
-            )
+            ]
         );
 
         $urlAlias = $this->persistenceHandler->urlAliasHandler()->createCustomUrlAlias(
@@ -93,13 +93,13 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'resource' => $resource,
                 'path' => $path,
                 'forwarding' => $forwarding,
                 'language' => $languageCode,
                 'alwaysAvailable' => $alwaysAvailable,
-            )
+            ]
         );
 
         $urlAlias = $this->persistenceHandler->urlAliasHandler()->createGlobalUrlAlias(
@@ -120,7 +120,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
      */
     public function listGlobalURLAliases($languageCode = null, $offset = 0, $limit = -1)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $languageCode, 'offset' => $offset, 'limit' => $limit));
+        $this->logger->logCall(__METHOD__, ['language' => $languageCode, 'offset' => $offset, 'limit' => $limit]);
 
         return $this->persistenceHandler->urlAliasHandler()->listGlobalURLAliases($languageCode, $offset, $limit);
     }
@@ -162,7 +162,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
      */
     public function removeURLAliases(array $urlAliases)
     {
-        $this->logger->logCall(__METHOD__, array('aliases' => $urlAliases));
+        $this->logger->logCall(__METHOD__, ['aliases' => $urlAliases]);
         $return = $this->persistenceHandler->urlAliasHandler()->removeURLAliases($urlAliases);
 
         $cacheTags = [];
@@ -246,11 +246,11 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'location' => $locationId,
                 'oldParent' => $oldParentId,
                 'newParent' => $newParentId,
-            )
+            ]
         );
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationMoved($locationId, $oldParentId, $newParentId);
@@ -267,11 +267,11 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
     {
         $this->logger->logCall(
             __METHOD__,
-            array(
+            [
                 'oldLocation' => $locationId,
                 'newLocation' => $newLocationId,
                 'newParent' => $newParentId,
-            )
+            ]
         );
 
         $return = $this->persistenceHandler->urlAliasHandler()->locationCopied(
@@ -289,7 +289,7 @@ class UrlAliasHandler extends AbstractInMemoryPersistenceHandler implements UrlA
      */
     public function locationDeleted($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('location' => $locationId));
+        $this->logger->logCall(__METHOD__, ['location' => $locationId]);
         $return = $this->persistenceHandler->urlAliasHandler()->locationDeleted($locationId);
 
         $this->cache->invalidateTags(['urlAlias-location-' . $locationId, 'urlAlias-location-path-' . $locationId]);

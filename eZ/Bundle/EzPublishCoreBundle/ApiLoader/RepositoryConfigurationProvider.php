@@ -53,6 +53,6 @@ class RepositoryConfigurationProvider
             );
         }
 
-        return array('alias' => $repositoryAlias) + $this->repositories[$repositoryAlias];
+        return ['alias' => $repositoryAlias] + $this->repositories[$repositoryAlias];
     }
 }

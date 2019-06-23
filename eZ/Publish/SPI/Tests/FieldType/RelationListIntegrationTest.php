@@ -73,18 +73,18 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array(
-                'fieldSettings' => array(
+            [
+                'fieldSettings' => [
                     'selectionMethod' => 0,
                     'selectionDefaultLocation' => '',
-                    'selectionContentTypes' => array(),
-                ),
-                'validators' => array(
-                    'RelationListValueValidator' => array(
+                    'selectionContentTypes' => [],
+                ],
+                'validators' => [
+                    'RelationListValueValidator' => [
                         'selectionLimit' => 3,
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
     }
 
@@ -97,25 +97,25 @@ class RelationListIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        $fieldSettings = array(
+        $fieldSettings = [
             'selectionMethod' => 0,
             'selectionDefaultLocation' => '',
-            'selectionContentTypes' => array(),
-        );
+            'selectionContentTypes' => [],
+        ];
 
-        $validators = array(
-            'RelationListValueValidator' => array(
+        $validators = [
+            'RelationListValueValidator' => [
                 'selectionLimit' => 3,
-            ),
-        );
+            ],
+        ];
 
-        return array(
-            array('fieldType', 'ezobjectrelationlist'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints(array(
+        return [
+            ['fieldType', 'ezobjectrelationlist'],
+            ['fieldTypeConstraints', new Content\FieldTypeConstraints([
                 'fieldSettings' => $fieldSettings,
                 'validators' => $validators,
-            ))),
-        );
+            ])],
+        ];
     }
 
     /**
@@ -126,11 +126,11 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array('destinationContentIds' => array(4)),
+            [
+                'data' => ['destinationContentIds' => [4]],
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 
@@ -170,11 +170,11 @@ class RelationListIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array('destinationContentIds' => array(11)),
+            [
+                'data' => ['destinationContentIds' => [11]],
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 

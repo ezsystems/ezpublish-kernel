@@ -39,7 +39,7 @@ class ConfigResolverTest extends TestCase
      *
      * @return \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ConfigResolver
      */
-    private function getResolver($defaultNS = 'ezsettings', $undefinedStrategy = ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, array $groupsBySiteAccess = array())
+    private function getResolver($defaultNS = 'ezsettings', $undefinedStrategy = ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION, array $groupsBySiteAccess = [])
     {
         $configResolver = new ConfigResolver(
             null,
@@ -84,29 +84,29 @@ class ConfigResolverTest extends TestCase
 
     public function parameterProvider()
     {
-        return array(
-            array('foo', 'bar'),
-            array('some.parameter', true),
-            array('some.other.parameter', array('foo', 'bar', 'baz')),
-            array('a.hash.parameter', array('foo' => 'bar', 'tata' => 'toto')),
-            array(
-                'a.deep.hash', array(
+        return [
+            ['foo', 'bar'],
+            ['some.parameter', true],
+            ['some.other.parameter', ['foo', 'bar', 'baz']],
+            ['a.hash.parameter', ['foo' => 'bar', 'tata' => 'toto']],
+            [
+                'a.deep.hash', [
                     'foo' => 'bar',
                     'tata' => 'toto',
-                    'deeper_hash' => array(
+                    'deeper_hash' => [
                         'likeStarWars' => true,
-                        'jedi' => array('Obi-Wan Kenobi', 'Mace Windu', 'Luke Skywalker', 'Leïa Skywalker (yes! Read episodes 7-8-9!)'),
-                        'sith' => array('Darth Vader', 'Darth Maul', 'Palpatine'),
-                        'roles' => array(
-                            'Amidala' => array('Queen'),
-                            'Palpatine' => array('Senator', 'Emperor', 'Villain'),
-                            'C3PO' => array('Droid', 'Annoying guy'),
-                            'Jar-Jar' => array('Still wondering his role', 'Annoying guy'),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                        'jedi' => ['Obi-Wan Kenobi', 'Mace Windu', 'Luke Skywalker', 'Leïa Skywalker (yes! Read episodes 7-8-9!)'],
+                        'sith' => ['Darth Vader', 'Darth Maul', 'Palpatine'],
+                        'roles' => [
+                            'Amidala' => ['Queen'],
+                            'Palpatine' => ['Senator', 'Emperor', 'Villain'],
+                            'C3PO' => ['Droid', 'Annoying guy'],
+                            'Jar-Jar' => ['Still wondering his role', 'Annoying guy'],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -215,16 +215,16 @@ class ConfigResolverTest extends TestCase
 
     public function hasParameterProvider()
     {
-        return array(
-            array(true, true, true, true, true),
-            array(true, true, true, false, true),
-            array(true, true, false, false, true),
-            array(false, false, false, false, false),
-            array(false, false, true, false, true),
-            array(false, false, false, true, true),
-            array(false, false, true, true, true),
-            array(false, true, false, false, true),
-        );
+        return [
+            [true, true, true, true, true],
+            [true, true, true, false, true],
+            [true, true, false, false, true],
+            [false, false, false, false, false],
+            [false, false, true, false, true],
+            [false, false, false, true, true],
+            [false, false, true, true, true],
+            [false, true, false, false, true],
+        ];
     }
 
     /**
@@ -237,19 +237,19 @@ class ConfigResolverTest extends TestCase
         $configResolver = $this->getResolver(
             'ezsettings',
             ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION,
-            array($this->siteAccess->name => array($groupName))
+            [$this->siteAccess->name => [$groupName]]
         );
 
         $this->containerMock->expects($this->atLeastOnce())
             ->method('hasParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array("ezsettings.default.$paramName", $defaultMatch),
-                        array("ezsettings.$groupName.$paramName", $groupMatch),
-                        array("ezsettings.{$this->siteAccess->name}.$paramName", $scopeMatch),
-                        array("ezsettings.global.$paramName", $globalMatch),
-                    )
+                    [
+                        ["ezsettings.default.$paramName", $defaultMatch],
+                        ["ezsettings.$groupName.$paramName", $groupMatch],
+                        ["ezsettings.{$this->siteAccess->name}.$paramName", $scopeMatch],
+                        ["ezsettings.global.$paramName", $globalMatch],
+                    ]
                 )
             );
 
@@ -268,22 +268,22 @@ class ConfigResolverTest extends TestCase
         $configResolver = $this->getResolver(
             'ezsettings',
             ConfigResolver::UNDEFINED_STRATEGY_EXCEPTION,
-            array(
-                $this->siteAccess->name => array('some_group'),
-                $scope => array($groupName),
-            )
+            [
+                $this->siteAccess->name => ['some_group'],
+                $scope => [$groupName],
+            ]
         );
 
         $this->containerMock->expects($this->atLeastOnce())
             ->method('hasParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array("$namespace.default.$paramName", $defaultMatch),
-                        array("$namespace.$groupName.$paramName", $groupMatch),
-                        array("$namespace.$scope.$paramName", $scopeMatch),
-                        array("$namespace.global.$paramName", $globalMatch),
-                    )
+                    [
+                        ["$namespace.default.$paramName", $defaultMatch],
+                        ["$namespace.$groupName.$paramName", $groupMatch],
+                        ["$namespace.$scope.$paramName", $scopeMatch],
+                        ["$namespace.global.$paramName", $globalMatch],
+                    ]
                 )
             );
 

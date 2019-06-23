@@ -36,10 +36,10 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testCreateContentDefaultValues()
     {
         $mainLanguageCode = 'eng-US';
-        $fieldValues = array(
-            'field1' => array('eng-US' => 'new value 1'),
-            'field3' => array('eng-US' => 'new value 3'),
-        );
+        $fieldValues = [
+            'field1' => ['eng-US' => 'new value 1'],
+            'field3' => ['eng-US' => 'new value 3'],
+        ];
 
         $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
@@ -83,10 +83,10 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testCreateContentEmptyValues()
     {
         $mainLanguageCode = 'eng-US';
-        $fieldValues = array(
-            'field2' => array('eng-US' => null),
-            'field4' => array('eng-US' => null),
-        );
+        $fieldValues = [
+            'field2' => ['eng-US' => null],
+            'field4' => ['eng-US' => null],
+        ];
 
         $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
@@ -134,10 +134,10 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testCreateContentEmptyValuesTranslationNotStored()
     {
         $mainLanguageCode = 'eng-US';
-        $fieldValues = array(
-            'field2' => array('eng-US' => null),
-            'field4' => array('eng-US' => null, 'ger-DE' => null),
-        );
+        $fieldValues = [
+            'field2' => ['eng-US' => null],
+            'field4' => ['eng-US' => null, 'ger-DE' => null],
+        ];
 
         $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
@@ -187,10 +187,10 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testCreateContentTwoLanguagesMainTranslationStored()
     {
         $mainLanguageCode = 'eng-US';
-        $fieldValues = array(
-            'field2' => array('eng-US' => null),
-            'field4' => array('eng-US' => null, 'ger-DE' => 'new ger-DE value 4'),
-        );
+        $fieldValues = [
+            'field2' => ['eng-US' => null],
+            'field4' => ['eng-US' => null, 'ger-DE' => 'new ger-DE value 4'],
+        ];
 
         $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
@@ -245,9 +245,9 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testCreateContentTwoLanguagesSecondTranslationNotStored()
     {
         $mainLanguageCode = 'eng-US';
-        $fieldValues = array(
-            'field4' => array('ger-DE' => null),
-        );
+        $fieldValues = [
+            'field4' => ['ger-DE' => null],
+        ];
 
         $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
@@ -296,7 +296,7 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testCreateContentDefaultValuesNoStructFields()
     {
         $mainLanguageCode = 'eng-US';
-        $fieldValues = array();
+        $fieldValues = [];
 
         $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
@@ -342,9 +342,9 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testCreateContentTwoLanguagesNoValuesForMainLanguage()
     {
         $mainLanguageCode = 'eng-US';
-        $fieldValues = array(
-            'field4' => array('ger-DE' => 'new value 4'),
-        );
+        $fieldValues = [
+            'field4' => ['ger-DE' => 'new value 4'],
+        ];
 
         $content = $this->createTestContent($mainLanguageCode, $fieldValues);
 
@@ -402,7 +402,7 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
 
         $newDraft = $contentService->loadContent($newDraft->id, null, $newDraft->versionInfo->versionNo);
 
-        return array($published, $newDraft);
+        return [$published, $newDraft];
     }
 
     /**
@@ -466,9 +466,9 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testUpdateContentWithNewLanguage()
     {
         $initialLanguageCode = 'ger-DE';
-        $fieldValues = array(
-            'field4' => array('ger-DE' => 'new value 4'),
-        );
+        $fieldValues = [
+            'field4' => ['ger-DE' => 'new value 4'],
+        ];
 
         $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
@@ -532,10 +532,10 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testUpdateContentWithNewLanguageVariant()
     {
         $initialLanguageCode = 'ger-DE';
-        $fieldValues = array(
-            'field1' => array('eng-US' => null),
-            'field4' => array('ger-DE' => 'new value 4'),
-        );
+        $fieldValues = [
+            'field1' => ['eng-US' => null],
+            'field4' => ['ger-DE' => 'new value 4'],
+        ];
 
         $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
@@ -594,7 +594,7 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testUpdateContentWithNewLanguageNoValues()
     {
         $initialLanguageCode = 'ger-DE';
-        $fieldValues = array();
+        $fieldValues = [];
 
         $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
@@ -654,10 +654,10 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testUpdateContentUpdatingNonTranslatableFieldUpdatesFieldCopy()
     {
         $initialLanguageCode = 'eng-US';
-        $fieldValues = array(
-            'field1' => array('eng-US' => 'new value 1'),
-            'field2' => array('eng-US' => null),
-        );
+        $fieldValues = [
+            'field1' => ['eng-US' => 'new value 1'],
+            'field2' => ['eng-US' => null],
+        ];
 
         $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
@@ -709,11 +709,11 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
     public function testUpdateContentWithTwoLanguagesInitialLanguageTranslationNotCreated()
     {
         $initialLanguageCode = 'ger-DE';
-        $fieldValues = array(
-            'field1' => array('eng-US' => null),
-            'field2' => array('eng-US' => null),
-            'field4' => array('ger-DE' => null),
-        );
+        $fieldValues = [
+            'field1' => ['eng-US' => null],
+            'field2' => ['eng-US' => null],
+            'field4' => ['ger-DE' => null],
+        ];
 
         $content = $this->updateTestContent($initialLanguageCode, $fieldValues);
         $this->assertInstanceOf('\\eZ\\Publish\\API\\Repository\\Values\\Content\\Content', $content);
@@ -780,7 +780,7 @@ class NonRedundantFieldSetTest extends BaseNonRedundantFieldSetTest
      */
     protected function mapFields(array $fields)
     {
-        $mappedFields = array();
+        $mappedFields = [];
 
         foreach ($fields as $field) {
             $mappedFields[$field->fieldDefIdentifier][$field->languageCode] = $field->id;

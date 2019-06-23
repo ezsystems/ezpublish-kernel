@@ -31,17 +31,17 @@ class BorderFilterLoaderTest extends TestCase
 
     public function loadInvalidProvider()
     {
-        return array(
-            array(array()),
-            array(array(123)),
-            array(array('foo' => 'bar')),
-        );
+        return [
+            [[]],
+            [[123]],
+            [['foo' => 'bar']],
+        ];
     }
 
     public function testLoadDefaultColor()
     {
         $image = $this->createMock(ImageInterface::class);
-        $options = array(10, 10);
+        $options = [10, 10];
 
         $palette = $this->createMock(PaletteInterface::class);
         $image
@@ -88,7 +88,7 @@ class BorderFilterLoaderTest extends TestCase
     public function testLoad($thickX, $thickY, $color)
     {
         $image = $this->createMock(ImageInterface::class);
-        $options = array($thickX, $thickY, $color);
+        $options = [$thickX, $thickY, $color];
 
         $palette = $this->createMock(PaletteInterface::class);
         $image
@@ -131,10 +131,10 @@ class BorderFilterLoaderTest extends TestCase
 
     public function loadProvider()
     {
-        return array(
-            array(10, 10, '#fff'),
-            array(5, 5, '#5dcb4f'),
-            array(50, 50, '#fa1629'),
-        );
+        return [
+            [10, 10, '#fff'],
+            [5, 5, '#5dcb4f'],
+            [50, 50, '#fa1629'],
+        ];
     }
 }

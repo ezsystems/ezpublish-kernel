@@ -87,12 +87,12 @@ class KeywordIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezkeyword field type does not have any special field definition
             // properties
-            array('fieldType', 'ezkeyword'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints()),
-        );
+            ['fieldType', 'ezkeyword'],
+            ['fieldTypeConstraints', new Content\FieldTypeConstraints()],
+        ];
     }
 
     /**
@@ -103,11 +103,11 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(),
-                'externalData' => array('foo', 'bar', 'sindelfingen'),
+            [
+                'data' => [],
+                'externalData' => ['foo', 'bar', 'sindelfingen'],
                 'sortKey' => 'foo,bar,sindelfingen',
-            )
+            ]
         );
     }
 
@@ -127,7 +127,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value->externalData
         );
 
-        $this->assertEquals(array(), $field->value->data);
+        $this->assertEquals([], $field->value->data);
         $this->assertEquals('foo,bar,sindelfingen', $field->value->sortKey);
     }
 
@@ -173,11 +173,11 @@ class KeywordIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(),
-                'externalData' => array('sindelfingen', 'baz'),
+            [
+                'data' => [],
+                'externalData' => ['sindelfingen', 'baz'],
                 'sortKey' => 'sindelfingen,baz',
-            )
+            ]
         );
     }
 
@@ -198,7 +198,7 @@ class KeywordIntegrationTest extends BaseIntegrationTest
             $field->value->externalData
         );
 
-        $this->assertEquals(array(), $field->value->data);
+        $this->assertEquals([], $field->value->data);
         $this->assertEquals('sindelfingen,baz', $field->value->sortKey);
     }
 }

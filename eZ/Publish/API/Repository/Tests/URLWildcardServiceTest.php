@@ -69,11 +69,11 @@ class URLWildcardServiceTest extends BaseTest
     public function testCreateSetsPropertiesOnURLWildcard(URLWildcard $urlWildcard)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'sourceUrl' => '/articles/*',
                 'destinationUrl' => '/content/{1}',
                 'forward' => false,
-            ),
+            ],
             $urlWildcard
         );
     }
@@ -96,11 +96,11 @@ class URLWildcardServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'sourceUrl' => '/articles/*',
                 'destinationUrl' => '/content/{1}',
                 'forward' => true,
-            ),
+            ],
             $urlWildcard
         );
     }
@@ -212,11 +212,11 @@ class URLWildcardServiceTest extends BaseTest
     public function testLoadSetsPropertiesOnURLWildcard(URLWildcard $urlWildcard)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'sourceUrl' => '/articles/*',
                 'destinationUrl' => '/content/{1}',
                 'forward' => true,
-            ),
+            ],
             $urlWildcard
         );
     }
@@ -294,10 +294,10 @@ class URLWildcardServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals(
-            array(
+            [
                 $urlWildcardOne,
                 $urlWildcardTwo,
-            ),
+            ],
             $allUrlWildcards
         );
     }
@@ -323,7 +323,7 @@ class URLWildcardServiceTest extends BaseTest
         $allUrlWildcards = $urlWildcardService->loadAll(1);
         /* END: Use Case */
 
-        $this->assertEquals(array($urlWildcardTwo), $allUrlWildcards);
+        $this->assertEquals([$urlWildcardTwo], $allUrlWildcards);
     }
 
     /**
@@ -347,7 +347,7 @@ class URLWildcardServiceTest extends BaseTest
         $allUrlWildcards = $urlWildcardService->loadAll(0, 1);
         /* END: Use Case */
 
-        $this->assertEquals(array($urlWildcardOne), $allUrlWildcards);
+        $this->assertEquals([$urlWildcardOne], $allUrlWildcards);
     }
 
     /**
@@ -367,7 +367,7 @@ class URLWildcardServiceTest extends BaseTest
         $allUrlWildcards = $urlWildcardService->loadAll();
         /* END: Use Case */
 
-        $this->assertSame(array(), $allUrlWildcards);
+        $this->assertSame([], $allUrlWildcards);
     }
 
     /**
@@ -411,10 +411,10 @@ class URLWildcardServiceTest extends BaseTest
     public function testTranslateSetsPropertiesOnTranslationResult(URLWildcardTranslationResult $result)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'uri' => '/content/2012/05/sindelfingen',
                 'forward' => false,
-            ),
+            ],
             $result
         );
     }
@@ -440,10 +440,10 @@ class URLWildcardServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'uri' => '/content/sindelfingen/year/2012',
                 'forward' => true,
-            ),
+            ],
             $result
         );
     }

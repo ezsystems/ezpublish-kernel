@@ -44,7 +44,7 @@ class Mapper
      */
     public function extractLanguagesFromRows(array $rows, string $key = 'locale'): array
     {
-        $languages = array();
+        $languages = [];
 
         foreach ($rows as $row) {
             $language = new Language();

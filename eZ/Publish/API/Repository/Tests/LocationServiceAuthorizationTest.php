@@ -435,7 +435,7 @@ class LocationServiceAuthorizationTest extends BaseTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new OwnerLimitation(
-                array('limitationValues' => array(1))
+                ['limitationValues' => [1]]
             )
         );
         $roleService->updatePolicy($removePolicy, $policyUpdate);
@@ -457,7 +457,7 @@ class LocationServiceAuthorizationTest extends BaseTest
 
         $locationCreateStruct = $locationService->newLocationCreateStruct($parentLocationId);
 
-        $contentDraft = $contentService->createContent($contentCreateStruct, array($locationCreateStruct));
+        $contentDraft = $contentService->createContent($contentCreateStruct, [$locationCreateStruct]);
         $content = $contentService->publishVersion($contentDraft->versionInfo);
 
         // New user will be able to delete this Location at this point
@@ -470,7 +470,7 @@ class LocationServiceAuthorizationTest extends BaseTest
         // Under newly created Location create Content with administrator user
         // After this created user will not be able to delete $firstLocation
         $locationCreateStruct = $locationService->newLocationCreateStruct($firstLocation->id);
-        $contentDraft = $contentService->createContent($contentCreateStruct, array($locationCreateStruct));
+        $contentDraft = $contentService->createContent($contentCreateStruct, [$locationCreateStruct]);
         $content = $contentService->publishVersion($contentDraft->versionInfo);
         $secondLocation = $locationService->loadLocation($content->contentInfo->mainLocationId);
 

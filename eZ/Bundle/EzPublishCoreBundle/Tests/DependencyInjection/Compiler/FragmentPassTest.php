@@ -63,26 +63,26 @@ class FragmentPassTest extends AbstractCompilerPassTestCase
 
         $this->assertContainerBuilderHasServiceDefinitionWithParent('fragment.renderer.inline', 'ezpublish.decorated_fragment_renderer');
         $decoratedInlineDef = $this->container->getDefinition('fragment.renderer.inline');
-        $this->assertSame(array('kernel.fragment_renderer' => array(array())), $decoratedInlineDef->getTags());
+        $this->assertSame(['kernel.fragment_renderer' => [[]]], $decoratedInlineDef->getTags());
         $this->assertEquals(
-            array(new Reference('fragment.renderer.inline.inner')),
+            [new Reference('fragment.renderer.inline.inner')],
             $decoratedInlineDef->getArguments()
         );
         $this->assertSame($inlineClass, $decoratedInlineDef->getClass());
 
         $this->assertContainerBuilderHasServiceDefinitionWithParent('fragment.renderer.esi', 'ezpublish.decorated_fragment_renderer');
         $decoratedEsiDef = $this->container->getDefinition('fragment.renderer.esi');
-        $this->assertSame(array('kernel.fragment_renderer' => array(array())), $decoratedEsiDef->getTags());
+        $this->assertSame(['kernel.fragment_renderer' => [[]]], $decoratedEsiDef->getTags());
         $this->assertEquals(
-            array(new Reference('fragment.renderer.esi.inner')),
+            [new Reference('fragment.renderer.esi.inner')],
             $decoratedEsiDef->getArguments()
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithParent('fragment.renderer.hinclude', 'ezpublish.decorated_fragment_renderer');
         $decoratedHincludeDef = $this->container->getDefinition('fragment.renderer.hinclude');
-        $this->assertSame(array('kernel.fragment_renderer' => array(array())), $decoratedHincludeDef->getTags());
+        $this->assertSame(['kernel.fragment_renderer' => [[]]], $decoratedHincludeDef->getTags());
         $this->assertEquals(
-            array(new Reference('fragment.renderer.hinclude.inner')),
+            [new Reference('fragment.renderer.hinclude.inner')],
             $decoratedHincludeDef->getArguments()
         );
     }

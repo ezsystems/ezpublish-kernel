@@ -231,6 +231,6 @@ class DoctrineStorage extends Gateway
 
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-        return isset($rows[0]) ? $this->convertColumnsToProperties($rows[0]) : array();
+        return isset($rows[0]) ? $this->convertColumnsToProperties($rows[0]) : [];
     }
 }

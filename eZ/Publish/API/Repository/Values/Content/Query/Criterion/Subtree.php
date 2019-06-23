@@ -40,7 +40,7 @@ class Subtree extends Criterion
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::EQ,
                 Specifications::FORMAT_SINGLE,
@@ -51,7 +51,7 @@ class Subtree extends Criterion
                 Specifications::FORMAT_ARRAY,
                 Specifications::TYPE_STRING
             ),
-        );
+        ];
     }
 
     /**

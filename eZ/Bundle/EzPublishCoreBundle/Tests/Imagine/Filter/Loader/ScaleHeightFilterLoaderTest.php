@@ -37,7 +37,7 @@ class ScaleHeightFilterLoaderTest extends TestCase
     {
         $this->expectException(\Imagine\Exception\InvalidArgumentException::class);
 
-        $this->loader->load($this->createMock(ImageInterface::class, array()));
+        $this->loader->load($this->createMock(ImageInterface::class, []));
     }
 
     public function testLoad()
@@ -47,9 +47,9 @@ class ScaleHeightFilterLoaderTest extends TestCase
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, $this->equalTo(array('heighten' => $height)))
+            ->with($image, $this->equalTo(['heighten' => $height]))
             ->will($this->returnValue($image));
 
-        $this->assertSame($image, $this->loader->load($image, array($height)));
+        $this->assertSame($image, $this->loader->load($image, [$height]));
     }
 }

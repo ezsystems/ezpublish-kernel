@@ -63,7 +63,7 @@ class FieldRenderingExtension extends AbstractExtension
 
     public function getFunctions()
     {
-        return array(
+        return [
             new TwigFunction(
                 'ez_render_field',
                 function (Environment $environment, Content $content, $fieldIdentifier, array $params = []) {
@@ -82,7 +82,7 @@ class FieldRenderingExtension extends AbstractExtension
                 },
                 ['is_safe' => ['html'], 'needs_environment' => true]
             ),
-        );
+        ];
     }
 
     /**

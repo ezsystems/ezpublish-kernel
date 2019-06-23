@@ -17,7 +17,7 @@ use Imagine\Exception\InvalidArgumentException;
  */
 class ScaleFilterLoader extends FilterLoaderWrapped
 {
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         if (count($options) < 2) {
             throw new InvalidArgumentException('Missing width and/or height options');
@@ -38,6 +38,6 @@ class ScaleFilterLoader extends FilterLoaderWrapped
             $value = $height;
         }
 
-        return $this->innerLoader->load($image, array($method => $value));
+        return $this->innerLoader->load($image, [$method => $value]);
     }
 }

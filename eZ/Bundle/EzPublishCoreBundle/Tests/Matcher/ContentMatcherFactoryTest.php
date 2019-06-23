@@ -27,9 +27,9 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
             ->method('has')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array($matcherServiceIdentifier, true),
-                    )
+                    [
+                        [$matcherServiceIdentifier, true],
+                    ]
                 )
             );
         $container
@@ -37,13 +37,13 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
             ->method('get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array(
+                    [
+                        [
                             $matcherServiceIdentifier,
                             ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE,
                             $this->createMock(ViewMatcherInterface::class),
-                        ),
-                    )
+                        ],
+                    ]
                 )
             );
 
@@ -64,16 +64,16 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
             ->with('content_view')
             ->will(
                 $this->returnValue(
-                    array(
-                        'full' => array(
-                            'matchRule' => array(
+                    [
+                        'full' => [
+                            'matchRule' => [
                                 'template' => 'my_template.html.twig',
-                                'match' => array(
+                                'match' => [
                                     $matcherServiceIdentifier => 'someValue',
-                                ),
-                            ),
-                        ),
-                    )
+                                ],
+                            ],
+                        ],
+                    ]
                 )
             );
         $matcherFactory = new ContentMatcherFactory($resolverMock, $this->createMock(Repository::class));
@@ -88,37 +88,37 @@ class ContentMatcherFactoryTest extends BaseMatcherFactoryTest
         $container = $this->createMock(ContainerInterface::class);
 
         $siteAccessName = 'siteaccess_name';
-        $updatedMatchConfig = array(
-            'full' => array(
-                'matchRule2' => array(
+        $updatedMatchConfig = [
+            'full' => [
+                'matchRule2' => [
                     'template' => 'my_other_template.html.twig',
-                    'match' => array(
-                        'foo' => array('bar'),
-                    ),
-                ),
-            ),
-        );
+                    'match' => [
+                        'foo' => ['bar'],
+                    ],
+                ],
+            ],
+        ];
         $resolverMock
             ->expects($this->atLeastOnce())
             ->method('getParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array(
+                    [
+                        [
                             'content_view', null, null,
-                            array(
-                                'full' => array(
-                                    'matchRule' => array(
+                            [
+                                'full' => [
+                                    'matchRule' => [
                                         'template' => 'my_template.html.twig',
-                                        'match' => array(
+                                        'match' => [
                                             $matcherServiceIdentifier => 'someValue',
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                        array('content_view', 'ezsettings', $siteAccessName, $updatedMatchConfig),
-                    )
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        ['content_view', 'ezsettings', $siteAccessName, $updatedMatchConfig],
+                    ]
                 )
             );
         $matcherFactory = new ContentMatcherFactory($resolverMock, $this->createMock(Repository::class));

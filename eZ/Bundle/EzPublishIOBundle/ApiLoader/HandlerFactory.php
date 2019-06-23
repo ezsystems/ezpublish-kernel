@@ -26,7 +26,7 @@ class HandlerFactory implements ContainerAwareInterface
      *
      * @var array
      */
-    private $handlersMap = array();
+    private $handlersMap = [];
 
     public function setHandlersMap($handlersMap)
     {

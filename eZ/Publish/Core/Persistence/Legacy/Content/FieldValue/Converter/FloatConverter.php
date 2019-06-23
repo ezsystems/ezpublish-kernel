@@ -90,7 +90,7 @@ class FloatConverter implements Converter
      */
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
-        $validatorParameters = array('minFloatValue' => null, 'maxFloatValue' => null);
+        $validatorParameters = ['minFloatValue' => null, 'maxFloatValue' => null];
         if ($storageDef->dataFloat4 & self::HAS_MIN_VALUE) {
             $validatorParameters['minFloatValue'] = $storageDef->dataFloat1;
         }

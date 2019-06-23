@@ -44,9 +44,9 @@ class SectionTest extends BaseTest
                     $this
                         ->getMockBuilder(Section::class)
                         ->setConstructorArgs(
-                            array(
-                                array('identifier' => $sectionIdentifier),
-                            )
+                            [
+                                ['identifier' => $sectionIdentifier],
+                            ]
                         )
                         ->getMockForAbstractClass()
                 )
@@ -96,28 +96,28 @@ class SectionTest extends BaseTest
 
     public function matchSectionProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'foo',
                 $this->generateRepositoryMockForSectionIdentifier('foo'),
                 true,
-            ),
-            array(
+            ],
+            [
                 'foo',
                 $this->generateRepositoryMockForSectionIdentifier('bar'),
                 false,
-            ),
-            array(
-                array('foo', 'baz'),
+            ],
+            [
+                ['foo', 'baz'],
                 $this->generateRepositoryMockForSectionIdentifier('bar'),
                 false,
-            ),
-            array(
-                array('foo', 'baz'),
+            ],
+            [
+                ['foo', 'baz'],
                 $this->generateRepositoryMockForSectionIdentifier('baz'),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**

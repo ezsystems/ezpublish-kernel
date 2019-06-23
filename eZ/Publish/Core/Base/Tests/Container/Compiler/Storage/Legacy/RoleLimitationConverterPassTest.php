@@ -48,7 +48,7 @@ class RoleLimitationConverterPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.legacy.role.limitation.converter',
             'addHandler',
-            array(new Reference($serviceId))
+            [new Reference($serviceId)]
         );
     }
 }

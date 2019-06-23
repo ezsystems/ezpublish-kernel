@@ -45,103 +45,103 @@ class URLAliasServiceTest extends ServiceTest
         $contentInfo = $this->getContentInfo(59, md5('bugs bunny contnet'));
 
         $location = new Location(
-            array(
+            [
                 'id' => $locationId,
                 'path' => $locationPath,
                 'remoteId' => $locationRemoteId,
                 'contentInfo' => $contentInfo,
-            )
+            ]
         );
 
         $locationUrlAlias = new URLAlias(
-            array(
+            [
                 'id' => $urlAliasId,
                 'type' => URLAlias::LOCATION,
                 'destination' => $locationId,
                 'path' => $path,
-                'languageCodes' => array($languageCode),
+                'languageCodes' => [$languageCode],
                 'forward' => $forward,
-            )
+            ]
         );
 
         $globalUrlAlias = new URLAlias(
-            array(
+            [
                 'id' => $globalUrlAliasId,
                 'type' => URLAlias::RESOURCE,
                 'destination' => $globalDestination,
                 'path' => $globalPath,
-                'languageCodes' => array($languageCode),
+                'languageCodes' => [$languageCode],
                 'forward' => $forward,
-            )
+            ]
         );
 
-        $aliasList = array($globalUrlAlias, $locationUrlAlias);
+        $aliasList = [$globalUrlAlias, $locationUrlAlias];
 
-        return array(
-            array(
+        return [
+            [
                 'createUrlAlias',
-                array(
+                [
                     $location, $path, $languageCode, $forward, $alwaysAvailable,
-                ),
+                ],
                 $locationUrlAlias,
                 1,
                 URLAliasServiceSignals\CreateUrlAliasSignal::class,
-                array('urlAliasId' => $urlAliasId),
-            ),
-            array(
+                ['urlAliasId' => $urlAliasId],
+            ],
+            [
                 'createGlobalUrlAlias',
-                array(
+                [
                     $globalPath,
                     $globalDestination,
                     $languageCode,
                     $forward,
                     $alwaysAvailable,
-                ),
+                ],
                 $globalUrlAlias,
                 1,
                 URLAliasServiceSignals\CreateGlobalUrlAliasSignal::class,
-                array('urlAliasId' => $globalUrlAliasId),
-            ),
-            array(
+                ['urlAliasId' => $globalUrlAliasId],
+            ],
+            [
                 'listLocationAliases',
-                array($location, false, $languageCode, false, array()),
-                array($locationUrlAlias),
+                [$location, false, $languageCode, false, []],
+                [$locationUrlAlias],
                 0,
-            ),
-            array(
+            ],
+            [
                 'listGlobalAliases',
-                array($languageCode, 1, 2),
-                array($globalUrlAlias),
+                [$languageCode, 1, 2],
+                [$globalUrlAlias],
                 0,
-            ),
-            array(
+            ],
+            [
                 'removeAliases',
-                array($aliasList),
+                [$aliasList],
                 null,
                 1,
                 URLAliasServiceSignals\RemoveAliasesSignal::class,
-                array(
+                [
                     'aliasList' => $aliasList,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'lookup',
-                array($path, $languageCode),
+                [$path, $languageCode],
                 $locationUrlAlias,
                 0,
-            ),
-            array(
+            ],
+            [
                 'reverseLookup',
-                array($location, $languageCode, false, array()),
+                [$location, $languageCode, false, []],
                 $locationUrlAlias,
                 0,
-            ),
-            array(
+            ],
+            [
                 'load',
-                array($urlAliasId),
+                [$urlAliasId],
                 $locationUrlAlias,
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

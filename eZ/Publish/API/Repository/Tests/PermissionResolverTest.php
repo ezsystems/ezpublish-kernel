@@ -511,7 +511,7 @@ class PermissionResolverTest extends BaseTest
         // Performing an action having necessary permissions will succeed
         $contentDraft = $contentService->createContent(
             $contentCreateStruct,
-            array($locationCreateStruct)
+            [$locationCreateStruct]
         );
         /* END: Use Case */
 
@@ -576,7 +576,7 @@ class PermissionResolverTest extends BaseTest
         if (!$canUser) {
             $contentDraft = $contentService->createContent(
                 $contentCreateStruct,
-                array($locationCreateStruct)
+                [$locationCreateStruct]
             );
         }
         /* END: Use Case */
@@ -623,7 +623,7 @@ class PermissionResolverTest extends BaseTest
         $locationService = $repository->getLocationService();
         $locationCreateStruct1 = $locationService->newLocationCreateStruct($imagesLocationId);
         $locationCreateStruct2 = $locationService->newLocationCreateStruct($filesLocationId);
-        $locationCreateStructs = array($locationCreateStruct1, $locationCreateStruct2);
+        $locationCreateStructs = [$locationCreateStruct1, $locationCreateStruct2];
 
         // This call will return true
         $canUser = $permissionResolver->canUser(
@@ -687,7 +687,7 @@ class PermissionResolverTest extends BaseTest
         $locationService = $repository->getLocationService();
         $locationCreateStruct1 = $locationService->newLocationCreateStruct($homeLocationId);
         $locationCreateStruct2 = $locationService->newLocationCreateStruct($administratorUsersLocationId);
-        $locationCreateStructs = array($locationCreateStruct1, $locationCreateStruct2);
+        $locationCreateStructs = [$locationCreateStruct1, $locationCreateStruct2];
 
         // This call will return false because user with Editor role does not have permission to
         // create content in the "Administrator users" location subtree

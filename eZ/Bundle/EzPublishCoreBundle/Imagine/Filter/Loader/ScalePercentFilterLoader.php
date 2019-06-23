@@ -17,7 +17,7 @@ use Imagine\Exception\InvalidArgumentException;
  */
 class ScalePercentFilterLoader extends FilterLoaderWrapped
 {
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         if (count($options) < 2) {
             throw new InvalidArgumentException('Missing width and/or height percent options');
@@ -31,6 +31,6 @@ class ScalePercentFilterLoader extends FilterLoaderWrapped
         $targetWidth = ($origWidth * $widthPercent) / 100;
         $targetHeight = ($origHeight * $heightPercent) / 100;
 
-        return $this->innerLoader->load($image, array('size' => array($targetWidth, $targetHeight)));
+        return $this->innerLoader->load($image, ['size' => [$targetWidth, $targetHeight]]);
     }
 }

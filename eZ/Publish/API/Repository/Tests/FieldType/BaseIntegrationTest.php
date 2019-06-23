@@ -316,7 +316,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    protected function createContentType($fieldSettings, $validatorConfiguration, array $typeCreateOverride = array(), array $fieldCreateOverride = array())
+    protected function createContentType($fieldSettings, $validatorConfiguration, array $typeCreateOverride = [], array $fieldCreateOverride = [])
     {
         $repository = $this->getRepository();
         $contentTypeService = $repository->getContentTypeService();
@@ -334,7 +334,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         );
         $createStruct->mainLanguageCode = $this->getOverride('mainLanguageCode', $typeCreateOverride, 'eng-GB');
         $createStruct->remoteId = $this->getTypeName();
-        $createStruct->names = $this->getOverride('names', $typeCreateOverride, array('eng-GB' => 'Test'));
+        $createStruct->names = $this->getOverride('names', $typeCreateOverride, ['eng-GB' => 'Test']);
         $createStruct->creatorId = 14;
         $createStruct->creationDate = $this->createDateTime();
 
@@ -344,14 +344,14 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         }
 
         $nameFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('name', 'ezstring');
-        $nameFieldCreate->names = array('eng-GB' => 'Title');
+        $nameFieldCreate->names = ['eng-GB' => 'Title'];
         $nameFieldCreate->fieldGroup = 'main';
         $nameFieldCreate->position = 1;
         $nameFieldCreate->isTranslatable = true;
         $createStruct->addFieldDefinition($nameFieldCreate);
 
         $dataFieldCreate = $contentTypeService->newFieldDefinitionCreateStruct('data', $this->getTypeName());
-        $dataFieldCreate->names = $this->getOverride('names', $fieldCreateOverride, array('eng-GB' => 'Title'));
+        $dataFieldCreate->names = $this->getOverride('names', $fieldCreateOverride, ['eng-GB' => 'Title']);
         $dataFieldCreate->fieldGroup = 'main';
         $dataFieldCreate->position = 2;
         $dataFieldCreate->isTranslatable = $this->getOverride('isTranslatable', $fieldCreateOverride, false);
@@ -363,7 +363,7 @@ abstract class BaseIntegrationTest extends Tests\BaseTest
         $createStruct->addFieldDefinition($dataFieldCreate);
 
         $contentGroup = $contentTypeService->loadContentTypeGroupByIdentifier('Content');
-        $contentTypeDraft = $contentTypeService->createContentType($createStruct, array($contentGroup));
+        $contentTypeDraft = $contentTypeService->createContentType($createStruct, [$contentGroup]);
 
         $contentTypeService->publishContentTypeDraft($contentTypeDraft);
         $contentType = $contentTypeService->loadContentType($contentTypeDraft->id);

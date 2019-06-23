@@ -36,7 +36,7 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -46,7 +46,7 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,9 +56,9 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -68,18 +68,18 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array(
-            'StringLengthValidator' => array(
-                'minStringLength' => array(
+        return [
+            'StringLengthValidator' => [
+                'minStringLength' => [
                     'type' => 'int',
                     'default' => null,
-                ),
-                'maxStringLength' => array(
+                ],
+                'maxStringLength' => [
                     'type' => 'int',
                     'default' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -89,12 +89,12 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array(
-            'StringLengthValidator' => array(
+        return [
+            'StringLengthValidator' => [
                 'minStringLength' => 1,
                 'maxStringLength' => 42,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -104,11 +104,11 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'StringLengthValidator' => array(
+        return [
+            'StringLengthValidator' => [
                 'minStringLength' => new \stdClass(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -146,9 +146,9 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'text' => 'Example',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -178,20 +178,20 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 42,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 new TextLineValue(str_repeat('.', 64)),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -218,9 +218,9 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'text' => 'Example  2',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -268,9 +268,9 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'text' => 'Example',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -299,12 +299,12 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new TextLineValue('Simple value'),
                 'Simple value',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -316,33 +316,33 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 'Foobar',
                 new TextLineValue('Foobar'),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new TextLineValue()),
-            array(new TextLineValue(null)),
-            array(new TextLineValue('')),
-            array(new TextLineValue('   ')),
-        );
+        return [
+            [new TextLineValue()],
+            [new TextLineValue(null)],
+            [new TextLineValue('')],
+            [new TextLineValue('   ')],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(new TextLineValue(0)),
-            array(new TextLineValue('0')),
-        );
+            ],
+            [new TextLineValue(0)],
+            [new TextLineValue('0')],
+        ];
     }
 
     protected function getValidSearchValueOne()
@@ -369,8 +369,8 @@ class TextLineIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getFullTextIndexedFieldData()
     {
-        return array(
-            array('aaa', 'bbb'),
-        );
+        return [
+            ['aaa', 'bbb'],
+        ];
     }
 }

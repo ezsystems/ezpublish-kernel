@@ -22,14 +22,14 @@ class Aggregate extends FieldValueMapper
      *
      * @var \eZ\Publish\Core\Search\Common\FieldValueMapper[]
      */
-    protected $mappers = array();
+    protected $mappers = [];
 
     /**
      * Construct from optional mapper array.
      *
      * @param \eZ\Publish\Core\Search\Common\FieldValueMapper[] $mappers
      */
-    public function __construct(array $mappers = array())
+    public function __construct(array $mappers = [])
     {
         foreach ($mappers as $mapper) {
             $this->addMapper($mapper);

@@ -45,7 +45,7 @@ class ChainConfigResolverPassTest extends AbstractCompilerPassTestCase
         $resolverDef = new Definition();
         $serviceId = 'some_service_id';
         if ($declaredPriority !== null) {
-            $resolverDef->addTag('ezpublish.config.resolver', array('priority' => $declaredPriority));
+            $resolverDef->addTag('ezpublish.config.resolver', ['priority' => $declaredPriority]);
         } else {
             $resolverDef->addTag('ezpublish.config.resolver');
         }
@@ -56,23 +56,23 @@ class ChainConfigResolverPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.config.resolver.chain',
             'addResolver',
-            array(new Reference($serviceId), $expectedPriority)
+            [new Reference($serviceId), $expectedPriority]
         );
     }
 
     public function addResolverProvider()
     {
-        return array(
-            array(null, 0),
-            array(0, 0),
-            array(57, 57),
-            array(-23, -23),
-            array(-255, -255),
-            array(-256, -255),
-            array(-1000, -255),
-            array(255, 255),
-            array(256, 255),
-            array(1000, 255),
-        );
+        return [
+            [null, 0],
+            [0, 0],
+            [57, 57],
+            [-23, -23],
+            [-255, -255],
+            [-256, -255],
+            [-1000, -255],
+            [255, 255],
+            [256, 255],
+            [1000, 255],
+        ];
     }
 }

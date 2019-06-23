@@ -26,6 +26,6 @@ class LogicalNot extends LogicalOperator
      */
     public function __construct(Criterion $criterion)
     {
-        parent::__construct(array($criterion));
+        parent::__construct([$criterion]);
     }
 }

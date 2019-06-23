@@ -22,14 +22,14 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class Type extends FieldType
 {
-    protected $settingsSchema = array(
-        'textRows' => array(
+    protected $settingsSchema = [
+        'textRows' => [
             'type' => 'int',
             'default' => 10,
-        ),
-    );
+        ],
+    ];
 
-    protected $validatorConfigurationSchema = array();
+    protected $validatorConfigurationSchema = [];
 
     /**
      * Returns the field type identifier for this field type.
@@ -172,7 +172,7 @@ class Type extends FieldType
      */
     public function validateFieldSettings($fieldSettings)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($fieldSettings as $name => $value) {
             if (isset($this->settingsSchema[$name])) {
@@ -182,9 +182,9 @@ class Type extends FieldType
                             $validationErrors[] = new ValidationError(
                                 "Setting '%setting%' value must be of integer type",
                                 null,
-                                array(
+                                [
                                     '%setting%' => $name,
-                                ),
+                                ],
                                 "[$name]"
                             );
                         }
@@ -194,9 +194,9 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
-                    array(
+                    [
                         '%setting%' => $name,
-                    ),
+                    ],
                     "[$name]"
                 );
             }

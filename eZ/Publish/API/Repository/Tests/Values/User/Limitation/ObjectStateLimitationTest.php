@@ -64,11 +64,11 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ObjectStateLimitation(
-                array(
-                    'limitationValues' => array(
+                [
+                    'limitationValues' => [
                         $notLockedState,
-                    ),
-                )
+                    ],
+                ]
             )
         );
         $roleService->updatePolicy($removePolicy, $policyUpdate);
@@ -128,11 +128,11 @@ class ObjectStateLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ObjectStateLimitation(
-                array(
-                    'limitationValues' => array(
+                [
+                    'limitationValues' => [
                         $lockedState,
-                    ),
-                )
+                    ],
+                ]
             )
         );
         $roleService->updatePolicy($removePolicy, $policyUpdate);

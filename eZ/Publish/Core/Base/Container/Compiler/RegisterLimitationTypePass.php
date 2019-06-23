@@ -40,10 +40,10 @@ class RegisterLimitationTypePass implements CompilerPassInterface
 
                 $repositoryFactoryDef->addMethodCall(
                     'registerLimitationType',
-                    array(
+                    [
                         $attribute['alias'],
                         new Reference($id),
-                    )
+                    ]
                 );
             }
         }

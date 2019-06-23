@@ -58,7 +58,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ContentTypeLimitation(
-                array('limitationValues' => array($contentTypeId))
+                ['limitationValues' => [$contentTypeId]]
             )
         );
 
@@ -125,7 +125,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ContentTypeLimitation(
-                array('limitationValues' => array($contentTypeId))
+                ['limitationValues' => [$contentTypeId]]
             )
         );
 
@@ -180,7 +180,7 @@ class ContentTypeLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ContentTypeLimitation(
-                array('limitationValues' => array($contentTypeId))
+                ['limitationValues' => [$contentTypeId]]
             )
         );
 

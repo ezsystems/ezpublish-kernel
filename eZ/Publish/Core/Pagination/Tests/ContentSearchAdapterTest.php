@@ -34,7 +34,7 @@ class ContentSearchAdapterTest extends ContentSearchHitAdapterTest
      */
     protected function getExpectedFinalResultFromHits($hits)
     {
-        $expectedResult = array();
+        $expectedResult = [];
 
         /** @var \eZ\Publish\API\Repository\Values\Content\Search\SearchHit[] $hits */
         foreach ($hits as $hit) {

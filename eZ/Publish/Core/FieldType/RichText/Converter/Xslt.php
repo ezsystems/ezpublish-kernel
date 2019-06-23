@@ -34,7 +34,7 @@ class Xslt extends XmlBase implements Converter
      *
      * @var array
      */
-    protected $customStylesheets = array();
+    protected $customStylesheets = [];
 
     /**
      * Constructor.
@@ -42,7 +42,7 @@ class Xslt extends XmlBase implements Converter
      * @param string $stylesheet Stylesheet to use for conversion
      * @param array $customStylesheets Array of XSL stylesheets. Each entry consists in a hash having "path" and "priority" keys.
      */
-    public function __construct($stylesheet, array $customStylesheets = array())
+    public function __construct($stylesheet, array $customStylesheets = [])
     {
         $this->stylesheet = $stylesheet;
 
@@ -103,7 +103,7 @@ class Xslt extends XmlBase implements Converter
      */
     protected function getSortedCustomStylesheets()
     {
-        $sortedStylesheets = array();
+        $sortedStylesheets = [];
         ksort($this->customStylesheets);
         foreach ($this->customStylesheets as $stylesheets) {
             $sortedStylesheets = array_merge($sortedStylesheets, $stylesheets);

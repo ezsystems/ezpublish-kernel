@@ -155,7 +155,7 @@ class Handler implements BaseSectionHandler
      */
     protected function createSectionsFromArray(array $data)
     {
-        $sections = array();
+        $sections = [];
         foreach ($data as $sectionData) {
             $sections[] = $this->createSectionFromArray($sectionData);
         }

@@ -79,9 +79,9 @@ class CheckboxTest extends TestCase
         $defaultValue = new FieldValue();
         $defaultValue->data = $defaultBool;
         $fieldDef = new PersistenceFieldDefinition(
-            array(
+            [
                 'defaultValue' => $defaultValue,
-            )
+            ]
         );
 
         $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
@@ -101,9 +101,9 @@ class CheckboxTest extends TestCase
         $defaultBool = true;
         $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
-            array(
+            [
                 'dataInt3' => 1,
-            )
+            ]
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);

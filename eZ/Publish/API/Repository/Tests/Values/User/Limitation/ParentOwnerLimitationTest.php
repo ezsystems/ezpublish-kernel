@@ -41,7 +41,7 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentOwnerLimitation(
-                array('limitationValues' => array(1))
+                ['limitationValues' => [1]]
             )
         );
 
@@ -91,7 +91,7 @@ class ParentOwnerLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentOwnerLimitation(
-                array('limitationValues' => array(1))
+                ['limitationValues' => [1]]
             )
         );
 

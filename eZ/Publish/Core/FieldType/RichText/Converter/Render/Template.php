@@ -67,7 +67,7 @@ class Template extends Render implements Converter
 
         $templates = $xpath->query($xpathExpression);
         /** @var \DOMElement[] $templatesSorted */
-        $templatesSorted = array();
+        $templatesSorted = [];
         $maxDepth = 0;
 
         foreach ($templates as $template) {
@@ -100,10 +100,10 @@ class Template extends Render implements Converter
         $content = null;
         $templateName = $template->getAttribute('name');
         $templateType = $template->hasAttribute('type') ? $template->getAttribute('type') : 'tag';
-        $parameters = array(
+        $parameters = [
             'name' => $templateName,
             'params' => $this->extractConfiguration($template),
-        );
+        ];
 
         if ($template->getElementsByTagName('ezcontent')->length > 0) {
             $contentNode = $template->getElementsByTagName('ezcontent')->item(0);

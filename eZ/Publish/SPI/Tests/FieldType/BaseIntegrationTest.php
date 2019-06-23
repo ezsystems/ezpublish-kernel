@@ -246,8 +246,8 @@ abstract class BaseIntegrationTest extends TestCase
     protected function createContentType()
     {
         $createStruct = new Content\Type\CreateStruct(
-            array(
-                'name' => array('eng-GB' => 'Test'),
+            [
+                'name' => ['eng-GB' => 'Test'],
                 'identifier' => 'test-' . $this->getTypeName(),
                 'status' => 0,
                 'creatorId' => 14,
@@ -256,24 +256,24 @@ abstract class BaseIntegrationTest extends TestCase
                 'modified' => time(),
                 'initialLanguageId' => 2,
                 'remoteId' => 'abcdef',
-            )
+            ]
         );
 
-        $createStruct->fieldDefinitions = array(
+        $createStruct->fieldDefinitions = [
             new Content\Type\FieldDefinition(
-                array(
-                    'name' => array('eng-GB' => 'Name'),
+                [
+                    'name' => ['eng-GB' => 'Name'],
                     'identifier' => 'name',
                     'fieldGroup' => 'main',
                     'position' => 1,
                     'fieldType' => 'ezstring',
                     'isTranslatable' => false,
                     'isRequired' => true,
-                )
+                ]
             ),
             new Content\Type\FieldDefinition(
-                array(
-                    'name' => array('eng-GB' => 'Data'),
+                [
+                    'name' => ['eng-GB' => 'Data'],
                     'identifier' => 'data',
                     'fieldGroup' => 'main',
                     'position' => 2,
@@ -281,9 +281,9 @@ abstract class BaseIntegrationTest extends TestCase
                     'isTranslatable' => false,
                     'isRequired' => true,
                     'fieldTypeConstraints' => $this->getTypeConstraints(),
-                )
+                ]
             ),
-        );
+        ];
 
         $handler = $this->getCustomHandler();
         $contentTypeHandler = $handler->contentTypeHandler();
@@ -368,19 +368,19 @@ abstract class BaseIntegrationTest extends TestCase
     protected function createContent(Type $contentType, $fieldValue, $languageCode = 'eng-GB')
     {
         $createStruct = new Content\CreateStruct(
-            array(
-                'name' => array($languageCode => 'Test object'),
+            [
+                'name' => [$languageCode => 'Test object'],
                 'typeId' => $contentType->id,
                 'sectionId' => 1,
                 'ownerId' => 14,
-                'locations' => array(
+                'locations' => [
                     new Content\Location\CreateStruct(
-                        array(
+                        [
                             'parentId' => 2,
                             'remoteId' => 'sindelfingen',
-                        )
+                        ]
                     ),
-                ),
+                ],
                 // Language with id=2 is eng-US
                 // This is probably a mistake, as the fields are given with eng-GB, but it has a nice
                 // side effect of testing creation with empty value.
@@ -388,30 +388,30 @@ abstract class BaseIntegrationTest extends TestCase
                 'initialLanguageId' => 2,
                 'remoteId' => microtime(),
                 'modified' => time(),
-                'fields' => array(
+                'fields' => [
                     new Content\Field(
-                        array(
+                        [
                             'type' => 'ezstring',
                             'languageCode' => $languageCode,
                             'fieldDefinitionId' => $contentType->fieldDefinitions[0]->id,
                             'value' => new Content\FieldValue(
-                                array(
+                                [
                                     'data' => 'This is just a test object',
                                     'sortKey' => 'this is just a test object',
-                                )
+                                ]
                             ),
-                        )
+                        ]
                     ),
                     new Content\Field(
-                        array(
+                        [
                             'type' => $this->getTypeName(),
                             'languageCode' => $languageCode,
                             'fieldDefinitionId' => $contentType->fieldDefinitions[1]->id,
                             'value' => $fieldValue,
-                        )
+                        ]
                     ),
-                ),
-            )
+                ],
+            ]
         );
 
         $handler = $this->getCustomHandler();
@@ -491,14 +491,14 @@ abstract class BaseIntegrationTest extends TestCase
 
         $field->value = $this->getUpdatedValue();
         $updateStruct = new UpdateStruct(
-            array(
+            [
                 'creatorId' => 14,
                 'modificationDate' => time(),
                 'initialLanguageId' => 2,
-                'fields' => array(
+                'fields' => [
                     $field,
-                ),
-            )
+                ],
+            ]
         );
 
         $contentHandler = $handler->contentHandler();

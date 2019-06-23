@@ -385,50 +385,50 @@ class SectionServiceTest extends BaseTest
         $sectionService = $repository->getSectionService();
 
         $this->assertEquals(
-            array(
+            [
                 new Section(
-                    array(
+                    [
                         'id' => $this->generateId('section', 1),
                         'name' => 'Standard',
                         'identifier' => 'standard',
-                    )
+                    ]
                 ),
                 new Section(
-                    array(
+                    [
                         'id' => $this->generateId('section', 2),
                         'name' => 'Users',
                         'identifier' => 'users',
-                    )
+                    ]
                 ),
                 new Section(
-                    array(
+                    [
                         'id' => $this->generateId('section', 3),
                         'name' => 'Media',
                         'identifier' => 'media',
-                    )
+                    ]
                 ),
                 new Section(
-                    array(
+                    [
                         'id' => $this->generateId('section', 4),
                         'name' => 'Setup',
                         'identifier' => 'setup',
-                    )
+                    ]
                 ),
                 new Section(
-                    array(
+                    [
                         'id' => $this->generateId('section', 5),
                         'name' => 'Design',
                         'identifier' => 'design',
-                    )
+                    ]
                 ),
                 new Section(
-                    array(
+                    [
                         'id' => $this->generateId('section', 6),
                         'name' => 'Restricted',
                         'identifier' => '',
-                    )
+                    ]
                 ),
-            ),
+            ],
             $sectionService->loadSections()
         );
     }

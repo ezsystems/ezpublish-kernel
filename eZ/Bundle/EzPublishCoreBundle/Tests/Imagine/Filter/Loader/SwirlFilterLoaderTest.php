@@ -65,16 +65,16 @@ class SwirlFilterLoaderTest extends TestCase
             ->with($image)
             ->will($this->returnValue($image));
 
-        $this->assertSame($image, $this->loader->load($image, array($degrees)));
+        $this->assertSame($image, $this->loader->load($image, [$degrees]));
     }
 
     public function loadWithOptionProvider()
     {
-        return array(
-            array(10),
-            array(60),
-            array(60.34),
-            array(180.123),
-        );
+        return [
+            [10],
+            [60],
+            [60.34],
+            [180.123],
+        ];
     }
 }

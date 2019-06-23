@@ -27,7 +27,7 @@ class FileSizeExtensionTest extends IntegrationTestCase
     /**
      * @param array $suffixes
      */
-    protected $suffixes = array('B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB');
+    protected $suffixes = ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB'];
 
     /**
      * @param TranslatorInterface|\PHPUnit\Framework\MockObject\MockObject
@@ -66,7 +66,7 @@ class FileSizeExtensionTest extends IntegrationTestCase
      */
     public function getLocale()
     {
-        return array($this->locale);
+        return [$this->locale];
     }
 
     /**
@@ -74,9 +74,9 @@ class FileSizeExtensionTest extends IntegrationTestCase
      */
     protected function getExtensions()
     {
-        return array(
+        return [
             new FileSizeExtension($this->getTranslatorInterfaceMock(), $this->suffixes, $this->getConfigResolverInterfaceMock(), $this->getLocaleConverterInterfaceMock()),
-        );
+        ];
     }
 
     /**
@@ -111,10 +111,10 @@ class FileSizeExtensionTest extends IntegrationTestCase
         ->method('convertToPOSIX')
         ->will(
             $this->returnValueMap(
-                array(
-                    array('fre-FR', 'fr-FR'),
-                    array('eng-GB', 'en-GB'),
-                )
+                [
+                    ['fre-FR', 'fr-FR'],
+                    ['eng-GB', 'en-GB'],
+                ]
             )
         );
 

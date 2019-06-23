@@ -58,8 +58,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $result = $gateway->loadObjectStateData(1);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_default_language_id' => 2,
                     'ezcobj_state_group_id' => 2,
                     'ezcobj_state_id' => 1,
@@ -69,8 +69,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_language_description' => '',
                     'ezcobj_state_language_language_id' => 3,
                     'ezcobj_state_language_name' => 'Not locked',
-                ),
-            ),
+                ],
+            ],
             $result
         );
     }
@@ -85,8 +85,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $result = $gateway->loadObjectStateDataByIdentifier('not_locked', 2);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_default_language_id' => 2,
                     'ezcobj_state_group_id' => 2,
                     'ezcobj_state_id' => 1,
@@ -96,8 +96,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_language_description' => '',
                     'ezcobj_state_language_language_id' => 3,
                     'ezcobj_state_language_name' => 'Not locked',
-                ),
-            ),
+                ],
+            ],
             $result
         );
     }
@@ -112,9 +112,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $result = $gateway->loadObjectStateListData(2);
 
         $this->assertEquals(
-            array(
-                array(
-                    array(
+            [
+                [
+                    [
                         'ezcobj_state_default_language_id' => 2,
                         'ezcobj_state_group_id' => 2,
                         'ezcobj_state_id' => 1,
@@ -124,10 +124,10 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_language_description' => '',
                         'ezcobj_state_language_language_id' => 3,
                         'ezcobj_state_language_name' => 'Not locked',
-                    ),
-                ),
-                array(
-                    array(
+                    ],
+                ],
+                [
+                    [
                         'ezcobj_state_default_language_id' => 2,
                         'ezcobj_state_group_id' => 2,
                         'ezcobj_state_id' => 2,
@@ -137,9 +137,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_language_description' => '',
                         'ezcobj_state_language_language_id' => 3,
                         'ezcobj_state_language_name' => 'Locked',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             $result
         );
     }
@@ -154,8 +154,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $result = $gateway->loadObjectStateGroupData(2);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_group_default_language_id' => 2,
                     'ezcobj_state_group_id' => 2,
                     'ezcobj_state_group_identifier' => 'ez_lock',
@@ -164,8 +164,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_language_id' => 3,
                     'ezcobj_state_group_language_real_language_id' => 2,
                     'ezcobj_state_group_language_name' => 'Lock',
-                ),
-            ),
+                ],
+            ],
             $result
         );
     }
@@ -180,8 +180,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $result = $gateway->loadObjectStateGroupDataByIdentifier('ez_lock');
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_group_default_language_id' => 2,
                     'ezcobj_state_group_id' => 2,
                     'ezcobj_state_group_identifier' => 'ez_lock',
@@ -190,8 +190,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_language_id' => 3,
                     'ezcobj_state_group_language_real_language_id' => 2,
                     'ezcobj_state_group_language_name' => 'Lock',
-                ),
-            ),
+                ],
+            ],
             $result
         );
     }
@@ -206,9 +206,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $result = $gateway->loadObjectStateGroupListData(0, -1);
 
         $this->assertEquals(
-            array(
-                array(
-                    array(
+            [
+                [
+                    [
                         'ezcobj_state_group_default_language_id' => 2,
                         'ezcobj_state_group_id' => 2,
                         'ezcobj_state_group_identifier' => 'ez_lock',
@@ -217,9 +217,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                         'ezcobj_state_group_language_language_id' => 3,
                         'ezcobj_state_group_language_real_language_id' => 2,
                         'ezcobj_state_group_language_name' => 'Lock',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             $result
         );
     }
@@ -234,8 +234,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->insertObjectState($this->getObjectStateFixture(), 2);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_default_language_id' => 4,
                     'ezcobj_state_group_id' => 2,
                     // The new state should be added with state ID = 3
@@ -247,8 +247,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_language_description' => 'Test state description',
                     'ezcobj_state_language_language_id' => 5,
                     'ezcobj_state_language_name' => 'Test state',
-                ),
-            ),
+                ],
+            ],
             // The new state should be added with state ID = 3
             $this->getDatabaseGateway()->loadObjectStateData(3)
         );
@@ -265,8 +265,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->insertObjectState($this->getObjectStateFixture(), 3);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_default_language_id' => 4,
                     // New group should be added with group ID = 3
                     'ezcobj_state_group_id' => 3,
@@ -279,8 +279,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_language_description' => 'Test state description',
                     'ezcobj_state_language_language_id' => 5,
                     'ezcobj_state_language_name' => 'Test state',
-                ),
-            ),
+                ],
+            ],
             // The new state should be added with state ID = 3
             $this->getDatabaseGateway()->loadObjectStateData(3)
         );
@@ -305,8 +305,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->updateObjectState($objectStateFixture);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_default_language_id' => 4,
                     'ezcobj_state_group_id' => 2,
                     'ezcobj_state_id' => 1,
@@ -316,8 +316,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_language_description' => 'Test state description',
                     'ezcobj_state_language_language_id' => 5,
                     'ezcobj_state_language_name' => 'Test state',
-                ),
-            ),
+                ],
+            ],
             $this->getDatabaseGateway()->loadObjectStateData(1)
         );
     }
@@ -332,7 +332,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteObjectState(1);
 
         $this->assertEquals(
-            array(),
+            [],
             $this->getDatabaseGateway()->loadObjectStateData(1)
         );
     }
@@ -410,8 +410,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->insertObjectStateGroup($this->getObjectStateGroupFixture());
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_group_default_language_id' => 4,
                     // The new state group should be added with state group ID = 3
                     'ezcobj_state_group_id' => 3,
@@ -421,8 +421,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_language_id' => 5,
                     'ezcobj_state_group_language_real_language_id' => 4,
                     'ezcobj_state_group_language_name' => 'Test group',
-                ),
-            ),
+                ],
+            ],
             // The new state group should be added with state group ID = 3
             $this->getDatabaseGateway()->loadObjectStateGroupData(3)
         );
@@ -441,8 +441,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->updateObjectStateGroup($groupFixture);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_group_default_language_id' => 4,
                     'ezcobj_state_group_id' => 2,
                     'ezcobj_state_group_identifier' => 'test_group',
@@ -451,8 +451,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_group_language_language_id' => 5,
                     'ezcobj_state_group_language_real_language_id' => 4,
                     'ezcobj_state_group_language_name' => 'Test group',
-                ),
-            ),
+                ],
+            ],
             $this->getDatabaseGateway()->loadObjectStateGroupData(2)
         );
     }
@@ -467,7 +467,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteObjectStateGroup(2);
 
         $this->assertEquals(
-            array(),
+            [],
             $this->getDatabaseGateway()->loadObjectStateGroupData(2)
         );
     }
@@ -482,12 +482,12 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->setContentState(42, 2, 2);
 
         $this->assertQueryResult(
-            array(
-                array(
+            [
+                [
                     'contentobject_id' => 42,
                     'contentobject_state_id' => 2,
-                ),
-            ),
+                ],
+            ],
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select('contentobject_id', 'contentobject_state_id')
                 ->from('ezcobj_state_link')
@@ -505,8 +505,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $result = $gateway->loadObjectStateDataForContent(42, 2);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_default_language_id' => 2,
                     'ezcobj_state_group_id' => 2,
                     'ezcobj_state_id' => 1,
@@ -516,8 +516,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_language_description' => '',
                     'ezcobj_state_language_language_id' => 3,
                     'ezcobj_state_language_name' => 'Not locked',
-                ),
-            ),
+                ],
+            ],
             $result
         );
     }
@@ -547,8 +547,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $objectStateData = $gateway->loadObjectStateData(1);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'ezcobj_state_default_language_id' => 2,
                     'ezcobj_state_group_id' => 2,
                     'ezcobj_state_id' => 1,
@@ -558,8 +558,8 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
                     'ezcobj_state_language_description' => '',
                     'ezcobj_state_language_language_id' => 3,
                     'ezcobj_state_language_name' => 'Not locked',
-                ),
-            ),
+                ],
+            ],
             $objectStateData
         );
     }
@@ -574,9 +574,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $objectState = new ObjectState();
         $objectState->identifier = 'test_state';
         $objectState->defaultLanguage = 'eng-GB';
-        $objectState->languageCodes = array('eng-GB');
-        $objectState->name = array('eng-GB' => 'Test state');
-        $objectState->description = array('eng-GB' => 'Test state description');
+        $objectState->languageCodes = ['eng-GB'];
+        $objectState->name = ['eng-GB' => 'Test state'];
+        $objectState->description = ['eng-GB' => 'Test state description'];
 
         return $objectState;
     }
@@ -591,9 +591,9 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $group = new Group();
         $group->identifier = 'test_group';
         $group->defaultLanguage = 'eng-GB';
-        $group->languageCodes = array('eng-GB');
-        $group->name = array('eng-GB' => 'Test group');
-        $group->description = array('eng-GB' => 'Test group description');
+        $group->languageCodes = ['eng-GB'];
+        $group->name = ['eng-GB' => 'Test group'];
+        $group->description = ['eng-GB' => 'Test group description'];
 
         return $group;
     }

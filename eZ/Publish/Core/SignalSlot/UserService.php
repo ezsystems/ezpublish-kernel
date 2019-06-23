@@ -85,9 +85,9 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->createUserGroup($userGroupCreateStruct, $parentGroup);
         $this->signalDispatcher->emit(
             new CreateUserGroupSignal(
-                array(
+                [
                     'userGroupId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -141,10 +141,10 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->deleteUserGroup($userGroup);
         $this->signalDispatcher->emit(
             new DeleteUserGroupSignal(
-                array(
+                [
                     'userGroupId' => $userGroup->id,
                     'affectedLocationIds' => $returnValue,
-                )
+                ]
             )
         );
 
@@ -164,10 +164,10 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->moveUserGroup($userGroup, $newParent);
         $this->signalDispatcher->emit(
             new MoveUserGroupSignal(
-                array(
+                [
                     'userGroupId' => $userGroup->id,
                     'newParentId' => $newParent->id,
-                )
+                ]
             )
         );
 
@@ -195,9 +195,9 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->updateUserGroup($userGroup, $userGroupUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateUserGroupSignal(
-                array(
+                [
                     'userGroupId' => $userGroup->id,
-                )
+                ]
             )
         );
 
@@ -223,9 +223,9 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->createUser($userCreateStruct, $parentGroups);
         $this->signalDispatcher->emit(
             new CreateUserSignal(
-                array(
+                [
                     'userId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -341,10 +341,10 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->deleteUser($user);
         $this->signalDispatcher->emit(
             new DeleteUserSignal(
-                array(
+                [
                     'userId' => $user->id,
                     'affectedLocationIds' => $returnValue,
-                )
+                ]
             )
         );
 
@@ -372,9 +372,9 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->updateUser($user, $userUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateUserSignal(
-                array(
+                [
                     'userId' => $user->id,
-                )
+                ]
             )
         );
 
@@ -425,10 +425,10 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->assignUserToUserGroup($user, $userGroup);
         $this->signalDispatcher->emit(
             new AssignUserToUserGroupSignal(
-                array(
+                [
                     'userId' => $user->id,
                     'userGroupId' => $userGroup->id,
-                )
+                ]
             )
         );
 
@@ -449,10 +449,10 @@ class UserService implements UserServiceInterface
         $returnValue = $this->service->unAssignUserFromUserGroup($user, $userGroup);
         $this->signalDispatcher->emit(
             new UnAssignUserFromUserGroupSignal(
-                array(
+                [
                     'userId' => $user->id,
                     'userGroupId' => $userGroup->id,
-                )
+                ]
             )
         );
 

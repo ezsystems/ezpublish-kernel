@@ -24,7 +24,7 @@ class TolerantIOServiceTest extends IOServiceTest
             $this->metadataHandlerMock,
             $this->binarydataHandlerMock,
             $this->mimeTypeDetectorMock,
-            array('prefix' => self::PREFIX)
+            ['prefix' => self::PREFIX]
         );
     }
 
@@ -36,7 +36,7 @@ class TolerantIOServiceTest extends IOServiceTest
         $binaryFile = parent::loadBinaryFileNotFound();
 
         self::assertEquals(
-            new MissingBinaryFile(array('id' => 'id.ext')),
+            new MissingBinaryFile(['id' => 'id.ext']),
             $binaryFile
         );
     }
@@ -57,7 +57,7 @@ class TolerantIOServiceTest extends IOServiceTest
 
         $binaryFile = parent::loadBinaryFileNotFound();
         self::assertEquals(
-            new MissingBinaryFile(array('id' => 'id.ext', 'uri' => "/$prefixedUri")),
+            new MissingBinaryFile(['id' => 'id.ext', 'uri' => "/$prefixedUri"]),
             $binaryFile
         );
     }
@@ -75,7 +75,7 @@ class TolerantIOServiceTest extends IOServiceTest
     public function testLoadBinaryFileByUriNotFound()
     {
         self::assertEquals(
-            new MissingBinaryFile(array('id' => 'my/path.png')),
+            new MissingBinaryFile(['id' => 'my/path.png']),
             parent::loadBinaryFileByUriNotFound()
         );
     }

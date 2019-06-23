@@ -42,7 +42,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
      */
     public function create(CreateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $this->cache->deleteItems(['ez-language-list']);
 
         return $this->persistenceHandler->contentLanguageHandler()->create($struct);
@@ -53,7 +53,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
      */
     public function update(Language $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $return = $this->persistenceHandler->contentLanguageHandler()->update($struct);
 
         $this->cache->deleteItems([
@@ -149,7 +149,7 @@ class ContentLanguageHandler extends AbstractInMemoryPersistenceHandler implemen
      */
     public function delete($id)
     {
-        $this->logger->logCall(__METHOD__, array('language' => $id));
+        $this->logger->logCall(__METHOD__, ['language' => $id]);
         $return = $this->persistenceHandler->contentLanguageHandler()->delete($id);
 
         // As we don't have locale we clear cache by tag invalidation

@@ -42,12 +42,12 @@ class LegacyTest extends TestCase
         $this->publishedIoServiceMock = $this->createMock(IOServiceInterface::class);
         $this->draftIoServiceMock = $this->createMock(IOServiceInterface::class);
         $optionsProvider = new OptionsProvider(
-            array(
+            [
                 'var_dir' => 'var/test',
                 'storage_dir' => 'storage',
                 'draft_images_dir' => 'images-versioned',
                 'published_images_dir' => 'images',
-            )
+            ]
         );
         $this->service = new LegacyIOService(
             $this->publishedIoServiceMock,
@@ -129,7 +129,7 @@ class LegacyTest extends TestCase
     public function testLoadBinaryFile()
     {
         $id = 'path/file.jpg';
-        $binaryFile = new BinaryFile(array('id' => $id));
+        $binaryFile = new BinaryFile(['id' => $id]);
 
         $this->publishedIoServiceMock
             ->expects($this->once())
@@ -152,7 +152,7 @@ class LegacyTest extends TestCase
     {
         $internalId = 'var/test/storage/images-versioned/path/file.jpg';
         $id = 'path/file.jpg';
-        $binaryFile = new BinaryFile(array('id' => $id));
+        $binaryFile = new BinaryFile(['id' => $id]);
 
         $this->draftIoServiceMock
             ->expects($this->once())
@@ -181,7 +181,7 @@ class LegacyTest extends TestCase
     {
         $internalId = 'var/test/storage/images/path/file.jpg';
         $id = 'path/file.jpg';
-        $binaryFile = new BinaryFile(array('id' => $id));
+        $binaryFile = new BinaryFile(['id' => $id]);
 
         $this->publishedIoServiceMock
             ->expects($this->once())
@@ -209,7 +209,7 @@ class LegacyTest extends TestCase
     public function testLoadBinaryFileDraftExternalPath()
     {
         $id = 'path/file.jpg';
-        $binaryFile = new BinaryFile(array('id' => $id));
+        $binaryFile = new BinaryFile(['id' => $id]);
 
         $this->draftIoServiceMock->expects($this->never())->method('getExternalPath');
         $this->publishedIoServiceMock->expects($this->never())->method('getExternalPath');
@@ -235,7 +235,7 @@ class LegacyTest extends TestCase
     public function testLoadBinaryFileByUriWithPublishedFile()
     {
         $binaryFileUri = 'var/test/images/an/image.png';
-        $binaryFile = new BinaryFile(array('id' => 'an/image.png'));
+        $binaryFile = new BinaryFile(['id' => 'an/image.png']);
         $this->publishedIoServiceMock
             ->expects($this->once())
             ->method('loadBinaryFileByUri')
@@ -251,7 +251,7 @@ class LegacyTest extends TestCase
     public function testLoadBinaryFileByUriWithDraftFile()
     {
         $binaryFileUri = 'var/test/images-versioned/an/image.png';
-        $binaryFile = new BinaryFile(array('id' => 'an/image.png'));
+        $binaryFile = new BinaryFile(['id' => 'an/image.png']);
 
         $this->publishedIoServiceMock
             ->expects($this->once())
@@ -445,14 +445,14 @@ class LegacyTest extends TestCase
         $this->publishedIoServiceMock
             ->expects($this->once())
             ->method('newBinaryCreateStructFromUploadedFile')
-            ->with(array())
+            ->with([])
             ->will($this->returnValue($struct));
 
         $this->draftIoServiceMock->expects($this->never())->method('newBinaryCreateStructFromUploadedFile');
 
         self::assertEquals(
             $struct,
-            $this->service->newBinaryCreateStructFromUploadedFile(array())
+            $this->service->newBinaryCreateStructFromUploadedFile([])
         );
     }
 }

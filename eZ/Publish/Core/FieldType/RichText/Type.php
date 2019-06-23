@@ -119,7 +119,7 @@ class Type extends FieldType
             $result = $value->xml->documentElement->textContent;
         }
 
-        return trim(preg_replace(array('/\n/', '/\s\s+/'), ' ', $result));
+        return trim(preg_replace(['/\n/', '/\s\s+/'], ' ', $result));
     }
 
     /**
@@ -212,7 +212,7 @@ class Type extends FieldType
         $success = $document->loadXML($xmlString, LIBXML_NOENT | LIBXML_NONET | LIBXML_PARSEHUGE);
 
         if (!$success) {
-            $messages = array();
+            $messages = [];
 
             foreach (libxml_get_errors() as $error) {
                 $messages[] = trim($error->message);
@@ -261,7 +261,7 @@ class Type extends FieldType
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $value)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         $errors = $this->internalFormatValidator->validate($value->xml);
 
@@ -327,7 +327,7 @@ class Type extends FieldType
      */
     public function toHash(SPIValue $value)
     {
-        return array('xml' => (string)$value);
+        return ['xml' => (string)$value];
     }
 
     /**
@@ -351,11 +351,11 @@ class Type extends FieldType
     public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
-            array(
+            [
                 'data' => $value->xml->saveXML(),
                 'externalData' => null,
                 'sortKey' => $this->getSortInfo($value),
-            )
+            ]
         );
     }
 
@@ -396,14 +396,14 @@ class Type extends FieldType
      */
     public function getRelations(SPIValue $value)
     {
-        $relations = array();
+        $relations = [];
 
         /** @var \eZ\Publish\Core\FieldType\RichText\Value $value */
         if ($value->xml instanceof DOMDocument) {
-            $relations = array(
+            $relations = [
                 Relation::LINK => $this->getRelatedObjectIds($value, Relation::LINK),
                 Relation::EMBED => $this->getRelatedObjectIds($value, Relation::EMBED),
-            );
+            ];
         }
 
         return $relations;
@@ -420,8 +420,8 @@ class Type extends FieldType
             $tagNames = ['link', 'ezlink'];
         }
 
-        $contentIds = array();
-        $locationIds = array();
+        $contentIds = [];
+        $locationIds = [];
         $xpath = new \DOMXPath($fieldValue->xml);
         $xpath->registerNamespace('docbook', 'http://docbook.org/ns/docbook');
 
@@ -444,9 +444,9 @@ class Type extends FieldType
             }
         }
 
-        return array(
+        return [
             'locationIds' => array_unique($locationIds),
             'contentIds' => array_unique($contentIds),
-        );
+        ];
     }
 }

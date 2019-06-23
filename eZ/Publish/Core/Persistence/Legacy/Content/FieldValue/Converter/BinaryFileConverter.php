@@ -73,15 +73,15 @@ class BinaryFileConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints = new FieldTypeConstraints(
-            array(
-                'validators' => array(
-                    'FileSizeValidator' => array(
+            [
+                'validators' => [
+                    'FileSizeValidator' => [
                         'maxFileSize' => ($storageDef->dataInt1 != 0
                             ? $storageDef->dataInt1
                             : null),
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
     }
 

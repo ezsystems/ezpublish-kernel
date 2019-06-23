@@ -44,186 +44,186 @@ class LocationServiceTest extends ServiceTest
 
         $rootContentInfo = $this->getContentInfo($rootContentId, $rootContentRemoteId);
         $root = new Location(
-            array(
+            [
                 'id' => $rootId,
                 'path' => $rootPath,
                 'remoteId' => $rootRemoteId,
                 'contentInfo' => $rootContentInfo,
                 'parentLocationId' => 1,
-            )
+            ]
         );
         $locationContentInfo = $this->getContentInfo($locationContentId, $locationContentRemoteId);
         $location = new Location(
-            array(
+            [
                 'id' => $locationId,
                 'path' => $locationPath,
                 'remoteId' => $locationRemoteId,
                 'contentInfo' => $locationContentInfo,
                 'parentLocationId' => $rootId,
-            )
+            ]
         );
 
         $rootChildren = new LocationList(
-            array(
+            [
                 'totalCount' => 1,
-                'locations' => array($location),
-            )
+                'locations' => [$location],
+            ]
         );
 
         $locationCreateStruct = new LocationCreateStruct();
         $locationUpdateStruct = new LocationUpdateStruct();
 
-        return array(
-            array(
+        return [
+            [
                 'copySubtree',
-                array($location, $root),
+                [$location, $root],
                 $location,
                 1,
                 LocationServiceSignals\CopySubtreeSignal::class,
-                array(
+                [
                     'subtreeId' => $locationId,
                     'targetParentLocationId' => $rootId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'loadLocation',
-                array($rootId, [], true),
+                [$rootId, [], true],
                 $root,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadLocationList',
-                array([$rootId], [], true),
+                [[$rootId], [], true],
                 [$root],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadLocationByRemoteId',
-                array($rootRemoteId, [], true),
+                [$rootRemoteId, [], true],
                 $root,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadLocations',
-                array($locationContentInfo, $root, []),
-                array($location),
+                [$locationContentInfo, $root, []],
+                [$location],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadLocationChildren',
-                array($root, 0, 1, []),
+                [$root, 0, 1, []],
                 $rootChildren,
                 0,
-            ),
+            ],
             /*array(
                 'loadParentLocationsForDraftContent',
                 array($root, 0, 1, []),
                 $rootChildren,
                 0,
             ),*/
-            array(
+            [
                 'getLocationChildCount',
-                array($root),
+                [$root],
                 1,
                 0,
-            ),
-            array(
+            ],
+            [
                 'createLocation',
-                array($locationContentInfo, $locationCreateStruct),
+                [$locationContentInfo, $locationCreateStruct],
                 $location,
                 1,
                 LocationServiceSignals\CreateLocationSignal::class,
-                array(
+                [
                     'contentId' => $locationContentId,
                     'locationId' => $locationId,
                     'parentLocationId' => $rootId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'updateLocation',
-                array($location, $locationUpdateStruct),
+                [$location, $locationUpdateStruct],
                 $location,
                 1,
                 LocationServiceSignals\UpdateLocationSignal::class,
-                array(
+                [
                     'contentId' => $locationContentId,
                     'locationId' => $locationId,
                     'parentLocationId' => $rootId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'swapLocation',
-                array($location, $root),
+                [$location, $root],
                 null,
                 1,
                 LocationServiceSignals\SwapLocationSignal::class,
-                array(
+                [
                     'location1Id' => $locationId,
                     'content1Id' => $locationContentId,
                     'parentLocation1Id' => $rootId,
                     'location2Id' => $rootId,
                     'content2Id' => $rootContentId,
                     'parentLocation2Id' => 1,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'hideLocation',
-                array($location),
+                [$location],
                 $location,
                 1,
                 LocationServiceSignals\HideLocationSignal::class,
-                array(
+                [
                     'locationId' => $locationId,
                     'parentLocationId' => $rootId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'unhideLocation',
-                array($location),
+                [$location],
                 $location,
                 1,
                 LocationServiceSignals\UnhideLocationSignal::class,
-                array(
+                [
                     'locationId' => $locationId,
                     'parentLocationId' => $rootId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'moveSubtree',
-                array($location, $root),
+                [$location, $root],
                 $location,
                 1,
                 LocationServiceSignals\MoveSubtreeSignal::class,
-                array(
+                [
                     'locationId' => $locationId,
                     'newParentLocationId' => $rootId,
                     'oldParentLocationId' => $rootId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'deleteLocation',
-                array($location),
+                [$location],
                 null,
                 1,
                 LocationServiceSignals\DeleteLocationSignal::class,
-                array(
+                [
                     'locationId' => $locationId,
                     'contentId' => $locationContentId,
                     'parentLocationId' => $rootId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'newLocationCreateStruct',
-                array($rootId, null),
+                [$rootId, null],
                 $locationCreateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newLocationUpdateStruct',
-                array(),
+                [],
                 $locationUpdateStruct,
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -26,7 +26,7 @@ class UpdateStruct extends ValueObject
      *
      * @var string[]
      */
-    public $name = array();
+    public $name = [];
 
     /**
      * Description.
@@ -35,7 +35,7 @@ class UpdateStruct extends ValueObject
      *
      * @var string[]
      */
-    public $description = array();
+    public $description = [];
 
     /**
      * Readable string identifier of a group.

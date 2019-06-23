@@ -56,14 +56,14 @@ class RichTextIntegrationTest extends BaseIntegrationTest
     {
         $fieldType = new FieldType\RichText\Type(
             new FieldType\RichText\Validator(
-                array(
+                [
                     $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
                     $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
-                )
+                ]
             ),
-            new FieldType\RichText\ConverterDispatcher(array()),
+            new FieldType\RichText\ConverterDispatcher([]),
             new FieldType\RichText\Normalizer\Aggregate(),
-            new FieldType\RichText\ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null))
+            new FieldType\RichText\ValidatorDispatcher(['http://docbook.org/ns/docbook' => null])
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessor());
 
@@ -102,15 +102,15 @@ class RichTextIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezrichtext field type does not have any special field definition
             // properties
-            array('fieldType', 'ezrichtext'),
-            array(
+            ['fieldType', 'ezrichtext'],
+            [
                 'fieldTypeConstraints',
                 new FieldTypeConstraints(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -128,11 +128,11 @@ class RichTextIntegrationTest extends BaseIntegrationTest
 ';
 
         return new FieldValue(
-            array(
+            [
                 'data' => $xml,
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 
@@ -153,11 +153,11 @@ class RichTextIntegrationTest extends BaseIntegrationTest
 ';
 
         return new FieldValue(
-            array(
+            [
                 'data' => $xml,
                 'externalData' => null,
                 'sortKey' => null,
-            )
+            ]
         );
     }
 

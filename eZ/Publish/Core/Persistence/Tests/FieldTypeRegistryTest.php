@@ -26,7 +26,7 @@ class FieldTypeRegistryTest extends TestCase
     public function testConstructor(): void
     {
         $fieldType = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array(self::FIELD_TYPE_IDENTIFIER => $fieldType));
+        $registry = new FieldTypeRegistry([self::FIELD_TYPE_IDENTIFIER => $fieldType]);
 
         $this->assertInstanceOf(
             SPIPersistenceFieldType::class,
@@ -40,7 +40,7 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetFieldTypeInstance()
     {
         $instance = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array(self::FIELD_TYPE_IDENTIFIER => $instance));
+        $registry = new FieldTypeRegistry([self::FIELD_TYPE_IDENTIFIER => $instance]);
 
         $result = $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER);
 
@@ -56,7 +56,7 @@ class FieldTypeRegistryTest extends TestCase
         $closure = function () use ($instance) {
             return $instance;
         };
-        $registry = new FieldTypeRegistry(array(self::FIELD_TYPE_IDENTIFIER => $closure));
+        $registry = new FieldTypeRegistry([self::FIELD_TYPE_IDENTIFIER => $closure]);
 
         $result = $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER);
 
@@ -72,7 +72,7 @@ class FieldTypeRegistryTest extends TestCase
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException::class);
 
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry([]);
         $registry->getFieldType('not-found');
     }
 
@@ -85,7 +85,7 @@ class FieldTypeRegistryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry([]);
         $registry->getFieldType('not-found');
     }
 
@@ -96,7 +96,7 @@ class FieldTypeRegistryTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $registry = new FieldTypeRegistry(array(self::FIELD_TYPE_IDENTIFIER => new \DateTime()));
+        $registry = new FieldTypeRegistry([self::FIELD_TYPE_IDENTIFIER => new \DateTime()]);
         $registry->getFieldType(self::FIELD_TYPE_IDENTIFIER);
     }
 
@@ -106,7 +106,7 @@ class FieldTypeRegistryTest extends TestCase
     public function testRegister()
     {
         $fieldType = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry([]);
         $registry->register(self::FIELD_TYPE_IDENTIFIER, $fieldType);
 
         $this->assertInstanceOf(

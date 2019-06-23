@@ -49,7 +49,7 @@ abstract class AbstractMatcherFactoryTest extends TestCase
      */
     public function testMatchFailNoViewType()
     {
-        $matcherFactory = new $this->matcherFactoryClass($this->getRepositoryMock(), array());
+        $matcherFactory = new $this->matcherFactoryClass($this->getRepositoryMock(), []);
         $this->assertNull($matcherFactory->match($this->getContentView(), 'full'));
     }
 
@@ -64,16 +64,16 @@ abstract class AbstractMatcherFactoryTest extends TestCase
 
         $matcherFactory = new $this->matcherFactoryClass(
             $this->getRepositoryMock(),
-            array(
-                'full' => array(
-                    'test' => array(
+            [
+                'full' => [
+                    'test' => [
                         'template' => 'foo.html.twig',
-                        'match' => array(
+                        'match' => [
                             'NonExistingMatcher' => true,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
         $matcherFactory->match($this->getMatchableValueObject(), 'full');
     }
@@ -85,25 +85,25 @@ abstract class AbstractMatcherFactoryTest extends TestCase
      */
     public function testMatch()
     {
-        $expectedConfigHash = array(
+        $expectedConfigHash = [
             'template' => 'foo.html.twig',
-            'match' => array(
+            'match' => [
                 $this->getMatcherClass() => 456,
-            ),
-        );
+            ],
+        ];
         $matcherFactory = new $this->matcherFactoryClass(
             $this->getRepositoryMock(),
-            array(
-                'full' => array(
-                    'not_matching' => array(
+            [
+                'full' => [
+                    'not_matching' => [
                         'template' => 'bar.html.twig',
-                        'match' => array(
+                        'match' => [
                             $this->getMatcherClass() => 123,
-                        ),
-                    ),
+                        ],
+                    ],
                     'test' => $expectedConfigHash,
-                ),
-            )
+                ],
+            ]
         );
         $configHash = $matcherFactory->match($this->getMatchableValueObject());
         $this->assertArrayHasKey('matcher', $configHash);
@@ -133,22 +133,22 @@ abstract class AbstractMatcherFactoryTest extends TestCase
     {
         $matcherFactory = new $this->matcherFactoryClass(
             $this->getRepositoryMock(),
-            array(
-                'full' => array(
-                    'not_matching' => array(
+            [
+                'full' => [
+                    'not_matching' => [
                         'template' => 'bar.html.twig',
-                        'match' => array(
+                        'match' => [
                             $this->getMatcherClass() => 123,
-                        ),
-                    ),
-                    'test' => array(
+                        ],
+                    ],
+                    'test' => [
                         'template' => 'foo.html.twig',
-                        'match' => array(
+                        'match' => [
                             $this->getMatcherClass() => 456,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
         $this->assertNull(
             $matcherFactory->match(

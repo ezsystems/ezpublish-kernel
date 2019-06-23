@@ -18,10 +18,10 @@ class IOVariationPurgerTest extends TestCase
             ->expects($this->exactly(2))
             ->method('deleteDirectory')
             ->withConsecutive(
-                array('_aliases/medium'),
-                array('_aliases/large')
+                ['_aliases/medium'],
+                ['_aliases/large']
             );
         $purger = new IOVariationPurger($ioService);
-        $purger->purge(array('medium', 'large'));
+        $purger->purge(['medium', 'large']);
     }
 }

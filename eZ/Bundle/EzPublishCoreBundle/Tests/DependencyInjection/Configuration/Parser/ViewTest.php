@@ -19,9 +19,9 @@ class ViewTest extends AbstractParserTestCase
 
     protected function getContainerExtensions(): array
     {
-        return array(
-            new EzPublishCoreExtension(array(new LocationView(), new ContentView())),
-        );
+        return [
+            new EzPublishCoreExtension([new LocationView(), new ContentView()]),
+        ];
     }
 
     protected function getMinimalConfiguration(): array
@@ -41,14 +41,14 @@ class ViewTest extends AbstractParserTestCase
         foreach ($expectedLocationView as &$rulesets) {
             foreach ($rulesets as &$config) {
                 if (!isset($config['params'])) {
-                    $config['params'] = array();
+                    $config['params'] = [];
                 }
             }
         }
 
         $this->assertConfigResolverParameterValue('location_view', $expectedLocationView, 'ezdemo_site', false);
         $this->assertConfigResolverParameterValue('location_view', $expectedLocationView, 'fre', false);
-        $this->assertConfigResolverParameterValue('location_view', array(), 'ezdemo_site_admin', false);
+        $this->assertConfigResolverParameterValue('location_view', [], 'ezdemo_site_admin', false);
     }
 
     public function testContentView()
@@ -58,13 +58,13 @@ class ViewTest extends AbstractParserTestCase
         foreach ($expectedContentView as &$rulesets) {
             foreach ($rulesets as &$config) {
                 if (!isset($config['params'])) {
-                    $config['params'] = array();
+                    $config['params'] = [];
                 }
             }
         }
 
         $this->assertConfigResolverParameterValue('content_view', $expectedContentView, 'ezdemo_site', false);
         $this->assertConfigResolverParameterValue('content_view', $expectedContentView, 'fre', false);
-        $this->assertConfigResolverParameterValue('content_view', array(), 'ezdemo_site_admin', false);
+        $this->assertConfigResolverParameterValue('content_view', [], 'ezdemo_site_admin', false);
     }
 }

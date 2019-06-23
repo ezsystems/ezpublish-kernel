@@ -43,18 +43,18 @@ class ImageExtension extends AbstractExtension
 
     public function getFunctions()
     {
-        return array(
+        return [
             new TwigFunction(
                 'ez_image_alias',
-                array($this, 'getImageVariation'),
-                array('is_safe' => array('html'))
+                [$this, 'getImageVariation'],
+                ['is_safe' => ['html']]
             ),
             new TwigFunction(
                 'ez_image_asset_content_field_identifier',
-                array($this, 'getImageAssetContentFieldIdentifier'),
-                array('is_safe' => array('html'))
+                [$this, 'getImageAssetContentFieldIdentifier'],
+                ['is_safe' => ['html']]
             ),
-        );
+        ];
     }
 
     /**

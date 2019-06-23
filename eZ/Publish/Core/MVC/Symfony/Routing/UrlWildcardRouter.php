@@ -110,7 +110,7 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
      *
      * @return string|void
      */
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
         throw new RouteNotFoundException('Could not match route');
     }
@@ -165,7 +165,7 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
     /**
      * @see Symfony\Cmf\Component\Routing\VersatileGeneratorInterface::getRouteDebugMessage()
      */
-    public function getRouteDebugMessage($name, array $parameters = array()): string
+    public function getRouteDebugMessage($name, array $parameters = []): string
     {
         if ($name instanceof RouteObjectInterface) {
             return 'Route with key ' . $name->getRouteKey();

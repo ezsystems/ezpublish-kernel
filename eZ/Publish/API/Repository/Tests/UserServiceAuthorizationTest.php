@@ -234,7 +234,7 @@ class UserServiceAuthorizationTest extends BaseTest
         // This call will fail with an "UnauthorizedException"
         $userService->createUser(
             $userCreateStruct,
-            array($parentUserGroup)
+            [$parentUserGroup]
         );
         /* END: Use Case */
     }

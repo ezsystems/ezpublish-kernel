@@ -6,7 +6,7 @@ return PhpCsFixer\Config::create()
         '@Symfony' => true,
         '@Symfony:risky' => true,
         'concat_space' => ['spacing' => 'one'],
-        'array_syntax' => false,
+        'array_syntax' => ['syntax' => 'short'],
         'simplified_null_return' => false,
         'phpdoc_align' => false,
         'phpdoc_separation' => false,

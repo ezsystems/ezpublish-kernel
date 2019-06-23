@@ -39,11 +39,11 @@ class CacheFactoryTest extends TestCase
      */
     public function providerGetService()
     {
-        return array(
-            array('default', 'default'),
-            array('ez_site1', 'ez_site1'),
-            array('xyZ', 'xyZ'),
-        );
+        return [
+            ['default', 'default'],
+            ['ez_site1', 'ez_site1'],
+            ['xyZ', 'xyZ'],
+        ];
     }
 
     /**

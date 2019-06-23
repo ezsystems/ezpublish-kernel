@@ -60,17 +60,17 @@ class ViewProvidersPassTest extends AbstractCompilerPassTestCase
 
     public function addViewProviderProvider()
     {
-        return array(
-            array(null, 0),
-            array(0, 0),
-            array(57, 57),
-            array(-23, -23),
-            array(-255, -255),
-            array(-256, -255),
-            array(-1000, -255),
-            array(255, 255),
-            array(256, 255),
-            array(1000, 255),
-        );
+        return [
+            [null, 0],
+            [0, 0],
+            [57, 57],
+            [-23, -23],
+            [-255, -255],
+            [-256, -255],
+            [-1000, -255],
+            [255, 255],
+            [256, 255],
+            [1000, 255],
+        ];
     }
 }

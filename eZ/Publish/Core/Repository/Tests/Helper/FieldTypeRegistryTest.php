@@ -41,9 +41,9 @@ class FieldTypeRegistryTest extends TestCase
 
     public function testGetFieldType()
     {
-        $fieldTypes = array(
+        $fieldTypes = [
             self::FIELD_TYPE_ID => $this->getFieldTypeMock(),
-        );
+        ];
 
         $registry = new FieldTypeRegistry($fieldTypes);
 
@@ -57,9 +57,9 @@ class FieldTypeRegistryTest extends TestCase
 
     public function testGetClosureFieldType()
     {
-        $fieldTypes = array(
+        $fieldTypes = [
             self::FIELD_TYPE_ID => $this->getClosure($this->getFieldTypeMock()),
-        );
+        ];
 
         $registry = new FieldTypeRegistry($fieldTypes);
 
@@ -75,7 +75,7 @@ class FieldTypeRegistryTest extends TestCase
     {
         $this->expectException(\eZ\Publish\Core\Base\Exceptions\NotFound\FieldTypeNotFoundException::class);
 
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry([]);
 
         $registry->getFieldType('none');
     }
@@ -86,9 +86,9 @@ class FieldTypeRegistryTest extends TestCase
         $this->expectExceptionMessage('$fieldTypes[none] must be instance of SPI\\FieldType\\FieldType or callable');
 
         $registry = new FieldTypeRegistry(
-            array(
+            [
                 'none' => "I'm not a field type",
-            )
+            ]
         );
 
         $registry->getFieldType('none');
@@ -100,9 +100,9 @@ class FieldTypeRegistryTest extends TestCase
         $this->expectExceptionMessage('$fieldTypes[none] must be instance of SPI\\FieldType\\FieldType or callable');
 
         $registry = new FieldTypeRegistry(
-            array(
+            [
                 'none' => $this->getClosure("I'm not a field type"),
-            )
+            ]
         );
 
         $registry->getFieldType('none');
@@ -110,10 +110,10 @@ class FieldTypeRegistryTest extends TestCase
 
     public function testGetFieldTypes()
     {
-        $fieldTypes = array(
+        $fieldTypes = [
             self::FIELD_TYPE_ID => $this->getFieldTypeMock(),
             'two' => $this->getClosure($this->getFieldTypeMock()),
-        );
+        ];
 
         $registry = new FieldTypeRegistry($fieldTypes);
 

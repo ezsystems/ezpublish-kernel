@@ -44,7 +44,7 @@ class DataCollectorPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish_debug.data_collector',
             'addCollector',
-            array(new Reference($serviceId), $panelTemplate, $toolbarTemplate)
+            [new Reference($serviceId), $panelTemplate, $toolbarTemplate]
         );
     }
 }

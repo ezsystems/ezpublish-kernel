@@ -40,20 +40,20 @@ abstract class FileSystemTwigIntegrationTestCase extends IntegrationTestCase
 
         // changes from the original is here, Twig_Loader_Filesystem has been added
         $loader = new ChainLoader(
-            array(
+            [
                 new ArrayLoader($templates),
                 new FilesystemLoader($this->getFixturesDir()),
-            )
+            ]
         );
         // end changes
 
         foreach ($outputs as $match) {
             $config = array_merge(
-                array(
+                [
                     'cache' => false,
                     'strict_variables' => true,
-                ),
-                $match[2] ? eval($match[2] . ';') : array()
+                ],
+                $match[2] ? eval($match[2] . ';') : []
             );
             $twig = new Environment($loader, $config);
             $twig->addGlobal('global', 'global');

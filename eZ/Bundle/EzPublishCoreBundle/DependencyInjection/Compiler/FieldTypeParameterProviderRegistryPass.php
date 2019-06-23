@@ -60,11 +60,11 @@ class FieldTypeParameterProviderRegistryPass implements CompilerPassInterface
 
                 $parameterProviderRegistryDef->addMethodCall(
                     'setParameterProvider',
-                    array(
+                    [
                         // Only pass the service Id since field types will be lazy loaded via the service container
                         new Reference($id),
                         $attribute['alias'],
-                    )
+                    ]
                 );
             }
         }

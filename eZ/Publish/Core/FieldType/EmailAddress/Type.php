@@ -23,9 +23,9 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class Type extends FieldType
 {
-    protected $validatorConfigurationSchema = array(
-        'EmailAddressValidator' => array(),
-    );
+    protected $validatorConfigurationSchema = [
+        'EmailAddressValidator' => [],
+    ];
 
     /**
      * @param \eZ\Publish\Core\FieldType\EmailAddress\Value|\eZ\Publish\SPI\FieldType\Value $value
@@ -44,7 +44,7 @@ class Type extends FieldType
      */
     public function validateValidatorConfiguration($validatorConfiguration)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         $validator = new EmailAddressValidator();
 
         foreach ($validatorConfiguration as $validatorIdentifier => $constraints) {
@@ -52,9 +52,9 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     "Validator '%validator%' is unknown",
                     null,
-                    array(
+                    [
                         '%validator%' => $validatorIdentifier,
-                    ),
+                    ],
                     "[$validatorIdentifier]"
                 );
                 continue;
@@ -77,7 +77,7 @@ class Type extends FieldType
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
-        $errors = array();
+        $errors = [];
 
         if ($this->isEmptyValue($fieldValue)) {
             return $errors;
@@ -86,7 +86,7 @@ class Type extends FieldType
         $validatorConfiguration = $fieldDefinition->getValidatorConfiguration();
         $constraints = isset($validatorConfiguration['EmailAddressValidator']) ?
             $validatorConfiguration['EmailAddressValidator'] :
-            array();
+            [];
         $validator = new EmailAddressValidator();
         $validator->initializeWithConstraints($constraints);
 
@@ -94,7 +94,7 @@ class Type extends FieldType
             return $validator->getMessage();
         }
 
-        return array();
+        return [];
     }
 
     /**

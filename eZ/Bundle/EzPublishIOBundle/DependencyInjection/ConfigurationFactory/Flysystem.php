@@ -77,7 +77,7 @@ abstract class Flysystem implements ConfigurationFactory, ContainerAwareInterfac
             $filesystemId,
             $filesystemServiceDefinition
         );
-        $definition->setArguments(array(new Reference($adapterId)));
+        $definition->setArguments([new Reference($adapterId)]);
 
         return $filesystemId;
     }

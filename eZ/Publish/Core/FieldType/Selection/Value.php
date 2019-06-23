@@ -27,7 +27,7 @@ class Value extends BaseValue
      *
      * @param int[] $selection
      */
-    public function __construct(array $selection = array())
+    public function __construct(array $selection = [])
     {
         $this->selection = $selection;
     }

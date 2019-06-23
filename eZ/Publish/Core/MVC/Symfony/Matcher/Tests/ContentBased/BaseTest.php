@@ -37,17 +37,17 @@ abstract class BaseTest extends TestCase
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getPartiallyMockedViewProvider(array $matchingConfig = array())
+    protected function getPartiallyMockedViewProvider(array $matchingConfig = [])
     {
         return $this
             ->getMockBuilder(Configured::class)
             ->setConstructorArgs(
-                array(
+                [
                     $this->repositoryMock,
                     $matchingConfig,
-                )
+                ]
             )
-            ->setMethods(array('getMatcher'))
+            ->setMethods(['getMatcher'])
             ->getMock();
     }
 
@@ -64,7 +64,7 @@ abstract class BaseTest extends TestCase
             ->setMethods(
                 array_diff(
                     get_class_methods($repositoryClass),
-                    array('sudo')
+                    ['sudo']
                 )
             )
             ->getMock();
@@ -75,11 +75,11 @@ abstract class BaseTest extends TestCase
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getLocationMock(array $properties = array())
+    protected function getLocationMock(array $properties = [])
     {
         return $this
             ->getMockBuilder(Location::class)
-            ->setConstructorArgs(array($properties))
+            ->setConstructorArgs([$properties])
             ->getMockForAbstractClass();
     }
 
@@ -88,11 +88,11 @@ abstract class BaseTest extends TestCase
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getContentInfoMock(array $properties = array())
+    protected function getContentInfoMock(array $properties = [])
     {
         return $this->
             getMockBuilder(ContentInfo::class)
-            ->setConstructorArgs(array($properties))
+            ->setConstructorArgs([$properties])
             ->getMockForAbstractClass();
     }
 

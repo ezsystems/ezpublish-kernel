@@ -20,46 +20,46 @@ class EzPublishIOExtensionTest extends AbstractExtensionTestCase
         $extension->addMetadataHandlerFactory('flysystem', new ConfigurationFactory\MetadataHandler\Flysystem());
         $extension->addBinarydataHandlerFactory('flysystem', new ConfigurationFactory\BinarydataHandler\Flysystem());
 
-        return array($extension);
+        return [$extension];
     }
 
     public function testParametersWithoutConfiguration()
     {
         $this->load();
 
-        $this->assertContainerBuilderHasParameter('ez_io.metadata_handlers', array());
-        $this->assertContainerBuilderHasParameter('ez_io.binarydata_handlers', array());
+        $this->assertContainerBuilderHasParameter('ez_io.metadata_handlers', []);
+        $this->assertContainerBuilderHasParameter('ez_io.binarydata_handlers', []);
     }
 
     public function testParametersWithMetadataHandler()
     {
-        $config = array(
-            'metadata_handlers' => array(
-                'my_metadata_handler' => array('flysystem' => array('adapter' => 'my_adapter')),
-            ),
-        );
+        $config = [
+            'metadata_handlers' => [
+                'my_metadata_handler' => ['flysystem' => ['adapter' => 'my_adapter']],
+            ],
+        ];
         $this->load($config);
 
-        $this->assertContainerBuilderHasParameter('ez_io.binarydata_handlers', array());
+        $this->assertContainerBuilderHasParameter('ez_io.binarydata_handlers', []);
         $this->assertContainerBuilderHasParameter(
             'ez_io.metadata_handlers',
-            array('my_metadata_handler' => array('name' => 'my_metadata_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter'))
+            ['my_metadata_handler' => ['name' => 'my_metadata_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter']]
         );
     }
 
     public function testParametersWithBinarydataHandler()
     {
-        $config = array(
-            'binarydata_handlers' => array(
-                'my_binarydata_handler' => array('flysystem' => array('adapter' => 'my_adapter')),
-            ),
-        );
+        $config = [
+            'binarydata_handlers' => [
+                'my_binarydata_handler' => ['flysystem' => ['adapter' => 'my_adapter']],
+            ],
+        ];
         $this->load($config);
 
-        $this->assertContainerBuilderHasParameter('ez_io.metadata_handlers', array());
+        $this->assertContainerBuilderHasParameter('ez_io.metadata_handlers', []);
         $this->assertContainerBuilderHasParameter(
             'ez_io.binarydata_handlers',
-            array('my_binarydata_handler' => array('name' => 'my_binarydata_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter'))
+            ['my_binarydata_handler' => ['name' => 'my_binarydata_handler', 'type' => 'flysystem', 'adapter' => 'my_adapter']]
         );
     }
 }

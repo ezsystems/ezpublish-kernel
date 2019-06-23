@@ -28,7 +28,7 @@ class RichTextEzxmlInputConverterPass implements CompilerPassInterface
         $ezxmlInputConverterDefinition = $container->getDefinition('ezpublish.fieldType.ezrichtext.converter.input.ezxml');
         $taggedServiceIds = $container->findTaggedServiceIds('ezpublish.ezrichtext.converter.input.ezxml');
 
-        $convertersByPriority = array();
+        $convertersByPriority = [];
         foreach ($taggedServiceIds as $id => $tags) {
             foreach ($tags as $tag) {
                 $priority = isset($tag['priority']) ? (int)$tag['priority'] : 0;
@@ -38,9 +38,9 @@ class RichTextEzxmlInputConverterPass implements CompilerPassInterface
 
         if (count($convertersByPriority) > 0) {
             $ezxmlInputConverterDefinition->setArguments(
-                array(
+                [
                     $this->sortConverters($convertersByPriority),
-                )
+                ]
             );
         }
     }

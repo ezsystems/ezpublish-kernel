@@ -22,7 +22,7 @@ class Policy extends APIPolicy
      *
      * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    protected $limitations = array();
+    protected $limitations = [];
 
     /**
      * Returns the list of limitations for this policy.

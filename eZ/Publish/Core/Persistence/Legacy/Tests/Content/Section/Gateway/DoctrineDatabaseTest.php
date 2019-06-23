@@ -46,14 +46,14 @@ class DoctrineDatabaseTest extends TestCase
         $query = $this->getDatabaseHandler()->createSelectQuery();
 
         $this->assertQueryResult(
-            array(
-                array(
+            [
+                [
                     'id' => '7',
                     'identifier' => 'new_section',
                     'name' => 'New Section',
                     'locale' => '',
-                ),
-            ),
+                ],
+            ],
             $query
                 ->select('id', 'identifier', 'name', 'locale')
                 ->from('ezsection')
@@ -71,14 +71,14 @@ class DoctrineDatabaseTest extends TestCase
         $gateway->updateSection(2, 'New Section', 'new_section');
 
         $this->assertQueryResult(
-            array(
-                array(
+            [
+                [
                     'id' => '2',
                     'identifier' => 'new_section',
                     'name' => 'New Section',
                     'locale' => '',
-                ),
-            ),
+                ],
+            ],
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select('id', 'identifier', 'name', 'locale')
                 ->from('ezsection')
@@ -96,13 +96,13 @@ class DoctrineDatabaseTest extends TestCase
         $result = $gateway->loadSectionData(2);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'id' => '2',
                     'identifier' => 'users',
                     'name' => 'Users',
-                ),
-            ),
+                ],
+            ],
             $result
         );
     }
@@ -116,43 +116,43 @@ class DoctrineDatabaseTest extends TestCase
 
         $result = $gateway->loadAllSectionData();
 
-        $expected = array(
-            array(
+        $expected = [
+            [
                 'id' => '1',
                 'identifier' => 'standard',
                 'name' => 'Standard',
-            ),
+            ],
 
-            array(
+            [
                 'id' => '2',
                 'identifier' => 'users',
                 'name' => 'Users',
-            ),
+            ],
 
-            array(
+            [
                 'id' => '3',
                 'identifier' => 'media',
                 'name' => 'Media',
-            ),
+            ],
 
-            array(
+            [
                 'id' => '4',
                 'identifier' => 'setup',
                 'name' => 'Setup',
-            ),
+            ],
 
-            array(
+            [
                 'id' => '5',
                 'identifier' => 'design',
                 'name' => 'Design',
-            ),
+            ],
 
-            array(
+            [
                 'id' => '6',
                 'identifier' => '',
                 'name' => 'Restricted',
-            ),
-        );
+            ],
+        ];
         $this->assertEquals(
             $expected,
             $result
@@ -169,13 +169,13 @@ class DoctrineDatabaseTest extends TestCase
         $result = $gateway->loadSectionDataByIdentifier('users');
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'id' => '2',
                     'identifier' => 'users',
                     'name' => 'Users',
-                ),
-            ),
+                ],
+            ],
             $result
         );
     }
@@ -228,22 +228,22 @@ class DoctrineDatabaseTest extends TestCase
         $result = $gateway->deleteSection(2);
 
         $this->assertQueryResult(
-            array(
-                array(
+            [
+                [
                     'count' => '5',
-                ),
-            ),
+                ],
+            ],
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select('COUNT( * ) AS count')
                 ->from('ezsection')
         );
 
         $this->assertQueryResult(
-            array(
-                array(
+            [
+                [
                     'count' => '0',
-                ),
-            ),
+                ],
+            ],
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select('COUNT( * ) AS count')
                 ->from('ezsection')

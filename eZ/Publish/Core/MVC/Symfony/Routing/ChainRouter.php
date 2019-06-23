@@ -12,7 +12,7 @@ use Symfony\Cmf\Component\Routing\ChainRouter as BaseChainRouter;
 
 class ChainRouter extends BaseChainRouter
 {
-    public function generate($name, $parameters = array(), $referenceType = self::ABSOLUTE_PATH)
+    public function generate($name, $parameters = [], $referenceType = self::ABSOLUTE_PATH)
     {
         if ($name instanceof RouteReference) {
             $parameters += $name->getParams();

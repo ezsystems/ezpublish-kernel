@@ -35,7 +35,7 @@ class Depth extends Location
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::IN,
                 Specifications::FORMAT_ARRAY,
@@ -72,6 +72,6 @@ class Depth extends Location
                 Specifications::TYPE_INTEGER,
                 2
             ),
-        );
+        ];
     }
 }

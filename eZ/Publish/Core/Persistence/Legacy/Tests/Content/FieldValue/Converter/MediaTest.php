@@ -38,28 +38,28 @@ class MediaTest extends TestCase
         $storageFieldDef = new StorageFieldDefinition();
 
         $fieldTypeConstraints = new FieldTypeConstraints();
-        $fieldTypeConstraints->validators = array(
+        $fieldTypeConstraints->validators = [
             // Setting max file size to 1MB (1.048.576 bytes)
-            'FileSizeValidator' => array('maxFileSize' => 1048576),
-        );
+            'FileSizeValidator' => ['maxFileSize' => 1048576],
+        ];
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'mediaType' => MediaType::TYPE_HTML5_VIDEO,
-            )
+            ]
         );
 
         $fieldDef = new PersistenceFieldDefinition(
-            array(
+            [
                 'fieldTypeConstraints' => $fieldTypeConstraints,
                 'defaultValue' => null,
-            )
+            ]
         );
 
         $this->converter->toStorageFieldDefinition($fieldDef, $storageFieldDef);
 
         self::assertSame(
             $fieldDef->fieldTypeConstraints->validators['FileSizeValidator'],
-            array('maxFileSize' => $storageFieldDef->dataInt1)
+            ['maxFileSize' => $storageFieldDef->dataInt1]
         );
         self::assertSame(
             $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'],
@@ -76,22 +76,22 @@ class MediaTest extends TestCase
     {
         $fieldDef = new PersistenceFieldDefinition();
         $storageDef = new StorageFieldDefinition(
-            array(
+            [
                 'dataInt1' => 1048576,
                 'dataText1' => MediaType::TYPE_HTML5_VIDEO,
-            )
+            ]
         );
 
         $this->converter->toFieldDefinition($storageDef, $fieldDef);
         self::assertSame(
-            array(
-                'FileSizeValidator' => array('maxFileSize' => $storageDef->dataInt1),
-            ),
+            [
+                'FileSizeValidator' => ['maxFileSize' => $storageDef->dataInt1],
+            ],
             $fieldDef->fieldTypeConstraints->validators
         );
         self::assertInstanceOf('eZ\\Publish\\Core\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings);
         self::assertSame(
-            array('mediaType' => MediaType::TYPE_HTML5_VIDEO),
+            ['mediaType' => MediaType::TYPE_HTML5_VIDEO],
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()
         );
     }

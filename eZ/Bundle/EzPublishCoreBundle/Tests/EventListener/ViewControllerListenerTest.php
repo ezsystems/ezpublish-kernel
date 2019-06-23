@@ -87,7 +87,7 @@ class ViewControllerListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(KernelEvents::CONTROLLER => array('getController', 10)),
+            [KernelEvents::CONTROLLER => ['getController', 10]],
             $this->controllerListener->getSubscribedEvents()
         );
     }
@@ -137,11 +137,11 @@ class ViewControllerListenerTest extends TestCase
         $customController = 'FooBundle::bar';
 
         $this->request->attributes->add(
-            array(
+            [
                 '_controller' => 'ez_content:viewLocation',
                 'locationId' => $id,
                 'viewType' => $viewType,
-            )
+            ]
         );
 
         $this->viewBuilderRegistry

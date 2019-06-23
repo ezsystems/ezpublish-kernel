@@ -57,7 +57,7 @@ abstract class ConfigurationFactoryTest extends AbstractContainerBuilderTestCase
     {
         $handlerConfiguration =
             $this->provideHandlerConfiguration($this->container) +
-            array('name' => 'my_test_handler', 'type' => 'test_handler');
+            ['name' => 'my_test_handler', 'type' => 'test_handler'];
 
         $handlerServiceId = $this->registerHandler($handlerConfiguration['name']);
 

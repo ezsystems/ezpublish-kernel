@@ -92,7 +92,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         Helper\DomainMapper $domainMapper,
         Helper\ContentTypeDomainMapper $contentTypeDomainMapper,
         Helper\FieldTypeRegistry $fieldTypeRegistry,
-        array $settings = array()
+        array $settings = []
     ) {
         $this->repository = $repository;
         $this->contentTypeHandler = $contentTypeHandler;
@@ -100,9 +100,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $this->contentTypeDomainMapper = $contentTypeDomainMapper;
         $this->fieldTypeRegistry = $fieldTypeRegistry;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             //'defaultSetting' => array(),
-        );
+        ];
     }
 
     /**
@@ -145,13 +145,13 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $spiGroupCreateStruct = new SPIContentTypeGroupCreateStruct(
-            array(
+            [
                 'identifier' => $contentTypeGroupCreateStruct->identifier,
                 'created' => $timestamp,
                 'modified' => $timestamp,
                 'creatorId' => $userId,
                 'modifierId' => $userId,
-            )
+            ]
         );
 
         $this->repository->beginTransaction();
@@ -203,7 +203,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     {
         $spiGroups = $this->contentTypeHandler->loadAllGroups();
 
-        $groups = array();
+        $groups = [];
         foreach ($spiGroups as $spiGroup) {
             $groups[] = $this->contentTypeDomainMapper->buildContentTypeGroupDomainObject($spiGroup, $prioritizedLanguages);
         }
@@ -249,7 +249,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $spiGroupUpdateStruct = new SPIContentTypeGroupUpdateStruct(
-            array(
+            [
                 'id' => $loadedContentTypeGroup->id,
                 'identifier' => $contentTypeGroupUpdateStruct->identifier === null ?
                     $loadedContentTypeGroup->identifier :
@@ -258,7 +258,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 'modifierId' => $contentTypeGroupUpdateStruct->modifierId === null ?
                     $this->repository->getCurrentUserReference()->getUserId() :
                     $contentTypeGroupUpdateStruct->modifierId,
-            )
+            ]
         );
 
         $this->repository->beginTransaction();
@@ -682,8 +682,8 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
-        $fieldDefinitionIdentifierSet = array();
-        $fieldDefinitionPositionSet = array();
+        $fieldDefinitionIdentifierSet = [];
+        $fieldDefinitionPositionSet = [];
         foreach ($contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct) {
             // Check for duplicate identifiers
             if (!isset($fieldDefinitionIdentifierSet[$fieldDefinitionCreateStruct->identifier])) {
@@ -706,9 +706,9 @@ class ContentTypeService implements ContentTypeServiceInterface
             }
         }
 
-        $allValidationErrors = array();
-        $spiFieldDefinitions = array();
-        $fieldTypeIdentifierSet = array();
+        $allValidationErrors = [];
+        $spiFieldDefinitions = [];
+        $fieldTypeIdentifierSet = [];
         foreach ($contentTypeCreateStruct->fieldDefinitions as $fieldDefinitionCreateStruct) {
             /** @var $fieldType \eZ\Publish\SPI\FieldType\FieldType */
             $fieldType = $this->fieldTypeRegistry->getFieldType(
@@ -772,12 +772,12 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         $spiContentTypeCreateStruct = new SPIContentTypeCreateStruct(
-            array(
+            [
                 'identifier' => $contentTypeCreateStruct->identifier,
                 'name' => $contentTypeCreateStruct->names,
                 'status' => APIContentType::STATUS_DRAFT,
                 'description' => $contentTypeCreateStruct->descriptions === null ?
-                    array() :
+                    [] :
                     $contentTypeCreateStruct->descriptions,
                 'created' => $timestamp,
                 'modified' => $timestamp,
@@ -803,7 +803,7 @@ class ContentTypeService implements ContentTypeServiceInterface
                 'groupIds' => $groupIds,
                 'fieldDefinitions' => $spiFieldDefinitions,
                 'defaultAlwaysAvailable' => $contentTypeCreateStruct->defaultAlwaysAvailable,
-            )
+            ]
         );
 
         $this->repository->beginTransaction();
@@ -830,7 +830,7 @@ class ContentTypeService implements ContentTypeServiceInterface
      */
     protected function validateFieldDefinitionCreateStruct(FieldDefinitionCreateStruct $fieldDefinitionCreateStruct, SPIFieldType $fieldType)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         if ($fieldDefinitionCreateStruct->isSearchable && !$fieldType->isSearchable()) {
             $validationErrors[] = new ValidationError(
@@ -924,7 +924,7 @@ class ContentTypeService implements ContentTypeServiceInterface
     public function loadContentTypeList(array $contentTypeIds, array $prioritizedLanguages = []): iterable
     {
         $spiContentTypes = $this->contentTypeHandler->loadContentTypeList($contentTypeIds);
-        $contentTypes = array();
+        $contentTypes = [];
 
         // @todo We could bulk load content type group proxies involved in the future & pass those relevant per type to mapper
         foreach ($spiContentTypes as $spiContentType) {
@@ -946,7 +946,7 @@ class ContentTypeService implements ContentTypeServiceInterface
             $contentTypeGroup->id,
             SPIContentType::STATUS_DEFINED
         );
-        $contentTypes = array();
+        $contentTypes = [];
 
         foreach ($spiContentTypes as $spiContentType) {
             $contentTypes[] = $this->contentTypeDomainMapper->buildContentTypeDomainObject(
@@ -1300,7 +1300,7 @@ class ContentTypeService implements ContentTypeServiceInterface
         $fieldType->applyDefaultValidatorConfiguration($fieldDefinitionCreateStruct->validatorConfiguration);
         $validationErrors = $this->validateFieldDefinitionCreateStruct($fieldDefinitionCreateStruct, $fieldType);
         if (!empty($validationErrors)) {
-            $validationErrors = array($fieldDefinitionCreateStruct->identifier => $validationErrors);
+            $validationErrors = [$fieldDefinitionCreateStruct->identifier => $validationErrors];
             throw new ContentTypeFieldDefinitionValidationException($validationErrors);
         }
 
@@ -1485,9 +1485,9 @@ class ContentTypeService implements ContentTypeServiceInterface
                     $this->contentTypeDomainMapper->buildSPIContentTypeUpdateStruct(
                         $loadedContentTypeDraft,
                         new ContentTypeUpdateStruct(
-                            array(
+                            [
                                 'nameSchema' => '<' . $fieldDefinitions[0]->identifier . '>',
-                            )
+                            ]
                         ),
                         $this->repository->getCurrentUserReference()
                     )
@@ -1520,9 +1520,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         return new ContentTypeGroupCreateStruct(
-            array(
+            [
                 'identifier' => $identifier,
-            )
+            ]
         );
     }
 
@@ -1542,9 +1542,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         return new ContentTypeCreateStruct(
-            array(
+            [
                 'identifier' => $identifier,
-            )
+            ]
         );
     }
 
@@ -1590,10 +1590,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         }
 
         return new FieldDefinitionCreateStruct(
-            array(
+            [
                 'identifier' => $identifier,
                 'fieldTypeIdentifier' => $fieldTypeIdentifier,
-            )
+            ]
         );
     }
 

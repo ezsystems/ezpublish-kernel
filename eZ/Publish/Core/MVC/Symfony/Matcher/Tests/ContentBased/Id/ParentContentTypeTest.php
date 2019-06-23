@@ -35,7 +35,7 @@ class ParentContentTypeTest extends BaseTest
      */
     private function generateRepositoryMockForContentTypeId($contentTypeId)
     {
-        $parentContentInfo = $this->getContentInfoMock(array('contentTypeId' => $contentTypeId));
+        $parentContentInfo = $this->getContentInfoMock(['contentTypeId' => $contentTypeId]);
         $parentLocation = $this->getLocationMock();
         $parentLocation->expects($this->once())
             ->method('getContentInfo')
@@ -92,28 +92,28 @@ class ParentContentTypeTest extends BaseTest
 
     public function matchLocationProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 123,
                 $this->generateRepositoryMockForContentTypeId(123),
                 true,
-            ),
-            array(
+            ],
+            [
                 123,
                 $this->generateRepositoryMockForContentTypeId(456),
                 false,
-            ),
-            array(
-                array(123, 789),
+            ],
+            [
+                [123, 789],
                 $this->generateRepositoryMockForContentTypeId(456),
                 false,
-            ),
-            array(
-                array(123, 789),
+            ],
+            [
+                [123, 789],
                 $this->generateRepositoryMockForContentTypeId(789),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**

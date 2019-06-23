@@ -137,7 +137,7 @@ SQL
             throw new BinaryFileNotFoundException($path);
         }
 
-        $row = $stmt->fetch(\PDO::FETCH_ASSOC) + array('id' => $spiBinaryFileId);
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC) + ['id' => $spiBinaryFileId];
 
         return $this->mapArrayToSPIBinaryFile($row);
     }

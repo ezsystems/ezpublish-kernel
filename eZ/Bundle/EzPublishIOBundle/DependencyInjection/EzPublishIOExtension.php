@@ -107,7 +107,7 @@ class EzPublishIOExtension extends Extension
      */
     private function processHandlers(ContainerBuilder $container, $config, $key)
     {
-        $handlers = array();
+        $handlers = [];
         if (isset($config[$key])) {
             foreach ($config[$key] as $name => $value) {
                 if (isset($handlers[$name])) {

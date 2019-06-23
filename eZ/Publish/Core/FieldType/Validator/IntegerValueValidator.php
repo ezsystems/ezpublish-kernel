@@ -20,25 +20,25 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class IntegerValueValidator extends Validator
 {
-    protected $constraints = array(
+    protected $constraints = [
         'minIntegerValue' => null,
         'maxIntegerValue' => null,
-    );
+    ];
 
-    protected $constraintsSchema = array(
-        'minIntegerValue' => array(
+    protected $constraintsSchema = [
+        'minIntegerValue' => [
             'type' => 'int',
             'default' => 0,
-        ),
-        'maxIntegerValue' => array(
+        ],
+        'maxIntegerValue' => [
             'type' => 'int',
             'default' => null,
-        ),
-    );
+        ],
+    ];
 
     public function validateConstraints($constraints)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($constraints as $name => $value) {
             switch ($name) {
                 case 'minIntegerValue':
@@ -54,9 +54,9 @@ class IntegerValueValidator extends Validator
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
-                            array(
+                            [
                                 '%parameter%' => $name,
-                            )
+                            ]
                         );
                     }
                     break;
@@ -64,9 +64,9 @@ class IntegerValueValidator extends Validator
                     $validationErrors[] = new ValidationError(
                         "Validator parameter '%parameter%' is unknown",
                         null,
-                        array(
+                        [
                             '%parameter%' => $name,
-                        )
+                        ]
                     );
             }
         }
@@ -95,9 +95,9 @@ class IntegerValueValidator extends Validator
             $this->errors[] = new ValidationError(
                 'The value can not be higher than %size%.',
                 null,
-                array(
+                [
                     '%size%' => $this->constraints['maxIntegerValue'],
-                )
+                ]
             );
             $isValid = false;
         }
@@ -106,9 +106,9 @@ class IntegerValueValidator extends Validator
             $this->errors[] = new ValidationError(
                 'The value can not be lower than %size%.',
                 null,
-                array(
+                [
                     '%size%' => $this->constraints['minIntegerValue'],
-                )
+                ]
             );
             $isValid = false;
         }

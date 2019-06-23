@@ -44,24 +44,24 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      */
     protected function getFixtureData()
     {
-        return array(
-            'create' => array(
+        return [
+            'create' => [
                 'id' => null,
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                 'fileName' => 'Icy-Night-Flower-Binary.jpg',
                 'fileSize' => filesize($path),
                 'mimeType' => 'image/jpeg',
                 // Left out'downloadCount' by intention (will be set to 0)
-            ),
-            'update' => array(
+            ],
+            'update' => [
                 'id' => null,
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                 'fileName' => 'Blue-Blue-Blue-Sindelfingen.png',
                 'fileSize' => filesize($path),
                 'downloadCount' => 23,
                 // Left out 'mimeType' by intention (will be auto-detected)
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -81,7 +81,7 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -91,7 +91,7 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -101,9 +101,9 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -113,14 +113,14 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array(
-            'FileSizeValidator' => array(
-                'maxFileSize' => array(
+        return [
+            'FileSizeValidator' => [
+                'maxFileSize' => [
                     'type' => 'int',
                     'default' => false,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -130,11 +130,11 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array(
-            'FileSizeValidator' => array(
+        return [
+            'FileSizeValidator' => [
                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -144,11 +144,11 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'StringLengthValidator' => array(
+        return [
+            'StringLengthValidator' => [
                 'minStringLength' => new \stdClass(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -232,22 +232,22 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'id' => '/foo/bar/sindelfingen.pdf',
-                ),
+                ],
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
-            ),
-            array(
+            ],
+            [
                 new BinaryFileValue(
-                    array(
+                    [
                         'id' => '/foo/bar/sindelfingen.pdf',
-                    )
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -370,12 +370,12 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
         $fieldValue = $this->getValidCreationFieldData();
         $fieldValue->uri = $expected['uri'];
 
-        return array(
-            array(
+        return [
+            [
                 $fieldValue,
                 $expected,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -394,39 +394,39 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
         $fieldValue = $this->getValidCreationFieldData();
         $fieldValue->uri = $fixture['create']['uri'];
 
-        return array(
-            array(
+        return [
+            [
                 $fixture['create'],
                 $fieldValue,
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new BinaryFileValue()),
-            array(new BinaryFileValue(array())),
-        );
+        return [
+            [new BinaryFileValue()],
+            [new BinaryFileValue([])],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()
     {
         return new BinaryFileValue(
-            array(
+            [
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                 'fileName' => 'blue-blue-blue-sindelfingen.jpg',
                 'fileSize' => filesize($path),
-            )
+            ]
         );
     }
 
@@ -446,11 +446,11 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
     protected function getValidSearchValueTwo()
     {
         return new BinaryFileValue(
-            array(
+            [
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                 'fileName' => 'icy-night-flower-binary.png',
                 'fileSize' => filesize($path),
-            )
+            ]
         );
     }
 
@@ -470,18 +470,18 @@ class BinaryFileIntegrationTest extends FileSearchBaseIntegrationTest
 
     protected function getAdditionallyIndexedFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'file_size',
                 $this->getValidSearchValueOne()->fileSize,
                 $this->getValidSearchValueTwo()->fileSize,
-            ),
-            array(
+            ],
+            [
                 'mime_type',
                 // ensure case-insensitivity
                 'IMAGE/JPEG',
                 'IMAGE/PNG',
-            ),
-        );
+            ],
+        ];
     }
 }

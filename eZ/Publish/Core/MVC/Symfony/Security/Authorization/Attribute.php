@@ -46,7 +46,7 @@ class Attribute
      */
     public $limitations;
 
-    public function __construct($module = null, $function = null, array $limitations = array())
+    public function __construct($module = null, $function = null, array $limitations = [])
     {
         $this->module = $module;
         $this->function = $function;

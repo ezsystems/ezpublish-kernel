@@ -33,7 +33,7 @@ class InstallPlatformCommand extends Command
     private $environment;
 
     /** @var \EzSystems\PlatformInstallerBundle\Installer\Installer[] */
-    private $installers = array();
+    private $installers = [];
 
     const EXIT_GENERAL_DATABASE_ERROR = 4;
     const EXIT_PARAMETERS_NOT_FOUND = 5;

@@ -92,18 +92,18 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     public function getTypeConstraints()
     {
         return new FieldTypeConstraints(
-            array(
-                'validators' => array(
-                    'FileSizeValidator' => array(
+            [
+                'validators' => [
+                    'FileSizeValidator' => [
                         'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                    ),
-                ),
+                    ],
+                ],
                 'fieldSettings' => new FieldType\FieldSettings(
-                    array(
+                    [
                         'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
-                    )
+                    ]
                 ),
-            )
+            ]
         );
     }
 
@@ -116,26 +116,26 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
-            array('fieldType', 'ezmedia'),
-            array(
+        return [
+            ['fieldType', 'ezmedia'],
+            [
                 'fieldTypeConstraints',
                 new FieldTypeConstraints(
-                    array(
-                        'validators' => array(
-                            'FileSizeValidator' => array(
+                    [
+                        'validators' => [
+                            'FileSizeValidator' => [
                                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                            ),
-                        ),
+                            ],
+                        ],
                         'fieldSettings' => new FieldType\FieldSettings(
-                            array(
+                            [
                                 'mediaType' => FieldType\Media\Type::TYPE_SILVERLIGHT,
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -146,9 +146,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     'id' => null,
                     'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                     'fileName' => 'Ice-Flower-Media.jpg',
@@ -160,9 +160,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                     'width' => 23,
                     'height' => 42,
                     'uri' => $path,
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 
@@ -206,9 +206,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     'id' => null,
                     'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                     'fileName' => 'Blueish-Blue-Media.jpg',
@@ -220,9 +220,9 @@ class MediaIntegrationTest extends FileBaseIntegrationTest
                     'width' => 0,
                     'height' => 0,
                     'uri' => $path,
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 

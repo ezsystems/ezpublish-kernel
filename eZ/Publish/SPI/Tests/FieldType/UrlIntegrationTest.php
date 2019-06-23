@@ -87,12 +87,12 @@ class UrlIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezurl field type does not have any special field definition
             // properties
-            array('fieldType', 'ezurl'),
-            array('fieldTypeConstraints', new Content\FieldTypeConstraints()),
-        );
+            ['fieldType', 'ezurl'],
+            ['fieldTypeConstraints', new Content\FieldTypeConstraints()],
+        ];
     }
 
     /**
@@ -103,14 +103,14 @@ class UrlIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'urlId' => null,
                     'text' => 'Some awesome website',
-                ),
+                ],
                 'externalData' => 'http://example.com/sindelfingen',
                 'sortKey' => null,
-            )
+            ]
         );
     }
 
@@ -150,14 +150,14 @@ class UrlIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'urlId' => null,
                     'text' => 'An even more awesome website',
-                ),
+                ],
                 'externalData' => 'http://example.com/hubba',
                 'sortKey' => null,
-            )
+            ]
         );
     }
 

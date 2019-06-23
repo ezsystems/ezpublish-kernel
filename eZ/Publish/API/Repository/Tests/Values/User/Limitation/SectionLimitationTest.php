@@ -56,7 +56,7 @@ class SectionLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new SectionLimitation(
-                array('limitationValues' => array(3))
+                ['limitationValues' => [3]]
             )
         );
 
@@ -114,7 +114,7 @@ class SectionLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new SectionLimitation(
-                array('limitationValues' => array(1, 6))
+                ['limitationValues' => [1, 6]]
             )
         );
 

@@ -65,7 +65,7 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $id) {
             try {
                 $this->persistence->contentTypeHandler()->load($id);
@@ -73,10 +73,10 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
-                    array(
+                    [
                         'value' => $id,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -93,7 +93,7 @@ class ParentContentTypeLimitationType extends AbstractPersistenceLimitationType 
      */
     public function buildValue(array $limitationValues)
     {
-        return new APIParentContentTypeLimitation(array('limitationValues' => $limitationValues));
+        return new APIParentContentTypeLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

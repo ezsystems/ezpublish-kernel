@@ -24,7 +24,7 @@ class ImaginePass implements CompilerPassInterface
 
         $filterConfigDef = $container->findDefinition('liip_imagine.filter.configuration');
         $filterConfigDef->setClass(FilterConfiguration::class);
-        $filterConfigDef->addMethodCall('setConfigResolver', array(new Reference('ezpublish.config.resolver')));
+        $filterConfigDef->addMethodCall('setConfigResolver', [new Reference('ezpublish.config.resolver')]);
 
         if ($container->hasAlias('liip_imagine')) {
             $imagineAlias = (string)$container->getAlias('liip_imagine');

@@ -32,9 +32,9 @@ class SiteAccessListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents(): array
     {
-        return array(
-            MVCEvents::SITEACCESS => array('onSiteAccessMatch', 255),
-        );
+        return [
+            MVCEvents::SITEACCESS => ['onSiteAccessMatch', 255],
+        ];
     }
 
     public function onSiteAccessMatch(PostSiteAccessMatchEvent $event): void
@@ -57,7 +57,7 @@ class SiteAccessListener implements EventSubscriberInterface
                 );
             } else {
                 $request->attributes->set('viewParametersString', '');
-                $request->attributes->set('viewParameters', array());
+                $request->attributes->set('viewParameters', []);
             }
 
             return;
@@ -95,7 +95,7 @@ class SiteAccessListener implements EventSubscriberInterface
     {
         // No view parameters, get out of here.
         if (($vpStart = strpos($pathinfo, '/(')) === false) {
-            return array($pathinfo, array(), '');
+            return [$pathinfo, [], ''];
         }
 
         $vpString = substr($pathinfo, $vpStart + 1);
@@ -104,7 +104,7 @@ class SiteAccessListener implements EventSubscriberInterface
         // Now remove the view parameters string from $semanticPathinfo
         $pathinfo = substr($pathinfo, 0, $vpStart);
 
-        return array($pathinfo, $viewParameters, "/$vpString");
+        return [$pathinfo, $viewParameters, "/$vpString"];
     }
 
     /**
@@ -117,7 +117,7 @@ class SiteAccessListener implements EventSubscriberInterface
     private function generateViewParametersArray(string $vpString): array
     {
         $vpString = trim($vpString, '/');
-        $viewParameters = array();
+        $viewParameters = [];
 
         $vpSegments = explode('/', $vpString);
         for ($i = 0, $iMax = count($vpSegments); $i < $iMax; ++$i) {
@@ -128,7 +128,7 @@ class SiteAccessListener implements EventSubscriberInterface
             // View parameter name.
             // We extract it + the value from the following segment (next element in $vpSegments array)
             if ($vpSegments[$i][0] === '(') {
-                $paramName = str_replace(array('(', ')'), '', $vpSegments[$i]);
+                $paramName = str_replace(['(', ')'], '', $vpSegments[$i]);
                 // A value is present (e.g. /(foo)/bar)
                 if (isset($vpSegments[$i + 1])) {
                     $viewParameters[$paramName] = $vpSegments[$i + 1];

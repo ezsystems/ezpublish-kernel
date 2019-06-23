@@ -44,7 +44,7 @@ class CriteriaConverterPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.legacy.gateway.criteria_converter.content',
             'addHandler',
-            array(new Reference($serviceId))
+            [new Reference($serviceId)]
         );
     }
 
@@ -65,7 +65,7 @@ class CriteriaConverterPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.legacy.gateway.criteria_converter.location',
             'addHandler',
-            array(new Reference($serviceId))
+            [new Reference($serviceId)]
         );
     }
 
@@ -91,13 +91,13 @@ class CriteriaConverterPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.legacy.gateway.criteria_converter.content',
             'addHandler',
-            array(new Reference($commonServiceId))
+            [new Reference($commonServiceId)]
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.legacy.gateway.criteria_converter.location',
             'addHandler',
-            array(new Reference($commonServiceId))
+            [new Reference($commonServiceId)]
         );
     }
 }

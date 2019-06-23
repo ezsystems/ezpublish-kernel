@@ -286,7 +286,7 @@ class TranslationHelper
     {
         $translationSiteAccesses = $this->configResolver->getParameter('translation_siteaccesses');
         $relatedSiteAccesses = $translationSiteAccesses ?: $this->configResolver->getParameter('related_siteaccesses');
-        $availableLanguages = array();
+        $availableLanguages = [];
         $currentLanguages = $this->configResolver->getParameter('languages');
         $availableLanguages[] = array_shift($currentLanguages);
 
@@ -309,7 +309,7 @@ class TranslationHelper
     private function getLanguages($forcedLanguage = null, $fallbackLanguage = null)
     {
         if ($forcedLanguage !== null) {
-            $languages = array($forcedLanguage);
+            $languages = [$forcedLanguage];
         } else {
             $languages = $this->configResolver->getParameter('languages');
         }

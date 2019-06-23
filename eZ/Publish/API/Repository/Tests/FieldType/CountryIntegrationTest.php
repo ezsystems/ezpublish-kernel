@@ -36,12 +36,12 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'isMultiple' => array(
+        return [
+            'isMultiple' => [
                 'type' => 'boolean',
                 'default' => false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -51,9 +51,9 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'isMultiple' => false,
-        );
+        ];
     }
 
     /**
@@ -63,9 +63,9 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -75,7 +75,7 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -85,7 +85,7 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -95,9 +95,9 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 42),
-        );
+        return [
+            'unknown' => ['value' => 42],
+        ];
     }
 
     /**
@@ -108,14 +108,14 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function getValidCreationFieldData()
     {
         return new CountryValue(
-            array(
-                'BE' => array(
+            [
+                'BE' => [
                     'Name' => 'Belgium',
                     'Alpha2' => 'BE',
                     'Alpha3' => 'BEL',
                     'IDC' => 32,
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -144,16 +144,16 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'countries' => array(
-                'BE' => array(
+        $expectedData = [
+            'countries' => [
+                'BE' => [
                     'Name' => 'Belgium',
                     'Alpha2' => 'BE',
                     'Alpha3' => 'BEL',
                     'IDC' => 32,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $this->assertPropertiesCorrect(
             $expectedData,
@@ -184,33 +184,33 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'Sindelfingen',
                 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                array('NON_VALID_ALPHA2_CODE'),
+            ],
+            [
+                ['NON_VALID_ALPHA2_CODE'],
                 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
-                array('BE', 'FR'),
+            ],
+            [
+                ['BE', 'FR'],
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-            array(
+            ],
+            [
                 new CountryValue(
-                    array(
-                        'NON_VALID_ALPHA2_CODE' => array(
+                    [
+                        'NON_VALID_ALPHA2_CODE' => [
                             'Name' => 'Belgium',
                             'Alpha2' => 'BE',
                             'Alpha3' => 'BEL',
                             'IDC' => 32,
-                        ),
-                    )
+                        ],
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -221,14 +221,14 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
     public function getValidUpdateFieldData()
     {
         return new CountryValue(
-            array(
-                'FR' => array(
+            [
+                'FR' => [
                     'Name' => 'France',
                     'Alpha2' => 'FR',
                     'Alpha3' => 'FRA',
                     'IDC' => 33,
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -246,16 +246,16 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'countries' => array(
-                'FR' => array(
+        $expectedData = [
+            'countries' => [
+                'FR' => [
                     'Name' => 'France',
                     'Alpha2' => 'FR',
                     'Alpha3' => 'FRA',
                     'IDC' => 33,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -303,16 +303,16 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'countries' => array(
-                'BE' => array(
+        $expectedData = [
+            'countries' => [
+                'BE' => [
                     'Name' => 'Belgium',
                     'Alpha2' => 'BE',
                     'Alpha3' => 'BEL',
                     'IDC' => 32,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -341,27 +341,27 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new CountryValue(
-                    array(
-                        'BE' => array(
+                    [
+                        'BE' => [
                             'Name' => 'Belgium',
                             'Alpha2' => 'BE',
                             'Alpha3' => 'BEL',
                             'IDC' => 32,
-                        ),
-                        'FR' => array(
+                        ],
+                        'FR' => [
                             'Name' => 'France',
                             'Alpha2' => 'FR',
                             'Alpha3' => 'FRA',
                             'IDC' => 33,
-                        ),
-                    )
+                        ],
+                    ]
                 ),
-                array('BE', 'FR'),
-            ),
-        );
+                ['BE', 'FR'],
+            ],
+        ];
     }
 
     /**
@@ -373,54 +373,54 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
-                array('BE', 'FR'),
+        return [
+            [
+                ['BE', 'FR'],
                 new CountryValue(
-                    array(
-                        'BE' => array(
+                    [
+                        'BE' => [
                             'Name' => 'Belgium',
                             'Alpha2' => 'BE',
                             'Alpha3' => 'BEL',
                             'IDC' => 32,
-                        ),
-                        'FR' => array(
+                        ],
+                        'FR' => [
                             'Name' => 'France',
                             'Alpha2' => 'FR',
                             'Alpha3' => 'FRA',
                             'IDC' => 33,
-                        ),
-                    )
+                        ],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new CountryValue()),
-            array(new CountryValue(array())),
-        );
+        return [
+            [new CountryValue()],
+            [new CountryValue([])],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()
     {
-        return array('Andorra');
+        return ['Andorra'];
     }
 
     protected function getValidSearchValueTwo()
     {
-        return array('Trinidad and Tobago');
+        return ['Trinidad and Tobago'];
     }
 
     protected function getSearchTargetValueOne()
@@ -435,84 +435,84 @@ class CountryIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 
     protected function getAdditionallyIndexedFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'idc',
                 '376',
                 '1868',
-            ),
-            array(
+            ],
+            [
                 'alpha2',
                 'AD',
                 'TT',
-            ),
-            array(
+            ],
+            [
                 'alpha3',
                 'AND',
                 'TTO',
-            ),
-            array(
+            ],
+            [
                 'name',
                 'Andorra',
                 'Trinidad and Tobago',
-            ),
-            array(
+            ],
+            [
                 'sort_value',
                 'andorra',
                 'trinidad and tobago',
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidMultivaluedSearchValuesOne()
     {
-        return array('Andorra', 'Bolivia');
+        return ['Andorra', 'Bolivia'];
     }
 
     protected function getValidMultivaluedSearchValuesTwo()
     {
-        return array('Syrian Arab Republic', 'Trinidad and Tobago');
+        return ['Syrian Arab Republic', 'Trinidad and Tobago'];
     }
 
     protected function getAdditionallyIndexedMultivaluedFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'idc',
-                array(376, 591),
-                array(963, 1868),
-            ),
-            array(
+                [376, 591],
+                [963, 1868],
+            ],
+            [
                 'alpha2',
-                array('AD', 'BO'),
-                array('SY', 'TT'),
-            ),
-            array(
+                ['AD', 'BO'],
+                ['SY', 'TT'],
+            ],
+            [
                 'alpha3',
-                array('AND', 'BOL'),
-                array('SYR', 'TTO'),
-            ),
-            array(
+                ['AND', 'BOL'],
+                ['SYR', 'TTO'],
+            ],
+            [
                 'name',
-                array('Andorra', 'Bolivia'),
-                array('Syrian Arab Republic', 'Trinidad and Tobago'),
-            ),
-        );
+                ['Andorra', 'Bolivia'],
+                ['Syrian Arab Republic', 'Trinidad and Tobago'],
+            ],
+        ];
     }
 
     protected function getFullTextIndexedFieldData()
     {
-        return array(
-            array('Andorra', 'Tobago'),
-        );
+        return [
+            ['Andorra', 'Tobago'],
+        ];
     }
 
     protected function createTestContentType()
     {
         $contentType = $this->createContentType(
-            array(
+            [
                 'isMultiple' => true,
-            ),
+            ],
             $this->getValidValidatorConfiguration()
         );
 

@@ -16,8 +16,8 @@ class DocumentTypeDefinitionTest extends TestCase
 {
     public function providerForTestNormalize()
     {
-        return array(
-            array(
+        return [
+            [
                 'section',
                 'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
                 __DIR__ . '/_fixtures/pound.dtd',
@@ -36,8 +36,8 @@ class DocumentTypeDefinitionTest extends TestCase
 <section xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
   <p>Behold the pound pudding in a pond: £</p>
 </section>',
-            ),
-            array(
+            ],
+            [
                 'section',
                 'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
                 __DIR__ . '/_fixtures/weird_drink.dtd',
@@ -74,8 +74,8 @@ xmlns="http://ez.no/namespaces/ezpublish5/xhtml5/edit">
   <p>Serve chilled.</p>
   <p>The price is 165¥.</p>
 </section>',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -144,20 +144,20 @@ XML
 
     public function providerForTestRefuse()
     {
-        return array(
-            array(
+        return [
+            [
                 'section',
                 'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
                 __DIR__ . '/_fixtures/pound.dtd',
                 '`eZ` flavored **markdown**',
-            ),
-            array(
+            ],
+            [
                 'section',
                 'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
                 __DIR__ . '/_fixtures/pound.dtd',
                 '<?xml version="1.0" encoding="UTF-8"?>this is not exactly well formed...',
-            ),
-            array(
+            ],
+            [
                 'section',
                 'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
                 __DIR__ . '/_fixtures/pound.dtd',
@@ -165,8 +165,8 @@ XML
 <truck xmlns="http://example.com/something">
   <helicopter>Something something tra la la</helicopter>
 </truck>',
-            ),
-            array(
+            ],
+            [
                 'section',
                 'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
                 __DIR__ . '/_fixtures/pound.dtd',
@@ -178,8 +178,8 @@ XML
          version="5.0-variant ezpublish-1.0">
   <para ezxhtml:class="paraClass">This is a paragraph.</para>
 </section>',
-            ),
-            array(
+            ],
+            [
                 'section',
                 'http://ez.no/namespaces/ezpublish5/xhtml5/edit',
                 __DIR__ . '/_fixtures/pound.dtd',
@@ -192,8 +192,8 @@ XML
   </section>
 </section>
 ',
-            ),
-        );
+            ],
+        ];
     }
 
     /**

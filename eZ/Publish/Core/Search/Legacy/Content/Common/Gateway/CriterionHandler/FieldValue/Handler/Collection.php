@@ -78,7 +78,7 @@ class Collection extends Handler
                 $value = isset($value) ? $value : $this->prepareLikeString($criterion->value);
                 $quotedColumn = $this->dbHandler->quoteColumn($column);
                 $filter = $query->expr->lOr(
-                    array(
+                    [
                         $query->expr->$singleValueExpr(
                             $quotedColumn,
                             $query->bindValue($value, null, \PDO::PARAM_STR)
@@ -107,7 +107,7 @@ class Collection extends Handler
                                 \PDO::PARAM_STR
                             )
                         ),
-                    )
+                    ]
                 );
                 break;
 

@@ -27,7 +27,7 @@ class ComplexSettingsPassTest extends AbstractCompilerPassTestCase
 
     public function testProcess()
     {
-        $definition = new Definition('stdClass', array('/mnt/nfs/$var_dir$/$storage_dir$'));
+        $definition = new Definition('stdClass', ['/mnt/nfs/$var_dir$/$storage_dir$']);
         $this->setDefinition('service1', $definition);
 
         $this->compile();

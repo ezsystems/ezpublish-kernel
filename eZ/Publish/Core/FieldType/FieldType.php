@@ -42,7 +42,7 @@ abstract class FieldType extends SPIFieldType
      *
      * @var mixed
      */
-    protected $settingsSchema = array();
+    protected $settingsSchema = [];
 
     /**
      * The validator configuration schema.
@@ -55,7 +55,7 @@ abstract class FieldType extends SPIFieldType
      *
      * @var mixed
      */
-    protected $validatorConfigurationSchema = array();
+    protected $validatorConfigurationSchema = [];
 
     /**
      * String transformation processor, used to normalize sort string as needed.
@@ -133,7 +133,7 @@ abstract class FieldType extends SPIFieldType
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $value)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -152,15 +152,15 @@ abstract class FieldType extends SPIFieldType
      */
     public function validateValidatorConfiguration($validatorConfiguration)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ((array)$validatorConfiguration as $validatorIdentifier => $constraints) {
             $validationErrors[] = new ValidationError(
                 "Validator '%validator%' is unknown",
                 null,
-                array(
+                [
                     'validator' => $validatorIdentifier,
-                ),
+                ],
                 "[$validatorIdentifier]"
             );
         }
@@ -187,7 +187,7 @@ abstract class FieldType extends SPIFieldType
         foreach ($this->getValidatorConfigurationSchema() as $validatorName => $configurationSchema) {
             // Set configuration of specific validator to empty array if it is not already provided
             if (!isset($validatorConfiguration[$validatorName])) {
-                $validatorConfiguration[$validatorName] = array();
+                $validatorConfiguration[$validatorName] = [];
             }
 
             foreach ($configurationSchema as $settingName => $settingConfiguration) {
@@ -212,19 +212,19 @@ abstract class FieldType extends SPIFieldType
     public function validateFieldSettings($fieldSettings)
     {
         if (!empty($fieldSettings)) {
-            return array(
+            return [
                 new ValidationError(
                     "FieldType '%fieldType%' does not accept settings",
                     null,
-                    array(
+                    [
                         'fieldType' => $this->getFieldTypeIdentifier(),
-                    ),
+                    ],
                     'fieldType'
                 ),
-            );
+            ];
         }
 
-        return array();
+        return [];
     }
 
     /**
@@ -287,11 +287,11 @@ abstract class FieldType extends SPIFieldType
         //       Couldn't this be retrieved with a method, which would initialize
         //       that info on request only?
         return new PersistenceValue(
-            array(
+            [
                 'data' => $this->toHash($value),
                 'externalData' => null,
                 'sortKey' => $this->getSortInfo($value),
-            )
+            ]
         );
     }
 
@@ -575,6 +575,6 @@ abstract class FieldType extends SPIFieldType
      */
     public function getRelations(SPIValue $fieldValue)
     {
-        return array();
+        return [];
     }
 }

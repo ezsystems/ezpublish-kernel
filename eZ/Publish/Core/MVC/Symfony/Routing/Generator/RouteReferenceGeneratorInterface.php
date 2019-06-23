@@ -22,5 +22,5 @@ interface RouteReferenceGeneratorInterface
      *
      * @return \eZ\Publish\Core\MVC\Symfony\Routing\RouteReference
      */
-    public function generate($resource = null, array $params = array());
+    public function generate($resource = null, array $params = []);
 }

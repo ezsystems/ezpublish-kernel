@@ -62,7 +62,7 @@ class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccess
      *
      * @return Response A Response instance
      */
-    public function render($uri, Request $request, array $options = array())
+    public function render($uri, Request $request, array $options = [])
     {
         if ($uri instanceof ControllerReference && $request->attributes->has('siteaccess')) {
             // Serialize the siteaccess to get it back after.

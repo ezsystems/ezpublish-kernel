@@ -32,11 +32,11 @@ abstract class XmlBase
      *
      * @var array
      */
-    protected $errorTypes = array(
+    protected $errorTypes = [
         LIBXML_ERR_WARNING => 'Warning',
         LIBXML_ERR_ERROR => 'Error',
         LIBXML_ERR_FATAL => 'Fatal error',
-    );
+    ];
 
     /**
      * Returns DOMDocument object loaded from given XML file $path.
@@ -106,7 +106,7 @@ abstract class XmlBase
         }
 
         $xmlErrors = libxml_get_errors();
-        $errors = array();
+        $errors = [];
         foreach ($xmlErrors as $error) {
             $errors[] = $this->formatLibXmlError($error);
         }

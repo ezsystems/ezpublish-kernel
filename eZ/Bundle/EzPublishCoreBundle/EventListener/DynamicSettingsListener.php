@@ -54,11 +54,11 @@ class DynamicSettingsListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            MVCEvents::SITEACCESS => array('onSiteAccessMatch', 254),
-            MVCEvents::CONFIG_SCOPE_CHANGE => array('onConfigScopeChange', 90),
-            MVCEvents::CONFIG_SCOPE_RESTORE => array('onConfigScopeChange', 90),
-        );
+        return [
+            MVCEvents::SITEACCESS => ['onSiteAccessMatch', 254],
+            MVCEvents::CONFIG_SCOPE_CHANGE => ['onConfigScopeChange', 90],
+            MVCEvents::CONFIG_SCOPE_RESTORE => ['onConfigScopeChange', 90],
+        ];
     }
 
     public function onSiteAccessMatch(PostSiteAccessMatchEvent $event)

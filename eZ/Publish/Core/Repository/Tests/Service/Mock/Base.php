@@ -53,7 +53,7 @@ abstract class Base extends TestCase
      *
      * @see getPersistenceMockHandler()
      */
-    private $spiMockHandlers = array();
+    private $spiMockHandlers = [];
 
     /**
      * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
@@ -67,7 +67,7 @@ abstract class Base extends TestCase
      *
      * @return \eZ\Publish\API\Repository\Repository
      */
-    protected function getRepository(array $serviceSettings = array())
+    protected function getRepository(array $serviceSettings = [])
     {
         if ($this->repository === null || !empty($serviceSettings)) {
             $repository = new Repository(
@@ -227,9 +227,9 @@ abstract class Base extends TestCase
     {
         if (!isset($this->spiMockHandlers[$handler])) {
             $this->spiMockHandlers[$handler] = $this->getMockBuilder("eZ\\Publish\\SPI\\{$handler}")
-                ->setMethods(array())
+                ->setMethods([])
                 ->disableOriginalConstructor()
-                ->setConstructorArgs(array())
+                ->setConstructorArgs([])
                 ->getMock();
         }
 
@@ -258,18 +258,18 @@ abstract class Base extends TestCase
     protected function getStubbedUser($id)
     {
         return new User(
-            array(
+            [
                 'content' => new Content(
-                    array(
+                    [
                         'versionInfo' => new VersionInfo(
-                            array(
-                                'contentInfo' => new ContentInfo(array('id' => $id)),
-                            )
+                            [
+                                'contentInfo' => new ContentInfo(['id' => $id]),
+                            ]
                         ),
-                        'internalFields' => array(),
-                    )
+                        'internalFields' => [],
+                    ]
                 ),
-            )
+            ]
         );
     }
 }

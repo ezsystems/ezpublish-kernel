@@ -30,16 +30,16 @@ abstract class BaseMatcherFactoryTest extends TestCase
         ->with($this->logicalOr('location_view', 'content_view'))
         ->will(
             $this->returnValue(
-                array(
-                    'full' => array(
-                        'matchRule' => array(
+                [
+                    'full' => [
+                        'matchRule' => [
                             'template' => 'my_template.html.twig',
-                            'match' => array(
+                            'match' => [
                                 $matcherServiceIdentifier => 'someValue',
-                            ),
-                        ),
-                    ),
-                )
+                            ],
+                        ],
+                    ],
+                ]
             )
         );
 
@@ -51,7 +51,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
      *
      * @return \PHPUnit\Framework\MockObject\MockObject
      */
-    protected function getLocationMock(array $properties = array())
+    protected function getLocationMock(array $properties = [])
     {
         $view = new ContentView();
         $view->setLocation(new Location($properties));
@@ -64,7 +64,7 @@ abstract class BaseMatcherFactoryTest extends TestCase
      *
      * @return \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\Symfony\View\ContentView
      */
-    protected function getContentInfoMock(array $properties = array())
+    protected function getContentInfoMock(array $properties = [])
     {
         $view = new ContentView();
         $view->setContent(new Content($properties));

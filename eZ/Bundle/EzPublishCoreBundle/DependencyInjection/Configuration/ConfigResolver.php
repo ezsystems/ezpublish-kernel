@@ -185,7 +185,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
 
         $namespace = $namespace ?: $this->defaultNamespace;
         $scope = $scope ?: $this->getDefaultScope();
-        $triedScopes = array();
+        $triedScopes = [];
 
         // Global scope
         $globalScopeParamName = "$namespace." . self::SCOPE_GLOBAL . ".$paramName";

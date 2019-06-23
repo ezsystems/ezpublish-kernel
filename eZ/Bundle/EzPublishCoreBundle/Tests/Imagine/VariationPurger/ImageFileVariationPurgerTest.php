@@ -32,29 +32,29 @@ class ImageFileVariationPurgerTest extends TestCase
     public function testIteratesOverItems()
     {
         $purger = $this->createPurger(
-            array(
+            [
                 'path/to/1st/image.jpg',
                 'path/to/2nd/image.png',
-            )
+            ]
         );
 
         $this->pathGeneratorMock
             ->expects($this->exactly(4))
             ->method('getVariationPath')
             ->withConsecutive(
-                array('path/to/1st/image.jpg', 'large'),
-                array('path/to/1st/image.jpg', 'gallery'),
-                array('path/to/2nd/image.png', 'large'),
-                array('path/to/2nd/image.png', 'gallery')
+                ['path/to/1st/image.jpg', 'large'],
+                ['path/to/1st/image.jpg', 'gallery'],
+                ['path/to/2nd/image.png', 'large'],
+                ['path/to/2nd/image.png', 'gallery']
             );
 
-        $purger->purge(array('large', 'gallery'));
+        $purger->purge(['large', 'gallery']);
     }
 
     public function testPurgesExistingItem()
     {
         $purger = $this->createPurger(
-            array('path/to/file.png')
+            ['path/to/file.png']
         );
 
         $this->pathGeneratorMock
@@ -77,13 +77,13 @@ class ImageFileVariationPurgerTest extends TestCase
             ->method('deleteBinaryFile')
             ->with($this->isInstanceOf(BinaryFile::class));
 
-        $purger->purge(array('large'));
+        $purger->purge(['large']);
     }
 
     public function testDoesNotPurgeNotExistingItem()
     {
         $purger = $this->createPurger(
-            array('path/to/file.png')
+            ['path/to/file.png']
         );
 
         $this->pathGeneratorMock
@@ -104,7 +104,7 @@ class ImageFileVariationPurgerTest extends TestCase
             ->expects($this->never())
             ->method('deleteBinaryFile');
 
-        $purger->purge(array('large'));
+        $purger->purge(['large']);
     }
 
     private function createPurger(array $fileList)

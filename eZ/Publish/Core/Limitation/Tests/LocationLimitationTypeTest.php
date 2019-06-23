@@ -65,11 +65,11 @@ class LocationLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValue()
     {
-        return array(
-            array(new LocationLimitation()),
-            array(new LocationLimitation(array())),
-            array(new LocationLimitation(array('limitationValues' => array(0, PHP_INT_MAX, '2', 's3fdaf32r')))),
-        );
+        return [
+            [new LocationLimitation()],
+            [new LocationLimitation([])],
+            [new LocationLimitation(['limitationValues' => [0, PHP_INT_MAX, '2', 's3fdaf32r']])],
+        ];
     }
 
     /**
@@ -89,10 +89,10 @@ class LocationLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValueException()
     {
-        return array(
-            array(new ObjectStateLimitation()),
-            array(new LocationLimitation(array('limitationValues' => array(true)))),
-        );
+        return [
+            [new ObjectStateLimitation()],
+            [new LocationLimitation(['limitationValues' => [true]])],
+        ];
     }
 
     /**
@@ -114,11 +114,11 @@ class LocationLimitationTypeTest extends Base
      */
     public function providerForTestValidatePass()
     {
-        return array(
-            array(new LocationLimitation()),
-            array(new LocationLimitation(array())),
-            array(new LocationLimitation(array('limitationValues' => array(2)))),
-        );
+        return [
+            [new LocationLimitation()],
+            [new LocationLimitation([])],
+            [new LocationLimitation(['limitationValues' => [2]])],
+        ];
     }
 
     /**
@@ -154,11 +154,11 @@ class LocationLimitationTypeTest extends Base
      */
     public function providerForTestValidateError()
     {
-        return array(
-            array(new LocationLimitation(), 0),
-            array(new LocationLimitation(array('limitationValues' => array(0))), 1),
-            array(new LocationLimitation(array('limitationValues' => array(0, PHP_INT_MAX))), 2),
-        );
+        return [
+            [new LocationLimitation(), 0],
+            [new LocationLimitation(['limitationValues' => [0]]), 1],
+            [new LocationLimitation(['limitationValues' => [0, PHP_INT_MAX]]), 2],
+        ];
     }
 
     /**
@@ -202,7 +202,7 @@ class LocationLimitationTypeTest extends Base
      */
     public function testBuildValue(LocationLimitationType $limitationType)
     {
-        $expected = array('test', 'test' => 9);
+        $expected = ['test', 'test' => 9];
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(LocationLimitation::class, $value);
@@ -227,113 +227,113 @@ class LocationLimitationTypeTest extends Base
         $versionInfoMock
             ->expects($this->once())
             ->method('getContentInfo')
-            ->will($this->returnValue(new ContentInfo(array('published' => true))));
+            ->will($this->returnValue(new ContentInfo(['published' => true])));
 
         $versionInfoMock2 = $this->createMock(APIVersionInfo::class);
 
         $versionInfoMock2
             ->expects($this->once())
             ->method('getContentInfo')
-            ->will($this->returnValue(new ContentInfo(array('published' => true))));
+            ->will($this->returnValue(new ContentInfo(['published' => true])));
 
-        return array(
+        return [
             // ContentInfo, with targets, no access
-            array(
+            [
                 'limitation' => new LocationLimitation(),
-                'object' => new ContentInfo(array('published' => true)),
-                'targets' => array(new Location()),
-                'persistence' => array(),
+                'object' => new ContentInfo(['published' => true]),
+                'targets' => [new Location()],
+                'persistence' => [],
                 'expected' => false,
-            ),
+            ],
             // ContentInfo, with targets, no access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2))),
-                'object' => new ContentInfo(array('published' => true)),
-                'targets' => array(new Location(array('id' => 55))),
-                'persistence' => array(),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2]]),
+                'object' => new ContentInfo(['published' => true]),
+                'targets' => [new Location(['id' => 55])],
+                'persistence' => [],
                 'expected' => false,
-            ),
+            ],
             // ContentInfo, with targets, with access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2))),
-                'object' => new ContentInfo(array('published' => true)),
-                'targets' => array(new Location(array('id' => 2))),
-                'persistence' => array(),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2]]),
+                'object' => new ContentInfo(['published' => true]),
+                'targets' => [new Location(['id' => 2])],
+                'persistence' => [],
                 'expected' => true,
-            ),
+            ],
             // ContentInfo, no targets, with access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2))),
-                'object' => new ContentInfo(array('published' => true)),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2]]),
+                'object' => new ContentInfo(['published' => true]),
                 'targets' => null,
-                'persistence' => array(new Location(array('id' => 2))),
+                'persistence' => [new Location(['id' => 2])],
                 'expected' => true,
-            ),
+            ],
             // ContentInfo, no targets, no access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2, 43))),
-                'object' => new ContentInfo(array('published' => true)),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2, 43]]),
+                'object' => new ContentInfo(['published' => true]),
                 'targets' => null,
-                'persistence' => array(new Location(array('id' => 55))),
+                'persistence' => [new Location(['id' => 55])],
                 'expected' => false,
-            ),
+            ],
             // ContentInfo, no targets, un-published, with access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2))),
-                'object' => new ContentInfo(array('published' => false)),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2]]),
+                'object' => new ContentInfo(['published' => false]),
                 'targets' => null,
-                'persistence' => array(new Location(array('id' => 2))),
+                'persistence' => [new Location(['id' => 2])],
                 'expected' => true,
-            ),
+            ],
             // ContentInfo, no targets, un-published, no access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2, 43))),
-                'object' => new ContentInfo(array('published' => false)),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2, 43]]),
+                'object' => new ContentInfo(['published' => false]),
                 'targets' => null,
-                'persistence' => array(new Location(array('id' => 55))),
+                'persistence' => [new Location(['id' => 55])],
                 'expected' => false,
-            ),
+            ],
             // Content, with targets, with access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2))),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2]]),
                 'object' => $contentMock,
-                'targets' => array(new Location(array('id' => 2))),
-                'persistence' => array(),
+                'targets' => [new Location(['id' => 2])],
+                'persistence' => [],
                 'expected' => true,
-            ),
+            ],
             // VersionInfo, with targets, with access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2))),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2]]),
                 'object' => $versionInfoMock2,
-                'targets' => array(new Location(array('id' => 2))),
-                'persistence' => array(),
+                'targets' => [new Location(['id' => 2])],
+                'persistence' => [],
                 'expected' => true,
-            ),
+            ],
             // ContentCreateStruct, no targets, no access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2))),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2]]),
                 'object' => new ContentCreateStruct(),
-                'targets' => array(),
-                'persistence' => array(),
+                'targets' => [],
+                'persistence' => [],
                 'expected' => false,
-            ),
+            ],
             // ContentCreateStruct, with targets, no access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2, 43))),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2, 43]]),
                 'object' => new ContentCreateStruct(),
-                'targets' => array(new LocationCreateStruct(array('parentLocationId' => 55))),
-                'persistence' => array(),
+                'targets' => [new LocationCreateStruct(['parentLocationId' => 55])],
+                'persistence' => [],
                 'expected' => false,
-            ),
+            ],
             // ContentCreateStruct, with targets, with access
-            array(
-                'limitation' => new LocationLimitation(array('limitationValues' => array(2, 43))),
+            [
+                'limitation' => new LocationLimitation(['limitationValues' => [2, 43]]),
                 'object' => new ContentCreateStruct(),
-                'targets' => array(new LocationCreateStruct(array('parentLocationId' => 43))),
-                'persistence' => array(),
+                'targets' => [new LocationCreateStruct(['parentLocationId' => 43])],
+                'persistence' => [],
                 'expected' => true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -388,36 +388,36 @@ class LocationLimitationTypeTest extends Base
      */
     public function providerForTestEvaluateInvalidArgument()
     {
-        return array(
+        return [
             // invalid limitation
-            array(
+            [
                 'limitation' => new ObjectStateLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array(new Location()),
-                'persistence' => array(),
-            ),
+                'targets' => [new Location()],
+                'persistence' => [],
+            ],
             // invalid object
-            array(
+            [
                 'limitation' => new LocationLimitation(),
                 'object' => new ObjectStateLimitation(),
-                'targets' => array(new Location()),
-                'persistence' => array(),
-            ),
+                'targets' => [new Location()],
+                'persistence' => [],
+            ],
             // invalid target
-            array(
+            [
                 'limitation' => new LocationLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array(new ObjectStateLimitation()),
-                'persistence' => array(),
-            ),
+                'targets' => [new ObjectStateLimitation()],
+                'persistence' => [],
+            ],
             // invalid target when using ContentCreateStruct
-            array(
+            [
                 'limitation' => new LocationLimitation(),
                 'object' => new ContentCreateStruct(),
-                'targets' => array(new Location()),
-                'persistence' => array(),
-            ),
-        );
+                'targets' => [new Location()],
+                'persistence' => [],
+            ],
+        ];
     }
 
     /**
@@ -463,7 +463,7 @@ class LocationLimitationTypeTest extends Base
         $this->expectException(\RuntimeException::class);
 
         $limitationType->getCriterion(
-            new LocationLimitation(array()),
+            new LocationLimitation([]),
             $this->getUserMock()
         );
     }
@@ -476,7 +476,7 @@ class LocationLimitationTypeTest extends Base
     public function testGetCriterionSingleValue(LocationLimitationType $limitationType)
     {
         $criterion = $limitationType->getCriterion(
-            new LocationLimitation(array('limitationValues' => array(9))),
+            new LocationLimitation(['limitationValues' => [9]]),
             $this->getUserMock()
         );
 
@@ -484,7 +484,7 @@ class LocationLimitationTypeTest extends Base
         self::assertIsArray($criterion->value);
         self::assertIsString($criterion->operator);
         self::assertEquals(Operator::EQ, $criterion->operator);
-        self::assertEquals(array(9), $criterion->value);
+        self::assertEquals([9], $criterion->value);
     }
 
     /**
@@ -495,7 +495,7 @@ class LocationLimitationTypeTest extends Base
     public function testGetCriterionMultipleValues(LocationLimitationType $limitationType)
     {
         $criterion = $limitationType->getCriterion(
-            new LocationLimitation(array('limitationValues' => array(9, 55))),
+            new LocationLimitation(['limitationValues' => [9, 55]]),
             $this->getUserMock()
         );
 
@@ -503,7 +503,7 @@ class LocationLimitationTypeTest extends Base
         self::assertIsArray($criterion->value);
         self::assertIsString($criterion->operator);
         self::assertEquals(Operator::IN, $criterion->operator);
-        self::assertEquals(array(9, 55), $criterion->value);
+        self::assertEquals([9, 55], $criterion->value);
     }
 
     /**

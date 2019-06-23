@@ -37,7 +37,7 @@ class ScaleWidthDownOnlyFilterLoaderTest extends TestCase
     {
         $this->expectException(\Imagine\Exception\InvalidArgumentException::class);
 
-        $this->loader->load($this->createMock(ImageInterface::class), array());
+        $this->loader->load($this->createMock(ImageInterface::class), []);
     }
 
     public function testLoad()
@@ -47,9 +47,9 @@ class ScaleWidthDownOnlyFilterLoaderTest extends TestCase
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, $this->equalTo(array('size' => array($width, null), 'mode' => ImageInterface::THUMBNAIL_INSET)))
+            ->with($image, $this->equalTo(['size' => [$width, null], 'mode' => ImageInterface::THUMBNAIL_INSET]))
             ->will($this->returnValue($image));
 
-        $this->assertSame($image, $this->loader->load($image, array($width)));
+        $this->assertSame($image, $this->loader->load($image, [$width]));
     }
 }

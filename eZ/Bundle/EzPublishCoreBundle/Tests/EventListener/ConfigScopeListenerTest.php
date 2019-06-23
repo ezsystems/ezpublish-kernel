@@ -39,19 +39,19 @@ class ConfigScopeListenerTest extends TestCase
         parent::setUp();
         $this->configResolver = $this->createMock(VersatileScopeInterface::class);
         $this->viewManager = $this->createMock(ViewManager::class);
-        $this->viewProviders = array(
+        $this->viewProviders = [
             $this->createMock(ViewProvider::class),
             $this->createMock(ViewProvider::class),
-        );
+        ];
     }
 
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(
-                MVCEvents::CONFIG_SCOPE_CHANGE => array('onConfigScopeChange', 100),
-                MVCEvents::CONFIG_SCOPE_RESTORE => array('onConfigScopeChange', 100),
-            ),
+            [
+                MVCEvents::CONFIG_SCOPE_CHANGE => ['onConfigScopeChange', 100],
+                MVCEvents::CONFIG_SCOPE_RESTORE => ['onConfigScopeChange', 100],
+            ],
             ConfigScopeListener::getSubscribedEvents()
         );
     }

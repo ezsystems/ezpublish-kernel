@@ -25,7 +25,7 @@ class FieldValueConverterRegistryTest extends TestCase
     public function testRegister()
     {
         $converter = $this->getFieldValueConverterMock();
-        $registry = new Registry(array(self::TYPE_NAME => $converter));
+        $registry = new Registry([self::TYPE_NAME => $converter]);
 
         $this->assertSame($converter, $registry->getConverter(self::TYPE_NAME));
     }
@@ -36,7 +36,7 @@ class FieldValueConverterRegistryTest extends TestCase
     public function testGetStorage()
     {
         $converter = $this->getFieldValueConverterMock();
-        $registry = new Registry(array(self::TYPE_NAME => $converter));
+        $registry = new Registry([self::TYPE_NAME => $converter]);
 
         $res = $registry->getConverter(self::TYPE_NAME);
 
@@ -54,7 +54,7 @@ class FieldValueConverterRegistryTest extends TestCase
     {
         $this->expectException(\eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound::class);
 
-        $registry = new Registry(array());
+        $registry = new Registry([]);
 
         $registry->getConverter('not-found');
     }

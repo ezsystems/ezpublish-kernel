@@ -24,7 +24,7 @@ class SwirlFilterLoader implements LoaderInterface
         $this->filter = $filter;
     }
 
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         if (!empty($options)) {
             $this->filter->setOption('degrees', $options[0]);

@@ -40,7 +40,7 @@ class MatcherBuilderTest extends TestCase
             ->method('get');
         $matcherBuilder = new MatcherBuilder($this->container);
         $matcher = $this->createMock(Matcher::class);
-        $builtMatcher = $matcherBuilder->buildMatcher('\\' . get_class($matcher), array(), new SimplifiedRequest());
+        $builtMatcher = $matcherBuilder->buildMatcher('\\' . get_class($matcher), [], new SimplifiedRequest());
         $this->assertInstanceOf(get_class($matcher), $builtMatcher);
     }
 
@@ -59,7 +59,7 @@ class MatcherBuilderTest extends TestCase
             ->with($serviceId)
             ->will($this->returnValue($this->createMock(Matcher::class)));
         $matcherBuilder = new MatcherBuilder($this->container);
-        $matcherBuilder->buildMatcher("@$serviceId", array(), new SimplifiedRequest());
+        $matcherBuilder->buildMatcher("@$serviceId", [], new SimplifiedRequest());
     }
 
     /**
@@ -76,7 +76,7 @@ class MatcherBuilderTest extends TestCase
             ->with($serviceId)
             ->will($this->returnValue($matcher));
 
-        $matchingConfig = array('foo' => 'bar');
+        $matchingConfig = ['foo' => 'bar'];
         $request = new SimplifiedRequest();
         $matcher
             ->expects($this->once())

@@ -36,7 +36,7 @@ class BlockingLimitation extends Limitation
             throw new \InvalidArgumentException('Argument $identifier can not be empty');
         }
 
-        parent::__construct(array('identifier' => $identifier, 'limitationValues' => $limitationValues));
+        parent::__construct(['identifier' => $identifier, 'limitationValues' => $limitationValues]);
     }
 
     /**
