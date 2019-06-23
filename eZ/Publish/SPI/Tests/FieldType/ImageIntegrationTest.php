@@ -127,13 +127,13 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array(
-                'validators' => array(
-                    'FileSizeValidator' => array(
+            [
+                'validators' => [
+                    'FileSizeValidator' => [
                         'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                    ),
-                ),
-            )
+                    ],
+                ],
+            ]
         );
     }
 
@@ -146,23 +146,23 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezint field type does not have any special field definition
             // properties
-            array('fieldType', 'ezimage'),
-            array(
+            ['fieldType', 'ezimage'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
-                        'validators' => array(
-                            'FileSizeValidator' => array(
+                    [
+                        'validators' => [
+                            'FileSizeValidator' => [
                                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-                            ),
-                        ),
-                    )
+                            ],
+                        ],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -173,15 +173,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     'inputUri' => __DIR__ . '/_fixtures/image.jpg',
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 
@@ -214,17 +214,17 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     // should be ignored
                     'id' => 'some/value',
                     'inputUri' => __DIR__ . '/_fixtures/image.png',
                     'fileName' => 'Blueish-Blue.jpg',
                     'alternativeText' => 'This blue is so blueish.',
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 
@@ -302,15 +302,15 @@ class ImageIntegrationTest extends FileBaseIntegrationTest
     public function getDeprecatedIdPropertyValue()
     {
         return new Content\FieldValue(
-            array(
+            [
                 'data' => null,
-                'externalData' => array(
+                'externalData' => [
                     'id' => __DIR__ . '/_fixtures/image.jpg',
                     'fileName' => 'Ice-Flower.jpg',
                     'alternativeText' => 'An icy flower.',
-                ),
+                ],
                 'sortKey' => '',
-            )
+            ]
         );
     }
 

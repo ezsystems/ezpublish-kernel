@@ -35,7 +35,7 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
 
         // Gateways for external storage handlers.
         // Alias attribute is the corresponding field type string.
-        $externalStorageGateways = array();
+        $externalStorageGateways = [];
         // Referencing the services by alias (field type string)
         foreach ($container->findTaggedServiceIds('ezpublish.fieldType.externalStorageHandler.gateway') as $id => $attributes) {
             foreach ($attributes as $attribute) {
@@ -47,10 +47,10 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
                     throw new LogicException('ezpublish.fieldType.externalStorageHandler.gateway service tag needs an "identifier" attribute to identify the gateway. None given.');
                 }
 
-                $externalStorageGateways[$attribute['alias']] = array(
+                $externalStorageGateways[$attribute['alias']] = [
                     'id' => $id,
                     'identifier' => $attribute['identifier'],
-                );
+                ];
             }
         }
 
@@ -85,19 +85,19 @@ class ExternalStorageRegistryPass implements CompilerPassInterface
 
                     $storageHandlerDef->addMethodCall(
                         'addGateway',
-                        array(
+                        [
                             $externalStorageGateways[$attribute['alias']]['identifier'],
                             new Reference($externalStorageGateways[$attribute['alias']]['id']),
-                        )
+                        ]
                     );
                 }
 
                 $externalStorageRegistryFactoryDefinition->addMethodCall(
                     'registerExternalStorageHandler',
-                    array(
+                    [
                         $id,
                         $attribute['alias'],
-                    )
+                    ]
                 );
             }
         }

@@ -45,7 +45,7 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
         $resolverDef = new Definition();
         $serviceId = 'some_service_id';
         if ($declaredPriority !== null) {
-            $resolverDef->addTag('router', array('priority' => $declaredPriority));
+            $resolverDef->addTag('router', ['priority' => $declaredPriority]);
         } else {
             $resolverDef->addTag('router');
         }
@@ -56,7 +56,7 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.chain_router',
             'add',
-            array(new Reference($serviceId), $expectedPriority)
+            [new Reference($serviceId), $expectedPriority]
         );
     }
 
@@ -75,7 +75,7 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
         $resolverDef = new Definition();
         $serviceId = 'some_service_id';
         if ($declaredPriority !== null) {
-            $resolverDef->addTag('router', array('priority' => $declaredPriority));
+            $resolverDef->addTag('router', ['priority' => $declaredPriority]);
         } else {
             $resolverDef->addTag('router');
         }
@@ -87,50 +87,50 @@ class ChainRoutingPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'router.default',
             'setSiteAccess',
-            array(new Reference('ezpublish.siteaccess'))
+            [new Reference('ezpublish.siteaccess')]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'router.default',
             'setConfigResolver',
-            array(new Reference('ezpublish.config.resolver'))
+            [new Reference('ezpublish.config.resolver')]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'router.default',
             'setNonSiteAccessAwareRoutes',
-            array('%ezpublish.default_router.non_siteaccess_aware_routes%')
+            ['%ezpublish.default_router.non_siteaccess_aware_routes%']
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'router.default',
             'setSiteAccessRouter',
-            array(new Reference('ezpublish.siteaccess_router'))
+            [new Reference('ezpublish.siteaccess_router')]
         );
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.chain_router',
             'add',
-            array(new Reference('router.default'), 255)
+            [new Reference('router.default'), 255]
         );
 
         // Assertion for all routers
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.chain_router',
             'add',
-            array(new Reference($serviceId), $expectedPriority)
+            [new Reference($serviceId), $expectedPriority]
         );
     }
 
     public function addRouterProvider()
     {
-        return array(
-            array(null, 0),
-            array(0, 0),
-            array(57, 57),
-            array(-23, -23),
-            array(-255, -255),
-            array(-256, -255),
-            array(-1000, -255),
-            array(255, 255),
-            array(256, 255),
-            array(1000, 255),
-        );
+        return [
+            [null, 0],
+            [0, 0],
+            [57, 57],
+            [-23, -23],
+            [-255, -255],
+            [-256, -255],
+            [-1000, -255],
+            [255, 255],
+            [256, 255],
+            [1000, 255],
+        ];
     }
 }

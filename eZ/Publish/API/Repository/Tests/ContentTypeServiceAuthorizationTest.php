@@ -174,12 +174,12 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $typeCreate->creatorId = $creatorId;
         $typeCreate->creationDate = $this->createDateTime();
         $typeCreate->mainLanguageCode = 'eng-GB';
-        $typeCreate->names = array('eng-GB' => 'A name.');
-        $typeCreate->descriptions = array('eng-GB' => 'A description.');
+        $typeCreate->names = ['eng-GB' => 'A name.'];
+        $typeCreate->descriptions = ['eng-GB' => 'A description.'];
 
         $titleFieldCreateStruct = $contentTypeService->newFieldDefinitionCreateStruct('title', 'ezstring');
-        $titleFieldCreateStruct->names = array('eng-GB' => 'Title');
-        $titleFieldCreateStruct->descriptions = array('eng-GB' => 'The Title');
+        $titleFieldCreateStruct->names = ['eng-GB' => 'Title'];
+        $titleFieldCreateStruct->descriptions = ['eng-GB' => 'The Title'];
         $titleFieldCreateStruct->fieldGroup = 'content';
         $titleFieldCreateStruct->position = 10;
         $titleFieldCreateStruct->isTranslatable = true;
@@ -191,7 +191,7 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $repository->setCurrentUser($userService->loadUser($anonymousUserId));
 
         // This call will fail with a "UnauthorizedException"
-        $contentTypeService->createContentType($typeCreate, array($contentTypeGroup));
+        $contentTypeService->createContentType($typeCreate, [$contentTypeGroup]);
         /* END: Use Case */
     }
 
@@ -225,14 +225,14 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         // $modifierId is the ID of a random user
         $typeUpdate->modifierId = $modifierId;
         $typeUpdate->modificationDate = $this->createDateTime();
-        $typeUpdate->names = array(
+        $typeUpdate->names = [
             'eng-GB' => 'News article',
             'ger-DE' => 'Nachrichten-Artikel',
-        );
-        $typeUpdate->descriptions = array(
+        ];
+        $typeUpdate->descriptions = [
             'eng-GB' => 'A news article',
             'ger-DE' => 'Ein Nachrichten-Artikel',
-        );
+        ];
 
         // Load the user service
         $userService = $repository->getUserService();
@@ -264,28 +264,28 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
         $contentTypeDraft = $this->createContentTypeDraft();
 
         $fieldDefCreate = $contentTypeService->newFieldDefinitionCreateStruct('tags', 'string');
-        $fieldDefCreate->names = array(
+        $fieldDefCreate->names = [
             'eng-GB' => 'Tags',
             'ger-DE' => 'Schlagworte',
-        );
-        $fieldDefCreate->descriptions = array(
+        ];
+        $fieldDefCreate->descriptions = [
             'eng-GB' => 'Tags of the blog post',
             'ger-DE' => 'Schlagworte des Blog-Eintrages',
-        );
+        ];
         $fieldDefCreate->fieldGroup = 'blog-meta';
         $fieldDefCreate->position = 1;
         $fieldDefCreate->isTranslatable = true;
         $fieldDefCreate->isRequired = true;
         $fieldDefCreate->isInfoCollector = false;
-        $fieldDefCreate->validatorConfiguration = array(
-            'StringLengthValidator' => array(
+        $fieldDefCreate->validatorConfiguration = [
+            'StringLengthValidator' => [
                 'minStringLength' => 0,
                 'maxStringLength' => 0,
-            ),
-        );
-        $fieldDefCreate->fieldSettings = array(
+            ],
+        ];
+        $fieldDefCreate->fieldSettings = [
             'textRows' => 10,
-        );
+        ];
         $fieldDefCreate->isSearchable = true;
 
         // Load the user service
@@ -358,23 +358,23 @@ class ContentTypeServiceAuthorizationTest extends BaseContentTypeServiceTest
 
         $bodyUpdateStruct = $contentTypeService->newFieldDefinitionUpdateStruct();
         $bodyUpdateStruct->identifier = 'blog-body';
-        $bodyUpdateStruct->names = array(
+        $bodyUpdateStruct->names = [
             'eng-GB' => 'Blog post body',
             'ger-DE' => 'Blog-Eintrags-Textkörper',
-        );
-        $bodyUpdateStruct->descriptions = array(
+        ];
+        $bodyUpdateStruct->descriptions = [
             'eng-GB' => 'Blog post body of the blog post',
             'ger-DE' => 'Blog-Eintrags-Textkörper des Blog-Eintrages',
-        );
+        ];
         $bodyUpdateStruct->fieldGroup = 'updated-blog-content';
         $bodyUpdateStruct->position = 3;
         $bodyUpdateStruct->isTranslatable = false;
         $bodyUpdateStruct->isRequired = false;
         $bodyUpdateStruct->isInfoCollector = true;
-        $bodyUpdateStruct->validatorConfiguration = array();
-        $bodyUpdateStruct->fieldSettings = array(
+        $bodyUpdateStruct->validatorConfiguration = [];
+        $bodyUpdateStruct->fieldSettings = [
             'textRows' => 60,
-        );
+        ];
         $bodyUpdateStruct->isSearchable = false;
 
         // This call will fail with a "UnauthorizedException"

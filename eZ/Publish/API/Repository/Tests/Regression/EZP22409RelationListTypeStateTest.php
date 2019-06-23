@@ -35,12 +35,12 @@ class EZP22409RelationListTypeStateTest extends BaseTest
         $typeCreateStruct = $contentTypeService->newContentTypeCreateStruct(
             'test-type'
         );
-        $typeCreateStruct->names = array(
+        $typeCreateStruct->names = [
             'eng-GB' => 'title',
-        );
-        $typeCreateStruct->descriptions = array(
+        ];
+        $typeCreateStruct->descriptions = [
             'eng-GB' => 'description',
-        );
+        ];
         $typeCreateStruct->remoteId = 'new-remoteid';
         $typeCreateStruct->creatorId = $creatorId;
         $typeCreateStruct->creationDate = $creationDate;
@@ -53,12 +53,12 @@ class EZP22409RelationListTypeStateTest extends BaseTest
             'title',
             'ezstring'
         );
-        $titleFieldCreate->names = array(
+        $titleFieldCreate->names = [
             'eng-GB' => 'title',
-        );
-        $titleFieldCreate->descriptions = array(
+        ];
+        $titleFieldCreate->descriptions = [
             'eng-GB' => 'title description',
-        );
+        ];
         $titleFieldCreate->fieldGroup = 'content';
         $titleFieldCreate->position = 1;
         $titleFieldCreate->isTranslatable = true;
@@ -72,12 +72,12 @@ class EZP22409RelationListTypeStateTest extends BaseTest
             'relationlist',
             'ezobjectrelationlist'
         );
-        $objectRelationListFieldCreate->names = array(
+        $objectRelationListFieldCreate->names = [
             'eng-GB' => 'object relation list',
-        );
-        $objectRelationListFieldCreate->descriptions = array(
+        ];
+        $objectRelationListFieldCreate->descriptions = [
             'eng-GB' => 'object relation list description',
-        );
+        ];
         $objectRelationListFieldCreate->fieldGroup = 'content';
         $objectRelationListFieldCreate->position = 2;
         $objectRelationListFieldCreate->isTranslatable = false;
@@ -97,7 +97,7 @@ class EZP22409RelationListTypeStateTest extends BaseTest
         // create and publish ContentType
         $type = $contentTypeService->createContentType(
             $typeCreateStruct,
-            array($contentTypeService->createContentTypeGroup($groupCreate))
+            [$contentTypeService->createContentTypeGroup($groupCreate)]
         );
         $contentTypeService->publishContentTypeDraft($type);
     }
@@ -137,7 +137,7 @@ class EZP22409RelationListTypeStateTest extends BaseTest
         $contentCreateStruct1->setField('name', 'EZP-22409-2');
         $draft1 = $contentService->createContent(
             $contentCreateStruct1,
-            array($locationService->newLocationCreateStruct(2))
+            [$locationService->newLocationCreateStruct(2)]
         );
         $destinationContent = $contentService->publishVersion($draft1->versionInfo);
 
@@ -149,11 +149,11 @@ class EZP22409RelationListTypeStateTest extends BaseTest
         $contentCreateStruct2->setField('title', 'EZP-22409-1');
         $contentCreateStruct2->setField(
             'relationlist',
-            new RelationList\Value(array($destinationContent->id))
+            new RelationList\Value([$destinationContent->id])
         );
         $draft2 = $contentService->createContent(
             $contentCreateStruct2,
-            array($locationService->newLocationCreateStruct(2))
+            [$locationService->newLocationCreateStruct(2)]
         );
         $content2 = $contentService->publishVersion($draft2->versionInfo);
     }

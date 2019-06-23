@@ -37,10 +37,10 @@ class SectionIdentifier extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return array(
-            'section_identifier_id' => array(
+        return [
+            'section_identifier_id' => [
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

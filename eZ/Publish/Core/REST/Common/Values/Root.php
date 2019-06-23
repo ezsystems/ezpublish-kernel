@@ -20,7 +20,7 @@ class Root extends RestValue
      */
     protected $resources;
 
-    public function __construct(array $resources = array())
+    public function __construct(array $resources = [])
     {
         $this->resources = $resources;
     }

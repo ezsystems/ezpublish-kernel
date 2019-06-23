@@ -16,29 +16,29 @@ class RootTest extends ValueObjectVisitorBaseTest
 {
     protected function getRootResourceBuilder()
     {
-        $resourceConfig = array(
-            'Router' => array(
+        $resourceConfig = [
+            'Router' => [
                 'mediaType' => '',
                 'href' => 'router.generate("ezpublish_rest_createContent")',
-            ),
-            'RouterWithAttributes' => array(
+            ],
+            'RouterWithAttributes' => [
                 'mediaType' => 'UserRefList',
                 'href' => 'router.generate("ezpublish_rest_loadUsers")',
-            ),
-            'TemplateRouter' => array(
+            ],
+            'TemplateRouter' => [
                 'mediaType' => '',
                 'href' => 'templateRouter.generate("ezpublish_rest_redirectContent", {remoteId: "{remoteId}"})',
-            ),
-            'TemplateRouterWithAttributes' => array(
+            ],
+            'TemplateRouterWithAttributes' => [
                 'mediaType' => 'UserRefList',
                 'href' => 'templateRouter.generate("ezpublish_rest_loadUsers", {roleId: "{roleId}"})',
-            ),
-        );
+            ],
+        ];
 
-        $this->addRouteExpectation('ezpublish_rest_createContent', array(), '/content/objects');
-        $this->addTemplatedRouteExpectation('ezpublish_rest_redirectContent', array('remoteId' => '{remoteId}'), '/content/objects');
-        $this->addRouteExpectation('ezpublish_rest_loadUsers', array(), '/user/users');
-        $this->addTemplatedRouteExpectation('ezpublish_rest_loadUsers', array('roleId' => '{roleId}'), '/user/users{?roleId}');
+        $this->addRouteExpectation('ezpublish_rest_createContent', [], '/content/objects');
+        $this->addTemplatedRouteExpectation('ezpublish_rest_redirectContent', ['remoteId' => '{remoteId}'], '/content/objects');
+        $this->addRouteExpectation('ezpublish_rest_loadUsers', [], '/user/users');
+        $this->addTemplatedRouteExpectation('ezpublish_rest_loadUsers', ['roleId' => '{roleId}'], '/user/users{?roleId}');
 
         return new ExpressionRouterRootResourceBuilder($this->getRouterMock(), $this->getTemplatedRouterMock(), $resourceConfig);
     }
@@ -75,7 +75,7 @@ class RootTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRootElement($result)
     {
         $this->assertXMLTag(
-            array('tag' => 'Root'),
+            ['tag' => 'Root'],
             $result,
             'Invalid <Root> element.',
             false
@@ -92,12 +92,12 @@ class RootTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRootAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Root',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Root+xml',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Root> attributes.',
             false
@@ -110,9 +110,9 @@ class RootTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRouterTag($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Router',
-            ),
+            ],
             $result,
             'Invalid <Router> element.',
             false
@@ -125,12 +125,12 @@ class RootTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRouterWithAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'RouterWithAttributes',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UserRefList+xml',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <RouterWithAttributes> element.',
             false
@@ -143,9 +143,9 @@ class RootTest extends ValueObjectVisitorBaseTest
     public function testResultContainsTemplateRouterTag($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'TemplateRouter',
-            ),
+            ],
             $result,
             'Invalid <TemplateRouter> element.',
             false
@@ -158,12 +158,12 @@ class RootTest extends ValueObjectVisitorBaseTest
     public function testResultContainsTemplateRouterWithAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'TemplateRouterWithAttributes',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UserRefList+xml',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <TemplateRouterWithAttributes> element.',
             false

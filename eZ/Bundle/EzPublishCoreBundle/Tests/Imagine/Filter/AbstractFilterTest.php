@@ -31,8 +31,8 @@ class AbstractFilterTest extends TestCase
 
     public function testGetSetOptions()
     {
-        $this->assertSame(array(), $this->filter->getOptions());
-        $options = array('foo' => 'bar', 'some' => array('thing'));
+        $this->assertSame([], $this->filter->getOptions());
+        $options = ['foo' => 'bar', 'some' => ['thing']];
         $this->filter->setOptions($options);
         $this->assertSame($options, $this->filter->getOptions());
     }
@@ -51,14 +51,14 @@ class AbstractFilterTest extends TestCase
 
     public function getSetOptionNoDefaulValueProvider()
     {
-        return array(
-            array('foo', 'bar'),
-            array('foo', '123'),
-            array('bar', 123),
-            array('bar', array('foo', 123)),
-            array('bool', true),
-            array('obj', new \stdClass()),
-        );
+        return [
+            ['foo', 'bar'],
+            ['foo', '123'],
+            ['bar', 123],
+            ['bar', ['foo', 123]],
+            ['bool', true],
+            ['obj', new \stdClass()],
+        ];
     }
 
     /**
@@ -75,13 +75,13 @@ class AbstractFilterTest extends TestCase
 
     public function getSetOptionWithDefaulValueProvider()
     {
-        return array(
-            array('foo', 'bar', 'default'),
-            array('foo', '123', 'default2'),
-            array('bar', 123, 0),
-            array('bar', array('foo', 123), array()),
-            array('bool', true, false),
-            array('obj', new \stdClass(), new \stdClass()),
-        );
+        return [
+            ['foo', 'bar', 'default'],
+            ['foo', '123', 'default2'],
+            ['bar', 123, 0],
+            ['bar', ['foo', 123], []],
+            ['bool', true, false],
+            ['obj', new \stdClass(), new \stdClass()],
+        ];
     }
 }

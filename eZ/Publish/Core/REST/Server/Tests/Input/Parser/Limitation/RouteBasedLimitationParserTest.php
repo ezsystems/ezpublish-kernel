@@ -39,8 +39,8 @@ class RouteBasedLimitationParserTest extends BaseTest
 
     public function getParseHrefExpectationsMap()
     {
-        return array(
-            array('/content/sections/42', 'sectionId', 42),
-        );
+        return [
+            ['/content/sections/42', 'sectionId', 42],
+        ];
     }
 }

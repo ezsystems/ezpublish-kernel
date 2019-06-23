@@ -144,9 +144,9 @@ class UserGroupLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new UserGroupLimitation(
-                array(
-                    'limitationValues' => array(true),
-                )
+                [
+                    'limitationValues' => [true],
+                ]
             )
         );
         $roleService->updatePolicy($editPolicy, $policyUpdate);

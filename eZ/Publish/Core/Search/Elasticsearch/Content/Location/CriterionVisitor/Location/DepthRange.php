@@ -54,10 +54,10 @@ class DepthRange extends CriterionVisitor
         $start = $criterion->value[0];
         $end = isset($criterion->value[1]) ? $criterion->value[1] : null;
 
-        return array(
-            'range' => array(
+        return [
+            'range' => [
                 'depth_i' => $this->getFilterRange($criterion->operator, $start, $end),
-            ),
-        );
+            ],
+        ];
     }
 }

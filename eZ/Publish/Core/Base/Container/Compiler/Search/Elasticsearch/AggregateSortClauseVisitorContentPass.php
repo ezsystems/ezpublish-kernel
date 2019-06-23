@@ -33,9 +33,9 @@ class AggregateSortClauseVisitorContentPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('ezpublish.search.elasticsearch.content.sort_clause_visitor') as $id => $attributes) {
             $aggregateSortClauseVisitorDefinition->addMethodCall(
                 'addVisitor',
-                array(
+                [
                     new Reference($id),
-                )
+                ]
             );
         }
     }

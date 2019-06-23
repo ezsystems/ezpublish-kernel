@@ -37,7 +37,7 @@ class DefinitionBased extends TransformationProcessor
      *
      * @return \eZ\Publish\Core\Persistence\TransformationProcessor\DefinitionBased
      */
-    public function __construct(Parser $parser, PcreCompiler $compiler, array $ruleFiles = array())
+    public function __construct(Parser $parser, PcreCompiler $compiler, array $ruleFiles = [])
     {
         parent::__construct($compiler, $ruleFiles);
         $this->parser = $parser;
@@ -51,7 +51,7 @@ class DefinitionBased extends TransformationProcessor
     protected function getRules()
     {
         if ($this->compiledRules === null) {
-            $rules = array();
+            $rules = [];
             foreach ($this->ruleFiles as $file) {
                 $rules = array_merge(
                     $rules,

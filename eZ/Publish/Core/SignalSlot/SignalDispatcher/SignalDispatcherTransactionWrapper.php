@@ -33,7 +33,7 @@ class SignalDispatcherTransactionWrapper extends SignalDispatcher implements Tra
      *
      * @var \eZ\Publish\Core\SignalSlot\Signal[][]
      */
-    private $signalsQueue = array();
+    private $signalsQueue = [];
 
     /**
      * @var int Used to keep track of depth of current transaction
@@ -77,7 +77,7 @@ class SignalDispatcherTransactionWrapper extends SignalDispatcher implements Tra
     public function beginTransaction()
     {
         ++$this->transactionDepth;
-        $this->signalsQueue[++$this->transactionCount] = array();
+        $this->signalsQueue[++$this->transactionCount] = [];
     }
 
     /**
@@ -100,7 +100,7 @@ class SignalDispatcherTransactionWrapper extends SignalDispatcher implements Tra
 
             // To avoid possible int overflow on long running processes
             $this->transactionCount = 0;
-            $this->signalsQueue = array();
+            $this->signalsQueue = [];
         }
     }
 

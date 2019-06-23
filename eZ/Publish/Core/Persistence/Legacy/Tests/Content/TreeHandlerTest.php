@@ -26,18 +26,18 @@ class TreeHandlerTest extends TestCase
 {
     public function testLoadContentInfoByRemoteId()
     {
-        $contentInfoData = array(new ContentInfo());
+        $contentInfoData = [new ContentInfo()];
 
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('loadContentInfo')
             ->with(42)
-            ->will($this->returnValue(array(42)));
+            ->will($this->returnValue([42]));
 
         $this->getContentMapperMock()
             ->expects($this->once())
             ->method('extractContentInfoFromRow')
-            ->with($this->equalTo(array(42)))
+            ->with($this->equalTo([42]))
             ->will($this->returnValue($contentInfoData));
 
         $this->assertSame(
@@ -52,24 +52,24 @@ class TreeHandlerTest extends TestCase
             ->expects($this->once())
             ->method('listVersions')
             ->with($this->equalTo(23))
-            ->will($this->returnValue(array(array('ezcontentobject_version_version' => 2))));
+            ->will($this->returnValue([['ezcontentobject_version_version' => 2]]));
 
         $this->getContentGatewayMock()
             ->expects($this->once())
             ->method('loadVersionedNameData')
-            ->with($this->equalTo(array(array('id' => 23, 'version' => 2))))
-            ->will($this->returnValue(array()));
+            ->with($this->equalTo([['id' => 23, 'version' => 2]]))
+            ->will($this->returnValue([]));
 
         $this->getContentMapperMock()
             ->expects($this->once())
             ->method('extractVersionInfoListFromRows')
-            ->with($this->equalTo(array(array('ezcontentobject_version_version' => 2))), array())
-            ->will($this->returnValue(array(new VersionInfo())));
+            ->with($this->equalTo([['ezcontentobject_version_version' => 2]]), [])
+            ->will($this->returnValue([new VersionInfo()]));
 
         $versions = $this->getTreeHandler()->listVersions(23);
 
         $this->assertEquals(
-            array(new VersionInfo()),
+            [new VersionInfo()],
             $versions
         );
     }
@@ -77,21 +77,21 @@ class TreeHandlerTest extends TestCase
     public function testRemoveRawContent()
     {
         $treeHandler = $this->getPartlyMockedTreeHandler(
-            array(
+            [
                 'loadContentInfo',
                 'listVersions',
-            )
+            ]
         );
 
         $treeHandler
             ->expects($this->once())
             ->method('listVersions')
-            ->will($this->returnValue(array(new VersionInfo(), new VersionInfo())));
+            ->will($this->returnValue([new VersionInfo(), new VersionInfo()]));
         $treeHandler
             ->expects($this->once())
             ->method('loadContentInfo')
             ->with(23)
-            ->will($this->returnValue(new ContentInfo(array('mainLocationId' => 42))));
+            ->will($this->returnValue(new ContentInfo(['mainLocationId' => 42])));
 
         $this->getFieldHandlerMock()
             ->expects($this->exactly(2))
@@ -129,10 +129,10 @@ class TreeHandlerTest extends TestCase
     public function testRemoveSubtree()
     {
         $treeHandler = $this->getPartlyMockedTreeHandler(
-            array(
+            [
                 'changeMainLocation',
                 'removeRawContent',
-            )
+            ]
         );
 
         // Original call
@@ -142,10 +142,10 @@ class TreeHandlerTest extends TestCase
             ->with(42)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'contentobject_id' => 100,
                         'main_node_id' => 200,
-                    )
+                    ]
                 )
             );
         $this->getLocationGatewayMock()
@@ -154,10 +154,10 @@ class TreeHandlerTest extends TestCase
             ->with(42)
             ->will(
                 $this->returnValue(
-                    array(
-                        array('node_id' => 201),
-                        array('node_id' => 202),
-                    )
+                    [
+                        ['node_id' => 201],
+                        ['node_id' => 202],
+                    ]
                 )
             );
 
@@ -168,17 +168,17 @@ class TreeHandlerTest extends TestCase
             ->with(201)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'contentobject_id' => 101,
                         'main_node_id' => 201,
-                    )
+                    ]
                 )
             );
         $this->getLocationGatewayMock()
             ->expects($this->at(3))
             ->method('getChildren')
             ->with(201)
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
         $this->getLocationGatewayMock()
             ->expects($this->at(4))
             ->method('countLocationsByContentId')
@@ -204,17 +204,17 @@ class TreeHandlerTest extends TestCase
             ->with(202)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'contentobject_id' => 102,
                         'main_node_id' => 202,
-                    )
+                    ]
                 )
             );
         $this->getLocationGatewayMock()
             ->expects($this->at(8))
             ->method('getChildren')
             ->with(202)
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
         $this->getLocationGatewayMock()
             ->expects($this->at(9))
             ->method('countLocationsByContentId')
@@ -226,11 +226,11 @@ class TreeHandlerTest extends TestCase
             ->with(102, 202)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 203,
                         'contentobject_version' => 1,
                         'parent_node_id' => 204,
-                    )
+                    ]
                 )
             );
         $treeHandler
@@ -270,11 +270,11 @@ class TreeHandlerTest extends TestCase
             ->with(69)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 69,
                         'path_string' => '/1/2/69/',
                         'contentobject_id' => 67,
-                    )
+                    ]
                 )
             );
 
@@ -289,36 +289,36 @@ class TreeHandlerTest extends TestCase
     public function testChangeMainLocation()
     {
         $treeHandler = $this->getPartlyMockedTreeHandler(
-            array(
+            [
                 'loadLocation',
                 'setSectionForSubtree',
                 'loadContentInfo',
-            )
+            ]
         );
 
         $treeHandler
             ->expects($this->at(0))
             ->method('loadLocation')
             ->with(34)
-            ->will($this->returnValue(new Location(array('parentId' => 42))));
+            ->will($this->returnValue(new Location(['parentId' => 42])));
 
         $treeHandler
             ->expects($this->at(1))
             ->method('loadContentInfo')
             ->with('12')
-            ->will($this->returnValue(new ContentInfo(array('currentVersionNo' => 1))));
+            ->will($this->returnValue(new ContentInfo(['currentVersionNo' => 1])));
 
         $treeHandler
             ->expects($this->at(2))
             ->method('loadLocation')
             ->with(42)
-            ->will($this->returnValue(new Location(array('contentId' => 84))));
+            ->will($this->returnValue(new Location(['contentId' => 84])));
 
         $treeHandler
             ->expects($this->at(3))
             ->method('loadContentInfo')
             ->with('84')
-            ->will($this->returnValue(new ContentInfo(array('sectionId' => 4))));
+            ->will($this->returnValue(new ContentInfo(['sectionId' => 4])));
 
         $this->getLocationGatewayMock()
             ->expects($this->once())
@@ -343,16 +343,16 @@ class TreeHandlerTest extends TestCase
             ->with(77)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 77,
-                    )
+                    ]
                 )
             );
 
         $this->getLocationMapperMock()
             ->expects($this->once())
             ->method('createLocationFromRow')
-            ->with(array('node_id' => 77))
+            ->with(['node_id' => 77])
             ->will($this->returnValue(new Location()));
 
         $location = $treeHandler->loadLocation(77);
@@ -465,13 +465,13 @@ class TreeHandlerTest extends TestCase
         return $this->getMockBuilder(TreeHandler::class)
             ->setMethods($methods)
             ->setConstructorArgs(
-                array(
+                [
                     $this->getLocationGatewayMock(),
                     $this->getLocationMapperMock(),
                     $this->getContentGatewayMock(),
                     $this->getContentMapperMock(),
                     $this->getFieldHandlerMock(),
-                )
+                ]
             )
             ->getMock();
     }

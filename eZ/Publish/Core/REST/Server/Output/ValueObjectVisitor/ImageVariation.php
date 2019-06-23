@@ -31,10 +31,10 @@ class ImageVariation extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_binaryContent_getImageVariation',
-                array(
+                [
                     'imageId' => $data->imageId,
                     'variationIdentifier' => $data->name,
-                )
+                ]
             )
         );
         $generator->endAttribute('href');

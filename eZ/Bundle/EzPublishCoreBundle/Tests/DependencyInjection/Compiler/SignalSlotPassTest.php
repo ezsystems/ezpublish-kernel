@@ -21,15 +21,15 @@ class SignalSlotPassTest extends TestCase
         $dispatcherDef = new Definition();
         $slotDef = new Definition();
         $signalIdentifier = 'FooSignal';
-        $slotDef->addTag('ezpublish.api.slot', array('signal' => $signalIdentifier));
+        $slotDef->addTag('ezpublish.api.slot', ['signal' => $signalIdentifier]);
 
         $containerBuilder = new ContainerBuilder();
         $slotId = 'acme.foo_slot';
         $containerBuilder->addDefinitions(
-            array(
+            [
                 $slotId => $slotDef,
                 'ezpublish.signalslot.signal_dispatcher' => $dispatcherDef,
-            )
+            ]
         );
 
         $pass = new SignalSlotPass();
@@ -49,14 +49,14 @@ class SignalSlotPassTest extends TestCase
     public function testProcessNoSignal()
     {
         $slotDef = new Definition();
-        $slotDef->addTag('ezpublish.api.slot', array());
+        $slotDef->addTag('ezpublish.api.slot', []);
 
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions(
-            array(
+            [
                 'acme.foo_slot' => $slotDef,
                 'ezpublish.signalslot.signal_dispatcher' => new Definition(),
-            )
+            ]
         );
 
         $pass = new SignalSlotPass();

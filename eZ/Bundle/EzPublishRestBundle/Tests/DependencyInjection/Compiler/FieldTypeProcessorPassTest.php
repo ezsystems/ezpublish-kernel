@@ -19,14 +19,14 @@ class FieldTypeProcessorPassTest extends TestCase
     public function testProcess()
     {
         $processorDefinition = new Definition();
-        $processorDefinition->addTag('ezpublish_rest.field_type_processor', array('alias' => 'test'));
+        $processorDefinition->addTag('ezpublish_rest.field_type_processor', ['alias' => 'test']);
 
         $containerBuilder = new ContainerBuilder();
         $containerBuilder->addDefinitions(
-            array(
+            [
                 'ezpublish_rest.field_type_processor_registry' => new Definition(),
                 'ezpublish_rest.field_type_processor.test' => $processorDefinition,
-            )
+            ]
         );
 
         $compilerPass = new FieldTypeProcessorPass();

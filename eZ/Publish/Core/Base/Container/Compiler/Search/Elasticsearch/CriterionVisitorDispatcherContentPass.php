@@ -33,9 +33,9 @@ class CriterionVisitorDispatcherContentPass implements CompilerPassInterface
         foreach ($container->findTaggedServiceIds('ezpublish.search.elasticsearch.content.criterion_visitor') as $id => $attributes) {
             $aggregateCriterionVisitorDefinition->addMethodCall(
                 'addVisitor',
-                array(
+                [
                     new Reference($id),
-                )
+                ]
             );
         }
     }

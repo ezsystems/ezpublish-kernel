@@ -41,21 +41,21 @@ class ValueObjectVoterTest extends TestCase
 
     public function supportsAttributeProvider()
     {
-        return array(
-            array('foo', false),
-            array(new Attribute('foo', 'bar'), false),
-            array(new Attribute('foo', 'bar', array('some' => 'thing')), false),
-            array(new \stdClass(), false),
-            array(array('foo'), false),
-            array(
+        return [
+            ['foo', false],
+            [new Attribute('foo', 'bar'), false],
+            [new Attribute('foo', 'bar', ['some' => 'thing']), false],
+            [new \stdClass(), false],
+            [['foo'], false],
+            [
                 new Attribute(
                     'foo',
                     'bar',
-                    array('valueObject' => $this->getMockForAbstractClass(ValueObject::class))
+                    ['valueObject' => $this->getMockForAbstractClass(ValueObject::class)]
                 ),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -69,12 +69,12 @@ class ValueObjectVoterTest extends TestCase
 
     public function supportsClassProvider()
     {
-        return array(
-            array('foo'),
-            array('bar'),
-            array(ValueObject::class),
-            array(ViewController::class),
-        );
+        return [
+            ['foo'],
+            ['bar'],
+            [ValueObject::class],
+            [ViewController::class],
+        ];
     }
 
     /**
@@ -95,13 +95,13 @@ class ValueObjectVoterTest extends TestCase
 
     public function voteInvalidAttributeProvider()
     {
-        return array(
-            array(array()),
-            array(array('foo')),
-            array(array('foo', 'bar', array('some' => 'thing'))),
-            array(array(new \stdClass())),
-            array(array(new Attribute('content', 'read'))),
-        );
+        return [
+            [[]],
+            [['foo']],
+            [['foo', 'bar', ['some' => 'thing']]],
+            [[new \stdClass()]],
+            [[new Attribute('content', 'read')]],
+        ];
     }
 
     /**
@@ -122,72 +122,72 @@ class ValueObjectVoterTest extends TestCase
             $voter->vote(
                 $this->createMock(TokenInterface::class),
                 new \stdClass(),
-                array($attribute)
+                [$attribute]
             )
         );
     }
 
     public function voteProvider()
     {
-        return array(
-            array(
-                new Attribute('content', 'read', array('valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'))),
+        return [
+            [
+                new Attribute('content', 'read', ['valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject')]),
                 true,
                 VoterInterface::ACCESS_GRANTED,
-            ),
-            array(
-                new Attribute('content', 'read', array('valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject'))),
+            ],
+            [
+                new Attribute('content', 'read', ['valueObject' => $this->getMockForAbstractClass('eZ\Publish\API\Repository\Values\ValueObject')]),
                 false,
                 VoterInterface::ACCESS_DENIED,
-            ),
-            array(
+            ],
+            [
                 new Attribute(
                     'content',
                     'read',
-                    array(
+                    [
                         'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
                         'targets' => $this->getMockForAbstractClass(ValueObject::class),
-                    )
+                    ]
                 ),
                 true,
                 VoterInterface::ACCESS_GRANTED,
-            ),
-            array(
+            ],
+            [
                 new Attribute(
                     'content',
                     'read',
-                    array(
+                    [
                         'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
-                        'targets' => array($this->getMockForAbstractClass(ValueObject::class)),
-                    )
+                        'targets' => [$this->getMockForAbstractClass(ValueObject::class)],
+                    ]
                 ),
                 true,
                 VoterInterface::ACCESS_GRANTED,
-            ),
-            array(
+            ],
+            [
                 new Attribute(
                     'content',
                     'read',
-                    array(
+                    [
                         'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
                         'targets' => $this->getMockForAbstractClass(ValueObject::class),
-                    )
+                    ]
                 ),
                 false,
                 VoterInterface::ACCESS_DENIED,
-            ),
-            array(
+            ],
+            [
                 new Attribute(
                     'content',
                     'read',
-                    array(
+                    [
                         'valueObject' => $this->getMockForAbstractClass(ValueObject::class),
-                        'targets' => array($this->getMockForAbstractClass(ValueObject::class)),
-                    )
+                        'targets' => [$this->getMockForAbstractClass(ValueObject::class)],
+                    ]
                 ),
                 false,
                 VoterInterface::ACCESS_DENIED,
-            ),
-        );
+            ],
+        ];
     }
 }

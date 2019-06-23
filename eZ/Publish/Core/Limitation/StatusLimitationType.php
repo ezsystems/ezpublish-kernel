@@ -61,22 +61,22 @@ class StatusLimitationType implements SPILimitationTypeInterface
     public function validate(APILimitationValue $limitationValue)
     {
         // For limitation values used here see \eZ\Publish\SPI\Persistence\Content\VersionInfo::Status_* constants.
-        $availableStatusSet = array(
+        $availableStatusSet = [
             VersionInfo::STATUS_DRAFT => true,
             VersionInfo::STATUS_PUBLISHED => true,
             VersionInfo::STATUS_ARCHIVED => true,
-        );
+        ];
 
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $status) {
             if (!isset($availableStatusSet[$status])) {
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
-                    array(
+                    [
                         'value' => $status,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -93,7 +93,7 @@ class StatusLimitationType implements SPILimitationTypeInterface
      */
     public function buildValue(array $limitationValues)
     {
-        return new APIStatusLimitation(array('limitationValues' => $limitationValues));
+        return new APIStatusLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

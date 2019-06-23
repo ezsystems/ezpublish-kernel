@@ -44,7 +44,7 @@ class UrlTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -54,7 +54,7 @@ class UrlTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -90,16 +90,16 @@ class UrlTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 23,
                 InvalidArgumentException::class,
-            ),
-            array(
+            ],
+            [
                 new UrlValue(23),
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -133,20 +133,20 @@ class UrlTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new UrlValue(),
-            ),
-            array(
+            ],
+            [
                 'http://example.com/sindelfingen',
                 new UrlValue('http://example.com/sindelfingen'),
-            ),
-            array(
+            ],
+            [
                 new UrlValue('http://example.com/sindelfingen', 'Sindelfingen!'),
                 new UrlValue('http://example.com/sindelfingen', 'Sindelfingen!'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -186,26 +186,26 @@ class UrlTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new UrlValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new UrlValue('http://example.com/sindelfingen'),
-                array(
+                [
                     'link' => 'http://example.com/sindelfingen',
                     'text' => '',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 new UrlValue('http://example.com/sindelfingen', 'Sindelfingen!'),
-                array(
+                [
                     'link' => 'http://example.com/sindelfingen',
                     'text' => 'Sindelfingen!',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -245,26 +245,26 @@ class UrlTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new UrlValue(),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'link' => 'http://example.com/sindelfingen',
                     'text' => null,
-                ),
+                ],
                 new UrlValue('http://example.com/sindelfingen'),
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'link' => 'http://example.com/sindelfingen',
                     'text' => 'Sindelfingen!',
-                ),
+                ],
                 new UrlValue('http://example.com/sindelfingen', 'Sindelfingen!'),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -274,9 +274,9 @@ class UrlTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new UrlValue('', 'Url text'), 'Url text'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [new UrlValue('', 'Url text'), 'Url text'],
+        ];
     }
 }

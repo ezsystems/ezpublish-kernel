@@ -40,7 +40,7 @@ class UrlTest extends TestCase
     {
         $value = new FieldValue();
         $text = 'eZ Systems';
-        $value->data = array('text' => $text);
+        $value->data = ['text' => $text];
         $value->externalData = 'http://ez.no/';
         $value->sortKey = false;
         $storageFieldValue = new StorageFieldValue();

@@ -37,10 +37,10 @@ class Depth extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return array(
-            'depth_i' => array(
+        return [
+            'depth_i' => [
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -58,30 +58,30 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     public function getTypeConstraints()
     {
         return new Content\FieldTypeConstraints(
-            array(
+            [
                 'validators' => null,
                 'fieldSettings' => new FieldSettings(
-                    array(
+                    [
                         'isMultiple' => true,
-                        'options' => array(
+                        'options' => [
                             1 => 'First',
                             2 => 'Second',
                             3 => 'Sindelfingen',
-                        ),
-                        'multilingualOptions' => array(
-                            'ger-DE' => array(
+                        ],
+                        'multilingualOptions' => [
+                            'ger-DE' => [
                                 1 => 'Zuerst',
                                 2 => 'Zweite',
-                            ),
-                            'eng-US' => array(
+                            ],
+                            'eng-US' => [
                                 1 => 'ML First',
                                 2 => 'ML Second',
                                 3 => 'ML Sindelfingen',
-                            ),
-                        ),
-                    )
+                            ],
+                        ],
+                    ]
                 ),
-            )
+            ]
         );
     }
 
@@ -94,38 +94,38 @@ class SelectionIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
-            array('fieldType', 'ezselection'),
-            array(
+        return [
+            ['fieldType', 'ezselection'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
+                    [
                         'validators' => null,
                         'fieldSettings' => new FieldSettings(
-                            array(
+                            [
                                 'isMultiple' => true,
-                                'options' => array(
+                                'options' => [
                                     1 => 'ML First',
                                     2 => 'ML Second',
                                     3 => 'ML Sindelfingen',
-                                ),
-                                'multilingualOptions' => array(
-                                    'ger-DE' => array(
+                                ],
+                                'multilingualOptions' => [
+                                    'ger-DE' => [
                                         1 => 'Zuerst',
                                         2 => 'Zweite',
-                                    ),
-                                    'eng-US' => array(
+                                    ],
+                                    'eng-US' => [
                                         1 => 'ML First',
                                         2 => 'ML Second',
                                         3 => 'ML Sindelfingen',
-                                    ),
-                                ),
-                            )
+                                    ],
+                                ],
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -136,11 +136,11 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(1, 3),
+            [
+                'data' => [1, 3],
                 'externalData' => null,
                 'sortKey' => '1-3',
-            )
+            ]
         );
     }
 
@@ -154,11 +154,11 @@ class SelectionIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(2),
+            [
+                'data' => [2],
                 'externalData' => null,
                 'sortKey' => '2',
-            )
+            ]
         );
     }
 
@@ -187,7 +187,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
             ]
         );
 
-        $createStruct->fieldDefinitions = array(
+        $createStruct->fieldDefinitions = [
             new Content\Type\FieldDefinition(
                 [
                     'name' => [
@@ -219,7 +219,7 @@ class SelectionIntegrationTest extends BaseIntegrationTest
                     'mainLanguageCode' => 'eng-US',
                 ]
             ),
-        );
+        ];
 
         $handler = $this->getCustomHandler();
         $contentTypeHandler = $handler->contentTypeHandler();

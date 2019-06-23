@@ -27,8 +27,8 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->container->setParameter('ez_io.metadata_handlers', array());
-        $this->container->setParameter('ez_io.binarydata_handlers', array());
+        $this->container->setParameter('ez_io.metadata_handlers', []);
+        $this->container->setParameter('ez_io.binarydata_handlers', []);
 
         $this->container->setDefinition('ezpublish.core.io.binarydata_handler.factory', new Definition());
         $this->container->setDefinition('ezpublish.core.io.metadata_handler.factory', new Definition());
@@ -42,10 +42,10 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         $container->addCompilerPass(
             new IOConfigurationPass(
                 new ArrayObject(
-                    array('test_handler' => $this->metadataConfigurationFactoryMock)
+                    ['test_handler' => $this->metadataConfigurationFactoryMock]
                 ),
                 new ArrayObject(
-                    array('test_handler' => $this->binarydataConfigurationFactoryMock)
+                    ['test_handler' => $this->binarydataConfigurationFactoryMock]
                 )
             )
         );
@@ -61,13 +61,13 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.core.io.binarydata_handler.factory',
             'setHandlersMap',
-            array(array('default' => 'ezpublish.core.io.binarydata_handler.flysystem.default'))
+            [['default' => 'ezpublish.core.io.binarydata_handler.flysystem.default']]
         );
 
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.core.io.metadata_handler.factory',
             'setHandlersMap',
-            array(array('default' => 'ezpublish.core.io.metadata_handler.flysystem.default'))
+            [['default' => 'ezpublish.core.io.metadata_handler.flysystem.default']]
         );
     }
 
@@ -75,7 +75,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
-            array('my_handler' => array('name' => 'my_handler', 'type' => 'test_handler'))
+            ['my_handler' => ['name' => 'my_handler', 'type' => 'test_handler']]
         );
 
         $this->binarydataConfigurationFactoryMock
@@ -95,7 +95,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.metadata_handlers',
-            array('my_handler' => array('name' => 'my_handler', 'type' => 'test_handler'))
+            ['my_handler' => ['name' => 'my_handler', 'type' => 'test_handler']]
         );
 
         $this->metadataConfigurationFactoryMock
@@ -119,7 +119,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.metadata_handlers',
-            array('test' => array('type' => 'unknown'))
+            ['test' => ['type' => 'unknown']]
         );
 
         $this->compile();
@@ -133,7 +133,7 @@ class IOConfigurationPassTest extends AbstractCompilerPassTestCase
     {
         $this->container->setParameter(
             'ez_io.binarydata_handlers',
-            array('test' => array('type' => 'unknown'))
+            ['test' => ['type' => 'unknown']]
         );
 
         $this->compile();

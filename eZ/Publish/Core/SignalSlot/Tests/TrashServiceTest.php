@@ -40,114 +40,114 @@ class TrashServiceTest extends ServiceTest
         $trashItemParentLocationId = 17;
 
         $trashItem = new TrashItem(
-            array(
+            [
                 'id' => $trashItemId,
                 'contentInfo' => $trashItemContentInfo,
                 'parentLocationId' => $trashItemParentLocationId,
-            )
+            ]
         );
 
         $newParentLocation = new Location(
-            array(
+            [
                 'id' => $newParentLocationId,
                 'contentInfo' => $this->getContentInfo(53, md5('root')),
-            )
+            ]
         );
 
         $location = new Location(
-            array(
+            [
                 'id' => $locationId,
                 'contentInfo' => $trashItemContentInfo,
                 'parentLocationId' => $trashItemParentLocationId,
-            )
+            ]
         );
 
         $locationWithNewParent = new Location(
-            array(
+            [
                 'id' => $locationId,
                 'contentInfo' => $trashItemContentInfo,
                 'parentLocationId' => $newParentLocationId,
-            )
+            ]
         );
 
         $trashItemDeleteResult = new TrashItemDeleteResult(
-            array(
+            [
                 'trashItemId' => $trashItemId,
                 'contentId' => $contentId,
                 'contentRemoved' => true,
-            )
+            ]
         );
 
         $trashItemDeleteResultList = new TrashItemDeleteResultList(
-            array(
-                'items' => array($trashItemDeleteResult),
-            )
+            [
+                'items' => [$trashItemDeleteResult],
+            ]
         );
 
-        return array(
-            array(
+        return [
+            [
                 'loadTrashItem',
-                array($trashItemId),
+                [$trashItemId],
                 $trashItem,
                 0,
-            ),
-            array(
+            ],
+            [
                 'trash',
-                array($location),
+                [$location],
                 $trashItem,
                 1,
                 TrashServiceSignals\TrashSignal::class,
-                array('locationId' => $locationId),
-            ),
-            array(
+                ['locationId' => $locationId],
+            ],
+            [
                 'recover',
-                array($trashItem, $newParentLocation),
+                [$trashItem, $newParentLocation],
                 $locationWithNewParent,
                 1,
                 'eZ\Publish\Core\SignalSlot\Signal\TrashService\RecoverSignal',
-                array(
+                [
                     'trashItemId' => $trashItemId,
                     'newParentLocationId' => $newParentLocationId,
                     'newLocationId' => $locationId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'recover',
-                array($trashItem, null),
+                [$trashItem, null],
                 $location,
                 1,
                 TrashServiceSignals\RecoverSignal::class,
-                array(
+                [
                     'trashItemId' => $trashItemId,
                     'newParentLocationId' => $trashItemParentLocationId,
                     'newLocationId' => $locationId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'emptyTrash',
-                array(),
+                [],
                 $trashItemDeleteResultList,
                 1,
                 TrashServiceSignals\EmptyTrashSignal::class,
-                array('trashItemDeleteResultList' => $trashItemDeleteResultList),
-            ),
-            array(
+                ['trashItemDeleteResultList' => $trashItemDeleteResultList],
+            ],
+            [
                 'deleteTrashItem',
-                array($trashItem),
+                [$trashItem],
                 $trashItemDeleteResult,
                 1,
                 TrashServiceSignals\DeleteTrashItemSignal::class,
-                array(
+                [
                     'trashItemId' => $trashItemId,
                     'trashItemDeleteResult' => $trashItemDeleteResult,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'findTrashItems',
-                array(new Query()),
-                new SearchResult(array('totalCount' => 0)),
+                [new Query()],
+                new SearchResult(['totalCount' => 0]),
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

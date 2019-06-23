@@ -43,10 +43,10 @@ class VersionList extends ValueObjectVisitor
                 'href',
                 $this->router->generate(
                     'ezpublish_rest_loadContentInVersion',
-                    array(
+                    [
                         'contentId' => $version->getContentInfo()->id,
                         'versionNumber' => $version->versionNo,
-                    )
+                    ]
                 )
             );
             $generator->endAttribute('href');

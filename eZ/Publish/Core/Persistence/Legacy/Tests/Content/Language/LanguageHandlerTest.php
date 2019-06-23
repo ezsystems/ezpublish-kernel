@@ -127,12 +127,12 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock->expects($this->once())
             ->method('loadLanguageListData')
             ->with($this->equalTo([2]))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $mapperMock->expects($this->once())
             ->method('extractLanguagesFromRows')
-            ->with($this->equalTo(array()))
-            ->will($this->returnValue(array(new Language())));
+            ->with($this->equalTo([]))
+            ->will($this->returnValue([new Language()]));
 
         $result = $handler->load(2);
 
@@ -155,13 +155,13 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock->expects($this->once())
             ->method('loadLanguageListData')
             ->with($this->equalTo([2]))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $mapperMock->expects($this->once())
             ->method('extractLanguagesFromRows')
-            ->with($this->equalTo(array()))
+            ->with($this->equalTo([]))
             // No language extracted
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $result = $handler->load(2);
     }
@@ -178,12 +178,12 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock->expects($this->once())
             ->method('loadLanguageListDataByLanguageCode')
             ->with($this->equalTo(['eng-US']))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $mapperMock->expects($this->once())
             ->method('extractLanguagesFromRows')
-            ->with($this->equalTo(array()))
-            ->will($this->returnValue(array(new Language())));
+            ->with($this->equalTo([]))
+            ->will($this->returnValue([new Language()]));
 
         $result = $handler->loadByLanguageCode('eng-US');
 
@@ -206,13 +206,13 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock->expects($this->once())
             ->method('loadLanguageListDataByLanguageCode')
             ->with($this->equalTo(['eng-US']))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $mapperMock->expects($this->once())
             ->method('extractLanguagesFromRows')
-            ->with($this->equalTo(array()))
+            ->with($this->equalTo([]))
             // No language extracted
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $result = $handler->loadByLanguageCode('eng-US');
     }
@@ -228,12 +228,12 @@ class LanguageHandlerTest extends TestCase
 
         $gatewayMock->expects($this->once())
             ->method('loadAllLanguagesData')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $mapperMock->expects($this->once())
             ->method('extractLanguagesFromRows')
-            ->with($this->equalTo(array()))
-            ->will($this->returnValue(array(new Language())));
+            ->with($this->equalTo([]))
+            ->will($this->returnValue([new Language()]));
 
         $result = $handler->loadAll();
 

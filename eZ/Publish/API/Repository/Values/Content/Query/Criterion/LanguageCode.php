@@ -50,7 +50,7 @@ class LanguageCode extends Criterion
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::IN,
                 Specifications::FORMAT_ARRAY,
@@ -61,7 +61,7 @@ class LanguageCode extends Criterion
                 Specifications::FORMAT_SINGLE,
                 Specifications::TYPE_STRING
             ),
-        );
+        ];
     }
 
     /**

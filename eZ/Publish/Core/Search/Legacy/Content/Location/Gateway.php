@@ -32,7 +32,7 @@ abstract class Gateway
         $offset,
         $limit,
         array $sortClauses = null,
-        array $languageFilter = array(),
+        array $languageFilter = [],
         $doCount = true
     );
 }

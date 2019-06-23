@@ -50,7 +50,7 @@ class Validator extends XmlBase
     public function validate(DOMDocument $document)
     {
         $this->startRecordingErrors();
-        $additionalErrors = array();
+        $additionalErrors = [];
 
         foreach ($this->schemas as $schema) {
             $errors = $this->validateBySchema($document, $schema);
@@ -85,7 +85,7 @@ class Validator extends XmlBase
             );
         }
 
-        $additionalErrors = array();
+        $additionalErrors = [];
         $pathInfo = pathinfo($schema);
         switch ($pathInfo['extension']) {
             case 'xsd':
@@ -129,7 +129,7 @@ class Validator extends XmlBase
         $xpath->registerNamespace('svrl', 'http://purl.oclc.org/dsdl/svrl');
         $xpathExpression = '//svrl:failed-assert';
 
-        $failures = array();
+        $failures = [];
         $failedAsserts = $xpath->query($xpathExpression);
 
         foreach ($failedAsserts as $failedAssert) {

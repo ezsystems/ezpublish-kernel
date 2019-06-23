@@ -45,15 +45,15 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_deleteSession',
-            array(
+            [
                 'sessionId' => $session->sessionId,
-            ),
+            ],
             "/user/sessions/{$session->sessionId}"
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $session->user->id),
+            ['userId' => $session->user->id],
             "/user/users/{$session->user->id}"
         );
 
@@ -80,12 +80,12 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSessionElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Session',
-                'children' => array(
+                'children' => [
                     'count' => 4,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Session> element.',
             false
@@ -102,13 +102,13 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsSessionAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Session',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.Session+xml',
                     'href' => '/user/sessions/sessionId',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Session> attributes.',
             false
@@ -125,10 +125,10 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsNameValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'name',
                 'content' => 'sessionName',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Session> name value element.',
             false
@@ -145,10 +145,10 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIdentifierValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'identifier',
                 'content' => 'sessionId',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Session> identifier value element.',
             false
@@ -165,10 +165,10 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsCsrfTokenValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'csrfToken',
                 'content' => 'csrfToken',
-            ),
+            ],
             $result,
             'Invalid or non-existing <Session> csrf-token value element.',
             false
@@ -196,9 +196,9 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUserElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'User',
-            ),
+            ],
             $result,
             'Invalid <User> element.',
             false
@@ -215,13 +215,13 @@ class UserSessionTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUserAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'User',
-                'attributes' => array(
+                'attributes' => [
                     'href' => '/user/users/user123',
                     'media-type' => 'application/vnd.ez.api.User+xml',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <User> element attributes.',
             false

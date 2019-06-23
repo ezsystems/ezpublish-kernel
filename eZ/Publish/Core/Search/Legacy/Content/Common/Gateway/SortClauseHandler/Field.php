@@ -121,7 +121,7 @@ class Field extends SortClauseHandler
                 )
             );
 
-        return array($column1, $column2, $column3, $column4);
+        return [$column1, $column2, $column3, $column4];
     }
 
     /**

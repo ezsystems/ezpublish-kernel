@@ -32,7 +32,7 @@ class CreatedObjectStateGroup extends ObjectStateGroup
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadObjectStateGroup',
-                array('objectStateGroupId' => $data->objectStateGroup->id)
+                ['objectStateGroupId' => $data->objectStateGroup->id]
             )
         );
         $visitor->setStatus(201);

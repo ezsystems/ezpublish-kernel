@@ -47,13 +47,13 @@ class UrlAliasTest extends BaseTest
 
     public function setMatchingConfigProvider()
     {
-        return array(
-            array('/foo/bar/', array('foo/bar')),
-            array('/foo/bar/', array('foo/bar')),
-            array('/foo/bar', array('foo/bar')),
-            array(array('/foo/bar/', 'baz/biz/'), array('foo/bar', 'baz/biz')),
-            array(array('foo/bar', 'baz/biz'), array('foo/bar', 'baz/biz')),
-        );
+        return [
+            ['/foo/bar/', ['foo/bar']],
+            ['/foo/bar/', ['foo/bar']],
+            ['/foo/bar', ['foo/bar']],
+            [['/foo/bar/', 'baz/biz/'], ['foo/bar', 'baz/biz']],
+            [['foo/bar', 'baz/biz'], ['foo/bar', 'baz/biz']],
+        ];
     }
 
     /**
@@ -67,13 +67,13 @@ class UrlAliasTest extends BaseTest
     {
         // First an url alias that will never match, then the right url alias.
         // This ensures to test even if the location has several url aliases.
-        $urlAliasList = array(
+        $urlAliasList = [
             $this->createMock(URLAlias::class),
             $this
                 ->getMockBuilder(URLAlias::class)
-                ->setConstructorArgs(array(array('path' => $path)))
+                ->setConstructorArgs([['path' => $path]])
                 ->getMockForAbstractClass(),
-        );
+        ];
 
         $urlAliasServiceMock = $this->createMock(URLAliasService::class);
         $urlAliasServiceMock->expects($this->at(0))
@@ -82,7 +82,7 @@ class UrlAliasTest extends BaseTest
                 $this->isInstanceOf(Location::class),
                 true
             )
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
         $urlAliasServiceMock->expects($this->at(1))
             ->method('listLocationAliases')
             ->with(
@@ -122,33 +122,33 @@ class UrlAliasTest extends BaseTest
 
     public function matchLocationProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'foo/url',
                 $this->generateRepositoryMockForUrlAlias('/foo/url'),
                 true,
-            ),
-            array(
+            ],
+            [
                 '/foo/url',
                 $this->generateRepositoryMockForUrlAlias('/foo/url'),
                 true,
-            ),
-            array(
+            ],
+            [
                 'foo/url',
                 $this->generateRepositoryMockForUrlAlias('/bar/url'),
                 false,
-            ),
-            array(
-                array('foo/url', 'baz'),
+            ],
+            [
+                ['foo/url', 'baz'],
                 $this->generateRepositoryMockForUrlAlias('/bar/url'),
                 false,
-            ),
-            array(
-                array('foo/url   ', 'baz   '),
+            ],
+            [
+                ['foo/url   ', 'baz   '],
                 $this->generateRepositoryMockForUrlAlias('/baz'),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**

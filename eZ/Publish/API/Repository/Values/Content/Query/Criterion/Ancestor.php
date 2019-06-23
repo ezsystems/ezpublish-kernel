@@ -42,7 +42,7 @@ class Ancestor extends Criterion
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::EQ,
                 Specifications::FORMAT_SINGLE,
@@ -53,7 +53,7 @@ class Ancestor extends Criterion
                 Specifications::FORMAT_ARRAY,
                 Specifications::TYPE_STRING
             ),
-        );
+        ];
     }
 
     /**

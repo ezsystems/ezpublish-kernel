@@ -23,8 +23,8 @@ class ConfigurationProcessorTest extends TestCase
         $namespace = 'ez_test';
         $siteAccessNodeName = 'foo';
         $container = $this->getContainerMock();
-        $siteAccessList = array('test', 'bar');
-        $groupsBySa = array('test' => array('group1', 'group2'), 'bar' => array('group1', 'group3'));
+        $siteAccessList = ['test', 'bar'];
+        $groupsBySa = ['test' => ['group1', 'group2'], 'bar' => ['group1', 'group3']];
         ConfigurationProcessor::setAvailableSiteAccesses($siteAccessList);
         ConfigurationProcessor::setGroupsBySiteAccess($groupsBySa);
         $processor = new ConfigurationProcessor($container, $namespace, $siteAccessNodeName);
@@ -65,7 +65,7 @@ class ConfigurationProcessorTest extends TestCase
         $container = $this->getContainerMock();
         $processor = new ConfigurationProcessor($container, $namespace, $siteAccessNodeName);
 
-        $processor->mapConfig(array(), new stdClass());
+        $processor->mapConfig([], new stdClass());
     }
 
     public function testMapConfigClosure()
@@ -78,26 +78,26 @@ class ConfigurationProcessorTest extends TestCase
 
         $sa1Name = 'sa1';
         $sa2Name = 'sa2';
-        $availableSAs = array($sa1Name => true, $sa2Name => true);
-        $sa1Config = array(
+        $availableSAs = [$sa1Name => true, $sa2Name => true];
+        $sa1Config = [
             'foo' => 'bar',
             'hello' => 'world',
             'an_integer' => 123,
             'a_bool' => true,
-        );
-        $sa2Config = array(
+        ];
+        $sa2Config = [
             'foo' => 'bar2',
             'hello' => 'universe',
             'an_integer' => 456,
             'a_bool' => false,
-        );
-        $config = array(
+        ];
+        $config = [
             'not_sa_aware' => 'blabla',
-            $saNodeName => array(
+            $saNodeName => [
                 'sa1' => $sa1Config,
                 'sa2' => $sa2Config,
-            ),
-        );
+            ],
+        ];
 
         $mapperClosure = function (array &$scopeSettings, $currentScope, ContextualizerInterface $contextualizer) use ($config, $availableSAs, $saNodeName, $expectedContextualizer) {
             self::assertTrue(isset($availableSAs[$currentScope]));
@@ -118,25 +118,25 @@ class ConfigurationProcessorTest extends TestCase
 
         $sa1Name = 'sa1';
         $sa2Name = 'sa2';
-        $sa1Config = array(
+        $sa1Config = [
             'foo' => 'bar',
             'hello' => 'world',
             'an_integer' => 123,
             'a_bool' => true,
-        );
-        $sa2Config = array(
+        ];
+        $sa2Config = [
             'foo' => 'bar2',
             'hello' => 'universe',
             'an_integer' => 456,
             'a_bool' => false,
-        );
-        $config = array(
+        ];
+        $config = [
             'not_sa_aware' => 'blabla',
-            $saNodeName => array(
+            $saNodeName => [
                 'sa1' => $sa1Config,
                 'sa2' => $sa2Config,
-            ),
-        );
+            ],
+        ];
 
         $mapper = $this->createMock(ConfigurationMapperInterface::class);
         $mapper
@@ -144,10 +144,10 @@ class ConfigurationProcessorTest extends TestCase
             ->method('mapConfig')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array($sa1Config, $sa1Name, $contextualizer, null),
-                        array($sa2Config, $sa2Name, $contextualizer, null),
-                    )
+                    [
+                        [$sa1Config, $sa1Name, $contextualizer, null],
+                        [$sa2Config, $sa2Name, $contextualizer, null],
+                    ]
                 )
             );
 
@@ -164,25 +164,25 @@ class ConfigurationProcessorTest extends TestCase
 
         $sa1Name = 'sa1';
         $sa2Name = 'sa2';
-        $sa1Config = array(
+        $sa1Config = [
             'foo' => 'bar',
             'hello' => 'world',
             'an_integer' => 123,
             'a_bool' => true,
-        );
-        $sa2Config = array(
+        ];
+        $sa2Config = [
             'foo' => 'bar2',
             'hello' => 'universe',
             'an_integer' => 456,
             'a_bool' => false,
-        );
-        $config = array(
+        ];
+        $config = [
             'not_sa_aware' => 'blabla',
-            $saNodeName => array(
+            $saNodeName => [
                 'sa1' => $sa1Config,
                 'sa2' => $sa2Config,
-            ),
-        );
+            ],
+        ];
 
         $mapper = $this->createMock(HookableConfigurationMapperInterface::class);
         $mapper
@@ -198,10 +198,10 @@ class ConfigurationProcessorTest extends TestCase
             ->method('mapConfig')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array($sa1Config, $sa1Name, $contextualizer, null),
-                        array($sa2Config, $sa2Name, $contextualizer, null),
-                    )
+                    [
+                        [$sa1Config, $sa1Name, $contextualizer, null],
+                        [$sa2Config, $sa2Name, $contextualizer, null],
+                    ]
                 )
             );
 
@@ -217,25 +217,25 @@ class ConfigurationProcessorTest extends TestCase
         $contextualizer = $this->getContextualizerMock();
         $processor->setContextualizer($contextualizer);
 
-        $sa1Config = array(
+        $sa1Config = [
             'foo' => 'bar',
             'hello' => 'world',
             'an_integer' => 123,
             'a_bool' => true,
-        );
-        $sa2Config = array(
+        ];
+        $sa2Config = [
             'foo' => 'bar2',
             'hello' => 'universe',
             'an_integer' => 456,
             'a_bool' => false,
-        );
-        $config = array(
+        ];
+        $config = [
             'not_sa_aware' => 'blabla',
-            $saNodeName => array(
+            $saNodeName => [
                 'sa1' => $sa1Config,
                 'sa2' => $sa2Config,
-            ),
-        );
+            ],
+        ];
 
         $contextualizer
             ->expects($this->once())
@@ -253,25 +253,25 @@ class ConfigurationProcessorTest extends TestCase
         $contextualizer = $this->getContextualizerMock();
         $processor->setContextualizer($contextualizer);
 
-        $sa1Config = array(
+        $sa1Config = [
             'foo' => 'bar',
-            'hello' => array('world'),
+            'hello' => ['world'],
             'an_integer' => 123,
             'a_bool' => true,
-        );
-        $sa2Config = array(
+        ];
+        $sa2Config = [
             'foo' => 'bar2',
-            'hello' => array('universe'),
+            'hello' => ['universe'],
             'an_integer' => 456,
             'a_bool' => false,
-        );
-        $config = array(
+        ];
+        $config = [
             'not_sa_aware' => 'blabla',
-            $saNodeName => array(
+            $saNodeName => [
                 'sa1' => $sa1Config,
                 'sa2' => $sa2Config,
-            ),
-        );
+            ],
+        ];
 
         $contextualizer
             ->expects($this->once())

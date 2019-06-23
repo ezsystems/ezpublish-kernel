@@ -127,7 +127,7 @@ class ObjectStateTest extends TestCase
      */
     public function testUnsetProperty()
     {
-        $objectState = new ObjectState(array('id' => 2));
+        $objectState = new ObjectState(['id' => 2]);
         unset($objectState->id);
         $this->fail('Unsetting read-only property succeeded');
     }

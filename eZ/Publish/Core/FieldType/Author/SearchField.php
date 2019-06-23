@@ -27,9 +27,9 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        $name = array();
-        $id = array();
-        $email = array();
+        $name = [];
+        $id = [];
+        $email = [];
 
         foreach ($field->value->data as $author) {
             $name[] = $author['name'];
@@ -37,7 +37,7 @@ class SearchField implements Indexable
             $email[] = $author['email'];
         }
 
-        return array(
+        return [
             new Search\Field(
                 'name',
                 $name,
@@ -68,7 +68,7 @@ class SearchField implements Indexable
                 $name,
                 new Search\FieldType\FullTextField()
             ),
-        );
+        ];
     }
 
     /**
@@ -78,13 +78,13 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'name' => new Search\FieldType\MultipleStringField(),
             'id' => new Search\FieldType\MultipleIntegerField(),
             'email' => new Search\FieldType\MultipleStringField(),
             'count' => new Search\FieldType\IntegerField(),
             'sort_value' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     /**

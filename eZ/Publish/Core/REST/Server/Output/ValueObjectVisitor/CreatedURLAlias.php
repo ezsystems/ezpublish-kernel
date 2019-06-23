@@ -32,7 +32,7 @@ class CreatedURLAlias extends URLAlias
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadURLAlias',
-                array('urlAliasId' => $data->urlAlias->id)
+                ['urlAliasId' => $data->urlAlias->id]
             )
         );
         $visitor->setStatus(201);

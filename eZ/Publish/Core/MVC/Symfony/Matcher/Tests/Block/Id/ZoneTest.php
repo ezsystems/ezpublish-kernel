@@ -40,28 +40,28 @@ class ZoneTest extends TestCase
 
     public function matchBlockProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 123,
                 $this->generateBlockForZoneId(123),
                 true,
-            ),
-            array(
+            ],
+            [
                 123,
                 $this->generateBlockForZoneId(456),
                 false,
-            ),
-            array(
-                array(123, 789),
+            ],
+            [
+                [123, 789],
                 $this->generateBlockForZoneId(456),
                 false,
-            ),
-            array(
-                array(123, 789),
+            ],
+            [
+                [123, 789],
                 $this->generateBlockForZoneId(789),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -72,7 +72,7 @@ class ZoneTest extends TestCase
     private function generateBlockForZoneId($id)
     {
         return new Block(
-            array('zoneId' => $id)
+            ['zoneId' => $id]
         );
     }
 }

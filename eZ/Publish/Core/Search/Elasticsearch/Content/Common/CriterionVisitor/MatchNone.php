@@ -40,11 +40,11 @@ class MatchNone extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'terms' => array(
-                '_id' => array(),
-            ),
-        );
+        return [
+            'terms' => [
+                '_id' => [],
+            ],
+        ];
     }
 
     /**
@@ -58,11 +58,11 @@ class MatchNone extends CriterionVisitor
      */
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'terms' => array(
-                '_id' => array(),
+        return [
+            'terms' => [
+                '_id' => [],
                 'minimum_should_match' => 1,
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -38,7 +38,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag('ezpublish.fieldType.indexable', array('alias' => $fieldTypeIdentifier));
+        $def->addTag('ezpublish.fieldType.indexable', ['alias' => $fieldTypeIdentifier]);
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
@@ -46,7 +46,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.common.field_registry',
             'registerType',
-            array($fieldTypeIdentifier, new Reference($serviceId))
+            [$fieldTypeIdentifier, new Reference($serviceId)]
         );
     }
 
@@ -66,7 +66,7 @@ class FieldTypeRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.search.common.field_registry',
             'registerType',
-            array($fieldTypeIdentifier, new Reference($serviceId))
+            [$fieldTypeIdentifier, new Reference($serviceId)]
         );
     }
 }

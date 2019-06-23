@@ -99,10 +99,10 @@ EOT
         $totalCount = $stmt->fetchColumn();
 
         $output->writeln(
-            array(
+            [
                 'Found total Content versions to update: ' . $totalCount,
                 '',
-            )
+            ]
         );
 
         if ($totalCount == 0) {

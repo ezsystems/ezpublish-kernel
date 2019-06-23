@@ -92,13 +92,13 @@ trait RelationSearchBaseIntegrationTestTrait
         $normalized = array_map(
             function (Relation $relation) {
                 $newRelation = new Relation(
-                    array(
+                    [
                         'id' => null,
                         'sourceFieldDefinitionIdentifier' => $relation->sourceFieldDefinitionIdentifier,
                         'type' => $relation->type,
                         'sourceContentInfo' => $relation->sourceContentInfo,
                         'destinationContentInfo' => $relation->destinationContentInfo,
-                    )
+                    ]
                 );
 
                 return $newRelation;

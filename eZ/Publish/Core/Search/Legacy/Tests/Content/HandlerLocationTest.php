@@ -38,7 +38,7 @@ class HandlerLocationTest extends AbstractTestCase
      *
      * @return \eZ\Publish\Core\Search\Legacy\Content\Handler
      */
-    protected function getContentSearchHandler(array $fullTextSearchConfiguration = array())
+    protected function getContentSearchHandler(array $fullTextSearchConfiguration = [])
     {
         $transformationProcessor = new Persistence\TransformationProcessor\DefinitionBased(
             new Persistence\TransformationProcessor\DefinitionBased\Parser(),
@@ -71,7 +71,7 @@ class HandlerLocationTest extends AbstractTestCase
             new Content\Location\Gateway\DoctrineDatabase(
                 $this->getDatabaseHandler(),
                 new CriteriaConverter(
-                    array(
+                    [
                         new LocationCriterionHandler\LocationId($this->getDatabaseHandler()),
                         new LocationCriterionHandler\ParentLocationId($this->getDatabaseHandler()),
                         new LocationCriterionHandler\LocationRemoteId($this->getDatabaseHandler()),
@@ -95,7 +95,7 @@ class HandlerLocationTest extends AbstractTestCase
                             $this->getConverterRegistry(),
                             new CommonCriterionHandler\FieldValue\Converter(
                                 new CommonCriterionHandler\FieldValue\HandlerRegistry(
-                                    array(
+                                    [
                                         'ezboolean' => $simpleValueHandler,
                                         'ezcountry' => $commaSeparatedCollectionValueHandler,
                                         'ezdate' => $simpleValueHandler,
@@ -106,7 +106,7 @@ class HandlerLocationTest extends AbstractTestCase
                                         'ezobjectrelationlist' => $commaSeparatedCollectionValueHandler,
                                         'ezselection' => $hyphenSeparatedCollectionValueHandler,
                                         'eztime' => $simpleValueHandler,
-                                    )
+                                    ]
                                 ),
                                 $compositeValueHandler
                             ),
@@ -139,13 +139,13 @@ class HandlerLocationTest extends AbstractTestCase
                         new CommonCriterionHandler\RemoteId($this->getDatabaseHandler()),
                         new CommonCriterionHandler\SectionId($this->getDatabaseHandler()),
                         new CommonCriterionHandler\UserMetadata($this->getDatabaseHandler()),
-                    )
+                    ]
                 ),
                 new SortClauseConverter(
-                    array(
+                    [
                         new LocationSortClauseHandler\Location\Id($this->getDatabaseHandler()),
                         new CommonSortClauseHandler\ContentId($this->getDatabaseHandler()),
-                    )
+                    ]
                 ),
                 $this->getLanguageHandler()
             ),
@@ -171,7 +171,7 @@ class HandlerLocationTest extends AbstractTestCase
     protected function getLocationMapperMock()
     {
         $mapperMock = $this->getMockBuilder(LocationMapper::class)
-            ->setMethods(array('createLocationsFromRows'))
+            ->setMethods(['createLocationsFromRows'])
             ->getMock();
         $mapperMock
             ->expects($this->any())
@@ -180,7 +180,7 @@ class HandlerLocationTest extends AbstractTestCase
             ->will(
                 $this->returnCallback(
                     function ($rows) {
-                        $locations = array();
+                        $locations = [];
                         foreach ($rows as $row) {
                             $locationId = (int)$row['node_id'];
                             if (!isset($locations[$locationId])) {
@@ -203,9 +203,9 @@ class HandlerLocationTest extends AbstractTestCase
 
         $searchResult = $handler->findLocations(
             new LocationQuery(
-                array(
+                [
                     'filter' => new Criterion\LocationId(2),
-                )
+                ]
             )
         );
 
@@ -219,16 +219,16 @@ class HandlerLocationTest extends AbstractTestCase
 
         $searchResult = $handler->findLocations(
             new LocationQuery(
-                array(
+                [
                     'filter' => new Criterion\LocationId(2),
                     'offset' => 0,
                     'limit' => 0,
-                )
+                ]
             )
         );
 
         $this->assertEquals(1, $searchResult->totalCount);
-        $this->assertEquals(array(), $searchResult->searchHits);
+        $this->assertEquals([], $searchResult->searchHits);
     }
 
     /**
@@ -240,11 +240,11 @@ class HandlerLocationTest extends AbstractTestCase
 
         $searchResult = $handler->findLocations(
             new LocationQuery(
-                array(
+                [
                     'filter' => new Criterion\LocationId(2),
                     'offset' => 0,
                     'limit' => null,
-                )
+                ]
             )
         );
 
@@ -261,30 +261,30 @@ class HandlerLocationTest extends AbstractTestCase
 
         $searchResult = $handler->findLocations(
             new LocationQuery(
-                array(
+                [
                     'filter' => new Criterion\LocationId(2),
                     'offset' => 1000,
                     'limit' => null,
-                )
+                ]
             )
         );
 
         $this->assertEquals(1, $searchResult->totalCount);
-        $this->assertEquals(array(), $searchResult->searchHits);
+        $this->assertEquals([], $searchResult->searchHits);
     }
 
     public function testLocationIdFilter()
     {
         $this->assertSearchResults(
-            array(12, 13),
+            [12, 13],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LocationId(
-                            array(4, 12, 13)
+                            [4, 12, 13]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -293,13 +293,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testParentLocationIdFilter()
     {
         $this->assertSearchResults(
-            array(12, 13, 14, 44, 227),
+            [12, 13, 14, 44, 227],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\ParentLocationId(5),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -308,22 +308,22 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLocationIdAndCombinatorFilter()
     {
         $this->assertSearchResults(
-            array(13),
+            [13],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\LocationId(
-                                    array(4, 12, 13)
+                                    [4, 12, 13]
                                 ),
                                 new Criterion\LocationId(
-                                    array(13, 44)
+                                    [13, 44]
                                 ),
-                            )
+                            ]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -332,22 +332,22 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLocationIdParentLocationIdAndCombinatorFilter()
     {
         $this->assertSearchResults(
-            array(44, 160),
+            [44, 160],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\LocationId(
-                                    array(2, 44, 160, 166)
+                                    [2, 44, 160, 166]
                                 ),
                                 new Criterion\ParentLocationId(
-                                    array(5, 156)
+                                    [5, 156]
                                 ),
-                            )
+                            ]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -356,13 +356,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentDepthFilterEq()
     {
         $this->assertSearchResults(
-            array(2, 5, 43, 48, 58),
+            [2, 5, 43, 48, 58],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Location\Depth(Criterion\Operator::EQ, 1),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -371,13 +371,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentDepthFilterIn()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14, 43, 44, 48, 51, 52, 53, 54, 56, 58, 59, 69, 77, 86, 96, 107, 153, 156, 167, 190, 227),
+            [2, 5, 12, 13, 14, 43, 44, 48, 51, 52, 53, 54, 56, 58, 59, 69, 77, 86, 96, 107, 153, 156, 167, 190, 227],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::IN, array(1, 2)),
+                    [
+                        'filter' => new Criterion\Location\Depth(Criterion\Operator::IN, [1, 2]),
                         'limit' => 50,
-                    )
+                    ]
                 )
             )
         );
@@ -386,12 +386,12 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentDepthFilterBetween()
     {
         $this->assertSearchResults(
-            array(2, 5, 43, 48, 58),
+            [2, 5, 43, 48, 58],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
-                        'filter' => new Criterion\Location\Depth(Criterion\Operator::BETWEEN, array(0, 1)),
-                    )
+                    [
+                        'filter' => new Criterion\Location\Depth(Criterion\Operator::BETWEEN, [0, 1]),
+                    ]
                 )
             )
         );
@@ -400,13 +400,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentDepthFilterGreaterThan()
     {
         $this->assertSearchResults(
-            array(99, 102, 135, 136, 137, 139, 140, 142, 143, 144, 145, 148, 151, 174, 175, 177, 194, 196, 197, 198, 199, 200, 201, 202, 203, 205, 206, 207, 208, 209, 210, 211, 212, 214, 215),
+            [99, 102, 135, 136, 137, 139, 140, 142, 143, 144, 145, 148, 151, 174, 175, 177, 194, 196, 197, 198, 199, 200, 201, 202, 203, 205, 206, 207, 208, 209, 210, 211, 212, 214, 215],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Location\Depth(Criterion\Operator::GT, 4),
                         'limit' => 50,
-                    )
+                    ]
                 )
             )
         );
@@ -415,13 +415,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentDepthFilterGreaterThanOrEqual()
     {
         $this->assertSearchResults(
-            array(99, 102, 135, 136, 137, 139, 140, 142, 143, 144, 145, 148, 151, 174, 175, 177, 194, 196, 197, 198, 199, 200, 201, 202, 203, 205, 206, 207, 208, 209, 210, 211, 212, 214, 215),
+            [99, 102, 135, 136, 137, 139, 140, 142, 143, 144, 145, 148, 151, 174, 175, 177, 194, 196, 197, 198, 199, 200, 201, 202, 203, 205, 206, 207, 208, 209, 210, 211, 212, 214, 215],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Location\Depth(Criterion\Operator::GTE, 5),
                         'limit' => 50,
-                    )
+                    ]
                 )
             )
         );
@@ -430,13 +430,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentDepthFilterLessThan()
     {
         $this->assertSearchResults(
-            array(2, 5, 43, 48, 58),
+            [2, 5, 43, 48, 58],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Location\Depth(Criterion\Operator::LT, 2),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -445,13 +445,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentDepthFilterLessThanOrEqual()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14, 43, 44, 48, 51, 52, 53, 54, 56, 58, 59, 69, 77, 86, 96, 107, 153, 156, 167, 190, 227),
+            [2, 5, 12, 13, 14, 43, 44, 48, 51, 52, 53, 54, 56, 58, 59, 69, 77, 86, 96, 107, 153, 156, 167, 190, 227],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Location\Depth(Criterion\Operator::LTE, 2),
                         'limit' => 50,
-                    )
+                    ]
                 )
             )
         );
@@ -460,16 +460,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLocationPriorityFilter()
     {
         $this->assertSearchResults(
-            array(156, 167, 190),
+            [156, 167, 190],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Location\Priority(
                             Criterion\Operator::BETWEEN,
-                            array(1, 10)
+                            [1, 10]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -478,15 +478,15 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLocationRemoteIdFilter()
     {
         $this->assertSearchResults(
-            array(2, 5),
+            [2, 5],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LocationRemoteId(
-                            array('3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983')
+                            ['3f6d92f8044aed134f32153517850f5a', 'f3e90596361e31d496d4026eb624c983']
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -495,16 +495,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testVisibilityFilterVisible()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14),
+            [2, 5, 12, 13, 14],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Visibility(
                             Criterion\Visibility::VISIBLE
                         ),
                         'limit' => 5,
-                        'sortClauses' => array(new SortClause\Location\Id()),
-                    )
+                        'sortClauses' => [new SortClause\Location\Id()],
+                    ]
                 )
             )
         );
@@ -513,14 +513,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testVisibilityFilterHidden()
     {
         $this->assertSearchResults(
-            array(228),
+            [228],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Visibility(
                             Criterion\Visibility::HIDDEN
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -529,24 +529,24 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLocationNotCombinatorFilter()
     {
         $this->assertSearchResults(
-            array(2, 5),
+            [2, 5],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\LocationId(
-                                    array(2, 5, 12, 356)
+                                    [2, 5, 12, 356]
                                 ),
                                 new Criterion\LogicalNot(
                                     new Criterion\LocationId(
-                                        array(12, 13, 14)
+                                        [12, 13, 14]
                                     )
                                 ),
-                            )
+                            ]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -555,22 +555,22 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLocationOrCombinatorFilter()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14),
+            [2, 5, 12, 13, 14],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LogicalOr(
-                            array(
+                            [
                                 new Criterion\LocationId(
-                                    array(2, 5, 12)
+                                    [2, 5, 12]
                                 ),
                                 new Criterion\LocationId(
-                                    array(12, 13, 14)
+                                    [12, 13, 14]
                                 ),
-                            )
+                            ]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -579,12 +579,12 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentIdFilterEquals()
     {
         $this->assertSearchResults(
-            array(225),
+            [225],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\ContentId(223),
-                    )
+                    ]
                 )
             )
         );
@@ -593,14 +593,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentIdFilterIn()
     {
         $this->assertSearchResults(
-            array(225, 226, 227),
+            [225, 226, 227],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\ContentId(
-                            array(223, 224, 225)
+                            [223, 224, 225]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -609,13 +609,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentTypeGroupFilter()
     {
         $this->assertSearchResults(
-            array(5, 12, 13, 14, 15, 44, 45, 227, 228),
+            [5, 12, 13, 14, 15, 44, 45, 227, 228],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\ContentTypeGroupId(2),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -624,13 +624,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentTypeIdFilter()
     {
         $this->assertSearchResults(
-            array(15, 45, 228),
+            [15, 45, 228],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\ContentTypeId(4),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -639,14 +639,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testContentTypeIdentifierFilter()
     {
         $this->assertSearchResults(
-            array(43, 48, 51, 52, 53),
+            [43, 48, 51, 52, 53],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\ContentTypeIdentifier('folder'),
                         'limit' => 5,
-                        'sortClauses' => array(new SortClause\Location\Id()),
-                    )
+                        'sortClauses' => [new SortClause\Location\Id()],
+                    ]
                 )
             )
         );
@@ -655,14 +655,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testObjectStateIdFilter()
     {
         $this->assertSearchResults(
-            array(5, 12, 13, 14, 15, 43, 44, 45, 48, 51),
+            [5, 12, 13, 14, 15, 43, 44, 45, 48, 51],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\ObjectStateId(1),
                         'limit' => 10,
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 )
             )
         );
@@ -671,14 +671,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testObjectStateIdFilterIn()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14, 15, 43, 44, 45, 48),
+            [2, 5, 12, 13, 14, 15, 43, 44, 45, 48],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
-                        'filter' => new Criterion\ObjectStateId(array(1, 2)),
+                    [
+                        'filter' => new Criterion\ObjectStateId([1, 2]),
                         'limit' => 10,
-                        'sortClauses' => array(new SortClause\Location\Id()),
-                    )
+                        'sortClauses' => [new SortClause\Location\Id()],
+                    ]
                 )
             )
         );
@@ -687,15 +687,15 @@ class HandlerLocationTest extends AbstractTestCase
     public function testRemoteIdFilter()
     {
         $this->assertSearchResults(
-            array(5, 45),
+            [5, 45],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\RemoteId(
-                            array('f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca')
+                            ['f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca']
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -704,13 +704,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testSectionFilter()
     {
         $this->assertSearchResults(
-            array(5, 12, 13, 14, 15, 44, 45, 228),
+            [5, 12, 13, 14, 15, 44, 45, 228],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
-                        'filter' => new Criterion\SectionId(array(2)),
+                    [
+                        'filter' => new Criterion\SectionId([2]),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -719,17 +719,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testDateMetadataFilterModifiedGreater()
     {
         $this->assertSearchResults(
-            array(12, 227, 228),
+            [12, 227, 228],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::GT,
                             1311154214
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -738,17 +738,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testDateMetadataFilterModifiedGreaterOrEqual()
     {
         $this->assertSearchResults(
-            array(12, 15, 227, 228),
+            [12, 15, 227, 228],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::GTE,
                             1311154214
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -757,17 +757,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testDateMetadataFilterModifiedIn()
     {
         $this->assertSearchResults(
-            array(12, 15, 227, 228),
+            [12, 15, 227, 228],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::IN,
-                            array(1311154214, 1311154215)
+                            [1311154214, 1311154215]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -776,17 +776,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testDateMetadataFilterModifiedBetween()
     {
         $this->assertSearchResults(
-            array(12, 15, 227, 228),
+            [12, 15, 227, 228],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\DateMetadata(
                             Criterion\DateMetadata::MODIFIED,
                             Criterion\Operator::BETWEEN,
-                            array(1311154213, 1311154215)
+                            [1311154213, 1311154215]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -795,17 +795,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testDateMetadataFilterCreatedBetween()
     {
         $this->assertSearchResults(
-            array(68, 133, 227),
+            [68, 133, 227],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\DateMetadata(
                             Criterion\DateMetadata::CREATED,
                             Criterion\Operator::BETWEEN,
-                            array(1299780749, 1311154215)
+                            [1299780749, 1311154215]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -814,16 +814,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterOwnerWrongUserId()
     {
         $this->assertSearchResults(
-            array(),
+            [],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             2
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -832,18 +832,18 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterOwnerAdministrator()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14, 15, 43, 44, 45, 48),
+            [2, 5, 12, 13, 14, 15, 43, 44, 45, 48],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             14
                         ),
                         'limit' => 10,
-                        'sortClauses' => array(new SortClause\Location\Id()),
-                    )
+                        'sortClauses' => [new SortClause\Location\Id()],
+                    ]
                 )
             )
         );
@@ -852,16 +852,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterOwnerEqAMember()
     {
         $this->assertSearchResults(
-            array(225),
+            [225],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::OWNER,
                             Criterion\Operator::EQ,
                             226
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -870,16 +870,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterOwnerInAMember()
     {
         $this->assertSearchResults(
-            array(225),
+            [225],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::OWNER,
                             Criterion\Operator::IN,
-                            array(226)
+                            [226]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -888,16 +888,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterCreatorEqAMember()
     {
         $this->assertSearchResults(
-            array(225),
+            [225],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::MODIFIER,
                             Criterion\Operator::EQ,
                             226
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -906,16 +906,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterCreatorInAMember()
     {
         $this->assertSearchResults(
-            array(225),
+            [225],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::MODIFIER,
                             Criterion\Operator::IN,
-                            array(226)
+                            [226]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -924,16 +924,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterEqGroupMember()
     {
         $this->assertSearchResults(
-            array(225),
+            [225],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::GROUP,
                             Criterion\Operator::EQ,
                             11
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -942,16 +942,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterInGroupMember()
     {
         $this->assertSearchResults(
-            array(225),
+            [225],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::GROUP,
                             Criterion\Operator::IN,
-                            array(11)
+                            [11]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -960,16 +960,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterEqGroupMemberNoMatch()
     {
         $this->assertSearchResults(
-            array(),
+            [],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::GROUP,
                             Criterion\Operator::EQ,
                             13
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -978,16 +978,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testUserMetadataFilterInGroupMemberNoMatch()
     {
         $this->assertSearchResults(
-            array(),
+            [],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\UserMetadata(
                             Criterion\UserMetadata::GROUP,
                             Criterion\Operator::IN,
-                            array(13)
+                            [13]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -996,14 +996,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLanguageCodeFilter()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14, 15, 43, 44, 45, 48),
+            [2, 5, 12, 13, 14, 15, 43, 44, 45, 48],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LanguageCode('eng-US'),
                         'limit' => 10,
-                        'sortClauses' => array(new SortClause\Location\Id()),
-                    )
+                        'sortClauses' => [new SortClause\Location\Id()],
+                    ]
                 )
             )
         );
@@ -1012,14 +1012,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLanguageCodeFilterIn()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14, 15, 43, 44, 45, 48),
+            [2, 5, 12, 13, 14, 15, 43, 44, 45, 48],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
-                        'filter' => new Criterion\LanguageCode(array('eng-US', 'eng-GB')),
+                    [
+                        'filter' => new Criterion\LanguageCode(['eng-US', 'eng-GB']),
                         'limit' => 10,
-                        'sortClauses' => array(new SortClause\Location\Id()),
-                    )
+                        'sortClauses' => [new SortClause\Location\Id()],
+                    ]
                 )
             )
         );
@@ -1028,14 +1028,14 @@ class HandlerLocationTest extends AbstractTestCase
     public function testLanguageCodeFilterWithAlwaysAvailable()
     {
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14, 15, 43, 44, 45, 48, 51, 52, 53, 58, 59, 70, 72, 76, 78, 82),
+            [2, 5, 12, 13, 14, 15, 43, 44, 45, 48, 51, 52, 53, 58, 59, 70, 72, 76, 78, 82],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LanguageCode('eng-GB', true),
                         'limit' => 20,
-                        'sortClauses' => array(new SortClause\ContentId()),
-                    )
+                        'sortClauses' => [new SortClause\ContentId()],
+                    ]
                 )
             )
         );
@@ -1045,18 +1045,18 @@ class HandlerLocationTest extends AbstractTestCase
     {
         $result = $this->getContentSearchHandler()->findLocations(
             new LocationQuery(
-                array(
+                [
                     'filter' => new Criterion\MatchAll(),
                     'limit' => 10,
-                    'sortClauses' => array(new SortClause\Location\Id()),
-                )
+                    'sortClauses' => [new SortClause\Location\Id()],
+                ]
             )
         );
 
         $this->assertCount(10, $result->searchHits);
         $this->assertEquals(186, $result->totalCount);
         $this->assertSearchResults(
-            array(2, 5, 12, 13, 14, 15, 43, 44, 45, 48),
+            [2, 5, 12, 13, 14, 15, 43, 44, 45, 48],
             $result
         );
     }
@@ -1064,13 +1064,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFullTextFilter()
     {
         $this->assertSearchResults(
-            array(193),
+            [193],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FullText('applied webpage'),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1079,13 +1079,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFullTextWildcardFilter()
     {
         $this->assertSearchResults(
-            array(193),
+            [193],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FullText('applie*'),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1094,13 +1094,13 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFullTextDisabledWildcardFilter()
     {
         $this->assertSearchResults(
-            array(),
-            $this->getContentSearchHandler(array('enableWildcards' => false))->findLocations(
+            [],
+            $this->getContentSearchHandler(['enableWildcards' => false])->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FullText('applie*'),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1109,18 +1109,18 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFullTextFilterStopwordRemoval()
     {
         $handler = $this->getContentSearchHandler(
-            array(
+            [
                 'stopWordThresholdFactor' => 0.1,
-            )
+            ]
         );
         $this->assertSearchResults(
-            array(),
+            [],
             $handler->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FullText('the'),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1129,19 +1129,19 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFullTextFilterNoStopwordRemoval()
     {
         $handler = $this->getContentSearchHandler(
-            array(
+            [
                 'stopWordThresholdFactor' => 1,
-            )
+            ]
         );
 
         $result = $handler->findLocations(
             new LocationQuery(
-                array(
+                [
                     'filter' => new Criterion\FullText(
                         'the'
                     ),
                     'limit' => 10,
-                )
+                ]
             )
         );
 
@@ -1166,25 +1166,25 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFullTextFilterInvalidStopwordThreshold()
     {
         $this->getContentSearchHandler(
-            array(
+            [
                 'stopWordThresholdFactor' => 2,
-            )
+            ]
         );
     }
 
     public function testFieldRelationFilterContainsSingle()
     {
         $this->assertSearchResults(
-            array(69),
+            [69],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
-                            array(60)
+                            [60]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -1193,16 +1193,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldRelationFilterContainsSingleNoMatch()
     {
         $this->assertSearchResults(
-            array(),
+            [],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
-                            array(4)
+                            [4]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -1211,16 +1211,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldRelationFilterContainsArray()
     {
         $this->assertSearchResults(
-            array(69),
+            [69],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
-                            array(60, 75)
+                            [60, 75]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -1229,16 +1229,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldRelationFilterContainsArrayNotMatch()
     {
         $this->assertSearchResults(
-            array(),
+            [],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::CONTAINS,
-                            array(60, 64)
+                            [60, 64]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -1247,16 +1247,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldRelationFilterInArray()
     {
         $this->assertSearchResults(
-            array(69, 77),
+            [69, 77],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
-                            array(60, 64)
+                            [60, 64]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -1265,16 +1265,16 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldRelationFilterInArrayNotMatch()
     {
         $this->assertSearchResults(
-            array(),
+            [],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\FieldRelation(
                             'billboard',
                             Criterion\Operator::IN,
-                            array(4, 10)
+                            [4, 10]
                         ),
-                    )
+                    ]
                 )
             )
         );
@@ -1283,17 +1283,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilter()
     {
         $this->assertSearchResults(
-            array(12),
+            [12],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Field(
                             'name',
                             Criterion\Operator::EQ,
                             'members'
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1302,17 +1302,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilterIn()
     {
         $this->assertSearchResults(
-            array(12, 44),
+            [12, 44],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Field(
                             'name',
                             Criterion\Operator::IN,
-                            array('members', 'anonymous users')
+                            ['members', 'anonymous users']
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1321,17 +1321,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilterContainsPartial()
     {
         $this->assertSearchResults(
-            array(44),
+            [44],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Field(
                             'name',
                             Criterion\Operator::CONTAINS,
                             'nonymous use'
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1340,17 +1340,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilterContainsSimple()
     {
         $this->assertSearchResults(
-            array(79),
+            [79],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Field(
                             'publish_date',
                             Criterion\Operator::CONTAINS,
                             1174643880
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1359,17 +1359,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilterContainsSimpleNoMatch()
     {
         $this->assertSearchResults(
-            array(),
+            [],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Field(
                             'publish_date',
                             Criterion\Operator::CONTAINS,
                             1174643
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1378,17 +1378,17 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilterBetween()
     {
         $this->assertSearchResults(
-            array(71, 73, 74),
+            [71, 73, 74],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\Field(
                             'price',
                             Criterion\Operator::BETWEEN,
-                            array(10000, 1000000)
+                            [10000, 1000000]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1397,12 +1397,12 @@ class HandlerLocationTest extends AbstractTestCase
     public function testFieldFilterOr()
     {
         $this->assertSearchResults(
-            array(12, 71, 73, 74),
+            [12, 71, 73, 74],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LogicalOr(
-                            array(
+                            [
                                 new Criterion\Field(
                                     'name',
                                     Criterion\Operator::EQ,
@@ -1411,12 +1411,12 @@ class HandlerLocationTest extends AbstractTestCase
                                 new Criterion\Field(
                                     'price',
                                     Criterion\Operator::BETWEEN,
-                                    array(10000, 1000000)
+                                    [10000, 1000000]
                                 ),
-                            )
+                            ]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1425,20 +1425,20 @@ class HandlerLocationTest extends AbstractTestCase
     public function testIsMainLocationFilter()
     {
         $this->assertSearchResults(
-            array(225),
+            [225],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\ParentLocationId(224),
                                 new Criterion\Location\IsMainLocation(
                                     Criterion\Location\IsMainLocation::MAIN
                                 ),
-                            )
+                            ]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );
@@ -1447,20 +1447,20 @@ class HandlerLocationTest extends AbstractTestCase
     public function testIsNotMainLocationFilter()
     {
         $this->assertSearchResults(
-            array(510),
+            [510],
             $this->getContentSearchHandler()->findLocations(
                 new LocationQuery(
-                    array(
+                    [
                         'filter' => new Criterion\LogicalAnd(
-                            array(
+                            [
                                 new Criterion\ParentLocationId(224),
                                 new Criterion\Location\IsMainLocation(
                                     Criterion\Location\IsMainLocation::NOT_MAIN
                                 ),
-                            )
+                            ]
                         ),
                         'limit' => 10,
-                    )
+                    ]
                 )
             )
         );

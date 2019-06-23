@@ -20,25 +20,25 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class StringLengthValidator extends Validator
 {
-    protected $constraints = array(
+    protected $constraints = [
         'maxStringLength' => false,
         'minStringLength' => false,
-    );
+    ];
 
-    protected $constraintsSchema = array(
-        'minStringLength' => array(
+    protected $constraintsSchema = [
+        'minStringLength' => [
             'type' => 'int',
             'default' => 0,
-        ),
-        'maxStringLength' => array(
+        ],
+        'maxStringLength' => [
             'type' => 'int',
             'default' => null,
-        ),
-    );
+        ],
+    ];
 
     public function validateConstraints($constraints)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($constraints as $name => $value) {
             switch ($name) {
                 case 'minStringLength':
@@ -47,17 +47,17 @@ class StringLengthValidator extends Validator
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
-                            array(
+                            [
                                 '%parameter%' => $name,
-                            )
+                            ]
                         );
                     } elseif ($value < 0) {
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value can't be negative",
                             null,
-                            array(
+                            [
                                 '%parameter%' => $name,
-                            )
+                            ]
                         );
                     }
                     break;
@@ -65,9 +65,9 @@ class StringLengthValidator extends Validator
                     $validationErrors[] = new ValidationError(
                         "Validator parameter '%parameter%' is unknown",
                         null,
-                        array(
+                        [
                             '%parameter%' => $name,
-                        )
+                        ]
                     );
             }
         }
@@ -116,9 +116,9 @@ class StringLengthValidator extends Validator
             $this->errors[] = new ValidationError(
                 'The string can not exceed %size% character.',
                 'The string can not exceed %size% characters.',
-                array(
+                [
                     '%size%' => $this->constraints['maxStringLength'],
-                )
+                ]
             );
             $isValid = false;
         }
@@ -128,9 +128,9 @@ class StringLengthValidator extends Validator
             $this->errors[] = new ValidationError(
                 'The string cannot be shorter than %size% character.',
                 'The string cannot be shorter than %size% characters.',
-                array(
+                [
                     '%size%' => $this->constraints['minStringLength'],
-                )
+                ]
             );
             $isValid = false;
         }

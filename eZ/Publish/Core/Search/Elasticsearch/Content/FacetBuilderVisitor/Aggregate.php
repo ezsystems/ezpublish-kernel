@@ -25,14 +25,14 @@ class Aggregate extends FacetBuilderVisitor
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor[]
      */
-    protected $visitors = array();
+    protected $visitors = [];
 
     /**
      * Construct from optional visitor array.
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\FacetBuilderVisitor[] $visitors
      */
-    public function __construct(array $visitors = array())
+    public function __construct(array $visitors = [])
     {
         foreach ($visitors as $visitor) {
             $this->addVisitor($visitor);

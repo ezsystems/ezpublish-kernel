@@ -20,7 +20,7 @@ class ExternalStorageRegistryFactory implements ContainerAwareInterface
      *
      * @var \Closure[]
      */
-    protected $externalStorages = array();
+    protected $externalStorages = [];
 
     /**
      * Registers an external storage handler for a field type, identified by $fieldTypeAlias.

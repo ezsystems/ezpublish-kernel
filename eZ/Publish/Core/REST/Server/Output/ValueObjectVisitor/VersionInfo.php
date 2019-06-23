@@ -82,7 +82,7 @@ class VersionInfo extends ValueObjectVisitor
         $generator->startAttribute(
             'href',
             $this->router->generate('ezpublish_rest_loadUser',
-                array('userId' => $versionInfo->creatorId))
+                ['userId' => $versionInfo->creatorId])
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Creator');
@@ -112,7 +112,7 @@ class VersionInfo extends ValueObjectVisitor
         $generator->startObjectElement('Content', 'ContentInfo');
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadContent', array('contentId' => $versionInfo->getContentInfo()->id))
+            $this->router->generate('ezpublish_rest_loadContent', ['contentId' => $versionInfo->getContentInfo()->id])
         );
         $generator->endAttribute('href');
         $generator->endObjectElement('Content');

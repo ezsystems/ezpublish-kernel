@@ -19,7 +19,7 @@ trait PHPUnit5CompatTrait
      * @deprecated Since PHPUnit 5.4, marked as deprecated here to make it clear when working on 6.7/5.4 branches
      * {@inheritdoc}
      */
-    public function getMock($originalClassName, $methods = array(), array $arguments = array(), $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false, $callOriginalMethods = false, $proxyTarget = null)
+    public function getMock($originalClassName, $methods = [], array $arguments = [], $mockClassName = '', $callOriginalConstructor = true, $callOriginalClone = true, $callAutoload = true, $cloneArguments = false, $callOriginalMethods = false, $proxyTarget = null)
     {
         return parent::getMock(
             $originalClassName,

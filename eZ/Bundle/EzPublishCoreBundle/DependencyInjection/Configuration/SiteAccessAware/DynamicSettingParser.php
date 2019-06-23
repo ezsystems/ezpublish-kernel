@@ -30,11 +30,11 @@ class DynamicSettingParser implements DynamicSettingParserInterface
             throw new OutOfBoundsException('Dynamic settings cannot have more than 3 segments: $paramName;namespace;scope$');
         }
 
-        return array(
+        return [
             'param' => $params[0],
             'namespace' => isset($params[1]) ? $params[1] : null,
             'scope' => isset($params[2]) ? $params[2] : null,
-        );
+        ];
     }
 
     /**

@@ -46,17 +46,17 @@ class RoleServiceTest extends ServiceTest
         $userGroupId = 25;
 
         $role = new Role(
-            array(
+            [
                 'id' => $roleId,
                 'identifier' => $roleIdentifier,
-            )
+            ]
         );
         $roleDraft = new RoleDraft(['innerRole' => $role]);
         $policy = new Policy(
-            array(
+            [
                 'id' => $policyId,
                 'roleId' => $roleId,
-            )
+            ]
         );
         $policyDraft = new PolicyDraft(['innerPolicy' => $policy]);
         $roleCreateStruct = new RoleCreateStruct();
@@ -69,257 +69,257 @@ class RoleServiceTest extends ServiceTest
 
         $user = $this->getUser($userId, md5('user'), 4);
         $roleAssignement = new UserRoleAssignment(
-            array(
+            [
                 'user' => $user,
                 'role' => $role,
-            )
+            ]
         );
         $userGroupRoleAssignement = new UserGroupRoleAssignment(
-            array(
+            [
                 'userGroup' => $userGroup,
                 'role' => $role,
-            )
+            ]
         );
 
-        return array(
-            array(
+        return [
+            [
                 'createRole',
-                array($roleCreateStruct),
+                [$roleCreateStruct],
                 $role,
                 1,
                 RoleServiceSignals\CreateRoleSignal::class,
-                array('roleId' => $roleId),
-            ),
-            array(
+                ['roleId' => $roleId],
+            ],
+            [
                 'createRoleDraft',
-                array($role),
+                [$role],
                 $role,
                 1,
                 RoleServiceSignals\CreateRoleDraftSignal::class,
-                array('roleId' => $roleId),
-            ),
-            array(
+                ['roleId' => $roleId],
+            ],
+            [
                 'updateRole',
-                array($role, $roleUpdateStruct),
+                [$role, $roleUpdateStruct],
                 $role,
                 1,
                 RoleServiceSignals\UpdateRoleSignal::class,
-                array('roleId' => $roleId),
-            ),
-            array(
+                ['roleId' => $roleId],
+            ],
+            [
                 'updateRoleDraft',
-                array($roleDraft, $roleUpdateStruct),
+                [$roleDraft, $roleUpdateStruct],
                 $roleDraft,
                 1,
                 RoleServiceSignals\UpdateRoleDraftSignal::class,
-                array('roleId' => $roleId),
-            ),
-            array(
+                ['roleId' => $roleId],
+            ],
+            [
                 'publishRoleDraft',
-                array($roleDraft),
+                [$roleDraft],
                 $roleDraft,
                 1,
                 RoleServiceSignals\PublishRoleDraftSignal::class,
-                array('roleId' => $roleId),
-            ),
-            array(
+                ['roleId' => $roleId],
+            ],
+            [
                 'addPolicy',
-                array($role, $policyCreateStruct),
+                [$role, $policyCreateStruct],
                 $role,
                 1,
                 RoleServiceSignals\AddPolicySignal::class,
-                array(
+                [
                     'roleId' => $roleId,
                     'policyId' => $roleId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'addPolicyByRoleDraft',
-                array($roleDraft, $policyCreateStruct),
+                [$roleDraft, $policyCreateStruct],
                 $roleDraft,
                 1,
                 RoleServiceSignals\AddPolicyByRoleDraftSignal::class,
-                array(
+                [
                     'roleId' => $roleId,
                     'policyId' => $roleId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'removePolicyByRoleDraft',
-                array($roleDraft, $policyDraft),
+                [$roleDraft, $policyDraft],
                 $roleDraft,
                 1,
                 RoleServiceSignals\RemovePolicyByRoleDraftSignal::class,
-                array(
+                [
                     'roleId' => $roleId,
                     'policyId' => $policyId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'deletePolicy',
-                array($policy),
+                [$policy],
                 null,
                 1,
                 RoleServiceSignals\RemovePolicySignal::class,
-                array(
+                [
                     'roleId' => $roleId,
                     'policyId' => $policyId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'updatePolicy',
-                array($policy, $policyUpdateStruct),
+                [$policy, $policyUpdateStruct],
                 $policy,
                 1,
                 RoleServiceSignals\UpdatePolicySignal::class,
-                array('policyId' => $policyId),
-            ),
-            array(
+                ['policyId' => $policyId],
+            ],
+            [
                 'loadRole',
-                array($roleId),
+                [$roleId],
                 $role,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadRoleDraft',
-                array($roleId),
+                [$roleId],
                 $roleDraft,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadRoleByIdentifier',
-                array($roleIdentifier),
+                [$roleIdentifier],
                 $role,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadRoles',
-                array(),
-                array($role),
+                [],
+                [$role],
                 0,
-            ),
-            array(
+            ],
+            [
                 'deleteRole',
-                array($role),
+                [$role],
                 null,
                 1,
                 RoleServiceSignals\DeleteRoleSignal::class,
-                array('roleId' => $roleId),
-            ),
-            array(
+                ['roleId' => $roleId],
+            ],
+            [
                 'deleteRoleDraft',
-                array($roleDraft),
+                [$roleDraft],
                 null,
                 1,
                 RoleServiceSignals\DeleteRoleDraftSignal::class,
-                array('roleId' => $roleId),
-            ),
-            array(
+                ['roleId' => $roleId],
+            ],
+            [
                 'loadPoliciesByUserId',
-                array($userId),
-                array($policy),
+                [$userId],
+                [$policy],
                 0,
-            ),
-            array(
+            ],
+            [
                 'assignRoleToUserGroup',
-                array($role, $userGroup, $roleLimitation),
+                [$role, $userGroup, $roleLimitation],
                 null,
                 1,
                 RoleServiceSignals\AssignRoleToUserGroupSignal::class,
-                array(
+                [
                     'roleId' => $roleId,
                     'userGroupId' => $userGroupId,
                     'roleLimitation' => $roleLimitation,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'unassignRoleFromUserGroup',
-                array($role, $userGroup),
+                [$role, $userGroup],
                 null,
                 1,
                 RoleServiceSignals\UnassignRoleFromUserGroupSignal::class,
-                array(
+                [
                     'roleId' => $roleId,
                     'userGroupId' => $userGroupId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'assignRoleToUser',
-                array($role, $user, $roleLimitation),
+                [$role, $user, $roleLimitation],
                 null,
                 1,
                 RoleServiceSignals\AssignRoleToUserSignal::class,
-                array(
+                [
                     'roleId' => $roleId,
                     'userId' => $userId,
                     'roleLimitation' => $roleLimitation,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'unassignRoleFromUser',
-                array($role, $user),
+                [$role, $user],
                 null,
                 1,
                 RoleServiceSignals\UnassignRoleFromUserSignal::class,
-                array(
+                [
                     'roleId' => $roleId,
                     'userId' => $userId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'getRoleAssignments',
-                array($role),
-                array($roleAssignement),
+                [$role],
+                [$roleAssignement],
                 0,
-            ),
-            array(
+            ],
+            [
                 'getRoleAssignmentsForUser',
-                array($user, true),
-                array($roleAssignement),
+                [$user, true],
+                [$roleAssignement],
                 0,
-            ),
-            array(
+            ],
+            [
                 'getRoleAssignmentsForUserGroup',
-                array($userGroup),
-                array($userGroupRoleAssignement),
+                [$userGroup],
+                [$userGroupRoleAssignement],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newRoleCreateStruct',
-                array('new role name'),
+                ['new role name'],
                 $roleCreateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newPolicyCreateStruct',
-                array('section', 'view'),
+                ['section', 'view'],
                 $policyCreateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newPolicyUpdateStruct',
-                array(),
+                [],
                 $policyUpdateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'newRoleUpdateStruct',
-                array(),
+                [],
                 $roleUpdateStruct,
                 0,
-            ),
-            array(
+            ],
+            [
                 'getLimitationType',
-                array('identifier'),
+                ['identifier'],
                 $this->createMock(LimitationType::class),
                 0,
-            ),
-            array(
+            ],
+            [
                 'getLimitationTypesByModuleFunction',
-                array('module', 'function'),
-                array($this->createMock(LimitationType::class)),
+                ['module', 'function'],
+                [$this->createMock(LimitationType::class)],
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

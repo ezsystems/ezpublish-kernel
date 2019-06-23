@@ -34,24 +34,24 @@ class CriterionVisitorDispatcher
      *
      * @var array
      */
-    protected $contextMethodMap = array(
+    protected $contextMethodMap = [
         self::CONTEXT_QUERY => 'visitQuery',
         self::CONTEXT_FILTER => 'visitFilter',
-    );
+    ];
 
     /**
      * Array of available visitors.
      *
      * @var \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor[]
      */
-    protected $visitors = array();
+    protected $visitors = [];
 
     /**
      * Construct from optional visitor array.
      *
      * @param \eZ\Publish\Core\Search\Elasticsearch\Content\CriterionVisitor[] $visitors
      */
-    public function __construct(array $visitors = array())
+    public function __construct(array $visitors = [])
     {
         foreach ($visitors as $visitor) {
             $this->addVisitor($visitor);
@@ -79,7 +79,7 @@ class CriterionVisitorDispatcher
      *
      * @return string
      */
-    public function dispatch(Criterion $criterion, $context, array $languageFilter = array())
+    public function dispatch(Criterion $criterion, $context, array $languageFilter = [])
     {
         if (!isset($this->contextMethodMap[$context])) {
             throw new RuntimeException(

@@ -27,13 +27,13 @@ class PageServiceTest extends BaseTest
     {
         $this->pageService->setStorageGateway($this->storageGateway);
         $block = $this->buildBlock();
-        $items = array(
-            new Item(array('contentId' => 1)),
-            new Item(array('contentId' => 60)),
-        );
-        $content1 = new ContentInfo(array('id' => 1));
-        $content2 = new ContentInfo(array('id' => 60));
-        $expectedResult = array($content1, $content2);
+        $items = [
+            new Item(['contentId' => 1]),
+            new Item(['contentId' => 60]),
+        ];
+        $content1 = new ContentInfo(['id' => 1]);
+        $content2 = new ContentInfo(['id' => 60]);
+        $expectedResult = [$content1, $content2];
 
         $this->storageGateway
             ->expects($this->once())

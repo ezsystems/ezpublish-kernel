@@ -48,20 +48,20 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'isMultiple' => array(
+        return [
+            'isMultiple' => [
                 'type' => 'bool',
                 'default' => false,
-            ),
-            'options' => array(
+            ],
+            'options' => [
                 'type' => 'hash',
-                'default' => array(),
-            ),
-            'multilingualOptions' => array(
+                'default' => [],
+            ],
+            'multilingualOptions' => [
                 'type' => 'hash',
-                'default' => array(),
-            ),
-        );
+                'default' => [],
+            ],
+        ];
     }
 
     /**
@@ -99,11 +99,11 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-            'isMultiple' => array(),
+            'isMultiple' => [],
             'options' => new \stdClass(),
-        );
+        ];
     }
 
     /**
@@ -113,7 +113,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -123,7 +123,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -133,9 +133,9 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 23),
-        );
+        return [
+            'unknown' => ['value' => 23],
+        ];
     }
 
     /**
@@ -145,7 +145,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new SelectionValue(array(0, 2));
+        return new SelectionValue([0, 2]);
     }
 
     /**
@@ -173,9 +173,9 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'selection' => array(0, 2),
-        );
+        $expectedData = [
+            'selection' => [0, 2],
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -205,16 +205,16 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
-                new SelectionValue(array(7)),
+            ],
+            [
+                new SelectionValue([7]),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -224,7 +224,7 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new SelectionValue(array(1));
+        return new SelectionValue([1]);
     }
 
     /**
@@ -241,9 +241,9 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'selection' => array(1),
-        );
+        $expectedData = [
+            'selection' => [1],
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -291,9 +291,9 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
-            'selection' => array(0, 2),
-        );
+        $expectedData = [
+            'selection' => [0, 2],
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -322,12 +322,12 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
-                new SelectionValue(array(0, 2)),
-                array(0, 2),
-            ),
-        );
+        return [
+            [
+                new SelectionValue([0, 2]),
+                [0, 2],
+            ],
+        ];
     }
 
     /**
@@ -339,42 +339,42 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
-                array(0, 2),
-                new SelectionValue(array(0, 2)),
-            ),
-        );
+        return [
+            [
+                [0, 2],
+                new SelectionValue([0, 2]),
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new SelectionValue()),
-            array(new SelectionValue(array())),
-        );
+        return [
+            [new SelectionValue()],
+            [new SelectionValue([])],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(
-                new SelectionValue(array(0)),
-            ),
-        );
+            ],
+            [
+                new SelectionValue([0]),
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()
     {
-        return array(1);
+        return [1];
     }
 
     protected function getValidSearchValueTwo()
     {
-        return array(2);
+        return [2];
     }
 
     protected function getSearchTargetValueOne()
@@ -389,45 +389,45 @@ class SelectionIntegrationTest extends SearchMultivaluedBaseIntegrationTest
 
     protected function getAdditionallyIndexedFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'selected_option_value',
                 'Bielefeld',
                 'Sindelfingen',
-            ),
-            array(
+            ],
+            [
                 'sort_value',
                 '1',
                 '2',
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidMultivaluedSearchValuesOne()
     {
-        return array(0, 1);
+        return [0, 1];
     }
 
     protected function getValidMultivaluedSearchValuesTwo()
     {
-        return array(2, 3, 4);
+        return [2, 3, 4];
     }
 
     protected function getAdditionallyIndexedMultivaluedFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'selected_option_value',
-                array('A first', 'Bielefeld'),
-                array('Sindelfingen', 'Turtles', 'Zombies'),
-            ),
-        );
+                ['A first', 'Bielefeld'],
+                ['Sindelfingen', 'Turtles', 'Zombies'],
+            ],
+        ];
     }
 
     protected function getFullTextIndexedFieldData()
     {
-        return array(
-            array('Bielefeld', 'Sindelfingen'),
-        );
+        return [
+            ['Bielefeld', 'Sindelfingen'],
+        ];
     }
 }

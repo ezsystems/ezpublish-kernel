@@ -34,29 +34,29 @@ abstract class FieldFilterBase extends CriterionVisitor
         // latter making sense only when former is set.
         if (!empty($languageFilter['languages'])) {
             // For 'terms' filter caching is enabled by default
-            $filter = array(
-                'terms' => array(
+            $filter = [
+                'terms' => [
                     'fields_doc.meta_language_code_s' => $languageFilter['languages'],
-                ),
-            );
+                ],
+            ];
 
             if (!isset($languageFilter['useAlwaysAvailable']) || $languageFilter['useAlwaysAvailable'] === true) {
-                $filter = array(
-                    'or' => array(
+                $filter = [
+                    'or' => [
                         // Enabling caching requires filters to be wrapped in 'filters' element
-                        'filters' => array(
+                        'filters' => [
                             $filter,
-                            array(
-                                'term' => array(
+                            [
+                                'term' => [
                                     'meta_is_always_available_b' => true,
-                                ),
-                            ),
-                        ),
+                                ],
+                            ],
+                        ],
                         // For 'or' filter caching is disabled by default
                         // We enable it as it should be heavily reused
                         '_cache' => true,
-                    ),
-                );
+                    ],
+                ];
             }
         }
 
@@ -76,43 +76,43 @@ abstract class FieldFilterBase extends CriterionVisitor
         $translationFilter = null;
 
         if (!empty($languageFilter['languages'])) {
-            $translationFilter = array(
-                'terms' => array(
+            $translationFilter = [
+                'terms' => [
                     'fields_doc.meta_language_code_s' => $languageFilter['languages'],
-                ),
-            );
+                ],
+            ];
 
             if (isset($languageFilter['defaultTranslationToMainLanguage'])) {
                 switch ($languageFilter['defaultTranslationToMainLanguage']) {
                     case true:
-                        $translationFilter = array(
-                            'or' => array(
+                        $translationFilter = [
+                            'or' => [
                                 $translationFilter,
-                                'term' => array(
+                                'term' => [
                                     'meta_is_main_translation_b' => true,
-                                ),
-                            ),
-                        );
+                                ],
+                            ],
+                        ];
                         break;
 
                     case 'use_always_available':
-                        $translationFilter = array(
-                            'or' => array(
+                        $translationFilter = [
+                            'or' => [
                                 $translationFilter,
-                                'and' => array(
-                                    array(
-                                        'term' => array(
+                                'and' => [
+                                    [
+                                        'term' => [
                                             'always_available_b' => true,
-                                        ),
-                                    ),
-                                    array(
-                                        'term' => array(
+                                        ],
+                                    ],
+                                    [
+                                        'term' => [
                                             'meta_is_main_translation_b' => true,
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        );
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ];
                         break;
 
                     case false:

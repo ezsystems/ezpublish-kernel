@@ -27,10 +27,10 @@ class FieldRelation extends Criterion
     {
         $types = Specifications::TYPE_INTEGER | Specifications::TYPE_STRING;
 
-        return array(
+        return [
             new Specifications(Operator::CONTAINS, Specifications::FORMAT_SINGLE | Specifications::FORMAT_ARRAY, $types),
             new Specifications(Operator::IN, Specifications::FORMAT_ARRAY, $types),
-        );
+        ];
     }
 
     /**

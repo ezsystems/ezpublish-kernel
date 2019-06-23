@@ -209,7 +209,7 @@ class Json extends Generator
      * @param string $value
      * @param array $attributes
      */
-    public function startValueElement($name, $value, $attributes = array())
+    public function startValueElement($name, $value, $attributes = [])
     {
         $this->checkStartValueElement($name);
 

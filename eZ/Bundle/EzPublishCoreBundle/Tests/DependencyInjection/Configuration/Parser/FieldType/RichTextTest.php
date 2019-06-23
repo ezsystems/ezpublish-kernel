@@ -25,9 +25,9 @@ class RichTextTest extends AbstractParserTestCase
      */
     protected function getContainerExtensions()
     {
-        return array(
-            new EzPublishCoreExtension(array(new RichTextConfigParser())),
-        );
+        return [
+            new EzPublishCoreExtension([new RichTextConfigParser()]),
+        ];
     }
 
     protected function getMinimalConfiguration()
@@ -41,19 +41,19 @@ class RichTextTest extends AbstractParserTestCase
 
         $this->assertConfigResolverParameterValue(
             'fieldtypes.ezrichtext.tags.default',
-            array(
+            [
                 'template' => 'EzPublishCoreBundle:FieldType/RichText/tag:default.html.twig',
-            ),
+            ],
             'ezdemo_site'
         );
         $this->assertConfigResolverParameterValue(
             'fieldtypes.ezrichtext.output_custom_xsl',
-            array(
-                0 => array(
+            [
+                0 => [
                     'path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl',
                     'priority' => 0,
-                ),
-            ),
+                ],
+            ],
             'ezdemo_site'
         );
     }
@@ -92,11 +92,11 @@ class RichTextTest extends AbstractParserTestCase
     public function testRichTextSettings(array $config, array $expected)
     {
         $this->load(
-            array(
-                'system' => array(
+            [
+                'system' => [
                     'ezdemo_site' => $config,
-                ),
-            )
+                ],
+            ]
         );
 
         foreach ($expected as $key => $val) {
@@ -106,198 +106,198 @@ class RichTextTest extends AbstractParserTestCase
 
     public function richTextSettingsProvider()
     {
-        return array(
-            array(
-                array(
-                    'fieldtypes' => array(
-                        'ezrichtext' => array(
-                            'output_custom_tags' => array(
-                                array('path' => '/foo/bar.xsl', 'priority' => 123),
-                                array('path' => '/foo/custom.xsl', 'priority' => -10),
-                                array('path' => '/another/custom.xsl', 'priority' => 27),
-                            ),
-                        ),
-                    ),
-                ),
-                array(
-                    'fieldtypes.ezrichtext.output_custom_xsl' => array(
+        return [
+            [
+                [
+                    'fieldtypes' => [
+                        'ezrichtext' => [
+                            'output_custom_tags' => [
+                                ['path' => '/foo/bar.xsl', 'priority' => 123],
+                                ['path' => '/foo/custom.xsl', 'priority' => -10],
+                                ['path' => '/another/custom.xsl', 'priority' => 27],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'fieldtypes.ezrichtext.output_custom_xsl' => [
                         // Default settings will be added
-                        array('path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl', 'priority' => 0),
-                        array('path' => '/foo/bar.xsl', 'priority' => 123),
-                        array('path' => '/foo/custom.xsl', 'priority' => -10),
-                        array('path' => '/another/custom.xsl', 'priority' => 27),
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'fieldtypes' => array(
-                        'ezrichtext' => array(
-                            'edit_custom_tags' => array(
-                                array('path' => '/foo/bar.xsl', 'priority' => 123),
-                                array('path' => '/foo/custom.xsl', 'priority' => -10),
-                                array('path' => '/another/custom.xsl', 'priority' => 27),
-                            ),
-                        ),
-                    ),
-                ),
-                array(
-                    'fieldtypes.ezrichtext.edit_custom_xsl' => array(
+                        ['path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/output/core.xsl', 'priority' => 0],
+                        ['path' => '/foo/bar.xsl', 'priority' => 123],
+                        ['path' => '/foo/custom.xsl', 'priority' => -10],
+                        ['path' => '/another/custom.xsl', 'priority' => 27],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'fieldtypes' => [
+                        'ezrichtext' => [
+                            'edit_custom_tags' => [
+                                ['path' => '/foo/bar.xsl', 'priority' => 123],
+                                ['path' => '/foo/custom.xsl', 'priority' => -10],
+                                ['path' => '/another/custom.xsl', 'priority' => 27],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'fieldtypes.ezrichtext.edit_custom_xsl' => [
                         // Default settings will be added
-                        array('path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl', 'priority' => 0),
-                        array('path' => '/foo/bar.xsl', 'priority' => 123),
-                        array('path' => '/foo/custom.xsl', 'priority' => -10),
-                        array('path' => '/another/custom.xsl', 'priority' => 27),
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'fieldtypes' => array(
-                        'ezrichtext' => array(
-                            'input_custom_tags' => array(
-                                array('path' => '/foo/bar.xsl', 'priority' => 123),
-                                array('path' => '/foo/custom.xsl', 'priority' => -10),
-                                array('path' => '/another/custom.xsl', 'priority' => 27),
-                            ),
-                        ),
-                    ),
-                ),
-                array(
-                    'fieldtypes.ezrichtext.input_custom_xsl' => array(
+                        ['path' => '%kernel.root_dir%/../vendor/ezsystems/ezpublish-kernel/eZ/Publish/Core/FieldType/RichText/Resources/stylesheets/docbook/xhtml5/edit/core.xsl', 'priority' => 0],
+                        ['path' => '/foo/bar.xsl', 'priority' => 123],
+                        ['path' => '/foo/custom.xsl', 'priority' => -10],
+                        ['path' => '/another/custom.xsl', 'priority' => 27],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'fieldtypes' => [
+                        'ezrichtext' => [
+                            'input_custom_tags' => [
+                                ['path' => '/foo/bar.xsl', 'priority' => 123],
+                                ['path' => '/foo/custom.xsl', 'priority' => -10],
+                                ['path' => '/another/custom.xsl', 'priority' => 27],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'fieldtypes.ezrichtext.input_custom_xsl' => [
                         // No default settings for input
-                        array('path' => '/foo/bar.xsl', 'priority' => 123),
-                        array('path' => '/foo/custom.xsl', 'priority' => -10),
-                        array('path' => '/another/custom.xsl', 'priority' => 27),
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'fieldtypes' => array(
-                        'ezrichtext' => array(
-                            'tags' => array(
-                                'default' => array(
+                        ['path' => '/foo/bar.xsl', 'priority' => 123],
+                        ['path' => '/foo/custom.xsl', 'priority' => -10],
+                        ['path' => '/another/custom.xsl', 'priority' => 27],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'fieldtypes' => [
+                        'ezrichtext' => [
+                            'tags' => [
+                                'default' => [
                                     'template' => 'MyBundle:FieldType/RichText/tag:default.html.twig',
-                                    'config' => array(
+                                    'config' => [
                                         'watch' => 'out',
                                         'only' => 'first level',
                                         'can' => 'be mapped to ezxml',
-                                    ),
-                                ),
-                                'math_equation' => array(
+                                    ],
+                                ],
+                                'math_equation' => [
                                     'template' => 'MyBundle:FieldType/RichText/tag:math_equation.html.twig',
-                                    'config' => array(
+                                    'config' => [
                                         'some' => 'arbitrary',
-                                        'hash' => array(
+                                        'hash' => [
                                             'structure' => 12345,
-                                            'works' => array(
+                                            'works' => [
                                                 'drink' => 'beer',
                                                 'explode' => false,
-                                            ),
-                                            'does not work' => array(
+                                            ],
+                                            'does not work' => [
                                                 'drink' => 'whiskey',
                                                 'deeble' => true,
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-                array(
-                    'fieldtypes.ezrichtext.tags.default' => array(
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'fieldtypes.ezrichtext.tags.default' => [
                         'template' => 'MyBundle:FieldType/RichText/tag:default.html.twig',
-                        'config' => array(
+                        'config' => [
                             'watch' => 'out',
                             'only' => 'first level',
                             'can' => 'be mapped to ezxml',
-                        ),
-                    ),
-                    'fieldtypes.ezrichtext.tags.math_equation' => array(
+                        ],
+                    ],
+                    'fieldtypes.ezrichtext.tags.math_equation' => [
                         'template' => 'MyBundle:FieldType/RichText/tag:math_equation.html.twig',
-                        'config' => array(
+                        'config' => [
                             'some' => 'arbitrary',
-                            'hash' => array(
+                            'hash' => [
                                 'structure' => 12345,
-                                'works' => array(
+                                'works' => [
                                     'drink' => 'beer',
                                     'explode' => false,
-                                ),
-                                'does not work' => array(
+                                ],
+                                'does not work' => [
                                     'drink' => 'whiskey',
                                     'deeble' => true,
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'fieldtypes' => array(
-                        'ezrichtext' => array(
-                            'custom_tags' => array('video', 'equation'),
-                        ),
-                    ),
-                ),
-                array(
-                    'fieldtypes.ezrichtext.custom_tags' => array('video', 'equation'),
-                ),
-            ),
-            array(
-                array(
-                    'fieldtypes' => array(
-                        'ezrichtext' => array(
-                            'embed' => array(
-                                'content' => array(
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
+                [
+                    'fieldtypes' => [
+                        'ezrichtext' => [
+                            'custom_tags' => ['video', 'equation'],
+                        ],
+                    ],
+                ],
+                [
+                    'fieldtypes.ezrichtext.custom_tags' => ['video', 'equation'],
+                ],
+            ],
+            [
+                [
+                    'fieldtypes' => [
+                        'ezrichtext' => [
+                            'embed' => [
+                                'content' => [
                                     'template' => 'MyBundle:FieldType/RichText/embed:content.html.twig',
-                                    'config' => array(
-                                        'have' => array(
-                                            'spacesuit' => array(
+                                    'config' => [
+                                        'have' => [
+                                            'spacesuit' => [
                                                 'travel' => true,
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                                'location_inline_denied' => array(
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'location_inline_denied' => [
                                     'template' => 'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig',
-                                    'config' => array(
-                                        'have' => array(
-                                            'location' => array(
+                                    'config' => [
+                                        'have' => [
+                                            'location' => [
                                                 'index' => true,
-                                            ),
-                                        ),
-                                    ),
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-                array(
-                    'fieldtypes.ezrichtext.embed.content' => array(
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                [
+                    'fieldtypes.ezrichtext.embed.content' => [
                         'template' => 'MyBundle:FieldType/RichText/embed:content.html.twig',
-                        'config' => array(
-                            'have' => array(
-                                'spacesuit' => array(
+                        'config' => [
+                            'have' => [
+                                'spacesuit' => [
                                     'travel' => true,
-                                ),
-                            ),
-                        ),
-                    ),
-                    'fieldtypes.ezrichtext.embed.location_inline_denied' => array(
+                                ],
+                            ],
+                        ],
+                    ],
+                    'fieldtypes.ezrichtext.embed.location_inline_denied' => [
                         'template' => 'MyBundle:FieldType/RichText/embed:location_inline_denied.html.twig',
-                        'config' => array(
-                            'have' => array(
-                                'location' => array(
+                        'config' => [
+                            'have' => [
+                                'location' => [
                                     'index' => true,
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 }

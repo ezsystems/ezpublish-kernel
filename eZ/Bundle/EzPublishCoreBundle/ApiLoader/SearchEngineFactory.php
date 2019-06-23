@@ -27,7 +27,7 @@ class SearchEngineFactory
      *
      * @var \eZ\Publish\SPI\Search\Handler[]
      */
-    protected $searchEngines = array();
+    protected $searchEngines = [];
 
     public function __construct(RepositoryConfigurationProvider $repositoryConfigurationProvider)
     {

@@ -40,7 +40,7 @@ abstract class GatewayBasedStorage implements FieldStorage
      *
      * @param \eZ\Publish\Core\FieldType\StorageGateway[] $gateways
      */
-    public function __construct(array $gateways = array())
+    public function __construct(array $gateways = [])
     {
         @trigger_error(
             sprintf(

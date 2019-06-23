@@ -25,6 +25,6 @@ class AliasCleaner implements AliasCleanerInterface
 
     public function removeAliases($originalPath)
     {
-        $this->aliasResolver->remove(array($originalPath), array());
+        $this->aliasResolver->remove([$originalPath], []);
     }
 }

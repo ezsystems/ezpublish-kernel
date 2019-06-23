@@ -39,10 +39,10 @@ class SignalSlotPass implements CompilerPassInterface
 
                 $signalDispatcherDef->addMethodCall(
                     'attach',
-                    array(
+                    [
                         $attribute['signal'],
                         new Reference($id),
-                    )
+                    ]
                 );
             }
         }

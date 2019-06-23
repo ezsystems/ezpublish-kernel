@@ -26,11 +26,11 @@ class FullText extends CriterionHandler
      *
      * @var array
      */
-    protected $configuration = array(
+    protected $configuration = [
         // @see getStopWordThresholdValue()
         'stopWordThresholdFactor' => 0.66,
         'enableWildcards' => true,
-        'commands' => array(
+        'commands' => [
             'apostrophe_normalize',
             'apostrophe_to_doublequote',
             'ascii_lowercase',
@@ -63,8 +63,8 @@ class FullText extends CriterionHandler
             'special_decompose',
             'specialwords_search_normalize',
             'tab_search_normalize',
-        ),
-    );
+        ],
+    ];
 
     /**
      * @var int|null
@@ -92,7 +92,7 @@ class FullText extends CriterionHandler
     public function __construct(
         DatabaseHandler $dbHandler,
         TransformationProcessor $processor,
-        array $configuration = array()
+        array $configuration = []
     ) {
         parent::__construct($dbHandler);
 
@@ -186,7 +186,7 @@ class FullText extends CriterionHandler
         $tokens = $this->tokenizeString(
             $this->processor->transform($string, $this->configuration['commands'])
         );
-        $wordExpressions = array();
+        $wordExpressions = [];
         foreach ($tokens as $token) {
             $wordExpressions[] = $this->getWordExpression($subQuery, $token);
         }

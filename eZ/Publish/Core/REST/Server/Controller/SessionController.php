@@ -59,7 +59,7 @@ class SessionController extends Controller
         /** @var $sessionInput \eZ\Publish\Core\REST\Server\Values\SessionInput */
         $sessionInput = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );

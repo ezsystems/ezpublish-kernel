@@ -85,10 +85,10 @@ class TimeConverter implements Converter
     public function toFieldDefinition(StorageFieldDefinition $storageDef, FieldDefinition $fieldDef)
     {
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'defaultType' => $storageDef->dataInt1,
                 'useSeconds' => (bool)$storageDef->dataInt2,
-            )
+            ]
         );
 
         // Building default value

@@ -28,7 +28,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array(
+        return [
             new Search\Field(
                 'value_url',
                 $field->value->externalData,
@@ -49,7 +49,7 @@ class SearchField implements Indexable
                 $text,
                 new Search\FieldType\FullTextField()
             ),
-        );
+        ];
     }
 
     /**
@@ -59,11 +59,11 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'value_url' => new Search\FieldType\StringField(),
             'value_id' => new Search\FieldType\StringField(),
             'value_text' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     /**

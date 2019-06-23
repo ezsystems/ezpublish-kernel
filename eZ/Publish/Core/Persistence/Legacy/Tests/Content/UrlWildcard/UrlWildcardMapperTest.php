@@ -34,12 +34,12 @@ class UrlWildcardMapperTest extends TestCase
 
         self::assertEquals(
             new UrlWildcard(
-                array(
+                [
                     'id' => null,
                     'sourceUrl' => '/pancake/*',
                     'destinationUrl' => '/cake/{1}',
                     'forward' => true,
-                )
+                ]
             ),
             $urlWildcard
         );
@@ -53,23 +53,23 @@ class UrlWildcardMapperTest extends TestCase
     public function testExtractUrlWildcardFromRow()
     {
         $mapper = $this->getMapper();
-        $row = array(
+        $row = [
             'id' => '42',
             'source_url' => 'faq/*',
             'destination_url' => '42',
             'type' => '1',
-        );
+        ];
 
         $urlWildcard = $mapper->extractUrlWildcardFromRow($row);
 
         self::assertEquals(
             new UrlWildcard(
-                array(
+                [
                     'id' => 42,
                     'sourceUrl' => '/faq/*',
                     'destinationUrl' => '/42',
                     'forward' => true,
-                )
+                ]
             ),
             $urlWildcard
         );
@@ -83,42 +83,42 @@ class UrlWildcardMapperTest extends TestCase
     public function testExtractUrlWildcardsFromRows()
     {
         $mapper = $this->getMapper();
-        $rows = array(
-            array(
+        $rows = [
+            [
                 'id' => '24',
                 'source_url' => 'contact-information',
                 'destination_url' => 'contact',
                 'type' => '2',
-            ),
-            array(
+            ],
+            [
                 'id' => '42',
                 'source_url' => 'faq/*',
                 'destination_url' => '42',
                 'type' => '1',
-            ),
-        );
+            ],
+        ];
 
         $urlWildcards = $mapper->extractUrlWildcardsFromRows($rows);
 
         self::assertEquals(
-            array(
+            [
                 new UrlWildcard(
-                    array(
+                    [
                         'id' => 24,
                         'sourceUrl' => '/contact-information',
                         'destinationUrl' => '/contact',
                         'forward' => false,
-                    )
+                    ]
                 ),
                 new UrlWildcard(
-                    array(
+                    [
                         'id' => 42,
                         'sourceUrl' => '/faq/*',
                         'destinationUrl' => '/42',
                         'forward' => true,
-                    )
+                    ]
                 ),
-            ),
+            ],
             $urlWildcards
         );
     }

@@ -37,14 +37,14 @@ class ResponseListenerTest extends EventListenerTest
     public function setUp()
     {
         $this->eventValue = new stdClass();
-        $this->response = new Response('BODY', 406, array('foo' => 'bar'));
+        $this->response = new Response('BODY', 406, ['foo' => 'bar']);
     }
 
     public function provideExpectedSubscribedEventTypes()
     {
-        return array(
-            array(array(KernelEvents::VIEW, KernelEvents::EXCEPTION)),
-        );
+        return [
+            [[KernelEvents::VIEW, KernelEvents::EXCEPTION]],
+        ];
     }
 
     public function testOnKernelResultViewIsNotRestRequest()

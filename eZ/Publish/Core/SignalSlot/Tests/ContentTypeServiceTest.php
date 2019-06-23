@@ -53,273 +53,273 @@ class ContentTypeServiceTest extends ServiceTest
         $contentTypeGroupCreateStruct = new ContentTypeGroupCreateStruct();
         $contentTypeGroupUpdateStruct = new ContentTypeGroupUpdateStruct();
         $contentTypeGroup = new ContentTypeGroup(
-            array(
+            [
                 'id' => $contentTypeGroupId,
                 'identifier' => $contentTypeGroupIdentifier,
-            )
+            ]
         );
         $contentTypeCreateStruct = new ContentTypeCreateStruct();
         $contentTypeUpdateStruct = new ContentTypeUpdateStruct();
         $contentType = new ContentType(
-            array(
+            [
                 'id' => $contentTypeId,
                 'identifier' => $contentTypeIdentifier,
                 'remoteId' => $contentTypeRemoteId,
-                'fieldDefinitions' => array(),
-            )
+                'fieldDefinitions' => [],
+            ]
         );
         $contentTypeDraft = new ContentTypeDraft(
-            array(
+            [
                 'innerContentType' => $contentType,
-            )
+            ]
         );
         $copyContentType = new ContentType(
-            array(
+            [
                 'id' => $copyContentTypeId,
                 'identifier' => $copyContentTypeIdentifier,
                 'remoteId' => $copyContentTypeRemoteId,
-                'fieldDefinitions' => array(),
-            )
+                'fieldDefinitions' => [],
+            ]
         );
         $user = $this->getUser($userId, md5('Sauron'), $userVersionNo);
 
         $fieldDefinitionCreateStruct = new FieldDefinitionCreateStruct();
         $fieldDefinitionUpdateStruct = new FieldDefinitionUpdateStruct();
         $fieldDefinition = new FieldDefinition(
-            array(
+            [
                 'id' => $fieldDefinitionId,
                 'identifier' => $fieldDefinitionIdentifier,
-            )
+            ]
         );
 
-        return array(
-            array(
+        return [
+            [
                 'createContentTypeGroup',
-                array($contentTypeGroupCreateStruct),
+                [$contentTypeGroupCreateStruct],
                 $contentTypeGroup,
                 1,
                 ContentTypeServiceSignals\CreateContentTypeGroupSignal::class,
-                array('groupId' => $contentTypeGroupId),
-            ),
-            array(
+                ['groupId' => $contentTypeGroupId],
+            ],
+            [
                 'loadContentTypeGroup',
-                array($contentTypeGroupId, ['eng-GB']),
+                [$contentTypeGroupId, ['eng-GB']],
                 $contentTypeGroup,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentTypeGroupByIdentifier',
-                array($contentTypeGroupIdentifier, ['eng-GB']),
+                [$contentTypeGroupIdentifier, ['eng-GB']],
                 $contentTypeGroup,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentTypeGroups',
-                array(['eng-GB']),
-                array($contentTypeGroup),
+                [['eng-GB']],
+                [$contentTypeGroup],
                 0,
-            ),
-            array(
+            ],
+            [
                 'updateContentTypeGroup',
-                array($contentTypeGroup, $contentTypeGroupUpdateStruct),
+                [$contentTypeGroup, $contentTypeGroupUpdateStruct],
                 null,
                 1,
                 ContentTypeServiceSignals\UpdateContentTypeGroupSignal::class,
-                array('contentTypeGroupId' => $contentTypeGroupId),
-            ),
-            array(
+                ['contentTypeGroupId' => $contentTypeGroupId],
+            ],
+            [
                 'deleteContentTypeGroup',
-                array($contentTypeGroup),
+                [$contentTypeGroup],
                 null,
                 1,
                 ContentTypeServiceSignals\DeleteContentTypeGroupSignal::class,
-                array('contentTypeGroupId' => $contentTypeGroupId),
-            ),
-            array(
+                ['contentTypeGroupId' => $contentTypeGroupId],
+            ],
+            [
                 'createContentType',
-                array($contentTypeCreateStruct, array($contentTypeGroup)),
+                [$contentTypeCreateStruct, [$contentTypeGroup]],
                 $contentType,
                 1,
                 ContentTypeServiceSignals\CreateContentTypeSignal::class,
-                array('contentTypeId' => $contentTypeId),
-            ),
-            array(
+                ['contentTypeId' => $contentTypeId],
+            ],
+            [
                 'loadContentType',
-                array($contentTypeId, ['eng-GB']),
-                array($contentType),
+                [$contentTypeId, ['eng-GB']],
+                [$contentType],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentTypeByIdentifier',
-                array($contentTypeIdentifier, ['eng-GB']),
-                array($contentType),
+                [$contentTypeIdentifier, ['eng-GB']],
+                [$contentType],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentTypeByRemoteId',
-                array($contentTypeRemoteId, ['eng-GB']),
-                array($contentType),
+                [$contentTypeRemoteId, ['eng-GB']],
+                [$contentType],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentTypeDraft',
-                array($contentType),
-                array($contentTypeDraft),
+                [$contentType],
+                [$contentTypeDraft],
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentTypes',
-                array($contentTypeGroup, ['eng-GB']),
-                array($contentType),
+                [$contentTypeGroup, ['eng-GB']],
+                [$contentType],
                 0,
-            ),
-            array(
+            ],
+            [
                 'createContentTypeDraft',
-                array($contentType),
+                [$contentType],
                 $contentTypeDraft,
                 1,
                 ContentTypeServiceSignals\CreateContentTypeDraftSignal::class,
-                array('contentTypeId' => $contentTypeId),
-            ),
-            array(
+                ['contentTypeId' => $contentTypeId],
+            ],
+            [
                 'updateContentTypeDraft',
-                array($contentTypeDraft, $contentTypeUpdateStruct),
+                [$contentTypeDraft, $contentTypeUpdateStruct],
                 null,
                 1,
                 ContentTypeServiceSignals\UpdateContentTypeDraftSignal::class,
-                array('contentTypeDraftId' => $contentTypeId),
-            ),
-            array(
+                ['contentTypeDraftId' => $contentTypeId],
+            ],
+            [
                 'deleteContentType',
-                array($contentType),
+                [$contentType],
                 null,
                 1,
                 ContentTypeServiceSignals\DeleteContentTypeSignal::class,
-                array('contentTypeId' => $contentTypeId),
-            ),
-            array(
+                ['contentTypeId' => $contentTypeId],
+            ],
+            [
                 'copyContentType',
-                array($contentType, $user),
+                [$contentType, $user],
                 $copyContentType,
                 1,
                 ContentTypeServiceSignals\CopyContentTypeSignal::class,
-                array(
+                [
                     'contentTypeId' => $contentTypeId,
                     'userId' => $userId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'assignContentTypeGroup',
-                array($contentType, $contentTypeGroup),
+                [$contentType, $contentTypeGroup],
                 null,
                 1,
                 ContentTypeServiceSignals\AssignContentTypeGroupSignal::class,
-                array(
+                [
                     'contentTypeId' => $contentTypeId,
                     'contentTypeGroupId' => $contentTypeGroupId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'unassignContentTypeGroup',
-                array($contentType, $contentTypeGroup),
+                [$contentType, $contentTypeGroup],
                 null,
                 1,
                 ContentTypeServiceSignals\UnassignContentTypeGroupSignal::class,
-                array(
+                [
                     'contentTypeId' => $contentTypeId,
                     'contentTypeGroupId' => $contentTypeGroupId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'addFieldDefinition',
-                array($contentTypeDraft, $fieldDefinitionCreateStruct),
+                [$contentTypeDraft, $fieldDefinitionCreateStruct],
                 null,
                 1,
                 ContentTypeServiceSignals\AddFieldDefinitionSignal::class,
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'removeFieldDefinition',
-                array($contentTypeDraft, $fieldDefinition),
+                [$contentTypeDraft, $fieldDefinition],
                 null,
                 1,
                 ContentTypeServiceSignals\RemoveFieldDefinitionSignal::class,
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeId,
                     'fieldDefinitionId' => $fieldDefinitionId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'updateFieldDefinition',
-                array($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct),
+                [$contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct],
                 null,
                 1,
                 ContentTypeServiceSignals\UpdateFieldDefinitionSignal::class,
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeId,
                     'fieldDefinitionId' => $fieldDefinitionId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'publishContentTypeDraft',
-                array($contentTypeDraft),
+                [$contentTypeDraft],
                 null,
                 1,
                 ContentTypeServiceSignals\PublishContentTypeDraftSignal::class,
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'newContentTypeGroupCreateStruct',
-                array('Content'),
-                array($contentTypeGroupCreateStruct),
+                ['Content'],
+                [$contentTypeGroupCreateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newContentTypeCreateStruct',
-                array('lords'),
-                array($contentTypeCreateStruct),
+                ['lords'],
+                [$contentTypeCreateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newContentTypeUpdateStruct',
-                array(),
-                array($contentTypeUpdateStruct),
+                [],
+                [$contentTypeUpdateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newContentTypeGroupUpdateStruct',
-                array(),
-                array($contentTypeGroupUpdateStruct),
+                [],
+                [$contentTypeGroupUpdateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newFieldDefinitionCreateStruct',
-                array('ezstring', 'name'),
-                array($fieldDefinitionCreateStruct),
+                ['ezstring', 'name'],
+                [$fieldDefinitionCreateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newFieldDefinitionUpdateStruct',
-                array(),
-                array($fieldDefinitionUpdateStruct),
+                [],
+                [$fieldDefinitionUpdateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'isContentTypeUsed',
-                array($contentType),
+                [$contentType],
                 true,
                 0,
-            ),
-            array(
+            ],
+            [
                 'removeContentTypeTranslation',
-                array($contentTypeDraft, 'eng-GB'),
+                [$contentTypeDraft, 'eng-GB'],
                 $contentTypeDraft,
                 1,
-            ),
-        );
+            ],
+        ];
     }
 }

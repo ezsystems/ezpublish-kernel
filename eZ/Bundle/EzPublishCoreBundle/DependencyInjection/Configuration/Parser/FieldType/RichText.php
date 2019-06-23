@@ -323,10 +323,10 @@ class RichText extends AbstractFieldTypeParser
                 ->setDeprecated('DEPRECATED. Configure custom tags using custom_tags node')
                 ->info('Custom XSL stylesheets to use for RichText transformation to HTML5. Useful for "custom tags".')
                 ->example(
-                    array(
+                    [
                         'path' => '%kernel.root_dir%/../src/Acme/TestBundle/Resources/myTag.xsl',
                         'priority' => 10,
-                    )
+                    ]
                 )
                 ->prototype('array')
                     ->children()
@@ -345,10 +345,10 @@ class RichText extends AbstractFieldTypeParser
                 ->setDeprecated('DEPRECATED. Configure custom tags using custom_tags node')
                 ->info('Custom XSL stylesheets to use for RichText transformation to HTML5. Useful for "custom tags".')
                 ->example(
-                    array(
+                    [
                         'path' => '%kernel.root_dir%/../src/Acme/TestBundle/Resources/myTag.xsl',
                         'priority' => 10,
-                    )
+                    ]
                 )
                 ->prototype('array')
                     ->children()
@@ -367,10 +367,10 @@ class RichText extends AbstractFieldTypeParser
                 ->setDeprecated('DEPRECATED. Configure custom tags using custom_tags node')
                 ->info('Custom XSL stylesheets to use for RichText transformation to HTML5. Useful for "custom tags".')
                 ->example(
-                    array(
+                    [
                         'path' => '%kernel.root_dir%/../src/Acme/TestBundle/Resources/myTag.xsl',
                         'priority' => 10,
-                    )
+                    ]
                 )
                 ->prototype('array')
                     ->children()

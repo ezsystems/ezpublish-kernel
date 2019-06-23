@@ -33,8 +33,8 @@ class RoleAssignmentList extends ValueObjectVisitor
         $generator->startAttribute(
             'href',
             $data->isGroupAssignment ?
-                $this->router->generate('ezpublish_rest_loadRoleAssignmentsForUserGroup', array('groupPath' => $data->id)) :
-                $this->router->generate('ezpublish_rest_loadRoleAssignmentsForUser', array('userId' => $data->id))
+                $this->router->generate('ezpublish_rest_loadRoleAssignmentsForUserGroup', ['groupPath' => $data->id]) :
+                $this->router->generate('ezpublish_rest_loadRoleAssignmentsForUser', ['userId' => $data->id])
         );
         $generator->endAttribute('href');
 

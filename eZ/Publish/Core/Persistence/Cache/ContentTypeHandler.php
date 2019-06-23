@@ -65,7 +65,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function createGroup(GroupCreateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $this->cache->deleteItems(['ez-content-type-group-list']);
 
         return $this->persistenceHandler->contentTypeHandler()->createGroup($struct);
@@ -76,7 +76,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function updateGroup(GroupUpdateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $group = $this->persistenceHandler->contentTypeHandler()->updateGroup($struct);
 
         $this->cache->deleteItems([
@@ -93,7 +93,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function deleteGroup($groupId)
     {
-        $this->logger->logCall(__METHOD__, array('group' => $groupId));
+        $this->logger->logCall(__METHOD__, ['group' => $groupId]);
         $return = $this->persistenceHandler->contentTypeHandler()->deleteGroup($groupId);
 
         $this->cache->invalidateTags(['type-group-' . $groupId]);
@@ -171,7 +171,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
     public function loadContentTypes($groupId, $status = Type::STATUS_DEFINED)
     {
         if ($status !== Type::STATUS_DEFINED) {
-            $this->logger->logCall(__METHOD__, array('group' => $groupId, 'status' => $status));
+            $this->logger->logCall(__METHOD__, ['group' => $groupId, 'status' => $status]);
 
             return $this->persistenceHandler->contentTypeHandler()->loadContentTypes($groupId, $status);
         }
@@ -263,7 +263,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function create(CreateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['struct' => $struct]);
 
         $type = $this->persistenceHandler->contentTypeHandler()->create($struct);
 
@@ -283,7 +283,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function update($typeId, $status, UpdateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status, 'struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['type' => $typeId, 'status' => $status, 'struct' => $struct]);
         $type = $this->persistenceHandler->contentTypeHandler()->update($typeId, $status, $struct);
 
         if ($status === Type::STATUS_DEFINED) {
@@ -300,7 +300,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function delete($typeId, $status)
     {
-        $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status));
+        $this->logger->logCall(__METHOD__, ['type' => $typeId, 'status' => $status]);
         $return = $this->persistenceHandler->contentTypeHandler()->delete($typeId, $status);
 
         if ($status === Type::STATUS_DEFINED) {
@@ -317,7 +317,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function createDraft($modifierId, $typeId)
     {
-        $this->logger->logCall(__METHOD__, array('modifier' => $modifierId, 'type' => $typeId));
+        $this->logger->logCall(__METHOD__, ['modifier' => $modifierId, 'type' => $typeId]);
         $draft = $this->persistenceHandler->contentTypeHandler()->createDraft($modifierId, $typeId);
 
         $this->cache->deleteItems(['ez-content-type-' . $typeId . '-' . Type::STATUS_DRAFT]);
@@ -330,7 +330,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function copy($userId, $typeId, $status)
     {
-        $this->logger->logCall(__METHOD__, array('user' => $userId, 'type' => $typeId, 'status' => $status));
+        $this->logger->logCall(__METHOD__, ['user' => $userId, 'type' => $typeId, 'status' => $status]);
 
         return $this->persistenceHandler->contentTypeHandler()->copy($userId, $typeId, $status);
     }
@@ -340,7 +340,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function unlink($groupId, $typeId, $status)
     {
-        $this->logger->logCall(__METHOD__, array('group' => $groupId, 'type' => $typeId, 'status' => $status));
+        $this->logger->logCall(__METHOD__, ['group' => $groupId, 'type' => $typeId, 'status' => $status]);
         $return = $this->persistenceHandler->contentTypeHandler()->unlink($groupId, $typeId, $status);
 
         if ($status === Type::STATUS_DEFINED) {
@@ -357,7 +357,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function link($groupId, $typeId, $status)
     {
-        $this->logger->logCall(__METHOD__, array('group' => $groupId, 'type' => $typeId, 'status' => $status));
+        $this->logger->logCall(__METHOD__, ['group' => $groupId, 'type' => $typeId, 'status' => $status]);
         $return = $this->persistenceHandler->contentTypeHandler()->link($groupId, $typeId, $status);
 
         if ($status === Type::STATUS_DEFINED) {
@@ -376,7 +376,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function getFieldDefinition($id, $status)
     {
-        $this->logger->logCall(__METHOD__, array('field' => $id, 'status' => $status));
+        $this->logger->logCall(__METHOD__, ['field' => $id, 'status' => $status]);
 
         return $this->persistenceHandler->contentTypeHandler()->getFieldDefinition($id, $status);
     }
@@ -386,7 +386,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function getContentCount($contentTypeId)
     {
-        $this->logger->logCall(__METHOD__, array('contentTypeId' => $contentTypeId));
+        $this->logger->logCall(__METHOD__, ['contentTypeId' => $contentTypeId]);
 
         return $this->persistenceHandler->contentTypeHandler()->getContentCount($contentTypeId);
     }
@@ -396,7 +396,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function addFieldDefinition($typeId, $status, FieldDefinition $struct)
     {
-        $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status, 'struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['type' => $typeId, 'status' => $status, 'struct' => $struct]);
         $return = $this->persistenceHandler->contentTypeHandler()->addFieldDefinition(
             $typeId,
             $status,
@@ -417,7 +417,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function removeFieldDefinition($typeId, $status, $fieldDefinitionId)
     {
-        $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status, 'field' => $fieldDefinitionId));
+        $this->logger->logCall(__METHOD__, ['type' => $typeId, 'status' => $status, 'field' => $fieldDefinitionId]);
         $this->persistenceHandler->contentTypeHandler()->removeFieldDefinition(
             $typeId,
             $status,
@@ -436,7 +436,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function updateFieldDefinition($typeId, $status, FieldDefinition $struct)
     {
-        $this->logger->logCall(__METHOD__, array('type' => $typeId, 'status' => $status, 'struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['type' => $typeId, 'status' => $status, 'struct' => $struct]);
         $this->persistenceHandler->contentTypeHandler()->updateFieldDefinition(
             $typeId,
             $status,
@@ -455,7 +455,7 @@ class ContentTypeHandler extends AbstractInMemoryPersistenceHandler implements C
      */
     public function publish($typeId)
     {
-        $this->logger->logCall(__METHOD__, array('type' => $typeId));
+        $this->logger->logCall(__METHOD__, ['type' => $typeId]);
         $this->persistenceHandler->contentTypeHandler()->publish($typeId);
 
         // Clear type cache, map cache, and content cache which contains fields.

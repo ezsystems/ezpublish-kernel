@@ -39,7 +39,7 @@ class Policy extends ValueObjectVisitor
     {
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadPolicy', array('roleId' => $data->roleId, 'policyId' => $data->id))
+            $this->router->generate('ezpublish_rest_loadPolicy', ['roleId' => $data->roleId, 'policyId' => $data->id])
         );
         $generator->endAttribute('href');
 

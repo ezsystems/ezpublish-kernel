@@ -44,10 +44,10 @@ class RegisterStorageEnginePass implements CompilerPassInterface
                 // Register the storage engine on the main storage engine factory
                 $storageEngineFactoryDef->addMethodCall(
                     'registerStorageEngine',
-                    array(
+                    [
                         new Reference($id),
                         $attribute['alias'],
-                    )
+                    ]
                 );
             }
         }

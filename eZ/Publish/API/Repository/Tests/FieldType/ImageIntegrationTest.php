@@ -43,20 +43,20 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     protected function getFixtureData()
     {
-        return array(
-            'create' => array(
+        return [
+            'create' => [
                 'fileName' => 'Icy-Night-Flower.jpg',
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                 'alternativeText' => 'My icy flower at night',
                 'fileSize' => filesize($path),
-            ),
-            'update' => array(
+            ],
+            'update' => [
                 'fileName' => 'Blue-Blue-Blue.png',
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                 'alternativeText' => 'Such a blue …',
                 'fileSize' => filesize($path),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -76,7 +76,7 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -86,7 +86,7 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -96,9 +96,9 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -108,14 +108,14 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array(
-            'FileSizeValidator' => array(
-                'maxFileSize' => array(
+        return [
+            'FileSizeValidator' => [
+                'maxFileSize' => [
                     'type' => 'int',
                     'default' => false,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -125,11 +125,11 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array(
-            'FileSizeValidator' => array(
+        return [
+            'FileSizeValidator' => [
                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -139,11 +139,11 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'StringLengthValidator' => array(
+        return [
+            'StringLengthValidator' => [
                 'minStringLength' => new \stdClass(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -225,17 +225,17 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
+        return [
             // will fail because the provided file doesn't exist, and fileSize/fileName won't be set
-            array(
+            [
                 new ImageValue(
-                    array(
+                    [
                         'inputUri' => __DIR__ . '/_fixtures/nofile.png',
-                    )
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -349,16 +349,16 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new ImageValue(
-                    array(
+                    [
                         'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                         'fileName' => 'Icy-Night-Flower.jpg',
                         'alternativeText' => 'My icy flower at night',
-                    )
+                    ]
                 ),
-                array(
+                [
                     'inputUri' => $path,
                     'path' => $path,
                     'fileName' => 'Icy-Night-Flower.jpg',
@@ -369,11 +369,11 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
                     'uri' => null,
                     'width' => null,
                     'height' => null,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 new ImageValue(
-                    array(
+                    [
                         'id' => $path = 'var/test/storage/images/file.png',
                         'fileName' => 'Icy-Night-Flower.jpg',
                         'alternativeText' => 'My icy flower at night',
@@ -382,9 +382,9 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
                         'uri' => "/$path",
                         'width' => 123,
                         'height' => 456,
-                    )
+                    ]
                 ),
-                array(
+                [
                     'id' => $path,
                     'path' => $path,
                     'fileName' => 'Icy-Night-Flower.jpg',
@@ -395,9 +395,9 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
                     'uri' => "/$path",
                     'width' => 123,
                     'height' => 456,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -411,12 +411,12 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
     {
         $fixture = $this->getFixtureData();
 
-        return array(
-            array(
+        return [
+            [
                 $fixture['create'],
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     public function testInherentCopyForNewLanguage()
@@ -427,10 +427,10 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         $type = $this->createContentType(
             $this->getValidFieldSettings(),
             $this->getValidValidatorConfiguration(),
-            array(),
+            [],
             // Causes a copy of the image value for each language in legacy
             // storage
-            array('isTranslatable' => false)
+            ['isTranslatable' => false]
         );
 
         $draft = $this->createContent($this->getValidCreationFieldData(), $type);
@@ -442,7 +442,7 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         // Automatically creates a copy of the image field in the back ground
         $updatedDraft = $contentService->updateContent($draft->versionInfo, $updateStruct);
 
-        $paths = array();
+        $paths = [];
         foreach ($updatedDraft->getFields() as $field) {
             if ($field->fieldDefIdentifier === 'data') {
                 $paths[$field->languageCode] = $field->value->uri;
@@ -471,18 +471,18 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new ImageValue()),
-        );
+        return [
+            [new ImageValue()],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -496,7 +496,7 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         $type = $this->createContentType(
             $this->getValidFieldSettings(),
             $this->getValidValidatorConfiguration(),
-            array()
+            []
         );
 
         $draft = $this->createContent($this->getValidCreationFieldData(), $type);
@@ -539,7 +539,7 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
         $contentCreateStruct->setField('image', $this->getValidCreationFieldData());
 
         $locationCreateStruct = $locationService->newLocationCreateStruct(2);
-        $content = $contentService->createContent($contentCreateStruct, array($locationCreateStruct));
+        $content = $contentService->createContent($contentCreateStruct, [$locationCreateStruct]);
         $content = $contentService->publishVersion($content->getVersionInfo());
 
         $originalFileUri = $content->fields['image']['eng-GB']->uri;
@@ -615,24 +615,24 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
     protected function getValidSearchValueOne()
     {
         return new ImageValue(
-            array(
+            [
                 'fileName' => 'cafe-terrace-at-night.jpg',
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                 'alternativeText' => 'café terrace at night, also known as the cafe terrace on the place du forum',
                 'fileSize' => filesize($path),
-            )
+            ]
         );
     }
 
     protected function getValidSearchValueTwo()
     {
         return new ImageValue(
-            array(
+            [
                 'fileName' => 'thatched-cottages-at-cordeville.png',
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                 'alternativeText' => 'chaumes de cordeville à auvers-sur-oise',
                 'fileSize' => filesize($path),
-            )
+            ]
         );
     }
 
@@ -652,23 +652,23 @@ class ImageIntegrationTest extends FileSearchBaseIntegrationTest
 
     protected function getAdditionallyIndexedFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'alternative_text',
                 $this->getValidSearchValueOne()->alternativeText,
                 $this->getValidSearchValueTwo()->alternativeText,
-            ),
-            array(
+            ],
+            [
                 'file_size',
                 $this->getValidSearchValueOne()->fileSize,
                 $this->getValidSearchValueTwo()->fileSize,
-            ),
-            array(
+            ],
+            [
                 'mime_type',
                 // ensure case-insensitivity
                 'IMAGE/JPEG',
                 'IMAGE/PNG',
-            ),
-        );
+            ],
+        ];
     }
 }

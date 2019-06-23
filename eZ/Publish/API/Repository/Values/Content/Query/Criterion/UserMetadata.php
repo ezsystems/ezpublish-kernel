@@ -70,7 +70,7 @@ class UserMetadata extends Criterion
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::EQ,
                 Specifications::FORMAT_SINGLE,
@@ -81,6 +81,6 @@ class UserMetadata extends Criterion
                 Specifications::FORMAT_ARRAY,
                 Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
             ),
-        );
+        ];
     }
 }

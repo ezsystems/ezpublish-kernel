@@ -28,7 +28,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array(
+        return [
             new Search\Field(
                 'value',
                 $field->value->data['destinationContentIds'],
@@ -39,7 +39,7 @@ class SearchField implements Indexable
                 implode('-', $field->value->data['destinationContentIds']),
                 new Search\FieldType\StringField()
             ),
-        );
+        ];
     }
 
     /**
@@ -49,10 +49,10 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'value' => new Search\FieldType\MultipleStringField(),
             'sort_value' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     /**

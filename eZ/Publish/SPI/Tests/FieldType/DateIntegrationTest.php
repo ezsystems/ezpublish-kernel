@@ -82,23 +82,23 @@ class DateIntegrationTest extends BaseIntegrationTest
      */
     public function getFieldDefinitionData()
     {
-        return array(
+        return [
             // The ezdate field type does not have any special field definition
             // properties
-            array('fieldType', 'ezdate'),
-            array(
+            ['fieldType', 'ezdate'],
+            [
                 'fieldTypeConstraints',
                 new Content\FieldTypeConstraints(
-                    array(
+                    [
                         'fieldSettings' => new FieldType\FieldSettings(
-                            array(
+                            [
                                 'defaultType' => 0,
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -109,14 +109,14 @@ class DateIntegrationTest extends BaseIntegrationTest
     public function getInitialValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'timestamp' => 123456,
                     'rfc850' => null,
-                ),
+                ],
                 'externalData' => null,
                 'sortKey' => 42,
-            )
+            ]
         );
     }
 
@@ -130,14 +130,14 @@ class DateIntegrationTest extends BaseIntegrationTest
     public function getUpdatedValue()
     {
         return new Content\FieldValue(
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'timestamp' => 12345678,
                     'rfc850' => null,
-                ),
+                ],
                 'externalData' => null,
                 'sortKey' => 23,
-            )
+            ]
         );
     }
 }

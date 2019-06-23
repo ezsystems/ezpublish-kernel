@@ -69,9 +69,9 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->createSection($sectionCreateStruct);
         $this->signalDispatcher->emit(
             new CreateSectionSignal(
-                array(
+                [
                     'sectionId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -94,9 +94,9 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->updateSection($section, $sectionUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateSectionSignal(
-                array(
+                [
                     'sectionId' => $section->id,
-                )
+                ]
             )
         );
 
@@ -189,10 +189,10 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->assignSection($contentInfo, $section);
         $this->signalDispatcher->emit(
             new AssignSectionSignal(
-                array(
+                [
                     'contentId' => $contentInfo->id,
                     'sectionId' => $section->id,
-                )
+                ]
             )
         );
 
@@ -238,9 +238,9 @@ class SectionService implements SectionServiceInterface
         $returnValue = $this->service->deleteSection($section);
         $this->signalDispatcher->emit(
             new DeleteSectionSignal(
-                array(
+                [
                     'sectionId' => $section->id,
-                )
+                ]
             )
         );
 

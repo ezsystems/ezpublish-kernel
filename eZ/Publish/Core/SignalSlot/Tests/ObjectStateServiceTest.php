@@ -44,14 +44,14 @@ class ObjectStateServiceTest extends ServiceTest
         $objectStateCreateStruct = new ObjectStateCreateStruct();
         $objectStateUpdateStruct = new ObjectStateUpdateStruct();
         $objectStateGroup = new ObjectStateGroup(
-            array(
+            [
                 'id' => $objectStateGroupId,
-            )
+            ]
         );
         $objectState = new ObjectState(
-            array(
+            [
                 'id' => $objectStateId,
-            )
+            ]
         );
         $contentInfo = $this->getContentInfo($contentId, $contentRemoteId);
 

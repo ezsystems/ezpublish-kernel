@@ -41,7 +41,7 @@ abstract class Gateway
      *
      * @return mixed
      */
-    abstract public function find(Query $query, $type, array $languageFilter = array());
+    abstract public function find(Query $query, $type, array $languageFilter = []);
 
     /**
      * Finds and returns documents of a given $type for a given $query string.

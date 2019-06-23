@@ -40,7 +40,7 @@ class EZP21771EzStringTest extends BaseTest
         // make a draft
         $draft = $contentService->createContent(
             $createStruct,
-            array($locationService->newLocationCreateStruct(2))
+            [$locationService->newLocationCreateStruct(2)]
         );
 
         // publish
@@ -52,7 +52,7 @@ class EZP21771EzStringTest extends BaseTest
         // finaly test if the value is done right
         $this->assertEquals(
             $content->versionInfo->names,
-            array('eng-GB' => '12345678901')
+            ['eng-GB' => '12345678901']
         );
     }
 }

@@ -54,7 +54,7 @@ class Type extends FieldType
      */
     public function getEmptyValue()
     {
-        return new Value(array());
+        return new Value([]);
     }
 
     /**
@@ -67,7 +67,7 @@ class Type extends FieldType
     protected function createValueFromInput($inputValue)
     {
         if (is_string($inputValue)) {
-            $inputValue = array($inputValue);
+            $inputValue = [$inputValue];
         }
 
         if (is_array($inputValue)) {
@@ -147,11 +147,11 @@ class Type extends FieldType
     public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
-            array(
+            [
                 'data' => null,
                 'externalData' => $value->values,
                 'sortKey' => $this->getSortInfo($value),
-            )
+            ]
         );
     }
 

@@ -149,7 +149,7 @@ class StorageHandlerTest extends TestCase
             ->method('deleteFieldData')
             ->with(
                 $this->isInstanceOf(VersionInfo::class),
-                $this->equalTo(array(1, 2, 3)),
+                $this->equalTo([1, 2, 3]),
                 $this->equalTo($this->getContextMock())
             );
 
@@ -159,7 +159,7 @@ class StorageHandlerTest extends TestCase
             ->will($this->returnValue($storageMock));
 
         $handler = $this->getStorageHandler();
-        $handler->deleteFieldData('foobar', new VersionInfo(), array(1, 2, 3));
+        $handler->deleteFieldData('foobar', new VersionInfo(), [1, 2, 3]);
     }
 
     /**
@@ -186,7 +186,7 @@ class StorageHandlerTest extends TestCase
      */
     protected function getContextMock()
     {
-        return array(23, 42);
+        return [23, 42];
     }
 
     /**
@@ -198,8 +198,8 @@ class StorageHandlerTest extends TestCase
     {
         if (!isset($this->storageRegistryMock)) {
             $this->storageRegistryMock = $this->getMockBuilder(StorageRegistry::class)
-                ->setConstructorArgs(array(array()))
-                ->setMethods(array())
+                ->setConstructorArgs([[]])
+                ->setMethods([])
                 ->getMock();
         }
 

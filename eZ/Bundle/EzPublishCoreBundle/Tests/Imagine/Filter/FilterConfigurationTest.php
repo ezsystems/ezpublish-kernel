@@ -34,8 +34,8 @@ class FilterConfigurationTest extends TestCase
 
     public function testGetOnlyImagineFilters()
     {
-        $fooConfig = array('fooconfig');
-        $barConfig = array('barconfig');
+        $fooConfig = ['fooconfig'];
+        $barConfig = ['barconfig'];
         $this->filterConfiguration->set('foo', $fooConfig);
         $this->filterConfiguration->set('bar', $barConfig);
 
@@ -43,7 +43,7 @@ class FilterConfigurationTest extends TestCase
             ->expects($this->exactly(2))
             ->method('getParameter')
             ->with('image_variations')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->assertSame($fooConfig, $this->filterConfiguration->get('foo'));
         $this->assertSame($barConfig, $this->filterConfiguration->get('bar'));
@@ -54,8 +54,8 @@ class FilterConfigurationTest extends TestCase
      */
     public function testGetNoEzVariationInvalidImagineFilter()
     {
-        $fooConfig = array('fooconfig');
-        $barConfig = array('barconfig');
+        $fooConfig = ['fooconfig'];
+        $barConfig = ['barconfig'];
         $this->filterConfiguration->set('foo', $fooConfig);
         $this->filterConfiguration->set('bar', $barConfig);
 
@@ -63,7 +63,7 @@ class FilterConfigurationTest extends TestCase
             ->expects($this->once())
             ->method('getParameter')
             ->with('image_variations')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $this->filterConfiguration->get('foobar');
     }
@@ -73,14 +73,14 @@ class FilterConfigurationTest extends TestCase
      */
     public function testGetWithEzVariationInvalidFilters()
     {
-        $fooConfig = array('fooconfig');
-        $barConfig = array('barconfig');
+        $fooConfig = ['fooconfig'];
+        $barConfig = ['barconfig'];
         $this->filterConfiguration->set('foo', $fooConfig);
         $this->filterConfiguration->set('bar', $barConfig);
 
-        $variations = array(
-            'some_variation' => array(),
-        );
+        $variations = [
+            'some_variation' => [],
+        ];
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -92,15 +92,15 @@ class FilterConfigurationTest extends TestCase
 
     public function testGetEzVariationNoReference()
     {
-        $fooConfig = array('fooconfig');
-        $barConfig = array('barconfig');
+        $fooConfig = ['fooconfig'];
+        $barConfig = ['barconfig'];
         $this->filterConfiguration->set('foo', $fooConfig);
         $this->filterConfiguration->set('bar', $barConfig);
 
-        $filters = array('some_filter' => array());
-        $variations = array(
-            'some_variation' => array('filters' => $filters),
-        );
+        $filters = ['some_filter' => []];
+        $variations = [
+            'some_variation' => ['filters' => $filters],
+        ];
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -108,29 +108,29 @@ class FilterConfigurationTest extends TestCase
             ->will($this->returnValue($variations));
 
         $this->assertSame(
-            array(
+            [
                 'cache' => 'ezpublish',
                 'data_loader' => 'ezpublish',
                 'reference' => null,
                 'filters' => $filters,
-                'post_processors' => array(),
-            ),
+                'post_processors' => [],
+            ],
             $this->filterConfiguration->get('some_variation')
         );
     }
 
     public function testGetEzVariationWithReference()
     {
-        $fooConfig = array('fooconfig');
-        $barConfig = array('barconfig');
+        $fooConfig = ['fooconfig'];
+        $barConfig = ['barconfig'];
         $this->filterConfiguration->set('foo', $fooConfig);
         $this->filterConfiguration->set('bar', $barConfig);
 
-        $filters = array('some_filter' => array());
+        $filters = ['some_filter' => []];
         $reference = 'another_variation';
-        $variations = array(
-            'some_variation' => array('filters' => $filters, 'reference' => $reference),
-        );
+        $variations = [
+            'some_variation' => ['filters' => $filters, 'reference' => $reference],
+        ];
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -138,27 +138,27 @@ class FilterConfigurationTest extends TestCase
             ->will($this->returnValue($variations));
 
         $this->assertSame(
-            array(
+            [
                 'cache' => 'ezpublish',
                 'data_loader' => 'ezpublish',
                 'reference' => $reference,
                 'filters' => $filters,
-                'post_processors' => array(),
-            ),
+                'post_processors' => [],
+            ],
             $this->filterConfiguration->get('some_variation')
         );
     }
 
     public function testGetEzVariationImagineFilters()
     {
-        $filters = array('some_filter' => array());
-        $imagineConfig = array('filters' => $filters);
+        $filters = ['some_filter' => []];
+        $imagineConfig = ['filters' => $filters];
         $this->filterConfiguration->set('some_variation', $imagineConfig);
 
         $reference = 'another_variation';
-        $variations = array(
-            'some_variation' => array('reference' => $reference),
-        );
+        $variations = [
+            'some_variation' => ['reference' => $reference],
+        ];
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -166,30 +166,30 @@ class FilterConfigurationTest extends TestCase
             ->will($this->returnValue($variations));
 
         $this->assertSame(
-            array(
+            [
                 'cache' => 'ezpublish',
                 'data_loader' => 'ezpublish',
                 'reference' => $reference,
                 'filters' => $filters,
-                'post_processors' => array(),
-            ),
+                'post_processors' => [],
+            ],
             $this->filterConfiguration->get('some_variation')
         );
     }
 
     public function testGetEzVariationImagineOptions()
     {
-        $imagineConfig = array(
+        $imagineConfig = [
             'foo_option' => 'foo',
             'bar_option' => 'bar',
-        );
+        ];
         $this->filterConfiguration->set('some_variation', $imagineConfig);
 
-        $filters = array('some_filter' => array());
+        $filters = ['some_filter' => []];
         $reference = 'another_variation';
-        $variations = array(
-            'some_variation' => array('reference' => $reference, 'filters' => $filters),
-        );
+        $variations = [
+            'some_variation' => ['reference' => $reference, 'filters' => $filters],
+        ];
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -197,31 +197,31 @@ class FilterConfigurationTest extends TestCase
             ->will($this->returnValue($variations));
 
         $this->assertSame(
-            array(
+            [
                 'cache' => 'ezpublish',
                 'data_loader' => 'ezpublish',
                 'reference' => $reference,
                 'filters' => $filters,
-                'post_processors' => array(),
+                'post_processors' => [],
                 'foo_option' => 'foo',
                 'bar_option' => 'bar',
-            ),
+            ],
             $this->filterConfiguration->get('some_variation')
         );
     }
 
     public function testAll()
     {
-        $fooConfig = array('fooconfig');
-        $barConfig = array('barconfig');
+        $fooConfig = ['fooconfig'];
+        $barConfig = ['barconfig'];
         $this->filterConfiguration->set('foo', $fooConfig);
         $this->filterConfiguration->set('bar', $barConfig);
-        $this->filterConfiguration->set('some_variation', array());
+        $this->filterConfiguration->set('some_variation', []);
 
-        $filters = array('some_filter' => array());
+        $filters = ['some_filter' => []];
         $reference = 'another_variation';
-        $eZVariationConfig = array('filters' => $filters, 'reference' => $reference);
-        $variations = array('some_variation' => $eZVariationConfig);
+        $eZVariationConfig = ['filters' => $filters, 'reference' => $reference];
+        $variations = ['some_variation' => $eZVariationConfig];
         $this->configResolver
             ->expects($this->once())
             ->method('getParameter')
@@ -229,11 +229,11 @@ class FilterConfigurationTest extends TestCase
             ->will($this->returnValue($variations));
 
         $this->assertEquals(
-            array(
+            [
                 'foo' => $fooConfig,
                 'bar' => $barConfig,
                 'some_variation' => $eZVariationConfig,
-            ),
+            ],
             $this->filterConfiguration->all()
         );
     }

@@ -351,6 +351,6 @@ class CachingLanguageHandlerTest extends TestCase
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 
-        return array($langUs, $langGb);
+        return [$langUs, $langGb];
     }
 }

@@ -31,7 +31,7 @@ class TransformationProcessorPreprocessedBasedTest extends TestCase
 
         $this->assertSame(
             'hello world!',
-            $processor->transform('Hello World!', array('ascii_lowercase'))
+            $processor->transform('Hello World!', ['ascii_lowercase'])
         );
     }
 
@@ -41,7 +41,7 @@ class TransformationProcessorPreprocessedBasedTest extends TestCase
 
         $this->assertSame(
             'HELLO WORLD!',
-            $processor->transform('Hello World!', array('ascii_uppercase'))
+            $processor->transform('Hello World!', ['ascii_uppercase'])
         );
     }
 

@@ -29,7 +29,7 @@ class BlockViewPassTest extends AbstractCompilerPassTestCase
     public function testAddViewProvider()
     {
         $def = new Definition();
-        $def->addTag(BlockViewPass::VIEW_PROVIDER_IDENTIFIER, array('priority' => 12));
+        $def->addTag(BlockViewPass::VIEW_PROVIDER_IDENTIFIER, ['priority' => 12]);
         $serviceId = 'service_id';
         $this->setDefinition($serviceId, $def);
 

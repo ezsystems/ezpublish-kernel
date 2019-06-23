@@ -37,21 +37,21 @@ class Manager implements ViewManagerInterface
      *            Each priority key is an array of Content View Provider objects having this priority.
      *            The highest priority number is the highest priority
      */
-    protected $contentViewProviders = array();
+    protected $contentViewProviders = [];
 
     /**
      * @var array Array indexed by priority.
      *            Each priority key is an array of Location View Provider objects having this priority.
      *            The highest priority number is the highest priority
      */
-    protected $locationViewProviders = array();
+    protected $locationViewProviders = [];
 
     /**
      * @var array Array indexed by priority.
      *            Each priority key is an array of Block View Provider objects having this priority.
      *            The highest priority number is the highest priority
      */
-    protected $blockViewProviders = array();
+    protected $blockViewProviders = [];
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]
@@ -123,7 +123,7 @@ class Manager implements ViewManagerInterface
     {
         $priority = (int)$priority;
         if (!isset($property[$priority])) {
-            $property[$priority] = array();
+            $property[$priority] = [];
         }
 
         $property[$priority][] = $viewProvider;
@@ -211,7 +211,7 @@ class Manager implements ViewManagerInterface
      */
     protected function sortViewProviders($property)
     {
-        $sortedViewProviders = array();
+        $sortedViewProviders = [];
         krsort($property);
 
         foreach ($property as $viewProvider) {
@@ -235,7 +235,7 @@ class Manager implements ViewManagerInterface
      *
      * @return string
      */
-    public function renderContent(Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array())
+    public function renderContent(Content $content, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = [])
     {
         $view = new ContentView(null, $parameters, $viewType);
         $view->setContent($content);
@@ -267,7 +267,7 @@ class Manager implements ViewManagerInterface
      *
      * @return string
      */
-    public function renderLocation(Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = array())
+    public function renderLocation(Location $location, $viewType = ViewManagerInterface::VIEW_TYPE_FULL, $parameters = [])
     {
         if (!isset($parameters['location'])) {
             $parameters['location'] = $location;
@@ -296,7 +296,7 @@ class Manager implements ViewManagerInterface
      *
      * @return string
      */
-    public function renderBlock(Block $block, $parameters = array())
+    public function renderBlock(Block $block, $parameters = [])
     {
         $view = new BlockView(null, $parameters);
         $view->setBlock($block);
@@ -319,7 +319,7 @@ class Manager implements ViewManagerInterface
      *
      * @return string
      */
-    public function renderContentView(View $view, array $defaultParams = array())
+    public function renderContentView(View $view, array $defaultParams = [])
     {
         $defaultParams['viewbaseLayout'] = $this->viewBaseLayout;
         $view->addParameters($defaultParams);

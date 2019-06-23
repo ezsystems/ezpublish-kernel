@@ -23,7 +23,7 @@ class ValidatorDispatcher
      *
      * @var \eZ\Publish\Core\FieldType\RichText\Validator[]
      */
-    protected $mapping = array();
+    protected $mapping = [];
 
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Validator[] $validatorMap
@@ -66,7 +66,7 @@ class ValidatorDispatcher
         foreach ($this->mapping as $namespace => $validator) {
             if ($documentNamespace === $namespace) {
                 if ($validator === null) {
-                    return array();
+                    return [];
                 }
 
                 return $validator->validate($document);

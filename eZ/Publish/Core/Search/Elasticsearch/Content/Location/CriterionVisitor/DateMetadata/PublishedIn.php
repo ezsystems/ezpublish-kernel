@@ -49,22 +49,22 @@ class PublishedIn extends DateMetadata
     {
         if (count($criterion->value) > 1) {
             $that = $this;
-            $filter = array(
-                'terms' => array(
+            $filter = [
+                'terms' => [
                     'content_published_dt' => array_map(
                         function ($timestamp) use ($that) {
                             return $that->getNativeTime($timestamp);
                         },
                         $criterion->value
                     ),
-                ),
-            );
+                ],
+            ];
         } else {
-            $filter = array(
-                'term' => array(
+            $filter = [
+                'term' => [
                     'published_dt' => $this->getNativeTime($criterion->value),
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;

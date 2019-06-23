@@ -45,7 +45,7 @@ class TimeTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -55,16 +55,16 @@ class TimeTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array(
-            'useSeconds' => array(
+        return [
+            'useSeconds' => [
                 'type' => 'bool',
                 'default' => false,
-            ),
-            'defaultType' => array(
+            ],
+            'defaultType' => [
                 'type' => 'choice',
                 'default' => Time::DEFAULT_EMPTY,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -100,12 +100,12 @@ class TimeTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
-                array(),
+        return [
+            [
+                [],
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -217,20 +217,20 @@ class TimeTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new TimeValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new TimeValue(0),
                 0,
-            ),
-            array(
+            ],
+            [
                 new TimeValue(200),
                 200,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -270,20 +270,20 @@ class TimeTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new TimeValue(),
-            ),
-            array(
+            ],
+            [
                 0,
                 new TimeValue(0),
-            ),
-            array(
+            ],
+            [
                 200,
                 new TimeValue(200),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -310,23 +310,23 @@ class TimeTest extends FieldTypeTest
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
                     'useSeconds' => true,
                     'defaultType' => Time::DEFAULT_EMPTY,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'useSeconds' => false,
                     'defaultType' => Time::DEFAULT_CURRENT_TIME,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -354,20 +354,20 @@ class TimeTest extends FieldTypeTest
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     // useSeconds must be bool
                     'useSeconds' => 23,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     // defaultType must be constant
                     'defaultType' => 42,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -377,9 +377,9 @@ class TimeTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new TimeValue(200), '12:03:20 am'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [new TimeValue(200), '12:03:20 am'],
+        ];
     }
 }

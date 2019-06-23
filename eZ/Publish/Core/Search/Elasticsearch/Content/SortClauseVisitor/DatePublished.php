@@ -37,10 +37,10 @@ class DatePublished extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return array(
-            'published_dt' => array(
+        return [
+            'published_dt' => [
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

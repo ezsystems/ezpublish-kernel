@@ -133,7 +133,7 @@ class User extends RestController
     {
         //@todo Replace hardcoded value with one loaded from settings
         return new Values\PermanentRedirect(
-            $this->router->generate('ezpublish_rest_loadUserGroup', array('groupPath' => '/1/5'))
+            $this->router->generate('ezpublish_rest_loadUserGroup', ['groupPath' => '/1/5'])
         );
     }
 
@@ -171,7 +171,7 @@ class User extends RestController
                 $userGroupLocation,
                 $this->contentService->loadRelations($userGroup->getVersionInfo())
             ),
-            array('locationId' => $userGroupLocation->id)
+            ['locationId' => $userGroupLocation->id]
         );
     }
 
@@ -201,7 +201,7 @@ class User extends RestController
                     }
                 );
                 // user may not have permissions to read related content, for security reasons do not use sudo().
-                $relations = array();
+                $relations = [];
             } else {
                 throw $e;
             }
@@ -215,7 +215,7 @@ class User extends RestController
                 $userMainLocation,
                 $relations
             ),
-            array('locationId' => $userContentInfo->mainLocationId)
+            ['locationId' => $userContentInfo->mainLocationId]
         );
     }
 
@@ -238,7 +238,7 @@ class User extends RestController
         $createdUserGroup = $this->userService->createUserGroup(
             $this->inputDispatcher->parse(
                 new Message(
-                    array('Content-Type' => $request->headers->get('Content-Type')),
+                    ['Content-Type' => $request->headers->get('Content-Type')],
                     $request->getContent()
                 )
             ),
@@ -252,7 +252,7 @@ class User extends RestController
         $contentType = $this->contentTypeService->loadContentType($createdContentInfo->contentTypeId);
 
         return new Values\CreatedUserGroup(
-            array(
+            [
                 'userGroup' => new Values\RestUserGroup(
                     $createdUserGroup,
                     $contentType,
@@ -260,7 +260,7 @@ class User extends RestController
                     $createdLocation,
                     $this->contentService->loadRelations($createdUserGroup->getVersionInfo())
                 ),
-            )
+            ]
         );
     }
 
@@ -282,13 +282,13 @@ class User extends RestController
 
         $userCreateStruct = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );
 
         try {
-            $createdUser = $this->userService->createUser($userCreateStruct, array($userGroup));
+            $createdUser = $this->userService->createUser($userCreateStruct, [$userGroup]);
         } catch (ApiExceptions\InvalidArgumentException $e) {
             throw new ForbiddenException($e->getMessage());
         }
@@ -298,7 +298,7 @@ class User extends RestController
         $contentType = $this->contentTypeService->loadContentType($createdContentInfo->contentTypeId);
 
         return new Values\CreatedUser(
-            array(
+            [
                 'user' => new Values\RestUser(
                     $createdUser,
                     $contentType,
@@ -306,7 +306,7 @@ class User extends RestController
                     $createdLocation,
                     $this->contentService->loadRelations($createdUser->getVersionInfo())
                 ),
-            )
+            ]
         );
     }
 
@@ -329,11 +329,11 @@ class User extends RestController
 
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array(
+                [
                     'Content-Type' => $request->headers->get('Content-Type'),
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
                     'Url' => $request->getPathInfo(),
-                ),
+                ],
                 $request->getContent()
             )
         );
@@ -373,11 +373,11 @@ class User extends RestController
 
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array(
+                [
                     'Content-Type' => $request->headers->get('Content-Type'),
                     // @todo Needs refactoring! Temporary solution so parser has access to URL
                     'Url' => $request->getPathInfo(),
-                ),
+                ],
                 $request->getContent()
             )
         );
@@ -463,7 +463,7 @@ class User extends RestController
      */
     public function loadUsers(Request $request)
     {
-        $restUsers = array();
+        $restUsers = [];
 
         try {
             if ($request->query->has('roleId')) {
@@ -471,20 +471,20 @@ class User extends RestController
                     $this->requestParser->parseHref($request->query->get('roleId'), 'roleId')
                 );
             } elseif ($request->query->has('remoteId')) {
-                $restUsers = array(
+                $restUsers = [
                     $this->buildRestUserObject(
                         $this->userService->loadUser(
                             $this->contentService->loadContentInfoByRemoteId($request->query->get('remoteId'))->id,
                             Language::ALL
                         )
                     ),
-                );
+                ];
             } elseif ($request->query->has('login')) {
-                $restUsers = array(
+                $restUsers = [
                     $this->buildRestUserObject(
                         $this->userService->loadUserByLogin($request->query->get('login'), Language::ALL)
                     ),
-                );
+                ];
             } elseif ($request->query->has('email')) {
                 foreach ($this->userService->loadUsersByEmail($request->query->get('email'), Language::ALL) as $user) {
                     $restUsers[] = $this->buildRestUserObject($user);
@@ -525,7 +525,7 @@ class User extends RestController
         $role = $this->roleService->loadRole($roleId);
         $roleAssignments = $this->roleService->getRoleAssignments($role);
 
-        $restUsers = array();
+        $restUsers = [];
 
         foreach ($roleAssignments as $roleAssignment) {
             if ($roleAssignment instanceof UserRoleAssignment) {
@@ -557,14 +557,14 @@ class User extends RestController
      */
     public function loadUserGroups(Request $request)
     {
-        $restUserGroups = array();
+        $restUserGroups = [];
         if ($request->query->has('id')) {
             $userGroup = $this->userService->loadUserGroup($request->query->get('id'), Language::ALL);
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupMainLocation = $this->locationService->loadLocation($userGroupContentInfo->mainLocationId);
             $contentType = $this->contentTypeService->loadContentType($userGroupContentInfo->contentTypeId);
 
-            $restUserGroups = array(
+            $restUserGroups = [
                 new Values\RestUserGroup(
                     $userGroup,
                     $contentType,
@@ -572,13 +572,13 @@ class User extends RestController
                     $userGroupMainLocation,
                     $this->contentService->loadRelations($userGroup->getVersionInfo())
                 ),
-            );
+            ];
         } elseif ($request->query->has('roleId')) {
             $restUserGroups = $this->loadUserGroupsAssignedToRole($request->query->get('roleId'));
         } elseif ($request->query->has('remoteId')) {
-            $restUserGroups = array(
+            $restUserGroups = [
                 $this->loadUserGroupByRemoteId($request),
-            );
+            ];
         }
 
         if ($this->getMediaType($request) === 'application/vnd.ez.api.usergrouplist') {
@@ -621,7 +621,7 @@ class User extends RestController
         $role = $this->roleService->loadRole($roleId);
         $roleAssignments = $this->roleService->getRoleAssignments($role);
 
-        $restUserGroups = array();
+        $restUserGroups = [];
 
         foreach ($roleAssignments as $roleAssignment) {
             if ($roleAssignment instanceof UserGroupRoleAssignment) {
@@ -702,9 +702,9 @@ class User extends RestController
         return new Values\ResourceCreated(
             $this->router->generate(
                 'ezpublish_rest_loadUserGroup',
-                array(
+                [
                     'groupPath' => trim($destinationGroupLocation->pathString, '/') . '/' . $userGroupLocation->id,
-                )
+                ]
             )
         );
     }
@@ -736,7 +736,7 @@ class User extends RestController
             Language::ALL
         );
 
-        $restUserGroups = array();
+        $restUserGroups = [];
         foreach ($subGroups as $subGroup) {
             $subGroupContentInfo = $subGroup->getVersionInfo()->getContentInfo();
             $subGroupLocation = $this->locationService->loadLocation($subGroupContentInfo->mainLocationId);
@@ -754,13 +754,13 @@ class User extends RestController
         if ($this->getMediaType($request) === 'application/vnd.ez.api.usergrouplist') {
             return new Values\CachedValue(
                 new Values\UserGroupList($restUserGroups, $request->getPathInfo()),
-                array('locationId' => $userGroupLocation->id)
+                ['locationId' => $userGroupLocation->id]
             );
         }
 
         return new Values\CachedValue(
             new Values\UserGroupRefList($restUserGroups, $request->getPathInfo()),
-            array('locationId' => $userGroupLocation->id)
+            ['locationId' => $userGroupLocation->id]
         );
     }
 
@@ -786,7 +786,7 @@ class User extends RestController
             Language::ALL
         );
 
-        $restUserGroups = array();
+        $restUserGroups = [];
         foreach ($userGroups as $userGroup) {
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupLocation = $this->locationService->loadLocation($userGroupContentInfo->mainLocationId);
@@ -803,7 +803,7 @@ class User extends RestController
 
         return new Values\CachedValue(
             new Values\UserGroupRefList($restUserGroups, $request->getPathInfo(), $userId),
-            array('locationId' => $user->contentInfo->mainLocationId)
+            ['locationId' => $user->contentInfo->mainLocationId]
         );
     }
 
@@ -834,7 +834,7 @@ class User extends RestController
             Language::ALL
         );
 
-        $restUsers = array();
+        $restUsers = [];
         foreach ($users as $user) {
             $userContentInfo = $user->getVersionInfo()->getContentInfo();
             $userLocation = $this->locationService->loadLocation($userContentInfo->mainLocationId);
@@ -852,13 +852,13 @@ class User extends RestController
         if ($this->getMediaType($request) === 'application/vnd.ez.api.userlist') {
             return new Values\CachedValue(
                 new Values\UserList($restUsers, $request->getPathInfo()),
-                array('locationId' => $userGroupLocation->id)
+                ['locationId' => $userGroupLocation->id]
             );
         }
 
         return new Values\CachedValue(
             new Values\UserRefList($restUsers, $request->getPathInfo()),
-            array('locationId' => $userGroupLocation->id)
+            ['locationId' => $userGroupLocation->id]
         );
     }
 
@@ -889,7 +889,7 @@ class User extends RestController
         }
 
         $userGroups = $this->userService->loadUserGroupsOfUser($user);
-        $restUserGroups = array();
+        $restUserGroups = [];
         foreach ($userGroups as $userGroup) {
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupLocation = $this->locationService->loadLocation($userGroupContentInfo->mainLocationId);
@@ -908,7 +908,7 @@ class User extends RestController
             $restUserGroups,
             $this->router->generate(
                 'ezpublish_rest_loadUserGroupsOfUser',
-                array('userId' => $userId)
+                ['userId' => $userId]
             ),
             $userId
         );
@@ -950,7 +950,7 @@ class User extends RestController
         }
 
         $userGroups = $this->userService->loadUserGroupsOfUser($user);
-        $restUserGroups = array();
+        $restUserGroups = [];
         foreach ($userGroups as $userGroup) {
             $userGroupContentInfo = $userGroup->getVersionInfo()->getContentInfo();
             $userGroupLocation = $this->locationService->loadLocation($userGroupContentInfo->mainLocationId);
@@ -969,7 +969,7 @@ class User extends RestController
             $restUserGroups,
             $this->router->generate(
                 'ezpublish_rest_loadUserGroupsOfUser',
-                array('userId' => $userId)
+                ['userId' => $userId]
             ),
             $userId
         );

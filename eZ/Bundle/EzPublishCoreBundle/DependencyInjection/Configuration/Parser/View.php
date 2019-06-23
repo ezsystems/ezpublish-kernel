@@ -56,10 +56,10 @@ Those params will NOT be passed to the resulting view template by default.
 EOT
                                 )
                                 ->example(
-                                    array(
+                                    [
                                         'foo' => '%some.parameter.reference%',
-                                        'osTypes' => array('osx', 'linux', 'windows'),
-                                    )
+                                        'osTypes' => ['osx', 'linux', 'windows'],
+                                    ]
                                 )
                                 ->useAttributeAsKey('key')
                                 ->prototype('variable')->end()

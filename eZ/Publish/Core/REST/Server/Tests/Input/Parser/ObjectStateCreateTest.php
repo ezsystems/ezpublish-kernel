@@ -19,27 +19,27 @@ class ObjectStateCreateTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-state',
             'priority' => '0',
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test state',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateCreate = $this->getParser();
         $result = $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -69,13 +69,13 @@ class ObjectStateCreateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array('eng-GB' => 'Test state'),
+            ['eng-GB' => 'Test state'],
             $result->names,
             'ObjectStateCreateStruct names property not created correctly.'
         );
 
         $this->assertEquals(
-            array('eng-GB' => 'Test description'),
+            ['eng-GB' => 'Test description'],
             $result->descriptions,
             'ObjectStateCreateStruct descriptions property not created correctly.'
         );
@@ -89,26 +89,26 @@ class ObjectStateCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingIdentifier()
     {
-        $inputArray = array(
+        $inputArray = [
             'priority' => '0',
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test state',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateCreate = $this->getParser();
         $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -122,26 +122,26 @@ class ObjectStateCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingPriority()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-state',
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test state',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateCreate = $this->getParser();
         $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -155,26 +155,26 @@ class ObjectStateCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingDefaultLanguageCode()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-state',
             'priority' => '0',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test state',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateCreate = $this->getParser();
         $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -188,19 +188,19 @@ class ObjectStateCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingNames()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-state',
             'priority' => '0',
             'defaultLanguageCode' => 'eng-GB',
-            'descriptions' => array(
-                'value' => array(
-                    array(
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateCreate = $this->getParser();
         $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -214,20 +214,20 @@ class ObjectStateCreateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidNames()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'test-state',
             'priority' => '0',
             'defaultLanguageCode' => 'eng-GB',
-            'names' => array(),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+            'names' => [],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-GB',
                         '#text' => 'Test description',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $objectStateCreate = $this->getParser();
         $objectStateCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -259,7 +259,7 @@ class ObjectStateCreateTest extends BaseTest
             ->method('newObjectStateCreateStruct')
             ->with($this->equalTo('test-state'))
             ->will(
-                $this->returnValue(new ObjectStateCreateStruct(array('identifier' => 'test-state')))
+                $this->returnValue(new ObjectStateCreateStruct(['identifier' => 'test-state']))
             );
 
         return $objectStateServiceMock;

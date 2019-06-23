@@ -46,7 +46,7 @@ class IOConfigurationPass implements CompilerPassInterface
     {
         $ioMetadataHandlers = $container->hasParameter('ez_io.metadata_handlers') ?
             $container->getParameter('ez_io.metadata_handlers') :
-            array();
+            [];
         $this->processHandlers(
             $container,
             $container->getDefinition('ezpublish.core.io.metadata_handler.factory'),
@@ -57,7 +57,7 @@ class IOConfigurationPass implements CompilerPassInterface
 
         $ioBinarydataHandlers = $container->hasParameter('ez_io.binarydata_handlers') ?
             $container->getParameter('ez_io.binarydata_handlers') :
-            array();
+            [];
         $this->processHandlers(
             $container,
             $container->getDefinition('ezpublish.core.io.binarydata_handler.factory'),
@@ -85,7 +85,7 @@ class IOConfigurationPass implements CompilerPassInterface
         ArrayObject $factories,
         $defaultHandler
     ) {
-        $handlers = array('default' => $defaultHandler);
+        $handlers = ['default' => $defaultHandler];
 
         foreach ($configuredHandlers as $name => $config) {
             $configurationFactory = $this->getFactory($factories, $config['type'], $container);
@@ -99,7 +99,7 @@ class IOConfigurationPass implements CompilerPassInterface
             $handlers[$name] = $handlerId;
         }
 
-        $factory->addMethodCall('setHandlersMap', array($handlers));
+        $factory->addMethodCall('setHandlersMap', [$handlers]);
     }
 
     /**

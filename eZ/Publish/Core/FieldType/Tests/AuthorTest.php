@@ -29,11 +29,11 @@ class AuthorTest extends FieldTypeTest
     protected function setUp()
     {
         parent::setUp();
-        $this->authors = array(
-            new Author(array('name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com')),
-            new Author(array('name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz')),
-            new Author(array('name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net')),
-        );
+        $this->authors = [
+            new Author(['name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com']),
+            new Author(['name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz']),
+            new Author(['name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net']),
+        ];
     }
 
     /**
@@ -62,7 +62,7 @@ class AuthorTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -72,12 +72,12 @@ class AuthorTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array(
-            'defaultAuthor' => array(
+        return [
+            'defaultAuthor' => [
                 'type' => 'choice',
                 'default' => AuthorType::DEFAULT_VALUE_EMPTY,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -115,20 +115,20 @@ class AuthorTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 'My name',
                 InvalidArgumentException::class,
-            ),
-            array(
+            ],
+            [
                 23,
                 InvalidArgumentException::class,
-            ),
-            array(
-                array('foo'),
+            ],
+            [
+                ['foo'],
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -162,34 +162,34 @@ class AuthorTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
-                array(),
-                new AuthorValue(array()),
-            ),
-            array(
-                array(
-                    new Author(array('name' => 'Boba Fett', 'email' => 'boba.fett@example.com')),
-                ),
+        return [
+            [
+                [],
+                new AuthorValue([]),
+            ],
+            [
+                [
+                    new Author(['name' => 'Boba Fett', 'email' => 'boba.fett@example.com']),
+                ],
                 new AuthorValue(
-                    array(
-                        new Author(array('id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com')),
-                    )
+                    [
+                        new Author(['id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com']),
+                    ]
                 ),
-            ),
-            array(
-                array(
-                    new Author(array('name' => 'Boba Fett', 'email' => 'boba.fett@example.com')),
-                    new Author(array('name' => 'Darth Vader', 'email' => 'darth.vader@example.com')),
-                ),
+            ],
+            [
+                [
+                    new Author(['name' => 'Boba Fett', 'email' => 'boba.fett@example.com']),
+                    new Author(['name' => 'Darth Vader', 'email' => 'darth.vader@example.com']),
+                ],
                 new AuthorValue(
-                    array(
-                        new Author(array('id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com')),
-                        new Author(array('id' => 2, 'name' => 'Darth Vader', 'email' => 'darth.vader@example.com')),
-                    )
+                    [
+                        new Author(['id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com']),
+                        new Author(['id' => 2, 'name' => 'Darth Vader', 'email' => 'darth.vader@example.com']),
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -229,34 +229,34 @@ class AuthorTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
-                new AuthorValue(array()),
-                array(),
-            ),
-            array(
+        return [
+            [
+                new AuthorValue([]),
+                [],
+            ],
+            [
                 new AuthorValue(
-                    array(
-                        new Author(array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com')),
-                    )
+                    [
+                        new Author(['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com']),
+                    ]
                 ),
-                array(
-                    array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'),
-                ),
-            ),
-            array(
+                [
+                    ['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'],
+                ],
+            ],
+            [
                 new AuthorValue(
-                    array(
-                        new Author(array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com')),
-                        new Author(array('id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com')),
-                    )
+                    [
+                        new Author(['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com']),
+                        new Author(['id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com']),
+                    ]
                 ),
-                array(
-                    array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'),
-                    array('id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com'),
-                ),
-            ),
-        );
+                [
+                    ['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'],
+                    ['id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com'],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -296,34 +296,34 @@ class AuthorTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
-                array(),
-                new AuthorValue(array()),
-            ),
-            array(
-                array(
-                    array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'),
-                ),
+        return [
+            [
+                [],
+                new AuthorValue([]),
+            ],
+            [
+                [
+                    ['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'],
+                ],
                 new AuthorValue(
-                    array(
-                        new Author(array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com')),
-                    )
+                    [
+                        new Author(['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com']),
+                    ]
                 ),
-            ),
-            array(
-                array(
-                    array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'),
-                    array('id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com'),
-                ),
+            ],
+            [
+                [
+                    ['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'],
+                    ['id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com'],
+                ],
                 new AuthorValue(
-                    array(
-                        new Author(array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com')),
-                        new Author(array('id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com')),
-                    )
+                    [
+                        new Author(['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com']),
+                        new Author(['id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com']),
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -350,21 +350,21 @@ class AuthorTest extends FieldTypeTest
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
                     'defaultAuthor' => AuthorType::DEFAULT_VALUE_EMPTY,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'defaultAuthor' => AuthorType::DEFAULT_CURRENT_USER,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -392,20 +392,20 @@ class AuthorTest extends FieldTypeTest
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     // non-existent setting
                     'useSeconds' => 23,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     //defaultAuthor must be constant
                     'defaultAuthor' => 42,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function tearDown()
@@ -457,7 +457,7 @@ class AuthorTest extends FieldTypeTest
         $author = new Author();
         $author->name = 'Boba Fett';
         $author->email = 'boba.fett@bountyhunters.com';
-        $value = new AuthorValue(array($author));
+        $value = new AuthorValue([$author]);
         $newValue = $ft->acceptValue($value);
         self::assertSame($value, $newValue);
     }
@@ -469,7 +469,7 @@ class AuthorTest extends FieldTypeTest
     {
         $value = new AuthorValue();
         self::assertInstanceOf(AuthorCollection::class, $value->authors);
-        self::assertSame(array(), $value->authors->getArrayCopy());
+        self::assertSame([], $value->authors->getArrayCopy());
     }
 
     /**
@@ -489,7 +489,7 @@ class AuthorTest extends FieldTypeTest
     {
         $value = new AuthorValue($this->authors);
 
-        $authorsName = array();
+        $authorsName = [];
         foreach ($this->authors as $author) {
             $authorsName[] = $author->name;
         }
@@ -522,7 +522,7 @@ class AuthorTest extends FieldTypeTest
      */
     public function testRemoveAuthors()
     {
-        $existingIds = array();
+        $existingIds = [];
         foreach ($this->authors as $author) {
             $id = random_int(1, 100);
             if (in_array($id, $existingIds)) {
@@ -533,9 +533,9 @@ class AuthorTest extends FieldTypeTest
         }
 
         $value = new AuthorValue($this->authors);
-        $value->authors->removeAuthorsById(array($this->authors[1]->id, $this->authors[2]->id));
+        $value->authors->removeAuthorsById([$this->authors[1]->id, $this->authors[2]->id]);
         self::assertSame(count($this->authors) - 2, count($value->authors));
-        self::assertSame(array($this->authors[0]), $value->authors->getArrayCopy());
+        self::assertSame([$this->authors[0]], $value->authors->getArrayCopy());
     }
 
     /**
@@ -556,15 +556,15 @@ class AuthorTest extends FieldTypeTest
     public function provideDataForGetName()
     {
         $authorList = new AuthorValue(
-            array(
-                new Author(array('id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com')),
-                new Author(array('id' => 2, 'name' => 'Luke Skywalker', 'email' => 'luke.skywalker@example.com')),
-            )
+            [
+                new Author(['id' => 1, 'name' => 'Boba Fett', 'email' => 'boba.fett@example.com']),
+                new Author(['id' => 2, 'name' => 'Luke Skywalker', 'email' => 'luke.skywalker@example.com']),
+            ]
         );
 
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array($authorList, 'Boba Fett'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [$authorList, 'Boba Fett'],
+        ];
     }
 }

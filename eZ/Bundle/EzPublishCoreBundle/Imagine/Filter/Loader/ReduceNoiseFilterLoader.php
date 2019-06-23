@@ -31,7 +31,7 @@ class ReduceNoiseFilterLoader implements LoaderInterface
         $this->filter = $filter;
     }
 
-    public function load(ImageInterface $image, array $options = array())
+    public function load(ImageInterface $image, array $options = [])
     {
         if (!$image instanceof ImagickImage && !$image instanceof GmagickImage) {
             throw new NotSupportedException('ReduceNoiseFilterLoader is only compatible with "imagick" and "gmagick" drivers');

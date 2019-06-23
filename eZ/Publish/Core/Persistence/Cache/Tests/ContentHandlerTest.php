@@ -105,9 +105,9 @@ class ContentHandlerTest extends AbstractInMemoryCacheHandlerTest
             ->with(2, APIRelation::FIELD | APIRelation::ASSET)
             ->will(
                 $this->returnValue(
-                    array(
-                        new SPIRelation(array('sourceContentId' => 42)),
-                    )
+                    [
+                        new SPIRelation(['sourceContentId' => 42]),
+                    ]
                 )
             );
 

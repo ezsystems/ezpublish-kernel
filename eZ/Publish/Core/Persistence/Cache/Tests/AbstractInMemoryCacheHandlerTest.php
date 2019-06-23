@@ -67,7 +67,7 @@ abstract class AbstractInMemoryCacheHandlerTest extends AbstractBaseHandlerTest
         }
 
         $handler = $this->persistenceCacheHandler->$handlerMethodName();
-        $actualReturnValue = call_user_func_array(array($handler, $method), $arguments);
+        $actualReturnValue = call_user_func_array([$handler, $method], $arguments);
 
         $this->assertEquals($returnValue, $actualReturnValue);
     }

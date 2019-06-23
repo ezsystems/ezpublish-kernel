@@ -133,7 +133,7 @@ class ConnectionHandler implements DatabaseHandler
      */
     public static function parseDSN($dsn)
     {
-        $parsed = array(
+        $parsed = [
             'driver' => false,
             'user' => false,
             'password' => false,
@@ -143,7 +143,7 @@ class ConnectionHandler implements DatabaseHandler
             'dbname' => false,
             'memory' => false,
             'path' => false,
-        );
+        ];
 
         // Find driver and dbsyntax
         if (($pos = strpos($dsn, '://')) !== false) {
@@ -225,7 +225,7 @@ class ConnectionHandler implements DatabaseHandler
                 if (strpos($dsn, '&') !== false) {
                     $opts = explode('&', $dsn);
                 } else {
-                    $opts = array($dsn);
+                    $opts = [$dsn];
                 }
 
                 foreach ($opts as $opt) {
@@ -250,11 +250,11 @@ class ConnectionHandler implements DatabaseHandler
             }
         }
 
-        $driverMap = array(
+        $driverMap = [
             'mysql' => 'pdo_mysql',
             'pgsql' => 'pdo_pgsql',
             'sqlite' => 'pdo_sqlite',
-        );
+        ];
 
         if (isset($driverMap[$parsed['driver']])) {
             $parsed['driver'] = $driverMap[$parsed['driver']];

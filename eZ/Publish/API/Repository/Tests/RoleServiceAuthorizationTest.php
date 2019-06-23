@@ -242,9 +242,9 @@ class RoleServiceAuthorizationTest extends BaseTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/'),
-                )
+                [
+                    'limitationValues' => ['/1/'],
+                ]
             )
         );
 
@@ -384,9 +384,9 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Create a subtree role limitation
         $limitation = new SubtreeLimitation(
-            array(
-                'limitationValues' => array('/1/2/'),
-            )
+            [
+                'limitationValues' => ['/1/2/'],
+            ]
         );
 
         // This call will fail with an "UnauthorizedException"
@@ -478,9 +478,9 @@ class RoleServiceAuthorizationTest extends BaseTest
 
         // Create a subtree role limitation
         $limitation = new SubtreeLimitation(
-            array(
-                'limitationValues' => array('/1/2/'),
-            )
+            [
+                'limitationValues' => ['/1/2/'],
+            ]
         );
 
         // This call will fail with an "UnauthorizedException"

@@ -29,14 +29,14 @@ class SortClauseConverter
      *
      * @var array
      */
-    protected $sortColumns = array();
+    protected $sortColumns = [];
 
     /**
      * Construct from an optional array of sort clause handlers.
      *
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler[] $handlers
      */
-    public function __construct(array $handlers = array())
+    public function __construct(array $handlers = [])
     {
         $this->handlers = $handlers;
     }
@@ -123,6 +123,6 @@ class SortClauseConverter
         // fails with the database error "Unknown column sort_column_0". The change does not break any
         // integration tests or legacy persistence tests, but it can break something else, so review is needed
         // Discussion: https://github.com/ezsystems/ezpublish-kernel/commit/8749d0977307858c3e2a7d82f3be90fa21973357#L1R102
-        $this->sortColumns = array();
+        $this->sortColumns = [];
     }
 }

@@ -19,7 +19,7 @@ class CreateStruct extends ValueObject
      *
      * @var string[]
      */
-    public $name = array();
+    public $name = [];
 
     /**
      * Description.
@@ -28,7 +28,7 @@ class CreateStruct extends ValueObject
      *
      * @var string[]
      */
-    public $description = array();
+    public $description = [];
 
     /**
      * Readable string identifier of a group.

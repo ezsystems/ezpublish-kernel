@@ -21,14 +21,14 @@ class StorageConnectionFactoryTest extends TestCase
      */
     public function testGetConnection($repositoryAlias, $doctrineConnection)
     {
-        $repositories = array(
-            $repositoryAlias => array(
-                'storage' => array(
+        $repositories = [
+            $repositoryAlias => [
+                'storage' => [
                     'engine' => 'legacy',
                     'connection' => $doctrineConnection,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $configResolver = $this->getConfigResolverMock();
         $configResolver
@@ -61,11 +61,11 @@ class StorageConnectionFactoryTest extends TestCase
 
     public function getConnectionProvider()
     {
-        return array(
-            array('my_repository', 'my_doctrine_connection'),
-            array('foo', 'default'),
-            array('répository_de_dédé', 'la_connexion_de_bébêrt'),
-        );
+        return [
+            ['my_repository', 'my_doctrine_connection'],
+            ['foo', 'default'],
+            ['répository_de_dédé', 'la_connexion_de_bébêrt'],
+        ];
     }
 
     /**
@@ -73,14 +73,14 @@ class StorageConnectionFactoryTest extends TestCase
      */
     public function testGetConnectionInvalidRepository()
     {
-        $repositories = array(
-            'foo' => array(
-                'storage' => array(
+        $repositories = [
+            'foo' => [
+                'storage' => [
                     'engine' => 'legacy',
                     'connection' => 'my_doctrine_connection',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $configResolver = $this->getConfigResolverMock();
         $configResolver
@@ -101,13 +101,13 @@ class StorageConnectionFactoryTest extends TestCase
     public function testGetConnectionInvalidConnection()
     {
         $repositoryConfigurationProviderMock = $this->createMock(RepositoryConfigurationProvider::class);
-        $repositoryConfig = array(
+        $repositoryConfig = [
             'alias' => 'foo',
-            'storage' => array(
+            'storage' => [
                 'engine' => 'legacy',
                 'connection' => 'my_doctrine_connection',
-            ),
-        );
+            ],
+        ];
         $repositoryConfigurationProviderMock
             ->expects($this->once())
             ->method('getRepositoryConfig')
@@ -123,7 +123,7 @@ class StorageConnectionFactoryTest extends TestCase
             ->expects($this->once())
             ->method('getParameter')
             ->with('doctrine.connections')
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
         $factory = new StorageConnectionFactory($repositoryConfigurationProviderMock);
         $factory->setContainer($container);
         $factory->getConnection();

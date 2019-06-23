@@ -44,11 +44,11 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('state', 'assign');
         $policyCreate->addLimitation(
             new NewObjectStateLimitation(
-                array(
-                    'limitationValues' => array(
+                [
+                    'limitationValues' => [
                         $notLockedState,
-                    ),
-                )
+                    ],
+                ]
             )
         );
 
@@ -92,11 +92,11 @@ class NewObjectStateLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('state', 'assign');
         $policyCreate->addLimitation(
             new NewObjectStateLimitation(
-                array(
-                    'limitationValues' => array(
+                [
+                    'limitationValues' => [
                         $lockedState,
-                    ),
-                )
+                    ],
+                ]
             )
         );
 

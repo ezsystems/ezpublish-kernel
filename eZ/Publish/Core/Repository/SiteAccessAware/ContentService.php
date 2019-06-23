@@ -112,7 +112,7 @@ class ContentService implements ContentServiceInterface
         );
     }
 
-    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array())
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = [])
     {
         return $this->service->createContent($contentCreateStruct, $locationCreateStructs);
     }

@@ -177,7 +177,7 @@ abstract class TestCase extends BaseTestCase
             $q->insertInto($db->quoteIdentifier($table));
 
             // Contains the bound parameters
-            $values = array();
+            $values = [];
 
             // Binding the parameters
             foreach ($rows[0] as $col => $val) {
@@ -248,7 +248,7 @@ abstract class TestCase extends BaseTestCase
         $statement = $query->prepare();
         $statement->execute();
 
-        $result = array();
+        $result = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $result[] = $row;
         }

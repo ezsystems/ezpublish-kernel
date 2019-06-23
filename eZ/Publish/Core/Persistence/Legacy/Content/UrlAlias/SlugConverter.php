@@ -15,13 +15,13 @@ use eZ\Publish\Core\Persistence\TransformationProcessor;
  */
 class SlugConverter
 {
-    const DEFAULT_CONFIGURATION = array(
+    const DEFAULT_CONFIGURATION = [
         'wordSeparatorName' => 'dash',
         'urlAliasNameLimit' => 255,
         'transformation' => 'urlalias',
-        'transformationGroups' => array(
-            'urlalias' => array(
-                'commands' => array(
+        'transformationGroups' => [
+            'urlalias' => [
+                'commands' => [
                     //normalize
                     'space_normalize',
                     'hyphen_normalize',
@@ -53,15 +53,15 @@ class SlugConverter
                     'greek_diacritical',
                     'latin1_diacritical',
                     'latin-exta_diacritical',
-                ),
+                ],
                 'cleanupMethod' => 'url_cleanup',
-            ),
-            'urlalias_iri' => array(
-                'commands' => array(),
+            ],
+            'urlalias_iri' => [
+                'commands' => [],
                 'cleanupMethod' => 'url_cleanup_iri',
-            ),
-            'urlalias_compat' => array(
-                'commands' => array(
+            ],
+            'urlalias_compat' => [
+                'commands' => [
                     //normalize
                     'space_normalize',
                     'hyphen_normalize',
@@ -101,11 +101,11 @@ class SlugConverter
                     'latin1_lowercase',
                     'latin-exta_lowercase',
                     'latin_lowercase',
-                ),
+                ],
                 'cleanupMethod' => 'url_cleanup_compat',
-            ),
-            'urlalias_lowercase' => array(
-                'commands' => array(
+            ],
+            'urlalias_lowercase' => [
+                'commands' => [
                     'ascii_lowercase',
                     'cyrillic_lowercase',
                     'greek_lowercase',
@@ -139,11 +139,11 @@ class SlugConverter
                     'greek_diacritical',
                     'latin1_diacritical',
                     'latin-exta_diacritical',
-                ),
+                ],
                 'cleanupMethod' => 'url_cleanup',
-            ),
-        ),
-        'reservedNames' => array(
+            ],
+        ],
+        'reservedNames' => [
             'class',
             'collaboration',
             'content',
@@ -170,8 +170,8 @@ class SlugConverter
             'visual',
             'workflow',
             'switchlanguage',
-        ),
-    );
+        ],
+    ];
 
     /**
      * Transformation processor to normalize URL strings.
@@ -193,7 +193,7 @@ class SlugConverter
      */
     public function __construct(
         TransformationProcessor $transformationProcessor,
-        array $configuration = array()
+        array $configuration = []
     ) {
         $this->transformationProcessor = $transformationProcessor;
         $this->configuration = $configuration + self::DEFAULT_CONFIGURATION;
@@ -294,20 +294,20 @@ class SlugConverter
                 $sep = $this->getWordSeparator();
                 $sepQ = preg_quote($sep);
                 $text = preg_replace(
-                    array(
+                    [
                         '#[^a-zA-Z0-9_!.-]+#',
                         '#^[.]+|[!.]+$#', // Remove dots at beginning/end
                         "#\.\.+#", // Remove double dots
                         "#[{$sepQ}]+#", // Turn multiple separators into one
                         "#^[{$sepQ}]+|[{$sepQ}]+$#", // Strip separator from beginning/end
-                    ),
-                    array(
+                    ],
+                    [
                         $sep,
                         $sep,
                         $sep,
                         $sep,
                         '',
-                    ),
+                    ],
                     $text
                 );
                 break;
@@ -326,20 +326,20 @@ class SlugConverter
                     $prepost .= '-';
                 }
                 $text = preg_replace(
-                    array(
+                    [
                         "#[ \\\\%\#&;/:=?\[\]()+]+#",
                         '#^[.]+|[!.]+$#', // Remove dots at beginning/end
                         "#\.\.+#", // Remove double dots
                         "#[{$sepQ}]+#", // Turn multiple separators into one
                         "#^[{$prepost}]+|[{$prepost}]+$#",
-                    ),
-                    array(
+                    ],
+                    [
                         $sep,
                         $sep,
                         $sep,
                         $sep,
                         '',
-                    ),
+                    ],
                     $text
                 );
                 break;
@@ -347,14 +347,14 @@ class SlugConverter
                 // Old style of url alias with lowercase only and underscores for separators
                 $text = strtolower($text);
                 $text = preg_replace(
-                    array(
+                    [
                         '#[^a-z0-9]+#',
                         '#^_+|_+$#',
-                    ),
-                    array(
+                    ],
+                    [
                         '_',
                         '',
-                    ),
+                    ],
                     $text
                 );
                 break;

@@ -37,14 +37,14 @@ class RichTextTest extends TestCase
     {
         $fieldType = new RichTextType(
             new Validator(
-                array(
+                [
                     $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/ezpublish.rng'),
                     $this->getAbsolutePath('eZ/Publish/Core/FieldType/RichText/Resources/schemas/docbook/docbook.iso.sch.xsl'),
-                )
+                ]
             ),
-            new ConverterDispatcher(array('http://docbook.org/ns/docbook' => null)),
+            new ConverterDispatcher(['http://docbook.org/ns/docbook' => null]),
             new Aggregate(),
-            new ValidatorDispatcher(array('http://docbook.org/ns/docbook' => null))
+            new ValidatorDispatcher(['http://docbook.org/ns/docbook' => null])
         );
         $fieldType->setTransformationProcessor($this->getTransformationProcessorMock());
 
@@ -58,7 +58,7 @@ class RichTextTest extends TestCase
     {
         return $this->getMockForAbstractClass(
             TransformationProcessor::class,
-            array(),
+            [],
             '',
             false,
             true,
@@ -102,22 +102,22 @@ class RichTextTest extends TestCase
 
     public static function providerForTestAcceptValueValidFormat()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
   <title>This is a heading.</title>
   <para>This is a paragraph.</para>
 </section>
 ',
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
   <h1>This is not valid, but acceptValue() will not validate it.</h1>
 </section>',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -132,22 +132,22 @@ class RichTextTest extends TestCase
 
     public static function providerForTestAcceptValueInvalidFormat()
     {
-        return array(
-            array(
+        return [
+            [
                 'This is not XML at all!',
                 new InvalidArgumentException(
                     '$inputValue',
                     "Could not create XML document: Start tag expected, '<' not found"
                 ),
-            ),
-            array(
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?><unknown xmlns="http://www.w3.org/2013/foobar"><format /></unknown>',
                 new NotFoundException(
                     'Validator',
                     'http://www.w3.org/2013/foobar'
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -173,63 +173,63 @@ class RichTextTest extends TestCase
 
     public function providerForTestValidate()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" version="5.0-variant ezpublish-1.0">
   <h1>This is a heading.</h1>
 </section>',
-                array(
+                [
                     new ValidationError(
                         "Validation of XML content failed:\n" .
                         'Error in 3:0: Element section has extra content: h1'
                     ),
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink">
   <title>This is a heading.</title>
 </section>',
-                array(
+                [
                     new ValidationError(
                         "Validation of XML content failed:\n" .
                         "/*[local-name()='section' and namespace-uri()='http://docbook.org/ns/docbook']: The root element must have a version attribute."
                     ),
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
   <para><link xlink:href="javascript:alert(\'XSS\');">link</link></para>
 </section>',
-                array(
+                [
                     new ValidationError(
                         "Validation of XML content failed:\n" .
                         '/section/para/link: using scripts in links is not allowed'
                     ),
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
   <para><link xlink:href="vbscript:alert(\'XSS\');">link</link></para>
 </section>',
-                array(
+                [
                     new ValidationError(
                         "Validation of XML content failed:\n" .
                         '/section/para/link: using scripts in links is not allowed'
                     ),
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
   <para><link xlink:href="http://example.org">link</link></para>
 </section>',
-                array(),
-            ),
-        );
+                [],
+            ],
+        ];
     }
 
     /**
@@ -291,87 +291,87 @@ class RichTextTest extends TestCase
      */
     public static function providerForTestGetName()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>',
                 'This is a piece of text',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of <emphasize>text</emphasize></header></section>',
                 /* @todo FIXME: should probably be "This is a piece of text" */
                 'This is a piece of',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong>This is a piece</strong> of text</header></section>',
                 /* @todo FIXME: should probably be "This is a piece of text" */
                 'This is a piece',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1"><strong><emphasize>This is</emphasize> a piece</strong> of text</header></section>',
                 /* @todo FIXME: should probably be "This is a piece of text" */
                 'This is',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><table class="default" border="0" width="100%" custom:summary="wai" custom:caption=""><tr><td><paragraph>First cell</paragraph></td><td><paragraph>Second cell</paragraph></td></tr><tr><td><paragraph>Third cell</paragraph></td><td><paragraph>Fourth cell</paragraph></td></tr></table></paragraph><paragraph>Text after table</paragraph></section>',
                 /* @todo FIXME: should probably be "First cell" */
                 'First cellSecond cell',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List item</paragraph></li></ul></paragraph></section>',
                 'List item',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/"><ul><li><paragraph xmlns:tmp="http://ez.no/namespaces/ezpublish3/temporary/">List <emphasize>item</emphasize></paragraph></li></ul></paragraph></section>',
                 'List item',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />',
                 '',
-            ),
+            ],
 
-            array(
+            [
                 '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><paragraph><strong><emphasize>A simple</emphasize></strong> paragraph!</paragraph></section>',
                 'A simple',
-            ),
+            ],
 
-            array('<section><paragraph>test</paragraph></section>', 'test'),
+            ['<section><paragraph>test</paragraph></section>', 'test'],
 
-            array('<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', 'test'),
-        );
+            ['<section><paragraph><link node_id="1">test</link><link object_id="1">test</link></paragraph></section>', 'test'],
+        ];
     }
 
     /**
@@ -395,16 +395,16 @@ EOT;
 
         $fieldType = $this->getFieldType();
         $this->assertEquals(
-            array(
-                Relation::LINK => array(
-                    'locationIds' => array(72, 61),
-                    'contentIds' => array(70, 75),
-                ),
-                Relation::EMBED => array(
-                    'locationIds' => array(),
-                    'contentIds' => array(),
-                ),
-            ),
+            [
+                Relation::LINK => [
+                    'locationIds' => [72, 61],
+                    'contentIds' => [70, 75],
+                ],
+                Relation::EMBED => [
+                    'locationIds' => [],
+                    'contentIds' => [],
+                ],
+            ],
             $fieldType->getRelations($fieldType->acceptValue($xml))
         );
     }
@@ -440,6 +440,6 @@ EOT;
 
     public function provideDataForGetName()
     {
-        return array();
+        return [];
     }
 }

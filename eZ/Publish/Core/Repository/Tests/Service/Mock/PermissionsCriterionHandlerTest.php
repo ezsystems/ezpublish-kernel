@@ -46,10 +46,10 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
     public function providerForTestAddPermissionsCriterionWithBooleanPermission()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return [
+            [true],
+            [false],
+        ];
     }
 
     /**
@@ -59,7 +59,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
      */
     public function testAddPermissionsCriterionWithBooleanPermission($permissionsCriterion)
     {
-        $handler = $this->getPermissionsCriterionHandlerMock(array('getPermissionsCriterion'));
+        $handler = $this->getPermissionsCriterionHandlerMock(['getPermissionsCriterion']);
         $criterionMock = $this->createMock(Criterion::class);
 
         $handler
@@ -77,18 +77,18 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
     {
         $criterionMock = $this->createMock(Criterion::class);
 
-        return array(
-            array(
+        return [
+            [
                 $criterionMock,
-                new Criterion\LogicalAnd(array()),
-                new Criterion\LogicalAnd(array($criterionMock)),
-            ),
-            array(
+                new Criterion\LogicalAnd([]),
+                new Criterion\LogicalAnd([$criterionMock]),
+            ],
+            [
                 $criterionMock,
                 $criterionMock,
-                new Criterion\LogicalAnd(array($criterionMock, $criterionMock)),
-            ),
-        );
+                new Criterion\LogicalAnd([$criterionMock, $criterionMock]),
+            ],
+        ];
     }
 
     /**
@@ -98,7 +98,7 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
      */
     public function testAddPermissionsCriterion($permissionsCriterionMock, $givenCriterion, $expectedCriterion)
     {
-        $handler = $this->getPermissionsCriterionHandlerMock(array('getPermissionsCriterion'));
+        $handler = $this->getPermissionsCriterionHandlerMock(['getPermissionsCriterion']);
         $handler
             ->expects($this->once())
             ->method('getPermissionsCriterion')
@@ -122,189 +122,189 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
             ->method('getIdentifier')
             ->will($this->returnValue('limitationIdentifier'));
 
-        $policy1 = new Policy(array('limitations' => array($limitationMock)));
-        $policy2 = new Policy(array('limitations' => array($limitationMock, $limitationMock)));
+        $policy1 = new Policy(['limitations' => [$limitationMock]]);
+        $policy2 = new Policy(['limitations' => [$limitationMock, $limitationMock]]);
 
-        return array(
-            array(
+        return [
+            [
                 $criterionMock,
                 1,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array($policy1),
-                    ),
-                ),
+                        'policies' => [$policy1],
+                    ],
+                ],
                 $criterionMock,
-            ),
-            array(
+            ],
+            [
                 $criterionMock,
                 2,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array($policy1, $policy1),
-                    ),
-                ),
-                new Criterion\LogicalOr(array($criterionMock, $criterionMock)),
-            ),
-            array(
+                        'policies' => [$policy1, $policy1],
+                    ],
+                ],
+                new Criterion\LogicalOr([$criterionMock, $criterionMock]),
+            ],
+            [
                 $criterionMock,
                 0,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array(new Policy(array('limitations' => '*')), $policy1),
-                    ),
-                ),
+                        'policies' => [new Policy(['limitations' => '*']), $policy1],
+                    ],
+                ],
                 false,
-            ),
-            array(
+            ],
+            [
                 $criterionMock,
                 0,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array(new Policy(array('limitations' => array())), $policy1),
-                    ),
-                ),
+                        'policies' => [new Policy(['limitations' => []]), $policy1],
+                    ],
+                ],
                 false,
-            ),
-            array(
+            ],
+            [
                 $criterionMock,
                 2,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array($policy2),
-                    ),
-                ),
-                new Criterion\LogicalAnd(array($criterionMock, $criterionMock)),
-            ),
-            array(
+                        'policies' => [$policy2],
+                    ],
+                ],
+                new Criterion\LogicalAnd([$criterionMock, $criterionMock]),
+            ],
+            [
                 $criterionMock,
                 3,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array($policy1, $policy2),
-                    ),
-                ),
+                        'policies' => [$policy1, $policy2],
+                    ],
+                ],
                 new Criterion\LogicalOr(
-                    array(
+                    [
                         $criterionMock,
-                        new Criterion\LogicalAnd(array($criterionMock, $criterionMock)),
-                    )
+                        new Criterion\LogicalAnd([$criterionMock, $criterionMock]),
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 $criterionMock,
                 2,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array($policy1),
-                    ),
-                    array(
+                        'policies' => [$policy1],
+                    ],
+                    [
                         'limitation' => null,
-                        'policies' => array($policy1),
-                    ),
-                ),
-                new Criterion\LogicalOr(array($criterionMock, $criterionMock)),
-            ),
-            array(
+                        'policies' => [$policy1],
+                    ],
+                ],
+                new Criterion\LogicalOr([$criterionMock, $criterionMock]),
+            ],
+            [
                 $criterionMock,
                 3,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array($policy1),
-                    ),
-                    array(
+                        'policies' => [$policy1],
+                    ],
+                    [
                         'limitation' => null,
-                        'policies' => array($policy1, $policy1),
-                    ),
-                ),
-                new Criterion\LogicalOr(array($criterionMock, $criterionMock, $criterionMock)),
-            ),
-            array(
+                        'policies' => [$policy1, $policy1],
+                    ],
+                ],
+                new Criterion\LogicalOr([$criterionMock, $criterionMock, $criterionMock]),
+            ],
+            [
                 $criterionMock,
                 3,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => null,
-                        'policies' => array($policy2),
-                    ),
-                    array(
+                        'policies' => [$policy2],
+                    ],
+                    [
                         'limitation' => null,
-                        'policies' => array($policy1),
-                    ),
-                ),
+                        'policies' => [$policy1],
+                    ],
+                ],
                 new Criterion\LogicalOr(
-                    array(
-                        new Criterion\LogicalAnd(array($criterionMock, $criterionMock)),
+                    [
+                        new Criterion\LogicalAnd([$criterionMock, $criterionMock]),
                         $criterionMock,
-                    )
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 $criterionMock,
                 2,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => $limitationMock,
-                        'policies' => array($policy1),
-                    ),
-                ),
-                new Criterion\LogicalAnd(array($criterionMock, $criterionMock)),
-            ),
-            array(
+                        'policies' => [$policy1],
+                    ],
+                ],
+                new Criterion\LogicalAnd([$criterionMock, $criterionMock]),
+            ],
+            [
                 $criterionMock,
                 4,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => $limitationMock,
-                        'policies' => array($policy1),
-                    ),
-                    array(
+                        'policies' => [$policy1],
+                    ],
+                    [
                         'limitation' => $limitationMock,
-                        'policies' => array($policy1),
-                    ),
-                ),
+                        'policies' => [$policy1],
+                    ],
+                ],
                 new Criterion\LogicalOr(
-                    array(
-                        new Criterion\LogicalAnd(array($criterionMock, $criterionMock)),
-                        new Criterion\LogicalAnd(array($criterionMock, $criterionMock)),
-                    )
+                    [
+                        new Criterion\LogicalAnd([$criterionMock, $criterionMock]),
+                        new Criterion\LogicalAnd([$criterionMock, $criterionMock]),
+                    ]
                 ),
-            ),
-            array(
+            ],
+            [
                 $criterionMock,
                 1,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => $limitationMock,
-                        'policies' => array(new Policy(array('limitations' => '*'))),
-                    ),
-                ),
+                        'policies' => [new Policy(['limitations' => '*'])],
+                    ],
+                ],
                 $criterionMock,
-            ),
-            array(
+            ],
+            [
                 $criterionMock,
                 2,
-                array(
-                    array(
+                [
+                    [
                         'limitation' => $limitationMock,
-                        'policies' => array(new Policy(array('limitations' => '*'))),
-                    ),
-                    array(
+                        'policies' => [new Policy(['limitations' => '*'])],
+                    ],
+                    [
                         'limitation' => $limitationMock,
-                        'policies' => array(new Policy(array('limitations' => '*'))),
-                    ),
-                ),
-                new Criterion\LogicalOr(array($criterionMock, $criterionMock)),
-            ),
-        );
+                        'policies' => [new Policy(['limitations' => '*'])],
+                    ],
+                ],
+                new Criterion\LogicalOr([$criterionMock, $criterionMock]),
+            ],
+        ];
     }
 
     protected function mockServices($criterionMock, $limitationCount, $permissionSets)
@@ -367,10 +367,10 @@ class PermissionsCriterionHandlerTest extends BaseServiceMockTest
 
     public function providerForTestGetPermissionsCriterionBooleanPermissionSets()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return [
+            [true],
+            [false],
+        ];
     }
 
     /**

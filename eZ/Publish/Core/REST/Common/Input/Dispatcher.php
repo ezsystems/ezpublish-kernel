@@ -30,7 +30,7 @@ class Dispatcher
      *
      * @var array
      */
-    protected $handlers = array();
+    protected $handlers = [];
 
     /**
      * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
@@ -43,7 +43,7 @@ class Dispatcher
      * @param \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher $parsingDispatcher
      * @param array $handlers
      */
-    public function __construct(ParsingDispatcher $parsingDispatcher, array $handlers = array())
+    public function __construct(ParsingDispatcher $parsingDispatcher, array $handlers = [])
     {
         $this->parsingDispatcher = $parsingDispatcher;
         foreach ($handlers as $type => $handler) {

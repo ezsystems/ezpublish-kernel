@@ -30,7 +30,7 @@ class LocalePass implements CompilerPassInterface
 
         $localeListenerDef = $container->getDefinition('locale_listener');
         // Injecting the service container for lazy loading purpose, since all event listeners are instantiated before events are triggered
-        $localeListenerDef->addMethodCall('setConfigResolver', array(new Reference('ezpublish.config.resolver')));
-        $localeListenerDef->addMethodCall('setLocaleConverter', array(new Reference('ezpublish.locale.converter')));
+        $localeListenerDef->addMethodCall('setConfigResolver', [new Reference('ezpublish.config.resolver')]);
+        $localeListenerDef->addMethodCall('setLocaleConverter', [new Reference('ezpublish.locale.converter')]);
     }
 }

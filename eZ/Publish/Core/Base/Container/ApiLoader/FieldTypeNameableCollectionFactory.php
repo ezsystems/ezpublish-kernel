@@ -21,7 +21,7 @@ class FieldTypeNameableCollectionFactory implements ContainerAwareInterface
      *
      * @var \Closure[]
      */
-    protected $nameableFieldTypeClosures = array();
+    protected $nameableFieldTypeClosures = [];
 
     /**
      * Registers an eZ Publish field type.

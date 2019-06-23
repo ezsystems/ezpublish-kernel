@@ -30,9 +30,9 @@ abstract class Base extends ValueObject
      *
      * @param array $properties
      */
-    public function __construct(array $properties = array())
+    public function __construct(array $properties = [])
     {
-        $this->attributes = array();
+        $this->attributes = [];
         parent::__construct($properties);
     }
 
@@ -43,7 +43,7 @@ abstract class Base extends ValueObject
      */
     public function getState()
     {
-        $hash = array();
+        $hash = [];
 
         foreach ($this->getProperties() as $property) {
             $hash[$property] = $this->$property;

@@ -33,6 +33,6 @@ class BinaryContentDownloadPass implements CompilerPassInterface
         }
 
         $definition = $container->findDefinition($targetServiceName);
-        $definition->addMethodCall('setDownloadUrlGenerator', array($reference));
+        $definition->addMethodCall('setDownloadUrlGenerator', [$reference]);
     }
 }

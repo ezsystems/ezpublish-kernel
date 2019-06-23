@@ -66,40 +66,40 @@ class ContentExtension extends Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
+        return [
             new Twig_SimpleFunction(
                 'ez_content_name',
-                array($this, 'getTranslatedContentName')
+                [$this, 'getTranslatedContentName']
             ),
             new Twig_SimpleFunction(
                 'ez_field_value',
-                array($this, 'getTranslatedFieldValue')
+                [$this, 'getTranslatedFieldValue']
             ),
             new Twig_SimpleFunction(
                 'ez_field',
-                array($this, 'getTranslatedField')
+                [$this, 'getTranslatedField']
             ),
             new Twig_SimpleFunction(
                 'ez_is_field_empty',
-                array($this, 'isFieldEmpty')
+                [$this, 'isFieldEmpty']
             ),
             new Twig_SimpleFunction(
                 'ez_field_name',
-                array($this, 'getTranslatedFieldDefinitionName')
+                [$this, 'getTranslatedFieldDefinitionName']
             ),
             new Twig_SimpleFunction(
                 'ez_field_description',
-                array($this, 'getTranslatedFieldDefinitionDescription')
+                [$this, 'getTranslatedFieldDefinitionDescription']
             ),
             new Twig_SimpleFunction(
                 'ez_trans_prop',
-                array($this, 'getTranslatedProperty')
+                [$this, 'getTranslatedProperty']
             ),
             new Twig_SimpleFunction(
                 'ez_first_filled_image_field_identifier',
-                array($this, 'getFirstFilledImageFieldIdentifier')
+                [$this, 'getFirstFilledImageFieldIdentifier']
             ),
-        );
+        ];
     }
 
     /**

@@ -28,14 +28,14 @@ class RelationListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $relationList = new RelationList(array(), 42, 21);
+        $relationList = new RelationList([], 42, 21);
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadVersionRelations',
-            array(
+            [
                 'contentId' => $relationList->contentId,
                 'versionNumber' => $relationList->versionNo,
-            ),
+            ],
             "/content/objects/{$relationList->contentId}/versions/{$relationList->versionNo}/relations"
         );
 
@@ -62,9 +62,9 @@ class RelationListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRelationsElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Relations',
-            ),
+            ],
             $result,
             'Invalid <Relations> element.',
             false
@@ -81,13 +81,13 @@ class RelationListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsRelationsAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'Relations',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.RelationList+xml',
                     'href' => '/content/objects/42/versions/21/relations',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <Relations> attributes.',
             false
@@ -105,10 +105,10 @@ class RelationListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $relationList = new RelationList(
-            array(
+            [
                 new Content\Relation(),
                 new Content\Relation(),
-            ),
+            ],
             23,
             1
         );

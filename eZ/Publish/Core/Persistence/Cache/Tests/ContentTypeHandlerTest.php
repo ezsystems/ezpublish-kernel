@@ -141,6 +141,6 @@ class ContentTypeHandlerTest extends AbstractInMemoryCacheHandlerTest
             ->willReturn(true);
 
         $handler = $this->persistenceCacheHandler->$handlerMethodName();
-        call_user_func_array(array($handler, $method), $arguments);
+        call_user_func_array([$handler, $method], $arguments);
     }
 }

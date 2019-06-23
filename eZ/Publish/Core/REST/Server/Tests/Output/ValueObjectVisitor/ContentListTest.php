@@ -28,11 +28,11 @@ class ContentListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $contentList = new ContentList(array());
+        $contentList = new ContentList([]);
 
         $this->addRouteExpectation(
             'ezpublish_rest_redirectContent',
-            array(),
+            [],
             '/content/objects'
         );
 
@@ -59,9 +59,9 @@ class ContentListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentList',
-            ),
+            ],
             $result,
             'Invalid <ContentList> element.',
             false
@@ -78,13 +78,13 @@ class ContentListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsContentListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ContentList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ContentList+xml',
                     'href' => '/content/objects',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ContentList> attributes.',
             false
@@ -102,10 +102,10 @@ class ContentListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $contentList = new ContentList(
-            array(
+            [
                 new RestContent(new ContentInfo()),
                 new RestContent(new ContentInfo()),
-            )
+            ]
         );
 
         $this->getVisitorMock()->expects($this->exactly(2))

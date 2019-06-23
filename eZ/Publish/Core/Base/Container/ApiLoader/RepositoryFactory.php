@@ -47,14 +47,14 @@ class RepositoryFactory implements ContainerAwareInterface
      *
      * @var \eZ\Publish\SPI\Limitation\Type[]
      */
-    protected $roleLimitations = array();
+    protected $roleLimitations = [];
 
     /**
      * Policies map.
      *
      * @var array
      */
-    protected $policyMap = array();
+    protected $policyMap = [];
 
     public function __construct(
         $repositoryClass,
@@ -91,15 +91,15 @@ class RepositoryFactory implements ContainerAwareInterface
             $searchHandler,
             $backgroundIndexer,
             $relationProcessor,
-            array(
+            [
                 'fieldType' => $this->fieldTypeCollectionFactory->getFieldTypes(),
                 'nameableFieldTypes' => $this->fieldTypeNameableCollectionFactory->getNameableFieldTypes(),
-                'role' => array(
+                'role' => [
                     'limitationTypes' => $this->roleLimitations,
                     'policyMap' => $this->policyMap,
-                ),
+                ],
                 'languages' => $this->container->getParameter('languages'),
-            ),
+            ],
             new UserReference($this->container->getParameter('anonymous_user_id'))
         );
 

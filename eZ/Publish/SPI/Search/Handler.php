@@ -33,7 +33,7 @@ interface Handler
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With ContentInfo as SearchHit->valueObject
      */
-    public function findContent(Query $query, array $languageFilter = array());
+    public function findContent(Query $query, array $languageFilter = []);
 
     /**
      * Performs a query for a single content object.
@@ -50,7 +50,7 @@ interface Handler
      *
      * @return \eZ\Publish\SPI\Persistence\Content\ContentInfo
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array());
+    public function findSingle(Criterion $filter, array $languageFilter = []);
 
     /**
      * Finds locations for the given $query.
@@ -63,7 +63,7 @@ interface Handler
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult With Location as SearchHit->valueObject
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = array());
+    public function findLocations(LocationQuery $query, array $languageFilter = []);
 
     /**
      * Suggests a list of values for the given prefix.
@@ -73,7 +73,7 @@ interface Handler
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null);
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null);
 
     /**
      * Indexes a content object.

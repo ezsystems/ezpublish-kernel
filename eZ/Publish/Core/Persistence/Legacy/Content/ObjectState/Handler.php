@@ -215,7 +215,7 @@ class Handler implements BaseObjectStateHandler
         $data = $this->objectStateGateway->loadObjectStateDataByIdentifier($identifier, $groupId);
 
         if (empty($data)) {
-            throw new NotFoundException('ObjectState', array('identifier' => $identifier, 'groupId' => $groupId));
+            throw new NotFoundException('ObjectState', ['identifier' => $identifier, 'groupId' => $groupId]);
         }
 
         return $this->objectStateMapper->createObjectStateFromData($data);
@@ -250,7 +250,7 @@ class Handler implements BaseObjectStateHandler
         $objectState = $this->load($stateId);
         $groupObjectStates = $this->loadObjectStates($objectState->groupId);
 
-        $priorityList = array();
+        $priorityList = [];
         foreach ($groupObjectStates as $index => $groupObjectState) {
             // Update given state and push all other states with same or higher priority down
             if ($objectState->id === $groupObjectState->id) {
@@ -334,7 +334,7 @@ class Handler implements BaseObjectStateHandler
         $data = $this->objectStateGateway->loadObjectStateDataForContent($contentId, $stateGroupId);
 
         if (empty($data)) {
-            throw new NotFoundException('ObjectState', array('groupId' => $stateGroupId));
+            throw new NotFoundException('ObjectState', ['groupId' => $stateGroupId]);
         }
 
         return $this->objectStateMapper->createObjectStateFromData($data);

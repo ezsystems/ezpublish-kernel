@@ -37,7 +37,7 @@ class LegacyStorage extends Gateway
      *
      * @var array
      */
-    protected $defaultValues = array(
+    protected $defaultValues = [
         'hasStoredLogin' => false,
         'contentId' => null,
         'login' => null,
@@ -46,7 +46,7 @@ class LegacyStorage extends Gateway
         'passwordHashType' => null,
         'enabled' => false,
         'maxLogin' => null,
-    );
+    ];
 
     /**
      * Maps legacy database column names to property names.
@@ -56,44 +56,44 @@ class LegacyStorage extends Gateway
      */
     protected function getPropertyMap()
     {
-        return array(
-            'has_stored_login' => array(
+        return [
+            'has_stored_login' => [
                 'name' => 'hasStoredlogin',
                 'cast' => function ($input) {
                     return $input == '1';
                 },
-            ),
-            'contentobject_id' => array(
+            ],
+            'contentobject_id' => [
                 'name' => 'contentId',
                 'cast' => 'intval',
-            ),
-            'login' => array(
+            ],
+            'login' => [
                 'name' => 'login',
                 'cast' => 'strval',
-            ),
-            'email' => array(
+            ],
+            'email' => [
                 'name' => 'email',
                 'cast' => 'strval',
-            ),
-            'password_hash' => array(
+            ],
+            'password_hash' => [
                 'name' => 'passwordHash',
                 'cast' => 'strval',
-            ),
-            'password_hash_type' => array(
+            ],
+            'password_hash_type' => [
                 'name' => 'passwordHashType',
                 'cast' => 'strval',
-            ),
-            'is_enabled' => array(
+            ],
+            'is_enabled' => [
                 'name' => 'enabled',
                 'cast' => function ($input) {
                     return $input == '1';
                 },
-            ),
-            'max_login' => array(
+            ],
+            'max_login' => [
                 'name' => 'maxLogin',
                 'cast' => 'intval',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -126,9 +126,9 @@ class LegacyStorage extends Gateway
 
         $result = array_merge(
             $this->defaultValues,
-            array(
+            [
                 'hasStoredLogin' => true,
-            ),
+            ],
             $userData,
             $this->fetchUserSettings($userId)
         );
@@ -145,7 +145,7 @@ class LegacyStorage extends Gateway
      */
     protected function convertColumnsToProperties(array $databaseValues)
     {
-        $propertyValues = array();
+        $propertyValues = [];
         $propertyMap = $this->getPropertyMap();
 
         foreach ($databaseValues as $columnName => $value) {
@@ -216,7 +216,7 @@ class LegacyStorage extends Gateway
 
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        return isset($rows[0]) ? $this->convertColumnsToProperties($rows[0]) : array();
+        return isset($rows[0]) ? $this->convertColumnsToProperties($rows[0]) : [];
     }
 
     /**
@@ -250,6 +250,6 @@ class LegacyStorage extends Gateway
 
         $rows = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        return isset($rows[0]) ? $this->convertColumnsToProperties($rows[0]) : array();
+        return isset($rows[0]) ? $this->convertColumnsToProperties($rows[0]) : [];
     }
 }

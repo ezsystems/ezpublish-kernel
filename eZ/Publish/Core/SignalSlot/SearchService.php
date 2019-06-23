@@ -59,7 +59,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContent(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findContent(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         return $this->service->findContent($query, $languageFilter, $filterOnUserPermissions);
     }
@@ -80,7 +80,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findContentInfo(Query $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findContentInfo(Query $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         return $this->service->findContentInfo($query, $languageFilter, $filterOnUserPermissions);
     }
@@ -99,7 +99,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content
      */
-    public function findSingle(Criterion $filter, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findSingle(Criterion $filter, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         return $this->service->findSingle($filter, $languageFilter, $filterOnUserPermissions);
     }
@@ -112,7 +112,7 @@ class SearchService implements SearchServiceInterface
      * @param int $limit
      * @param \eZ\Publish\API\Repository\Values\Content\Query\Criterion $filter
      */
-    public function suggest($prefix, $fieldPaths = array(), $limit = 10, Criterion $filter = null)
+    public function suggest($prefix, $fieldPaths = [], $limit = 10, Criterion $filter = null)
     {
         return $this->service->suggest($prefix, $fieldPaths, $limit, $filter);
     }
@@ -130,7 +130,7 @@ class SearchService implements SearchServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Search\SearchResult
      */
-    public function findLocations(LocationQuery $query, array $languageFilter = array(), $filterOnUserPermissions = true)
+    public function findLocations(LocationQuery $query, array $languageFilter = [], $filterOnUserPermissions = true)
     {
         return $this->service->findLocations($query, $languageFilter, $filterOnUserPermissions);
     }

@@ -99,7 +99,7 @@ class IO extends AbstractParser
 
         // we should only write for default, and for sa/sa groups/global IF they have a declared value
         $scopes = array_merge(
-            array('default'),
+            ['default'],
             $config['siteaccess']['list'],
             array_keys($config['siteaccess']['groups'])
         );

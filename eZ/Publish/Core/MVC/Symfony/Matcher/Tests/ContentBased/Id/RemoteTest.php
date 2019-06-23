@@ -43,28 +43,28 @@ class RemoteTest extends BaseTest
 
     public function matchLocationProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'foo',
-                $this->getLocationMock(array('remoteId' => 'foo')),
+                $this->getLocationMock(['remoteId' => 'foo']),
                 true,
-            ),
-            array(
+            ],
+            [
                 'foo',
-                $this->getLocationMock(array('remoteId' => 'bar')),
+                $this->getLocationMock(['remoteId' => 'bar']),
                 false,
-            ),
-            array(
-                array('foo', 'baz'),
-                $this->getLocationMock(array('remoteId' => 'bar')),
+            ],
+            [
+                ['foo', 'baz'],
+                $this->getLocationMock(['remoteId' => 'bar']),
                 false,
-            ),
-            array(
-                array('foo', 'baz'),
-                $this->getLocationMock(array('remoteId' => 'baz')),
+            ],
+            [
+                ['foo', 'baz'],
+                $this->getLocationMock(['remoteId' => 'baz']),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -84,27 +84,27 @@ class RemoteTest extends BaseTest
 
     public function matchContentInfoProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 'foo',
-                $this->getContentInfoMock(array('remoteId' => 'foo')),
+                $this->getContentInfoMock(['remoteId' => 'foo']),
                 true,
-            ),
-            array(
+            ],
+            [
                 'foo',
-                $this->getContentInfoMock(array('remoteId' => 'bar')),
+                $this->getContentInfoMock(['remoteId' => 'bar']),
                 false,
-            ),
-            array(
-                array('foo', 'baz'),
-                $this->getContentInfoMock(array('remoteId' => 'bar')),
+            ],
+            [
+                ['foo', 'baz'],
+                $this->getContentInfoMock(['remoteId' => 'bar']),
                 false,
-            ),
-            array(
-                array('foo', 'baz'),
-                $this->getContentInfoMock(array('remoteId' => 'baz')),
+            ],
+            [
+                ['foo', 'baz'],
+                $this->getContentInfoMock(['remoteId' => 'baz']),
                 true,
-            ),
-        );
+            ],
+        ];
     }
 }

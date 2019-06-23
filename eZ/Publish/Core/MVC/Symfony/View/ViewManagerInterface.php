@@ -31,7 +31,7 @@ interface ViewManagerInterface
      *
      * @return string
      */
-    public function renderContent(Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = array());
+    public function renderContent(Content $content, $viewType = self::VIEW_TYPE_FULL, $parameters = []);
 
     /**
      * Renders $location by selecting the right template for $viewType.
@@ -48,7 +48,7 @@ interface ViewManagerInterface
      *
      * @return string
      */
-    public function renderLocation(Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = array());
+    public function renderLocation(Location $location, $viewType = self::VIEW_TYPE_FULL, $parameters = []);
 
     /**
      * Renders $block by selecting the right template.
@@ -63,7 +63,7 @@ interface ViewManagerInterface
      *
      * @return string
      */
-    public function renderBlock(Block $block, $parameters = array());
+    public function renderBlock(Block $block, $parameters = []);
 
     /**
      * Renders passed ContentView object via the template engine.
@@ -74,5 +74,5 @@ interface ViewManagerInterface
      *
      * @return string
      */
-    public function renderContentView(View $view, array $defaultParams = array());
+    public function renderContentView(View $view, array $defaultParams = []);
 }

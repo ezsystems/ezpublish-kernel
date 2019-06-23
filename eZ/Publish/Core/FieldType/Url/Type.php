@@ -140,7 +140,7 @@ class Type extends FieldType
             return null;
         }
 
-        return array('link' => $value->link, 'text' => $value->text);
+        return ['link' => $value->link, 'text' => $value->text];
     }
 
     /**
@@ -169,23 +169,23 @@ class Type extends FieldType
     {
         if ($value === null) {
             return new FieldValue(
-                array(
-                    'data' => array(),
+                [
+                    'data' => [],
                     'externalData' => null,
                     'sortKey' => null,
-                )
+                ]
             );
         }
 
         return new FieldValue(
-            array(
-                'data' => array(
+            [
+                'data' => [
                     'urlId' => null,
                     'text' => $value->text,
-                ),
+                ],
                 'externalData' => $value->link,
                 'sortKey' => $this->getSortInfo($value),
-            )
+            ]
         );
     }
 

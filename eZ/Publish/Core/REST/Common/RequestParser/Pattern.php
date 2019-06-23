@@ -28,14 +28,14 @@ class Pattern implements RequestParser
      *
      * @var array
      */
-    protected $map = array();
+    protected $map = [];
 
     /**
      * Cache for compiled expressions.
      *
      * @var array
      */
-    protected $compileCache = array();
+    protected $compileCache = [];
 
     /**
      * Pattern regular sub-expression.
@@ -52,7 +52,7 @@ class Pattern implements RequestParser
      *
      * @param array $map
      */
-    public function __construct(array $map = array())
+    public function __construct(array $map = [])
     {
         foreach ($map as $type => $pattern) {
             $this->addPattern($type, $pattern);
@@ -150,7 +150,7 @@ class Pattern implements RequestParser
      *
      * @return string
      */
-    public function generate($type, array $values = array())
+    public function generate($type, array $values = [])
     {
         if (!isset($this->map[$type])) {
             throw new Exceptions\InvalidArgumentException("No URL for type '$type' available.");

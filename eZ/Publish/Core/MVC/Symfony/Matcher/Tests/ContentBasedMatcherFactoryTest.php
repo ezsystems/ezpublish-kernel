@@ -24,16 +24,16 @@ abstract class ContentBasedMatcherFactoryTest extends AbstractMatcherFactoryTest
     {
         $matcherFactory = new $this->matcherFactoryClass(
             $this->getRepositoryMock(),
-            array(
-                'full' => array(
-                    'test' => array(
+            [
+                'full' => [
+                    'test' => [
                         'template' => 'foo.html.twig',
-                        'match' => array(
+                        'match' => [
                             Type::class => true,
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
         $matcherFactory->match($this->getMatchableValueObject(), 'full');
     }

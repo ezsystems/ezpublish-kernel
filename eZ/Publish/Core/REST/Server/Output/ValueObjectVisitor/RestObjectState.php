@@ -34,7 +34,7 @@ class RestObjectState extends ValueObjectVisitor
             'href',
             $this->router->generate(
                 'ezpublish_rest_loadObjectState',
-                array('objectStateGroupId' => $data->groupId, 'objectStateId' => $data->objectState->id)
+                ['objectStateGroupId' => $data->groupId, 'objectStateId' => $data->objectState->id]
             )
         );
         $generator->endAttribute('href');
@@ -52,7 +52,7 @@ class RestObjectState extends ValueObjectVisitor
 
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadObjectStateGroup', array('objectStateGroupId' => $data->groupId))
+            $this->router->generate('ezpublish_rest_loadObjectStateGroup', ['objectStateGroupId' => $data->groupId])
         );
         $generator->endAttribute('href');
 

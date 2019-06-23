@@ -201,7 +201,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array());
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = []);
 
     /**
      * Updates the metadata.

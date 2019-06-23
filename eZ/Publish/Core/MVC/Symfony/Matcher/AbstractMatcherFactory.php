@@ -64,8 +64,8 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
 
         $this->repository = $repository;
         $this->matchConfig = $matchConfig;
-        $this->matchers = array();
-        $this->alreadyMatched = array();
+        $this->matchers = [];
+        $this->alreadyMatched = [];
     }
 
     /**
@@ -141,7 +141,7 @@ abstract class AbstractMatcherFactory implements MatcherFactoryInterface
             }
 
             if ($hasMatched) {
-                return $this->alreadyMatched[$viewType][$view] = $configHash + array('matcher' => $matcher);
+                return $this->alreadyMatched[$viewType][$view] = $configHash + ['matcher' => $matcher];
             }
         }
 

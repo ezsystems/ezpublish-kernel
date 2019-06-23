@@ -40,10 +40,10 @@ class ContentType extends FacetBuilderVisitor
     public function map($name, $data)
     {
         return new Facet\ContentTypeFacet(
-            array(
+            [
                 'name' => (string)substr($name, 6),
                 'entries' => $this->mapData($data),
-            )
+            ]
         );
     }
 
@@ -68,14 +68,14 @@ class ContentType extends FacetBuilderVisitor
      */
     public function visit(FacetBuilder $facetBuilder)
     {
-        return array(
-            "type__{$facetBuilder->name}" => array(
-                'terms' => array(
+        return [
+            "type__{$facetBuilder->name}" => [
+                'terms' => [
                     'field' => 'type_id',
                     'min_doc_count' => $facetBuilder->minCount,
                     'size' => $facetBuilder->limit,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

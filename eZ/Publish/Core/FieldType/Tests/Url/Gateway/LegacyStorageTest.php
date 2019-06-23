@@ -23,12 +23,12 @@ class LegacyStorageTest extends TestCase
         $gateway = $this->getStorageGateway();
 
         $this->assertEquals(
-            array(
+            [
                 23 => '/content/view/sitemap/2',
                 24 => '/content/view/tagcloud/2',
-            ),
+            ],
             $gateway->getIdUrlMap(
-                array(23, 24, 'fake')
+                [23, 24, 'fake']
             )
         );
     }
@@ -40,16 +40,16 @@ class LegacyStorageTest extends TestCase
         $gateway = $this->getStorageGateway();
 
         $this->assertEquals(
-            array(
+            [
                 '/content/view/sitemap/2' => 23,
                 '/content/view/tagcloud/2' => 24,
-            ),
+            ],
             $gateway->getUrlIdMap(
-                array(
+                [
                     '/content/view/sitemap/2',
                     '/content/view/tagcloud/2',
                     'fake',
-                )
+                ]
             )
         );
     }
@@ -77,15 +77,15 @@ class LegacyStorageTest extends TestCase
 
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $expected = array(
-            array(
+        $expected = [
+            [
                 'id' => $id,
                 'is_valid' => '1',
                 'last_checked' => '0',
                 'original_url_md5' => md5($url),
                 'url' => $url,
-            ),
-        );
+            ],
+        ];
 
         $this->assertGreaterThanOrEqual($time, $result[0]['created']);
         $this->assertGreaterThanOrEqual($time, $result[0]['modified']);
@@ -121,13 +121,13 @@ class LegacyStorageTest extends TestCase
 
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $expected = array(
-            array(
+        $expected = [
+            [
                 'contentobject_attribute_id' => $fieldId,
                 'contentobject_attribute_version' => $versionNo,
                 'url_id' => $urlId,
-            ),
-        );
+            ],
+        ];
 
         $this->assertEquals($expected, $result);
     }
@@ -149,13 +149,13 @@ class LegacyStorageTest extends TestCase
 
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $expected = array(
-            array(
+        $expected = [
+            [
                 'contentobject_attribute_id' => 43,
                 'contentobject_attribute_version' => 6,
                 'url_id' => 24,
-            ),
-        );
+            ],
+        ];
 
         $this->assertEquals($expected, $result);
 
@@ -167,8 +167,8 @@ class LegacyStorageTest extends TestCase
 
         $result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
-        $expected = array(
-            array(
+        $expected = [
+            [
                 'created' => '1343140541',
                 'id' => '24',
                 'is_valid' => '1',
@@ -176,8 +176,8 @@ class LegacyStorageTest extends TestCase
                 'modified' => '1343140541',
                 'original_url_md5' => 'c86bcb109d8e70f9db65c803baafd550',
                 'url' => '/content/view/tagcloud/2',
-            ),
-        );
+            ],
+        ];
 
         $this->assertEquals($expected, $result);
     }

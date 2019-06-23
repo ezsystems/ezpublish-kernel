@@ -78,7 +78,7 @@ class Mapper
      */
     public function extractUrlWildcardsFromRows(array $rows)
     {
-        $urlWildcards = array();
+        $urlWildcards = [];
 
         foreach ($rows as $row) {
             $urlWildcards[] = $this->extractUrlWildcardFromRow($row);

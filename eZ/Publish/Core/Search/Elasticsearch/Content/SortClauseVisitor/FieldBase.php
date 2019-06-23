@@ -69,13 +69,13 @@ abstract class FieldBase extends SortClauseVisitor
     protected function getNestedFilterTerm($languageCode)
     {
         if ($languageCode === null) {
-            return array(
+            return [
                 'fields_doc.meta_is_main_translation_b' => true,
-            );
+            ];
         }
 
-        return array(
+        return [
             'fields_doc.meta_language_code_s' => $languageCode,
-        );
+        ];
     }
 }

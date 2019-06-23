@@ -117,7 +117,7 @@ trait EzRest
      */
     public function setFieldToEmptyArray($field)
     {
-        $this->setFieldToValue($field, array());
+        $this->setFieldToValue($field, []);
     }
 
     /**
@@ -305,7 +305,7 @@ trait EzRest
         try {
             $this->responseObject = $this->getKernel()->getContainer()->get('ezpublish_rest.input.dispatcher')->parse(
                 new Message(
-                    array('Content-Type' => $contentTypeHeader),
+                    ['Content-Type' => $contentTypeHeader],
                     $responseBody
                 )
             );

@@ -32,7 +32,7 @@ class CreatedSection extends Section
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadSection',
-                array('sectionId' => $data->section->id)
+                ['sectionId' => $data->section->id]
             )
         );
         $visitor->setStatus(201);

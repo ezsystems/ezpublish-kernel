@@ -74,7 +74,7 @@ class SectionService implements SectionServiceInterface
      * @param \eZ\Publish\API\Repository\PermissionCriterionResolver $permissionCriterionResolver
      * @param array $settings
      */
-    public function __construct(RepositoryInterface $repository, SectionHandler $sectionHandler, LocationHandler $locationHandler, PermissionCriterionResolver $permissionCriterionResolver, array $settings = array())
+    public function __construct(RepositoryInterface $repository, SectionHandler $sectionHandler, LocationHandler $locationHandler, PermissionCriterionResolver $permissionCriterionResolver, array $settings = [])
     {
         $this->repository = $repository;
         $this->sectionHandler = $sectionHandler;
@@ -82,9 +82,9 @@ class SectionService implements SectionServiceInterface
         $this->permissionResolver = $repository->getPermissionResolver();
         $this->permissionCriterionResolver = $permissionCriterionResolver;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             //'defaultSetting' => array(),
-        );
+        ];
     }
 
     /**
@@ -313,10 +313,10 @@ class SectionService implements SectionServiceInterface
             throw new UnauthorizedException(
                 'section',
                 'assign',
-                array(
+                [
                     'name' => $loadedSection->name,
                     'content-name' => $loadedContentInfo->name,
-                )
+                ]
             );
         }
 
@@ -412,7 +412,7 @@ class SectionService implements SectionServiceInterface
         $loadedSection = $this->loadSection($section->id);
 
         if (!$this->permissionResolver->canUser('section', 'edit', $loadedSection)) {
-            throw new UnauthorizedException('section', 'edit', array('sectionId' => $loadedSection->id));
+            throw new UnauthorizedException('section', 'edit', ['sectionId' => $loadedSection->id]);
         }
 
         if ($this->sectionHandler->assignmentsCount($loadedSection->id) > 0) {
@@ -463,11 +463,11 @@ class SectionService implements SectionServiceInterface
     protected function buildDomainSectionObject(SPISection $spiSection)
     {
         return new Section(
-            array(
+            [
                 'id' => $spiSection->id,
                 'identifier' => $spiSection->identifier,
                 'name' => $spiSection->name,
-            )
+            ]
         );
     }
 }

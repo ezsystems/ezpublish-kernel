@@ -58,11 +58,11 @@ class ImageStorage extends GatewayBasedStorage
 
     public function storeFieldData(VersionInfo $versionInfo, Field $field, array $context)
     {
-        $contentMetaData = array(
+        $contentMetaData = [
             'fieldId' => $field->id,
             'versionNo' => $versionInfo->versionNo,
             'languageCode' => $field->languageCode,
-        );
+        ];
 
         // new image
         if (isset($field->value->externalData)) {

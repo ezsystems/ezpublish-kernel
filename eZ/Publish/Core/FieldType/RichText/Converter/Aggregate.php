@@ -23,12 +23,12 @@ class Aggregate implements Converter
      *
      * @var \eZ\Publish\Core\FieldType\RichText\Converter[]
      */
-    protected $converters = array();
+    protected $converters = [];
 
     /**
      * @param \eZ\Publish\Core\FieldType\RichText\Converter[] $converters An array of Converters, sorted by priority
      */
-    public function __construct(array $converters = array())
+    public function __construct(array $converters = [])
     {
         $this->converters = $converters;
     }

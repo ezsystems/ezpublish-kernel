@@ -36,7 +36,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -46,7 +46,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,9 +56,9 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -68,7 +68,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -78,7 +78,7 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -88,9 +88,9 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 42),
-        );
+        return [
+            'unknown' => ['value' => 42],
+        ];
     }
 
     /**
@@ -128,9 +128,9 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'bool' => true,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -160,12 +160,12 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new CheckboxValue(new \stdClass()),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -192,9 +192,9 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'bool' => false,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -242,9 +242,9 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'bool' => true,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -273,12 +273,12 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new CheckboxValue(true),
                 '1',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -290,33 +290,33 @@ class CheckboxIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 '1',
                 new CheckboxValue(true),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new CheckboxValue()),
-            array(new CheckboxValue(null)),
-            array(new CheckboxValue(false)),
-        );
+        return [
+            [new CheckboxValue()],
+            [new CheckboxValue(null)],
+            [new CheckboxValue(false)],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(
+            ],
+            [
                 new CheckboxValue(true),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()

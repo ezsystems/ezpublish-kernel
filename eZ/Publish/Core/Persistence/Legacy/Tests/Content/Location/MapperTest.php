@@ -23,7 +23,7 @@ class MapperTest extends TestCase
      *
      * @var array
      */
-    protected $locationRow = array(
+    protected $locationRow = [
         'node_id' => 77,
         'priority' => 0,
         'is_hidden' => 0,
@@ -39,14 +39,14 @@ class MapperTest extends TestCase
         'depth' => 2,
         'sort_field' => 2,
         'sort_order' => 1,
-    );
+    ];
 
     /**
      * Expected Location object properties values.
      *
      * @var array
      */
-    protected $locationValues = array(
+    protected $locationValues = [
         'id' => 77,
         'priority' => 0,
         'hidden' => false,
@@ -59,14 +59,14 @@ class MapperTest extends TestCase
         'depth' => 2,
         'sortField' => 2,
         'sortOrder' => 1,
-    );
+    ];
 
     /**
      * Expected Location CreateStruct object properties values.
      *
      * @var array
      */
-    protected $locationCreateStructValues = array(
+    protected $locationCreateStructValues = [
         'contentId' => 75,
         'contentVersion' => 1,
         'hidden' => 0,
@@ -76,7 +76,7 @@ class MapperTest extends TestCase
         'priority' => 0,
         'sortField' => 2,
         'sortOrder' => 1,
-    );
+    ];
 
     /**
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
@@ -100,7 +100,7 @@ class MapperTest extends TestCase
      */
     public function testCreateLocationsFromRows()
     {
-        $inputRows = array();
+        $inputRows = [];
         for ($i = 0; $i < 3; ++$i) {
             $row = $this->locationRow;
             $row['node_id'] += $i;
@@ -147,7 +147,7 @@ class MapperTest extends TestCase
     {
         $prefix = 'some_prefix_';
 
-        $data = array();
+        $data = [];
         foreach ($this->locationRow as $key => $val) {
             $data[$prefix . $key] = $val;
         }

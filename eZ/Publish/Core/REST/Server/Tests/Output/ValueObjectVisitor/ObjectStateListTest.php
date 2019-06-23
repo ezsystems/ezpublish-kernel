@@ -29,11 +29,11 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         // @todo coverage add actual object states + visitor mock for RestObjectState
-        $stateList = new ObjectStateList(array(), 42);
+        $stateList = new ObjectStateList([], 42);
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadObjectStates',
-            array('objectStateGroupId' => $stateList->groupId),
+            ['objectStateGroupId' => $stateList->groupId],
             "/content/objectstategroups/{$stateList->groupId}/objectstates"
         );
 
@@ -60,9 +60,9 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsObjectStateListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ObjectStateList',
-            ),
+            ],
             $result,
             'Invalid <ObjectStateList> element.',
             false
@@ -79,13 +79,13 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsObjectStateListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ObjectStateList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ObjectStateList+xml',
                     'href' => '/content/objectstategroups/42/objectstates',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ObjectStateList> attributes.',
             false
@@ -103,10 +103,10 @@ class ObjectStateListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $objectStateList = new ObjectStateList(
-            array(
+            [
                 new ObjectState(),
                 new ObjectState(),
-            ),
+            ],
             42
         );
 

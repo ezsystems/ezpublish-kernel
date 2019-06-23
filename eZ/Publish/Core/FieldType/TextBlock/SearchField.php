@@ -28,7 +28,7 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        return array(
+        return [
             new Search\Field(
                 'value',
                 $this->extractShortText($field->value->data),
@@ -39,7 +39,7 @@ class SearchField implements Indexable
                 $field->value->data,
                 new Search\FieldType\FullTextField()
             ),
-        );
+        ];
     }
 
     /**
@@ -61,9 +61,9 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'value' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     /**

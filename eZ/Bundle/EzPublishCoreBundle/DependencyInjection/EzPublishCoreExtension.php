@@ -65,7 +65,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      */
     private $siteaccessConfigurationFilters = [];
 
-    public function __construct(array $configParsers = array())
+    public function __construct(array $configParsers = [])
     {
         $this->configParsers = $configParsers;
         $this->suggestionCollector = new SuggestionCollector();
@@ -216,7 +216,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     private function registerRepositoriesConfiguration(array $config, ContainerBuilder $container)
     {
         if (!isset($config['repositories'])) {
-            $config['repositories'] = array();
+            $config['repositories'] = [];
         }
 
         foreach ($config['repositories'] as $name => &$repository) {
@@ -231,10 +231,10 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     private function registerSiteAccessConfiguration(array $config, ContainerBuilder $container)
     {
         if (!isset($config['siteaccess'])) {
-            $config['siteaccess'] = array();
-            $config['siteaccess']['list'] = array('setup');
+            $config['siteaccess'] = [];
+            $config['siteaccess']['list'] = ['setup'];
             $config['siteaccess']['default_siteaccess'] = 'setup';
-            $config['siteaccess']['groups'] = array();
+            $config['siteaccess']['groups'] = [];
             $config['siteaccess']['match'] = null;
         }
 
@@ -245,11 +245,11 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
 
         // Register siteaccess groups + reverse
         $container->setParameter('ezpublish.siteaccess.groups', $config['siteaccess']['groups']);
-        $groupsBySiteaccess = array();
+        $groupsBySiteaccess = [];
         foreach ($config['siteaccess']['groups'] as $groupName => $groupMembers) {
             foreach ($groupMembers as $member) {
                 if (!isset($groupsBySiteaccess[$member])) {
-                    $groupsBySiteaccess[$member] = array();
+                    $groupsBySiteaccess[$member] = [];
                 }
 
                 $groupsBySiteaccess[$member][] = $groupName;
@@ -269,7 +269,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
             }
         }
 
-        $filters = isset($config['imagemagick']['filters']) ? $config['imagemagick']['filters'] : array();
+        $filters = isset($config['imagemagick']['filters']) ? $config['imagemagick']['filters'] : [];
         $filters = $filters + $container->getParameter('ezpublish.image.imagemagick.filters');
         $container->setParameter('ezpublish.image.imagemagick.filters', $filters);
     }
@@ -489,18 +489,18 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
         $configResolver = $container->get('ezpublish.config.resolver.core');
         $configResolver->setContainer($container);
 
-        $saRelationMap = array();
+        $saRelationMap = [];
         $saList = $container->getParameter('ezpublish.siteaccess.list');
         // First build the SiteAccess relation map, indexed by repository and rootLocationId.
         foreach ($saList as $sa) {
             $repository = $configResolver->getParameter('repository', 'ezsettings', $sa);
             if (!isset($saRelationMap[$repository])) {
-                $saRelationMap[$repository] = array();
+                $saRelationMap[$repository] = [];
             }
 
             $rootLocationId = $configResolver->getParameter('content.tree_root.location_id', 'ezsettings', $sa);
             if (!isset($saRelationMap[$repository][$rootLocationId])) {
-                $saRelationMap[$repository][$rootLocationId] = array();
+                $saRelationMap[$repository][$rootLocationId] = [];
             }
             $saRelationMap[$repository][$rootLocationId][] = $sa;
         }

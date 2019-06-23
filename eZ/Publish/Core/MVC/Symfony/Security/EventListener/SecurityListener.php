@@ -91,14 +91,14 @@ class SecurityListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
-            SecurityEvents::INTERACTIVE_LOGIN => array(
-                array('onInteractiveLogin', 10),
-                array('checkSiteAccessPermission', 9),
-            ),
+        return [
+            SecurityEvents::INTERACTIVE_LOGIN => [
+                ['onInteractiveLogin', 10],
+                ['checkSiteAccessPermission', 9],
+            ],
             // Priority 7, so that it occurs just after firewall (priority 8)
-            KernelEvents::REQUEST => array('onKernelRequest', 7),
-        );
+            KernelEvents::REQUEST => ['onKernelRequest', 7],
+        ];
     }
 
     /**

@@ -206,7 +206,7 @@ class Legacy extends SetupFactory
             $q->insertInto($handler->quoteIdentifier($table));
 
             // Contains the bound parameters
-            $values = array();
+            $values = [];
 
             // Binding the parameters
             foreach ($rows[0] as $col => $val) {
@@ -293,7 +293,7 @@ class Legacy extends SetupFactory
             return array_filter(preg_split('(;\\s*$)m', file_get_contents($setvalPath)));
         }
 
-        return array();
+        return [];
     }
 
     /**

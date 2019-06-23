@@ -81,30 +81,30 @@ class FieldDefinitionUpdateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array('eng-US' => 'Title'),
+            ['eng-US' => 'Title'],
             $result->names,
             'names not created correctly'
         );
 
         $this->assertEquals(
-            array('eng-US' => 'This is the title'),
+            ['eng-US' => 'This is the title'],
             $result->descriptions,
             'descriptions not created correctly'
         );
 
         $this->assertEquals(
-            array('textRows' => 24),
+            ['textRows' => 24],
             $result->fieldSettings,
             'fieldSettings not created correctly'
         );
 
         $this->assertEquals(
-            array(
-                'StringLengthValidator' => array(
+            [
+                'StringLengthValidator' => [
                     'minStringLength' => 12,
                     'maxStringLength' => 24,
-                ),
-            ),
+                ],
+            ],
             $result->validatorConfiguration,
             'validatorConfiguration not created correctly'
         );
@@ -169,18 +169,18 @@ class FieldDefinitionUpdateTest extends BaseTest
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseFieldSettings')
-            ->will($this->returnValue(array('textRows' => 24)));
+            ->will($this->returnValue(['textRows' => 24]));
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseValidatorConfiguration')
             ->will(
                 $this->returnValue(
-                    array(
-                        'StringLengthValidator' => array(
+                    [
+                        'StringLengthValidator' => [
                             'minStringLength' => 12,
                             'maxStringLength' => 24,
-                        ),
-                    )
+                        ],
+                    ]
                 )
             );
 
@@ -210,16 +210,16 @@ class FieldDefinitionUpdateTest extends BaseTest
             ->will(
                 $this->returnValue(
                     new ContentType(
-                        array(
-                            'fieldDefinitions' => array(
+                        [
+                            'fieldDefinitions' => [
                                 new FieldDefinition(
-                                    array(
+                                    [
                                         'id' => 24,
                                         'fieldTypeIdentifier' => 'ezstring',
-                                    )
+                                    ]
                                 ),
-                            ),
-                        )
+                            ],
+                        ]
                     )
                 )
             );
@@ -234,7 +234,7 @@ class FieldDefinitionUpdateTest extends BaseTest
      */
     protected function getInputArray()
     {
-        return array(
+        return [
             '__url' => '/content/types/42/draft/fieldDefinitions/24',
             'identifier' => 'title',
             'fieldGroup' => 'content',
@@ -244,39 +244,39 @@ class FieldDefinitionUpdateTest extends BaseTest
             'isInfoCollector' => 'true',
             'isSearchable' => 'true',
             'defaultValue' => 'New title',
-            'names' => array(
-                'value' => array(
-                    array(
+            'names' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-US',
                         '#text' => 'Title',
-                    ),
-                ),
-            ),
-            'descriptions' => array(
-                'value' => array(
-                    array(
+                    ],
+                ],
+            ],
+            'descriptions' => [
+                'value' => [
+                    [
                         '_languageCode' => 'eng-US',
                         '#text' => 'This is the title',
-                    ),
-                ),
-            ),
-            'fieldSettings' => array(
+                    ],
+                ],
+            ],
+            'fieldSettings' => [
                 'textRows' => 24,
-            ),
-            'validatorConfiguration' => array(
-                'StringLengthValidator' => array(
+            ],
+            'validatorConfiguration' => [
+                'StringLengthValidator' => [
                     'minStringLength' => '12',
                     'maxStringLength' => '24',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     public function getParseHrefExpectationsMap()
     {
-        return array(
-            array('/content/types/42/draft/fieldDefinitions/24', 'contentTypeId', 42),
-            array('/content/types/42/draft/fieldDefinitions/24', 'fieldDefinitionId', 24),
-        );
+        return [
+            ['/content/types/42/draft/fieldDefinitions/24', 'contentTypeId', 42],
+            ['/content/types/42/draft/fieldDefinitions/24', 'fieldDefinitionId', 24],
+        ];
     }
 }

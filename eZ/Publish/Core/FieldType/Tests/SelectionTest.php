@@ -46,7 +46,7 @@ class SelectionTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,20 +56,20 @@ class SelectionTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array(
-            'isMultiple' => array(
+        return [
+            'isMultiple' => [
                 'type' => 'bool',
                 'default' => false,
-            ),
-            'options' => array(
+            ],
+            'options' => [
                 'type' => 'hash',
-                'default' => array(),
-            ),
-            'multilingualOptions' => array(
+                'default' => [],
+            ],
+            'multilingualOptions' => [
                 'type' => 'hash',
-                'default' => array(),
-            ),
-        );
+                'default' => [],
+            ],
+        ];
     }
 
     /**
@@ -107,16 +107,16 @@ class SelectionTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 23,
                 InvalidArgumentException::class,
-            ),
-            array(
+            ],
+            [
                 'sindelfingen',
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -150,24 +150,24 @@ class SelectionTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
-                array(),
+        return [
+            [
+                [],
                 new SelectionValue(),
-            ),
-            array(
-                array(23),
-                new SelectionValue(array(23)),
-            ),
-            array(
-                array(23, 42),
-                new SelectionValue(array(23, 42)),
-            ),
-            array(
-                new SelectionValue(array(23, 42)),
-                new SelectionValue(array(23, 42)),
-            ),
-        );
+            ],
+            [
+                [23],
+                new SelectionValue([23]),
+            ],
+            [
+                [23, 42],
+                new SelectionValue([23, 42]),
+            ],
+            [
+                new SelectionValue([23, 42]),
+                new SelectionValue([23, 42]),
+            ],
+        ];
     }
 
     /**
@@ -207,16 +207,16 @@ class SelectionTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new SelectionValue(),
-                array(),
-            ),
-            array(
-                new SelectionValue(array(23, 42)),
-                array(23, 42),
-            ),
-        );
+                [],
+            ],
+            [
+                new SelectionValue([23, 42]),
+                [23, 42],
+            ],
+        ];
     }
 
     /**
@@ -256,16 +256,16 @@ class SelectionTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
-                array(),
+        return [
+            [
+                [],
                 new SelectionValue(),
-            ),
-            array(
-                array(23, 42),
-                new SelectionValue(array(23, 42)),
-            ),
-        );
+            ],
+            [
+                [23, 42],
+                new SelectionValue([23, 42]),
+            ],
+        ];
     }
 
     /**
@@ -292,23 +292,23 @@ class SelectionTest extends FieldTypeTest
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
                     'isMultiple' => true,
-                    'options' => array('foo', 'bar'),
-                ),
-            ),
-            array(
-                array(
+                    'options' => ['foo', 'bar'],
+                ],
+            ],
+            [
+                [
                     'isMultiple' => false,
-                    'options' => array(23, 42),
-                ),
-            ),
-        );
+                    'options' => [23, 42],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -336,20 +336,20 @@ class SelectionTest extends FieldTypeTest
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     // isMultiple must be bool
                     'isMultiple' => 23,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     // options must be array
                     'options' => 23,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -368,9 +368,9 @@ class SelectionTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+        ];
     }
 
     /**
@@ -420,35 +420,35 @@ class SelectionTest extends FieldTypeTest
      */
     public function provideValidDataForValidate()
     {
-        return array(
-            array(
-                array(
-                    'fieldSettings' => array(
+        return [
+            [
+                [
+                    'fieldSettings' => [
                         'isMultiple' => true,
-                        'options' => array(0 => 1, 1 => 2),
-                    ),
-                ),
-                new SelectionValue(array(0, 1)),
-            ),
-            array(
-                array(
-                    'fieldSettings' => array(
+                        'options' => [0 => 1, 1 => 2],
+                    ],
+                ],
+                new SelectionValue([0, 1]),
+            ],
+            [
+                [
+                    'fieldSettings' => [
                         'isMultiple' => false,
-                        'options' => array(0 => 1, 1 => 2),
-                    ),
-                ),
-                new SelectionValue(array(1)),
-            ),
-            array(
-                array(
-                    'fieldSettings' => array(
+                        'options' => [0 => 1, 1 => 2],
+                    ],
+                ],
+                new SelectionValue([1]),
+            ],
+            [
+                [
+                    'fieldSettings' => [
                         'isMultiple' => false,
-                        'options' => array(0 => 1, 1 => 2),
-                    ),
-                ),
+                        'options' => [0 => 1, 1 => 2],
+                    ],
+                ],
                 new SelectionValue(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -517,43 +517,43 @@ class SelectionTest extends FieldTypeTest
      */
     public function provideInvalidDataForValidate()
     {
-        return array(
-            array(
-                array(
-                    'fieldSettings' => array(
+        return [
+            [
+                [
+                    'fieldSettings' => [
                         'isMultiple' => false,
-                        'options' => array(0 => 1, 1 => 2),
-                    ),
-                ),
-                new SelectionValue(array(0, 1)),
-                array(
+                        'options' => [0 => 1, 1 => 2],
+                    ],
+                ],
+                new SelectionValue([0, 1]),
+                [
                     new ValidationError(
                         'Field definition does not allow multiple options to be selected.',
                         null,
-                        array(),
+                        [],
                         'selection'
                     ),
-                ),
-            ),
-            array(
-                array(
-                    'fieldSettings' => array(
+                ],
+            ],
+            [
+                [
+                    'fieldSettings' => [
                         'isMultiple' => false,
-                        'options' => array(0 => 1, 1 => 2),
-                    ),
-                ),
-                new SelectionValue(array(3)),
-                array(
+                        'options' => [0 => 1, 1 => 2],
+                    ],
+                ],
+                new SelectionValue([3]),
+                [
                     new ValidationError(
                         'Option with index %index% does not exist in the field definition.',
                         null,
-                        array(
+                        [
                             '%index%' => 3,
-                        ),
+                        ],
                         'selection'
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

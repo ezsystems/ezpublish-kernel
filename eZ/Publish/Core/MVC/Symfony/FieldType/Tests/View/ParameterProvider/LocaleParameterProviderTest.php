@@ -20,10 +20,10 @@ class LocaleParameterProviderTest extends TestCase
 {
     public function providerForTestGetViewParameters()
     {
-        return array(
-            array(true, 'fr_FR'),
-            array(false, 'hr_HR'),
-        );
+        return [
+            [true, 'fr_FR'],
+            [false, 'hr_HR'],
+        ];
     }
 
     /**
@@ -31,11 +31,11 @@ class LocaleParameterProviderTest extends TestCase
      */
     public function testGetViewParameters($hasRequestLocale, $expectedLocale)
     {
-        $field = new Field(array('languageCode' => 'cro-HR'));
+        $field = new Field(['languageCode' => 'cro-HR']);
         $parameterProvider = new LocaleParameterProvider($this->getLocaleConverterMock());
         $parameterProvider->setRequestStack($this->getRequestStackMock($hasRequestLocale));
         $this->assertSame(
-            array('locale' => $expectedLocale),
+            ['locale' => $expectedLocale],
             $parameterProvider->getViewParameters($field)
         );
     }

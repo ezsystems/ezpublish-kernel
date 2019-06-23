@@ -61,22 +61,22 @@ class ImageConverter extends BinaryFileConverter
     {
         return $this->fillXml(
             array_merge(
-                array(
+                [
                     'uri' => '',
                     'path' => '',
                     'width' => '',
                     'height' => '',
                     'mime' => '',
                     'alternativeText' => '',
-                ),
+                ],
                 $contentMetaData
             ),
-            array(
+            [
                 'basename' => '',
                 'extension' => '',
                 'dirname' => '',
                 'filename' => '',
-            ),
+            ],
             time()
         );
     }
@@ -176,7 +176,7 @@ EOT;
      */
     protected function parseLegacyXml($xml)
     {
-        $extractedData = array();
+        $extractedData = [];
 
         $dom = new \DOMDocument();
         $dom->loadXml($xml);

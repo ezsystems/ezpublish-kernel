@@ -342,9 +342,9 @@ class ImageAssetTest extends FieldTypeTest
         $fieldType = $this->createFieldTypeUnderTest();
 
         $this->assertEquals(
-            array(
+            [
                 Relation::ASSET => [$destinationContentId],
-            ),
+            ],
             $fieldType->getRelations($fieldType->acceptValue($destinationContentId))
         );
     }

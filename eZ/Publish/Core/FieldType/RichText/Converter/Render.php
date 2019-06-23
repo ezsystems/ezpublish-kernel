@@ -38,7 +38,7 @@ abstract class Render
      */
     protected function extractConfiguration(DOMElement $embed)
     {
-        $hash = array();
+        $hash = [];
         $configElements = $embed->getElementsByTagName('ezconfig');
 
         if ($configElements->length) {
@@ -57,7 +57,7 @@ abstract class Render
      */
     protected function extractHash(DOMNode $configHash)
     {
-        $hash = array();
+        $hash = [];
 
         foreach ($configHash->childNodes as $node) {
             /** @var \DOMText|\DOMElement $node */

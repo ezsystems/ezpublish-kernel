@@ -37,21 +37,21 @@ class StatusLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValue()
     {
-        return array(
-            array(new StatusLimitation()),
-            array(new StatusLimitation(array())),
-            array(
+        return [
+            [new StatusLimitation()],
+            [new StatusLimitation([])],
+            [
                 new StatusLimitation(
-                    array(
-                        'limitationValues' => array(
+                    [
+                        'limitationValues' => [
                             VersionInfo::STATUS_DRAFT,
                             VersionInfo::STATUS_PUBLISHED,
                             VersionInfo::STATUS_ARCHIVED,
-                        ),
-                    )
+                        ],
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -71,10 +71,10 @@ class StatusLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValueException()
     {
-        return array(
-            array(new ObjectStateLimitation()),
-            array(new StatusLimitation(array('limitationValues' => array(true)))),
-        );
+        return [
+            [new ObjectStateLimitation()],
+            [new StatusLimitation(['limitationValues' => [true]])],
+        ];
     }
 
     /**
@@ -95,53 +95,53 @@ class StatusLimitationTypeTest extends Base
      */
     public function providerForTestValidateError()
     {
-        return array(
-            array(new StatusLimitation(), 0),
-            array(new StatusLimitation(array()), 0),
-            array(
+        return [
+            [new StatusLimitation(), 0],
+            [new StatusLimitation([]), 0],
+            [
                 new StatusLimitation(
-                    array(
-                        'limitationValues' => array(SPIVersionInfo::STATUS_PUBLISHED),
-                    )
+                    [
+                        'limitationValues' => [SPIVersionInfo::STATUS_PUBLISHED],
+                    ]
                 ),
                 0,
-            ),
-            array(new StatusLimitation(array('limitationValues' => array(100))), 1),
-            array(
+            ],
+            [new StatusLimitation(['limitationValues' => [100]]), 1],
+            [
                 new StatusLimitation(
-                    array(
-                        'limitationValues' => array(
+                    [
+                        'limitationValues' => [
                             SPIVersionInfo::STATUS_PUBLISHED,
                             PHP_INT_MAX,
-                        ),
-                    )
+                        ],
+                    ]
                 ),
                 1,
-            ),
-            array(
+            ],
+            [
                 new StatusLimitation(
-                    array(
-                        'limitationValues' => array(
+                    [
+                        'limitationValues' => [
                             SPIVersionInfo::STATUS_PENDING,
                             SPIVersionInfo::STATUS_REJECTED,
-                        ),
-                    )
+                        ],
+                    ]
                 ),
                 2,
-            ),
-            array(
+            ],
+            [
                 new StatusLimitation(
-                    array(
-                        'limitationValues' => array(
+                    [
+                        'limitationValues' => [
                             SPIVersionInfo::STATUS_DRAFT,
                             SPIVersionInfo::STATUS_PUBLISHED,
                             SPIVersionInfo::STATUS_ARCHIVED,
-                        ),
-                    )
+                        ],
+                    ]
                 ),
                 0,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -165,7 +165,7 @@ class StatusLimitationTypeTest extends Base
      */
     public function testBuildValue(StatusLimitationType $limitationType)
     {
-        $expected = array('test', 'test' => 9);
+        $expected = ['test', 'test' => 9];
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(StatusLimitation::class, $value);
@@ -177,7 +177,7 @@ class StatusLimitationTypeTest extends Base
     {
         $versionInfoMock = $this->getMockBuilder(APIVersionInfo::class)
             ->disableOriginalConstructor()
-            ->setMethods(array('__get'))
+            ->setMethods(['__get'])
             ->getMockForAbstractClass();
 
         if ($shouldBeCalled) {
@@ -199,8 +199,8 @@ class StatusLimitationTypeTest extends Base
     protected function getContentMock()
     {
         $contentMock = $this->getMockBuilder(APIContent::class)
-            ->setConstructorArgs(array())
-            ->setMethods(array())
+            ->setConstructorArgs([])
+            ->setMethods([])
             ->getMock();
 
         $contentMock
@@ -216,44 +216,44 @@ class StatusLimitationTypeTest extends Base
      */
     public function providerForTestEvaluate()
     {
-        return array(
+        return [
             // VersionInfo, no access
-            array(
+            [
                 'limitation' => new StatusLimitation(),
                 'object' => $this->getVersionInfoMock(false),
                 'expected' => false,
-            ),
+            ],
             // VersionInfo, no access
-            array(
-                'limitation' => new StatusLimitation(array('limitationValues' => array(42))),
+            [
+                'limitation' => new StatusLimitation(['limitationValues' => [42]]),
                 'object' => $this->getVersionInfoMock(),
                 'expected' => false,
-            ),
+            ],
             // VersionInfo, with access
-            array(
-                'limitation' => new StatusLimitation(array('limitationValues' => array(24))),
+            [
+                'limitation' => new StatusLimitation(['limitationValues' => [24]]),
                 'object' => $this->getVersionInfoMock(),
                 'expected' => true,
-            ),
+            ],
             // Content, no access
-            array(
+            [
                 'limitation' => new StatusLimitation(),
                 'object' => $this->getContentMock(),
                 'expected' => false,
-            ),
+            ],
             // Content, no access
-            array(
-                'limitation' => new StatusLimitation(array('limitationValues' => array(42))),
+            [
+                'limitation' => new StatusLimitation(['limitationValues' => [42]]),
                 'object' => $this->getContentMock(),
                 'expected' => false,
-            ),
+            ],
             // Content, with access
-            array(
-                'limitation' => new StatusLimitation(array('limitationValues' => array(24))),
+            [
+                'limitation' => new StatusLimitation(['limitationValues' => [24]]),
                 'object' => $this->getContentMock(),
                 'expected' => true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -287,22 +287,22 @@ class StatusLimitationTypeTest extends Base
     public function providerForTestEvaluateInvalidArgument()
     {
         $versionInfoMock = $this->getMockBuilder(APIVersionInfo::class)
-            ->setConstructorArgs(array())
-            ->setMethods(array())
+            ->setConstructorArgs([])
+            ->setMethods([])
             ->getMock();
 
-        return array(
+        return [
             // invalid limitation
-            array(
+            [
                 'limitation' => new ObjectStateLimitation(),
                 'object' => $versionInfoMock,
-            ),
+            ],
             // invalid object
-            array(
+            [
                 'limitation' => new StatusLimitation(),
                 'object' => new ObjectStateLimitation(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
