@@ -65,7 +65,7 @@ class NewObjectStateLimitationType extends AbstractPersistenceLimitationType imp
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $id) {
             try {
                 $this->persistence->objectStateHandler()->load($id);
@@ -73,10 +73,10 @@ class NewObjectStateLimitationType extends AbstractPersistenceLimitationType imp
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
-                    array(
+                    [
                         'value' => $id,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -93,7 +93,7 @@ class NewObjectStateLimitationType extends AbstractPersistenceLimitationType imp
      */
     public function buildValue(array $limitationValues)
     {
-        return new APINewObjectStateLimitation(array('limitationValues' => $limitationValues));
+        return new APINewObjectStateLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

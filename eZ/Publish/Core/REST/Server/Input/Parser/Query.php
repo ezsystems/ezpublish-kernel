@@ -98,7 +98,7 @@ abstract class Query extends CriterionParser
             return null;
         }
 
-        $criteria = array();
+        $criteria = [];
         foreach ($criteriaArray as $criterionName => $criterionData) {
             $criteria[] = $this->dispatchCriterion($criterionName, $criterionData, $parsingDispatcher);
         }

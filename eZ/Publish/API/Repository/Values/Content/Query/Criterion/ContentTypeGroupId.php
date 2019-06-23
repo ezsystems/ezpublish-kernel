@@ -40,7 +40,7 @@ class ContentTypeGroupId extends Criterion implements CriterionInterface
     {
         $types = Specifications::TYPE_INTEGER | Specifications::TYPE_STRING;
 
-        return array(
+        return [
             new Specifications(
                 Operator::IN,
                 Specifications::FORMAT_ARRAY,
@@ -51,7 +51,7 @@ class ContentTypeGroupId extends Criterion implements CriterionInterface
                 Specifications::FORMAT_SINGLE,
                 $types
             ),
-        );
+        ];
     }
 
     public static function createFromQueryBuilder($target, $operator, $value)

@@ -26,7 +26,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function create(User $user)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $user));
+        $this->logger->logCall(__METHOD__, ['struct' => $user]);
         $return = $this->persistenceHandler->userHandler()->create($user);
 
         // Clear corresponding content cache as creation of the User changes it's external data
@@ -40,7 +40,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function load($userId)
     {
-        $this->logger->logCall(__METHOD__, array('user' => $userId));
+        $this->logger->logCall(__METHOD__, ['user' => $userId]);
 
         return $this->persistenceHandler->userHandler()->load($userId);
     }
@@ -50,7 +50,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadByLogin($login)
     {
-        $this->logger->logCall(__METHOD__, array('user' => $login));
+        $this->logger->logCall(__METHOD__, ['user' => $login]);
 
         return $this->persistenceHandler->userHandler()->loadByLogin($login);
     }
@@ -60,7 +60,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadByEmail($email)
     {
-        $this->logger->logCall(__METHOD__, array('email' => $email));
+        $this->logger->logCall(__METHOD__, ['email' => $email]);
 
         return $this->persistenceHandler->userHandler()->loadByEmail($email);
     }
@@ -70,7 +70,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function update(User $user)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $user));
+        $this->logger->logCall(__METHOD__, ['struct' => $user]);
         $return = $this->persistenceHandler->userHandler()->update($user);
 
         // Clear corresponding content cache as update of the User changes it's external data
@@ -84,7 +84,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function delete($userId)
     {
-        $this->logger->logCall(__METHOD__, array('user' => $userId));
+        $this->logger->logCall(__METHOD__, ['user' => $userId]);
         $return = $this->persistenceHandler->userHandler()->delete($userId);
 
         // user id == content id == group id
@@ -100,7 +100,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function createRole(RoleCreateStruct $createStruct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $createStruct));
+        $this->logger->logCall(__METHOD__, ['struct' => $createStruct]);
 
         return $this->persistenceHandler->userHandler()->createRole($createStruct);
     }
@@ -110,7 +110,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function createRoleDraft($roleId)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $roleId));
+        $this->logger->logCall(__METHOD__, ['role' => $roleId]);
 
         return $this->persistenceHandler->userHandler()->createRoleDraft($roleId);
     }
@@ -124,7 +124,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
             $cache = $this->cache->getItem('user', 'role', $roleId);
             $role = $cache->get();
             if ($cache->isMiss()) {
-                $this->logger->logCall(__METHOD__, array('role' => $roleId));
+                $this->logger->logCall(__METHOD__, ['role' => $roleId]);
                 $role = $this->persistenceHandler->userHandler()->loadRole($roleId, $status);
                 $cache->set($role)->save();
             }
@@ -140,7 +140,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadRoleByIdentifier($identifier, $status = Role::STATUS_DEFINED)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $identifier));
+        $this->logger->logCall(__METHOD__, ['role' => $identifier]);
 
         return $this->persistenceHandler->userHandler()->loadRoleByIdentifier($identifier, $status);
     }
@@ -150,7 +150,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadRoleDraftByRoleId($roleId)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $roleId));
+        $this->logger->logCall(__METHOD__, ['role' => $roleId]);
 
         return $this->persistenceHandler->userHandler()->loadRoleDraftByRoleId($roleId);
     }
@@ -170,7 +170,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadRoleAssignment($roleAssignmentId)
     {
-        $this->logger->logCall(__METHOD__, array('assignment' => $roleAssignmentId));
+        $this->logger->logCall(__METHOD__, ['assignment' => $roleAssignmentId]);
 
         return $this->persistenceHandler->userHandler()->loadRoleAssignment($roleAssignmentId);
     }
@@ -180,7 +180,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadRoleAssignmentsByRoleId($roleId)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $roleId));
+        $this->logger->logCall(__METHOD__, ['role' => $roleId]);
 
         return $this->persistenceHandler->userHandler()->loadRoleAssignmentsByRoleId($roleId);
     }
@@ -197,7 +197,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
         }
         $assignments = $cache->get();
         if ($cache->isMiss()) {
-            $this->logger->logCall(__METHOD__, array('group' => $groupId, 'inherit' => $inherit));
+            $this->logger->logCall(__METHOD__, ['group' => $groupId, 'inherit' => $inherit]);
             $assignments = $this->persistenceHandler->userHandler()->loadRoleAssignmentsByGroupId(
                 $groupId,
                 $inherit
@@ -213,7 +213,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function updateRole(RoleUpdateStruct $struct)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $struct));
+        $this->logger->logCall(__METHOD__, ['struct' => $struct]);
         $this->persistenceHandler->userHandler()->updateRole($struct);
 
         $this->cache->clear('user', 'role', $struct->id);
@@ -224,7 +224,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function deleteRole($roleId, $status = Role::STATUS_DEFINED)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $roleId));
+        $this->logger->logCall(__METHOD__, ['role' => $roleId]);
         $return = $this->persistenceHandler->userHandler()->deleteRole($roleId, $status);
 
         if ($status === Role::STATUS_DEFINED) {
@@ -240,7 +240,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function publishRoleDraft($roleDraftId)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $roleDraftId));
+        $this->logger->logCall(__METHOD__, ['role' => $roleDraftId]);
         $userHandler = $this->persistenceHandler->userHandler();
         $roleDraft = $userHandler->loadRole($roleDraftId, Role::STATUS_DRAFT);
         $return = $userHandler->publishRoleDraft($roleDraftId);
@@ -267,7 +267,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function addPolicyByRoleDraft($roleId, Policy $policy)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $roleId, 'struct' => $policy));
+        $this->logger->logCall(__METHOD__, ['role' => $roleId, 'struct' => $policy]);
 
         return $this->persistenceHandler->userHandler()->addPolicyByRoleDraft($roleId, $policy);
     }
@@ -277,7 +277,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function addPolicy($roleId, Policy $policy)
     {
-        $this->logger->logCall(__METHOD__, array('role' => $roleId, 'struct' => $policy));
+        $this->logger->logCall(__METHOD__, ['role' => $roleId, 'struct' => $policy]);
         $return = $this->persistenceHandler->userHandler()->addPolicy($roleId, $policy);
 
         $this->cache->clear('user', 'role', $roleId);
@@ -290,7 +290,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function updatePolicy(Policy $policy)
     {
-        $this->logger->logCall(__METHOD__, array('struct' => $policy));
+        $this->logger->logCall(__METHOD__, ['struct' => $policy]);
         $return = $this->persistenceHandler->userHandler()->updatePolicy($policy);
 
         $this->cache->clear('user', 'role', $policy->roleId);
@@ -303,7 +303,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function deletePolicy($policyId)
     {
-        $this->logger->logCall(__METHOD__, array('policy' => $policyId));
+        $this->logger->logCall(__METHOD__, ['policy' => $policyId]);
         $this->persistenceHandler->userHandler()->deletePolicy($policyId);
 
         $this->cache->clear('user', 'role');
@@ -314,7 +314,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function loadPoliciesByUserId($userId)
     {
-        $this->logger->logCall(__METHOD__, array('user' => $userId));
+        $this->logger->logCall(__METHOD__, ['user' => $userId]);
 
         return $this->persistenceHandler->userHandler()->loadPoliciesByUserId($userId);
     }
@@ -324,7 +324,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function assignRole($contentId, $roleId, array $limitation = null)
     {
-        $this->logger->logCall(__METHOD__, array('group' => $contentId, 'role' => $roleId, 'limitation' => $limitation));
+        $this->logger->logCall(__METHOD__, ['group' => $contentId, 'role' => $roleId, 'limitation' => $limitation]);
         $return = $this->persistenceHandler->userHandler()->assignRole($contentId, $roleId, $limitation);
 
         $this->cache->clear('user', 'role', $roleId);
@@ -339,7 +339,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function unassignRole($contentId, $roleId)
     {
-        $this->logger->logCall(__METHOD__, array('group' => $contentId, 'role' => $roleId));
+        $this->logger->logCall(__METHOD__, ['group' => $contentId, 'role' => $roleId]);
         $return = $this->persistenceHandler->userHandler()->unassignRole($contentId, $roleId);
 
         $this->cache->clear('user', 'role', $roleId);
@@ -354,7 +354,7 @@ class UserHandler extends AbstractHandler implements UserHandlerInterface
      */
     public function removeRoleAssignment($roleAssignmentId)
     {
-        $this->logger->logCall(__METHOD__, array('assignment' => $roleAssignmentId));
+        $this->logger->logCall(__METHOD__, ['assignment' => $roleAssignmentId]);
         $return = $this->persistenceHandler->userHandler()->removeRoleAssignment($roleAssignmentId);
 
         // We don't know the contentId, so clear all assignment cache.

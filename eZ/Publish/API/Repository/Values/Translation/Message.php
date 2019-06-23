@@ -40,7 +40,7 @@ class Message extends Translation
      * @param string $message
      * @param array $values
      */
-    public function __construct($message, array $values = array())
+    public function __construct($message, array $values = [])
     {
         $this->message = $message;
         $this->values = $values;

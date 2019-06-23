@@ -21,13 +21,13 @@ class LocationUpdateTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'priority' => 0,
             'remoteId' => 'remote-id',
             'hidden' => 'true',
             'sortField' => 'PATH',
             'sortOrder' => 'ASC',
-        );
+        ];
 
         $locationUpdate = $this->getParser();
         $result = $locationUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -82,11 +82,11 @@ class LocationUpdateTest extends BaseTest
      */
     public function testParseExceptionOnMissingSortField()
     {
-        $inputArray = array(
+        $inputArray = [
             'priority' => 0,
             'remoteId' => 'remote-id',
             'sortOrder' => 'ASC',
-        );
+        ];
 
         $locationUpdate = $this->getParser();
         $locationUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -100,11 +100,11 @@ class LocationUpdateTest extends BaseTest
      */
     public function testParseExceptionOnMissingSortOrder()
     {
-        $inputArray = array(
+        $inputArray = [
             'priority' => 0,
             'remoteId' => 'remote-id',
             'sortField' => 'PATH',
-        );
+        ];
 
         $locationUpdate = $this->getParser();
         $locationUpdate->parse($inputArray, $this->getParsingDispatcherMock());

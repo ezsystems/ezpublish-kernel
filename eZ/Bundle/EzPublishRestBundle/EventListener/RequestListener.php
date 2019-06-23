@@ -27,10 +27,10 @@ class RequestListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             // 10001 is to ensure that REST requests are tagged before CorsListener is called
-            KernelEvents::REQUEST => array('onKernelRequest', 10001),
-        );
+            KernelEvents::REQUEST => ['onKernelRequest', 10001],
+        ];
     }
 
     /**

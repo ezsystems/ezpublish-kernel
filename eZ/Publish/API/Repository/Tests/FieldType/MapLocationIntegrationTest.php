@@ -36,7 +36,7 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -46,7 +46,7 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,9 +56,9 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -68,7 +68,7 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -78,7 +78,7 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -88,9 +88,9 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 23),
-        );
+        return [
+            'unknown' => ['value' => 23],
+        ];
     }
 
     /**
@@ -101,11 +101,11 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
     public function getValidCreationFieldData()
     {
         return new MapLocationValue(
-            array(
+            [
                 'latitude' => 51.559997,
                 'longitude' => 6.767921,
                 'address' => 'Bielefeld',
-            )
+            ]
         );
     }
 
@@ -158,43 +158,43 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 23,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 new MapLocationValue(
-                    array(
+                    [
                         'latitude' => 'string',
-                    )
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 new MapLocationValue(
-                    array(
+                    [
                         'latitude' => 23.42,
                         'longitude' => 'invalid',
-                    )
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 new MapLocationValue(
-                    array(
+                    [
                         'latitude' => 23.42,
                         'longitude' => 42.23,
                         'address' => true,
-                    )
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -206,11 +206,11 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
     {
         // https://maps.google.de/maps?qll=,&spn=0.139491,0.209942&sll=51.983611,8.574829&sspn=0.36242,0.839767&oq=Punta+Cana&t=h&hnear=Punta+Cana,+La+Altagracia,+Dominikanische+Republik&z=13
         return new MapLocationValue(
-            array(
+            [
                 'latitude' => 18.524701,
                 'longitude' => -68.363113,
                 'address' => 'Punta Cana',
-            )
+            ]
         );
     }
 
@@ -293,22 +293,22 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new MapLocationValue(
-                    array(
+                    [
                         'latitude' => 51.559997,
                         'longitude' => 6.767921,
                         'address' => 'Bielefeld',
-                    )
+                    ]
                 ),
-                array(
+                [
                     'latitude' => 51.559997,
                     'longitude' => 6.767921,
                     'address' => 'Bielefeld',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -320,53 +320,53 @@ class MapLocationIntegrationTest extends BaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'latitude' => 51.559997,
                     'longitude' => 6.767921,
                     'address' => 'Bielefeld',
-                ),
+                ],
                 new MapLocationValue(
-                    array(
+                    [
                         'latitude' => 51.559997,
                         'longitude' => 6.767921,
                         'address' => 'Bielefeld',
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new MapLocationValue()),
-            array(
+        return [
+            [new MapLocationValue()],
+            [
                 new MapLocationValue(
-                    array(
+                    [
                         'latitude' => null,
                         'longitude' => null,
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(
+            ],
+            [
                 new MapLocationValue(
-                    array(
+                    [
                         'latitude' => 0,
                         'longitude' => 0,
-                    )
+                    ]
                 ),
-            ),
-        );
+            ],
+        ];
     }
 }

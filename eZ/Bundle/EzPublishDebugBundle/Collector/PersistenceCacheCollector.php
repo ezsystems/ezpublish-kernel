@@ -77,14 +77,14 @@ class PersistenceCacheCollector extends DataCollector
             list($class, $method) = explode('::', $call['method']);
             $namespace = explode('\\', $class);
             $class = array_pop($namespace);
-            $calls[] = array(
+            $calls[] = [
                 'namespace' => $namespace,
                 'class' => $class,
                 'method' => $method,
                 'arguments' => empty($call['arguments']) ?
                     '' :
-                    preg_replace(array('/^array\s\(\s/', '/,\s\)$/'), '', var_export($call['arguments'], true)),
-            );
+                    preg_replace(['/^array\s\(\s/', '/,\s\)$/'], '', var_export($call['arguments'], true)),
+            ];
         }
 
         return $calls;

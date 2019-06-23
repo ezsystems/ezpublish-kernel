@@ -21,25 +21,25 @@ class ZoneTest extends TestCase
      */
     public function testGetState()
     {
-        $block1 = new Block(array('id' => 'foo'));
-        $block2 = new Block(array('id' => 'bar'));
-        $block3 = new Block(array('id' => 'baz'));
-        $properties = array(
+        $block1 = new Block(['id' => 'foo']);
+        $block2 = new Block(['id' => 'bar']);
+        $block3 = new Block(['id' => 'baz']);
+        $properties = [
             'id' => 'my_zone_id',
             'identifier' => 'somezone',
             'action' => Zone::ACTION_ADD,
-            'blocks' => array($block1, $block2, $block3),
-        );
+            'blocks' => [$block1, $block2, $block3],
+        ];
         $zone = new Zone($properties);
         $this->assertEquals(
-            $properties + array(
-                'blocksById' => array(
+            $properties + [
+                'blocksById' => [
                     'foo' => $block1,
                     'bar' => $block2,
                     'baz' => $block3,
-                ),
-                'attributes' => array(),
-            ),
+                ],
+                'attributes' => [],
+            ],
             $zone->getState()
         );
     }

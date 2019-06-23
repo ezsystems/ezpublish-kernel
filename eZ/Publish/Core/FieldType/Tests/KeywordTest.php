@@ -44,7 +44,7 @@ class KeywordTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -54,7 +54,7 @@ class KeywordTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -62,7 +62,7 @@ class KeywordTest extends FieldTypeTest
      */
     protected function getEmptyValueExpectation()
     {
-        return new KeywordValue(array());
+        return new KeywordValue([]);
     }
 
     /**
@@ -90,12 +90,12 @@ class KeywordTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 23,
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -129,28 +129,28 @@ class KeywordTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
-                new KeywordValue(array()),
-            ),
-            array(
-                array(),
-                new KeywordValue(array()),
-            ),
-            array(
+                new KeywordValue([]),
+            ],
+            [
+                [],
+                new KeywordValue([]),
+            ],
+            [
                 'foo',
-                new KeywordValue(array('foo')),
-            ),
-            array(
-                array('foo'),
-                new KeywordValue(array('foo')),
-            ),
-            array(
-                new KeywordValue(array('foo')),
-                new KeywordValue(array('foo')),
-            ),
-        );
+                new KeywordValue(['foo']),
+            ],
+            [
+                ['foo'],
+                new KeywordValue(['foo']),
+            ],
+            [
+                new KeywordValue(['foo']),
+                new KeywordValue(['foo']),
+            ],
+        ];
     }
 
     /**
@@ -190,16 +190,16 @@ class KeywordTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
-                new KeywordValue(array()),
-                array(),
-            ),
-            array(
-                new KeywordValue(array('foo', 'bar')),
-                array('foo', 'bar'),
-            ),
-        );
+        return [
+            [
+                new KeywordValue([]),
+                [],
+            ],
+            [
+                new KeywordValue(['foo', 'bar']),
+                ['foo', 'bar'],
+            ],
+        ];
     }
 
     /**
@@ -239,16 +239,16 @@ class KeywordTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
-                array(),
-                new KeywordValue(array()),
-            ),
-            array(
-                array('foo', 'bar'),
-                new KeywordValue(array('foo', 'bar')),
-            ),
-        );
+        return [
+            [
+                [],
+                new KeywordValue([]),
+            ],
+            [
+                ['foo', 'bar'],
+                new KeywordValue(['foo', 'bar']),
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -258,9 +258,9 @@ class KeywordTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new KeywordValue(array('foo', 'bar')), 'foo, bar'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [new KeywordValue(['foo', 'bar']), 'foo, bar'],
+        ];
     }
 }

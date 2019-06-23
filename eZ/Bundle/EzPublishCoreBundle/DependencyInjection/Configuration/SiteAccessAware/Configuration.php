@@ -48,15 +48,15 @@ abstract class Configuration implements ConfigurationInterface
                 ->arrayNode($scopeNodeName)
                     ->info('System configuration. First key is always a siteaccess or siteaccess group name')
                     ->example(
-                        array(
-                            'my_siteaccess' => array(
+                        [
+                            'my_siteaccess' => [
                                 'preferred_quote' => 'Let there be Light!',
-                                'j_aime' => array('le_saucisson'),
-                            ),
-                            'my_siteaccess_group' => array(
-                                'j_aime' => array('la_truite_a_la_vapeur'),
-                            ),
-                        )
+                                'j_aime' => ['le_saucisson'],
+                            ],
+                            'my_siteaccess_group' => [
+                                'j_aime' => ['la_truite_a_la_vapeur'],
+                            ],
+                        ]
                     )
                     ->useAttributeAsKey('siteaccess_name')
                     ->requiresAtLeastOneElement()

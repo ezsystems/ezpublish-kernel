@@ -38,7 +38,7 @@ class UserRefList extends ValueObjectVisitor
         foreach ($data->users as $user) {
             $generator->startObjectElement('User');
 
-            $generator->startAttribute('href', $this->router->generate('ezpublish_rest_loadUser', array('userId' => $user->contentInfo->id)));
+            $generator->startAttribute('href', $this->router->generate('ezpublish_rest_loadUser', ['userId' => $user->contentInfo->id]));
             $generator->endAttribute('href');
 
             $generator->endObjectElement('User');

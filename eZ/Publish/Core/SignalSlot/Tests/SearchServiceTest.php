@@ -30,7 +30,7 @@ class SearchServiceTest extends ServiceTest
 
     public function serviceProvider()
     {
-        $languageFilter = array('languages' => array('fre-FR'));
+        $languageFilter = ['languages' => ['fre-FR']];
         $content = $this->getContent(
             $this->getVersionInfo(
                 $this->getContentInfo(42, md5(__METHOD__)),
@@ -39,58 +39,58 @@ class SearchServiceTest extends ServiceTest
         );
         $criterion = new Visibility(Visibility::VISIBLE);
 
-        return array(
-            array(
+        return [
+            [
                 'findContent',
-                array(
+                [
                     new Query(),
                     $languageFilter,
                     false,
-                ),
-                new SearchResult(array('totalCount' => 0)),
+                ],
+                new SearchResult(['totalCount' => 0]),
                 0,
-            ),
-            array(
+            ],
+            [
                 'findContentInfo',
-                array(
+                [
                     new Query(),
                     $languageFilter,
                     false,
-                ),
-                new SearchResult(array('totalCount' => 0)),
+                ],
+                new SearchResult(['totalCount' => 0]),
                 0,
-            ),
-            array(
+            ],
+            [
                 'findSingle',
-                array(
+                [
                     $criterion,
                     $languageFilter,
                     false,
-                ),
+                ],
                 $content,
                 0,
-            ),
-            array(
+            ],
+            [
                 'findLocations',
-                array(
+                [
                     new LocationQuery(),
                     $languageFilter,
                     false,
-                ),
-                new SearchResult(array('totalCount' => 0)),
+                ],
+                new SearchResult(['totalCount' => 0]),
                 0,
-            ),
-            array(
+            ],
+            [
                 'suggest',
-                array(
+                [
                     'awesome',
-                    array(),
+                    [],
                     20,
                     $criterion,
-                ),
+                ],
                 null,
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

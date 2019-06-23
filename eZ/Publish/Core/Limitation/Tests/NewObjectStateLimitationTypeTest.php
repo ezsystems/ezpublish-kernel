@@ -62,11 +62,11 @@ class NewObjectStateLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValue()
     {
-        return array(
-            array(new NewObjectStateLimitation()),
-            array(new NewObjectStateLimitation(array())),
-            array(new NewObjectStateLimitation(array('limitationValues' => array(0, PHP_INT_MAX, '2', 's3fdaf32r')))),
-        );
+        return [
+            [new NewObjectStateLimitation()],
+            [new NewObjectStateLimitation([])],
+            [new NewObjectStateLimitation(['limitationValues' => [0, PHP_INT_MAX, '2', 's3fdaf32r']])],
+        ];
     }
 
     /**
@@ -86,10 +86,10 @@ class NewObjectStateLimitationTypeTest extends Base
      */
     public function providerForTestAcceptValueException()
     {
-        return array(
-            array(new ObjectStateLimitation()),
-            array(new NewObjectStateLimitation(array('limitationValues' => array(true)))),
-        );
+        return [
+            [new ObjectStateLimitation()],
+            [new NewObjectStateLimitation(['limitationValues' => [true]])],
+        ];
     }
 
     /**
@@ -110,11 +110,11 @@ class NewObjectStateLimitationTypeTest extends Base
      */
     public function providerForTestValidatePass()
     {
-        return array(
-            array(new NewObjectStateLimitation()),
-            array(new NewObjectStateLimitation(array())),
-            array(new NewObjectStateLimitation(array('limitationValues' => array(2)))),
-        );
+        return [
+            [new NewObjectStateLimitation()],
+            [new NewObjectStateLimitation([])],
+            [new NewObjectStateLimitation(['limitationValues' => [2]])],
+        ];
     }
 
     /**
@@ -150,11 +150,11 @@ class NewObjectStateLimitationTypeTest extends Base
      */
     public function providerForTestValidateError()
     {
-        return array(
-            array(new NewObjectStateLimitation(), 0),
-            array(new NewObjectStateLimitation(array('limitationValues' => array(0))), 1),
-            array(new NewObjectStateLimitation(array('limitationValues' => array(0, PHP_INT_MAX))), 2),
-        );
+        return [
+            [new NewObjectStateLimitation(), 0],
+            [new NewObjectStateLimitation(['limitationValues' => [0]]), 1],
+            [new NewObjectStateLimitation(['limitationValues' => [0, PHP_INT_MAX]]), 2],
+        ];
     }
 
     /**
@@ -198,7 +198,7 @@ class NewObjectStateLimitationTypeTest extends Base
      */
     public function testBuildValue(NewObjectStateLimitationType $limitationType)
     {
-        $expected = array('test', 'test' => 9);
+        $expected = ['test', 'test' => 9];
         $value = $limitationType->buildValue($expected);
 
         self::assertInstanceOf(NewObjectStateLimitation::class, $value);
@@ -211,50 +211,50 @@ class NewObjectStateLimitationTypeTest extends Base
      */
     public function providerForTestEvaluate()
     {
-        return array(
+        return [
             // ContentInfo, no access
-            array(
+            [
                 'limitation' => new NewObjectStateLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array(new ObjectState(array('id' => 66))),
+                'targets' => [new ObjectState(['id' => 66])],
                 'expected' => false,
-            ),
+            ],
             // Content, no access
-            array(
-                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(2))),
+            [
+                'limitation' => new NewObjectStateLimitation(['limitationValues' => [2]]),
                 'object' => new Content(),
-                'targets' => array(new ObjectState(array('id' => 66))),
+                'targets' => [new ObjectState(['id' => 66])],
                 'expected' => false,
-            ),
+            ],
             // Content, no access  (both must match!)
-            array(
-                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(2, 22))),
+            [
+                'limitation' => new NewObjectStateLimitation(['limitationValues' => [2, 22]]),
                 'object' => new Content(),
-                'targets' => array(new ObjectState(array('id' => 2)), new ObjectState(array('id' => 66))),
+                'targets' => [new ObjectState(['id' => 2]), new ObjectState(['id' => 66])],
                 'expected' => false,
-            ),
+            ],
             // ContentInfo, with access
-            array(
-                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(66))),
+            [
+                'limitation' => new NewObjectStateLimitation(['limitationValues' => [66]]),
                 'object' => new ContentInfo(),
-                'targets' => array(new ObjectState(array('id' => 66))),
+                'targets' => [new ObjectState(['id' => 66])],
                 'expected' => true,
-            ),
+            ],
             // VersionInfo, with access
-            array(
-                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(2, 66))),
+            [
+                'limitation' => new NewObjectStateLimitation(['limitationValues' => [2, 66]]),
                 'object' => new VersionInfo(),
-                'targets' => array(new ObjectState(array('id' => 66))),
+                'targets' => [new ObjectState(['id' => 66])],
                 'expected' => true,
-            ),
+            ],
             // Content, with access
-            array(
-                'limitation' => new NewObjectStateLimitation(array('limitationValues' => array(2, 66))),
+            [
+                'limitation' => new NewObjectStateLimitation(['limitationValues' => [2, 66]]),
                 'object' => new Content(),
-                'targets' => array(new ObjectState(array('id' => 66)), new ObjectState(array('id' => 2))),
+                'targets' => [new ObjectState(['id' => 66]), new ObjectState(['id' => 2])],
                 'expected' => true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -295,26 +295,26 @@ class NewObjectStateLimitationTypeTest extends Base
      */
     public function providerForTestEvaluateInvalidArgument()
     {
-        return array(
+        return [
             // invalid limitation
-            array(
+            [
                 'limitation' => new ObjectStateLimitation(),
                 'object' => new ContentInfo(),
-                'targets' => array(new Location()),
-            ),
+                'targets' => [new Location()],
+            ],
             // invalid object
-            array(
+            [
                 'limitation' => new NewObjectStateLimitation(),
                 'object' => new ObjectStateLimitation(),
-                'targets' => array(new Location()),
-            ),
+                'targets' => [new Location()],
+            ],
             // empty targets
-            array(
+            [
                 'limitation' => new NewObjectStateLimitation(),
                 'object' => new ObjectStateLimitation(),
-                'targets' => array(),
-            ),
-        );
+                'targets' => [],
+            ],
+        ];
     }
 
     /**
@@ -357,7 +357,7 @@ class NewObjectStateLimitationTypeTest extends Base
     public function testGetCriterion(NewObjectStateLimitationType $limitationType)
     {
         $limitationType->getCriterion(
-            new NewObjectStateLimitation(array()),
+            new NewObjectStateLimitation([]),
             $this->getUserMock()
         );
     }
@@ -371,7 +371,7 @@ class NewObjectStateLimitationTypeTest extends Base
     public function testValueSchema(NewObjectStateLimitationType $limitationType)
     {
         self::assertEquals(
-            array(),
+            [],
             $limitationType->valueSchema()
         );
     }

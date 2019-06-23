@@ -76,7 +76,7 @@ class ContentUpdater
      */
     public function determineActions(Type $fromType, Type $toType)
     {
-        $actions = array();
+        $actions = [];
         foreach ($fromType->fieldDefinitions as $fieldDef) {
             if (!$this->hasFieldDefinition($toType, $fieldDef)) {
                 $actions[] = new ContentUpdater\Action\RemoveField(

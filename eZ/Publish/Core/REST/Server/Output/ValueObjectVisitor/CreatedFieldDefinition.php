@@ -36,10 +36,10 @@ class CreatedFieldDefinition extends RestFieldDefinition
             'Location',
             $this->router->generate(
                 "ezpublish_rest_loadContentType{$draftUriPart}FieldDefinition",
-                array(
+                [
                     'contentTypeId' => $restFieldDefinition->contentType->id,
                     'fieldDefinitionId' => $restFieldDefinition->fieldDefinition->id,
-                )
+                ]
             )
         );
         $visitor->setStatus(201);

@@ -28,7 +28,7 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $policyList = new PolicyList(array(), '/user/roles/42/policies');
+        $policyList = new PolicyList([], '/user/roles/42/policies');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -53,9 +53,9 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsPolicyListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'PolicyList',
-            ),
+            ],
             $result,
             'Invalid <PolicyList> element.',
             false
@@ -72,13 +72,13 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsPolicyListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'PolicyList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.PolicyList+xml',
                     'href' => '/user/roles/42/policies',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <PolicyList> attributes.',
             false
@@ -96,10 +96,10 @@ class PolicyListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $policyList = new PolicyList(
-            array(
+            [
                 new User\Policy(),
                 new User\Policy(),
-            ),
+            ],
             42
         );
 

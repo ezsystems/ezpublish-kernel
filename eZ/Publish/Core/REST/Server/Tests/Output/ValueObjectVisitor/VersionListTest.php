@@ -29,19 +29,19 @@ class VersionListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $versionInfo = new VersionInfo(
-            array(
+            [
                 'versionNo' => 1,
-                'contentInfo' => new ContentInfo(array('id' => 12345)),
-            )
+                'contentInfo' => new ContentInfo(['id' => 12345]),
+            ]
         );
-        $versionList = new VersionList(array($versionInfo), '/some/path');
+        $versionList = new VersionList([$versionInfo], '/some/path');
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentInVersion',
-            array(
+            [
                 'contentId' => $versionInfo->contentInfo->id,
                 'versionNumber' => $versionInfo->versionNo,
-            ),
+            ],
             "/content/objects/{$versionInfo->contentInfo->id}/versions/{$versionInfo->versionNo}"
         );
 
@@ -68,9 +68,9 @@ class VersionListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsVersionListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'VersionList',
-            ),
+            ],
             $result,
             'Invalid <VersionList> element.',
             false
@@ -87,13 +87,13 @@ class VersionListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsVersionListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'VersionList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.VersionList+xml',
                     'href' => '/some/path',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <VersionList> attributes.',
             false
@@ -111,28 +111,28 @@ class VersionListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $versionList = new VersionList(
-            array(
+            [
                 new VersionInfo(
-                    array(
+                    [
                         'contentInfo' => new ContentInfo(
-                            array(
+                            [
                                 'id' => 42,
-                            )
+                            ]
                         ),
                         'versionNo' => 1,
-                    )
+                    ]
                 ),
                 new VersionInfo(
-                    array(
+                    [
                         'contentInfo' => new ContentInfo(
-                            array(
+                            [
                                 'id' => 42,
-                            )
+                            ]
                         ),
                         'versionNo' => 2,
-                    )
+                    ]
                 ),
-            ),
+            ],
             '/some/path'
         );
 

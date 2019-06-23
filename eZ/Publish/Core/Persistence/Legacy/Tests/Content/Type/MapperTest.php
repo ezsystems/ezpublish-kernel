@@ -388,8 +388,8 @@ class MapperTest extends TestCase
     protected function getNonConvertingMapper()
     {
         $mapper = $this->getMockBuilder(Mapper::class)
-            ->setMethods(array('toFieldDefinition'))
-            ->setConstructorArgs(array($this->getConverterRegistryMock()))
+            ->setMethods(['toFieldDefinition'])
+            ->setConstructorArgs([$this->getConverterRegistryMock()])
             ->getMock();
 
         // Dedicatedly tested test

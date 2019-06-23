@@ -141,7 +141,7 @@ class Handler implements BaseUserHandler
         $data = $this->userGateway->loadByEmail($email);
 
         if (empty($data)) {
-            return array();
+            return [];
         }
 
         return $this->mapper->mapUsers($data);
@@ -440,7 +440,7 @@ class Handler implements BaseUserHandler
         $this->limitationConverter->toLegacy($policy);
 
         $this->roleGateway->removePolicyLimitations($policy->id);
-        $this->roleGateway->addPolicyLimitations($policy->id, $policy->limitations === '*' ? array() : $policy->limitations);
+        $this->roleGateway->addPolicyLimitations($policy->id, $policy->limitations === '*' ? [] : $policy->limitations);
     }
 
     /**
@@ -500,7 +500,7 @@ class Handler implements BaseUserHandler
      */
     public function assignRole($contentId, $roleId, array $limitation = null)
     {
-        $limitation = $limitation ?: array('' => array(''));
+        $limitation = $limitation ?: ['' => ['']];
         $this->userGateway->assignRole($contentId, $roleId, $limitation);
     }
 
@@ -559,7 +559,7 @@ class Handler implements BaseUserHandler
         $data = $this->roleGateway->loadRoleAssignmentsByRoleId($roleId);
 
         if (empty($data)) {
-            return array();
+            return [];
         }
 
         return $this->mapper->mapRoleAssignments($data);
@@ -581,7 +581,7 @@ class Handler implements BaseUserHandler
         $data = $this->roleGateway->loadRoleAssignmentsByGroupId($groupId, $inherit);
 
         if (empty($data)) {
-            return array();
+            return [];
         }
 
         return $this->mapper->mapRoleAssignments($data);

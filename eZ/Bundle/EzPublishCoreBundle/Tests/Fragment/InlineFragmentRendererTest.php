@@ -23,7 +23,7 @@ class InlineFragmentRendererTest extends DecoratedFragmentRendererTest
         $request->attributes->set('siteaccess', $siteAccess);
         $request->attributes->set('semanticPathinfo', '/foo/bar');
         $request->attributes->set('viewParametersString', '/(foo)/bar');
-        $options = array('foo' => 'bar');
+        $options = ['foo' => 'bar'];
         $expectedReturn = '/_fragment?foo=bar';
         $this->innerRenderer
             ->expects($this->once())

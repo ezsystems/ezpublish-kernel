@@ -199,7 +199,7 @@ class GuzzleDriver implements DriverInterface
      */
     public function getHeaders()
     {
-        $headers = array();
+        $headers = [];
         foreach ($this->response->getHeaders()->getAll() as $header => $headerObject) {
             $allHeaderValues = $headerObject->toArray();
             $headers[strtolower($header)] = implode(';', $allHeaderValues);

@@ -48,7 +48,7 @@ class PcreCompiler
      */
     public function compile(array $ast)
     {
-        $transformations = array();
+        $transformations = [];
 
         foreach ($ast as $section => $rules) {
             foreach ($rules as $rule) {
@@ -95,10 +95,10 @@ class PcreCompiler
      */
     protected function compileMap(array $rule)
     {
-        return array(
+        return [
             'regexp' => '(' . preg_quote($this->compileCharacter($rule['data']['src'])) . ')us',
             'callback' => $this->compileTargetCharacter($rule['data']['dest']),
-        );
+        ];
     }
 
     /**
@@ -110,13 +110,13 @@ class PcreCompiler
      */
     protected function compileReplace(array $rule)
     {
-        return array(
+        return [
             'regexp' => '([' .
                 preg_quote($this->compileCharacter($rule['data']['srcStart'])) . '-' .
                 preg_quote($this->compileCharacter($rule['data']['srcEnd'])) .
                 '])us',
             'callback' => $this->compileTargetCharacter($rule['data']['dest']),
-        );
+        ];
     }
 
     /**
@@ -128,13 +128,13 @@ class PcreCompiler
      */
     protected function compileTranspose(array $rule)
     {
-        return array(
+        return [
             'regexp' => '([' .
                 preg_quote($this->compileCharacter($rule['data']['srcStart'])) . '-' .
                 preg_quote($this->compileCharacter($rule['data']['srcEnd'])) .
                 '])us',
             'callback' => $this->getTransposeClosure($rule['data']['op'], $rule['data']['dest']),
-        );
+        ];
     }
 
     /**
@@ -146,7 +146,7 @@ class PcreCompiler
      */
     protected function compileTransposeModulo(array $rule)
     {
-        return array(
+        return [
             'regexp' => '([' .
                 preg_quote(
                     $this->getModuloCharRange(
@@ -157,7 +157,7 @@ class PcreCompiler
                 ) .
                 '])us',
             'callback' => $this->getTransposeClosure($rule['data']['op'], $rule['data']['dest']),
-        );
+        ];
     }
 
     /**
@@ -231,8 +231,8 @@ class PcreCompiler
 
             case preg_match('("(?:[^\\\\"]+|\\\\\\\\|\\\\\'|\\\\")*?")', $char):
                 $string = str_replace(
-                    array('\\\\', '\\"', "\\'"),
-                    array('\\', '"', "'"),
+                    ['\\\\', '\\"', "\\'"],
+                    ['\\', '"', "'"],
                     substr($char, 1, -1)
                 );
 

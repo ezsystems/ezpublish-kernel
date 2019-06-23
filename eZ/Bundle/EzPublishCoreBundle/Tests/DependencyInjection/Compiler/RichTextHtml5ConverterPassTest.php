@@ -40,15 +40,15 @@ class RichTextHtml5ConverterPassTest extends AbstractCompilerPassTestCase
         $this->setDefinition('ezrichtext.converter.test1', $configurationProvider);
 
         $configurationProvider = new Definition();
-        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', array('priority' => 10));
+        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', ['priority' => 10]);
         $this->setDefinition('ezrichtext.converter.test2', $configurationProvider);
 
         $configurationProvider = new Definition();
-        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', array('priority' => 5));
+        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', ['priority' => 5]);
         $this->setDefinition('ezrichtext.converter.test3', $configurationProvider);
 
         $configurationProvider = new Definition();
-        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', array('priority' => 5));
+        $configurationProvider->addTag('ezpublish.ezrichtext.converter.output.xhtml5', ['priority' => 5]);
         $this->setDefinition('ezrichtext.converter.test4', $configurationProvider);
 
         $this->compile();
@@ -56,12 +56,12 @@ class RichTextHtml5ConverterPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithArgument(
             'ezpublish.fieldType.ezrichtext.converter.output.xhtml5',
             0,
-            array(
+            [
                 new Reference('ezrichtext.converter.test1'),
                 new Reference('ezrichtext.converter.test3'),
                 new Reference('ezrichtext.converter.test4'),
                 new Reference('ezrichtext.converter.test2'),
-            )
+            ]
         );
     }
 }

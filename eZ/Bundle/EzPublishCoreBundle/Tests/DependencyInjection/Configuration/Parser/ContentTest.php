@@ -16,9 +16,9 @@ class ContentTest extends AbstractParserTestCase
 {
     protected function getContainerExtensions()
     {
-        return array(
-            new EzPublishCoreExtension(array(new ContentConfigParser())),
-        );
+        return [
+            new EzPublishCoreExtension([new ContentConfigParser()]),
+        ];
     }
 
     protected function getMinimalConfiguration()
@@ -41,11 +41,11 @@ class ContentTest extends AbstractParserTestCase
     public function testContentSettings(array $config, array $expected)
     {
         $this->load(
-            array(
-                'system' => array(
+            [
+                'system' => [
                     'ezdemo_site' => $config,
-                ),
-            )
+                ],
+            ]
         );
 
         foreach ($expected as $key => $val) {
@@ -55,77 +55,77 @@ class ContentTest extends AbstractParserTestCase
 
     public function contentSettingsProvider()
     {
-        return array(
-            array(
-                array(
-                    'content' => array(
+        return [
+            [
+                [
+                    'content' => [
                         'view_cache' => true,
                         'ttl_cache' => true,
                         'default_ttl' => 100,
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'content.view_cache' => true,
                     'content.ttl_cache' => true,
                     'content.default_ttl' => 100,
-                ),
-            ),
-            array(
-                array(
-                    'content' => array(
+                ],
+            ],
+            [
+                [
+                    'content' => [
                         'view_cache' => false,
                         'ttl_cache' => false,
                         'default_ttl' => 123,
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'content.view_cache' => false,
                     'content.ttl_cache' => false,
                     'content.default_ttl' => 123,
-                ),
-            ),
-            array(
-                array(
-                    'content' => array(
+                ],
+            ],
+            [
+                [
+                    'content' => [
                         'view_cache' => false,
-                    ),
-                ),
-                array(
+                    ],
+                ],
+                [
                     'content.view_cache' => false,
                     'content.ttl_cache' => true,
                     'content.default_ttl' => 60,
-                ),
-            ),
-            array(
-                array(
-                    'content' => array(
-                        'tree_root' => array('location_id' => 123),
-                    ),
-                ),
-                array(
+                ],
+            ],
+            [
+                [
+                    'content' => [
+                        'tree_root' => ['location_id' => 123],
+                    ],
+                ],
+                [
                     'content.view_cache' => true,
                     'content.ttl_cache' => true,
                     'content.default_ttl' => 60,
                     'content.tree_root.location_id' => 123,
-                ),
-            ),
-            array(
-                array(
-                    'content' => array(
-                        'tree_root' => array(
+                ],
+            ],
+            [
+                [
+                    'content' => [
+                        'tree_root' => [
                             'location_id' => 456,
-                            'excluded_uri_prefixes' => array('/media/images', '/products'),
-                        ),
-                    ),
-                ),
-                array(
+                            'excluded_uri_prefixes' => ['/media/images', '/products'],
+                        ],
+                    ],
+                ],
+                [
                     'content.view_cache' => true,
                     'content.ttl_cache' => true,
                     'content.default_ttl' => 60,
                     'content.tree_root.location_id' => 456,
-                    'content.tree_root.excluded_uri_prefixes' => array('/media/images', '/products'),
-                ),
-            ),
-        );
+                    'content.tree_root.excluded_uri_prefixes' => ['/media/images', '/products'],
+                ],
+            ],
+        ];
     }
 }

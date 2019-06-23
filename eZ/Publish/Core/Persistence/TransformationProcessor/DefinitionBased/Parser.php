@@ -52,7 +52,7 @@ class Parser
     {
         $character = '(?:U\\+[0-9a-fA-F]{4}|remove|keep|[0-9a-fA-F]+|"(?:[^\\\\"]+|\\\\\\\\|\\\\\'|\\\\")*?")';
 
-        $this->tokenSpecifications = array(
+        $this->tokenSpecifications = [
             TransformationProcessor::T_COMMENT => '(\\A#(?P<comment>.*)$)m',
             TransformationProcessor::T_WHITESPACE => '(\\A\\s+)',
             TransformationProcessor::T_SECTION => '(\\A(?P<section>[a-z0-9_-]+):\s*$)m',
@@ -69,7 +69,7 @@ class Parser
                 '(?P<modulo>' . $character . ')\\s*' .
                 '(?P<op>[+-])\\s*' .
                 '(?P<dest>' . $character . '))',
-        );
+        ];
     }
 
     /**
@@ -105,7 +105,7 @@ class Parser
             }
         );
 
-        $ast = array();
+        $ast = [];
         $section = null;
         while ($token = array_shift($tokens)) {
             if ($token['type'] === TransformationProcessor::T_SECTION) {
@@ -135,7 +135,7 @@ class Parser
     protected function tokenize($string)
     {
         $string = preg_replace('(\\r\\n|\\r)', "\n", $string);
-        $tokens = array();
+        $tokens = [];
         $line = 1;
 
         while (strlen($string)) {
@@ -149,10 +149,10 @@ class Parser
                 $line += substr_count($matches[0], "\n");
 
                 // Append token to list
-                $tokens[] = array(
+                $tokens[] = [
                     'type' => $token,
                     'data' => $this->filterValues($matches),
-                );
+                ];
 
                 // Continue with outer loop
                 continue 2;

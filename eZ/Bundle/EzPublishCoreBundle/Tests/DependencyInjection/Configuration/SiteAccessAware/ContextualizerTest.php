@@ -25,13 +25,13 @@ class ContextualizerTest extends TestCase
 
     private $saNodeName = 'heyho';
 
-    private $availableSAs = array('sa1', 'sa2', 'sa3');
+    private $availableSAs = ['sa1', 'sa2', 'sa3'];
 
-    private $groupsBySA = array(
-        'sa1' => array('sa_group1', 'sa_group2'),
-        'sa2' => array('sa_group1'),
-        'sa3' => array('sa_group1'),
-    );
+    private $groupsBySA = [
+        'sa1' => ['sa_group1', 'sa_group2'],
+        'sa2' => ['sa_group1'],
+        'sa3' => ['sa_group1'],
+    ];
 
     /**
      * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Contextualizer
@@ -60,45 +60,45 @@ class ContextualizerTest extends TestCase
 
     public function setContextualParameterProvider()
     {
-        return array(
-            array('my_parameter', 'sa1', 'foobar'),
-            array('some', 'sa1', 'thing'),
-            array('my_array', 'sa3', array('foo', 'bar')),
-            array('my_hash', 'sa2', array('foo' => 'bar', 'hey' => array('ho'), 'enabled' => true)),
-            array('my_integer', 'sa3', 123),
-            array('my_bool', 'sa2', false),
-        );
+        return [
+            ['my_parameter', 'sa1', 'foobar'],
+            ['some', 'sa1', 'thing'],
+            ['my_array', 'sa3', ['foo', 'bar']],
+            ['my_hash', 'sa2', ['foo' => 'bar', 'hey' => ['ho'], 'enabled' => true]],
+            ['my_integer', 'sa3', 123],
+            ['my_bool', 'sa2', false],
+        ];
     }
 
     public function testMapSetting()
     {
         $fooSa1 = 'bar';
-        $planetsSa1 = array('Earth');
+        $planetsSa1 = ['Earth'];
         $intSa1 = 123;
         $boolSa1 = true;
-        $sa1Config = array(
+        $sa1Config = [
             'foo' => $fooSa1,
             'planets' => $planetsSa1,
             'an_integer' => $intSa1,
             'a_bool' => $boolSa1,
-        );
+        ];
         $fooSa2 = 'bar2';
-        $planetsSa2 = array('Earth', 'Mars', 'Venus');
+        $planetsSa2 = ['Earth', 'Mars', 'Venus'];
         $intSa2 = 456;
         $boolSa2 = false;
-        $sa2Config = array(
+        $sa2Config = [
             'foo' => $fooSa2,
             'planets' => $planetsSa2,
             'an_integer' => $intSa2,
             'a_bool' => $boolSa2,
-        );
-        $config = array(
+        ];
+        $config = [
             'not_sa_aware' => 'blabla',
-            $this->saNodeName => array(
+            $this->saNodeName => [
                 'sa1' => $sa1Config,
                 'sa2' => $sa2Config,
-            ),
-        );
+            ],
+        ];
 
         $container = new ContainerBuilder();
         $this->contextualizer->setContainer($container);
@@ -122,75 +122,75 @@ class ContextualizerTest extends TestCase
     {
         $containerBuilder = new ContainerBuilder();
         $this->contextualizer->setContainer($containerBuilder);
-        $defaultConfig = array(
+        $defaultConfig = [
             'foo' => null,
             'some' => null,
-            'planets' => array('Earth'),
+            'planets' => ['Earth'],
             'an_integer' => 0,
             'enabled' => false,
             'j_adore' => 'les_sushis',
-        );
+        ];
 
-        $config = array(
-            $this->saNodeName => array(
-                'default' => array(
+        $config = [
+            $this->saNodeName => [
+                'default' => [
                     'foo_setting' => $defaultConfig,
-                ),
-                'sa_group1' => array(
-                    'foo_setting' => array(
+                ],
+                'sa_group1' => [
+                    'foo_setting' => [
                         'foo' => 'bar',
                         'some' => 'thing',
                         'an_integer' => 123,
-                    ),
-                ),
-                'sa1' => array(
-                    'foo_setting' => array(
+                    ],
+                ],
+                'sa1' => [
+                    'foo_setting' => [
                         'an_integer' => 456,
                         'enabled' => true,
                         'j_adore' => 'le_saucisson',
-                    ),
-                ),
-                'sa2' => array(
-                    'foo_setting' => array(
+                    ],
+                ],
+                'sa2' => [
+                    'foo_setting' => [
                         'foo' => 'baz',
-                        'planets' => array('Mars', 'Venus'),
+                        'planets' => ['Mars', 'Venus'],
                         'an_integer' => 789,
-                    ),
-                ),
-                'global' => array(
-                    'foo_setting' => array(
+                    ],
+                ],
+                'global' => [
+                    'foo_setting' => [
                         'j_adore' => 'la_truite_a_la_vapeur',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
-        $expectedMergedSettings = array(
-            'sa1' => array(
+        $expectedMergedSettings = [
+            'sa1' => [
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array('Earth'),
+                'planets' => ['Earth'],
                 'an_integer' => 456,
                 'enabled' => true,
                 'j_adore' => 'la_truite_a_la_vapeur',
-            ),
-            'sa2' => array(
+            ],
+            'sa2' => [
                 'foo' => 'baz',
                 'some' => 'thing',
-                'planets' => array('Mars', 'Venus'),
+                'planets' => ['Mars', 'Venus'],
                 'an_integer' => 789,
                 'enabled' => false,
                 'j_adore' => 'la_truite_a_la_vapeur',
-            ),
-            'sa3' => array(
+            ],
+            'sa3' => [
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array('Earth'),
+                'planets' => ['Earth'],
                 'an_integer' => 123,
                 'enabled' => false,
                 'j_adore' => 'la_truite_a_la_vapeur',
-            ),
-        );
+            ],
+        ];
 
         $this->contextualizer->mapConfigArray('foo_setting', $config);
 
@@ -212,80 +212,80 @@ class ContextualizerTest extends TestCase
     {
         $containerBuilder = new ContainerBuilder();
         $this->contextualizer->setContainer($containerBuilder);
-        $defaultConfig = array(
+        $defaultConfig = [
             'foo' => null,
             'some' => null,
-            'planets' => array('Earth'),
+            'planets' => ['Earth'],
             'an_integer' => 0,
             'enabled' => false,
-            'j_adore' => array('les_sushis'),
-        );
+            'j_adore' => ['les_sushis'],
+        ];
 
-        $config = array(
-            $this->saNodeName => array(
-                'default' => array(
+        $config = [
+            $this->saNodeName => [
+                'default' => [
                     'foo_setting' => $defaultConfig,
-                ),
-                'sa_group1' => array(
-                    'foo_setting' => array(
+                ],
+                'sa_group1' => [
+                    'foo_setting' => [
                         'foo' => 'bar',
                         'some' => 'thing',
                         'an_integer' => 123,
-                    ),
-                ),
-                'sa1' => array(
-                    'foo_setting' => array(
+                    ],
+                ],
+                'sa1' => [
+                    'foo_setting' => [
                         'an_integer' => 456,
                         'enabled' => true,
-                        'j_adore' => array('le_saucisson'),
-                    ),
-                ),
-                'sa2' => array(
-                    'foo_setting' => array(
+                        'j_adore' => ['le_saucisson'],
+                    ],
+                ],
+                'sa2' => [
+                    'foo_setting' => [
                         'foo' => 'baz',
-                        'planets' => array('Mars', 'Venus'),
+                        'planets' => ['Mars', 'Venus'],
                         'an_integer' => 789,
-                    ),
-                ),
-                'sa3' => array(
-                    'foo_setting' => array(
-                        'planets' => array('Earth', 'Jupiter'),
-                    ),
-                ),
-                'global' => array(
-                    'foo_setting' => array(
-                        'j_adore' => array('la_truite_a_la_vapeur'),
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+                'sa3' => [
+                    'foo_setting' => [
+                        'planets' => ['Earth', 'Jupiter'],
+                    ],
+                ],
+                'global' => [
+                    'foo_setting' => [
+                        'j_adore' => ['la_truite_a_la_vapeur'],
+                    ],
+                ],
+            ],
+        ];
 
-        $expectedMergedSettings = array(
-            'sa1' => array(
+        $expectedMergedSettings = [
+            'sa1' => [
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array('Earth'),
+                'planets' => ['Earth'],
                 'an_integer' => 456,
                 'enabled' => true,
-                'j_adore' => array('les_sushis', 'le_saucisson', 'la_truite_a_la_vapeur'),
-            ),
-            'sa2' => array(
+                'j_adore' => ['les_sushis', 'le_saucisson', 'la_truite_a_la_vapeur'],
+            ],
+            'sa2' => [
                 'foo' => 'baz',
                 'some' => 'thing',
-                'planets' => array('Earth', 'Mars', 'Venus'),
+                'planets' => ['Earth', 'Mars', 'Venus'],
                 'an_integer' => 789,
                 'enabled' => false,
-                'j_adore' => array('les_sushis', 'la_truite_a_la_vapeur'),
-            ),
-            'sa3' => array(
+                'j_adore' => ['les_sushis', 'la_truite_a_la_vapeur'],
+            ],
+            'sa3' => [
                 'foo' => 'bar',
                 'some' => 'thing',
-                'planets' => array('Earth', 'Earth', 'Jupiter'),
+                'planets' => ['Earth', 'Earth', 'Jupiter'],
                 'an_integer' => 123,
                 'enabled' => false,
-                'j_adore' => array('les_sushis', 'la_truite_a_la_vapeur'),
-            ),
-        );
+                'j_adore' => ['les_sushis', 'la_truite_a_la_vapeur'],
+            ],
+        ];
 
         $this->contextualizer->mapConfigArray('foo_setting', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL);
 
@@ -307,33 +307,33 @@ class ContextualizerTest extends TestCase
     {
         $containerBuilder = new ContainerBuilder();
         $this->contextualizer->setContainer($containerBuilder);
-        $defaultConfig = array('Earth');
+        $defaultConfig = ['Earth'];
 
-        $config = array(
-            $this->saNodeName => array(
-                'default' => array(
+        $config = [
+            $this->saNodeName => [
+                'default' => [
                     'foo_setting' => $defaultConfig,
-                ),
-                'sa_group1' => array(
-                    'foo_setting' => array('Mars'),
-                ),
-                'sa1' => array(
-                    'foo_setting' => array('Earth'),
-                ),
-                'sa2' => array(
-                    'foo_setting' => array('Mars', 'Venus'),
-                ),
-                'sa3' => array(
-                    'foo_setting' => array('Earth', 'Jupiter'),
-                ),
-            ),
-        );
+                ],
+                'sa_group1' => [
+                    'foo_setting' => ['Mars'],
+                ],
+                'sa1' => [
+                    'foo_setting' => ['Earth'],
+                ],
+                'sa2' => [
+                    'foo_setting' => ['Mars', 'Venus'],
+                ],
+                'sa3' => [
+                    'foo_setting' => ['Earth', 'Jupiter'],
+                ],
+            ],
+        ];
 
-        $expectedMergedSettings = array(
-            'sa1' => array('Earth', 'Mars'),
-            'sa2' => array('Earth', 'Mars', 'Venus'),
-            'sa3' => array('Earth', 'Mars', 'Jupiter'),
-        );
+        $expectedMergedSettings = [
+            'sa1' => ['Earth', 'Mars'],
+            'sa2' => ['Earth', 'Mars', 'Venus'],
+            'sa3' => ['Earth', 'Mars', 'Jupiter'],
+        ];
 
         $this->contextualizer->mapConfigArray('foo_setting', $config, ContextualizerInterface::UNIQUE);
 
@@ -378,7 +378,7 @@ class ContextualizerTest extends TestCase
     public function testGetSetAvailableSiteAccesses()
     {
         $this->assertSame($this->availableSAs, $this->contextualizer->getAvailableSiteAccesses());
-        $sa = array('foo', 'bar', 'baz');
+        $sa = ['foo', 'bar', 'baz'];
         $this->contextualizer->setAvailableSiteAccesses($sa);
         $this->assertSame($sa, $this->contextualizer->getAvailableSiteAccesses());
     }
@@ -386,7 +386,7 @@ class ContextualizerTest extends TestCase
     public function testGetSetGroupsBySA()
     {
         $this->assertSame($this->groupsBySA, $this->contextualizer->getGroupsBySiteAccess());
-        $groups = array('foo' => array('bar', 'baz'), 'group2' => array('some', 'thing'));
+        $groups = ['foo' => ['bar', 'baz'], 'group2' => ['some', 'thing']];
         $this->contextualizer->setGroupsBySiteAccess($groups);
         $this->assertSame($groups, $this->contextualizer->getGroupsBySiteAccess());
     }
@@ -409,29 +409,29 @@ class ContextualizerTest extends TestCase
         $customSANodeKey = null
     ) {
         $this->contextualizer->setAvailableSiteAccesses($config['siteaccess']['list']);
-        $this->contextualizer->setGroupsBySiteAccess(array($siteaccess => $groups));
+        $this->contextualizer->setGroupsBySiteAccess([$siteaccess => $groups]);
 
-        $hasParameterMap = array(
-            array(
+        $hasParameterMap = [
+            [
                 $this->namespace . '.' . ConfigResolver::SCOPE_DEFAULT . '.' . $testId,
                 true,
-            ),
-            array(
+            ],
+            [
                 $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $testId,
                 true,
-            ),
-        );
+            ],
+        ];
 
-        $getParameterMap = array(
-            array(
+        $getParameterMap = [
+            [
                 $this->namespace . '.' . ConfigResolver::SCOPE_DEFAULT . '.' . $testId,
                 $defaultValue,
-            ),
-            array(
+            ],
+            [
                 $this->namespace . '.' . ConfigResolver::SCOPE_GLOBAL . '.' . $testId,
                 $globalValue,
-            ),
-        );
+            ],
+        ];
 
         $this->container
             ->expects($this->any())
@@ -463,899 +463,899 @@ class ContextualizerTest extends TestCase
         $siteaccess = 'krondor';
         $group1 = 'midkemia';
         $group2 = 'triagia';
-        $all = array('Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William');
-        $siteaccessConfig = array(
-            'list' => array($siteaccess),
-            'groups' => array(
-                $group1 => array($siteaccess),
-                $group2 => array($siteaccess),
-            ),
-        );
+        $all = ['Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William'];
+        $siteaccessConfig = [
+            'list' => [$siteaccess],
+            'groups' => [
+                $group1 => [$siteaccess],
+                $group2 => [$siteaccess],
+            ],
+        ];
         $testIdHash = 'location_view';
-        $locationView1 = array(
-            'full' => array(
-                'Wizard' => array(
+        $locationView1 = [
+            'full' => [
+                'Wizard' => [
                     'template' => 'wizard.html.twig',
-                ),
-                'Sorcerer' => array(
+                ],
+                'Sorcerer' => [
                     'template' => 'sorcerer.html.twig',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $locationView2 = array(
-            'full' => array(
-                'Dwarve' => array(
+        $locationView2 = [
+            'full' => [
+                'Dwarve' => [
                     'template' => 'dwarve.html.twig',
-                ),
-                'Sorcerer' => array(
+                ],
+                'Sorcerer' => [
                     'template' => 'sorcerer2.html.twig',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $locationView3 = array(
-            'full' => array(
-                'Moredhel' => array(
+        $locationView3 = [
+            'full' => [
+                'Moredhel' => [
                     'template' => 'moredhel.html.twig',
-                ),
-                'Sorcerer' => array(
+                ],
+                'Sorcerer' => [
                     'template' => 'sorcerer3.html.twig',
-                ),
-            ),
-        );
-        $locationView4 = array(
-            'full' => array(
-                'Moredhel' => array(
+                ],
+            ],
+        ];
+        $locationView4 = [
+            'full' => [
+                'Moredhel' => [
                     'template' => 'moredhel2.html.twig',
-                ),
-                'Warrior' => array(
+                ],
+                'Warrior' => [
                     'template' => 'warrior.html.twig',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $locationView12 = array(
-            'full' => array(
-                'Wizard' => array(
+        $locationView12 = [
+            'full' => [
+                'Wizard' => [
                     'template' => 'wizard.html.twig',
-                ),
-                'Sorcerer' => array(
+                ],
+                'Sorcerer' => [
                     'template' => 'sorcerer2.html.twig',
-                ),
-                'Dwarve' => array(
+                ],
+                'Dwarve' => [
                     'template' => 'dwarve.html.twig',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $locationView123 = array(
-            'full' => array(
-                'Wizard' => array(
+        $locationView123 = [
+            'full' => [
+                'Wizard' => [
                     'template' => 'wizard.html.twig',
-                ),
-                'Sorcerer' => array(
+                ],
+                'Sorcerer' => [
                     'template' => 'sorcerer3.html.twig',
-                ),
-                'Dwarve' => array(
+                ],
+                'Dwarve' => [
                     'template' => 'dwarve.html.twig',
-                ),
-                'Moredhel' => array(
+                ],
+                'Moredhel' => [
                     'template' => 'moredhel.html.twig',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $locationView1234 = array(
-            'full' => array(
-                'Wizard' => array(
+        $locationView1234 = [
+            'full' => [
+                'Wizard' => [
                     'template' => 'wizard.html.twig',
-                ),
-                'Sorcerer' => array(
+                ],
+                'Sorcerer' => [
                     'template' => 'sorcerer3.html.twig',
-                ),
-                'Dwarve' => array(
+                ],
+                'Dwarve' => [
                     'template' => 'dwarve.html.twig',
-                ),
-                'Moredhel' => array(
+                ],
+                'Moredhel' => [
                     'template' => 'moredhel2.html.twig',
-                ),
-                'Warrior' => array(
+                ],
+                'Warrior' => [
                     'template' => 'warrior.html.twig',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $locationView21 = array(
-            'full' => array(
-                'Dwarve' => array(
+        $locationView21 = [
+            'full' => [
+                'Dwarve' => [
                     'template' => 'dwarve.html.twig',
-                ),
-                'Sorcerer' => array(
+                ],
+                'Sorcerer' => [
                     'template' => 'sorcerer.html.twig',
-                ),
-                'Wizard' => array(
+                ],
+                'Wizard' => [
                     'template' => 'wizard.html.twig',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
-        $cases = array(
+        $cases = [
             //
             // MERGING TESTS ON NORMAL ARRAY
             //
-            array(
+            [
                 // everything in default scope
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $all,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(),
-                ),
+                    $this->saNodeName => [],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // everything in global scope
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $all,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(),
-                ),
+                    $this->saNodeName => [],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // everything in a group
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group2 => array($testId => $all),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group2 => [$testId => $all],
+                    ],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // everything in a siteaccess
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $siteaccess => array($testId => $all),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $siteaccess => [$testId => $all],
+                    ],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // default scope + one group
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array('Kulgan', 'Macros the Black'),
-                array(),
-                array(
+                [$group1, $group2],
+                ['Kulgan', 'Macros the Black'],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Pug', 'Rogen', 'William')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Pug', 'Rogen', 'William']],
+                    ],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // one group + global scope
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array('Pug', 'Rogen', 'William'),
-                array(
+                [$group1, $group2],
+                [],
+                ['Pug', 'Rogen', 'William'],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Kulgan', 'Macros the Black')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Kulgan', 'Macros the Black']],
+                    ],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // default scope + two groups
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array('Kulgan', 'Macros the Black'),
-                array(),
-                array(
+                [$group1, $group2],
+                ['Kulgan', 'Macros the Black'],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Pug', 'Rogen')),
-                        $group2 => array($testId => array('William')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Pug', 'Rogen']],
+                        $group2 => [$testId => ['William']],
+                    ],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // two groups + global scope
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array('Kulgan', 'Macros the Black'),
-                array(
+                [$group1, $group2],
+                [],
+                ['Kulgan', 'Macros the Black'],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Pug', 'Rogen')),
-                        $group2 => array($testId => array('William')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Pug', 'Rogen']],
+                        $group2 => [$testId => ['William']],
+                    ],
+                ],
                 0,
-                array('Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black'),
-            ),
-            array(
+                ['Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black'],
+            ],
+            [
                 // default scope + two groups + siteaccess
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array('Kulgan', 'Macros the Black'),
-                array(),
-                array(
+                [$group1, $group2],
+                ['Kulgan', 'Macros the Black'],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Pug')),
-                        $group2 => array($testId => array('Rogen')),
-                        $siteaccess => array($testId => array('William')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Pug']],
+                        $group2 => [$testId => ['Rogen']],
+                        $siteaccess => [$testId => ['William']],
+                    ],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // global scope + two groups + siteaccess
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array('Kulgan', 'Macros the Black'),
-                array(
+                [$group1, $group2],
+                [],
+                ['Kulgan', 'Macros the Black'],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Pug')),
-                        $group2 => array($testId => array('Rogen')),
-                        $siteaccess => array($testId => array('William')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Pug']],
+                        $group2 => [$testId => ['Rogen']],
+                        $siteaccess => [$testId => ['William']],
+                    ],
+                ],
                 0,
-                array('Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black'),
-            ),
-            array(
+                ['Pug', 'Rogen', 'William', 'Kulgan', 'Macros the Black'],
+            ],
+            [
                 // default scope + two groups +  global
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array('Kulgan', 'Macros the Black'),
-                array('William'),
-                array(
+                [$group1, $group2],
+                ['Kulgan', 'Macros the Black'],
+                ['William'],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Pug')),
-                        $group2 => array($testId => array('Rogen')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Pug']],
+                        $group2 => [$testId => ['Rogen']],
+                    ],
+                ],
                 0,
                 $all,
-            ),
-            array(
+            ],
+            [
                 // default scope + two groups + siteaccess + global
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array('Kulgan'),
-                array('William'),
-                array(
+                [$group1, $group2],
+                ['Kulgan'],
+                ['William'],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Macros the Black')),
-                        $group2 => array($testId => array('Pug')),
-                        $siteaccess => array($testId => array('Rogen')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Macros the Black']],
+                        $group2 => [$testId => ['Pug']],
+                        $siteaccess => [$testId => ['Rogen']],
+                    ],
+                ],
                 0,
                 $all,
-            ),
+            ],
             //
             // UNIQUE OPTION TESTS (only suitable for normal array)
             //
-            array(
+            [
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array('Kulgan', 'Kulgan'),
-                array('William'),
-                array(
+                [$group1, $group2],
+                ['Kulgan', 'Kulgan'],
+                ['William'],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Macros the Black')),
-                        $group2 => array($testId => array('Pug')),
-                        $siteaccess => array($testId => array('Rogen', 'Pug')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Macros the Black']],
+                        $group2 => [$testId => ['Pug']],
+                        $siteaccess => [$testId => ['Rogen', 'Pug']],
+                    ],
+                ],
                 ContextualizerInterface::UNIQUE,
-                array('Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William'),
-            ),
-            array(
+                ['Kulgan', 'Macros the Black', 'Pug', 'Rogen', 'William'],
+            ],
+            [
                 $testId,
                 $siteaccess,
-                array($group1, $group2),
-                array('Kulgan', 'Kulgan'),
-                array('William', 'Kulgan', 'Pug'),
-                array(
+                [$group1, $group2],
+                ['Kulgan', 'Kulgan'],
+                ['William', 'Kulgan', 'Pug'],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testId => array('Macros the Black')),
-                        $group2 => array($testId => array('Pug', 'William', 'Kulgan')),
-                        $siteaccess => array($testId => array('Rogen', 'Pug', 'Rogen', 'Macros the Black')),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testId => ['Macros the Black']],
+                        $group2 => [$testId => ['Pug', 'William', 'Kulgan']],
+                        $siteaccess => [$testId => ['Rogen', 'Pug', 'Rogen', 'Macros the Black']],
+                    ],
+                ],
                 ContextualizerInterface::UNIQUE,
-                array('Kulgan', 'Macros the Black', 'Pug', 'William', 'Rogen'),
-            ),
+                ['Kulgan', 'Macros the Black', 'Pug', 'William', 'Rogen'],
+            ],
             //
             // MERGING HASH TESTS with MERGE_FROM_SECOND_LEVEL
             //
-            array(
+            [
                 // everything in default scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(),
-                ),
+                    $this->saNodeName => [],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1,
-            ),
-            array(
+            ],
+            [
                 // everything in global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView1,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(),
-                ),
+                    $this->saNodeName => [],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1,
-            ),
-            array(
+            ],
+            [
                 // everything in a group
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView1),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView1],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1,
-            ),
-            array(
+            ],
+            [
                 // everything in a siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $siteaccess => array($testIdHash => $locationView1),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $siteaccess => [$testIdHash => $locationView1],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1,
-            ),
+            ],
 
-            array(
+            [
                 // default scope + one group
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView12,
-            ),
-            array(
+            ],
+            [
                 // one group + global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView1,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView21,
-            ),
-            array(
+            ],
+            [
                 // default scope + two groups
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                        $group2 => array($testIdHash => $locationView3),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                        $group2 => [$testIdHash => $locationView3],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
-            ),
-            array(
+            ],
+            [
                 // default scope + two groups + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                        $group2 => array($testIdHash => $locationView3),
-                        $siteaccess => array($testIdHash => $locationView4),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                        $group2 => [$testIdHash => $locationView3],
+                        $siteaccess => [$testIdHash => $locationView4],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1234,
-            ),
-            array(
+            ],
+            [
                 // two groups
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView1),
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView1],
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView12,
-            ),
-            array(
+            ],
+            [
                 // two groups + global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView3,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView1),
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView1],
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
-            ),
-            array(
+            ],
+            [
                 // two groups + siteaccess + global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView4,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView1),
-                        $group2 => array($testIdHash => $locationView2),
-                        $siteaccess => array($testIdHash => $locationView3),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView1],
+                        $group2 => [$testIdHash => $locationView2],
+                        $siteaccess => [$testIdHash => $locationView3],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1234,
-            ),
+            ],
 
-            array(
+            [
                 // two groups + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $siteaccess => array($testIdHash => $locationView3),
-                        $group1 => array($testIdHash => $locationView1),
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $siteaccess => [$testIdHash => $locationView3],
+                        $group1 => [$testIdHash => $locationView1],
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
-            ),
-            array(
+            ],
+            [
                 // default scope + group + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                        $siteaccess => array($testIdHash => $locationView3),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                        $siteaccess => [$testIdHash => $locationView3],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
-            ),
-            array(
+            ],
+            [
                 // default scope + group + siteaccess + global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
                 $locationView4,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                        $siteaccess => array($testIdHash => $locationView3),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                        $siteaccess => [$testIdHash => $locationView3],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView1234,
-            ),
-            array(
+            ],
+            [
                 // global scope + group + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView3,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group2 => array($testIdHash => $locationView1),
-                        $siteaccess => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group2 => [$testIdHash => $locationView1],
+                        $siteaccess => [$testIdHash => $locationView2],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
-            ),
-            array(
+            ],
+            [
                 // default scope + group +  global
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
                 $locationView3,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 ContextualizerInterface::MERGE_FROM_SECOND_LEVEL,
                 $locationView123,
-            ),
+            ],
             //
             // MERGING HASH TESTS without MERGE_FROM_SECOND_LEVEL, the result
             // is always the "last" defined one
             //
-            array(
+            [
                 // everything in default scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(),
-                ),
+                    $this->saNodeName => [],
+                ],
                 0,
                 $locationView1,
-            ),
-            array(
+            ],
+            [
                 // everything in global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView1,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(),
-                ),
+                    $this->saNodeName => [],
+                ],
                 0,
                 $locationView1,
-            ),
-            array(
+            ],
+            [
                 // everything in a group
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView1),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView1],
+                    ],
+                ],
                 0,
                 $locationView1,
-            ),
-            array(
+            ],
+            [
                 // everything in a siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $siteaccess => array($testIdHash => $locationView1),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $siteaccess => [$testIdHash => $locationView1],
+                    ],
+                ],
                 0,
                 $locationView1,
-            ),
-            array(
+            ],
+            [
                 // default scope + one group
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 0,
                 $locationView2,
-            ),
-            array(
+            ],
+            [
                 // one group + global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView1,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 0,
                 $locationView1,
-            ),
-            array(
+            ],
+            [
                 // default scope + two groups
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                        $group2 => array($testIdHash => $locationView3),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                        $group2 => [$testIdHash => $locationView3],
+                    ],
+                ],
                 0,
                 $locationView3,
-            ),
-            array(
+            ],
+            [
                 // default scope + two groups + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                        $group2 => array($testIdHash => $locationView3),
-                        $siteaccess => array($testIdHash => $locationView4),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                        $group2 => [$testIdHash => $locationView3],
+                        $siteaccess => [$testIdHash => $locationView4],
+                    ],
+                ],
                 0,
                 $locationView4,
-            ),
-            array(
+            ],
+            [
                 // default scope + two groups + global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
                 $locationView4,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                        $group2 => array($testIdHash => $locationView3),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                        $group2 => [$testIdHash => $locationView3],
+                    ],
+                ],
                 0,
                 $locationView4,
-            ),
-            array(
+            ],
+            [
                 // two groups
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView1),
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView1],
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 0,
                 $locationView2,
-            ),
-            array(
+            ],
+            [
                 // two groups + global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView3,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView1),
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView1],
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 0,
                 $locationView3,
-            ),
-            array(
+            ],
+            [
                 // two groups + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
-                array(),
-                array(
+                [$group1, $group2],
+                [],
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $siteaccess => array($testIdHash => $locationView3),
-                        $group1 => array($testIdHash => $locationView1),
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $siteaccess => [$testIdHash => $locationView3],
+                        $group1 => [$testIdHash => $locationView1],
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 0,
                 $locationView3,
-            ),
-            array(
+            ],
+            [
                 // two groups + siteaccess + global scope
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView4,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $siteaccess => array($testIdHash => $locationView3),
-                        $group1 => array($testIdHash => $locationView1),
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $siteaccess => [$testIdHash => $locationView3],
+                        $group1 => [$testIdHash => $locationView1],
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 0,
                 $locationView4,
-            ),
-            array(
+            ],
+            [
                 // default scope + group + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
-                array(),
-                array(
+                [],
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group1 => array($testIdHash => $locationView2),
-                        $siteaccess => array($testIdHash => $locationView3),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group1 => [$testIdHash => $locationView2],
+                        $siteaccess => [$testIdHash => $locationView3],
+                    ],
+                ],
                 0,
                 $locationView3,
-            ),
-            array(
+            ],
+            [
                 // global scope + group + siteaccess
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
-                array(),
+                [$group1, $group2],
+                [],
                 $locationView3,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group2 => array($testIdHash => $locationView1),
-                        $siteaccess => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group2 => [$testIdHash => $locationView1],
+                        $siteaccess => [$testIdHash => $locationView2],
+                    ],
+                ],
                 0,
                 $locationView3,
-            ),
-            array(
+            ],
+            [
                 // default scope + group +  global
                 $testIdHash,
                 $siteaccess,
-                array($group1, $group2),
+                [$group1, $group2],
                 $locationView1,
                 $locationView3,
-                array(
+                [
                     'siteaccess' => $siteaccessConfig,
-                    $this->saNodeName => array(
-                        $group2 => array($testIdHash => $locationView2),
-                    ),
-                ),
+                    $this->saNodeName => [
+                        $group2 => [$testIdHash => $locationView2],
+                    ],
+                ],
                 0,
                 $locationView3,
-            ),
-        );
+            ],
+        ];
 
         foreach ($cases as $k => $newcase) {
             // run the same tests with another baseKey than the default one

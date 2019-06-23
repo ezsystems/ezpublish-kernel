@@ -36,7 +36,7 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -46,7 +46,7 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -56,9 +56,9 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -68,7 +68,7 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -78,7 +78,7 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -88,9 +88,9 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 23),
-        );
+        return [
+            'unknown' => ['value' => 23],
+        ];
     }
 
     /**
@@ -128,10 +128,10 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'link' => 'http://example.com',
             'text' => 'Example',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -161,16 +161,16 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new UrlValue(23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 new UrlValue('http://example.com', 23),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -197,10 +197,10 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'link' => 'http://example.com/2',
             'text' => 'Example  2',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -248,10 +248,10 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'link' => 'http://example.com',
             'text' => 'Example',
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -280,22 +280,22 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new UrlValue('http://example.com'),
-                array(
+                [
                     'link' => 'http://example.com',
                     'text' => null,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 new UrlValue('http://example.com', 'Link text'),
-                array(
+                [
                     'link' => 'http://example.com',
                     'text' => 'Link text',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -307,38 +307,38 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
-                array('link' => 'http://example.com/sindelfingen'),
+        return [
+            [
+                ['link' => 'http://example.com/sindelfingen'],
                 new UrlValue('http://example.com/sindelfingen'),
-            ),
-            array(
-                array('link' => 'http://example.com/sindelfingen', 'text' => 'Foo'),
+            ],
+            [
+                ['link' => 'http://example.com/sindelfingen', 'text' => 'Foo'],
                 new UrlValue('http://example.com/sindelfingen', 'Foo'),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new UrlValue()),
-            array(new UrlValue(null)),
-            array(new UrlValue('')),
-            array(new UrlValue('', '')),
-        );
+        return [
+            [new UrlValue()],
+            [new UrlValue(null)],
+            [new UrlValue('')],
+            [new UrlValue('', '')],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(
+            ],
+            [
                 new UrlValue('http://example.com'),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()
@@ -363,20 +363,20 @@ class UrlIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getAdditionallyIndexedFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'value_text',
                 // ensure case-insensitivity
                 'AMPLE',
                 'EXAMPLE',
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getFullTextIndexedFieldData()
     {
-        return array(
-            array('ample', 'example'),
-        );
+        return [
+            ['ample', 'example'],
+        ];
     }
 }

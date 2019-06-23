@@ -34,10 +34,10 @@ class RelationList extends ValueObjectVisitor
         if ($path === null) {
             $path = $this->router->generate(
                 'ezpublish_rest_loadVersionRelations',
-                array(
+                [
                     'contentId' => $data->contentId,
                     'versionNumber' => $data->versionNo,
-                )
+                ]
             );
         }
 

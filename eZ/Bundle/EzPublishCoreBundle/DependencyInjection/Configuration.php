@@ -72,14 +72,14 @@ class Configuration extends SiteAccessConfiguration
                 ->arrayNode('repositories')
                     ->info('Content repositories configuration')
                     ->example(
-                        array(
-                            'main' => array(
-                                'storage' => array(
+                        [
+                            'main' => [
+                                'storage' => [
                                     'engine' => 'legacy',
                                     'connection' => 'my_doctrine_connection_name',
-                                ),
-                            ),
-                        )
+                                ],
+                            ],
+                        ]
                     )
                     ->useAttributeAsKey('alias')
                     ->prototype('array')
@@ -115,15 +115,15 @@ class Configuration extends SiteAccessConfiguration
                                 // Setting default values
                                 function ($v) {
                                     if ($v === null) {
-                                        $v = array();
+                                        $v = [];
                                     }
 
                                     if (!isset($v['storage'])) {
-                                        $v['storage'] = array();
+                                        $v['storage'] = [];
                                     }
 
                                     if (!isset($v['search'])) {
-                                        $v['search'] = array();
+                                        $v['search'] = [];
                                     }
 
                                     if (!isset($v['fields_groups']['list'])) {
@@ -204,7 +204,7 @@ class Configuration extends SiteAccessConfiguration
                     ->children()
                         ->arrayNode('list')
                             ->info('Available SiteAccess list')
-                            ->example(array('ezdemo_site', 'ezdemo_site_admin'))
+                            ->example(['ezdemo_site', 'ezdemo_site_admin'])
                             ->isRequired()
                             ->requiresAtLeastOneElement()
                             ->prototype('scalar')->end()
@@ -212,7 +212,7 @@ class Configuration extends SiteAccessConfiguration
                         ->arrayNode('groups')
                             ->useAttributeAsKey('key')
                             ->info('SiteAccess groups. Useful to share settings between Siteaccess')
-                            ->example(array('ezdemo_group' => array('ezdemo_site', 'ezdemo_site_admin')))
+                            ->example(['ezdemo_group' => ['ezdemo_site', 'ezdemo_site_admin']])
                             ->prototype('array')
                                 ->requiresAtLeastOneElement()
                                 ->prototype('scalar')->end()
@@ -222,23 +222,23 @@ class Configuration extends SiteAccessConfiguration
                         ->arrayNode('match')
                             ->info('Siteaccess match configuration. First key is the matcher class, value is passed to the matcher. Key can be a service identifier (prepended by "@"), or a FQ class name (prepended by "\\")')
                             ->example(
-                                array(
-                                    'Map\\URI' => array(
+                                [
+                                    'Map\\URI' => [
                                         'foo' => 'ezdemo_site',
                                         'ezdemo_site' => 'ezdemo_site',
                                         'ezdemo_site_admin' => 'ezdemo_site_admin',
-                                    ),
-                                    'Map\\Host' => array(
+                                    ],
+                                    'Map\\Host' => [
                                         'ezpublish.dev' => 'ezdemo_site',
                                         'admin.ezpublish.dev' => 'ezdemo_site_admin',
-                                    ),
-                                    '\\My\\Custom\\Matcher' => array(
+                                    ],
+                                    '\\My\\Custom\\Matcher' => [
                                         'some' => 'configuration',
-                                    ),
-                                    '@my.custom.matcher' => array(
+                                    ],
+                                    '@my.custom.matcher' => [
                                         'some' => 'other_configuration',
-                                    ),
-                                )
+                                    ],
+                                ]
                             )
                             ->isRequired()
                             ->useAttributeAsKey('key')
@@ -251,13 +251,13 @@ class Configuration extends SiteAccessConfiguration
                                             // Value passed to the matcher should always be an array.
                                             // If value is not an array, we transform it to a hash, with 'value' as key.
                                             if (!is_array($v)) {
-                                                return array('value' => $v);
+                                                return ['value' => $v];
                                             }
 
                                             // If passed value is a numerically indexed array, we must convert it into a hash.
                                             // See https://jira.ez.no/browse/EZP-21876
                                             if (array_keys($v) === range(0, count($v) - 1)) {
-                                                $final = array();
+                                                $final = [];
                                                 foreach ($v as $i => $val) {
                                                     $final["i$i"] = $val;
                                                 }
@@ -288,7 +288,7 @@ class Configuration extends SiteAccessConfiguration
                 ->end()
                 ->arrayNode('locale_conversion')
                     ->info('Locale conversion map between eZ Publish format (i.e. fre-FR) to POSIX (i.e. fr_FR). The key is the eZ Publish locale. Check locale.yml in EzPublishCoreBundle to see natively supported locales.')
-                    ->example(array('fre-FR' => 'fr_FR'))
+                    ->example(['fre-FR' => 'fr_FR'])
                     ->useAttributeAsKey('key')
                     ->normalizeKeys(false)
                     ->prototype('scalar')->end()
@@ -334,7 +334,7 @@ EOT;
                         ->end()
                         ->arrayNode('filters')
                             ->info($filtersInfo)
-                            ->example(array('geometry/scaledownonly' => '"-geometry {1}x{2}>"'))
+                            ->example(['geometry/scaledownonly' => '"-geometry {1}x{2}>"'])
                             ->prototype('scalar')->end()
                         ->end()
                     ->end()
@@ -374,7 +374,7 @@ EOT;
                             ->beforeNormalization()
                                 ->ifTrue(
                                     function ($v) {
-                                        $http = array('multiple_http' => true, 'single_http' => true);
+                                        $http = ['multiple_http' => true, 'single_http' => true];
 
                                         return isset($http[$v]);
                                     }
@@ -456,7 +456,7 @@ EOT;
                                 ->arrayNode('non_siteaccess_aware_routes')
                                     ->prototype('scalar')->end()
                                     ->info($nonSAAwareInfo)
-                                    ->example(array('my_route_name', 'some_prefix_'))
+                                    ->example(['my_route_name', 'some_prefix_'])
                                 ->end()
                             ->end()
                         ->end()

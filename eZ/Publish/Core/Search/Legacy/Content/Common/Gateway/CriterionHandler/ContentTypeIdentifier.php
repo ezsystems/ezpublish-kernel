@@ -72,7 +72,7 @@ class ContentTypeIdentifier extends CriterionHandler
         Criterion $criterion,
         array $languageSettings
     ) {
-        $idList = array();
+        $idList = [];
 
         foreach ($criterion->value as $identifier) {
             $idList[] = $this->contentTypeHandler->loadByIdentifier($identifier)->id;

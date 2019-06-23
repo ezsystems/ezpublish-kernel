@@ -43,14 +43,14 @@ class FOSPurgeClient implements PurgeClientInterface
         }
 
         if (!is_array($locationIds)) {
-            $locationIds = array($locationIds);
+            $locationIds = [$locationIds];
         }
 
-        $this->cacheManager->invalidate(array('X-Location-Id' => '^(' . implode('|', $locationIds) . ')$'));
+        $this->cacheManager->invalidate(['X-Location-Id' => '^(' . implode('|', $locationIds) . ')$']);
     }
 
     public function purgeAll()
     {
-        $this->cacheManager->invalidate(array('X-Location-Id' => '.*'));
+        $this->cacheManager->invalidate(['X-Location-Id' => '.*']);
     }
 }

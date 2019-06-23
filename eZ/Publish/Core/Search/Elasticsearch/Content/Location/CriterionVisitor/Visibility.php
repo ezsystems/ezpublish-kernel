@@ -41,10 +41,10 @@ class Visibility extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
-            'term' => array(
+        return [
+            'term' => [
                 'invisible_b' => ($criterion->value[0] === Criterion\Visibility::HIDDEN),
-            ),
-        );
+            ],
+        ];
     }
 }

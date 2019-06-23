@@ -45,18 +45,18 @@ class TextLineTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array(
-            'StringLengthValidator' => array(
-                'minStringLength' => array(
+        return [
+            'StringLengthValidator' => [
+                'minStringLength' => [
                     'type' => 'int',
                     'default' => 0,
-                ),
-                'maxStringLength' => array(
+                ],
+                'maxStringLength' => [
                     'type' => 'int',
                     'default' => null,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -66,7 +66,7 @@ class TextLineTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -104,16 +104,16 @@ class TextLineTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 23,
                 InvalidArgumentException::class,
-            ),
-            array(
+            ],
+            [
                 new TextLineValue(23),
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -147,45 +147,45 @@ class TextLineTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new TextLineValue(),
-            ),
-            array(
+            ],
+            [
                 '',
                 new TextLineValue(),
-            ),
-            array(
+            ],
+            [
                 ' ',
                 new TextLineValue(),
-            ),
-            array(
+            ],
+            [
                 ' sindelfingen ',
                 new TextLineValue(' sindelfingen '),
-            ),
-            array(
+            ],
+            [
                 new TextLineValue(' sindelfingen '),
                 new TextLineValue(' sindelfingen '),
-            ),
-            array(
+            ],
+            [
                 // 11+ numbers - EZP-21771
                 '12345678901',
                 new TextLineValue('12345678901'),
-            ),
-            array(
+            ],
+            [
                 new TextLineValue(''),
                 new TextLineValue(),
-            ),
-            array(
+            ],
+            [
                 new TextLineValue(' '),
                 new TextLineValue(),
-            ),
-            array(
+            ],
+            [
                 new TextLineValue(null),
                 new TextLineValue(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -225,20 +225,20 @@ class TextLineTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new TextLineValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new TextLineValue(''),
                 null,
-            ),
-            array(
+            ],
+            [
                 new TextLineValue('sindelfingen'),
                 'sindelfingen',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -278,20 +278,20 @@ class TextLineTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new TextLineValue(),
-            ),
-            array(
+            ],
+            [
                 '',
                 new TextLineValue(),
-            ),
-            array(
+            ],
+            [
                 'sindelfingen',
                 new TextLineValue('sindelfingen'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -324,47 +324,47 @@ class TextLineTest extends FieldTypeTest
      */
     public function provideValidValidatorConfiguration()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'minStringLength' => null,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'minStringLength' => 23,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'maxStringLength' => null,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'maxStringLength' => 23,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'minStringLength' => 23,
                         'maxStringLength' => 42,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -411,56 +411,56 @@ class TextLineTest extends FieldTypeTest
      */
     public function provideInvalidValidatorConfiguration()
     {
-        return array(
-            array(
-                array(
-                    'NonExistentValidator' => array(),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+        return [
+            [
+                [
+                    'NonExistentValidator' => [],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'nonExistentValue' => 23,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'minStringLength' => .23,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'maxStringLength' => .42,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'minStringLength' => -23,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'maxStringLength' => -42,
-                    ),
-                ),
-            ),
-            array(
-                array(
-                    'StringLengthValidator' => array(
+                    ],
+                ],
+            ],
+            [
+                [
+                    'StringLengthValidator' => [
                         'maxStringLength' => 23,
                         'minStringLength' => 42,
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -470,10 +470,10 @@ class TextLineTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new TextLineValue('This is a line of text'), 'This is a line of text'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [new TextLineValue('This is a line of text'), 'This is a line of text'],
+        ];
     }
 
     /**
@@ -523,39 +523,39 @@ class TextLineTest extends FieldTypeTest
      */
     public function provideValidDataForValidate()
     {
-        return array(
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'StringLengthValidator' => array(
+        return [
+            [
+                [
+                    'validatorConfiguration' => [
+                        'StringLengthValidator' => [
                             'minStringLength' => 2,
                             'maxStringLength' => 10,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new TextLineValue('lalalala'),
-            ),
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'StringLengthValidator' => array(
+            ],
+            [
+                [
+                    'validatorConfiguration' => [
+                        'StringLengthValidator' => [
                             'maxStringLength' => 10,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new TextLineValue('lililili'),
-            ),
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'StringLengthValidator' => array(
+            ],
+            [
+                [
+                    'validatorConfiguration' => [
+                        'StringLengthValidator' => [
                             'maxStringLength' => 10,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new TextLineValue('♔♕♖♗♘♙♚♛♜♝'),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -624,99 +624,99 @@ class TextLineTest extends FieldTypeTest
      */
     public function provideInvalidDataForValidate()
     {
-        return array(
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'StringLengthValidator' => array(
+        return [
+            [
+                [
+                    'validatorConfiguration' => [
+                        'StringLengthValidator' => [
                             'minStringLength' => 5,
                             'maxStringLength' => 10,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new TextLineValue('aaa'),
-                array(
+                [
                     new ValidationError(
                         'The string cannot be shorter than %size% character.',
                         'The string cannot be shorter than %size% characters.',
-                        array(
+                        [
                             '%size%' => 5,
-                        ),
+                        ],
                         'text'
                     ),
-                ),
-            ),
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'StringLengthValidator' => array(
+                ],
+            ],
+            [
+                [
+                    'validatorConfiguration' => [
+                        'StringLengthValidator' => [
                             'minStringLength' => 5,
                             'maxStringLength' => 10,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new TextLineValue('0123456789012345'),
-                array(
+                [
                     new ValidationError(
                         'The string can not exceed %size% character.',
                         'The string can not exceed %size% characters.',
-                        array(
+                        [
                             '%size%' => 10,
-                        ),
+                        ],
                         'text'
                     ),
-                ),
-            ),
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'StringLengthValidator' => array(
+                ],
+            ],
+            [
+                [
+                    'validatorConfiguration' => [
+                        'StringLengthValidator' => [
                             'minStringLength' => 10,
                             'maxStringLength' => 5,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new TextLineValue('1234567'),
-                array(
+                [
                     new ValidationError(
                         'The string can not exceed %size% character.',
                         'The string can not exceed %size% characters.',
-                        array(
+                        [
                             '%size%' => 5,
-                        ),
+                        ],
                         'text'
                     ),
                     new ValidationError(
                         'The string cannot be shorter than %size% character.',
                         'The string cannot be shorter than %size% characters.',
-                        array(
+                        [
                             '%size%' => 10,
-                        ),
+                        ],
                         'text'
                     ),
-                ),
-            ),
-            array(
-                array(
-                    'validatorConfiguration' => array(
-                        'StringLengthValidator' => array(
+                ],
+            ],
+            [
+                [
+                    'validatorConfiguration' => [
+                        'StringLengthValidator' => [
                             'minStringLength' => 5,
                             'maxStringLength' => 10,
-                        ),
-                    ),
-                ),
+                        ],
+                    ],
+                ],
                 new TextLineValue('ABC♔'),
-                array(
+                [
                     new ValidationError(
                         'The string cannot be shorter than %size% character.',
                         'The string cannot be shorter than %size% characters.',
-                        array(
+                        [
                             '%size%' => 5,
-                        ),
+                        ],
                         'text'
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

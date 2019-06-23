@@ -44,7 +44,7 @@ class FieldTypeSerializerTest extends TestCase
             ->method('generateFieldTypeHash')
             ->with(
                 $this->equalTo('fieldValue'),
-                $this->equalTo(array(23, 42))
+                $this->equalTo([23, 42])
             );
 
         $this->getContentTypeMock()->expects($this->once())
@@ -54,9 +54,9 @@ class FieldTypeSerializerTest extends TestCase
             )->will(
                 $this->returnValue(
                     new FieldDefinition(
-                        array(
+                        [
                             'fieldTypeIdentifier' => 'myFancyFieldType',
-                        )
+                        ]
                     )
                 )
             );
@@ -76,16 +76,16 @@ class FieldTypeSerializerTest extends TestCase
         $fieldTypeMock->expects($this->once())
             ->method('toHash')
             ->with($this->equalTo('my-field-value'))
-            ->will($this->returnValue(array(23, 42)));
+            ->will($this->returnValue([23, 42]));
 
         $serializer->serializeFieldValue(
             $this->getGeneratorMock(),
             $this->getContentTypeMock(),
             new Field(
-                array(
+                [
                     'fieldDefIdentifier' => 'some-field',
                     'value' => 'my-field-value',
-                )
+                ]
             )
         );
     }
@@ -98,7 +98,7 @@ class FieldTypeSerializerTest extends TestCase
             ->method('generateFieldTypeHash')
             ->with(
                 $this->equalTo('fieldValue'),
-                $this->equalTo(array('post-processed'))
+                $this->equalTo(['post-processed'])
             );
 
         $this->getContentTypeMock()->expects($this->once())
@@ -108,9 +108,9 @@ class FieldTypeSerializerTest extends TestCase
             )->will(
                 $this->returnValue(
                     new FieldDefinition(
-                        array(
+                        [
                             'fieldTypeIdentifier' => 'myFancyFieldType',
-                        )
+                        ]
                     )
                 )
             );
@@ -134,8 +134,8 @@ class FieldTypeSerializerTest extends TestCase
             );
         $processorMock->expects($this->once())
             ->method('postProcessValueHash')
-            ->with($this->equalTo(array(23, 42)))
-            ->will($this->returnValue(array('post-processed')));
+            ->with($this->equalTo([23, 42]))
+            ->will($this->returnValue(['post-processed']));
 
         $fieldTypeMock = $this->getFieldTypeMock();
         $this->getFieldTypeServiceMock()->expects($this->once())
@@ -155,16 +155,16 @@ class FieldTypeSerializerTest extends TestCase
         $fieldTypeMock->expects($this->once())
             ->method('toHash')
             ->with($this->equalTo('my-field-value'))
-            ->will($this->returnValue(array(23, 42)));
+            ->will($this->returnValue([23, 42]));
 
         $serializer->serializeFieldValue(
             $this->getGeneratorMock(),
             $this->getContentTypeMock(),
             new Field(
-                array(
+                [
                     'fieldDefIdentifier' => 'some-field',
                     'value' => 'my-field-value',
-                )
+                ]
             )
         );
     }
@@ -177,7 +177,7 @@ class FieldTypeSerializerTest extends TestCase
             ->method('generateFieldTypeHash')
             ->with(
                 $this->equalTo('defaultValue'),
-                $this->equalTo(array(23, 42))
+                $this->equalTo([23, 42])
             );
 
         $fieldTypeMock = $this->getFieldTypeMock();
@@ -195,7 +195,7 @@ class FieldTypeSerializerTest extends TestCase
         $fieldTypeMock->expects($this->once())
             ->method('toHash')
             ->with($this->equalTo('my-field-value'))
-            ->will($this->returnValue(array(23, 42)));
+            ->will($this->returnValue([23, 42]));
 
         $serializer->serializeFieldDefaultValue(
             $this->getGeneratorMock(),
@@ -212,7 +212,7 @@ class FieldTypeSerializerTest extends TestCase
             ->method('generateFieldTypeHash')
             ->with(
                 $this->equalTo('fieldSettings'),
-                $this->equalTo(array('foo' => 'bar'))
+                $this->equalTo(['foo' => 'bar'])
             );
 
         $fieldTypeMock = $this->getFieldTypeMock();
@@ -230,7 +230,7 @@ class FieldTypeSerializerTest extends TestCase
         $fieldTypeMock->expects($this->once())
             ->method('fieldSettingsToHash')
             ->with($this->equalTo('my-field-settings'))
-            ->will($this->returnValue(array('foo' => 'bar')));
+            ->will($this->returnValue(['foo' => 'bar']));
 
         $serializer->serializeFieldSettings(
             $this->getGeneratorMock(),
@@ -263,14 +263,14 @@ class FieldTypeSerializerTest extends TestCase
             );
         $processorMock->expects($this->once())
             ->method('postProcessFieldSettingsHash')
-            ->with($this->equalTo(array('foo' => 'bar')))
-            ->will($this->returnValue(array('post-processed')));
+            ->with($this->equalTo(['foo' => 'bar']))
+            ->will($this->returnValue(['post-processed']));
 
         $this->getGeneratorMock()->expects($this->once())
             ->method('generateFieldTypeHash')
             ->with(
                 $this->equalTo('fieldSettings'),
-                $this->equalTo(array('post-processed'))
+                $this->equalTo(['post-processed'])
             );
 
         $this->getFieldTypeServiceMock()->expects($this->once())
@@ -287,7 +287,7 @@ class FieldTypeSerializerTest extends TestCase
         $fieldTypeMock->expects($this->once())
             ->method('fieldSettingsToHash')
             ->with($this->equalTo('my-field-settings'))
-            ->will($this->returnValue(array('foo' => 'bar')));
+            ->will($this->returnValue(['foo' => 'bar']));
 
         $serializer->serializeFieldSettings(
             $this->getGeneratorMock(),
@@ -304,7 +304,7 @@ class FieldTypeSerializerTest extends TestCase
             ->method('generateFieldTypeHash')
             ->with(
                 $this->equalTo('validatorConfiguration'),
-                $this->equalTo(array('bar' => 'foo'))
+                $this->equalTo(['bar' => 'foo'])
             );
 
         $fieldTypeMock = $this->getFieldTypeMock();
@@ -322,7 +322,7 @@ class FieldTypeSerializerTest extends TestCase
         $fieldTypeMock->expects($this->once())
             ->method('validatorConfigurationToHash')
             ->with($this->equalTo('validator-config'))
-            ->will($this->returnValue(array('bar' => 'foo')));
+            ->will($this->returnValue(['bar' => 'foo']));
 
         $serializer->serializeValidatorConfiguration(
             $this->getGeneratorMock(),
@@ -355,8 +355,8 @@ class FieldTypeSerializerTest extends TestCase
             );
         $processorMock->expects($this->once())
             ->method('postProcessValidatorConfigurationHash')
-            ->with($this->equalTo(array('bar' => 'foo')))
-            ->will($this->returnValue(array('post-processed')));
+            ->with($this->equalTo(['bar' => 'foo']))
+            ->will($this->returnValue(['post-processed']));
 
         $fieldTypeMock = $this->getFieldTypeMock();
         $this->getFieldTypeServiceMock()->expects($this->once())
@@ -374,7 +374,7 @@ class FieldTypeSerializerTest extends TestCase
             ->method('generateFieldTypeHash')
             ->with(
                 $this->equalTo('validatorConfiguration'),
-                $this->equalTo(array('post-processed'))
+                $this->equalTo(['post-processed'])
             );
 
         $this->getFieldTypeServiceMock()->expects($this->once())
@@ -391,7 +391,7 @@ class FieldTypeSerializerTest extends TestCase
         $fieldTypeMock->expects($this->once())
             ->method('validatorConfigurationToHash')
             ->with($this->equalTo('validator-config'))
-            ->will($this->returnValue(array('bar' => 'foo')));
+            ->will($this->returnValue(['bar' => 'foo']));
 
         $serializer->serializeValidatorConfiguration(
             $this->getGeneratorMock(),

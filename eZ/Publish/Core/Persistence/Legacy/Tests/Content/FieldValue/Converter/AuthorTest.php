@@ -36,11 +36,11 @@ class AuthorTest extends TestCase
     {
         parent::setUp();
         $this->converter = new AuthorConverter();
-        $this->authors = array(
-            array('id' => 21, 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com'),
-            array('id' => 42, 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz'),
-            array('id' => 63, 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net'),
-        );
+        $this->authors = [
+            ['id' => 21, 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com'],
+            ['id' => 42, 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz'],
+            ['id' => 63, 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net'],
+        ];
     }
 
     protected function tearDown()

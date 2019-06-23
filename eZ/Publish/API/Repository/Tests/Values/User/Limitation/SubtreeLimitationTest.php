@@ -133,12 +133,12 @@ class SubtreeLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new SectionLimitation(
-                array(
-                    'limitationValues' => array(
+                [
+                    'limitationValues' => [
                         $standardSectionId,
                         $userSectionId,
-                    ),
-                )
+                    ],
+                ]
             )
         );
         $roleService->updatePolicy($editPolicy, $policyUpdate);
@@ -147,7 +147,7 @@ class SubtreeLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'edit');
         $policyCreate->addLimitation(
             new ContentTypeLimitation(
-                array('limitationValues' => array($userTypeId, $groupTypeId))
+                ['limitationValues' => [$userTypeId, $groupTypeId]]
             )
         );
         $roleService->addPolicy($role, $policyCreate);
@@ -156,7 +156,7 @@ class SubtreeLimitationTest extends BaseLimitationTest
             $role,
             $user,
             new SubtreeLimitation(
-                array('limitationValues' => array($subtree))
+                ['limitationValues' => [$subtree]]
             )
         );
 

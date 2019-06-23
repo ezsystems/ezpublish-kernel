@@ -31,9 +31,9 @@ class LanguageSwitchListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             MVCEvents::ROUTE_REFERENCE_GENERATION => 'onRouteReferenceGeneration',
-        );
+        ];
     }
 
     /**

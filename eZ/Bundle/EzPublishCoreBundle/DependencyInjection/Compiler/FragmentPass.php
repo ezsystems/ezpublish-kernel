@@ -46,7 +46,7 @@ class FragmentPass implements CompilerPassInterface
             $container->setDefinition($renamedId, $definition);
 
             $decoratedDef = new DefinitionDecorator('ezpublish.decorated_fragment_renderer');
-            $decoratedDef->setArguments(array(new Reference($renamedId)));
+            $decoratedDef->setArguments([new Reference($renamedId)]);
             $decoratedDef->setPublic($public);
             $decoratedDef->setTags($tags);
             // Special treatment for inline fragment renderer, to fit ESI renderer constructor type hinting (forced to InlineFragmentRenderer)

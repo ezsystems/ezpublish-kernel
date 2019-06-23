@@ -28,7 +28,7 @@ class HashConverter
      */
     public function convertFromValue(Value $value)
     {
-        $hash = array();
+        $hash = [];
 
         foreach ($value->page->getState() as $propName => $propValue) {
             switch ($propName) {
@@ -38,7 +38,7 @@ class HashConverter
                     }
                     break;
                 case 'attributes':
-                    if ($propValue !== null && $propValue !== array()) {
+                    if ($propValue !== null && $propValue !== []) {
                         $hash['attributes'] = $propValue;
                     }
                     break;
@@ -62,7 +62,7 @@ class HashConverter
      */
     protected function convertZoneToHash(Zone $zone)
     {
-        $hash = array();
+        $hash = [];
 
         foreach ($zone->getState() as $propName => $propValue) {
             switch ($propName) {
@@ -74,7 +74,7 @@ class HashConverter
                     }
                     break;
                 case 'attributes':
-                    if ($propValue !== null && $propValue !== array()) {
+                    if ($propValue !== null && $propValue !== []) {
                         $hash['attributes'] = $propValue;
                     }
                     break;
@@ -98,7 +98,7 @@ class HashConverter
      */
     protected function convertBlockToHash(Block $block)
     {
-        $hash = array();
+        $hash = [];
 
         foreach ($block->getState() as $propName => $propValue) {
             switch ($propName) {
@@ -116,7 +116,7 @@ class HashConverter
                     }
                     break;
                 case 'attributes':
-                    if ($propValue !== null && $propValue !== array()) {
+                    if ($propValue !== null && $propValue !== []) {
                         $hash['attributes'] = $propValue;
                     }
                     break;
@@ -140,7 +140,7 @@ class HashConverter
      */
     protected function convertItemToHash(Item $item)
     {
-        $hash = array();
+        $hash = [];
 
         foreach ($item->getState() as $propName => $propValue) {
             switch ($propName) {
@@ -155,7 +155,7 @@ class HashConverter
                     }
                     break;
                 case 'attributes':
-                    if ($propValue !== null && $propValue !== array()) {
+                    if ($propValue !== null && $propValue !== []) {
                         $hash['attributes'] = $propValue;
                     }
                     break;
@@ -184,7 +184,7 @@ class HashConverter
     public function convertToValue($hash)
     {
         if (isset($hash['zones'])) {
-            $zones = array();
+            $zones = [];
 
             foreach ($hash['zones'] as $zone) {
                 $zones[] = $this->convertZoneFromHash($zone);
@@ -206,7 +206,7 @@ class HashConverter
     protected function convertZoneFromHash($hash)
     {
         if (isset($hash['blocks'])) {
-            $blocks = array();
+            $blocks = [];
 
             foreach ($hash['blocks'] as $block) {
                 $blocks[] = $this->convertBlockFromHash($block);
@@ -228,7 +228,7 @@ class HashConverter
     protected function convertBlockFromHash($hash)
     {
         if (isset($hash['items'])) {
-            $items = array();
+            $items = [];
 
             foreach ($hash['items'] as $item) {
                 $items[] = $this->convertItemFromHash($item);

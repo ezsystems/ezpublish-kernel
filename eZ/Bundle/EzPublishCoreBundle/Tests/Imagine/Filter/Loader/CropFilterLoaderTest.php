@@ -42,13 +42,13 @@ class CropFilterLoaderTest extends TestCase
 
     public function loadInvalidProvider()
     {
-        return array(
-            array(array()),
-            array(array(123)),
-            array(array('foo' => 'bar')),
-            array(array(123, 456)),
-            array(array(123, 456, 789)),
-        );
+        return [
+            [[]],
+            [[123]],
+            [['foo' => 'bar']],
+            [[123, 456]],
+            [[123, 456, 789]],
+        ];
     }
 
     public function testLoad()
@@ -62,9 +62,9 @@ class CropFilterLoaderTest extends TestCase
         $this->innerLoader
             ->expects($this->once())
             ->method('load')
-            ->with($image, array('size' => array($width, $height), 'start' => array($offsetX, $offsetY)))
+            ->with($image, ['size' => [$width, $height], 'start' => [$offsetX, $offsetY]])
             ->will($this->returnValue($image));
 
-        $this->assertSame($image, $this->loader->load($image, array($width, $height, $offsetX, $offsetY)));
+        $this->assertSame($image, $this->loader->load($image, [$width, $height, $offsetX, $offsetY]));
     }
 }

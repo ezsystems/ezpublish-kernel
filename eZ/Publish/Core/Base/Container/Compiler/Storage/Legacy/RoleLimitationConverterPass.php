@@ -34,7 +34,7 @@ class RoleLimitationConverterPass implements CompilerPassInterface
             foreach ($attributes as $attribute) {
                 $roleLimitationConverter->addMethodCall(
                     'addHandler',
-                    array(new Reference($id))
+                    [new Reference($id)]
                 );
             }
         }

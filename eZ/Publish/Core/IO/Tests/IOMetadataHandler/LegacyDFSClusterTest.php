@@ -140,7 +140,7 @@ class LegacyDFSClusterTest extends TestCase
         $statement
             ->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(array('size' => 123, 'datatype' => 'image/png', 'mtime' => 1307155200)));
+            ->will($this->returnValue(['size' => 123, 'datatype' => 'image/png', 'mtime' => 1307155200]));
 
         $this->dbalMock
             ->expects($this->once())

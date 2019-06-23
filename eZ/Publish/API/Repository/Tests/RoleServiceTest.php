@@ -153,9 +153,9 @@ class RoleServiceTest extends BaseTest
 
         // Create new subtree limitation
         $limitation = new SubtreeLimitation(
-            array(
-                'limitationValues' => array('/1/2/'),
-            )
+            [
+                'limitationValues' => ['/1/2/'],
+            ]
         );
 
         // Create policy create struct and add limitation to it
@@ -408,9 +408,9 @@ class RoleServiceTest extends BaseTest
 
         // Create new subtree limitation
         $limitation = new SubtreeLimitation(
-            array(
-                'limitationValues' => array('/mountain/forest/tree/42/'),
-            )
+            [
+                'limitationValues' => ['/mountain/forest/tree/42/'],
+            ]
         );
 
         // Create policy create struct and add limitation to it
@@ -744,7 +744,7 @@ class RoleServiceTest extends BaseTest
 
         $roles = $roleService->loadRoles();
 
-        $roleNames = array();
+        $roleNames = [];
         foreach ($roles as $role) {
             $roleNames[] = $role->identifier;
         }
@@ -753,13 +753,13 @@ class RoleServiceTest extends BaseTest
         sort($roleNames);
 
         $this->assertEquals(
-            array(
+            [
                 'Administrator',
                 'Anonymous',
                 'Editor',
                 'Member',
                 'Partner',
-            ),
+            ],
             $roleNames
         );
     }
@@ -993,8 +993,8 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertEquals(
-            array('content', 'create'),
-            array($policyCreate->module, $policyCreate->function)
+            ['content', 'create'],
+            [$policyCreate->module, $policyCreate->function]
         );
     }
 
@@ -1031,12 +1031,12 @@ class RoleServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $actual = array();
+        $actual = [];
         foreach ($role->getPolicies() as $policy) {
-            $actual[] = array(
+            $actual[] = [
                 'module' => $policy->module,
                 'function' => $policy->function,
-            );
+            ];
         }
         usort(
             $actual,
@@ -1046,16 +1046,16 @@ class RoleServiceTest extends BaseTest
         );
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'module' => 'content',
                     'function' => 'create',
-                ),
-                array(
+                ],
+                [
                     'module' => 'content',
                     'function' => 'delete',
-                ),
-            ),
+                ],
+            ],
             $actual
         );
     }
@@ -1091,12 +1091,12 @@ class RoleServiceTest extends BaseTest
         );
         /* END: Use Case */
 
-        $actual = array();
+        $actual = [];
         foreach ($roleDraft->getPolicies() as $policy) {
-            $actual[] = array(
+            $actual[] = [
                 'module' => $policy->module,
                 'function' => $policy->function,
-            );
+            ];
         }
         usort(
             $actual,
@@ -1106,16 +1106,16 @@ class RoleServiceTest extends BaseTest
         );
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'module' => 'content',
                     'function' => 'create',
-                ),
-                array(
+                ],
+                [
                     'module' => 'content',
                     'function' => 'delete',
-                ),
-            ),
+                ],
+            ],
             $actual
         );
     }
@@ -1160,7 +1160,7 @@ class RoleServiceTest extends BaseTest
             $policy
         );
 
-        return array($role, $policy);
+        return [$role, $policy];
     }
 
     /**
@@ -1201,7 +1201,7 @@ class RoleServiceTest extends BaseTest
             $policy
         );
 
-        return array($roleDraft, $policy);
+        return [$roleDraft, $policy];
     }
 
     /**
@@ -1217,8 +1217,8 @@ class RoleServiceTest extends BaseTest
         list($role, $policy) = $roleAndPolicy;
 
         $this->assertEquals(
-            array($role->id, 'content', 'create'),
-            array($policy->roleId, $policy->module, $policy->function)
+            [$role->id, 'content', 'create'],
+            [$policy->roleId, $policy->module, $policy->function]
         );
     }
 
@@ -1235,8 +1235,8 @@ class RoleServiceTest extends BaseTest
         list($role, $policy) = $roleAndPolicy;
 
         $this->assertEquals(
-            array($role->id, 'content', 'create'),
-            array($policy->roleId, $policy->module, $policy->function)
+            [$role->id, 'content', 'create'],
+            [$policy->roleId, $policy->module, $policy->function]
         );
     }
 
@@ -1266,9 +1266,9 @@ class RoleServiceTest extends BaseTest
 
         // Create new subtree limitation
         $limitation = new SubtreeLimitation(
-            array(
-                'limitationValues' => array('/mountain/forest/tree/42/'),
-            )
+            [
+                'limitationValues' => ['/mountain/forest/tree/42/'],
+            ]
         );
 
         // Create policy create struct and add limitation to it
@@ -1305,9 +1305,9 @@ class RoleServiceTest extends BaseTest
 
         // Create new subtree limitation
         $limitation = new SubtreeLimitation(
-            array(
-                'limitationValues' => array('/mountain/forest/tree/42/'),
-            )
+            [
+                'limitationValues' => ['/mountain/forest/tree/42/'],
+            ]
         );
 
         // Create policy create struct and add limitation to it
@@ -1358,24 +1358,24 @@ class RoleServiceTest extends BaseTest
         $roleService->publishRoleDraft($roleDraft);
         $role = $roleService->loadRole($roleDraft->id);
 
-        $policies = array();
+        $policies = [];
         foreach ($role->getPolicies() as $policy) {
-            $policies[] = array('module' => $policy->module, 'function' => $policy->function);
+            $policies[] = ['module' => $policy->module, 'function' => $policy->function];
         }
         /* END: Use Case */
         array_multisort($policies);
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'module' => 'content',
                     'function' => 'read',
-                ),
-                array(
+                ],
+                [
                     'module' => 'content',
                     'function' => 'translate',
-                ),
-            ),
+                ],
+            ],
             $policies
         );
     }
@@ -1416,23 +1416,23 @@ class RoleServiceTest extends BaseTest
         // Create new role instance
         $roleDraft = $roleService->createRole($roleCreate);
 
-        $policies = array();
+        $policies = [];
         foreach ($roleDraft->getPolicies() as $policy) {
-            $policies[] = array('module' => $policy->module, 'function' => $policy->function);
+            $policies[] = ['module' => $policy->module, 'function' => $policy->function];
         }
         /* END: Use Case */
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'module' => 'content',
                     'function' => 'read',
-                ),
-                array(
+                ],
+                [
                     'module' => 'content',
                     'function' => 'translate',
-                ),
-            ),
+                ],
+            ],
             $policies
         );
     }
@@ -1500,7 +1500,7 @@ class RoleServiceTest extends BaseTest
             $policy
         );
 
-        self::assertEquals(array(), $policy->getLimitations());
+        self::assertEquals([], $policy->getLimitations());
     }
 
     /**
@@ -1525,9 +1525,9 @@ class RoleServiceTest extends BaseTest
         // Add some limitations for the new policy
         $policyCreate->addLimitation(
             new LanguageLimitation(
-                array(
-                    'limitationValues' => array('eng-US', 'eng-GB'),
-                )
+                [
+                    'limitationValues' => ['eng-US', 'eng-GB'],
+                ]
             )
         );
 
@@ -1556,9 +1556,9 @@ class RoleServiceTest extends BaseTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new ContentTypeLimitation(
-                array(
-                    'limitationValues' => array(29, 30),
-                )
+                [
+                    'limitationValues' => [29, 30],
+                ]
             )
         );
 
@@ -1571,7 +1571,7 @@ class RoleServiceTest extends BaseTest
             $policy
         );
 
-        return array($roleService->loadRole($role->id), $policy);
+        return [$roleService->loadRole($role->id), $policy];
     }
 
     /**
@@ -1587,13 +1587,13 @@ class RoleServiceTest extends BaseTest
         list($role, $policy) = $roleAndPolicy;
 
         $this->assertEquals(
-            array(
+            [
                 new ContentTypeLimitation(
-                    array(
-                        'limitationValues' => array(29, 30),
-                    )
+                    [
+                        'limitationValues' => [29, 30],
+                    ]
                 ),
-            ),
+            ],
             $policy->getLimitations()
         );
 
@@ -1610,7 +1610,7 @@ class RoleServiceTest extends BaseTest
      */
     public function testUpdatePolicyUpdatesRole($role)
     {
-        $limitations = array();
+        $limitations = [];
         foreach ($role->getPolicies() as $policy) {
             foreach ($policy->getLimitations() as $limitation) {
                 $limitations[] = $limitation;
@@ -1623,9 +1623,9 @@ class RoleServiceTest extends BaseTest
             $limitations[0]
         );
 
-        $expectedData = array(
-            'limitationValues' => array(29, 30),
-        );
+        $expectedData = [
+            'limitationValues' => [29, 30],
+        ];
         $this->assertPropertiesCorrectUnsorted(
             $expectedData,
             $limitations[0]
@@ -1656,9 +1656,9 @@ class RoleServiceTest extends BaseTest
         // Add some limitations for the new policy
         $policyCreate->addLimitation(
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/2/'),
-                )
+                [
+                    'limitationValues' => ['/1/2/'],
+                ]
             )
         );
 
@@ -1687,9 +1687,9 @@ class RoleServiceTest extends BaseTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/mountain/forest/tree/42/'),
-                )
+                [
+                    'limitationValues' => ['/mountain/forest/tree/42/'],
+                ]
             )
         );
 
@@ -1737,7 +1737,7 @@ class RoleServiceTest extends BaseTest
         }
         /* END: Use Case */
 
-        $this->assertSame(array(), $role->getPolicies());
+        $this->assertSame([], $role->getPolicies());
     }
 
     /**
@@ -1776,7 +1776,7 @@ class RoleServiceTest extends BaseTest
         }
         /* END: Use Case */
 
-        $this->assertSame(array(), $roleDraft->getPolicies());
+        $this->assertSame([], $roleDraft->getPolicies());
     }
 
     /**
@@ -1819,7 +1819,7 @@ class RoleServiceTest extends BaseTest
         /* END: Use Case */
 
         $role = $roleService->loadRole($role->id);
-        $this->assertSame(array(), $role->getPolicies());
+        $this->assertSame([], $role->getPolicies());
     }
 
     /**
@@ -1974,9 +1974,9 @@ class RoleServiceTest extends BaseTest
             $role,
             $user,
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/'],
+                ]
             )
         );
 
@@ -2002,9 +2002,9 @@ class RoleServiceTest extends BaseTest
 
         $this->assertEquals(
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/'],
+                ]
             ),
             $roleLimitation
         );
@@ -2014,9 +2014,9 @@ class RoleServiceTest extends BaseTest
             $role,
             $user,
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/', '/1/2/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/', '/1/2/'],
+                ]
             )
         );
 
@@ -2043,14 +2043,14 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals(
             [
                 new SubtreeLimitation(
-                    array(
-                        'limitationValues' => array('/1/2/'),
-                    )
+                    [
+                        'limitationValues' => ['/1/2/'],
+                    ]
                 ),
                 new SubtreeLimitation(
-                    array(
-                        'limitationValues' => array('/1/43/'),
-                    )
+                    [
+                        'limitationValues' => ['/1/43/'],
+                    ]
                 ),
             ],
             $roleLimitations
@@ -2085,9 +2085,9 @@ class RoleServiceTest extends BaseTest
             $role,
             $currentUser,
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/lorem/ipsum/42/'),
-                )
+                [
+                    'limitationValues' => ['/lorem/ipsum/42/'],
+                ]
             )
         );
         /* END: Use Case */
@@ -2164,9 +2164,9 @@ class RoleServiceTest extends BaseTest
                 $role,
                 $currentUser,
                 new SubtreeLimitation(
-                    array(
-                        'limitationValues' => array('/1/43/', '/1/2/'),
-                    )
+                    [
+                        'limitationValues' => ['/1/43/', '/1/2/'],
+                    ]
                 )
             );
         } catch (Exception $e) {
@@ -2179,9 +2179,9 @@ class RoleServiceTest extends BaseTest
             $role,
             $currentUser,
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/'],
+                ]
             )
         );
         /* END: Use Case */
@@ -2389,9 +2389,9 @@ class RoleServiceTest extends BaseTest
             $role,
             $userGroup,
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/'],
+                ]
             )
         );
 
@@ -2413,9 +2413,9 @@ class RoleServiceTest extends BaseTest
 
         $this->assertEquals(
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/'],
+                ]
             ),
             $roleLimitation
         );
@@ -2425,9 +2425,9 @@ class RoleServiceTest extends BaseTest
             $role,
             $userGroup,
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/', '/1/2/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/', '/1/2/'],
+                ]
             )
         );
 
@@ -2454,14 +2454,14 @@ class RoleServiceTest extends BaseTest
         $this->assertEquals(
             [
                 new SubtreeLimitation(
-                    array(
-                        'limitationValues' => array('/1/2/'),
-                    )
+                    [
+                        'limitationValues' => ['/1/2/'],
+                    ]
                 ),
                 new SubtreeLimitation(
-                    array(
-                        'limitationValues' => array('/1/43/'),
-                    )
+                    [
+                        'limitationValues' => ['/1/43/'],
+                    ]
                 ),
             ],
             $roleLimitations
@@ -2499,9 +2499,9 @@ class RoleServiceTest extends BaseTest
             $role,
             $userGroup,
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/lorem/ipsum/42/'),
-                )
+                [
+                    'limitationValues' => ['/lorem/ipsum/42/'],
+                ]
             )
         );
         /* END: Use Case */
@@ -2584,9 +2584,9 @@ class RoleServiceTest extends BaseTest
                 $role,
                 $userGroup,
                 new SubtreeLimitation(
-                    array(
-                        'limitationValues' => array('/1/43/', '/1/2/'),
-                    )
+                    [
+                        'limitationValues' => ['/1/43/', '/1/2/'],
+                    ]
                 )
             );
         } catch (Exception $e) {
@@ -2599,9 +2599,9 @@ class RoleServiceTest extends BaseTest
             $role,
             $userGroup,
             new SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/'],
+                ]
             )
         );
         /* END: Use Case */
@@ -2833,27 +2833,27 @@ class RoleServiceTest extends BaseTest
         $roleService->assignRoleToUser($role, $user);
 
         // Load the currently assigned role
-        $policies = array();
+        $policies = [];
         foreach ($roleService->loadPoliciesByUserId($user->id) as $policy) {
-            $policies[] = array($policy->roleId, $policy->module, $policy->function);
+            $policies[] = [$policy->roleId, $policy->module, $policy->function];
         }
         /* END: Use Case */
         array_multisort($policies);
 
         $this->assertEquals(
-            array(
-                array(1, 'content', 'pdf'),
-                array(1, 'content', 'read'),
-                array(1, 'content', 'read'),
-                array(1, 'rss', 'feed'),
-                array(1, 'user', 'login'),
-                array(1, 'user', 'login'),
-                array(1, 'user', 'login'),
-                array(1, 'user', 'login'),
-                array($role->id, 'notification', 'use'),
-                array($role->id, 'user', 'password'),
-                array($role->id, 'user', 'selfedit'),
-            ),
+            [
+                [1, 'content', 'pdf'],
+                [1, 'content', 'read'],
+                [1, 'content', 'read'],
+                [1, 'rss', 'feed'],
+                [1, 'user', 'login'],
+                [1, 'user', 'login'],
+                [1, 'user', 'login'],
+                [1, 'user', 'login'],
+                [$role->id, 'notification', 'use'],
+                [$role->id, 'user', 'password'],
+                [$role->id, 'user', 'selfedit'],
+            ],
             $policies
         );
     }
@@ -2949,12 +2949,12 @@ class RoleServiceTest extends BaseTest
         $role = $roleService->loadRoleByIdentifier($roleCreate->identifier);
         /* END: Use Case */
 
-        $actual = array();
+        $actual = [];
         foreach ($role->getPolicies() as $policy) {
-            $actual[] = array(
+            $actual[] = [
                 'module' => $policy->module,
                 'function' => $policy->function,
-            );
+            ];
         }
         usort(
             $actual,
@@ -2964,16 +2964,16 @@ class RoleServiceTest extends BaseTest
         );
 
         $this->assertEquals(
-            array(
-                array(
+            [
+                [
                     'module' => 'content',
                     'function' => 'create',
-                ),
-                array(
+                ],
+                [
                     'module' => 'content',
                     'function' => 'delete',
-                ),
-            ),
+                ],
+            ],
             $actual
         );
     }

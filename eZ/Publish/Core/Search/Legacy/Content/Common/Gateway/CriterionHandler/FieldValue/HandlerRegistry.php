@@ -21,7 +21,7 @@ class HandlerRegistry
      *
      * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler[]
      */
-    protected $map = array();
+    protected $map = [];
 
     /**
      * Create field value handler registry with handler map.
@@ -29,7 +29,7 @@ class HandlerRegistry
      * @param \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriterionHandler\FieldValue\Handler[] $map
      *        Map of Criterion field value handlers where key is field type identifier and value field value handler
      */
-    public function __construct(array $map = array())
+    public function __construct(array $map = [])
     {
         foreach ($map as $fieldTypeIdentifier => $handler) {
             $this->register($fieldTypeIdentifier, $handler);

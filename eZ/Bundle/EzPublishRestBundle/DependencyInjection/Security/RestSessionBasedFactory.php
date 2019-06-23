@@ -18,8 +18,8 @@ class RestSessionBasedFactory extends FormLoginFactory
     {
         parent::__construct();
         unset($this->options['check_path']);
-        $this->defaultSuccessHandlerOptions = array();
-        $this->defaultFailureHandlerOptions = array();
+        $this->defaultSuccessHandlerOptions = [];
+        $this->defaultFailureHandlerOptions = [];
     }
 
     protected function isRememberMeAware($config)
@@ -43,7 +43,7 @@ class RestSessionBasedFactory extends FormLoginFactory
             $logoutListenerDef = $container->getDefinition('security.logout_listener.' . $id);
             $logoutListenerDef->addMethodCall(
                 'addHandler',
-                array(new Reference('ezpublish_rest.security.authentication.logout_handler'))
+                [new Reference('ezpublish_rest.security.authentication.logout_handler')]
             );
 
             foreach ($logoutListenerDef->getMethodCalls() as $callArray) {

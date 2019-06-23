@@ -45,7 +45,7 @@ class TimeTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -55,16 +55,16 @@ class TimeTest extends FieldTypeTest
      */
     protected function getSettingsSchemaExpectation()
     {
-        return array(
-            'useSeconds' => array(
+        return [
+            'useSeconds' => [
                 'type' => 'bool',
                 'default' => false,
-            ),
-            'defaultType' => array(
+            ],
+            'defaultType' => [
                 'type' => 'choice',
                 'default' => Time::DEFAULT_EMPTY,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -100,12 +100,12 @@ class TimeTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
-                array(),
+        return [
+            [
+                [],
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -142,42 +142,42 @@ class TimeTest extends FieldTypeTest
         $dateTime = new DateTime();
         $secondsInDay = 24 * 60 * 60;
 
-        return array(
-            array(
+        return [
+            [
                 null,
                 new TimeValue(),
-            ),
-            array(
+            ],
+            [
                 '2012-08-28 12:20',
                 new TimeValue(44400),
-            ),
-            array(
+            ],
+            [
                 '2012-08-28 12:20 Europe/Berlin',
                 new TimeValue(44400),
-            ),
-            array(
+            ],
+            [
                 '2012-08-28 12:20 Asia/Sakhalin',
                 new TimeValue(44400),
-            ),
-            array(
+            ],
+            [
                 // Set $dateTime to proper time for correct offset
                 $dateTime->setTimestamp(1372896001)->getTimestamp(),
                 // Correct for negative offset
                 new TimeValue(($secondsInDay + $dateTime->getOffset() + 1) % $secondsInDay),
-            ),
-            array(
+            ],
+            [
                 TimeValue::fromTimestamp($timestamp = 1346149200),
                 new TimeValue(
                     $dateTime->setTimestamp($timestamp)->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp()
                 ),
-            ),
-            array(
+            ],
+            [
                 clone $dateTime,
                 new TimeValue(
                     $dateTime->getTimestamp() - $dateTime->setTime(0, 0, 0)->getTimestamp()
                 ),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -217,20 +217,20 @@ class TimeTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new TimeValue(),
                 null,
-            ),
-            array(
+            ],
+            [
                 new TimeValue(0),
                 0,
-            ),
-            array(
+            ],
+            [
                 new TimeValue(200),
                 200,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -270,20 +270,20 @@ class TimeTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
+        return [
+            [
                 null,
                 new TimeValue(),
-            ),
-            array(
+            ],
+            [
                 0,
                 new TimeValue(0),
-            ),
-            array(
+            ],
+            [
                 200,
                 new TimeValue(200),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -310,23 +310,23 @@ class TimeTest extends FieldTypeTest
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(),
-            ),
-            array(
-                array(
+        return [
+            [
+                [],
+            ],
+            [
+                [
                     'useSeconds' => true,
                     'defaultType' => Time::DEFAULT_EMPTY,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'useSeconds' => false,
                     'defaultType' => Time::DEFAULT_CURRENT_TIME,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -354,20 +354,20 @@ class TimeTest extends FieldTypeTest
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     // useSeconds must be bool
                     'useSeconds' => 23,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     // defaultType must be constant
                     'defaultType' => 42,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     protected function provideFieldTypeIdentifier()
@@ -377,9 +377,9 @@ class TimeTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-            array(new TimeValue(200), '12:03:20 am'),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+            [new TimeValue(200), '12:03:20 am'],
+        ];
     }
 }

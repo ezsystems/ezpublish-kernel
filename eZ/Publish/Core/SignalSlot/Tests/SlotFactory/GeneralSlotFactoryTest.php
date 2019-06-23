@@ -20,15 +20,15 @@ class GeneralSlotFactoryTest extends TestCase
 {
     public function providerForFactoryTests()
     {
-        return array(
-            array(array('slot1' => true, 'slot2' => true)),
-            array(
-                array(
+        return [
+            [['slot1' => true, 'slot2' => true]],
+            [
+                [
                     'slot1' => $this->createMock(SignalSlot\Slot::class),
                     'slot2' => $this->createMock(SignalSlot\Slot::class),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**

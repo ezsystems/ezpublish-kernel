@@ -40,7 +40,7 @@ class NewSectionLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('section', 'assign');
         $policyCreate->addLimitation(
             new NewSectionLimitation(
-                array('limitationValues' => array($sectionId))
+                ['limitationValues' => [$sectionId]]
             )
         );
 
@@ -94,7 +94,7 @@ class NewSectionLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('section', 'assign');
         $policyCreate->addLimitation(
             new NewSectionLimitation(
-                array('limitationValues' => array($sectionId))
+                ['limitationValues' => [$sectionId]]
             )
         );
 

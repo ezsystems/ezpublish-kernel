@@ -466,10 +466,10 @@ class Handler implements BaseContentTypeHandler
         if ($row === false) {
             throw new NotFoundException(
                 'FieldDefinition',
-                array(
+                [
                     'id' => $id,
                     'status' => $status,
-                )
+                ]
             );
         }
 

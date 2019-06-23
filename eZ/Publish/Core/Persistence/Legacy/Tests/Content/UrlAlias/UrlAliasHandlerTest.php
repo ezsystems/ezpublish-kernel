@@ -93,247 +93,247 @@ class UrlAliasHandlerTest extends TestCase
 
     public function providerForTestLookupLocationUrlAlias()
     {
-        return array(
-            array(
+        return [
+            [
                 'jedan',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                ),
-                array('cro-HR'),
+                        ],
+                    ],
+                ],
+                ['cro-HR'],
                 true,
                 314,
                 '0-6896260129051a949051c3847c34466f',
-            ),
-            array(
+            ],
+            [
                 'jedan/dva',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                ),
-                array('cro-HR'),
+                        ],
+                    ],
+                ],
+                ['cro-HR'],
                 false,
                 315,
                 '2-c67ed9a09ab136fae610b6a087d82e21',
-            ),
-            array(
+            ],
+            [
                 'jedan/two',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 false,
                 315,
                 '2-b8a9f715dbb64fd5c56e7783c6820a61',
-            ),
-            array(
+            ],
+            [
                 'jedan/dva/tri',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri',
                             'eng-GB' => 'three',
                             'ger-DE' => 'drei',
-                        ),
-                    ),
-                ),
-                array('cro-HR'),
+                        ],
+                    ],
+                ],
+                ['cro-HR'],
                 false,
                 316,
                 '3-d2cfe69af2d64330670e08efb2c86df7',
-            ),
-            array(
+            ],
+            [
                 'jedan/two/three',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri',
                             'eng-GB' => 'three',
                             'ger-DE' => 'drei',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 false,
                 316,
                 '3-35d6d33467aae9a2e3dccb4b6b027878',
-            ),
-            array(
+            ],
+            [
                 'jedan/dva/three',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri',
                             'eng-GB' => 'three',
                             'ger-DE' => 'drei',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 false,
                 316,
                 '3-35d6d33467aae9a2e3dccb4b6b027878',
-            ),
-            array(
+            ],
+            [
                 'jedan/two/tri',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri',
                             'eng-GB' => 'three',
                             'ger-DE' => 'drei',
-                        ),
-                    ),
-                ),
-                array('cro-HR'),
+                        ],
+                    ],
+                ],
+                ['cro-HR'],
                 false,
                 316,
                 '3-d2cfe69af2d64330670e08efb2c86df7',
-            ),
-            array(
+            ],
+            [
                 'jedan/dva/drei',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri',
                             'eng-GB' => 'three',
                             'ger-DE' => 'drei',
-                        ),
-                    ),
-                ),
-                array('ger-DE'),
+                        ],
+                    ],
+                ],
+                ['ger-DE'],
                 false,
                 316,
                 '3-1d8d2fd0a99802b89eb356a86e029d25',
-            ),
-            array(
+            ],
+            [
                 'jedan/two/drei',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri',
                             'eng-GB' => 'three',
                             'ger-DE' => 'drei',
-                        ),
-                    ),
-                ),
-                array('ger-DE'),
+                        ],
+                    ],
+                ],
+                ['ger-DE'],
                 false,
                 316,
                 '3-1d8d2fd0a99802b89eb356a86e029d25',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -362,7 +362,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::LOCATION,
                     'destination' => $locationId,
@@ -372,7 +372,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -413,7 +413,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::LOCATION,
                     'destination' => $locationId,
@@ -423,7 +423,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -431,88 +431,88 @@ class UrlAliasHandlerTest extends TestCase
 
     public function providerForTestLookupLocationMultipleLanguages()
     {
-        return array(
-            array(
+        return [
+            [
                 'jedan/dva',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'dva',
-                        ),
-                    ),
-                ),
-                array('cro-HR', 'eng-GB'),
+                        ],
+                    ],
+                ],
+                ['cro-HR', 'eng-GB'],
                 false,
                 315,
                 '2-c67ed9a09ab136fae610b6a087d82e21',
-            ),
-            array(
+            ],
+            [
                 'jedan/dva/tri',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'dva',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri',
                             'eng-GB' => 'three',
-                        ),
-                    ),
-                ),
-                array('cro-HR'),
+                        ],
+                    ],
+                ],
+                ['cro-HR'],
                 false,
                 316,
                 '3-d2cfe69af2d64330670e08efb2c86df7',
-            ),
-            array(
+            ],
+            [
                 'jedan/dva/three',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'jedan',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'dva',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri',
                             'eng-GB' => 'three',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 false,
                 316,
                 '3-35d6d33467aae9a2e3dccb4b6b027878',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -540,7 +540,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::LOCATION,
                     'destination' => $locationId,
@@ -550,7 +550,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -581,118 +581,118 @@ class UrlAliasHandlerTest extends TestCase
 
     public function providerForTestLookupCustomLocationUrlAlias()
     {
-        return array(
-            array(
+        return [
+            [
                 'autogenerated-hello/everybody',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'autogenerated-hello',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'everybody',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 false,
                 true,
                 315,
                 '2-88150d7d17390010ba6222de68bfafb5',
-            ),
-            array(
+            ],
+            [
                 'hello',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'hello',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 true,
                 false,
                 314,
                 '0-5d41402abc4b2a76b9719d911017c592',
-            ),
-            array(
+            ],
+            [
                 'hello/and/goodbye',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'hello',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'always-available' => 'and',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'goodbye',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 true,
                 false,
                 316,
                 '8-69faab6268350295550de7d587bc323d',
-            ),
-            array(
+            ],
+            [
                 'hello/everyone',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'hello',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'everyone',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 true,
                 false,
                 315,
                 '6-ed881bac6397ede33c0a285c9f50bb83',
-            ),
-            array(
+            ],
+            [
                 'well/ha-ha-ha',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'always-available' => 'well',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'ha-ha-ha',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 false,
                 false,
                 317,
                 '10-17a197f4bbe127c368b889a67effd1b3',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -722,7 +722,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::LOCATION,
                     'destination' => $destination,
@@ -732,7 +732,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => $forward,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -766,7 +766,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::LOCATION,
                     'destination' => $destination,
@@ -776,7 +776,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => $forward,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -784,16 +784,16 @@ class UrlAliasHandlerTest extends TestCase
 
     public function providerForTestLookupVirtualUrlAlias()
     {
-        return array(
-            array(
+        return [
+            [
                 'hello/and',
                 '6-be5d5d37542d75f93a87094459f76678',
-            ),
-            array(
+            ],
+            [
                 'HELLO/AND',
                 '6-be5d5d37542d75f93a87094459f76678',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -818,52 +818,52 @@ class UrlAliasHandlerTest extends TestCase
 
     public function providerForTestLookupResourceUrlAlias()
     {
-        return array(
-            array(
+        return [
+            [
                 'is-alive',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'is-alive',
-                        ),
-                    ),
-                ),
-                array('eng-GB'),
+                        ],
+                    ],
+                ],
+                ['eng-GB'],
                 true,
                 true,
                 'ezinfo/isalive',
                 '0-d003895fa282a14c8ec3eddf23ca4ca2',
-            ),
-            array(
+            ],
+            [
                 'is-alive/then/search',
-                array(
-                    array(
+                [
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'eng-GB' => 'is-alive',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => true,
-                        'translations' => array(
+                        'translations' => [
                             'always-available' => 'then',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'search',
-                        ),
-                    ),
-                ),
-                array('cro-HR'),
+                        ],
+                    ],
+                ],
+                ['cro-HR'],
                 false,
                 false,
                 'content/search',
                 '3-06a943c59f33a34bb5924aaf72cd2995',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -893,7 +893,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::RESOURCE,
                     'destination' => $destination,
@@ -903,7 +903,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => $forward,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -936,7 +936,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::RESOURCE,
                     'destination' => $destination,
@@ -946,7 +946,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => $forward,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1003,58 +1003,58 @@ class UrlAliasHandlerTest extends TestCase
         $urlAliases = $handler->listURLAliasesForLocation(315);
 
         self::assertEquals(
-            array(
+            [
                 new UrlAlias(
-                    array(
+                    [
                         'id' => '2-b8a9f715dbb64fd5c56e7783c6820a61',
                         'type' => UrlAlias::LOCATION,
                         'destination' => 315,
-                        'languageCodes' => array('eng-GB'),
-                        'pathData' => array(
-                            array(
+                        'languageCodes' => ['eng-GB'],
+                        'pathData' => [
+                            [
                                 'always-available' => true,
-                                'translations' => array('cro-HR' => 'jedan'),
-                            ),
-                            array(
+                                'translations' => ['cro-HR' => 'jedan'],
+                            ],
+                            [
                                 'always-available' => false,
-                                'translations' => array(
+                                'translations' => [
                                     'cro-HR' => 'dva',
                                     'eng-GB' => 'two',
-                                ),
-                            ),
-                        ),
+                                ],
+                            ],
+                        ],
                         'alwaysAvailable' => false,
                         'isHistory' => false,
                         'isCustom' => false,
                         'forward' => false,
-                    )
+                    ]
                 ),
                 new UrlAlias(
-                    array(
+                    [
                         'id' => '2-c67ed9a09ab136fae610b6a087d82e21',
                         'type' => UrlAlias::LOCATION,
                         'destination' => 315,
-                        'languageCodes' => array('cro-HR'),
-                        'pathData' => array(
-                            array(
+                        'languageCodes' => ['cro-HR'],
+                        'pathData' => [
+                            [
                                 'always-available' => true,
-                                'translations' => array('cro-HR' => 'jedan'),
-                            ),
-                            array(
+                                'translations' => ['cro-HR' => 'jedan'],
+                            ],
+                            [
                                 'always-available' => false,
-                                'translations' => array(
+                                'translations' => [
                                     'cro-HR' => 'dva',
                                     'eng-GB' => 'two',
-                                ),
-                            ),
-                        ),
+                                ],
+                            ],
+                        ],
                         'alwaysAvailable' => false,
                         'isHistory' => false,
                         'isCustom' => false,
                         'forward' => false,
-                    )
+                    ]
                 ),
-            ),
+            ],
             $urlAliases
         );
     }
@@ -1079,25 +1079,25 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals(4, $this->countRows());
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('simple'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'eng-GB' => 'simple',
                                 'cro-HR' => 'path314',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $publishedUrlAlias
         );
@@ -1150,24 +1150,24 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('simple2');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('simple2'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 315,
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'eng-GB' => 'simple2',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1214,7 +1214,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::LOCATION,
                     'destination' => $locationId,
@@ -1224,7 +1224,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1254,20 +1254,20 @@ class UrlAliasHandlerTest extends TestCase
         foreach ($urlAlias2 as $propertyName => $propertyValue) {
             if ($propertyName === 'languageCodes') {
                 self::assertEquals(
-                    array('cro-HR', 'eng-GB'),
+                    ['cro-HR', 'eng-GB'],
                     $urlAlias2->languageCodes
                 );
             } elseif ($propertyName === 'pathData') {
                 self::assertEquals(
-                    array(
-                        array(
+                    [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
                                 'eng-GB' => 'jedan',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     $urlAlias2->pathData
                 );
             } else {
@@ -1302,24 +1302,24 @@ class UrlAliasHandlerTest extends TestCase
 
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-c67ed9a09ab136fae610b6a087d82e21',
                     'type' => 0,
                     'destination' => 314,
-                    'languageCodes' => array('cro-HR'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['cro-HR'],
+                    'pathData' => [
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $newUrlAlias
         );
@@ -1328,24 +1328,24 @@ class UrlAliasHandlerTest extends TestCase
 
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-6896260129051a949051c3847c34466f',
                     'type' => 0,
                     'destination' => 314,
-                    'languageCodes' => array('cro-HR'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['cro-HR'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $historyUrlAlias
         );
@@ -1376,25 +1376,25 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-c67ed9a09ab136fae610b6a087d82e21',
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
                                 'eng-GB' => 'dva',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1402,25 +1402,25 @@ class UrlAliasHandlerTest extends TestCase
         $downgradedUrlAlias = $handler->lookup('jedan');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-6896260129051a949051c3847c34466f',
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array('cro-HR'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['cro-HR'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
                                 'eng-GB' => 'dva',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $downgradedUrlAlias
         );
@@ -1488,25 +1488,25 @@ class UrlAliasHandlerTest extends TestCase
 
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('one-history'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array('cro-HR'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['cro-HR'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'one-history',
                                 'eng-GB' => 'one-new',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAliasReusesHistory
         );
@@ -1563,22 +1563,22 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $publishedLocationUrlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-de55c2fff721217cc4cb67b58dc35f85',
                     'type' => UrlAlias::LOCATION,
                     'destination' => 315,
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'nop-element'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'nop-element'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $publishedLocationUrlAlias
         );
@@ -1587,16 +1587,16 @@ class UrlAliasHandlerTest extends TestCase
         foreach ($virtualUrlAliasReloaded as $propertyName => $propertyValue) {
             if ($propertyName === 'pathData') {
                 self::assertEquals(
-                    array(
-                        array(
+                    [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'nop-element'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'nop-element'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'search'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'search'],
+                        ],
+                    ],
                     $virtualUrlAliasReloaded->pathData
                 );
             } else {
@@ -1636,16 +1636,16 @@ class UrlAliasHandlerTest extends TestCase
         foreach ($virtualUrlAliasChanged as $propertyName => $propertyValue) {
             if ($propertyName === 'pathData') {
                 self::assertEquals(
-                    array(
-                        array(
+                    [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'nop-element-renamed'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'nop-element-renamed'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'search'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'search'],
+                        ],
+                    ],
                     $virtualUrlAliasChanged->pathData
                 );
             } else {
@@ -1721,22 +1721,22 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('cro-HR' => 'jedan'),
-                        ),
-                    ),
-                    'languageCodes' => array('cro-HR'),
+                            'translations' => ['cro-HR' => 'jedan'],
+                        ],
+                    ],
+                    'languageCodes' => ['cro-HR'],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1744,27 +1744,27 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('nop-element');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('nop-element'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'nop-element',
                                 'eng-GB' => 'dva',
-                            ),
-                        ),
-                    ),
-                    'languageCodes' => array(
+                            ],
+                        ],
+                    ],
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1795,22 +1795,22 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('cro-HR' => 'jedan'),
-                        ),
-                    ),
-                    'languageCodes' => array('cro-HR'),
+                            'translations' => ['cro-HR' => 'jedan'],
+                        ],
+                    ],
+                    'languageCodes' => ['cro-HR'],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1818,27 +1818,27 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('tri');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('tri'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'tri',
                                 'eng-GB' => 'dva',
-                            ),
-                        ),
-                    ),
-                    'languageCodes' => array(
+                            ],
+                        ],
+                    ],
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1860,22 +1860,22 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('cro-HR' => 'jedan'),
-                        ),
-                    ),
-                    'languageCodes' => array('cro-HR'),
+                            'translations' => ['cro-HR' => 'jedan'],
+                        ],
+                    ],
+                    'languageCodes' => ['cro-HR'],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1883,28 +1883,28 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('dva'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
                                 'eng-GB' => 'dva',
-                            ),
-                        ),
-                    ),
-                    'languageCodes' => array(
+                            ],
+                        ],
+                    ],
+                    'languageCodes' => [
                         'cro-HR',
                         'eng-GB',
-                    ),
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -1919,7 +1919,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     public function testCreateCustomUrlAliasBehaviour()
     {
-        $handlerMock = $this->getPartlyMockedHandler(array('createUrlAlias'));
+        $handlerMock = $this->getPartlyMockedHandler(['createUrlAlias']);
 
         $handlerMock->expects(
             $this->once()
@@ -1952,7 +1952,7 @@ class UrlAliasHandlerTest extends TestCase
      */
     public function testCreateGlobalUrlAliasBehaviour()
     {
-        $handlerMock = $this->getPartlyMockedHandler(array('createUrlAlias'));
+        $handlerMock = $this->getPartlyMockedHandler(['createUrlAlias']);
 
         $handlerMock->expects(
             $this->once()
@@ -2000,24 +2000,24 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals(4, $this->countRows());
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5($path),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'custom-location-alias',
-                            ),
-                        ),
-                    ),
-                    'languageCodes' => array('cro-HR'),
+                            ],
+                        ],
+                    ],
+                    'languageCodes' => ['cro-HR'],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => false,
-                )
+                ]
             ),
             $customUrlAlias
         );
@@ -2048,48 +2048,48 @@ class UrlAliasHandlerTest extends TestCase
 
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '7-' . md5('here'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'always-available' => 'there-is-a',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'always-available' => 'noname2',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'always-available' => 'custom-location-alias',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'always-available' => 'noname4',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'here',
-                            ),
-                        ),
-                    ),
-                    'languageCodes' => array('cro-HR'),
+                            ],
+                        ],
+                    ],
+                    'languageCodes' => ['cro-HR'],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => false,
-                )
+                ]
             ),
             $customUrlAlias
         );
@@ -2124,12 +2124,12 @@ class UrlAliasHandlerTest extends TestCase
         foreach ($loadedCustomUrlAlias as $propertyName => $propertyValue) {
             if ($propertyName === 'pathData') {
                 self::assertEquals(
-                    array(
-                        array(
+                    [
+                        [
                             'always-available' => false,
-                            'translations' => array('cro-HR' => $path),
-                        ),
-                    ),
+                            'translations' => ['cro-HR' => $path],
+                        ],
+                    ],
                     $loadedCustomUrlAlias->$propertyName
                 );
             } else {
@@ -2165,30 +2165,30 @@ class UrlAliasHandlerTest extends TestCase
         self::assertEquals(5, $this->countRows());
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '4-' . md5('palunko'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'pathData' => array(
-                        array(
+                    'pathData' => [
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'always-available' => 'ribar',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => true,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'palunko',
-                            ),
-                        ),
-                    ),
-                    'languageCodes' => array('cro-HR'),
+                            ],
+                        ],
+                    ],
+                    'languageCodes' => ['cro-HR'],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => false,
-                )
+                ]
             ),
             $customUrlAlias
         );
@@ -2242,22 +2242,22 @@ class UrlAliasHandlerTest extends TestCase
         );
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-da94285592c46d4396d3ca6904a4aa8f',
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => true,
-                            'translations' => array('eng-GB' => 'history-hello'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'history-hello'],
+                        ],
+                    ],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => true,
-                )
+                ]
             ),
             $handler->lookup('history-hello')
         );
@@ -2290,22 +2290,22 @@ class UrlAliasHandlerTest extends TestCase
         );
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-da94285592c46d4396d3ca6904a4aa8f',
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array('cro-HR'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['cro-HR'],
+                    'pathData' => [
+                        [
                             'always-available' => true,
-                            'translations' => array('cro-HR' => 'history-hello'),
-                        ),
-                    ),
+                            'translations' => ['cro-HR' => 'history-hello'],
+                        ],
+                    ],
                     'alwaysAvailable' => true,
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => true,
-                )
+                ]
             ),
             $handler->lookup('history-hello')
         );
@@ -2340,26 +2340,26 @@ class UrlAliasHandlerTest extends TestCase
         // Check that custom alias whose nop element was reused still works as expected
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-06a943c59f33a34bb5924aaf72cd2995',
                     'type' => UrlAlias::RESOURCE,
                     'destination' => 'content/search',
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => true,
-                            'translations' => array('cro-HR' => 'nop-element'),
-                        ),
-                        array(
+                            'translations' => ['cro-HR' => 'nop-element'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'search'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'search'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => false,
-                )
+                ]
             ),
             $handler->lookup('nop-element/search')
         );
@@ -2413,11 +2413,11 @@ class UrlAliasHandlerTest extends TestCase
         $globalAliasList = $handler->listGlobalURLAliases();
 
         self::assertEquals(
-            array(
+            [
                 $handler->lookup('is-alive'),
                 $handler->lookup('is-alive/then/search'),
                 $handler->lookup('nop-element/search'),
-            ),
+            ],
             $globalAliasList
         );
     }
@@ -2436,10 +2436,10 @@ class UrlAliasHandlerTest extends TestCase
         $globalAliasList = $handler->listGlobalURLAliases('eng-GB');
 
         self::assertEquals(
-            array(
+            [
                 $handler->lookup('is-alive'),
                 $handler->lookup('nop-element/search'),
-            ),
+            ],
             $globalAliasList
         );
     }
@@ -2458,9 +2458,9 @@ class UrlAliasHandlerTest extends TestCase
         $globalAliasList = $handler->listGlobalURLAliases(null, 2);
 
         self::assertEquals(
-            array(
+            [
                 $handler->lookup('nop-element/search'),
-            ),
+            ],
             $globalAliasList
         );
     }
@@ -2479,9 +2479,9 @@ class UrlAliasHandlerTest extends TestCase
         $globalAliasList = $handler->listGlobalURLAliases(null, 1, 1);
 
         self::assertEquals(
-            array(
+            [
                 $handler->lookup('is-alive/then/search'),
-            ),
+            ],
             $globalAliasList
         );
     }
@@ -2509,13 +2509,13 @@ class UrlAliasHandlerTest extends TestCase
             $handler->listURLAliasesForLocation(5)
         );
 
-        $removedAliases = array(
+        $removedAliases = [
             'moved-original-parent/moved-history',
             'moved-original-parent/sub',
             'moved-original-parent',
             'moved-original-parent-history',
             'custom-below/moved-original-parent-custom',
-        );
+        ];
         foreach ($removedAliases as $path) {
             try {
                 $handler->lookup($path);
@@ -2542,22 +2542,22 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('move-this');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('move-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => '4',
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-this'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'move-this'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -2579,22 +2579,22 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('move-this-history');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('move-this-history'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => '4',
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-this-history'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'move-this-history'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -2616,30 +2616,30 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('move-this/sub1/sub2');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '5-' . md5('sub2'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => '6',
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-this'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-this'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub1'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'sub1'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub2'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'sub2'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -2661,30 +2661,30 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('move-here/move-this/sub1');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '9-' . md5('sub1'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => '5',
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-here'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-here'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-this'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-this'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub1'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'sub1'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -2723,34 +2723,34 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('move-here/move-this/sub1/sub2');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '5-' . md5('sub2'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => '6',
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-here'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-here'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-this'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-this'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub1'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'sub1'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub2'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'sub2'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -2772,34 +2772,34 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('move-here/move-this/sub1/sub2-history');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '5-' . md5('sub2-history'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => '6',
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-here'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-here'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-this'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-this'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub1'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'sub1'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub2-history'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'sub2-history'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -2899,34 +2899,34 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('move-here/move-this/sub1/sub2');
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '10-' . md5('sub2'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 600,
-                    'languageCodes' => array('eng-GB'),
-                    'pathData' => array(
-                        array(
+                    'languageCodes' => ['eng-GB'],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-here'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-here'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'move-this'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'move-this'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub1'),
-                        ),
-                        array(
+                            'translations' => ['eng-GB' => 'sub1'],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array('eng-GB' => 'sub2'),
-                        ),
-                    ),
+                            'translations' => ['eng-GB' => 'sub2'],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -2954,7 +2954,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::LOCATION,
                     'destination' => $locationId,
@@ -2964,7 +2964,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -2993,7 +2993,7 @@ class UrlAliasHandlerTest extends TestCase
         self::assertInstanceOf(UrlAlias::class, $urlAlias);
         self::assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => $id,
                     'type' => UrlAlias::RESOURCE,
                     'destination' => $destination,
@@ -3003,7 +3003,7 @@ class UrlAliasHandlerTest extends TestCase
                     'isHistory' => false,
                     'isCustom' => true,
                     'forward' => $forward,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3028,35 +3028,35 @@ class UrlAliasHandlerTest extends TestCase
     protected function getHistoryAlias()
     {
         return new UrlAlias(
-            array(
+            [
                 'id' => '3-5f46413bb0ba5998caef84ab1ea590e1',
                 'type' => UrlAlias::LOCATION,
                 'destination' => '316',
-                'pathData' => array(
-                    array(
+                'pathData' => [
+                    [
                         'always-available' => true,
-                        'translations' => array('cro-HR' => 'jedan'),
-                    ),
-                    array(
+                        'translations' => ['cro-HR' => 'jedan'],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'dva',
                             'eng-GB' => 'two',
-                        ),
-                    ),
-                    array(
+                        ],
+                    ],
+                    [
                         'always-available' => false,
-                        'translations' => array(
+                        'translations' => [
                             'cro-HR' => 'tri-history',
-                        ),
-                    ),
-                ),
-                'languageCodes' => array('cro-HR'),
+                        ],
+                    ],
+                ],
+                'languageCodes' => ['cro-HR'],
                 'alwaysAvailable' => false,
                 'isHistory' => true,
                 'isCustom' => false,
                 'forward' => false,
-            )
+            ]
         );
     }
 
@@ -3148,32 +3148,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3181,32 +3181,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3234,32 +3234,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3267,32 +3267,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3300,32 +3300,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-new');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-new'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-new',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3333,32 +3333,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-new');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-new'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-new',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3406,32 +3406,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias1New = $handler->lookup('jedan/swap-new-22');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-new-22'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-new-22',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias1New
         );
@@ -3439,32 +3439,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias2New = $handler->lookup('dva/swap-new-12');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-new-12'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-new-12',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias2New
         );
@@ -3492,26 +3492,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 315,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3519,26 +3519,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('dva'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3566,26 +3566,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 315,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3593,26 +3593,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('dva'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3640,26 +3640,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3667,26 +3667,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('dva'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 315,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3694,26 +3694,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan-new');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan-new'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 315,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan-new',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3721,26 +3721,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva-new');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('dva-new'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva-new',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3768,26 +3768,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3795,26 +3795,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('dva'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 315,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3822,26 +3822,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan-new');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('jedan-new'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 315,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan-new',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -3849,26 +3849,26 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva-new');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '0-' . md5('dva-new'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 314,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva-new',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4211,33 +4211,33 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-hr');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-hr'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-hr',
                                 'ger-DE' => 'swap-de',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4245,33 +4245,33 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-de');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-de'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'ger-DE',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-hr',
                                 'ger-DE' => 'swap-de',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4279,32 +4279,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-en');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-en'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'eng-GB',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'eng-GB' => 'swap-en',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4312,33 +4312,33 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-hr');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-hr'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'eng-GB' => 'swap-en',
                                 'cro-HR' => 'swap-hr',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4346,33 +4346,33 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-en');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-en'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'eng-GB',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'eng-GB' => 'swap-en',
                                 'cro-HR' => 'swap-hr',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4380,32 +4380,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-de');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-de'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'ger-DE',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'ger-DE' => 'swap-de',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4433,35 +4433,35 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-this');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'ger-DE',
                         'nor-NO',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-hr',
                                 'ger-DE' => 'swap-this',
                                 'nor-NO' => 'swap-this',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4469,32 +4469,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-en');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-en'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'eng-GB',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'eng-GB' => 'swap-en',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4502,32 +4502,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-hr');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-hr'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-hr',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4535,35 +4535,35 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-this');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
                         'ger-DE',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-this',
                                 'ger-DE' => 'swap-this',
                                 'eng-GB' => 'swap-en',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4591,32 +4591,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-this');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-this',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4624,32 +4624,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-en');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-en'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'eng-GB',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'eng-GB' => 'swap-en',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4657,34 +4657,34 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-hr');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-hr'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-hr',
                                 'ger-DE' => 'swap-that',
                                 'nor-NO' => 'swap-that',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4692,35 +4692,35 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-that');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-that'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'ger-DE',
                         'nor-NO',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-hr',
                                 'ger-DE' => 'swap-that',
                                 'nor-NO' => 'swap-that',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4728,32 +4728,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-hr');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-hr'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-hr',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4761,34 +4761,34 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-that');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-that'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'ger-DE',
                         'nor-NO',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'ger-DE' => 'swap-that',
                                 'nor-NO' => 'swap-that',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4796,33 +4796,33 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-this');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-this',
                                 'eng-GB' => 'swap-en',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4830,33 +4830,33 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-en');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-en'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'eng-GB',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-this',
                                 'eng-GB' => 'swap-en',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4884,32 +4884,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-that');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-that'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 318,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-that',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4917,32 +4917,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-this');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 319,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-this',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4950,32 +4950,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-that');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-that'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 319,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-that',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -4983,32 +4983,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-this');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 318,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-this',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -5036,32 +5036,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-that');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-that'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-that',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -5069,32 +5069,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-this');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-this',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => false,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -5102,32 +5102,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('dva/swap-that');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '3-' . md5('swap-that'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 317,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'dva',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-that',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -5135,32 +5135,32 @@ class UrlAliasHandlerTest extends TestCase
         $urlAlias = $handler->lookup('jedan/swap-this');
         $this->assertEquals(
             new UrlAlias(
-                array(
+                [
                     'id' => '2-' . md5('swap-this'),
                     'type' => UrlAlias::LOCATION,
                     'destination' => 316,
-                    'languageCodes' => array(
+                    'languageCodes' => [
                         'cro-HR',
-                    ),
-                    'pathData' => array(
-                        array(
+                    ],
+                    'pathData' => [
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'jedan',
-                            ),
-                        ),
-                        array(
+                            ],
+                        ],
+                        [
                             'always-available' => false,
-                            'translations' => array(
+                            'translations' => [
                                 'cro-HR' => 'swap-this',
-                            ),
-                        ),
-                    ),
+                            ],
+                        ],
+                    ],
                     'alwaysAvailable' => false,
                     'isHistory' => true,
                     'isCustom' => false,
                     'forward' => false,
-                )
+                ]
             ),
             $urlAlias
         );
@@ -5313,7 +5313,7 @@ class UrlAliasHandlerTest extends TestCase
     {
         return $this->getMockBuilder(Handler::class)
             ->setConstructorArgs(
-                array(
+                [
                     $this->createMock(UrlAliasGateway::class),
                     $this->createMock(Mapper::class),
                     $this->createMock(LocationGateway::class),
@@ -5322,7 +5322,7 @@ class UrlAliasHandlerTest extends TestCase
                     $this->createMock(Gateway::class),
                     $this->createMock(LanguageMaskGenerator::class),
                     $this->createMock(TransactionHandler::class),
-                )
+                ]
             )
             ->setMethods($methods)
             ->getMock();

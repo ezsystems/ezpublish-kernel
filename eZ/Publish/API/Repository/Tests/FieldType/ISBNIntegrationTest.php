@@ -36,12 +36,12 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'isISBN13' => array(
+        return [
+            'isISBN13' => [
                 'type' => 'boolean',
                 'default' => true,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -51,9 +51,9 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'isISBN13' => true,
-        );
+        ];
     }
 
     /**
@@ -63,9 +63,9 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -75,7 +75,7 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -85,7 +85,7 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -95,9 +95,9 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 42),
-        );
+        return [
+            'unknown' => ['value' => 42],
+        ];
     }
 
     /**
@@ -166,24 +166,24 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 '9789722',
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-            array(
+            ],
+            [
                 'NON_VALID_ISBN_CODE',
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-            array(
+            ],
+            [
                 new \stdClass(),
                 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
+            ],
+            [
                 new ISBNValue('97897225'),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\ContentFieldValidationException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -288,20 +288,20 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new ISBNValue('9789722514095'),
                 '9789722514095',
-            ),
-            array(
+            ],
+            [
                 new ISBNValue('978-972-25-1409-5'),
                 '978-972-25-1409-5',
-            ),
-            array(
+            ],
+            [
                 new ISBNValue('0-9752298-0-X'),
                 '0-9752298-0-X',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -313,42 +313,42 @@ class ISBNIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 '9789722514095',
                 new ISBNValue('9789722514095'),
-            ),
-            array(
+            ],
+            [
                 '978-972-25-1409-5',
                 new ISBNValue('978-972-25-1409-5'),
-            ),
-            array(
+            ],
+            [
                 '0-9752298-0-X',
                 new ISBNValue('0-9752298-0-X'),
-            ),
-            array(
+            ],
+            [
                 '097522980X',
                 new ISBNValue('097522980X'),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new ISBNValue()),
-            array(new ISBNValue(null)),
-            array(new ISBNValue('')),
-        );
+        return [
+            [new ISBNValue()],
+            [new ISBNValue(null)],
+            [new ISBNValue('')],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()

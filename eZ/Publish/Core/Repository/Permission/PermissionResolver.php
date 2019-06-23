@@ -97,10 +97,10 @@ class PermissionResolver implements PermissionResolverInterface
         }
 
         // Uses SPI to avoid triggering permission checks in Role/User service
-        $permissionSets = array();
+        $permissionSets = [];
         $spiRoleAssignments = $this->userHandler->loadRoleAssignmentsByGroupId($userReference->getUserId(), true);
         foreach ($spiRoleAssignments as $spiRoleAssignment) {
-            $permissionSet = array('limitation' => null, 'policies' => array());
+            $permissionSet = ['limitation' => null, 'policies' => []];
 
             $spiRole = $this->userHandler->loadRole($spiRoleAssignment->roleId);
             foreach ($spiRole->policies as $spiPolicy) {

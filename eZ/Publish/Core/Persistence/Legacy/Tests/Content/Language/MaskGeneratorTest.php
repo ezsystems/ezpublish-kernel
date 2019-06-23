@@ -42,28 +42,28 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      */
     public static function getLanguageMaskData()
     {
-        return array(
-            'error' => array(
-                array(),
+        return [
+            'error' => [
+                [],
                 0,
-            ),
-            'single_lang' => array(
-                array('eng-GB' => true),
+            ],
+            'single_lang' => [
+                ['eng-GB' => true],
                 4,
-            ),
-            'multi_lang' => array(
-                array('eng-US' => true, 'eng-GB' => true),
+            ],
+            'multi_lang' => [
+                ['eng-US' => true, 'eng-GB' => true],
                 6,
-            ),
-            'always_available' => array(
-                array('always-available' => 'eng-US', 'eng-US' => true),
+            ],
+            'always_available' => [
+                ['always-available' => 'eng-US', 'eng-US' => true],
                 3,
-            ),
-            'full' => array(
-                array('always-available' => 'eng-US', 'eng-US' => true, 'eng-GB' => true),
+            ],
+            'full' => [
+                ['always-available' => 'eng-US', 'eng-US' => true, 'eng-GB' => true],
                 7,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -94,18 +94,18 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      */
     public static function getLanguageIndicatorData()
     {
-        return array(
-            'not_available' => array(
+        return [
+            'not_available' => [
                 'eng-GB',
                 false,
                 4,
-            ),
-            'always_available' => array(
+            ],
+            'always_available' => [
                 'eng-US',
                 true,
                 3,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -118,10 +118,10 @@ class MaskGeneratorTest extends LanguageAwareTestCase
         $this->assertTrue(
             $generator->isLanguageAlwaysAvailable(
                 'eng-GB',
-                array(
+                [
                     'always-available' => 'eng-GB',
                     'eng-GB' => 'lala',
-                )
+                ]
             )
         );
     }
@@ -136,10 +136,10 @@ class MaskGeneratorTest extends LanguageAwareTestCase
         $this->assertFalse(
             $generator->isLanguageAlwaysAvailable(
                 'eng-GB',
-                array(
+                [
                     'always-available' => 'eng-US',
                     'eng-GB' => 'lala',
-                )
+                ]
             )
         );
     }
@@ -154,9 +154,9 @@ class MaskGeneratorTest extends LanguageAwareTestCase
         $this->assertFalse(
             $generator->isLanguageAlwaysAvailable(
                 'eng-GB',
-                array(
+                [
                     'eng-GB' => 'lala',
-                )
+                ]
             )
         );
     }
@@ -181,13 +181,13 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      */
     public function isAlwaysAvailableProvider()
     {
-        return array(
-            array(2, false),
-            array(3, true),
-            array(62, false),
-            array(14, false),
-            array(15, true),
-        );
+        return [
+            [2, false],
+            [3, true],
+            [62, false],
+            [14, false],
+            [15, true],
+        ];
     }
 
     /**
@@ -207,12 +207,12 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      */
     public function removeAlwaysAvailableFlagProvider()
     {
-        return array(
-            array(3, 2),
-            array(7, 6),
-            array(14, 14),
-            array(62, 62),
-        );
+        return [
+            [3, 2],
+            [7, 6],
+            [14, 14],
+            [62, 62],
+        ];
     }
 
     /**
@@ -235,20 +235,20 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      */
     public function languageIdsFromMaskProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 2,
-                array(2),
-            ),
-            array(
+                [2],
+            ],
+            [
                 15,
-                array(2, 4, 8),
-            ),
-            array(
+                [2, 4, 8],
+            ],
+            [
                 62,
-                array(2, 4, 8, 16, 32),
-            ),
-        );
+                [2, 4, 8, 16, 32],
+            ],
+        ];
     }
 
     /**
@@ -278,19 +278,19 @@ class MaskGeneratorTest extends LanguageAwareTestCase
                                               switch ($languageCode) {
                                                   case 'eng-US':
                                                       return new Language(
-                                                          array(
+                                                          [
                                                               'id' => 2,
                                                               'languageCode' => 'eng-US',
                                                               'name' => 'US english',
-                                                          )
+                                                          ]
                                                       );
                                                   case 'eng-GB':
                                                       return new Language(
-                                                          array(
+                                                          [
                                                               'id' => 4,
                                                               'languageCode' => 'eng-GB',
                                                               'name' => 'British english',
-                                                          )
+                                                          ]
                                                       );
                                               }
                                           }

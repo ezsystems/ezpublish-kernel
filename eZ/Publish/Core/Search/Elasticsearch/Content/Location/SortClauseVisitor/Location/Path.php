@@ -37,10 +37,10 @@ class Path extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return array(
-            'path_string_id' => array(
+        return [
+            'path_string_id' => [
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

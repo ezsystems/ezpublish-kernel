@@ -60,7 +60,7 @@ class OwnerLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new OwnerLimitation(
-                array('limitationValues' => array(1))
+                ['limitationValues' => [1]]
             )
         );
         $roleService->updatePolicy($removePolicy, $policyUpdate);
@@ -125,7 +125,7 @@ class OwnerLimitationTest extends BaseLimitationTest
         $policyUpdate = $roleService->newPolicyUpdateStruct();
         $policyUpdate->addLimitation(
             new OwnerLimitation(
-                array('limitationValues' => array(1))
+                ['limitationValues' => [1]]
             )
         );
         $roleService->updatePolicy($removePolicy, $policyUpdate);

@@ -49,9 +49,9 @@ class Content extends RestController
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_loadContent',
-                array(
+                [
                     'contentId' => $contentInfo->id,
-                )
+                ]
             )
         );
     }
@@ -102,7 +102,7 @@ class Content extends RestController
 
         return new Values\CachedValue(
             $restContent,
-            array('locationId' => $contentInfo->mainLocationId)
+            ['locationId' => $contentInfo->mainLocationId]
         );
     }
 
@@ -117,7 +117,7 @@ class Content extends RestController
     {
         $updateStruct = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );
@@ -170,10 +170,10 @@ class Content extends RestController
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_loadContentInVersion',
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNumber' => $contentInfo->currentVersionNo,
-                )
+                ]
             )
         );
     }
@@ -215,7 +215,7 @@ class Content extends RestController
 
         return new Values\CachedValue(
             $versionValue,
-            array('locationId' => $content->contentInfo->mainLocationId)
+            ['locationId' => $content->contentInfo->mainLocationId]
         );
     }
 
@@ -276,7 +276,7 @@ class Content extends RestController
         return new Values\ResourceCreated(
             $this->router->generate(
                 'ezpublish_rest_loadContent',
-                array('contentId' => $copiedContent->id)
+                ['contentId' => $copiedContent->id]
             )
         );
     }
@@ -403,13 +403,13 @@ class Content extends RestController
         );
 
         return new Values\CreatedVersion(
-            array(
+            [
                 'version' => new Values\Version(
                     $contentDraft,
                     $contentType,
                     $this->repository->getContentService()->loadRelations($contentDraft->getVersionInfo())
                 ),
-            )
+            ]
         );
     }
 
@@ -437,13 +437,13 @@ class Content extends RestController
         $contentDraft = $this->repository->getContentService()->createContentDraft($contentInfo);
 
         return new Values\CreatedVersion(
-            array(
+            [
                 'version' => new Values\Version(
                     $contentDraft,
                     $contentType,
                     $this->repository->getContentService()->loadRelations($contentDraft->getVersionInfo())
                 ),
-            )
+            ]
         );
     }
 
@@ -462,16 +462,16 @@ class Content extends RestController
     {
         $contentUpdateStruct = $this->inputDispatcher->parse(
             new Message(
-                array(
+                [
                     'Content-Type' => $request->headers->get('Content-Type'),
                     'Url' => $this->router->generate(
                         'ezpublish_rest_updateVersion',
-                        array(
+                        [
                             'contentId' => $contentId,
                             'versionNumber' => $versionNumber,
-                        )
+                        ]
                     ),
-                ),
+                ],
                 $request->getContent()
             )
         );
@@ -558,10 +558,10 @@ class Content extends RestController
         return new Values\TemporaryRedirect(
             $this->router->generate(
                 'ezpublish_rest_redirectCurrentVersionRelations',
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNumber' => $contentInfo->currentVersionNo,
-                )
+                ]
             )
         );
     }
@@ -603,7 +603,7 @@ class Content extends RestController
 
         return new Values\CachedValue(
             $relationListValue,
-            array('locationId' => $contentInfo->mainLocationId)
+            ['locationId' => $contentInfo->mainLocationId]
         );
     }
 
@@ -635,7 +635,7 @@ class Content extends RestController
 
                 return new Values\CachedValue(
                     $relation,
-                    array('locationId' => $contentInfo->mainLocationId)
+                    ['locationId' => $contentInfo->mainLocationId]
                 );
             }
         }
@@ -697,7 +697,7 @@ class Content extends RestController
     {
         $destinationContentId = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );
@@ -724,9 +724,9 @@ class Content extends RestController
         $relation = $this->repository->getContentService()->addRelation($versionInfo, $destinationContentInfo);
 
         return new Values\CreatedRelation(
-            array(
+            [
                 'relation' => new Values\RestRelation($relation, $contentId, $versionNumber),
-            )
+            ]
         );
     }
 
@@ -770,7 +770,7 @@ class Content extends RestController
     {
         return $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type'), 'Url' => $request->getPathInfo()),
+                ['Content-Type' => $request->headers->get('Content-Type'), 'Url' => $request->getPathInfo()],
                 $request->getContent()
             )
         );
@@ -795,7 +795,7 @@ class Content extends RestController
 
             $content = $this->repository->getContentService()->createContent(
                 $contentCreateStruct,
-                array($contentCreate->locationCreateStruct)
+                [$contentCreate->locationCreateStruct]
             );
         } catch (ContentValidationException $e) {
             throw new BadRequestException($e->getMessage());
@@ -815,7 +815,7 @@ class Content extends RestController
         }
 
         return new Values\CreatedContent(
-            array(
+            [
                 'content' => new Values\RestContent(
                     $content->contentInfo,
                     null,
@@ -823,7 +823,7 @@ class Content extends RestController
                     $contentType,
                     $relations
                 ),
-            )
+            ]
         );
     }
 }

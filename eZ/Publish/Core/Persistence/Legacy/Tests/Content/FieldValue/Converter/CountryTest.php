@@ -35,10 +35,10 @@ class CountryTest extends TestCase
 
     public function providerForTestToStorageValue()
     {
-        return array(
-            array(array('BE', 'FR'), 'belgium,france', 'BE,FR', 'belgium,france'),
-            array(null, '', '', ''),
-        );
+        return [
+            [['BE', 'FR'], 'belgium,france', 'BE,FR', 'belgium,france'],
+            [null, '', '', ''],
+        ];
     }
 
     /**
@@ -61,10 +61,10 @@ class CountryTest extends TestCase
 
     public function providerForTestToFieldValue()
     {
-        return array(
-            array('BE,FR', 'belgium,france', array('BE', 'FR')),
-            array('', '', null),
-        );
+        return [
+            ['BE,FR', 'belgium,france', ['BE', 'FR']],
+            ['', '', null],
+        ];
     }
 
     /**
@@ -92,21 +92,21 @@ class CountryTest extends TestCase
     public function testToStorageFieldDefinitionMultiple()
     {
         $defaultValue = new FieldValue();
-        $defaultValue->data = array('BE', 'FR');
+        $defaultValue->data = ['BE', 'FR'];
         $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'isMultiple' => true,
-            )
+            ]
         );
 
         $storageFieldDef = new StorageFieldDefinition();
         $this->converter->toStorageFieldDefinition(
             new PersistenceFieldDefinition(
-                array(
+                [
                     'fieldTypeConstraints' => $fieldTypeConstraints,
                     'defaultValue' => $defaultValue,
-                )
+                ]
             ),
             $storageFieldDef
         );
@@ -129,17 +129,17 @@ class CountryTest extends TestCase
     {
         $fieldTypeConstraints = new FieldTypeConstraints();
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
+            [
                 'isMultiple' => false,
-            )
+            ]
         );
 
         $storageFieldDef = new StorageFieldDefinition();
         $this->converter->toStorageFieldDefinition(
             new PersistenceFieldDefinition(
-                array(
+                [
                     'fieldTypeConstraints' => $fieldTypeConstraints,
-                )
+                ]
             ),
             $storageFieldDef
         );
@@ -163,10 +163,10 @@ class CountryTest extends TestCase
 
         $this->converter->toFieldDefinition(
             new StorageFieldDefinition(
-                array(
+                [
                     'dataInt1' => 1,
                     'dataText5' => 'BE,FR',
-                )
+                ]
             ),
             $fieldDef
         );
@@ -175,7 +175,7 @@ class CountryTest extends TestCase
             $fieldDef->fieldTypeConstraints->fieldSettings['isMultiple']
         );
         self::assertEquals(
-            array('BE', 'FR'),
+            ['BE', 'FR'],
             $fieldDef->defaultValue->data
         );
     }
@@ -191,10 +191,10 @@ class CountryTest extends TestCase
 
         $this->converter->toFieldDefinition(
             new StorageFieldDefinition(
-                array(
+                [
                     'dataInt1' => 0,
                     'dataText5' => '',
-                )
+                ]
             ),
             $fieldDef
         );

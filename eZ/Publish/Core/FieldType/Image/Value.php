@@ -97,7 +97,7 @@ class Value extends BaseValue
      *
      * @param array $imageData
      */
-    public function __construct(array $imageData = array())
+    public function __construct(array $imageData = [])
     {
         foreach ($imageData as $key => $value) {
             try {
@@ -134,11 +134,11 @@ class Value extends BaseValue
         }
 
         return new static(
-            array(
+            [
                 'inputUri' => $path,
                 'fileName' => basename($path),
                 'fileSize' => filesize($path),
-            )
+            ]
         );
     }
 

@@ -72,7 +72,7 @@ class ExpressionRouterRootResourceBuilder implements RootResourceBuilderInterfac
     {
         $language = new ExpressionLanguage();
 
-        $resources = array();
+        $resources = [];
         foreach ($this->resourceConfig as $name => $resource) {
             $resources[] = new Values\Resource(
                 $name,

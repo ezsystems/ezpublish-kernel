@@ -37,7 +37,7 @@ class MultipleIntegerMapper extends IntegerMapper
      */
     public function map(Field $field)
     {
-        $values = array();
+        $values = [];
 
         foreach ((array)$field->value as $value) {
             $values[] = $this->convert($value);

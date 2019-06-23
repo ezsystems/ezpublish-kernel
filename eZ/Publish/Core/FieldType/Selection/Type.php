@@ -30,16 +30,16 @@ class Type extends FieldType
      *
      * @var mixed
      */
-    protected $settingsSchema = array(
-        'isMultiple' => array(
+    protected $settingsSchema = [
+        'isMultiple' => [
             'type' => 'bool',
             'default' => false,
-        ),
-        'options' => array(
+        ],
+        'options' => [
             'type' => 'hash',
-            'default' => array(),
-        ),
-    );
+            'default' => [],
+        ],
+    ];
 
     /**
      * Validates the fieldSettings of a FieldDefinitionCreateStruct or FieldDefinitionUpdateStruct.
@@ -50,7 +50,7 @@ class Type extends FieldType
      */
     public function validateFieldSettings($fieldSettings)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($fieldSettings as $settingKey => $settingValue) {
             switch ($settingKey) {
@@ -59,11 +59,11 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
-                            array(
+                            [
                                 '%fieldType%' => $this->getFieldTypeIdentifier(),
                                 '%setting%' => $settingKey,
                                 '%type%' => 'bool',
-                            ),
+                            ],
                             "[$settingKey]"
                         );
                     }
@@ -73,11 +73,11 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             "FieldType '%fieldType%' expects setting '%setting%' to be of type '%type%'",
                             null,
-                            array(
+                            [
                                 '%fieldType%' => $this->getFieldTypeIdentifier(),
                                 '%setting%' => $settingKey,
                                 '%type%' => 'hash',
-                            ),
+                            ],
                             "[$settingKey]"
                         );
                     }
@@ -86,9 +86,9 @@ class Type extends FieldType
                     $validationErrors[] = new ValidationError(
                         "Setting '%setting%' is unknown",
                         null,
-                        array(
+                        [
                             '%setting%' => $settingKey,
-                        ),
+                        ],
                         "[$settingKey]"
                     );
             }
@@ -181,7 +181,7 @@ class Type extends FieldType
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         if ($this->isEmptyValue($fieldValue)) {
             return $validationErrors;
@@ -194,7 +194,7 @@ class Type extends FieldType
             $validationErrors[] = new ValidationError(
                 'Field definition does not allow multiple options to be selected.',
                 null,
-                array(),
+                [],
                 'selection'
             );
         }
@@ -204,9 +204,9 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     'Option with index %index% does not exist in the field definition.',
                     null,
-                    array(
+                    [
                         '%index%' => $optionIndex,
-                    ),
+                    ],
                     'selection'
                 );
             }

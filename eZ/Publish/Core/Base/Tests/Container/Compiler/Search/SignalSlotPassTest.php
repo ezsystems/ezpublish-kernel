@@ -38,7 +38,7 @@ class SignalSlotPassTest extends AbstractCompilerPassTestCase
         $signal = 'signal_identifier';
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag('ezpublish.search.slot', array('signal' => $signal));
+        $def->addTag('ezpublish.search.slot', ['signal' => $signal]);
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
@@ -46,7 +46,7 @@ class SignalSlotPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.signalslot.signal_dispatcher',
             'attach',
-            array($signal, new Reference($serviceId))
+            [$signal, new Reference($serviceId)]
         );
     }
 
@@ -66,7 +66,7 @@ class SignalSlotPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.signalslot.signal_dispatcher',
             'attach',
-            array($signal, new Reference($serviceId))
+            [$signal, new Reference($serviceId)]
         );
     }
 }

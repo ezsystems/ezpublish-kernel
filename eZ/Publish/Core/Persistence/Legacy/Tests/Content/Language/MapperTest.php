@@ -32,7 +32,7 @@ class MapperTest extends TestCase
         $this->assertStructsEqual(
             $this->getLanguageFixture(),
             $result,
-            array('languageCode', 'name', 'isEnabled')
+            ['languageCode', 'name', 'isEnabled']
         );
     }
 
@@ -60,10 +60,10 @@ class MapperTest extends TestCase
      */
     protected function getRowsFixture()
     {
-        return array(
-            array('disabled' => '0', 'id' => '2', 'locale' => 'eng-US', 'name' => 'English (American)'),
-            array('disabled' => '0', 'id' => '4', 'locale' => 'eng-GB', 'name' => 'English (United Kingdom)'),
-        );
+        return [
+            ['disabled' => '0', 'id' => '2', 'locale' => 'eng-US', 'name' => 'English (American)'],
+            ['disabled' => '0', 'id' => '4', 'locale' => 'eng-GB', 'name' => 'English (United Kingdom)'],
+        ];
     }
 
     /**
@@ -85,7 +85,7 @@ class MapperTest extends TestCase
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 
-        return array('eng-US' => $langUs, 'eng-GB' => $langGb);
+        return ['eng-US' => $langUs, 'eng-GB' => $langGb];
     }
 
     /**

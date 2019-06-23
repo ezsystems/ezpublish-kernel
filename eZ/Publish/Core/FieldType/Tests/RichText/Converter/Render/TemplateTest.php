@@ -23,8 +23,8 @@ class TemplateTest extends TestCase
 
     public function providerForTestConvert()
     {
-        return array(
-            array(
+        return [
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template1"/>
@@ -35,18 +35,18 @@ class TemplateTest extends TestCase
     <ezpayload><![CDATA[template1]]></ezpayload>
   </eztemplate>
 </section>',
-                array(
-                    array(
+                [
+                    [
                         'name' => 'template1',
                         'is_inline' => false,
-                        'params' => array(
+                        'params' => [
                             'name' => 'template1',
-                            'params' => array(),
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                            'params' => [],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template2">
@@ -88,32 +88,32 @@ class TemplateTest extends TestCase
     <ezpayload><![CDATA[template2]]></ezpayload>
   </eztemplate>
 </section>',
-                array(
-                    array(
+                [
+                    [
                         'name' => 'template2',
                         'is_inline' => false,
-                        'params' => array(
+                        'params' => [
                             'name' => 'template2',
                             'content' => 'content2',
-                            'params' => array(
+                            'params' => [
                                 'size' => 'medium',
                                 'offset' => 10,
                                 'limit' => 5,
-                                'hey' => array(
-                                    'look' => array(
-                                        'at' => array(
+                                'hey' => [
+                                    'look' => [
+                                        'at' => [
                                             'this' => 'wohoo',
                                             'that' => 'weeee',
-                                        ),
-                                    ),
+                                        ],
+                                    ],
                                     'what' => 'get to the chopper',
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template3"/>
@@ -128,26 +128,26 @@ class TemplateTest extends TestCase
     <ezpayload><![CDATA[template4]]></ezpayload>
   </eztemplateinline>
 </section>',
-                array(
-                    array(
+                [
+                    [
                         'name' => 'template3',
                         'is_inline' => false,
-                        'params' => array(
+                        'params' => [
                             'name' => 'template3',
-                            'params' => array(),
-                        ),
-                    ),
-                    array(
+                            'params' => [],
+                        ],
+                    ],
+                    [
                         'name' => 'template4',
                         'is_inline' => true,
-                        'params' => array(
+                        'params' => [
                             'name' => 'template4',
-                            'params' => array(),
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                            'params' => [],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template5"/>
@@ -158,18 +158,18 @@ class TemplateTest extends TestCase
     <ezpayload><![CDATA[template5]]></ezpayload>
   </eztemplate>
 </section>',
-                array(
-                    array(
+                [
+                    [
                         'name' => 'template5',
                         'is_inline' => false,
-                        'params' => array(
+                        'params' => [
                             'name' => 'template5',
-                            'params' => array(),
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                            'params' => [],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook">
   <eztemplateinline name="template6"/>
@@ -180,18 +180,18 @@ class TemplateTest extends TestCase
     <ezpayload><![CDATA[template6]]></ezpayload>
   </eztemplateinline>
 </section>',
-                array(
-                    array(
+                [
+                    [
                         'name' => 'template6',
                         'is_inline' => true,
-                        'params' => array(
+                        'params' => [
                             'name' => 'template6',
-                            'params' => array(),
-                        ),
-                    ),
-                ),
-            ),
-            array(
+                            'params' => [],
+                        ],
+                    ],
+                ],
+            ],
+            [
                 '<?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook">
   <eztemplate name="template7">
@@ -207,28 +207,28 @@ class TemplateTest extends TestCase
     <ezpayload><![CDATA[template7]]></ezpayload>
   </eztemplate>
 </section>',
-                array(
-                    array(
+                [
+                    [
                         'name' => 'template8',
                         'is_inline' => false,
-                        'params' => array(
+                        'params' => [
                             'name' => 'template8',
                             'content' => 'content8',
-                            'params' => array(),
-                        ),
-                    ),
-                    array(
+                            'params' => [],
+                        ],
+                    ],
+                    [
                         'name' => 'template7',
                         'is_inline' => false,
-                        'params' => array(
+                        'params' => [
                             'name' => 'template7',
                             'content' => 'content7template8',
-                            'params' => array(),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                            'params' => [],
+                        ],
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**

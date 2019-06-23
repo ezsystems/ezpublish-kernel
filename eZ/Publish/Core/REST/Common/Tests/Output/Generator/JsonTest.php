@@ -176,7 +176,7 @@ class JsonTest extends GeneratorTest
 
         $generator->startHashElement('elements');
 
-        $generator->startValueElement('element', 'element value 1', array('attribute' => 'attribute value 1'));
+        $generator->startValueElement('element', 'element value 1', ['attribute' => 'attribute value 1']);
         $generator->endValueElement('element');
 
         $generator->endHashElement('elements');

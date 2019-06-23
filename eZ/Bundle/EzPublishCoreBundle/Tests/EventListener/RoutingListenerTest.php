@@ -52,9 +52,9 @@ class RoutingListenerTest extends TestCase
     {
         $listener = new RoutingListener($this->configResolver, $this->urlAliasRouter, $this->urlAliasGenerator);
         $this->assertSame(
-            array(
-                MVCEvents::SITEACCESS => array('onSiteAccessMatch', 200),
-            ),
+            [
+                MVCEvents::SITEACCESS => ['onSiteAccessMatch', 200],
+            ],
             $listener->getSubscribedEvents()
         );
     }
@@ -62,16 +62,16 @@ class RoutingListenerTest extends TestCase
     public function testOnSiteAccessMatch()
     {
         $rootLocationId = 123;
-        $excludedUriPrefixes = array('/foo/bar', '/baz');
+        $excludedUriPrefixes = ['/foo/bar', '/baz'];
         $this->configResolver
             ->expects($this->any())
             ->method('getParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('content.tree_root.location_id', null, null, $rootLocationId),
-                        array('content.tree_root.excluded_uri_prefixes', null, null, $excludedUriPrefixes),
-                    )
+                    [
+                        ['content.tree_root.location_id', null, null, $rootLocationId],
+                        ['content.tree_root.excluded_uri_prefixes', null, null, $excludedUriPrefixes],
+                    ]
                 )
             );
 

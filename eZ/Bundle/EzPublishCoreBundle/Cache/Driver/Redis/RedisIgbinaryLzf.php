@@ -30,7 +30,7 @@ class RedisIgbinaryLzf extends StashRedis
     {
         lzf_optimized_for(0);
 
-        $store = lzf_compress(igbinary_serialize(array('data' => $data, 'expiration' => $expiration)));
+        $store = lzf_compress(igbinary_serialize(['data' => $data, 'expiration' => $expiration]));
         if (null === $expiration) {
             return $this->redis->set($this->makeKeyString($key), $store);
         } else {

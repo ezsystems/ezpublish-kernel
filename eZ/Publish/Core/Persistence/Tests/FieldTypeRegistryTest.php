@@ -24,12 +24,12 @@ class FieldTypeRegistryTest extends TestCase
     public function testConstructor()
     {
         $fieldType = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array('some-type' => $fieldType));
+        $registry = new FieldTypeRegistry(['some-type' => $fieldType]);
 
         $this->assertAttributeSame(
-            array(
+            [
                 'some-type' => $fieldType,
-            ),
+            ],
             'coreFieldTypeMap',
             $registry
         );
@@ -41,7 +41,7 @@ class FieldTypeRegistryTest extends TestCase
     public function testGetFieldTypeInstance()
     {
         $instance = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array('some-type' => $instance));
+        $registry = new FieldTypeRegistry(['some-type' => $instance]);
 
         $result = $registry->getFieldType('some-type');
 
@@ -62,7 +62,7 @@ class FieldTypeRegistryTest extends TestCase
         $closure = function () use ($instance) {
             return $instance;
         };
-        $registry = new FieldTypeRegistry(array('some-type' => $closure));
+        $registry = new FieldTypeRegistry(['some-type' => $closure]);
 
         $result = $registry->getFieldType('some-type');
 
@@ -82,7 +82,7 @@ class FieldTypeRegistryTest extends TestCase
      */
     public function testGetNotFound()
     {
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry([]);
         $registry->getFieldType('not-found');
     }
 
@@ -94,7 +94,7 @@ class FieldTypeRegistryTest extends TestCase
      */
     public function testGetNotFoundBCException()
     {
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry([]);
         $registry->getFieldType('not-found');
     }
 
@@ -105,7 +105,7 @@ class FieldTypeRegistryTest extends TestCase
      */
     public function testGetNotCallableOrInstance()
     {
-        $registry = new FieldTypeRegistry(array('some-type' => new \DateTime()));
+        $registry = new FieldTypeRegistry(['some-type' => new \DateTime()]);
         $registry->getFieldType('some-type');
     }
 
@@ -115,13 +115,13 @@ class FieldTypeRegistryTest extends TestCase
     public function testRegister()
     {
         $fieldType = $this->getFieldTypeMock();
-        $registry = new FieldTypeRegistry(array());
+        $registry = new FieldTypeRegistry([]);
         $registry->register('some-type', $fieldType);
 
         $this->assertAttributeSame(
-            array(
+            [
                 'some-type' => $fieldType,
-            ),
+            ],
             'coreFieldTypeMap',
             $registry
         );

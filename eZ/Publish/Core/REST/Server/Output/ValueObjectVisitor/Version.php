@@ -95,10 +95,10 @@ class Version extends ValueObjectVisitor
         if ($path == null) {
             $path = $this->router->generate(
                 'ezpublish_rest_loadContentInVersion',
-                array(
+                [
                     'contentId' => $content->id,
                     'versionNumber' => $versionInfo->versionNo,
-                )
+                ]
             );
         }
 

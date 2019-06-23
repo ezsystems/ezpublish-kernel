@@ -36,16 +36,16 @@ class CacheTest extends TestCase
         $cache->store($languageFixture);
 
         $this->assertAttributeEquals(
-            array(
+            [
                 $languageFixture->id => $languageFixture,
-            ),
+            ],
             'mapById',
             $cache
         );
         $this->assertAttributeEquals(
-            array(
+            [
                 $languageFixture->languageCode => $languageFixture,
-            ),
+            ],
             'mapByLocale',
             $cache
         );
@@ -64,12 +64,12 @@ class CacheTest extends TestCase
         $cache->remove($languageFixture->id);
 
         $this->assertAttributeEquals(
-            array(),
+            [],
             'mapById',
             $cache
         );
         $this->assertAttributeEquals(
-            array(),
+            [],
             'mapByLocale',
             $cache
         );
@@ -149,7 +149,7 @@ class CacheTest extends TestCase
         $cache->store($languageFixture);
 
         $this->assertSame(
-            array($languageFixture->languageCode => $languageFixture),
+            [$languageFixture->languageCode => $languageFixture],
             $cache->getAll()
         );
     }

@@ -37,7 +37,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -47,7 +47,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -57,9 +57,9 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -69,7 +69,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -79,7 +79,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -89,9 +89,9 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'unknown' => array('value' => 23),
-        );
+        return [
+            'unknown' => ['value' => 23],
+        ];
     }
 
     /**
@@ -101,7 +101,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        return new KeywordValue(array('foo', 'bar', 'sindelfingen'));
+        return new KeywordValue(['foo', 'bar', 'sindelfingen']);
     }
 
     /**
@@ -149,7 +149,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         );
 
         $this->assertEquals(
-            array('foo' => true, 'bar' => true, 'sindelfingen' => true),
+            ['foo' => true, 'bar' => true, 'sindelfingen' => true],
             array_fill_keys($field->value->values, true)
         );
     }
@@ -177,16 +177,16 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-            array(
+            ],
+            [
                 23,
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -196,7 +196,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function getValidUpdateFieldData()
     {
-        return new KeywordValue(array('bielefeld'));
+        return new KeywordValue(['bielefeld']);
     }
 
     /**
@@ -214,7 +214,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         );
 
         $this->assertEquals(
-            array('bielefeld' => true),
+            ['bielefeld' => true],
             array_fill_keys($field->value->values, true)
         );
     }
@@ -261,7 +261,7 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
         );
 
         $this->assertEquals(
-            array('foo' => true, 'bar' => true, 'sindelfingen' => true),
+            ['foo' => true, 'bar' => true, 'sindelfingen' => true],
             array_fill_keys($field->value->values, true)
         );
     }
@@ -288,12 +288,12 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
-                new KeywordValue(array('bielefeld', 'sindelfingen')),
-                array('bielefeld', 'sindelfingen'),
-            ),
-        );
+        return [
+            [
+                new KeywordValue(['bielefeld', 'sindelfingen']),
+                ['bielefeld', 'sindelfingen'],
+            ],
+        ];
     }
 
     /**
@@ -305,33 +305,33 @@ class KeywordIntegrationTest extends SearchMultivaluedBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
-                array('sindelfeld', 'bielefingen'),
-                new KeywordValue(array('sindelfeld', 'bielefingen')),
-            ),
-        );
+        return [
+            [
+                ['sindelfeld', 'bielefingen'],
+                new KeywordValue(['sindelfeld', 'bielefingen']),
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new KeywordValue()),
-            array(new KeywordValue(null)),
-            array(new KeywordValue(array())),
-        );
+        return [
+            [new KeywordValue()],
+            [new KeywordValue(null)],
+            [new KeywordValue([])],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(
-                new KeywordValue(array('0')),
-            ),
-        );
+            ],
+            [
+                new KeywordValue(['0']),
+            ],
+        ];
     }
 
     /**

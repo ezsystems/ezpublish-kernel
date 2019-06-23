@@ -20,9 +20,9 @@ class OriginalRequestListenerTest extends TestCase
     public function testGetSubscribedEvents()
     {
         $this->assertSame(
-            array(
-                KernelEvents::REQUEST => array('onKernelRequest', 200),
-            ),
+            [
+                KernelEvents::REQUEST => ['onKernelRequest', 200],
+            ],
             OriginalRequestListener::getSubscribedEvents()
         );
     }

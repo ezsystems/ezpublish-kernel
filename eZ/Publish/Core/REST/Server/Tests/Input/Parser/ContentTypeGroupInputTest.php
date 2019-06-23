@@ -19,13 +19,13 @@ class ContentTypeGroupInputTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'Identifier Bar',
-            'User' => array(
+            'User' => [
                 '_href' => '/user/users/14',
-            ),
+            ],
             'modificationDate' => '2012-12-31T12:00:00',
-        );
+        ];
 
         $contentTypeGroupInput = $this->getParser();
         $result = $contentTypeGroupInput->parse($inputArray, $this->getParsingDispatcherMock());
@@ -63,11 +63,11 @@ class ContentTypeGroupInputTest extends BaseTest
      */
     public function testParseExceptionOnInvalidUser()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'Identifier Bar',
-            'User' => array(),
+            'User' => [],
             'modificationDate' => '2012-12-31T12:00:00',
-        );
+        ];
 
         $contentTypeGroupInput = $this->getParser();
         $contentTypeGroupInput->parse($inputArray, $this->getParsingDispatcherMock());
@@ -99,7 +99,7 @@ class ContentTypeGroupInputTest extends BaseTest
             ->method('newContentTypeGroupCreateStruct')
             ->with($this->equalTo('Identifier Bar'))
             ->will(
-                $this->returnValue(new ContentTypeGroupCreateStruct(array('identifier' => 'Identifier Bar')))
+                $this->returnValue(new ContentTypeGroupCreateStruct(['identifier' => 'Identifier Bar']))
             );
 
         return $contentTypeServiceMock;
@@ -107,8 +107,8 @@ class ContentTypeGroupInputTest extends BaseTest
 
     public function getParseHrefExpectationsMap()
     {
-        return array(
-            array('/user/users/14', 'userId', 14),
-        );
+        return [
+            ['/user/users/14', 'userId', 14],
+        ];
     }
 }

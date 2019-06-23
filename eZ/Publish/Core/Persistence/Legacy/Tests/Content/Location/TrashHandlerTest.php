@@ -71,20 +71,20 @@ class TrashHandlerTest extends TestCase
             ->with(20)
             ->will(
                 $this->returnValue(
-                    array(
-                        array(
+                    [
+                        [
                             'contentobject_id' => 10,
                             'node_id' => 20,
                             'main_node_id' => 30,
                             'parent_node_id' => 40,
-                        ),
-                        array(
+                        ],
+                        [
                             'contentobject_id' => 11,
                             'node_id' => 21,
                             'main_node_id' => 31,
                             'parent_node_id' => 41,
-                        ),
-                    )
+                        ],
+                    ]
                 )
             );
 
@@ -119,13 +119,13 @@ class TrashHandlerTest extends TestCase
             ->expects($this->at(5))
             ->method('loadTrashByLocation')
             ->with(20)
-            ->will($this->returnValue($array = array('data…')));
+            ->will($this->returnValue($array = ['data…']));
 
         $this->locationMapper
             ->expects($this->once())
             ->method('createLocationFromRow')
             ->with($array, null, new Trashed())
-            ->will($this->returnValue(new Trashed(array('id' => 20))));
+            ->will($this->returnValue(new Trashed(['id' => 20])));
 
         $trashedObject = $handler->trashSubtree(20);
         self::assertInstanceOf(Trashed::class, $trashedObject);
@@ -145,20 +145,20 @@ class TrashHandlerTest extends TestCase
             ->with(20)
             ->will(
                 $this->returnValue(
-                    array(
-                        array(
+                    [
+                        [
                             'contentobject_id' => 10,
                             'node_id' => 20,
                             'main_node_id' => 30,
                             'parent_node_id' => 40,
-                        ),
-                        array(
+                        ],
+                        [
                             'contentobject_id' => 11,
                             'node_id' => 21,
                             'main_node_id' => 31,
                             'parent_node_id' => 41,
-                        ),
-                    )
+                        ],
+                    ]
                 )
             );
 
@@ -206,20 +206,20 @@ class TrashHandlerTest extends TestCase
             ->with(20)
             ->will(
                 $this->returnValue(
-                    array(
-                        array(
+                    [
+                        [
                             'contentobject_id' => 10,
                             'node_id' => 20,
                             'main_node_id' => 30,
                             'parent_node_id' => 40,
-                        ),
-                        array(
+                        ],
+                        [
                             'contentobject_id' => 11,
                             'node_id' => 21,
                             'main_node_id' => 21,
                             'parent_node_id' => 41,
-                        ),
-                    )
+                        ],
+                    ]
                 )
             );
 
@@ -251,11 +251,11 @@ class TrashHandlerTest extends TestCase
             ->with(11, 21)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 100,
                         'contentobject_version' => 101,
                         'parent_node_id' => 102,
-                    )
+                    ]
                 )
             );
 
@@ -273,13 +273,13 @@ class TrashHandlerTest extends TestCase
             ->expects($this->at(6))
             ->method('loadTrashByLocation')
             ->with(20)
-            ->will($this->returnValue($array = array('data…')));
+            ->will($this->returnValue($array = ['data…']));
 
         $this->locationMapper
             ->expects($this->once())
             ->method('createLocationFromRow')
             ->with($array, null, new Trashed())
-            ->will($this->returnValue(new Trashed(array('id' => 20))));
+            ->will($this->returnValue(new Trashed(['id' => 20])));
 
         $trashedObject = $handler->trashSubtree(20);
         self::assertInstanceOf(Trashed::class, $trashedObject);
@@ -299,7 +299,7 @@ class TrashHandlerTest extends TestCase
             ->with(69, 23)
             ->will(
                 $this->returnValue(
-                    new Trashed(array('id' => 70))
+                    new Trashed(['id' => 70])
                 )
             );
 
@@ -317,7 +317,7 @@ class TrashHandlerTest extends TestCase
             ->expects($this->at(0))
             ->method('loadTrashByLocation')
             ->with(69)
-            ->will($this->returnValue($array = array('data…')));
+            ->will($this->returnValue($array = ['data…']));
 
         $this->locationMapper
             ->expects($this->at(0))
@@ -334,18 +334,18 @@ class TrashHandlerTest extends TestCase
     {
         $handler = $this->getTrashHandler();
 
-        $expectedTrashed = array(
-            array(
+        $expectedTrashed = [
+            [
                 'node_id' => 69,
                 'path_string' => '/1/2/69/',
                 'contentobject_id' => 67,
-            ),
-            array(
+            ],
+            [
                 'node_id' => 70,
                 'path_string' => '/1/2/70/',
                 'contentobject_id' => 68,
-            ),
-        );
+            ],
+        ];
 
         // Index for locationGateway calls
         $i = 0;
@@ -367,11 +367,11 @@ class TrashHandlerTest extends TestCase
                 ->will(
                     $this->returnValue(
                         new Trashed(
-                            array(
+                            [
                                 'id' => $trashedElement['node_id'],
                                 'contentId' => $trashedElement['contentobject_id'],
                                 'pathString' => $trashedElement['path_string'],
-                            )
+                            ]
                         )
                     )
                 );
@@ -408,11 +408,11 @@ class TrashHandlerTest extends TestCase
             ->with(69)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 69,
                         'contentobject_id' => 67,
                         'path_string' => '/1/2/69',
-                    )
+                    ]
                 )
             );
 
@@ -422,11 +422,11 @@ class TrashHandlerTest extends TestCase
             ->will(
                 $this->returnValue(
                     new Trashed(
-                        array(
+                        [
                             'id' => 69,
                             'contentId' => 67,
                             'pathString' => '/1/2/69',
-                        )
+                        ]
                     )
                 )
             );
@@ -463,11 +463,11 @@ class TrashHandlerTest extends TestCase
             ->with(69)
             ->will(
                 $this->returnValue(
-                    array(
+                    [
                         'node_id' => 69,
                         'contentobject_id' => 67,
                         'path_string' => '/1/2/69',
-                    )
+                    ]
                 )
             );
 
@@ -477,11 +477,11 @@ class TrashHandlerTest extends TestCase
             ->will(
                 $this->returnValue(
                     new Trashed(
-                        array(
+                        [
                             'id' => 69,
                             'contentId' => 67,
                             'pathString' => '/1/2/69',
-                        )
+                        ]
                     )
                 )
             );

@@ -34,56 +34,56 @@ class URLWildcardServiceTest extends ServiceTest
         $destinationUrl = '/cxm';
         $forward = true;
         $wildcard = new URLWildcard(
-            array(
+            [
                 'id' => $wildcardId,
                 'sourceUrl' => $sourceUrl,
                 'destinationUrl' => $destinationUrl,
                 'forward' => $forward,
-            )
+            ]
         );
 
-        return array(
-            array(
+        return [
+            [
                 'create',
-                array($sourceUrl, $destinationUrl, $forward),
+                [$sourceUrl, $destinationUrl, $forward],
                 $wildcard,
                 1,
                 URLWildcardServiceSignals\CreateSignal::class,
-                array('urlWildcardId' => $wildcardId),
-            ),
-            array(
+                ['urlWildcardId' => $wildcardId],
+            ],
+            [
                 'remove',
-                array($wildcard),
+                [$wildcard],
                 null,
                 1,
                 URLWildcardServiceSignals\RemoveSignal::class,
-                array('urlWildcardId' => $wildcardId),
-            ),
-            array(
+                ['urlWildcardId' => $wildcardId],
+            ],
+            [
                 'load',
-                array($wildcardId),
+                [$wildcardId],
                 $wildcard,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadAll',
-                array(0, 1),
-                array($wildcard),
+                [0, 1],
+                [$wildcard],
                 0,
-            ),
-            array(
+            ],
+            [
                 'translate',
-                array($sourceUrl),
+                [$sourceUrl],
                 new URLWildcardTranslationResult(
-                    array(
+                    [
                         'uri' => $destinationUrl,
                         'forward' => $forward,
-                    )
+                    ]
                 ),
                 1,
                 URLWildcardServiceSignals\TranslateSignal::class,
-                array('url' => $sourceUrl),
-            ),
-        );
+                ['url' => $sourceUrl],
+            ],
+        ];
     }
 }

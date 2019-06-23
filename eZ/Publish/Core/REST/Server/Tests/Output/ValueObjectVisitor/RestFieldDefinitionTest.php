@@ -47,10 +47,10 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadContentTypeFieldDefinition',
-            array(
+            [
                 'contentTypeId' => $restFieldDefinition->contentType->id,
                 'fieldDefinitionId' => $restFieldDefinition->fieldDefinition->id,
-            ),
+            ],
             "/content/types/{$restFieldDefinition->contentType->id}/fieldDefinitions/{$restFieldDefinition->fieldDefinition->id}"
         );
 
@@ -74,17 +74,17 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
     {
         return new Server\Values\RestFieldDefinition(
             new Values\ContentType\ContentType(
-                array(
+                [
                     'id' => 'contentTypeId',
                     'status' => Values\ContentType\ContentType::STATUS_DEFINED,
-                    'fieldDefinitions' => array(),
-                )
+                    'fieldDefinitions' => [],
+                ]
             ),
             new Values\ContentType\FieldDefinition(
-                array(
+                [
                     'id' => 'fieldDefinitionId_23',
-                    'fieldSettings' => array('setting' => 'foo'),
-                    'validatorConfiguration' => array('validator' => 'bar'),
+                    'fieldSettings' => ['setting' => 'foo'],
+                    'validatorConfiguration' => ['validator' => 'bar'],
                     'identifier' => 'title',
                     'fieldGroup' => 'abstract-field-group',
                     'position' => 2,
@@ -94,16 +94,16 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
                     'isSearchable' => true,
                     'isInfoCollector' => false,
                     'defaultValue' => 'my default value text',
-                    'names' => array('eng-US' => 'Sindelfingen'),
-                    'descriptions' => array('eng-GB' => 'Bielefeld'),
-                )
+                    'names' => ['eng-US' => 'Sindelfingen'],
+                    'descriptions' => ['eng-GB' => 'Bielefeld'],
+                ]
             )
         );
     }
 
     public function provideXpathAssertions()
     {
-        $xpathAssertions = array(
+        $xpathAssertions = [
             '/FieldDefinition[@href="/content/types/contentTypeId/fieldDefinitions/fieldDefinitionId_23"]',
             '/FieldDefinition[@media-type="application/vnd.ez.api.FieldDefinition+xml"]',
             '/FieldDefinition/id[text()="fieldDefinitionId_23"]',
@@ -118,11 +118,11 @@ class RestFieldDefinitionTest extends ValueObjectVisitorBaseTest
             '/FieldDefinition/names',
             '/FieldDefinition/names/value[@languageCode="eng-US" and text()="Sindelfingen"]',
             '/FieldDefinition/descriptions/value[@languageCode="eng-GB" and text()="Bielefeld"]',
-        );
+        ];
 
         return array_map(
             function ($xpath) {
-                return array($xpath);
+                return [$xpath];
             },
             $xpathAssertions
         );

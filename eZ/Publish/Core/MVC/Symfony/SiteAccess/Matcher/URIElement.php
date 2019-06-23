@@ -51,7 +51,7 @@ class URIElement implements VersatileMatcher, URILexer
 
     public function __sleep()
     {
-        return array('elementNumber', 'uriElements');
+        return ['elementNumber', 'uriElements'];
     }
 
     /**
@@ -80,7 +80,7 @@ class URIElement implements VersatileMatcher, URILexer
         if (isset($this->uriElements)) {
             return $this->uriElements;
         } elseif (!isset($this->request)) {
-            return array();
+            return [];
         }
 
         $elements = array_slice(
@@ -176,7 +176,7 @@ class URIElement implements VersatileMatcher, URILexer
      */
     public function reverseMatch($siteAccessName)
     {
-        $elements = $this->elementNumber > 1 ? explode('_', $siteAccessName) : array($siteAccessName);
+        $elements = $this->elementNumber > 1 ? explode('_', $siteAccessName) : [$siteAccessName];
         if (count($elements) !== $this->elementNumber) {
             return null;
         }

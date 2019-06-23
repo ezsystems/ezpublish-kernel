@@ -37,10 +37,10 @@ class SectionName extends SortClauseVisitor
      */
     public function visit(SortClause $sortClause)
     {
-        return array(
-            'section_name_s' => array(
+        return [
+            'section_name_s' => [
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

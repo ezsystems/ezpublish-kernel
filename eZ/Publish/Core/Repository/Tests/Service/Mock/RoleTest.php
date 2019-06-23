@@ -42,14 +42,14 @@ class RoleTest extends BaseServiceMockTest
         $limitationTypeMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($limitationMock))
-            ->will($this->returnValue(array(42)));
+            ->will($this->returnValue([42]));
 
-        $settings = array(
-            'policyMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
-            'limitationTypes' => array('mockIdentifier' => $limitationTypeMock),
-        );
+        $settings = [
+            'policyMap' => ['mockModule' => ['mockFunction' => ['mockIdentifier' => true]]],
+            'limitationTypes' => ['mockIdentifier' => $limitationTypeMock],
+        ];
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('loadRoleByIdentifier'), $settings);
+        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRoleByIdentifier'], $settings);
 
         $repository = $this->getRepositoryMock();
         /** @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct $roleCreateStructMock */
@@ -68,12 +68,12 @@ class RoleTest extends BaseServiceMockTest
         /* @var \PHPUnit_Framework_MockObject_MockObject $roleCreateStructMock */
         $roleCreateStructMock->expects($this->once())
             ->method('getPolicies')
-            ->will($this->returnValue(array($policyCreateStructMock)));
+            ->will($this->returnValue([$policyCreateStructMock]));
 
         /* @var \PHPUnit_Framework_MockObject_MockObject $policyCreateStructMock */
         $policyCreateStructMock->expects($this->once())
             ->method('getLimitations')
-            ->will($this->returnValue(array($limitationMock)));
+            ->will($this->returnValue([$limitationMock]));
 
         $repository->expects($this->once())
             ->method('hasAccess')
@@ -105,18 +105,18 @@ class RoleTest extends BaseServiceMockTest
         $limitationTypeMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($limitationMock))
-            ->will($this->returnValue(array(42)));
+            ->will($this->returnValue([42]));
 
         $limitationMock->expects($this->any())
             ->method('getIdentifier')
             ->will($this->returnValue('mockIdentifier'));
 
-        $settings = array(
-            'policyMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
-            'limitationTypes' => array('mockIdentifier' => $limitationTypeMock),
-        );
+        $settings = [
+            'policyMap' => ['mockModule' => ['mockFunction' => ['mockIdentifier' => true]]],
+            'limitationTypes' => ['mockIdentifier' => $limitationTypeMock],
+        ];
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('loadRole'), $settings);
+        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRole'], $settings);
 
         $repository = $this->getRepositoryMock();
         $roleMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Role');
@@ -138,7 +138,7 @@ class RoleTest extends BaseServiceMockTest
         /* @var \PHPUnit_Framework_MockObject_MockObject $policyCreateStructMock */
         $policyCreateStructMock->expects($this->once())
             ->method('getLimitations')
-            ->will($this->returnValue(array($limitationMock)));
+            ->will($this->returnValue([$limitationMock]));
 
         $repository->expects($this->once())
             ->method('hasAccess')
@@ -171,18 +171,18 @@ class RoleTest extends BaseServiceMockTest
         $limitationTypeMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($limitationMock))
-            ->will($this->returnValue(array(42)));
+            ->will($this->returnValue([42]));
 
         $limitationMock->expects($this->any())
             ->method('getIdentifier')
             ->will($this->returnValue('mockIdentifier'));
 
-        $settings = array(
-            'policyMap' => array('mockModule' => array('mockFunction' => array('mockIdentifier' => true))),
-            'limitationTypes' => array('mockIdentifier' => $limitationTypeMock),
-        );
+        $settings = [
+            'policyMap' => ['mockModule' => ['mockFunction' => ['mockIdentifier' => true]]],
+            'limitationTypes' => ['mockIdentifier' => $limitationTypeMock],
+        ];
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('loadRole'), $settings);
+        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRole'], $settings);
 
         $repository = $this->getRepositoryMock();
         $policyMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Policy');
@@ -208,7 +208,7 @@ class RoleTest extends BaseServiceMockTest
         /* @var \PHPUnit_Framework_MockObject_MockObject $policyCreateStructMock */
         $policyUpdateStructMock->expects($this->once())
             ->method('getLimitations')
-            ->will($this->returnValue(array($limitationMock)));
+            ->will($this->returnValue([$limitationMock]));
 
         $repository->expects($this->once())
             ->method('hasAccess')
@@ -267,15 +267,15 @@ class RoleTest extends BaseServiceMockTest
         $limitationTypeMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($limitationMock))
-            ->will($this->returnValue(array(42)));
+            ->will($this->returnValue([42]));
 
         $limitationMock->expects($this->once())
             ->method('getIdentifier')
             ->will($this->returnValue('testIdentifier'));
 
-        $settings = array(
-            'limitationTypes' => array('testIdentifier' => $limitationTypeMock),
-        );
+        $settings = [
+            'limitationTypes' => ['testIdentifier' => $limitationTypeMock],
+        ];
 
         $roleServiceMock = $this->getPartlyMockedRoleService(null, $settings);
 
@@ -349,17 +349,17 @@ class RoleTest extends BaseServiceMockTest
         $limitationTypeMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($limitationMock))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $limitationMock->expects($this->exactly(2))
             ->method('getIdentifier')
             ->will($this->returnValue('testIdentifier'));
 
-        $settings = array(
-            'limitationTypes' => array('testIdentifier' => $limitationTypeMock),
-        );
+        $settings = [
+            'limitationTypes' => ['testIdentifier' => $limitationTypeMock],
+        ];
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('checkAssignmentAndFilterLimitationValues'), $settings);
+        $roleServiceMock = $this->getPartlyMockedRoleService(['checkAssignmentAndFilterLimitationValues'], $settings);
 
         $repository = $this->getRepositoryMock();
         $roleMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Role');
@@ -388,17 +388,17 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects($this->once())
             ->method('loadRole')
             ->with($this->equalTo(42))
-            ->will($this->returnValue(new SPIRole(array('id' => 42))));
+            ->will($this->returnValue(new SPIRole(['id' => 42])));
 
         $userHandlerMock->expects($this->once())
             ->method('load')
             ->with($this->equalTo(24))
-            ->will($this->returnValue(new SPIUser(array('id' => 24))));
+            ->will($this->returnValue(new SPIUser(['id' => 24])));
 
         $roleServiceMock->expects($this->once())
             ->method('checkAssignmentAndFilterLimitationValues')
-            ->with(24, $this->isInstanceOf('\\eZ\\Publish\\SPI\\Persistence\\User\\Role'), array('testIdentifier' => array()))
-            ->will($this->returnValue(array('testIdentifier' => array())));
+            ->with(24, $this->isInstanceOf('\\eZ\\Publish\\SPI\\Persistence\\User\\Role'), ['testIdentifier' => []])
+            ->will($this->returnValue(['testIdentifier' => []]));
 
         $repository->expects($this->once())->method('beginTransaction');
         $userHandlerMock = $this->getPersistenceMockHandler('User\\Handler');
@@ -407,7 +407,7 @@ class RoleTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo(24),
                 $this->equalTo(42),
-                $this->equalTo(array('testIdentifier' => array()))
+                $this->equalTo(['testIdentifier' => []])
             );
         $repository->expects($this->once())->method('commit');
 
@@ -426,7 +426,7 @@ class RoleTest extends BaseServiceMockTest
     public function testAssignRoleToUserWithNullLimitation()
     {
         $repository = $this->getRepositoryMock();
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('checkAssignmentAndFilterLimitationValues'));
+        $roleServiceMock = $this->getPartlyMockedRoleService(['checkAssignmentAndFilterLimitationValues']);
         $roleMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Role');
         $userMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
         $userHandlerMock = $this->getPersistenceMockHandler('User\\Handler');
@@ -453,12 +453,12 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects($this->once())
             ->method('loadRole')
             ->with($this->equalTo(42))
-            ->will($this->returnValue(new SPIRole(array('id' => 42))));
+            ->will($this->returnValue(new SPIRole(['id' => 42])));
 
         $userHandlerMock->expects($this->once())
             ->method('load')
             ->with($this->equalTo(24))
-            ->will($this->returnValue(new SPIUser(array('id' => 24))));
+            ->will($this->returnValue(new SPIUser(['id' => 24])));
 
         $roleServiceMock->expects($this->once())
             ->method('checkAssignmentAndFilterLimitationValues')
@@ -491,7 +491,7 @@ class RoleTest extends BaseServiceMockTest
     public function testAssignRoleToUserWithRollback()
     {
         $repository = $this->getRepositoryMock();
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('checkAssignmentAndFilterLimitationValues'));
+        $roleServiceMock = $this->getPartlyMockedRoleService(['checkAssignmentAndFilterLimitationValues']);
         $roleMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Role');
         $userMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
         $userHandlerMock = $this->getPersistenceMockHandler('User\\Handler');
@@ -518,12 +518,12 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects($this->once())
             ->method('loadRole')
             ->with($this->equalTo(42))
-            ->will($this->returnValue(new SPIRole(array('id' => 42))));
+            ->will($this->returnValue(new SPIRole(['id' => 42])));
 
         $userHandlerMock->expects($this->once())
             ->method('load')
             ->with($this->equalTo(24))
-            ->will($this->returnValue(new SPIUser(array('id' => 24))));
+            ->will($this->returnValue(new SPIUser(['id' => 24])));
 
         $roleServiceMock->expects($this->once())
             ->method('checkAssignmentAndFilterLimitationValues')
@@ -591,15 +591,15 @@ class RoleTest extends BaseServiceMockTest
         $limitationTypeMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($limitationMock))
-            ->will($this->returnValue(array(42)));
+            ->will($this->returnValue([42]));
 
         $limitationMock->expects($this->once())
             ->method('getIdentifier')
             ->will($this->returnValue('testIdentifier'));
 
-        $settings = array(
-            'limitationTypes' => array('testIdentifier' => $limitationTypeMock),
-        );
+        $settings = [
+            'limitationTypes' => ['testIdentifier' => $limitationTypeMock],
+        ];
 
         $roleServiceMock = $this->getPartlyMockedRoleService(null, $settings);
 
@@ -673,17 +673,17 @@ class RoleTest extends BaseServiceMockTest
         $limitationTypeMock->expects($this->once())
             ->method('validate')
             ->with($this->equalTo($limitationMock))
-            ->will($this->returnValue(array()));
+            ->will($this->returnValue([]));
 
         $limitationMock->expects($this->exactly(2))
             ->method('getIdentifier')
             ->will($this->returnValue('testIdentifier'));
 
-        $settings = array(
-            'limitationTypes' => array('testIdentifier' => $limitationTypeMock),
-        );
+        $settings = [
+            'limitationTypes' => ['testIdentifier' => $limitationTypeMock],
+        ];
 
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('checkAssignmentAndFilterLimitationValues'), $settings);
+        $roleServiceMock = $this->getPartlyMockedRoleService(['checkAssignmentAndFilterLimitationValues'], $settings);
 
         $repository = $this->getRepositoryMock();
         $roleMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Role');
@@ -716,7 +716,7 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects($this->once())
             ->method('loadRole')
             ->with($this->equalTo(42))
-            ->will($this->returnValue(new SPIRole(array('id' => 42))));
+            ->will($this->returnValue(new SPIRole(['id' => 42])));
 
         $userServiceMock->expects($this->once())
             ->method('loadUserGroup')
@@ -725,8 +725,8 @@ class RoleTest extends BaseServiceMockTest
 
         $roleServiceMock->expects($this->once())
             ->method('checkAssignmentAndFilterLimitationValues')
-            ->with(24, $this->isInstanceOf('\\eZ\\Publish\\SPI\\Persistence\\User\\Role'), array('testIdentifier' => array()))
-            ->will($this->returnValue(array('testIdentifier' => array())));
+            ->with(24, $this->isInstanceOf('\\eZ\\Publish\\SPI\\Persistence\\User\\Role'), ['testIdentifier' => []])
+            ->will($this->returnValue(['testIdentifier' => []]));
 
         $repository->expects($this->once())->method('beginTransaction');
         $userHandlerMock = $this->getPersistenceMockHandler('User\\Handler');
@@ -735,7 +735,7 @@ class RoleTest extends BaseServiceMockTest
             ->with(
                 $this->equalTo(24),
                 $this->equalTo(42),
-                $this->equalTo(array('testIdentifier' => array()))
+                $this->equalTo(['testIdentifier' => []])
             );
         $repository->expects($this->once())->method('commit');
 
@@ -754,7 +754,7 @@ class RoleTest extends BaseServiceMockTest
     public function testAssignRoleToUserGroupWithNullLimitation()
     {
         $repository = $this->getRepositoryMock();
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('checkAssignmentAndFilterLimitationValues'));
+        $roleServiceMock = $this->getPartlyMockedRoleService(['checkAssignmentAndFilterLimitationValues']);
         $roleMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Role');
         $userGroupMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup');
         $userServiceMock = $this->createMock('eZ\\Publish\\API\\Repository\\UserService');
@@ -785,7 +785,7 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects($this->once())
             ->method('loadRole')
             ->with($this->equalTo(42))
-            ->will($this->returnValue(new SPIRole(array('id' => 42))));
+            ->will($this->returnValue(new SPIRole(['id' => 42])));
 
         $userServiceMock->expects($this->once())
             ->method('loadUserGroup')
@@ -823,7 +823,7 @@ class RoleTest extends BaseServiceMockTest
     public function testAssignRoleToUserGroupWithRollback()
     {
         $repository = $this->getRepositoryMock();
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('checkAssignmentAndFilterLimitationValues'));
+        $roleServiceMock = $this->getPartlyMockedRoleService(['checkAssignmentAndFilterLimitationValues']);
         $roleMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Role');
         $userGroupMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\UserGroup');
         $userServiceMock = $this->createMock('eZ\\Publish\\API\\Repository\\UserService');
@@ -854,7 +854,7 @@ class RoleTest extends BaseServiceMockTest
         $userHandlerMock->expects($this->once())
             ->method('loadRole')
             ->with($this->equalTo(42))
-            ->will($this->returnValue(new SPIRole(array('id' => 42))));
+            ->will($this->returnValue(new SPIRole(['id' => 42])));
 
         $userServiceMock->expects($this->once())
             ->method('loadUserGroup')
@@ -922,9 +922,9 @@ class RoleTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('id', 42),
-                    )
+                    [
+                        ['id', 42],
+                    ]
                 )
             );
 
@@ -966,9 +966,9 @@ class RoleTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('id', 42),
-                    )
+                    [
+                        ['id', 42],
+                    ]
                 )
             );
 
@@ -1042,10 +1042,10 @@ class RoleTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('id', 42),
-                        array('roleId', 24000),
-                    )
+                    [
+                        ['id', 42],
+                        ['roleId', 24000],
+                    ]
                 )
             );
 
@@ -1084,10 +1084,10 @@ class RoleTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('id', 42),
-                        array('roleId', 24),
-                    )
+                    [
+                        ['id', 42],
+                        ['roleId', 24],
+                    ]
                 )
             );
 
@@ -1123,7 +1123,7 @@ class RoleTest extends BaseServiceMockTest
     public function testRemovePolicy()
     {
         $repository = $this->getRepositoryMock();
-        $roleServiceMock = $this->getPartlyMockedRoleService(array('loadRole'));
+        $roleServiceMock = $this->getPartlyMockedRoleService(['loadRole']);
         $policyMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Policy');
         $roleMock = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\Role');
 
@@ -1136,10 +1136,10 @@ class RoleTest extends BaseServiceMockTest
             ->method('__get')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array('id', 42),
-                        array('roleId', 24),
-                    )
+                    [
+                        ['id', 42],
+                        ['roleId', 24],
+                    ]
                 )
             );
 
@@ -1189,22 +1189,22 @@ class RoleTest extends BaseServiceMockTest
      *
      * @return \eZ\Publish\Core\Repository\RoleService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartlyMockedRoleService(array $methods = null, array $settings = array())
+    protected function getPartlyMockedRoleService(array $methods = null, array $settings = [])
     {
         if (!isset($this->partlyMockedRoleService) || !empty($settings)) {
             $this->partlyMockedRoleService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\RoleService')
                 ->setMethods($methods)
                 ->setConstructorArgs(
-                    array(
+                    [
                         $this->getRepositoryMock(),
                         $this->getPersistenceMockHandler('User\\Handler'),
                         $limitationService = $this->getPartlyMockedLimitationService($methods, $settings),
                         $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\RoleDomainMapper')
-                            ->setMethods(array())
-                            ->setConstructorArgs(array($limitationService))
+                            ->setMethods([])
+                            ->setConstructorArgs([$limitationService])
                             ->getMock(),
                         $settings,
-                    )
+                    ]
                 )
                 ->getMock();
         }
@@ -1225,15 +1225,15 @@ class RoleTest extends BaseServiceMockTest
      *
      * @return \eZ\Publish\Core\Repository\Helper\LimitationService|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getPartlyMockedLimitationService(array $methods = null, array $settings = array())
+    protected function getPartlyMockedLimitationService(array $methods = null, array $settings = [])
     {
         if (!isset($this->partlyMockedLimitationService) || !empty($settings)) {
             $this->partlyMockedLimitationService = $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\Helper\\LimitationService')
                 ->setMethods($methods)
                 ->setConstructorArgs(
-                    array(
+                    [
                         $settings,
-                    )
+                    ]
                 )
                 ->getMock();
         }

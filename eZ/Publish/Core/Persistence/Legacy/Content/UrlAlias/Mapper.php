@@ -67,7 +67,7 @@ class Mapper
      */
     public function extractUrlAliasListFromData(array $rows)
     {
-        $urlAliases = array();
+        $urlAliases = [];
         foreach ($rows as $row) {
             $urlAliases[] = $this->extractUrlAliasFromData($row);
         }
@@ -130,7 +130,7 @@ class Mapper
             throw new \RuntimeException("Action '{$action}' is not valid");
         }
 
-        return array($type, $destination);
+        return [$type, $destination];
     }
 
     /**
@@ -140,9 +140,9 @@ class Mapper
      */
     protected function normalizePathData(array $pathData)
     {
-        $normalizedPathData = array();
+        $normalizedPathData = [];
         foreach ($pathData as $level => $rows) {
-            $pathElementData = array();
+            $pathElementData = [];
             foreach ($rows as $row) {
                 $this->normalizePathDataRow($pathElementData, $row);
             }

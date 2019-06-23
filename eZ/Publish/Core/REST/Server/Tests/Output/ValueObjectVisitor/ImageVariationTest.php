@@ -27,7 +27,7 @@ class ImageVariationTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $imageVariation = new ImageVariation(
-            array(
+            [
                 'width' => 600,
                 'height' => 400,
                 'name' => 'test',
@@ -36,15 +36,15 @@ class ImageVariationTest extends ValueObjectVisitorBaseTest
                 'mimeType' => 'image/png',
                 'fileSize' => 12345,
                 'fileName' => 'Test-Image.png',
-            )
+            ]
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_binaryContent_getImageVariation',
-            array(
+            [
                 'imageId' => '123-456789',
                 'variationIdentifier' => 'test',
-            ),
+            ],
             "/content/binary/images/{$imageVariation->imageId}/variations/{$imageVariation->name}"
         );
 

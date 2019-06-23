@@ -17,7 +17,7 @@ class ConverterRegistry
      *
      * @var array
      */
-    protected $converterMap = array();
+    protected $converterMap = [];
 
     /**
      * Create converter registry with converter map.
@@ -33,7 +33,7 @@ class ConverterRegistry
      * @param array $converterMap A map where key is field type name, and value
      *              is a callable factory to get Converter OR Converter object
      */
-    public function __construct(array $converterMap = array())
+    public function __construct(array $converterMap = [])
     {
         $this->converterMap = $converterMap;
     }

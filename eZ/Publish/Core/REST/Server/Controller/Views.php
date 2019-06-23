@@ -36,7 +36,7 @@ class Views extends Controller
     {
         $viewInput = $this->inputDispatcher->parse(
             new Message(
-                array('Content-Type' => $request->headers->get('Content-Type')),
+                ['Content-Type' => $request->headers->get('Content-Type')],
                 $request->getContent()
             )
         );
@@ -48,10 +48,10 @@ class Views extends Controller
         }
 
         return new Values\RestExecutedView(
-            array(
+            [
                 'identifier' => $viewInput->identifier,
                 'searchResults' => $this->searchService->$method($viewInput->query),
-            )
+            ]
         );
     }
 

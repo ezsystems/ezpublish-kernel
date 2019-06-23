@@ -237,7 +237,7 @@ class Repository implements RepositoryInterface
      *
      * @var array
      */
-    protected $commitEventsQueue = array();
+    protected $commitEventsQueue = [];
 
     /**
      * @var int
@@ -272,7 +272,7 @@ class Repository implements RepositoryInterface
         SearchHandler $searchHandler,
         BackgroundIndexer $backgroundIndexer,
         RelationProcessor $relationProcessor,
-        array $serviceSettings = array(),
+        array $serviceSettings = [],
         APIUserReference $user = null,
         LoggerInterface $logger = null
     ) {
@@ -280,27 +280,27 @@ class Repository implements RepositoryInterface
         $this->searchHandler = $searchHandler;
         $this->backgroundIndexer = $backgroundIndexer;
         $this->relationProcessor = $relationProcessor;
-        $this->serviceSettings = $serviceSettings + array(
-            'content' => array(),
-            'contentType' => array(),
-            'location' => array(),
-            'section' => array(),
-            'role' => array(),
-            'user' => array(
+        $this->serviceSettings = $serviceSettings + [
+            'content' => [],
+            'contentType' => [],
+            'location' => [],
+            'section' => [],
+            'role' => [],
+            'user' => [
                 'anonymousUserID' => 10,
-            ),
-            'language' => array(),
-            'trash' => array(),
-            'io' => array(),
-            'objectState' => array(),
-            'search' => array(),
-            'fieldType' => array(),
-            'nameableFieldTypes' => array(),
-            'urlAlias' => array(),
-            'urlWildcard' => array(),
-            'nameSchema' => array(),
-            'languages' => array(),
-        );
+            ],
+            'language' => [],
+            'trash' => [],
+            'io' => [],
+            'objectState' => [],
+            'search' => [],
+            'fieldType' => [],
+            'nameableFieldTypes' => [],
+            'urlAlias' => [],
+            'urlWildcard' => [],
+            'nameSchema' => [],
+            'languages' => [],
+        ];
 
         if (!empty($this->serviceSettings['languages'])) {
             $this->serviceSettings['language']['languages'] = $this->serviceSettings['languages'];
@@ -448,7 +448,7 @@ class Repository implements RepositoryInterface
     public function canUser($module, $function, ValueObject $object, $targets = null)
     {
         if ($targets instanceof ValueObject) {
-            $targets = array($targets);
+            $targets = [$targets];
         } elseif ($targets === null) {
             $targets = [];
         } elseif (!is_array($targets)) {
@@ -973,7 +973,7 @@ class Repository implements RepositoryInterface
         $this->persistenceHandler->beginTransaction();
 
         ++$this->transactionDepth;
-        $this->commitEventsQueue[++$this->transactionCount] = array();
+        $this->commitEventsQueue[++$this->transactionCount] = [];
     }
 
     /**
@@ -1006,7 +1006,7 @@ class Repository implements RepositoryInterface
                     }
                 }
 
-                $this->commitEventsQueue = array();
+                $this->commitEventsQueue = [];
             }
         } catch (Exception $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);

@@ -19,7 +19,7 @@ class BlockTest extends TestCase
      *
      * @return \eZ\Publish\Core\FieldType\Page\Parts\Block
      */
-    private function getBlock(array $properties = array())
+    private function getBlock(array $properties = [])
     {
         return new Block($properties);
     }
@@ -32,7 +32,7 @@ class BlockTest extends TestCase
     {
         $item = $this->createMock(Item::class);
 
-        $properties = array(
+        $properties = [
             'id' => '4efd68496edd8184aade729b4d2ee17b',
             'name' => 'Main Story',
             'type' => 'Campaign',
@@ -42,12 +42,12 @@ class BlockTest extends TestCase
             'action' => null,
             'rotation' => null,
             'zoneId' => '6c7f907b831a819ed8562e3ddce5b264',
-            'items' => array($item),
-            'attributes' => array(
+            'items' => [$item],
+            'attributes' => [
                 'foo' => 'bar',
                 'some' => 'thing',
-            ),
-        );
+            ],
+        ];
 
         $block = $this->getBlock($properties);
         $this->assertSame($properties, $block->getState());

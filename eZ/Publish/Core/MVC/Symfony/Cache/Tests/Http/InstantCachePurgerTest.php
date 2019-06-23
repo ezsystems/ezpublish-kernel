@@ -60,7 +60,7 @@ class InstantCachePurgerTest extends TestCase
             ->setMethods(
                 array_diff(
                     get_class_methods(Repository::class),
-                    array('sudo')
+                    ['sudo']
                 )
             )
             ->getMock();
@@ -73,7 +73,7 @@ class InstantCachePurgerTest extends TestCase
 
     public function testPurge()
     {
-        $locationIds = array(123, 456, 789);
+        $locationIds = [123, 456, 789];
         $this->purgeClient
             ->expects($this->once())
             ->method('purge')

@@ -25,7 +25,7 @@ use Psr\Log\LoggerInterface;
 
 class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTestCase
 {
-    private $fieldDefinitions = array();
+    private $fieldDefinitions = [];
 
     public function getExtensions()
     {
@@ -34,39 +34,39 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
         $fieldBlockRenderer = new FieldBlockRenderer();
         $fieldBlockRenderer->setBaseTemplate($this->getTemplatePath('base.html.twig'));
         $fieldBlockRenderer->setFieldViewResources(
-            array(
-                array(
+            [
+                [
                     'template' => $this->getTemplatePath('fields_override1.html.twig'),
                     'priority' => 10,
-                ),
-                array(
+                ],
+                [
                     'template' => $this->getTemplatePath('fields_default.html.twig'),
                     'priority' => 0,
-                ),
-                array(
+                ],
+                [
                     'template' => $this->getTemplatePath('fields_override2.html.twig'),
                     'priority' => 20,
-                ),
-            )
+                ],
+            ]
         );
         $fieldBlockRenderer->setFieldDefinitionViewResources(
-            array(
-                array(
+            [
+                [
                     'template' => $this->getTemplatePath('settings_override1.html.twig'),
                     'priority' => 10,
-                ),
-                array(
+                ],
+                [
                     'template' => $this->getTemplatePath('settings_default.html.twig'),
                     'priority' => 0,
-                ),
-                array(
+                ],
+                [
                     'template' => $this->getTemplatePath('settings_override2.html.twig'),
                     'priority' => 20,
-                ),
-            )
+                ],
+            ]
         );
 
-        return array(
+        return [
             new FieldRenderingExtension(
                 $fieldBlockRenderer,
                 $this->getContentTypeServiceMock(),
@@ -74,11 +74,11 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
                 new TranslationHelper(
                     $configResolver,
                     $this->createMock(ContentService::class),
-                    array(),
+                    [],
                     $this->createMock(LoggerInterface::class)
                 )
             ),
-        );
+        ];
     }
 
     public function getFixturesDir()
@@ -86,14 +86,14 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
         return __DIR__ . '/_fixtures/field_rendering_functions/';
     }
 
-    public function getFieldDefinition($typeIdentifier, $id = null, $settings = array())
+    public function getFieldDefinition($typeIdentifier, $id = null, $settings = [])
     {
         return new FieldDefinition(
-            array(
+            [
                 'id' => $id,
                 'fieldSettings' => $settings,
                 'fieldTypeIdentifier' => $typeIdentifier,
-            )
+            ]
         );
     }
 
@@ -106,45 +106,45 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
      *
      * @return Content
      */
-    protected function getContent($contentTypeIdentifier, array $fieldsData, array $namesData = array())
+    protected function getContent($contentTypeIdentifier, array $fieldsData, array $namesData = [])
     {
-        $fields = array();
+        $fields = [];
         foreach ($fieldsData as $fieldTypeIdentifier => $fieldsArray) {
-            $fieldsArray = isset($fieldsArray['id']) ? array($fieldsArray) : $fieldsArray;
+            $fieldsArray = isset($fieldsArray['id']) ? [$fieldsArray] : $fieldsArray;
             foreach ($fieldsArray as $fieldInfo) {
                 // Save field definitions in property for mocking purposes
                 $this->fieldDefinitions[$contentTypeIdentifier][$fieldInfo['fieldDefIdentifier']] = new FieldDefinition(
-                    array(
+                    [
                         'identifier' => $fieldInfo['fieldDefIdentifier'],
                         'id' => $fieldInfo['id'],
                         'fieldTypeIdentifier' => $fieldTypeIdentifier,
-                        'names' => isset($fieldInfo['fieldDefNames']) ? $fieldInfo['fieldDefNames'] : array(),
-                        'descriptions' => isset($fieldInfo['fieldDefDescriptions']) ? $fieldInfo['fieldDefDescriptions'] : array(),
-                    )
+                        'names' => isset($fieldInfo['fieldDefNames']) ? $fieldInfo['fieldDefNames'] : [],
+                        'descriptions' => isset($fieldInfo['fieldDefDescriptions']) ? $fieldInfo['fieldDefDescriptions'] : [],
+                    ]
                 );
                 unset($fieldInfo['fieldDefNames'], $fieldInfo['fieldDefDescriptions']);
                 $fields[] = new Field($fieldInfo);
             }
         }
         $content = new Content(
-            array(
+            [
                 'internalFields' => $fields,
                 'versionInfo' => new VersionInfo(
-                    array(
+                    [
                         'versionNo' => 64,
                         'names' => $namesData,
                         'initialLanguageCode' => 'fre-FR',
                         'contentInfo' => new ContentInfo(
-                            array(
+                            [
                                 'id' => 42,
                                 'mainLanguageCode' => 'fre-FR',
                                 // Using as id as we don't really care to test the service here
                                 'contentTypeId' => $contentTypeIdentifier,
-                            )
+                            ]
                         ),
-                    )
+                    ]
                 ),
-            )
+            ]
         );
 
         return $content;
@@ -163,14 +163,14 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
             ->method('getParameter')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array(
+                    [
+                        [
                             'languages',
                             null,
                             null,
-                            array('fre-FR', 'eng-US'),
-                        ),
-                    )
+                            ['fre-FR', 'eng-US'],
+                        ],
+                    ]
                 )
             );
 
@@ -190,11 +190,11 @@ class FieldRenderingExtensionIntegrationTest extends FileSystemTwigIntegrationTe
                 $this->returnCallback(
                     function ($contentTypeId) {
                         return new ContentType(
-                            array(
+                            [
                                 'identifier' => $contentTypeId,
                                 'mainLanguageCode' => 'fre-FR',
                                 'fieldDefinitions' => $this->fieldDefinitions[$contentTypeId],
-                            )
+                            ]
                         );
                     }
                 )

@@ -39,7 +39,7 @@ class IOService implements IOServiceInterface
         IOMetadataHandler $metadataHandler,
         IOBinarydataHandler $binarydataHandler,
         MimeTypeDetector $mimeTypeDetector,
-        array $settings = array()
+        array $settings = []
     ) {
         $this->metadataHandler = $metadataHandler;
         $this->binarydataHandler = $binarydataHandler;
@@ -91,11 +91,11 @@ class IOService implements IOServiceInterface
         }
 
         $binaryCreateStruct = new BinaryFileCreateStruct(
-            array(
+            [
                 'size' => filesize($localFile),
                 'inputStream' => $fileHandle,
                 'mimeType' => $this->mimeTypeDetector->getFromPath($localFile),
-            )
+            ]
         );
 
         return $binaryCreateStruct;
@@ -251,13 +251,13 @@ class IOService implements IOServiceInterface
     protected function buildDomainBinaryFileObject(SPIBinaryFile $spiBinaryFile)
     {
         return new BinaryFile(
-            array(
+            [
                 'size' => (int)$spiBinaryFile->size,
                 'mtime' => $spiBinaryFile->mtime,
                 'id' => $this->removeUriPrefix($spiBinaryFile->id),
                 'uri' => $spiBinaryFile->uri,
                 'mimeType' => $spiBinaryFile->mimeType ?: $this->metadataHandler->getMimeType($spiBinaryFile->id),
-            )
+            ]
         );
     }
 

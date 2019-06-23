@@ -29,22 +29,22 @@ class UserGroupUpdateTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'mainLanguageCode' => 'eng-US',
-            'Section' => array(
+            'Section' => [
                 '_href' => '/content/sections/1',
-            ),
+            ],
             'remoteId' => 'remoteId123456',
-            'fields' => array(
-                'field' => array(
-                    array(
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
             '__url' => '/user/groups/1/5',
-        );
+        ];
 
         $userGroupUpdate = $this->getParser();
         $result = $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -102,20 +102,20 @@ class UserGroupUpdateTest extends BaseTest
      */
     public function testParseExceptionOnMissingSectionHref()
     {
-        $inputArray = array(
+        $inputArray = [
             'mainLanguageCode' => 'eng-US',
-            'Section' => array(),
+            'Section' => [],
             'remoteId' => 'remoteId123456',
-            'fields' => array(
-                'field' => array(
-                    array(
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'name',
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
             '__url' => '/user/groups/1/5',
-        );
+        ];
 
         $userGroupUpdate = $this->getParser();
         $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -129,15 +129,15 @@ class UserGroupUpdateTest extends BaseTest
      */
     public function testParseExceptionOnInvalidFields()
     {
-        $inputArray = array(
+        $inputArray = [
             'mainLanguageCode' => 'eng-US',
-            'Section' => array(
+            'Section' => [
                 '_href' => '/content/sections/1',
-            ),
+            ],
             'remoteId' => 'remoteId123456',
-            'fields' => array(),
+            'fields' => [],
             '__url' => '/user/groups/1/5',
-        );
+        ];
 
         $userGroupUpdate = $this->getParser();
         $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -151,21 +151,21 @@ class UserGroupUpdateTest extends BaseTest
      */
     public function testParseExceptionOnMissingFieldDefinitionIdentifier()
     {
-        $inputArray = array(
+        $inputArray = [
             'mainLanguageCode' => 'eng-US',
-            'Section' => array(
+            'Section' => [
                 '_href' => '/content/sections/1',
-            ),
+            ],
             'remoteId' => 'remoteId123456',
-            'fields' => array(
-                'field' => array(
-                    array(
-                        'fieldValue' => array(),
-                    ),
-                ),
-            ),
+            'fields' => [
+                'field' => [
+                    [
+                        'fieldValue' => [],
+                    ],
+                ],
+            ],
             '__url' => '/user/groups/1/5',
-        );
+        ];
 
         $userGroupUpdate = $this->getParser();
         $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -179,21 +179,21 @@ class UserGroupUpdateTest extends BaseTest
      */
     public function testParseExceptionOnMissingFieldValue()
     {
-        $inputArray = array(
+        $inputArray = [
             'mainLanguageCode' => 'eng-US',
-            'Section' => array(
+            'Section' => [
                 '_href' => '/content/sections/1',
-            ),
+            ],
             'remoteId' => 'remoteId123456',
-            'fields' => array(
-                'field' => array(
-                    array(
+            'fields' => [
+                'field' => [
+                    [
                         'fieldDefinitionIdentifier' => 'name',
-                    ),
-                ),
-            ),
+                    ],
+                ],
+            ],
             '__url' => '/user/groups/1/5',
-        );
+        ];
 
         $userGroupUpdate = $this->getParser();
         $userGroupUpdate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -223,19 +223,19 @@ class UserGroupUpdateTest extends BaseTest
     {
         $fieldTypeParserMock = $this->getMockBuilder(FieldTypeParser::class)
             ->disableOriginalConstructor()
-            ->setMethods(array())
+            ->setMethods([])
             ->setConstructorArgs(
-                array(
+                [
                     $this->getContentServiceMock(),
                     $this->createMock(ContentTypeService::class),
                     $this->createMock(FieldTypeService::class),
-                )
+                ]
             )
             ->getMock();
 
         $fieldTypeParserMock->expects($this->any())
             ->method('parseFieldValue')
-            ->with(4, 'name', array())
+            ->with(4, 'name', [])
             ->will($this->returnValue('foo'));
 
         return $fieldTypeParserMock;
@@ -274,13 +274,13 @@ class UserGroupUpdateTest extends BaseTest
             ->will(
                 $this->returnValue(
                     new Location(
-                        array(
+                        [
                             'contentInfo' => new ContentInfo(
-                                array(
+                                [
                                     'id' => 4,
-                                )
+                                ]
                             ),
-                        )
+                        ]
                     )
                 )
             );
@@ -314,9 +314,9 @@ class UserGroupUpdateTest extends BaseTest
 
     public function getParseHrefExpectationsMap()
     {
-        return array(
-            array('/content/sections/1', 'sectionId', 1),
-            array('/user/groups/1/5', 'groupPath', '1/5'),
-        );
+        return [
+            ['/content/sections/1', 'sectionId', 1],
+            ['/user/groups/1/5', 'groupPath', '1/5'],
+        ];
     }
 }

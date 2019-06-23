@@ -43,7 +43,7 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
         $def->setClass($class);
         $def->addTag(
             'ezpublish.storageEngine.legacy.converter',
-            array('alias' => $fieldTypeIdentifier)
+            ['alias' => $fieldTypeIdentifier]
         );
         $this->setDefinition($serviceId, $def);
 
@@ -52,7 +52,7 @@ class FieldValueConverterRegistryPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.persistence.legacy.field_value_converter.registry',
             'register',
-            array($fieldTypeIdentifier, new Reference($serviceId))
+            [$fieldTypeIdentifier, new Reference($serviceId)]
         );
     }
 }

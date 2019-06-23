@@ -28,10 +28,10 @@ class RouterTest extends TestCase
         $uri = self::$routePrefix . '/';
         $request = Request::create($uri, 'GET');
 
-        $expectedMatchResult = array(
+        $expectedMatchResult = [
             '_route' => 'ezpublish_rest_testRoute',
             '_controller' => '',
-        );
+        ];
 
         $this->getRouterMock()
             ->expects($this->once())
@@ -83,10 +83,10 @@ class RouterTest extends TestCase
     {
         $href = '/api/test/v1/content/objects/1';
 
-        $expectedMatchResult = array(
+        $expectedMatchResult = [
             '_route' => 'ezpublish_rest_testParseHref',
             'contentId' => 1,
-        );
+        ];
 
         $this->getRouterMock()
             ->expects($this->once())
@@ -105,9 +105,9 @@ class RouterTest extends TestCase
     {
         $href = '/api/test/v1/content/no-attribute';
 
-        $matchResult = array(
+        $matchResult = [
             '_route' => 'ezpublish_rest_testParseHrefAttributeNotFound',
-        );
+        ];
 
         $this->getRouterMock()
             ->expects($this->once())
@@ -121,7 +121,7 @@ class RouterTest extends TestCase
     public function testGenerate()
     {
         $routeName = 'ezpublish_rest_testGenerate';
-        $arguments = array('arg1' => 1);
+        $arguments = ['arg1' => 1];
 
         $expectedResult = self::$routePrefix . '/generate/' . $arguments['arg1'];
         $this->getRouterMock()

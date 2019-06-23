@@ -27,7 +27,7 @@ class LanguageServiceMaximumSupportedLanguagesTest extends BaseTest
     /**
      * @var array
      */
-    private $createdLanguages = array();
+    private $createdLanguages = [];
 
     /**
      * Creates as much languages as possible.

@@ -67,7 +67,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      */
     public function validate(APILimitationValue $limitationValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         foreach ($limitationValue->limitationValues as $key => $path) {
             try {
                 $pathArray = explode('/', trim($path, '/'));
@@ -80,10 +80,10 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
                 $validationErrors[] = new ValidationError(
                     "limitationValues[%key%] => '%value%' does not exist in the backend",
                     null,
-                    array(
+                    [
                         'value' => $path,
                         'key' => $key,
-                    )
+                    ]
                 );
             }
         }
@@ -100,7 +100,7 @@ class SubtreeLimitationType extends AbstractPersistenceLimitationType implements
      */
     public function buildValue(array $limitationValues)
     {
-        return new APISubtreeLimitation(array('limitationValues' => $limitationValues));
+        return new APISubtreeLimitation(['limitationValues' => $limitationValues]);
     }
 
     /**

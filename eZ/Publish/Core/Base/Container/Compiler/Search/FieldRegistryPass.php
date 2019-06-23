@@ -42,10 +42,10 @@ class FieldRegistryPass implements CompilerPassInterface
 
                 $fieldRegistryDefinition->addMethodCall(
                     'registerType',
-                    array(
+                    [
                         $attribute['alias'],
                         new Reference($id),
-                    )
+                    ]
                 );
             }
         }

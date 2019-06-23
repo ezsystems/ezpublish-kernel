@@ -41,7 +41,7 @@ class RestProvider implements ProviderInterface
      */
     public function getOptions(Request $request)
     {
-        $return = array();
+        $return = [];
         if ($request->attributes->has('is_rest_request') && $request->attributes->get('is_rest_request') === true) {
             $return['allow_methods'] = $this->getAllowedMethods($request->getPathInfo());
         }
@@ -64,6 +64,6 @@ class RestProvider implements ProviderInterface
             // neither does it care about a method not allowed
         }
 
-        return array();
+        return [];
     }
 }

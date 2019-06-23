@@ -29,33 +29,33 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
 
         $objectState = new Values\RestObjectState(
             new ObjectState(
-                array(
+                [
                     'id' => 42,
                     'identifier' => 'test-state',
                     'priority' => '0',
                     'mainLanguageCode' => 'eng-GB',
-                    'languageCodes' => array('eng-GB', 'eng-US'),
-                    'names' => array(
+                    'languageCodes' => ['eng-GB', 'eng-US'],
+                    'names' => [
                         'eng-GB' => 'State name EN',
                         'eng-US' => 'State name EN US',
-                    ),
-                    'descriptions' => array(
+                    ],
+                    'descriptions' => [
                         'eng-GB' => 'State description EN',
                         'eng-US' => 'State description EN US',
-                    ),
-                )
+                    ],
+                ]
             ),
             21
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadObjectState',
-            array('objectStateGroupId' => $objectState->groupId, 'objectStateId' => $objectState->objectState->id),
+            ['objectStateGroupId' => $objectState->groupId, 'objectStateId' => $objectState->objectState->id],
             "/content/objectstategroups/{$objectState->groupId}/objectstates/{$objectState->objectState->id}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_loadObjectStateGroup',
-            array('objectStateGroupId' => $objectState->groupId),
+            ['objectStateGroupId' => $objectState->groupId],
             "/content/objectstategroups/{$objectState->groupId}"
         );
 
@@ -82,12 +82,12 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsObjectStateElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ObjectState',
-                'children' => array(
+                'children' => [
                     'count' => 8,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ObjectState> element.',
             false
@@ -104,13 +104,13 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsObjectStateAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ObjectState',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ObjectState+xml',
                     'href' => '/content/objectstategroups/21/objectstates/42',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ObjectState> attributes.',
             false
@@ -127,9 +127,9 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsObjectStateGroupElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ObjectStateGroup',
-            ),
+            ],
             $result,
             'Invalid <ObjectStateGroup> element.',
             false
@@ -146,13 +146,13 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsObjectStateGroupAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'ObjectStateGroup',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.ObjectStateGroup+xml',
                     'href' => '/content/objectstategroups/21',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <ObjectStateGroup> attributes.',
             false
@@ -169,10 +169,10 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIdValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'id',
                 'content' => '42',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ObjectState> id value element.',
             false
@@ -189,10 +189,10 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsIdentifierValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'identifier',
                 'content' => 'test-state',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ObjectState> identifier value element.',
             false
@@ -209,10 +209,10 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsPriorityValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'priority',
                 'content' => '0',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ObjectState> priority value element.',
             false
@@ -229,10 +229,10 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsDefaultLanguageCodeValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'defaultLanguageCode',
                 'content' => 'eng-GB',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ObjectState> defaultLanguageCode value element.',
             false
@@ -249,10 +249,10 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsLanguageCodesValueElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'languageCodes',
                 'content' => 'eng-GB,eng-US',
-            ),
+            ],
             $result,
             'Invalid or non-existing <ObjectState> languageCodes value element.',
             false
@@ -269,12 +269,12 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsNamesElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'names',
-                'children' => array(
+                'children' => [
                     'count' => 2,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <names> element.',
             false
@@ -291,12 +291,12 @@ class RestObjectStateTest extends ValueObjectVisitorBaseTest
     public function testResultContainsDescriptionsElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'descriptions',
-                'children' => array(
+                'children' => [
                     'count' => 2,
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <descriptions> element.',
             false

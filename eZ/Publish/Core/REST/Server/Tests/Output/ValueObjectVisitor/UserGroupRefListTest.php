@@ -32,32 +32,32 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $UserGroupRefList = new UserGroupRefList(
-            array(
+            [
                 new RestUserGroup(
                     new UserGroup(),
                     $this->getMockForAbstractClass(ContentType::class),
                     new ContentInfo(),
                     new Location(
-                        array(
+                        [
                             'pathString' => '/1/5/14',
-                            'path' => array(1, 5, 14),
-                        )
+                            'path' => [1, 5, 14],
+                        ]
                     ),
-                    array()
+                    []
                 ),
                 new RestUserGroup(
                     new UserGroup(),
                     $this->getMockForAbstractClass(ContentType::class),
                     new ContentInfo(),
                     new Location(
-                        array(
+                        [
                             'pathString' => '/1/5/13',
-                            'path' => array(1, 5, 13),
-                        )
+                            'path' => [1, 5, 13],
+                        ]
                     ),
-                    array()
+                    []
                 ),
-            ),
+            ],
             '/some/path',
             14
         );
@@ -65,24 +65,24 @@ class UserGroupRefListTest extends ValueObjectVisitorBaseTest
         $groupPath = trim($UserGroupRefList->userGroups[0]->mainLocation->pathString, '/');
         $this->addRouteExpectation(
             'ezpublish_rest_loadUserGroup',
-            array('groupPath' => $groupPath),
+            ['groupPath' => $groupPath],
             "/user/groups/{$groupPath}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_unassignUserFromUserGroup',
-            array('userId' => $UserGroupRefList->userId, 'groupPath' => 14),
+            ['userId' => $UserGroupRefList->userId, 'groupPath' => 14],
             '/user/users/14/groups/14'
         );
 
         $groupPath = trim($UserGroupRefList->userGroups[1]->mainLocation->pathString, '/');
         $this->addRouteExpectation(
             'ezpublish_rest_loadUserGroup',
-            array('groupPath' => '1/5/13'),
+            ['groupPath' => '1/5/13'],
             "/user/groups/{$groupPath}"
         );
         $this->addRouteExpectation(
             'ezpublish_rest_unassignUserFromUserGroup',
-            array('userId' => $UserGroupRefList->userId, 'groupPath' => 13),
+            ['userId' => $UserGroupRefList->userId, 'groupPath' => 13],
             '/user/users/14/groups/13'
         );
 

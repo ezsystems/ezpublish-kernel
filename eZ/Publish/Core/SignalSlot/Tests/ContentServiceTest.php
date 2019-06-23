@@ -50,28 +50,28 @@ class ContentServiceTest extends ServiceTest
         $contentCreateStruct = new ContentCreateStruct();
         $locationCreateStruct = new LocationCreateStruct();
         $copyLocationCreateStruct = new LocationCreateStruct(
-            array('parentLocationId' => $copyParentLocationId)
+            ['parentLocationId' => $copyParentLocationId]
         );
         $contentMetadataUpdateStruct = new ContentMetadataUpdateStruct();
         $contentUpdateStruct = new ContentUpdateStruct();
 
         $contentType = new ContentType(
-            array(
-                'fieldDefinitions' => array(),
-            )
+            [
+                'fieldDefinitions' => [],
+            ]
         );
         $contentInfo = $this->getContentInfo($contentId, $remoteId);
         $versionInfo = $this->getVersionInfo($contentInfo, $versionNo);
         $content = $this->getContent($versionInfo);
         $translationInfo = new TranslationInfo(
-            array(
+            [
                 'srcVersionInfo' => $versionInfo,
-            )
+            ]
         );
         $translationValues = new TranslationValues();
 
         $user = $this->getUser($userId, md5('Sauron'), $userVersionNo);
-        $usersDraft = array($versionInfo);
+        $usersDraft = [$versionInfo];
 
         $copiedContent = $this->getContent(
             $this->getVersionInfo(
@@ -80,259 +80,259 @@ class ContentServiceTest extends ServiceTest
             )
         );
 
-        $relations = array(new Relation());
+        $relations = [new Relation()];
         $newRelation = new Relation();
         $relationDestContentInfo = $this->getContentInfo($relationDestContentId, md5('Mordor'));
 
-        $translationInfoFilter = array();
+        $translationInfoFilter = [];
 
-        return array(
-            array(
+        return [
+            [
                 'loadContentInfo',
-                array($contentId),
+                [$contentId],
                 $contentInfo,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentInfoByRemoteId',
-                array($remoteId),
+                [$remoteId],
                 $contentInfo,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadVersionInfo',
-                array($contentInfo, $versionNo),
+                [$contentInfo, $versionNo],
                 $versionInfo,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadVersionInfoById',
-                array($contentId, $versionNo),
+                [$contentId, $versionNo],
                 $versionInfo,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentByContentInfo',
-                array($contentInfo, array($language), $versionNo, true),
+                [$contentInfo, [$language], $versionNo, true],
                 $content,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentByVersionInfo',
-                array($versionInfo, array($language), true),
+                [$versionInfo, [$language], true],
                 $content,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContent',
-                array($contentId, array($language), $versionNo, true),
+                [$contentId, [$language], $versionNo, true],
                 $content,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadContentByRemoteId',
-                array($remoteId, array($language), $versionNo, true),
+                [$remoteId, [$language], $versionNo, true],
                 $content,
                 0,
-            ),
-            array(
+            ],
+            [
                 'createContent',
-                array($contentCreateStruct, array($locationCreateStruct)),
+                [$contentCreateStruct, [$locationCreateStruct]],
                 $content,
                 1,
                 ContentServiceSignals\CreateContentSignal::class,
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'updateContentMetadata',
-                array($contentInfo, $contentMetadataUpdateStruct),
+                [$contentInfo, $contentMetadataUpdateStruct],
                 $content,
                 1,
                 ContentServiceSignals\UpdateContentMetadataSignal::class,
-                array('contentId' => $contentId),
-            ),
-            array(
+                ['contentId' => $contentId],
+            ],
+            [
                 'deleteContent',
-                array($contentInfo),
+                [$contentInfo],
                 $contentInfo,
                 1,
                 ContentServiceSignals\DeleteContentSignal::class,
-                array('contentId' => $contentId),
-            ),
-            array(
+                ['contentId' => $contentId],
+            ],
+            [
                 'createContentDraft',
-                array($contentInfo, $versionInfo, $user),
+                [$contentInfo, $versionInfo, $user],
                 $content,
                 1,
                 ContentServiceSignals\CreateContentDraftSignal::class,
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
                     'userId' => $userId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'loadContentDrafts',
-                array($user),
+                [$user],
                 $usersDraft,
                 0,
-            ),
-            array(
+            ],
+            [
                 'translateVersion',
-                array($translationInfo, $translationValues, $user),
+                [$translationInfo, $translationValues, $user],
                 $content,
                 1,
                 ContentServiceSignals\TranslateVersionSignal::class,
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
                     'userId' => $userId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'updateContent',
-                array($versionInfo, $contentUpdateStruct),
+                [$versionInfo, $contentUpdateStruct],
                 $content,
                 1,
                 ContentServiceSignals\UpdateContentSignal::class,
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'publishVersion',
-                array($versionInfo),
+                [$versionInfo],
                 $content,
                 1,
                 ContentServiceSignals\PublishVersionSignal::class,
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'deleteVersion',
-                array($versionInfo),
+                [$versionInfo],
                 $versionInfo,
                 1,
                 ContentServiceSignals\DeleteVersionSignal::class,
-                array(
+                [
                     'contentId' => $contentId,
                     'versionNo' => $versionNo,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'loadVersions',
-                array($contentInfo),
-                array($versionInfo),
+                [$contentInfo],
+                [$versionInfo],
                 0,
-            ),
-            array(
+            ],
+            [
                 'copyContent',
-                array($contentInfo, $copyLocationCreateStruct, $versionInfo),
+                [$contentInfo, $copyLocationCreateStruct, $versionInfo],
                 $copiedContent,
                 1,
                 ContentServiceSignals\CopyContentSignal::class,
-                array(
+                [
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
                     'dstContentId' => $copiedContentId,
                     'dstVersionNo' => $copiedVersionNo,
                     'dstParentLocationId' => $copyParentLocationId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'loadRelations',
-                array($versionInfo),
+                [$versionInfo],
                 $relations,
                 0,
-            ),
-            array(
+            ],
+            [
                 'loadReverseRelations',
-                array($contentInfo),
+                [$contentInfo],
                 $relations,
                 0,
-            ),
-            array(
+            ],
+            [
                 'addRelation',
-                array($versionInfo, $relationDestContentInfo),
+                [$versionInfo, $relationDestContentInfo],
                 $newRelation,
                 1,
                 ContentServiceSignals\AddRelationSignal::class,
-                array(
+                [
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
                     'dstContentId' => $relationDestContentId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'deleteRelation',
-                array($versionInfo, $relationDestContentInfo),
+                [$versionInfo, $relationDestContentInfo],
                 null,
                 1,
                 ContentServiceSignals\DeleteRelationSignal::class,
-                array(
+                [
                     'srcContentId' => $contentId,
                     'srcVersionNo' => $versionNo,
                     'dstContentId' => $relationDestContentId,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'addTranslationInfo',
-                array($translationInfo),
+                [$translationInfo],
                 null,
                 1,
                 ContentServiceSignals\AddTranslationInfoSignal::class,
-                array(),
-            ),
-            array(
+                [],
+            ],
+            [
                 'loadTranslationInfos',
-                array($contentInfo, $translationInfoFilter),
-                array($translationInfo),
+                [$contentInfo, $translationInfoFilter],
+                [$translationInfo],
                 0,
-            ),
-            array(
+            ],
+            [
                 'deleteTranslation',
-                array($contentInfo, $language),
+                [$contentInfo, $language],
                 null,
                 2,
                 DeleteTranslationSignal::class,
-                array('contentId' => $contentId, 'languageCode' => $language),
-            ),
-            array(
+                ['contentId' => $contentId, 'languageCode' => $language],
+            ],
+            [
                 'newContentCreateStruct',
-                array($contentType, $language),
-                array($contentCreateStruct),
+                [$contentType, $language],
+                [$contentCreateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newContentMetadataUpdateStruct',
-                array(),
-                array($contentMetadataUpdateStruct),
+                [],
+                [$contentMetadataUpdateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newContentUpdateStruct',
-                array(),
-                array($contentUpdateStruct),
+                [],
+                [$contentUpdateStruct],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newTranslationInfo',
-                array(),
-                array($translationInfo),
+                [],
+                [$translationInfo],
                 0,
-            ),
-            array(
+            ],
+            [
                 'newTranslationValues',
-                array(),
-                array($translationValues),
+                [],
+                [$translationValues],
                 0,
-            ),
-        );
+            ],
+        ];
     }
 }

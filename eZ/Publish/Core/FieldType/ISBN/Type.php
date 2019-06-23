@@ -30,12 +30,12 @@ class Type extends FieldType
     const ISBN13_PREFIX_978 = '978';
     const ISBN13_PREFIX_979 = '979';
 
-    protected $settingsSchema = array(
-        'isISBN13' => array(
+    protected $settingsSchema = [
+        'isISBN13' => [
             'type' => 'boolean',
             'default' => true,
-        ),
-    );
+        ],
+    ];
 
     /**
      * Returns the field type identifier for this field type.
@@ -133,7 +133,7 @@ class Type extends FieldType
      */
     public function validate(FieldDefinition $fieldDefinition, SPIValue $fieldValue)
     {
-        $validationErrors = array();
+        $validationErrors = [];
         if ($this->isEmptyValue($fieldValue)) {
             return $validationErrors;
         }
@@ -147,7 +147,7 @@ class Type extends FieldType
             $validationErrors[] = new ValidationError(
                 'ISBN-10 must be 10 character length',
                 null,
-                array(),
+                [],
                 'isbn'
             );
         } elseif (strlen($isbnTestNumber) === 10) {
@@ -156,7 +156,7 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     'ISBN value must be in a valid ISBN-10 format',
                     null,
-                    array(),
+                    [],
                     'isbn'
                 );
             }
@@ -166,7 +166,7 @@ class Type extends FieldType
                 $validationErrors[] = new ValidationError(
                     $error,
                     null,
-                    array(),
+                    [],
                     'isbn'
                 );
             }
@@ -238,16 +238,16 @@ class Type extends FieldType
      */
     public function validateFieldSettings($fieldSettings)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($fieldSettings as $name => $value) {
             if (!isset($this->settingsSchema[$name])) {
                 $validationErrors[] = new ValidationError(
                     "Setting '%setting%' is unknown",
                     null,
-                    array(
+                    [
                         '%setting%' => $name,
-                    ),
+                    ],
                     "[$name]"
                 );
                 continue;
@@ -259,9 +259,9 @@ class Type extends FieldType
                         $validationErrors[] = new ValidationError(
                             "Setting '%setting%' value must be of boolean type",
                             null,
-                            array(
+                            [
                                 '%setting%' => $name,
-                            ),
+                            ],
                             "[$name]"
                         );
                     }

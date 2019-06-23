@@ -67,7 +67,7 @@ abstract class Value extends BaseValue
      *
      * @param array $fileData
      */
-    public function __construct(array $fileData = array())
+    public function __construct(array $fileData = [])
     {
         // BC with 5.0 (EZP-20948)
         if (isset($fileData['path'])) {

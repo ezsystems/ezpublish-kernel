@@ -11,30 +11,30 @@ use eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
  */
 class LanguageHandlerMock implements LanguageHandler
 {
-    protected $languages = array();
+    protected $languages = [];
 
     public function __construct()
     {
         $this->languages[] = new Language(
-            array(
+            [
                 'id' => 2,
                 'languageCode' => 'eng-US',
                 'name' => 'US english',
-            )
+            ]
         );
         $this->languages[] = new Language(
-            array(
+            [
                 'id' => 4,
                 'languageCode' => 'eng-GB',
                 'name' => 'British english',
-            )
+            ]
         );
         $this->languages[] = new Language(
-            array(
+            [
                 'id' => 8,
                 'languageCode' => 'ger-DE',
                 'name' => 'German',
-            )
+            ]
         );
     }
 

@@ -224,7 +224,7 @@ abstract class BaseTest extends TestCase
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @param array $propertyNames
      */
-    protected function assertStructPropertiesCorrect(ValueObject $expectedValues, ValueObject $actualObject, array $additionalProperties = array())
+    protected function assertStructPropertiesCorrect(ValueObject $expectedValues, ValueObject $actualObject, array $additionalProperties = [])
     {
         foreach ($expectedValues as $propertyName => $propertyValue) {
             $this->assertPropertiesEqual($propertyName, $propertyValue, $actualObject->$propertyName);
@@ -311,7 +311,7 @@ abstract class BaseTest extends TestCase
         $group = $userService->loadUserGroup($editorsGroupId);
 
         // Create a new user instance.
-        $user = $userService->createUser($userCreate, array($group));
+        $user = $userService->createUser($userCreate, [$group]);
         /* END: Inline */
 
         return $user;
@@ -329,7 +329,7 @@ abstract class BaseTest extends TestCase
         return $this->createCustomUserVersion1(
             'Media Editor',
             'Editor',
-            new SubtreeLimitation(array('limitationValues' => array('/1/43/')))
+            new SubtreeLimitation(['limitationValues' => ['/1/43/']])
         );
     }
 
@@ -408,7 +408,7 @@ abstract class BaseTest extends TestCase
         $userCreate->setField('last_name', ucfirst($login));
 
         // Create a new user instance.
-        $user = $userService->createUser($userCreate, array($userGroup));
+        $user = $userService->createUser($userCreate, [$userGroup]);
         /* END: Inline */
 
         return $user;
@@ -447,7 +447,7 @@ abstract class BaseTest extends TestCase
         $userCreate->setField('last_name', $lastName);
 
         // Create a new user instance.
-        $user = $userService->createUser($userCreate, array($userGroup));
+        $user = $userService->createUser($userCreate, [$userGroup]);
 
         return $user;
     }

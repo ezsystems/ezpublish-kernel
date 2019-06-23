@@ -41,7 +41,7 @@ class LocalPurgeClient implements PurgeClientInterface
         }
 
         if (!is_array($locationIds)) {
-            $locationIds = array($locationIds);
+            $locationIds = [$locationIds];
         }
 
         $purgeRequest = Request::create('http://localhost/', 'BAN');

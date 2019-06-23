@@ -204,7 +204,7 @@ class BuzzDriver implements DriverInterface
      */
     protected function unFormatHeaders(array $headers)
     {
-        $headersInAssociativeArray = array();
+        $headersInAssociativeArray = [];
         foreach ($headers as $header) {
             $colonPosition = strpos($header, ':');
 

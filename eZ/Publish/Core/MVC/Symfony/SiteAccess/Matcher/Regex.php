@@ -58,7 +58,7 @@ abstract class Regex implements Matcher
 
     public function __sleep()
     {
-        return array('regex', 'itemNumber', 'matchedSiteAccess');
+        return ['regex', 'itemNumber', 'matchedSiteAccess'];
     }
 
     public function match()

@@ -35,7 +35,7 @@ class Template extends Render implements Converter
 
         $tags = $xpath->query($xpathExpression);
         /** @var \DOMElement[] $tagsSorted */
-        $tagsSorted = array();
+        $tagsSorted = [];
         $maxDepth = 0;
 
         foreach ($tags as $tag) {
@@ -67,10 +67,10 @@ class Template extends Render implements Converter
     {
         $content = null;
         $tagName = $tag->getAttribute('name');
-        $parameters = array(
+        $parameters = [
             'name' => $tagName,
             'params' => $this->extractConfiguration($tag),
-        );
+        ];
 
         if ($tag->getElementsByTagName('ezcontent')->length > 0) {
             $parameters['content'] = $this->saveNodeXML(

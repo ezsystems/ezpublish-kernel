@@ -30,20 +30,20 @@ class Embed extends Render implements Converter
      *
      * @var array
      */
-    protected $tagDefaultViewMap = array(
+    protected $tagDefaultViewMap = [
         'ezembed' => 'embed',
         'ezembedinline' => 'embed-inline',
-    );
+    ];
 
     /**
      * Maps Docbook target to HTML target.
      *
      * @var array
      */
-    protected $docbookToHtmlTargetMap = array(
+    protected $docbookToHtmlTargetMap = [
         'new' => '_blank',
         'replace' => '_self',
-    );
+    ];
 
     public function __construct(RendererInterface $renderer, LoggerInterface $logger = null)
     {
@@ -81,9 +81,9 @@ class Embed extends Render implements Converter
                 $embedContent = $this->renderer->renderContentEmbed(
                     $parameters['id'],
                     $parameters['viewType'],
-                    array(
+                    [
                         'embedParams' => $parameters,
-                    ),
+                    ],
                     $isInline
                 );
             } elseif ($matches[1] === 'ezlocation') {
@@ -91,9 +91,9 @@ class Embed extends Render implements Converter
                 $embedContent = $this->renderer->renderLocationEmbed(
                     $parameters['id'],
                     $parameters['viewType'],
-                    array(
+                    [
                         'embedParams' => $parameters,
-                    ),
+                    ],
                     $isInline
                 );
             }
@@ -126,9 +126,9 @@ class Embed extends Render implements Converter
         $configuration = $this->extractConfiguration($embed);
 
         // Setting template parameters only if not empty
-        $parameters = array(
+        $parameters = [
             'viewType' => $viewType,
-        );
+        ];
 
         if (!empty($class)) {
             $parameters['class'] = $class;
@@ -209,12 +209,12 @@ class Embed extends Render implements Converter
             $resourceId = substr($resourceId, 0, $fragmentPosition);
         }
 
-        $parameters = array(
+        $parameters = [
             'href' => $hrefResolved,
             'resourceType' => $resourceType,
             'resourceId' => $resourceId,
             'wrapped' => $this->isLinkWrapped($embed),
-        );
+        ];
 
         if (!empty($resourceFragmentIdentifier)) {
             $parameters['resourceFragmentIdentifier'] = $resourceFragmentIdentifier;

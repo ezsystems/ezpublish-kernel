@@ -31,7 +31,7 @@ class Guzzle4Driver extends GuzzleDriver
      */
     public function getHeaders()
     {
-        $headers = array();
+        $headers = [];
         foreach ((array)$this->getResponse()->getHeaders() as $header => $headerObject) {
             $headers[strtolower($header)] = implode(';', $headerObject);
         }

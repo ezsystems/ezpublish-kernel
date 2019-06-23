@@ -31,10 +31,10 @@ class FOSPurgeClientTest extends TestCase
         parent::setUp();
         $this->cacheManager = $this->getMockBuilder(CacheManager::class)
             ->setConstructorArgs(
-                array(
+                [
                     $this->createMock(ProxyClientInterface::class),
                     $this->createMock(UrlGeneratorInterface::class),
-                )
+                ]
             )
             ->getMock();
         $this->purgeClient = new FOSPurgeClient($this->cacheManager);
@@ -45,7 +45,7 @@ class FOSPurgeClientTest extends TestCase
         $this->cacheManager
             ->expects($this->never())
             ->method('invalidate');
-        $this->purgeClient->purge(array());
+        $this->purgeClient->purge([]);
     }
 
     public function testPurgeOneLocationId()
@@ -54,7 +54,7 @@ class FOSPurgeClientTest extends TestCase
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidate')
-            ->with(array('X-Location-Id' => "^($locationId)$"));
+            ->with(['X-Location-Id' => "^($locationId)$"]);
 
         $this->purgeClient->purge($locationId);
     }
@@ -67,18 +67,18 @@ class FOSPurgeClientTest extends TestCase
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidate')
-            ->with(array('X-Location-Id' => '^(' . implode('|', $locationIds) . ')$'));
+            ->with(['X-Location-Id' => '^(' . implode('|', $locationIds) . ')$']);
 
         $this->purgeClient->purge($locationIds);
     }
 
     public function purgeTestProvider()
     {
-        return array(
-            array(array(123)),
-            array(array(123, 456)),
-            array(array(123, 456, 789)),
-        );
+        return [
+            [[123]],
+            [[123, 456]],
+            [[123, 456, 789]],
+        ];
     }
 
     public function testPurgeAll()
@@ -86,7 +86,7 @@ class FOSPurgeClientTest extends TestCase
         $this->cacheManager
             ->expects($this->once())
             ->method('invalidate')
-            ->with(array('X-Location-Id' => '.*'));
+            ->with(['X-Location-Id' => '.*']);
 
         $this->purgeClient->purgeAll();
     }

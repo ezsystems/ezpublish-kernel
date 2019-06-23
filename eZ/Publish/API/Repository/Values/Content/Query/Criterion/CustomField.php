@@ -21,7 +21,7 @@ class CustomField extends Criterion implements CriterionInterface
 {
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(Operator::IN, Specifications::FORMAT_ARRAY),
             new Specifications(Operator::EQ, Specifications::FORMAT_SINGLE),
             new Specifications(Operator::GT, Specifications::FORMAT_SINGLE),
@@ -31,6 +31,6 @@ class CustomField extends Criterion implements CriterionInterface
             new Specifications(Operator::LIKE, Specifications::FORMAT_SINGLE),
             new Specifications(Operator::BETWEEN, Specifications::FORMAT_ARRAY, null, 2),
             new Specifications(Operator::CONTAINS, Specifications::FORMAT_SINGLE),
-        );
+        ];
     }
 }

@@ -107,17 +107,17 @@ class MapLocationDistanceRange extends Field
         $location = $criterion->valueData;
         $range = $this->getFilterRange($criterion->operator, $start, $end);
 
-        $filters = array();
+        $filters = [];
         foreach ($fieldNames as $name) {
             $filter = $range;
-            $filter["fields_doc.{$name}"] = array(
+            $filter["fields_doc.{$name}"] = [
                 'lat' => $location->latitude,
                 'lon' => $location->longitude,
-            );
+            ];
 
-            $filters[] = array(
+            $filters[] = [
                 'geo_distance_range' => $filter,
-            );
+            ];
         }
 
         return $filters;
@@ -136,24 +136,24 @@ class MapLocationDistanceRange extends Field
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $filter = array(
-            'nested' => array(
+        $filter = [
+            'nested' => [
                 'path' => 'fields_doc',
-                'filter' => array(
+                'filter' => [
                     'or' => $this->getCondition($criterion),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($languageFilter !== null) {
-            $filter['nested']['filter'] = array(
-                'and' => array(
+            $filter['nested']['filter'] = [
+                'and' => [
                     $fieldFilter,
                     $filter['nested']['filter'],
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;
@@ -172,35 +172,35 @@ class MapLocationDistanceRange extends Field
      */
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        $query = array(
-            'filtered' => array(
-                'filter' => array(
+        $query = [
+            'filtered' => [
+                'filter' => [
                     'or' => $this->getCondition($criterion),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         $fieldFilter = $this->getFieldFilter($languageFilter);
 
         if ($fieldFilter === null) {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
                     'query' => $query,
-                ),
-            );
+                ],
+            ];
         } else {
-            $query = array(
-                'nested' => array(
+            $query = [
+                'nested' => [
                     'path' => 'fields_doc',
-                    'query' => array(
-                        'filtered' => array(
+                    'query' => [
+                        'filtered' => [
                             'query' => $query,
                             'filter' => $fieldFilter,
-                        ),
-                    ),
-                ),
-            );
+                        ],
+                    ],
+                ],
+            ];
         }
 
         return $query;

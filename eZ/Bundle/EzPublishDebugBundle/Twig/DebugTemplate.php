@@ -21,7 +21,7 @@ class DebugTemplate extends Twig_Template
 {
     private $fileSystem;
 
-    public function display(array $context, array $blocks = array())
+    public function display(array $context, array $blocks = [])
     {
         $this->fileSystem = $this->fileSystem ?: new Filesystem();
 
@@ -86,7 +86,7 @@ class DebugTemplate extends Twig_Template
     /**
      * {@inheritdoc}
      */
-    protected function doDisplay(array $context, array $blocks = array())
+    protected function doDisplay(array $context, array $blocks = [])
     {
         return '';
     }
@@ -96,6 +96,6 @@ class DebugTemplate extends Twig_Template
      */
     public function getDebugInfo()
     {
-        return array();
+        return [];
     }
 }

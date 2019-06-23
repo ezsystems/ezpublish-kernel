@@ -22,7 +22,7 @@ class RouteReference
      */
     private $route;
 
-    public function __construct($route, array $params = array())
+    public function __construct($route, array $params = [])
     {
         $this->route = $route;
         $this->params = new ParameterBag($params);

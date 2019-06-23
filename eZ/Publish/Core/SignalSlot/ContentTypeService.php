@@ -84,9 +84,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->createContentTypeGroup($contentTypeGroupCreateStruct);
         $this->signalDispatcher->emit(
             new CreateContentTypeGroupSignal(
-                array(
+                [
                     'groupId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -131,9 +131,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->updateContentTypeGroup($contentTypeGroup, $contentTypeGroupUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateContentTypeGroupSignal(
-                array(
+                [
                     'contentTypeGroupId' => $contentTypeGroup->id,
-                )
+                ]
             )
         );
 
@@ -155,9 +155,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->deleteContentTypeGroup($contentTypeGroup);
         $this->signalDispatcher->emit(
             new DeleteContentTypeGroupSignal(
-                array(
+                [
                     'contentTypeGroupId' => $contentTypeGroup->id,
-                )
+                ]
             )
         );
 
@@ -188,9 +188,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->createContentType($contentTypeCreateStruct, $contentTypeGroups);
         $this->signalDispatcher->emit(
             new CreateContentTypeSignal(
-                array(
+                [
                     'contentTypeId' => $returnValue->id,
-                )
+                ]
             )
         );
 
@@ -261,9 +261,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->createContentTypeDraft($contentType);
         $this->signalDispatcher->emit(
             new CreateContentTypeDraftSignal(
-                array(
+                [
                     'contentTypeId' => $contentType->id,
-                )
+                ]
             )
         );
 
@@ -286,9 +286,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateContentTypeDraftSignal(
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeDraft->id,
-                )
+                ]
             )
         );
 
@@ -310,9 +310,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->deleteContentType($contentType);
         $this->signalDispatcher->emit(
             new DeleteContentTypeSignal(
-                array(
+                [
                     'contentTypeId' => $contentType->id,
-                )
+                ]
             )
         );
 
@@ -337,10 +337,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->copyContentType($contentType, $user);
         $this->signalDispatcher->emit(
             new CopyContentTypeSignal(
-                array(
+                [
                     'contentTypeId' => $contentType->id,
                     'userId' => ($user !== null ? $user->id : null),
-                )
+                ]
             )
         );
 
@@ -361,10 +361,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->assignContentTypeGroup($contentType, $contentTypeGroup);
         $this->signalDispatcher->emit(
             new AssignContentTypeGroupSignal(
-                array(
+                [
                     'contentTypeId' => $contentType->id,
                     'contentTypeGroupId' => $contentTypeGroup->id,
-                )
+                ]
             )
         );
 
@@ -386,10 +386,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->unassignContentTypeGroup($contentType, $contentTypeGroup);
         $this->signalDispatcher->emit(
             new UnassignContentTypeGroupSignal(
-                array(
+                [
                     'contentTypeId' => $contentType->id,
                     'contentTypeGroupId' => $contentTypeGroup->id,
-                )
+                ]
             )
         );
 
@@ -418,9 +418,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
         $this->signalDispatcher->emit(
             new AddFieldDefinitionSignal(
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeDraft->id,
-                )
+                ]
             )
         );
 
@@ -441,10 +441,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->removeFieldDefinition($contentTypeDraft, $fieldDefinition);
         $this->signalDispatcher->emit(
             new RemoveFieldDefinitionSignal(
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeDraft->id,
                     'fieldDefinitionId' => $fieldDefinition->id,
-                )
+                ]
             )
         );
 
@@ -467,10 +467,10 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->updateFieldDefinition($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct);
         $this->signalDispatcher->emit(
             new UpdateFieldDefinitionSignal(
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeDraft->id,
                     'fieldDefinitionId' => $fieldDefinition->id,
-                )
+                ]
             )
         );
 
@@ -493,9 +493,9 @@ class ContentTypeService implements ContentTypeServiceInterface
         $returnValue = $this->service->publishContentTypeDraft($contentTypeDraft);
         $this->signalDispatcher->emit(
             new PublishContentTypeDraftSignal(
-                array(
+                [
                     'contentTypeDraftId' => $contentTypeDraft->id,
-                )
+                ]
             )
         );
 

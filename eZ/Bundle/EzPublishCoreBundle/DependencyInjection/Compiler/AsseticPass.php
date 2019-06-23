@@ -27,10 +27,10 @@ class AsseticPass implements CompilerPassInterface
         $assetFactoryDef = $container->findDefinition('assetic.asset_factory');
         $assetFactoryDef
             ->setClass(AssetFactory::class)
-            ->addMethodCall('setConfigResolver', array(new Reference('ezpublish.config.resolver')))
+            ->addMethodCall('setConfigResolver', [new Reference('ezpublish.config.resolver')])
             ->addMethodCall(
                 'setDynamicSettingParser',
-                array(new Reference('ezpublish.config.dynamic_setting.parser'))
+                [new Reference('ezpublish.config.dynamic_setting.parser')]
             );
     }
 }

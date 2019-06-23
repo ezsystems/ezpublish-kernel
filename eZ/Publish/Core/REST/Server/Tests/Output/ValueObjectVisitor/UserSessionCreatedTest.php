@@ -42,15 +42,15 @@ class UserSessionCreatedTest extends UserSessionTest
 
         $this->addRouteExpectation(
             'ezpublish_rest_deleteSession',
-            array(
+            [
                 'sessionId' => $session->sessionId,
-            ),
+            ],
             "/user/sessions/{$session->sessionId}"
         );
 
         $this->addRouteExpectation(
             'ezpublish_rest_loadUser',
-            array('userId' => $session->user->id),
+            ['userId' => $session->user->id],
             "/user/users/{$session->user->id}"
         );
 

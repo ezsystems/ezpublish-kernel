@@ -291,7 +291,7 @@ class HandlerTest extends TestCase
 
             $containerBuilder->setParameter(
                 'languages',
-                array('eng-US', 'eng-GB')
+                ['eng-US', 'eng-GB']
             );
             $containerBuilder->setParameter(
                 'legacy_dsn',

@@ -118,12 +118,12 @@ abstract class FieldTypeHashGeneratorBaseTest extends TestCase
     {
         $this->getGenerator()->generateFieldTypeHash(
             'fieldValue',
-            array(
+            [
                 23,
                 true,
                 'Sindelfingen',
                 null,
-            )
+            ]
         );
 
         $this->assertSerializationSame(__FUNCTION__);
@@ -133,12 +133,12 @@ abstract class FieldTypeHashGeneratorBaseTest extends TestCase
     {
         $this->getGenerator()->generateFieldTypeHash(
             'fieldValue',
-            array(
+            [
                 'age' => 23,
                 'married' => true,
                 'city' => 'Sindelfingen',
                 'cause' => null,
-            )
+            ]
         );
 
         $this->assertSerializationSame(__FUNCTION__);
@@ -148,12 +148,12 @@ abstract class FieldTypeHashGeneratorBaseTest extends TestCase
     {
         $this->getGenerator()->generateFieldTypeHash(
             'fieldValue',
-            array(
+            [
                 23,
                 'married' => true,
                 'Sindelfingen',
                 'cause' => null,
-            )
+            ]
         );
 
         $this->assertSerializationSame(__FUNCTION__);
@@ -163,10 +163,10 @@ abstract class FieldTypeHashGeneratorBaseTest extends TestCase
     {
         $this->getGenerator()->generateFieldTypeHash(
             'fieldValue',
-            array(
-                array('id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'),
-                array('id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com'),
-            )
+            [
+                ['id' => 1, 'name' => 'Joe Sindelfingen', 'email' => 'sindelfingen@example.com'],
+                ['id' => 2, 'name' => 'Joe Bielefeld', 'email' => 'bielefeld@example.com'],
+            ]
         );
 
         $this->assertSerializationSame(__FUNCTION__);
@@ -232,7 +232,7 @@ abstract class FieldTypeHashGeneratorBaseTest extends TestCase
                 $fqClassName,
                 strlen(__NAMESPACE__) + 1
             ),
-            array('\\' => '_')
+            ['\\' => '_']
         );
     }
 }

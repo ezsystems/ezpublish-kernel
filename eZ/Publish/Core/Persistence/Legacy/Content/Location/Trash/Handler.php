@@ -182,7 +182,7 @@ class Handler implements BaseTrashHandler
     {
         // CBA: Ignore criterion for now.
         $rows = $this->locationGateway->listTrashed($offset, $limit, $sort);
-        $items = array();
+        $items = [];
 
         foreach ($rows as $row) {
             $items[] = $this->locationMapper->createLocationFromRow($row, null, new Trashed());

@@ -21,8 +21,8 @@ class InteractiveLoginTokenTest extends TestCase
         $originalTokenType = 'FooBar';
         $credentials = 'my_credentials';
         $providerKey = 'key';
-        $roles = array('ROLE_USER', 'ROLE_TEST', new Role('ROLE_FOO'));
-        $expectedRoles = array();
+        $roles = ['ROLE_USER', 'ROLE_TEST', new Role('ROLE_FOO')];
+        $expectedRoles = [];
         foreach ($roles as $role) {
             if (is_string($role)) {
                 $expectedRoles[] = new Role($role);
@@ -46,7 +46,7 @@ class InteractiveLoginTokenTest extends TestCase
         $originalTokenType = 'FooBar';
         $credentials = 'my_credentials';
         $providerKey = 'key';
-        $roles = array('ROLE_USER', 'ROLE_TEST', new Role('ROLE_FOO'));
+        $roles = ['ROLE_USER', 'ROLE_TEST', new Role('ROLE_FOO')];
 
         $token = new InteractiveLoginToken($user, $originalTokenType, $credentials, $providerKey, $roles);
         $serialized = serialize($token);

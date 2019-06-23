@@ -35,14 +35,14 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testCreateGroup()
     {
         $inputStruct = new SPIInputStruct(
-            array('identifier' => 'test_state_group', 'name' => 'Test State Group')
+            ['identifier' => 'test_state_group', 'name' => 'Test State Group']
         );
         $expectedGroup = new SPIObjectStateGroup(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state_group',
                 'name' => 'Test State Group',
-            )
+            ]
         );
         $this->loggerMock->expects($this->once())->method('logCall');
 
@@ -95,11 +95,11 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadGroup()
     {
         $expectedGroup = new SPIObjectStateGroup(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state_group',
                 'name' => 'Test State Group',
-            )
+            ]
         );
 
         $cacheItemMock = $this->getCacheItemMock();
@@ -152,11 +152,11 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadGroupHasCache()
     {
         $expectedGroup = new SPIObjectStateGroup(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state_group',
                 'name' => 'Test State Group',
-            )
+            ]
         );
 
         $cacheItemMock = $this->getCacheItemMock();
@@ -181,11 +181,11 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadGroupByIdentifier()
     {
         $expectedGroup = new SPIObjectStateGroup(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state_group',
                 'name' => 'Test State Group',
-            )
+            ]
         );
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -209,14 +209,14 @@ class ObjectStateHandlerTest extends HandlerTest
 
     public function generateObjectGroupsArray()
     {
-        $result = array();
+        $result = [];
         for ($i = 1; $i <= 20; ++$i) {
             $result[] = new SPIObjectStateGroup(
-                array(
+                [
                     'id' => $i,
                     'identifier' => "test_state_group_${i}",
                     'name' => "Test State Group #${i}",
-                )
+                ]
             );
         }
 
@@ -353,29 +353,29 @@ class ObjectStateHandlerTest extends HandlerTest
      */
     public function testLoadObjectStates()
     {
-        $testStates = array(
+        $testStates = [
             new SPIObjectState(
-                array(
+                [
                     'id' => 1,
                     'identifier' => 'test_state_1_group1',
                     'groupId' => 1,
-                )
+                ]
             ),
             new SPIObjectState(
-                array(
+                [
                     'id' => 2,
                     'identifier' => 'test_state_2_group1',
                     'groupId' => 1,
-                )
+                ]
             ),
             new SPIObjectState(
-                array(
+                [
                     'id' => 3,
                     'identifier' => 'test_state_3_group1',
                     'groupId' => 1,
-                )
+                ]
             ),
-        );
+        ];
 
         $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
@@ -427,29 +427,29 @@ class ObjectStateHandlerTest extends HandlerTest
      */
     public function testLoadObjectStatesCached()
     {
-        $testStates = array(
+        $testStates = [
             new SPIObjectState(
-                array(
+                [
                     'id' => 1,
                     'identifier' => 'test_state_1_group1',
                     'groupId' => 1,
-                )
+                ]
             ),
             new SPIObjectState(
-                array(
+                [
                     'id' => 2,
                     'identifier' => 'test_state_2_group1',
                     'groupId' => 1,
-                )
+                ]
             ),
             new SPIObjectState(
-                array(
+                [
                     'id' => 3,
                     'identifier' => 'test_state_3_group1',
                     'groupId' => 1,
-                )
+                ]
             ),
-        );
+        ];
 
         $cacheItemMock = $this->getCacheItemMock();
         $this->cacheMock
@@ -477,14 +477,14 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testUpdateGroup()
     {
         $inputStruct = new SPIInputStruct(
-            array('identifier' => 'test_state_group', 'name' => 'Test State Group (New)')
+            ['identifier' => 'test_state_group', 'name' => 'Test State Group (New)']
         );
         $expectedGroup = new SPIObjectStateGroup(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state_group_new',
                 'name' => 'Test State Group (New)',
-            )
+            ]
         );
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -558,15 +558,15 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testCreate()
     {
         $inputStruct = new SPIInputStruct(
-            array('identifier' => 'test_state', 'name' => 'Test State')
+            ['identifier' => 'test_state', 'name' => 'Test State']
         );
         $expectedState = new SPIObjectState(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state',
                 'name' => 'Test State',
                 'groupId' => 1,
-            )
+            ]
         );
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -600,12 +600,12 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoad()
     {
         $expectedState = new SPIObjectState(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state',
                 'name' => 'Test State',
                 'groupId' => 1,
-            )
+            ]
         );
 
         $cacheItemMock = $this->getCacheItemMock();
@@ -658,12 +658,12 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadCached()
     {
         $expectedState = new SPIObjectState(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state',
                 'name' => 'Test State',
                 'groupId' => 1,
-            )
+            ]
         );
 
         $cacheItemMock = $this->getCacheItemMock();
@@ -688,12 +688,12 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testLoadByIdentifier()
     {
         $expectedState = new SPIObjectState(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state',
                 'name' => 'Test State',
                 'groupId' => 1,
-            )
+            ]
         );
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -721,16 +721,16 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testUpdate()
     {
         $inputStruct = new SPIInputStruct(
-            array('identifier' => 'test_state_new', 'name' => 'Test State (new)')
+            ['identifier' => 'test_state_new', 'name' => 'Test State (new)']
         );
 
         $expectedState = new SPIObjectState(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state',
                 'name' => 'Test State',
                 'groupId' => 1,
-            )
+            ]
         );
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -769,13 +769,13 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testSetPriority()
     {
         $expectedState = new SPIObjectState(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state',
                 'name' => 'Test State',
                 'groupId' => 1,
                 'priority' => 1,
-            )
+            ]
         );
 
         $this->loggerMock->expects($this->once())->method('logCall');
@@ -869,13 +869,13 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testGetContentState()
     {
         $expectedState = new SPIObjectState(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state',
                 'name' => 'Test State',
                 'groupId' => 1,
                 'priority' => 1,
-            )
+            ]
         );
 
         $cacheItemMock = $this->getCacheItemMock();
@@ -927,12 +927,12 @@ class ObjectStateHandlerTest extends HandlerTest
     public function testGetContentStateCached()
     {
         $expectedState = new SPIObjectState(
-            array(
+            [
                 'id' => 1,
                 'identifier' => 'test_state',
                 'name' => 'Test State',
                 'groupId' => 1,
-            )
+            ]
         );
 
         $cacheItemMock = $this->getCacheItemMock();

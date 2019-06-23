@@ -40,10 +40,10 @@ class Section extends FacetBuilderVisitor
     public function map($name, $data)
     {
         return new Facet\SectionFacet(
-            array(
+            [
                 'name' => (string)substr($name, 9),
                 'entries' => $this->mapData($data),
-            )
+            ]
         );
     }
 
@@ -68,14 +68,14 @@ class Section extends FacetBuilderVisitor
      */
     public function visit(FacetBuilder $facetBuilder)
     {
-        return array(
-            "section__{$facetBuilder->name}" => array(
-                'terms' => array(
+        return [
+            "section__{$facetBuilder->name}" => [
+                'terms' => [
                     'field' => 'section_id',
                     'min_doc_count' => $facetBuilder->minCount,
                     'size' => $facetBuilder->limit,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

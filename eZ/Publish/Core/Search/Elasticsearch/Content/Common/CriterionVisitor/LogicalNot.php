@@ -59,9 +59,9 @@ class LogicalNot extends CriterionVisitor
         $this->validateCriterionInput($criterion);
 
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
-        return array(
+        return [
             'not' => $dispatcher->dispatch($criterion->criteria[0], Dispatcher::CONTEXT_FILTER, $languageFilter),
-        );
+        ];
     }
 
     /**
@@ -78,14 +78,14 @@ class LogicalNot extends CriterionVisitor
         $this->validateCriterionInput($criterion);
 
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
-        return array(
-            'bool' => array(
+        return [
+            'bool' => [
                 'must_not' => $dispatcher->dispatch(
                     $criterion->criteria[0],
                     Dispatcher::CONTEXT_FILTER,
                     $languageFilter
                 ),
-            ),
-        );
+            ],
+        ];
     }
 }

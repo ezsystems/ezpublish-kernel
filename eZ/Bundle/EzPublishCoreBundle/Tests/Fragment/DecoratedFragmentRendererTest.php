@@ -76,7 +76,7 @@ class DecoratedFragmentRendererTest extends TestCase
     {
         $url = 'http://phoenix-rises.fm/foo/bar';
         $request = new Request();
-        $options = array('foo' => 'bar');
+        $options = ['foo' => 'bar'];
         $expectedReturn = '/_fragment?foo=bar';
         $this->innerRenderer
             ->expects($this->once())
@@ -94,7 +94,7 @@ class DecoratedFragmentRendererTest extends TestCase
         $siteAccess = new SiteAccess('test', 'test');
         $request = new Request();
         $request->attributes->set('siteaccess', $siteAccess);
-        $options = array('foo' => 'bar');
+        $options = ['foo' => 'bar'];
         $expectedReturn = '/_fragment?foo=bar';
         $this->innerRenderer
             ->expects($this->once())

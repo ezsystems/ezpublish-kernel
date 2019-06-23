@@ -64,14 +64,14 @@ class RelationProcessor
         foreach ($fieldType->getRelations($fieldValue) as $relationType => $destinationIds) {
             if ($relationType === Relation::FIELD) {
                 if (!isset($relations[$relationType][$fieldDefinitionId])) {
-                    $relations[$relationType][$fieldDefinitionId] = array();
+                    $relations[$relationType][$fieldDefinitionId] = [];
                 }
                 $relations[$relationType][$fieldDefinitionId] += array_flip($destinationIds);
             } elseif ($relationType & (Relation::LINK | Relation::EMBED)) {
                 // Using bitwise operators as Legacy Stack stores COMMON, LINK and EMBED relation types
                 // in the same entry using bitmask
                 if (!isset($relations[$relationType])) {
-                    $relations[$relationType] = array();
+                    $relations[$relationType] = [];
                 }
 
                 if (isset($destinationIds['locationIds'])) {
@@ -115,10 +115,10 @@ class RelationProcessor
         $sourceContentId,
         $sourceContentVersionNo,
         ContentType $contentType,
-        array $existingRelations = array()
+        array $existingRelations = []
     ) {
         // Map existing relations for easier handling
-        $mappedRelations = array();
+        $mappedRelations = [];
         foreach ($existingRelations as $relation) {
             if ($relation->type === Relation::FIELD) {
                 $fieldDefinition = $contentType->getFieldDefinition($relation->sourceFieldDefinitionIdentifier);
@@ -146,13 +146,13 @@ class RelationProcessor
                         } else {
                             $this->persistenceHandler->contentHandler()->addRelation(
                                 new SPIRelationCreateStruct(
-                                    array(
+                                    [
                                         'sourceContentId' => $sourceContentId,
                                         'sourceContentVersionNo' => $sourceContentVersionNo,
                                         'sourceFieldDefinitionId' => $fieldDefinitionId,
                                         'destinationContentId' => $destinationContentId,
                                         'type' => $relationType,
-                                    )
+                                    ]
                                 )
                             );
                         }
@@ -165,13 +165,13 @@ class RelationProcessor
                     } else {
                         $this->persistenceHandler->contentHandler()->addRelation(
                             new SPIRelationCreateStruct(
-                                array(
+                                [
                                     'sourceContentId' => $sourceContentId,
                                     'sourceContentVersionNo' => $sourceContentVersionNo,
                                     'sourceFieldDefinitionId' => null,
                                     'destinationContentId' => $destinationContentId,
                                     'type' => $relationType,
-                                )
+                                ]
                             )
                         );
                     }

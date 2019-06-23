@@ -109,7 +109,7 @@ abstract class ValueObjectVisitor
         $generator->startHashElement($listName);
         $generator->startList('value');
         foreach ($translatedElements as $languageCode => $element) {
-            $generator->startValueElement('value', $element, array('languageCode' => $languageCode));
+            $generator->startValueElement('value', $element, ['languageCode' => $languageCode]);
             $generator->endValueElement('value');
         }
         $generator->endList('value');

@@ -102,7 +102,7 @@ abstract class HttpCache extends EventDispatchingHttpCache
      */
     protected function getInternalAllowedIPs()
     {
-        return array('127.0.0.1', '::1', 'fe80::1');
+        return ['127.0.0.1', '::1', 'fe80::1'];
     }
 
     protected function getDefaultSubscribers()

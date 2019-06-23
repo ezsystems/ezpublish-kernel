@@ -41,14 +41,14 @@ class LogicalOr extends CriterionVisitor
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
-        return array(
+        return [
             'or' => array_map(
                 function ($value) use ($dispatcher, $languageFilter) {
                     return $dispatcher->dispatch($value, Dispatcher::CONTEXT_FILTER, $languageFilter);
                 },
                 $criterion->criteria
             ),
-        );
+        ];
     }
 
     /**
@@ -63,8 +63,8 @@ class LogicalOr extends CriterionVisitor
     public function visitQuery(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         /* @var $criterion \eZ\Publish\API\Repository\Values\Content\Query\Criterion\LogicalOperator */
-        return array(
-            'bool' => array(
+        return [
+            'bool' => [
                 'should' => array_map(
                     function ($value) use ($dispatcher, $languageFilter) {
                         return $dispatcher->dispatch($value, Dispatcher::CONTEXT_FILTER, $languageFilter);
@@ -72,7 +72,7 @@ class LogicalOr extends CriterionVisitor
                     $criterion->criteria
                 ),
                 'minimum_should_match' => 1,
-            ),
-        );
+            ],
+        ];
     }
 }

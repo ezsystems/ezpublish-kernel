@@ -61,7 +61,7 @@ class URLAlias extends ValueObjectVisitor
     {
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadURLAlias', array('urlAliasId' => $data->id))
+            $this->router->generate('ezpublish_rest_loadURLAlias', ['urlAliasId' => $data->id])
         );
         $generator->endAttribute('href');
 
@@ -75,7 +75,7 @@ class URLAlias extends ValueObjectVisitor
             $generator->startObjectElement('location', 'Location');
             $generator->startAttribute(
                 'href',
-                $this->router->generate('ezpublish_rest_loadLocation', array('locationPath' => $data->destination))
+                $this->router->generate('ezpublish_rest_loadLocation', ['locationPath' => $data->destination])
             );
             $generator->endAttribute('href');
             $generator->endObjectElement('location');

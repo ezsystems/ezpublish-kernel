@@ -15,7 +15,7 @@ class UpdateStruct extends ValueObject
     /**
      * @var string[] Eg. array( 'eng-GB' => "New Article" )
      */
-    public $name = array();
+    public $name = [];
 
     /**
      * Creator user ID for the version.
@@ -29,7 +29,7 @@ class UpdateStruct extends ValueObject
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Field[]
      */
-    public $fields = array();
+    public $fields = [];
 
     /**
      * Modification date for the version.

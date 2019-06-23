@@ -53,7 +53,7 @@ class LegacyStorage extends Gateway
      */
     public function getContentIds(array $remoteIds)
     {
-        $objectRemoteIdMap = array();
+        $objectRemoteIdMap = [];
 
         if (!empty($remoteIds)) {
             $q = $this->getConnection()->createSelectQuery();

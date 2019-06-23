@@ -54,9 +54,9 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentUserGroupLimitation(
-                array(
-                    'limitationValues' => array(true),
-                )
+                [
+                    'limitationValues' => [true],
+                ]
             )
         );
 
@@ -116,9 +116,9 @@ class ParentUserGroupLimitationTest extends BaseLimitationTest
         $policyCreate = $roleService->newPolicyCreateStruct('content', 'create');
         $policyCreate->addLimitation(
             new ParentUserGroupLimitation(
-                array(
-                    'limitationValues' => array(true),
-                )
+                [
+                    'limitationValues' => [true],
+                ]
             )
         );
 

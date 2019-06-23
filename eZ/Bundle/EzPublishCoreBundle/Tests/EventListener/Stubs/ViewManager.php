@@ -28,22 +28,22 @@ class ViewManager implements ViewManagerInterface, SiteAccessAware
     public function renderContent(
         Content $content,
         $viewType = ViewManagerInterface::VIEW_TYPE_FULL,
-        $parameters = array()
+        $parameters = []
     ) {
     }
 
     public function renderLocation(
         Location $location,
         $viewType = ViewManagerInterface::VIEW_TYPE_FULL,
-        $parameters = array()
+        $parameters = []
     ) {
     }
 
-    public function renderBlock(Block $block, $parameters = array())
+    public function renderBlock(Block $block, $parameters = [])
     {
     }
 
-    public function renderContentView(View $view, array $defaultParams = array())
+    public function renderContentView(View $view, array $defaultParams = [])
     {
     }
 }

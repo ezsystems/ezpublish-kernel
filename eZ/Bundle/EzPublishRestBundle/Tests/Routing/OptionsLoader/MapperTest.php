@@ -34,8 +34,8 @@ class MapperTest extends TestCase
 
     public function testMergeMethodsDefault()
     {
-        $optionsRoute = new Route('', array('allowedMethods' => 'PUT,DELETE'));
-        $restRoute = new Route('', array(), array(), array(), '', array(), array('GET', 'POST'));
+        $optionsRoute = new Route('', ['allowedMethods' => 'PUT,DELETE']);
+        $restRoute = new Route('', [], [], [], '', [], ['GET', 'POST']);
 
         $mergedOptionsRoute = $this->mapper->mergeMethodsDefault($optionsRoute, $restRoute);
         self::assertEquals(
@@ -52,18 +52,18 @@ class MapperTest extends TestCase
     {
         $restRoute = new Route(
             '/route/one/{id}',
-            array('_controller' => 'anything'),
-            array('id' => '[0-9]+'),
-            array(),
+            ['_controller' => 'anything'],
+            ['id' => '[0-9]+'],
+            [],
             '',
-            array(),
-            array('PUT', 'DELETE')
+            [],
+            ['PUT', 'DELETE']
         );
 
         $optionsRoute = $this->mapper->mapRoute($restRoute);
 
         self::assertEquals(
-            array('OPTIONS'),
+            ['OPTIONS'],
             $optionsRoute->getMethods()
         );
 

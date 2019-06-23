@@ -39,9 +39,9 @@ class EmailAddressValidatorTest extends TestCase
      */
     public function testConstraintsInitializeGet()
     {
-        $constraints = array(
+        $constraints = [
             'Extent' => 'regex',
-        );
+        ];
         $validator = new EmailAddressValidator();
         $validator->initializeWithConstraints(
             $constraints
@@ -56,12 +56,12 @@ class EmailAddressValidatorTest extends TestCase
      */
     public function testGetConstraintsSchema()
     {
-        $constraintsSchema = array(
-            'Extent' => array(
+        $constraintsSchema = [
+            'Extent' => [
                 'type' => 'string',
                 'default' => 'regex',
-            ),
-        );
+            ],
+        ];
         $validator = new EmailAddressValidator();
         $this->assertSame($constraintsSchema, $validator->getConstraintsSchema());
     }
@@ -74,9 +74,9 @@ class EmailAddressValidatorTest extends TestCase
      */
     public function testConstraintsSetGet()
     {
-        $constraints = array(
+        $constraints = [
             'Extent' => 'regex',
-        );
+        ];
         $validator = new EmailAddressValidator();
         $validator->Extent = $constraints['Extent'];
         $this->assertSame($constraints['Extent'], $validator->Extent);
@@ -86,10 +86,10 @@ class EmailAddressValidatorTest extends TestCase
     {
         $validator = new EmailAddressValidator();
         $validator->Extent = 'regex';
-        $emailAddresses = array('john.doe@example.com', 'Info@eZ.No');
+        $emailAddresses = ['john.doe@example.com', 'Info@eZ.No'];
         foreach ($emailAddresses as $value) {
             $this->assertTrue($validator->validate(new EmailAddressValue($value)));
-            $this->assertSame(array(), $validator->getMessage());
+            $this->assertSame([], $validator->getMessage());
         }
     }
 
@@ -102,7 +102,7 @@ class EmailAddressValidatorTest extends TestCase
     {
         $validator = new EmailAddressValidator();
         $validator->Extent = 'regex';
-        $emailAddresses = array('.john.doe@example.com', 'Info-at-eZ.No');
+        $emailAddresses = ['.john.doe@example.com', 'Info-at-eZ.No'];
         foreach ($emailAddresses as $value) {
             $this->assertFalse($validator->validate(new EmailAddressValue($value)));
         }

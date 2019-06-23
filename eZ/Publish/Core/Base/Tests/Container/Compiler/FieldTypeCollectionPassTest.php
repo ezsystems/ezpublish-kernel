@@ -37,7 +37,7 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         $fieldTypeIdentifier = 'field_type_identifier';
         $serviceId = 'service_id';
         $def = new Definition();
-        $def->addTag('ezpublish.fieldType', array('alias' => $fieldTypeIdentifier));
+        $def->addTag('ezpublish.fieldType', ['alias' => $fieldTypeIdentifier]);
         $this->setDefinition($serviceId, $def);
 
         $this->compile();
@@ -45,7 +45,7 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.field_type_collection.factory',
             'registerFieldType',
-            array($serviceId, $fieldTypeIdentifier)
+            [$serviceId, $fieldTypeIdentifier]
         );
     }
 
@@ -65,7 +65,7 @@ class FieldTypeCollectionPassTest extends AbstractCompilerPassTestCase
         $this->assertContainerBuilderHasServiceDefinitionWithMethodCall(
             'ezpublish.field_type_collection.factory',
             'registerFieldType',
-            array($serviceId, $fieldTypeIdentifier)
+            [$serviceId, $fieldTypeIdentifier]
         );
     }
 }

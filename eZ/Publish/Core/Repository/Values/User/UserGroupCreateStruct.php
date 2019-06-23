@@ -23,7 +23,7 @@ class UserGroupCreateStruct extends APIUserGroupCreateStruct
      *
      * @var \eZ\Publish\API\Repository\Values\Content\Field[]
      */
-    public $fields = array();
+    public $fields = [];
 
     /**
      * Adds a field to the field collection.
@@ -44,11 +44,11 @@ class UserGroupCreateStruct extends APIUserGroupCreateStruct
         }
 
         $this->fields[] = new Field(
-            array(
+            [
                 'fieldDefIdentifier' => $fieldDefIdentifier,
                 'value' => $value,
                 'languageCode' => $language,
-            )
+            ]
         );
     }
 }

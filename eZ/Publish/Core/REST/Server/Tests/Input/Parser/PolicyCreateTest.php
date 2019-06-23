@@ -20,30 +20,30 @@ class PolicyCreateTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'module' => 'content',
             'function' => 'delete',
-            'limitations' => array(
-                'limitation' => array(
-                    array(
+            'limitations' => [
+                'limitation' => [
+                    [
                         '_identifier' => 'Class',
-                        'values' => array(
-                            'ref' => array(
-                                array(
+                        'values' => [
+                            'ref' => [
+                                [
                                     '_href' => 1,
-                                ),
-                                array(
+                                ],
+                                [
                                     '_href' => 2,
-                                ),
-                                array(
+                                ],
+                                [
                                     '_href' => 3,
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $policyCreate = $this->getParser();
         $result = $policyCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -93,7 +93,7 @@ class PolicyCreateTest extends BaseTest
         );
 
         $this->assertEquals(
-            array(1, 2, 3),
+            [1, 2, 3],
             $parsedLimitations['Class']->limitationValues,
             'Limitation values not created correctly.'
         );
@@ -107,29 +107,29 @@ class PolicyCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingModule()
     {
-        $inputArray = array(
+        $inputArray = [
             'function' => 'delete',
-            'limitations' => array(
-                'limitation' => array(
-                    array(
+            'limitations' => [
+                'limitation' => [
+                    [
                         '_identifier' => 'Class',
-                        'values' => array(
-                            'ref' => array(
-                                array(
+                        'values' => [
+                            'ref' => [
+                                [
                                     '_href' => 1,
-                                ),
-                                array(
+                                ],
+                                [
                                     '_href' => 2,
-                                ),
-                                array(
+                                ],
+                                [
                                     '_href' => 3,
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $policyCreate = $this->getParser();
         $policyCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -143,29 +143,29 @@ class PolicyCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingFunction()
     {
-        $inputArray = array(
+        $inputArray = [
             'module' => 'content',
-            'limitations' => array(
-                'limitation' => array(
-                    array(
+            'limitations' => [
+                'limitation' => [
+                    [
                         '_identifier' => 'Class',
-                        'values' => array(
-                            'ref' => array(
-                                array(
+                        'values' => [
+                            'ref' => [
+                                [
                                     '_href' => 1,
-                                ),
-                                array(
+                                ],
+                                [
                                     '_href' => 2,
-                                ),
-                                array(
+                                ],
+                                [
                                     '_href' => 3,
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $policyCreate = $this->getParser();
         $policyCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -179,29 +179,29 @@ class PolicyCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingLimitationIdentifier()
     {
-        $inputArray = array(
+        $inputArray = [
             'module' => 'content',
             'function' => 'delete',
-            'limitations' => array(
-                'limitation' => array(
-                    array(
-                        'values' => array(
-                            'ref' => array(
-                                array(
+            'limitations' => [
+                'limitation' => [
+                    [
+                        'values' => [
+                            'ref' => [
+                                [
                                     '_href' => 1,
-                                ),
-                                array(
+                                ],
+                                [
                                     '_href' => 2,
-                                ),
-                                array(
+                                ],
+                                [
                                     '_href' => 3,
-                                ),
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        );
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
 
         $policyCreate = $this->getParser();
         $policyCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -215,17 +215,17 @@ class PolicyCreateTest extends BaseTest
      */
     public function testParseExceptionOnMissingLimitationValues()
     {
-        $inputArray = array(
+        $inputArray = [
             'module' => 'content',
             'function' => 'delete',
-            'limitations' => array(
-                'limitation' => array(
-                    array(
+            'limitations' => [
+                'limitation' => [
+                    [
                         '_identifier' => 'Class',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
 
         $policyCreate = $this->getParser();
         $policyCreate->parse($inputArray, $this->getParsingDispatcherMock());
@@ -262,10 +262,10 @@ class PolicyCreateTest extends BaseTest
             ->will(
                 $this->returnValue(
                     new PolicyCreateStruct(
-                        array(
+                        [
                             'module' => 'content',
                             'function' => 'delete',
-                        )
+                        ]
                     )
                 )
             );

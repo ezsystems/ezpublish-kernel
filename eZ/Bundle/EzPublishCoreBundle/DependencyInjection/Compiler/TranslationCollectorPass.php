@@ -29,7 +29,7 @@ class TranslationCollectorPass implements CompilerPassInterface
         foreach ($collector->collect() as $file) {
             $definition->addMethodCall(
                 'addResource',
-                array($file['format'], $file['file'], $file['locale'], $file['domain'])
+                [$file['format'], $file['file'], $file['locale'], $file['domain']]
             );
         }
     }

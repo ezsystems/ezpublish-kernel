@@ -44,8 +44,8 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
      */
     protected function getFixtureData()
     {
-        return array(
-            'create' => array(
+        return [
+            'create' => [
                 'id' => null,
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                 'fileName' => 'Icy-Night-Flower-Binary.jpg',
@@ -53,8 +53,8 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
                 'mimeType' => 'image/jpeg',
                 // Left out 'hasControlls', 'autoplay', 'loop', 'height' and
                 // 'width' by intention (will be set to defaults)
-            ),
-            'update' => array(
+            ],
+            'update' => [
                 'id' => null,
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                 'fileName' => 'Blue-Blue-Blue-Sindelfingen.png',
@@ -65,8 +65,8 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
                 'loop' => true,
                 'width' => 23,
                 'height' => 42,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -86,12 +86,12 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'mediaType' => array(
+        return [
+            'mediaType' => [
                 'type' => 'choice',
                 'default' => MediaType::TYPE_HTML5_VIDEO,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -101,9 +101,9 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'mediaType' => MediaType::TYPE_FLASH,
-        );
+        ];
     }
 
     /**
@@ -113,9 +113,9 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -125,14 +125,14 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array(
-            'FileSizeValidator' => array(
-                'maxFileSize' => array(
+        return [
+            'FileSizeValidator' => [
+                'maxFileSize' => [
                     'type' => 'int',
                     'default' => false,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -142,11 +142,11 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array(
-            'FileSizeValidator' => array(
+        return [
+            'FileSizeValidator' => [
                 'maxFileSize' => 2 * 1024 * 1024, // 2 MB
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -156,11 +156,11 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'StringLengthValidator' => array(
+        return [
+            'StringLengthValidator' => [
                 'minStringLength' => new \stdClass(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -244,22 +244,22 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'id' => '/foo/bar/sindelfingen.pdf',
-                ),
+                ],
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
-            ),
-            array(
+            ],
+            [
                 new MediaValue(
-                    array(
+                    [
                         'id' => '/foo/bar/sindelfingen.pdf',
-                    )
+                    ]
                 ),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentValue',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -389,12 +389,12 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
         $fieldValue = $this->getValidCreationFieldData();
         $fieldValue->uri = $expected['uri'];
 
-        return array(
-            array(
+        return [
+            [
                 $fieldValue,
                 $expected,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -412,49 +412,49 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
         $fieldValue = $this->getValidCreationFieldData();
         $fieldValue->uri = $fixture['create']['uri'];
 
-        return array(
-            array(
+        return [
+            [
                 $fixture['create'],
                 $fieldValue,
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new MediaValue()),
-        );
+        return [
+            [new MediaValue()],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 
     protected function getValidSearchValueOne()
     {
         return new MediaValue(
-            array(
+            [
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.jpg'),
                 'fileName' => 'blue-blue-blue-sindelfingen.jpg',
                 'fileSize' => filesize($path),
-            )
+            ]
         );
     }
 
     protected function getValidSearchValueTwo()
     {
         return new MediaValue(
-            array(
+            [
                 'inputUri' => ($path = __DIR__ . '/_fixtures/image.png'),
                 'fileName' => 'icy-night-flower-binary.png',
                 'fileSize' => filesize($path),
-            )
+            ]
         );
     }
 
@@ -474,18 +474,18 @@ class MediaIntegrationTest extends FileSearchBaseIntegrationTest
 
     protected function getAdditionallyIndexedFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 'file_size',
                 $this->getValidSearchValueOne()->fileSize,
                 $this->getValidSearchValueTwo()->fileSize,
-            ),
-            array(
+            ],
+            [
                 'mime_type',
                 // ensure case-insensitivity
                 'IMAGE/JPEG',
                 'IMAGE/PNG',
-            ),
-        );
+            ],
+        ];
     }
 }

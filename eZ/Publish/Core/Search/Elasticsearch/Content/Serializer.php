@@ -73,12 +73,12 @@ class Serializer
      */
     public function getIndexMetadata(Document $document)
     {
-        $metadataHash = array(
-            'index' => array(
+        $metadataHash = [
+            'index' => [
                 '_type' => $document->type,
                 '_id' => $document->id,
-            ),
-        );
+            ],
+        ];
 
         return json_encode($metadataHash);
     }
@@ -96,12 +96,12 @@ class Serializer
      */
     protected function getDocumentHash(Document $document)
     {
-        $hash = array();
+        $hash = [];
 
         foreach ($document->fields as $field) {
             if ($field->type instanceof DocumentField) {
                 $documents = $this->fieldValueMapper->map($field);
-                $values = array();
+                $values = [];
 
                 foreach ($documents as $document) {
                     $values[] = $this->getDocumentHash($document);

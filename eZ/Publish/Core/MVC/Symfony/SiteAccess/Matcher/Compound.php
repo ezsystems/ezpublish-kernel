@@ -30,12 +30,12 @@ abstract class Compound implements CompoundInterface, URILexer
      *
      * @var array
      */
-    protected $matchersMap = array();
+    protected $matchersMap = [];
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
      */
-    protected $subMatchers = array();
+    protected $subMatchers = [];
 
     /**
      * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface
@@ -50,7 +50,7 @@ abstract class Compound implements CompoundInterface, URILexer
     public function __construct(array $config)
     {
         $this->config = $config;
-        $this->matchersMap = array();
+        $this->matchersMap = [];
     }
 
     public function setMatcherBuilder(MatcherBuilderInterface $matcherBuilder)
@@ -136,6 +136,6 @@ abstract class Compound implements CompoundInterface, URILexer
     {
         // We don't need the whole matcher map and the matcher builder once serialized.
         // config property is not needed either as it's only needed for matching.
-        return array('subMatchers');
+        return ['subMatchers'];
     }
 }

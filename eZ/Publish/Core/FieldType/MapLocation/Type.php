@@ -158,11 +158,11 @@ class Type extends FieldType
             return null;
         }
 
-        return array(
+        return [
             'latitude' => $value->latitude,
             'longitude' => $value->longitude,
             'address' => $value->address,
-        );
+        ];
     }
 
     /**
@@ -185,11 +185,11 @@ class Type extends FieldType
     public function toPersistenceValue(SPIValue $value)
     {
         return new FieldValue(
-            array(
+            [
                 'data' => null,
                 'externalData' => $this->toHash($value),
                 'sortKey' => $this->getSortInfo($value),
-            )
+            ]
         );
     }
 

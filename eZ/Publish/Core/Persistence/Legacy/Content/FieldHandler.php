@@ -93,8 +93,8 @@ class FieldHandler
      */
     public function createNewFields(Content $content, Type $contentType)
     {
-        $fieldsToCopy = array();
-        $languageCodes = array();
+        $fieldsToCopy = [];
+        $languageCodes = [];
         $fields = $this->getFieldMap($content->fields, $languageCodes);
         $languageCodes[$content->versionInfo->contentInfo->mainLanguageCode] = true;
 
@@ -138,12 +138,12 @@ class FieldHandler
         $fieldType = $this->fieldTypeRegistry->getFieldType($fieldDefinition->fieldType);
 
         return new Field(
-            array(
+            [
                 'fieldDefinitionId' => $fieldDefinition->id,
                 'type' => $fieldDefinition->fieldType,
                 'value' => $fieldType->getEmptyValue(),
                 'languageCode' => $languageCode,
-            )
+            ]
         );
     }
 
@@ -317,9 +317,9 @@ class FieldHandler
      */
     public function updateFields(Content $content, UpdateStruct $updateStruct, Type $contentType)
     {
-        $updatedFields = array();
-        $fieldsToCopy = array();
-        $nonTranslatableCopiesUpdateSet = array();
+        $updatedFields = [];
+        $fieldsToCopy = [];
+        $nonTranslatableCopiesUpdateSet = [];
         $mainLanguageCode = $content->versionInfo->contentInfo->mainLanguageCode;
         $languageCodes = $existingLanguageCodes = array_fill_keys($content->versionInfo->languageCodes, true);
         $contentFieldMap = $this->getFieldMap($content->fields);
@@ -421,7 +421,7 @@ class FieldHandler
      */
     protected function getFieldMap(array $fields, &$languageCodes = null)
     {
-        $fieldMap = array();
+        $fieldMap = [];
         foreach ($fields as $field) {
             if (isset($languageCodes)) {
                 $languageCodes[$field->languageCode] = true;

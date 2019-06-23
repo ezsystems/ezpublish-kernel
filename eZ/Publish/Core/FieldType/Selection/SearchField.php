@@ -28,8 +28,8 @@ class SearchField implements Indexable
      */
     public function getIndexData(Field $field, FieldDefinition $fieldDefinition)
     {
-        $indexes = array();
-        $values = array();
+        $indexes = [];
+        $values = [];
         $fieldSettings = $fieldDefinition->fieldTypeConstraints->fieldSettings;
         $options = $fieldSettings['options'];
         $positionSet = array_flip($field->value->data);
@@ -41,7 +41,7 @@ class SearchField implements Indexable
             }
         }
 
-        return array(
+        return [
             new Search\Field(
                 'selected_option_value',
                 $values,
@@ -67,7 +67,7 @@ class SearchField implements Indexable
                 $values,
                 new Search\FieldType\FullTextField()
             ),
-        );
+        ];
     }
 
     /**
@@ -77,12 +77,12 @@ class SearchField implements Indexable
      */
     public function getIndexDefinition()
     {
-        return array(
+        return [
             'selected_option_value' => new Search\FieldType\MultipleStringField(),
             'selected_option_index' => new Search\FieldType\MultipleIntegerField(),
             'selected_option_count' => new Search\FieldType\IntegerField(),
             'sort_value' => new Search\FieldType\StringField(),
-        );
+        ];
     }
 
     /**

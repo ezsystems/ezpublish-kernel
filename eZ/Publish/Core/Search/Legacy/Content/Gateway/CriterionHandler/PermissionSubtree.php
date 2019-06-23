@@ -51,7 +51,7 @@ class PermissionSubtree extends CriterionHandler
     ) {
         $table = 'permission_subtree';
 
-        $statements = array();
+        $statements = [];
         foreach ($criterion->value as $pattern) {
             $statements[] = $query->expr->like(
                 $this->dbHandler->quoteColumn('path_string', $table),

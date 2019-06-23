@@ -47,17 +47,17 @@ class SectionIdIn extends CriterionVisitor
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
         if (count($criterion->value) > 1) {
-            $filter = array(
-                'terms' => array(
+            $filter = [
+                'terms' => [
                     'section_id' => $criterion->value,
-                ),
-            );
+                ],
+            ];
         } else {
-            $filter = array(
-                'term' => array(
+            $filter = [
+                'term' => [
                     'section_id' => $criterion->value[0],
-                ),
-            );
+                ],
+            ];
         }
 
         return $filter;

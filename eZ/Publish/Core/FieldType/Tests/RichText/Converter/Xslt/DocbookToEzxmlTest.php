@@ -32,10 +32,10 @@ class DocbookToEzxmlTest extends BaseTest
      */
     public function getFixtureSubdirectories()
     {
-        return array(
+        return [
             'input' => 'docbook',
             'output' => 'ezxml',
-        );
+        ];
     }
 
     /**
@@ -72,12 +72,12 @@ class DocbookToEzxmlTest extends BaseTest
      */
     protected function getCustomConversionTransformationStylesheets()
     {
-        return array(
-            array(
+        return [
+            [
                 'path' => __DIR__ . '/_fixtures/docbook/custom_stylesheets/youtube_ezxml.xsl',
                 'priority' => 100,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -87,8 +87,8 @@ class DocbookToEzxmlTest extends BaseTest
      */
     protected function getConversionValidationSchema()
     {
-        return array(
+        return [
             __DIR__ . '/../../../../RichText/Resources/schemas/ezxml/ezxml.xsd',
-        );
+        ];
     }
 }

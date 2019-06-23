@@ -32,7 +32,7 @@ class CreatedUserGroup extends RestUserGroup
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadUserGroup',
-                array('groupPath' => trim($data->userGroup->mainLocation->pathString, '/'))
+                ['groupPath' => trim($data->userGroup->mainLocation->pathString, '/')]
             )
         );
         $visitor->setStatus(201);

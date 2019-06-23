@@ -149,34 +149,34 @@ abstract class CriterionVisitor
 
         switch ($operator) {
             case Operator::GT:
-                $range = array(
+                $range = [
                     'gt' => $start,
-                );
+                ];
                 break;
 
             case Operator::GTE:
-                $range = array(
+                $range = [
                     'gte' => $start,
-                );
+                ];
                 break;
 
             case Operator::LT:
-                $range = array(
+                $range = [
                     'lt' => $end,
-                );
+                ];
                 break;
 
             case Operator::LTE:
-                $range = array(
+                $range = [
                     'lte' => $end,
-                );
+                ];
                 break;
 
             case Operator::BETWEEN:
-                $range = array(
+                $range = [
                     'gte' => $start,
                     'lte' => $end,
-                );
+                ];
                 break;
 
             default:

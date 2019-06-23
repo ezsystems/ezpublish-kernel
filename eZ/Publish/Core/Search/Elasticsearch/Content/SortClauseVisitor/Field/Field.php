@@ -56,13 +56,13 @@ class Field extends FieldBase
             );
         }
 
-        return array(
-            "fields_doc.{$fieldName}" => array(
-                'nested_filter' => array(
+        return [
+            "fields_doc.{$fieldName}" => [
+                'nested_filter' => [
                     'term' => $this->getNestedFilterTerm(null),
-                ),
+                ],
                 'order' => $this->getDirection($sortClause),
-            ),
-        );
+            ],
+        ];
     }
 }

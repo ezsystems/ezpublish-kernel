@@ -24,10 +24,10 @@ class ContentDownloadUrlGenerator extends PathGenerator
     {
         return $this->router->generate(
             'ez_content_download_field_id',
-            array(
+            [
                 'contentId' => $versionInfo->contentInfo->id,
                 'fieldId' => $field->id,
-            )
+            ]
         );
     }
 }

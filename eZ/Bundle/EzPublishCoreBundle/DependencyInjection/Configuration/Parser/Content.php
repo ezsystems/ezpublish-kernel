@@ -40,7 +40,7 @@ class Content extends AbstractParser
                             ->end()
                             ->arrayNode('excluded_uri_prefixes')
                                 ->info("URI prefixes that are allowed to be outside the content tree\n(useful for content sharing between multiple sites).\nPrefixes are not case sensitive")
-                                ->example(array('/media/images', '/products'))
+                                ->example(['/media/images', '/products'])
                                 ->prototype('scalar')->end()
                             ->end()
                         ->end()

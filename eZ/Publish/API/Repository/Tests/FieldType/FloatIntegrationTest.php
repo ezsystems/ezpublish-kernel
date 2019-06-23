@@ -37,7 +37,7 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -47,7 +47,7 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -57,9 +57,9 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -69,18 +69,18 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array(
-            'FloatValueValidator' => array(
-                'minFloatValue' => array(
+        return [
+            'FloatValueValidator' => [
+                'minFloatValue' => [
                     'type' => 'float',
                     'default' => false,
-                ),
-                'maxFloatValue' => array(
+                ],
+                'maxFloatValue' => [
                     'type' => 'float',
                     'default' => false,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -90,12 +90,12 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array(
-            'FloatValueValidator' => array(
+        return [
+            'FloatValueValidator' => [
                 'minFloatValue' => 23.,
                 'maxFloatValue' => 43.,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -105,11 +105,11 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
-            'FloatValueValidator' => array(
+        return [
+            'FloatValueValidator' => [
                 'minStringLength' => new \stdClass(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -147,9 +147,9 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'value' => 23.5,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -179,20 +179,20 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 'eZ\\Publish\\API\\Repository\\Exceptions\\InvalidArgumentException',
-            ),
-            array(
+            ],
+            [
                 new FloatValue(5.5),
                 'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
-            ),
-            array(
+            ],
+            [
                 new FloatValue(127.5),
                 'eZ\\Publish\\API\\Repository\\Exceptions\\ContentFieldValidationException',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -219,9 +219,9 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'value' => 42.5,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -269,9 +269,9 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
             $field->value
         );
 
-        $expectedData = array(
+        $expectedData = [
             'value' => 23.5,
-        );
+        ];
         $this->assertPropertiesCorrect(
             $expectedData,
             $field->value
@@ -300,12 +300,12 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new FloatValue(23.5),
                 23.5,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -317,30 +317,30 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 42.5,
                 new FloatValue(42.5),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new FloatValue()),
-        );
+        return [
+            [new FloatValue()],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-            array(new FloatValue(0)),
-            array(new FloatValue(0.0)),
-        );
+            ],
+            [new FloatValue(0)],
+            [new FloatValue(0.0)],
+        ];
     }
 
     protected function getValidSearchValueOne()
@@ -355,8 +355,8 @@ class FloatIntegrationTest extends SearchBaseIntegrationTest
 
     protected function getFullTextIndexedFieldData()
     {
-        return array(
-            array('25.519', '25.59'),
-        );
+        return [
+            ['25.519', '25.59'],
+        ];
     }
 }

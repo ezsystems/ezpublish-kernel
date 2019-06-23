@@ -12,7 +12,7 @@ use eZ\Publish\Core\Persistence\Doctrine\ConnectionHandler;
 
 class SqliteConnectionHandler extends ConnectionHandler
 {
-    protected $lastInsertedIds = array();
+    protected $lastInsertedIds = [];
 
     /**
      * Retrieve the last auto incremet or sequence id.

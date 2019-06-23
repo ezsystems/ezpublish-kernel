@@ -39,11 +39,11 @@ class ResponseListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             KernelEvents::VIEW => 'onKernelResultView',
             // Must happen BEFORE the Core ExceptionListener.
             KernelEvents::EXCEPTION => ['onKernelExceptionView', 20],
-        );
+        ];
     }
 
     /**

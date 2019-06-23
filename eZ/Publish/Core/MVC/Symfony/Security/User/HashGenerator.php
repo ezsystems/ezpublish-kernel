@@ -29,7 +29,7 @@ class HashGenerator implements HashGeneratorInterface, IdentityAware, ContextPro
     /**
      * @var IdentityAware[]
      */
-    protected $identityDefiners = array();
+    protected $identityDefiners = [];
 
     /**
      * @param IdentityAware $identityDefiner

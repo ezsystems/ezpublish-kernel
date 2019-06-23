@@ -37,9 +37,9 @@ class PatternTest extends TestCase
     public function testParseInvalidPattern()
     {
         $urlHandler = new Common\RequestParser\Pattern(
-            array(
+            [
                 'invalid' => '/foo/{broken',
-            )
+            ]
         );
         $urlHandler->parse('/foo');
     }
@@ -53,9 +53,9 @@ class PatternTest extends TestCase
     public function testPatternDoesNotMatch()
     {
         $urlHandler = new Common\RequestParser\Pattern(
-            array(
+            [
                 'pattern' => '/foo/{foo}',
-            )
+            ]
         );
         $urlHandler->parse('/bar');
     }
@@ -69,9 +69,9 @@ class PatternTest extends TestCase
     public function testPatternDoesNotMatchTrailing()
     {
         $urlHandler = new Common\RequestParser\Pattern(
-            array(
+            [
                 'pattern' => '/foo/{foo}',
-            )
+            ]
         );
         $urlHandler->parse('/foo/23/bar');
     }
@@ -83,37 +83,37 @@ class PatternTest extends TestCase
      */
     public static function getParseValues()
     {
-        return array(
-            array(
+        return [
+            [
                 'section',
                 '/content/section/42',
-                array(
+                [
                     'section' => '42',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'objectversion',
                 '/content/object/42/23',
-                array(
+                [
                     'object' => '42',
                     'version' => '23',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'location',
                 '/content/locations/23/42/100',
-                array(
+                [
                     'location' => '23/42/100',
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 'locationChildren',
                 '/content/locations/23/42/100/children',
-                array(
+                [
                     'location' => '23/42/100',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -140,7 +140,7 @@ class PatternTest extends TestCase
     public function testGenerateUnknownUrlType()
     {
         $urlHandler = new Common\RequestParser\Pattern();
-        $urlHandler->generate('unknown', array());
+        $urlHandler->generate('unknown', []);
     }
 
     /**
@@ -152,11 +152,11 @@ class PatternTest extends TestCase
     public function testGenerateMissingValue()
     {
         $urlHandler = new Common\RequestParser\Pattern(
-            array(
+            [
                 'pattern' => '/foo/{unknown}',
-            )
+            ]
         );
-        $urlHandler->generate('pattern', array());
+        $urlHandler->generate('pattern', []);
     }
 
     /**
@@ -168,16 +168,16 @@ class PatternTest extends TestCase
     public function testGenerateSuperfluousValue()
     {
         $urlHandler = new Common\RequestParser\Pattern(
-            array(
+            [
                 'pattern' => '/foo/{foo}',
-            )
+            ]
         );
         $urlHandler->generate(
             'pattern',
-            array(
+            [
                 'foo' => 23,
                 'bar' => 42,
-            )
+            ]
         );
     }
 
@@ -204,12 +204,12 @@ class PatternTest extends TestCase
     protected function getWorkingUrlHandler()
     {
         return new Common\RequestParser\Pattern(
-            array(
+            [
                 'section' => '/content/section/{section}',
                 'objectversion' => '/content/object/{object}/{version}',
                 'locationChildren' => '/content/locations/{&location}/children',
                 'location' => '/content/locations/{&location}',
-            )
+            ]
         );
     }
 }

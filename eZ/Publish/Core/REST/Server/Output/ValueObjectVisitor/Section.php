@@ -38,7 +38,7 @@ class Section extends ValueObjectVisitor
     {
         $generator->startAttribute(
             'href',
-            $this->router->generate('ezpublish_rest_loadSection', array('sectionId' => $data->id))
+            $this->router->generate('ezpublish_rest_loadSection', ['sectionId' => $data->id])
         );
         $generator->endAttribute('href');
 

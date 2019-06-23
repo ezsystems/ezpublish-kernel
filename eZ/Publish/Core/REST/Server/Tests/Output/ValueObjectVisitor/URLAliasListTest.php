@@ -27,7 +27,7 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
 
         $generator->startDocument(null);
 
-        $urlAliasList = new URLAliasList(array(), '/content/urlaliases');
+        $urlAliasList = new URLAliasList([], '/content/urlaliases');
 
         $visitor->visit(
             $this->getVisitorMock(),
@@ -52,9 +52,9 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlAliasListElement($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlAliasList',
-            ),
+            ],
             $result,
             'Invalid <UrlAliasList> element.',
             false
@@ -71,13 +71,13 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
     public function testResultContainsUrlAliasListAttributes($result)
     {
         $this->assertXMLTag(
-            array(
+            [
                 'tag' => 'UrlAliasList',
-                'attributes' => array(
+                'attributes' => [
                     'media-type' => 'application/vnd.ez.api.UrlAliasList+xml',
                     'href' => '/content/urlaliases',
-                ),
-            ),
+                ],
+            ],
             $result,
             'Invalid <UrlAliasList> attributes.',
             false
@@ -95,10 +95,10 @@ class URLAliasListTest extends ValueObjectVisitorBaseTest
         $generator->startDocument(null);
 
         $urlAliasList = new URLAliasList(
-            array(
+            [
                 new Content\URLAlias(),
                 new Content\URLAlias(),
-            ),
+            ],
             '/content/urlaliases'
         );
 

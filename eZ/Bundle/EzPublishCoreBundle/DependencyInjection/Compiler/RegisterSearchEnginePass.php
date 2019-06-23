@@ -54,10 +54,10 @@ class RegisterSearchEnginePass implements CompilerPassInterface
                 // Register the search engine with the search engine factory
                 $searchEngineFactoryDefinition->addMethodCall(
                     'registerSearchEngine',
-                    array(
+                    [
                         new Reference($id),
                         $attribute['alias'],
-                    )
+                    ]
                 );
             }
         }

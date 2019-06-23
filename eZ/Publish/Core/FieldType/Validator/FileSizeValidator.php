@@ -19,20 +19,20 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class FileSizeValidator extends Validator
 {
-    protected $constraints = array(
+    protected $constraints = [
         'maxFileSize' => false,
-    );
+    ];
 
-    protected $constraintsSchema = array(
-        'maxFileSize' => array(
+    protected $constraintsSchema = [
+        'maxFileSize' => [
             'type' => 'int',
             'default' => false,
-        ),
-    );
+        ],
+    ];
 
     public function validateConstraints($constraints)
     {
-        $validationErrors = array();
+        $validationErrors = [];
 
         foreach ($constraints as $name => $value) {
             switch ($name) {
@@ -41,9 +41,9 @@ class FileSizeValidator extends Validator
                         $validationErrors[] = new ValidationError(
                             "Validator parameter '%parameter%' value must be of integer type",
                             null,
-                            array(
+                            [
                                 '%parameter%' => $name,
-                            )
+                            ]
                         );
                     }
                     break;
@@ -51,9 +51,9 @@ class FileSizeValidator extends Validator
                     $validationErrors[] = new ValidationError(
                         "Validator parameter '%parameter%' is unknown",
                         null,
-                        array(
+                        [
                             '%parameter%' => $name,
-                        )
+                        ]
                     );
             }
         }
@@ -76,9 +76,9 @@ class FileSizeValidator extends Validator
             $this->errors[] = new ValidationError(
                 'The file size cannot exceed %size% byte.',
                 'The file size cannot exceed %size% bytes.',
-                array(
+                [
                     '%size%' => $this->constraints['maxFileSize'],
-                )
+                ]
             );
             $isValid = false;
         }

@@ -50,13 +50,13 @@ class Visibility extends Criterion implements CriterionInterface
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(
                 Operator::EQ,
                 Specifications::FORMAT_SINGLE,
                 Specifications::TYPE_INTEGER
             ),
-        );
+        ];
     }
 
     public static function createFromQueryBuilder($target, $operator, $value)

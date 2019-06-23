@@ -66,9 +66,9 @@ class URLAliasService implements URLAliasServiceInterface
         $this->repository = $repository;
         $this->urlAliasHandler = $urlAliasHandler;
         // Union makes sure default settings are ignored if provided in argument
-        $this->settings = $settings + array(
+        $this->settings = $settings + [
             'showAllTranslations' => false,
-        );
+        ];
         // Get prioritized languages from language service to not have to call it several times
         $this->settings['prioritizedLanguageList'] = $repository->getContentLanguageService()->getPrioritizedLanguageCodeList();
         $this->nameSchemaService = $nameSchemaService;
@@ -215,7 +215,7 @@ class URLAliasService implements URLAliasServiceInterface
         if ($prioritizedLanguageList === null) {
             $prioritizedLanguageList = $this->settings['prioritizedLanguageList'];
         }
-        $urlAliasList = array();
+        $urlAliasList = [];
 
         foreach ($spiUrlAliasList as $spiUrlAlias) {
             if (
@@ -243,7 +243,7 @@ class URLAliasService implements URLAliasServiceInterface
             $urlAliasList[$spiUrlAlias->id] = $this->buildUrlAliasDomainObject($spiUrlAlias, $path);
         }
 
-        $prioritizedAliasList = array();
+        $prioritizedAliasList = [];
         foreach ($prioritizedLanguageList as $languageCode) {
             foreach ($urlAliasList as $urlAlias) {
                 foreach ($urlAlias->languageCodes as $aliasLanguageCode) {
@@ -315,7 +315,7 @@ class URLAliasService implements URLAliasServiceInterface
         $showAllTranslations,
         $prioritizedLanguageList
     ) {
-        $pathData = array();
+        $pathData = [];
         $pathLevels = count($spiUrlAlias->pathData);
 
         foreach ($spiUrlAlias->pathData as $level => $levelEntries) {
@@ -386,8 +386,8 @@ class URLAliasService implements URLAliasServiceInterface
      */
     protected function matchPath(SPIURLAlias $spiUrlAlias, $path, $languageCode)
     {
-        $matchedPathElements = array();
-        $matchedPathLanguageCodes = array();
+        $matchedPathElements = [];
+        $matchedPathLanguageCodes = [];
         $pathElements = explode('/', $path);
         $pathLevels = count($spiUrlAlias->pathData);
 
@@ -404,14 +404,14 @@ class URLAliasService implements URLAliasServiceInterface
             }
 
             if ($matchedLanguageCode === false) {
-                return array(false, false);
+                return [false, false];
             }
 
             $matchedPathLanguageCodes[] = $matchedLanguageCode;
             $matchedPathElements[] = $spiUrlAlias->pathData[$level]['translations'][$matchedLanguageCode];
         }
 
-        return array(implode('/', $matchedPathElements), $matchedPathLanguageCodes);
+        return [implode('/', $matchedPathElements), $matchedPathLanguageCodes];
     }
 
     /**
@@ -441,22 +441,22 @@ class URLAliasService implements URLAliasServiceInterface
      */
     private function sortTranslationsByPrioritizedLanguages(array $translations)
     {
-        $sortedTranslations = array();
+        $sortedTranslations = [];
         foreach ($this->settings['prioritizedLanguageList'] as $languageCode) {
             if (isset($translations[$languageCode])) {
-                $sortedTranslations[] = array(
+                $sortedTranslations[] = [
                     'lang' => $languageCode,
                     'text' => $translations[$languageCode],
-                );
+                ];
                 unset($translations[$languageCode]);
             }
         }
 
         foreach ($translations as $languageCode => $translation) {
-            $sortedTranslations[] = array(
+            $sortedTranslations[] = [
                 'lang' => $languageCode,
                 'text' => $translation,
-            );
+            ];
         }
 
         return $sortedTranslations;
@@ -541,7 +541,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function listGlobalAliases($languageCode = null, $offset = 0, $limit = -1)
     {
-        $urlAliasList = array();
+        $urlAliasList = [];
         $spiUrlAliasList = $this->urlAliasHandler->listGlobalURLAliases(
             $languageCode,
             $offset,
@@ -578,7 +578,7 @@ class URLAliasService implements URLAliasServiceInterface
      */
     public function removeAliases(array $aliasList)
     {
-        $spiUrlAliasList = array();
+        $spiUrlAliasList = [];
         foreach ($aliasList as $alias) {
             if (!$alias->isCustom) {
                 throw new InvalidArgumentException(
@@ -609,12 +609,12 @@ class URLAliasService implements URLAliasServiceInterface
     protected function buildSPIUrlAlias(URLAlias $urlAlias)
     {
         return new SPIURLAlias(
-            array(
+            [
                 'id' => $urlAlias->id,
                 'type' => $urlAlias->type,
                 'destination' => $urlAlias->destination,
                 'isCustom' => $urlAlias->isCustom,
-            )
+            ]
         );
     }
 
@@ -827,7 +827,7 @@ class URLAliasService implements URLAliasServiceInterface
     protected function buildUrlAliasDomainObject(SPIURLAlias $spiUrlAlias, $path)
     {
         return new URLAlias(
-            array(
+            [
                 'id' => $spiUrlAlias->id,
                 'type' => $spiUrlAlias->type,
                 'destination' => $spiUrlAlias->destination,
@@ -837,7 +837,7 @@ class URLAliasService implements URLAliasServiceInterface
                 'isHistory' => $spiUrlAlias->isHistory,
                 'isCustom' => $spiUrlAlias->isCustom,
                 'forward' => $spiUrlAlias->forward,
-            )
+            ]
         );
     }
 }

@@ -21,13 +21,13 @@ use eZ\Publish\Core\MVC\Symfony\Controller\PageController as BasePageController;
  */
 class PageController extends BasePageController
 {
-    public function viewBlock(Block $block, array $params = array(), array $cacheSettings = array())
+    public function viewBlock(Block $block, array $params = [], array $cacheSettings = [])
     {
         // Inject valid items as ContentInfo objects if possible.
         if ($this->pageService instanceof CoreBundlePageService) {
-            $params += array(
+            $params += [
                 'valid_contentinfo_items' => $this->pageService->getValidBlockItemsAsContentInfo($block),
-            );
+            ];
         }
 
         return parent::viewBlock($block, $params, $cacheSettings);

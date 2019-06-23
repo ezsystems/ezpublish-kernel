@@ -34,13 +34,13 @@ abstract class Handler
      *
      * @var array
      */
-    protected $comparatorMap = array(
+    protected $comparatorMap = [
         CriterionOperator::EQ => 'eq',
         CriterionOperator::GT => 'gt',
         CriterionOperator::GTE => 'gte',
         CriterionOperator::LT => 'lt',
         CriterionOperator::LTE => 'lte',
-    );
+    ];
 
     /**
      * Transformation processor.
@@ -80,7 +80,7 @@ abstract class Handler
             case Criterion\Operator::IN:
                 $filter = $query->expr->in(
                     $column,
-                    array_map(array($this, 'lowerCase'), $criterion->value)
+                    array_map([$this, 'lowerCase'], $criterion->value)
                 );
                 break;
 

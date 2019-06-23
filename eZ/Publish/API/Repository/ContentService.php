@@ -191,7 +191,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Content - the newly created content draft
      */
-    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array());
+    public function createContent(ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = []);
 
     /**
      * Updates the metadata.
@@ -421,7 +421,7 @@ interface ContentService
      * @since 5.0
      * @deprecated Never implemented, and might be redesigned if it ever is.
      */
-    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = array());
+    public function loadTranslationInfos(ContentInfo $contentInfo, array $filter = []);
 
     /**
      * Remove Content Object translation from all Versions (including archived ones) of a Content Object.

@@ -24,7 +24,7 @@ class ParsingDispatcherTest extends TestCase
     {
         $dispatcher = new Common\Input\ParsingDispatcher();
 
-        $dispatcher->parse(array(), 'text/unknown');
+        $dispatcher->parse([], 'text/unknown');
     }
 
     public function testParse()
@@ -35,12 +35,12 @@ class ParsingDispatcherTest extends TestCase
         $parser
             ->expects($this->at(0))
             ->method('parse')
-            ->with(array(42), $dispatcher)
+            ->with([42], $dispatcher)
             ->will($this->returnValue(23));
 
         $this->assertSame(
             23,
-            $dispatcher->parse(array(42), 'text/html')
+            $dispatcher->parse([42], 'text/html')
         );
     }
 
@@ -55,12 +55,12 @@ class ParsingDispatcherTest extends TestCase
         $parser
             ->expects($this->at(0))
             ->method('parse')
-            ->with(array(42), $dispatcher)
+            ->with([42], $dispatcher)
             ->will($this->returnValue(23));
 
         $this->assertSame(
             23,
-            $dispatcher->parse(array(42), 'text/html; charset=UTF-8; version=1.0')
+            $dispatcher->parse([42], 'text/html; charset=UTF-8; version=1.0')
         );
     }
 
@@ -78,7 +78,7 @@ class ParsingDispatcherTest extends TestCase
         $parserVersionOne->expects($this->never())->method('parse');
         $parserVersionTwo->expects($this->once())->method('parse');
 
-        $dispatcher->parse(array(42), 'text/html; version=2');
+        $dispatcher->parse([42], 'text/html; version=2');
     }
 
     public function testParseStripFormat()
@@ -89,12 +89,12 @@ class ParsingDispatcherTest extends TestCase
         $parser
             ->expects($this->at(0))
             ->method('parse')
-            ->with(array(42), $dispatcher)
+            ->with([42], $dispatcher)
             ->will($this->returnValue(23));
 
         $this->assertSame(
             23,
-            $dispatcher->parse(array(42), 'text/html+json')
+            $dispatcher->parse([42], 'text/html+json')
         );
     }
 

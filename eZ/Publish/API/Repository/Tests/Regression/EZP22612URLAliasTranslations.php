@@ -15,19 +15,19 @@ class EZP22612URLAliasTranslations extends BaseTest
         $contentService = $this->getRepository()->getContentService();
         $draft = $contentService->createContent(
             $this->getFolderCreateStruct('common'),
-            array(
+            [
                 $this->getRepository()->getLocationService()->newLocationCreateStruct(2),
-            )
+            ]
         );
         $parentContent = $contentService->publishVersion($draft->versionInfo);
 
         $draft = $contentService->createContent(
             $this->getFolderCreateStruct('alias'),
-            array(
+            [
                 $this->getRepository()->getLocationService()->newLocationCreateStruct(
                     $parentContent->contentInfo->mainLocationId
                 ),
-            )
+            ]
         );
 
         $contentService->publishVersion($draft->versionInfo);

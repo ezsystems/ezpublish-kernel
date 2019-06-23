@@ -350,7 +350,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser($pseudoEditor);
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContentByContentInfo($contentInfo, array('eng-US'));
+        $contentService->loadContentByContentInfo($contentInfo, ['eng-US']);
         /* END: Use Case */
     }
 
@@ -381,7 +381,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser($pseudoEditor);
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContentByContentInfo($contentInfo, array('eng-US'), 2);
+        $contentService->loadContentByContentInfo($contentInfo, ['eng-US'], 2);
         /* END: Use Case */
     }
 
@@ -449,7 +449,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser($pseudoEditor);
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContentByVersionInfo($versionInfo, array('eng-US'));
+        $contentService->loadContentByVersionInfo($versionInfo, ['eng-US']);
         /* END: Use Case */
     }
 
@@ -505,7 +505,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser($pseudoEditor);
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContent($anonymousUserId, array('eng-US'));
+        $contentService->loadContent($anonymousUserId, ['eng-US']);
         /* END: Use Case */
     }
 
@@ -533,7 +533,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser($pseudoEditor);
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContent($anonymousUserId, array('eng-US'), 2);
+        $contentService->loadContent($anonymousUserId, ['eng-US'], 2);
         /* END: Use Case */
     }
 
@@ -606,7 +606,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $newStruct->setField('name', 'Test Folder');
         $draft = $contentService->createContent(
             $newStruct,
-            array($locationSercice->newLocationCreateStruct(2))
+            [$locationSercice->newLocationCreateStruct(2)]
         );
         $object = $contentService->publishVersion($draft->versionInfo);
 
@@ -677,7 +677,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser($pseudoEditor);
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContentByRemoteId($anonymousRemoteId, array('eng-US'));
+        $contentService->loadContentByRemoteId($anonymousRemoteId, ['eng-US']);
         /* END: Use Case */
     }
 
@@ -704,7 +704,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $repository->setCurrentUser($pseudoEditor);
 
         // This call will fail with a "UnauthorizedException"
-        $contentService->loadContentByRemoteId($anonymousRemoteId, array('eng-US'), 2);
+        $contentService->loadContentByRemoteId($anonymousRemoteId, ['eng-US'], 2);
         /* END: Use Case */
     }
 
@@ -1349,9 +1349,9 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
             $role,
             $user,
             new \eZ\Publish\API\Repository\Values\User\Limitation\SubtreeLimitation(
-                array(
-                    'limitationValues' => array('/1/43/51/'),
-                )
+                [
+                    'limitationValues' => ['/1/43/51/'],
+                ]
             )
         );
 
@@ -1414,7 +1414,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $mainFolder = $contentService->publishVersion(
             $contentService->createContent(
                 $mainFolderCreate,
-                array($locationService->newLocationCreateStruct(2))
+                [$locationService->newLocationCreateStruct(2)]
             )->versionInfo
         );
 
@@ -1427,7 +1427,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $availableFolder = $contentService->publishVersion(
             $contentService->createContent(
                 $availableFolderCreate,
-                array($locationService->newLocationCreateStruct($mainFolder->contentInfo->mainLocationId))
+                [$locationService->newLocationCreateStruct($mainFolder->contentInfo->mainLocationId)]
             )->versionInfo
         );
 
@@ -1441,7 +1441,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $restrictedFolder = $contentService->publishVersion(
             $contentService->createContent(
                 $restrictedFolderCreate,
-                array($locationService->newLocationCreateStruct(2))
+                [$locationService->newLocationCreateStruct(2)]
             )->versionInfo
         );
 
@@ -1454,7 +1454,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $unavailableFolder = $contentService->publishVersion(
             $contentService->createContent(
                 $unavailableFolderCreate,
-                array($locationService->newLocationCreateStruct($restrictedFolder->contentInfo->mainLocationId))
+                [$locationService->newLocationCreateStruct($restrictedFolder->contentInfo->mainLocationId)]
             )->versionInfo
         );
 
@@ -1467,7 +1467,7 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         $testFolderCreate->setField('name', 'Test Folder');
         $testFolderDraft = $contentService->createContent(
             $testFolderCreate,
-            array($locationService->newLocationCreateStruct(2))
+            [$locationService->newLocationCreateStruct(2)]
         )->versionInfo;
 
         // add relations to test folder (as source)
@@ -1511,10 +1511,10 @@ class ContentServiceAuthorizationTest extends BaseContentServiceTest
         // assert results
         // verify that the only expected relations are from the 2 readable objects
         // Main Folder and Available Folder
-        $expectedRelations = array(
+        $expectedRelations = [
             $mainRelation->destinationContentInfo->id => $mainRelation,
             $availableRelation->destinationContentInfo->id => $availableRelation,
-        );
+        ];
 
         // assert there are as many expected relations as actual ones
         $this->assertEquals(

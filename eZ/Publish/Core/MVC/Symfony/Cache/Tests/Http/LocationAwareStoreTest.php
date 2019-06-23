@@ -113,7 +113,7 @@ class LocationAwareStoreTest extends TestCase
         $fs
             ->expects($this->once())
             ->method('remove')
-            ->with(array($staleCacheDir, $this->store->getLocationCacheLockName($locationId), $locationCacheDir));
+            ->with([$staleCacheDir, $this->store->getLocationCacheLockName($locationId), $locationCacheDir]);
 
         $request = Request::create('/', 'PURGE');
         $request->headers->set('X-Location-Id', "$locationId");
@@ -124,7 +124,7 @@ class LocationAwareStoreTest extends TestCase
     {
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem($fs);
-        $locationIds = array(123, 456, 789);
+        $locationIds = [123, 456, 789];
         $i = 0;
         foreach ($locationIds as $locationId) {
             $locationCacheDir = $this->store->getLocationCacheDir($locationId);
@@ -146,7 +146,7 @@ class LocationAwareStoreTest extends TestCase
             $fs
                 ->expects($this->at($i++))
                 ->method('remove')
-                ->with(array($staleCacheDir, $this->store->getLocationCacheLockName($locationId), $locationCacheDir));
+                ->with([$staleCacheDir, $this->store->getLocationCacheLockName($locationId), $locationCacheDir]);
         }
 
         $request = Request::create('/', 'PURGE');
@@ -158,7 +158,7 @@ class LocationAwareStoreTest extends TestCase
     {
         $fs = $this->getFilesystemMock();
         $this->store->setFilesystem($fs);
-        $locationIds = array(123, 456, 789);
+        $locationIds = [123, 456, 789];
         $i = 0;
         foreach ($locationIds as $locationId) {
             $locationCacheDir = $this->store->getLocationCacheDir($locationId);
@@ -180,7 +180,7 @@ class LocationAwareStoreTest extends TestCase
             $fs
                 ->expects($this->at($i++))
                 ->method('remove')
-                ->with(array($staleCacheDir, $this->store->getLocationCacheLockName($locationId), $locationCacheDir));
+                ->with([$staleCacheDir, $this->store->getLocationCacheLockName($locationId), $locationCacheDir]);
         }
 
         $request = Request::create('/', 'BAN');
@@ -211,7 +211,7 @@ class LocationAwareStoreTest extends TestCase
         $fs
             ->expects($this->once())
             ->method('remove')
-            ->with(array($staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir));
+            ->with([$staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir]);
 
         $this->store->purgeAllContent();
     }
@@ -239,7 +239,7 @@ class LocationAwareStoreTest extends TestCase
         $fs
             ->expects($this->once())
             ->method('remove')
-            ->with(array($staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir));
+            ->with([$staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir]);
 
         $request = Request::create('/', 'BAN');
         $request->headers->set('X-Location-Id', '.*');
@@ -269,7 +269,7 @@ class LocationAwareStoreTest extends TestCase
         $fs
             ->expects($this->once())
             ->method('remove')
-            ->with(array($staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir));
+            ->with([$staleCacheDir, $this->store->getLocationCacheLockName(), $locationCacheDir]);
 
         $request = Request::create('/', 'PURGE');
         $request->headers->set('X-Location-Id', '*');

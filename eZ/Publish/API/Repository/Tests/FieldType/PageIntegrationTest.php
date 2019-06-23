@@ -41,12 +41,12 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getSettingsSchema()
     {
-        return array(
-            'defaultLayout' => array(
+        return [
+            'defaultLayout' => [
                 'type' => 'string',
                 'default' => '',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -56,9 +56,9 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getValidFieldSettings()
     {
-        return array(
+        return [
             'defaultLayout' => '',
-        );
+        ];
     }
 
     /**
@@ -68,9 +68,9 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidFieldSettings()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -80,7 +80,7 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getValidatorSchema()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -90,7 +90,7 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getValidValidatorConfiguration()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -100,9 +100,9 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getInvalidValidatorConfiguration()
     {
-        return array(
+        return [
             'somethingUnknown' => 0,
-        );
+        ];
     }
 
     /**
@@ -112,21 +112,21 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function getValidCreationFieldData()
     {
-        $blockData = array(
+        $blockData = [
             'name' => 'Block 1',
             'id' => '50dc64c82efa83cfe53959240e159915',
-        );
+        ];
         $block = new Block($blockData);
-        $zoneData = array(
+        $zoneData = [
             'id' => '8386907d951657e087507f49a92bb06c',
             'identifier' => 'Zone 1',
-            'blocks' => array($block),
-        );
+            'blocks' => [$block],
+        ];
         $zone = new Zone($zoneData);
-        $pageData = array(
-            'zones' => array($zone),
+        $pageData = [
+            'zones' => [$zone],
             'layout' => 'my_layout',
-        );
+        ];
         $page = new Page($pageData);
 
         return new PageValue($page);
@@ -178,12 +178,12 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function provideInvalidCreationFieldData()
     {
-        return array(
-            array(
+        return [
+            [
                 new \stdClass(),
                 'eZ\\Publish\\Core\\Base\\Exceptions\\InvalidArgumentType',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -209,9 +209,9 @@ class PageIntegrationTest extends BaseIntegrationTest
     {
         $this->assertInstanceOf('eZ\\Publish\\Core\\FieldType\\Page\\Value', $field->value);
 
-        $expectedData = array(
+        $expectedData = [
             'page' => $this->getValidUpdateFieldData()->page,
-        );
+        ];
         $this->assertPropertiesCorrect($expectedData, $field->value);
     }
 
@@ -253,9 +253,9 @@ class PageIntegrationTest extends BaseIntegrationTest
     {
         $this->assertInstanceOf('eZ\\Publish\\Core\\FieldType\\Page\\Value', $field->value);
 
-        $expectedData = array(
+        $expectedData = [
             'page' => $this->getValidCreationFieldData()->page,
-        );
+        ];
         $this->assertPropertiesCorrect($expectedData, $field->value);
     }
 
@@ -281,12 +281,12 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function provideToHashData()
     {
-        return array(
-            array(
+        return [
+            [
                 new PageValue(),
                 0,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -298,27 +298,27 @@ class PageIntegrationTest extends BaseIntegrationTest
      */
     public function provideFromHashData()
     {
-        return array(
-            array(
-                array('zones' => array()),
+        return [
+            [
+                ['zones' => []],
                 new PageValue(new Page()),
-            ),
-        );
+            ],
+        ];
     }
 
     public function providerForTestIsEmptyValue()
     {
-        return array(
-            array(new PageValue()),
-        );
+        return [
+            [new PageValue()],
+        ];
     }
 
     public function providerForTestIsNotEmptyValue()
     {
-        return array(
-            array(
+        return [
+            [
                 $this->getValidCreationFieldData(),
-            ),
-        );
+            ],
+        ];
     }
 }

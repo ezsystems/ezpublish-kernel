@@ -24,71 +24,71 @@ class PermissionTest extends BaseServiceMockTest
 {
     public function providerForTestHasAccessReturnsTrue()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     25 => $this->createRole(
-                        array(
-                            array('dummy-module', 'dummy-function', 'dummy-limitation'),
-                            array('dummy-module2', 'dummy-function2', 'dummy-limitation2'),
-                        ),
+                        [
+                            ['dummy-module', 'dummy-function', 'dummy-limitation'],
+                            ['dummy-module2', 'dummy-function2', 'dummy-limitation2'],
+                        ],
                         25
                     ),
                     26 => $this->createRole(
-                        array(
-                            array('*', 'dummy-function', 'dummy-limitation'),
-                        ),
+                        [
+                            ['*', 'dummy-function', 'dummy-limitation'],
+                        ],
                         26
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 25,
-                        )
+                        ]
                     ),
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 26,
-                        )
+                        ]
                     ),
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     27 => $this->createRole(
-                        array(
-                            array('test-module', '*', 'dummy-limitation'),
-                        ),
+                        [
+                            ['test-module', '*', 'dummy-limitation'],
+                        ],
                         27
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 27,
-                        )
+                        ]
                     ),
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     28 => $this->createRole(
-                        array(
-                            array('test-module', 'test-function', '*'),
-                        ),
+                        [
+                            ['test-module', 'test-function', '*'],
+                        ],
                         28
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 28,
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -129,43 +129,43 @@ class PermissionTest extends BaseServiceMockTest
 
     public function providerForTestHasAccessReturnsFalse()
     {
-        return array(
-            array(array(), array()),
-            array(
-                array(
+        return [
+            [[], []],
+            [
+                [
                     29 => $this->createRole(
-                        array(
-                            array('dummy-module', 'dummy-function', 'dummy-limitation'),
-                        ),
+                        [
+                            ['dummy-module', 'dummy-function', 'dummy-limitation'],
+                        ],
                         29
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 29,
-                        )
+                        ]
                     ),
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     30 => $this->createRole(
-                        array(
-                            array('test-module', 'dummy-function', 'dummy-limitation'),
-                        ),
+                        [
+                            ['test-module', 'dummy-function', 'dummy-limitation'],
+                        ],
                         30
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 30,
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -237,53 +237,53 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function providerForTestHasAccessReturnsPermissionSets()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     31 => $this->createRole(
-                        array(
-                            array('test-module', 'test-function', 'test-limitation'),
-                        ),
+                        [
+                            ['test-module', 'test-function', 'test-limitation'],
+                        ],
                         31
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 31,
-                        )
+                        ]
                     ),
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     31 => $this->createRole(
-                        array(
-                            array('test-module', 'test-function', 'test-limitation'),
-                        ),
+                        [
+                            ['test-module', 'test-function', 'test-limitation'],
+                        ],
                         31
                     ),
                     32 => $this->createRole(
-                        array(
-                            array('test-module', 'test-function', 'test-limitation2'),
-                        ),
+                        [
+                            ['test-module', 'test-function', 'test-limitation2'],
+                        ],
                         32
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 31,
-                        )
+                        ]
                     ),
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 32,
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -317,11 +317,11 @@ class PermissionTest extends BaseServiceMockTest
                 ->will($this->returnValue($roles[$roleAssignment->roleId]));
         }
 
-        $permissionSets = array();
+        $permissionSets = [];
         $count = 0;
         /* @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
         foreach ($roleAssignments as $i => $roleAssignment) {
-            $permissionSet = array('limitation' => null);
+            $permissionSet = ['limitation' => null];
             foreach ($roles[$roleAssignment->roleId]->policies as $k => $policy) {
                 $policyName = 'policy-' . $i . '-' . $k;
                 $return = $this->returnValue($policyName);
@@ -351,53 +351,53 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function providerForTestHasAccessReturnsException()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     31 => $this->createRole(
-                        array(
-                            array('test-module', 'test-function', 'notfound'),
-                        ),
+                        [
+                            ['test-module', 'test-function', 'notfound'],
+                        ],
                         31
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 31,
-                        )
+                        ]
                     ),
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     31 => $this->createRole(
-                        array(
-                            array('test-module', 'test-function', 'test-limitation'),
-                        ),
+                        [
+                            ['test-module', 'test-function', 'test-limitation'],
+                        ],
                         31
                     ),
                     32 => $this->createRole(
-                        array(
-                            array('test-module', 'test-function', 'notfound'),
-                        ),
+                        [
+                            ['test-module', 'test-function', 'notfound'],
+                        ],
                         32
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 31,
-                        )
+                        ]
                     ),
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 32,
-                        )
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -435,7 +435,7 @@ class PermissionTest extends BaseServiceMockTest
         $count = 0;
         /* @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
         foreach ($roleAssignments as $i => $roleAssignment) {
-            $permissionSet = array('limitation' => null);
+            $permissionSet = ['limitation' => null];
             foreach ($roles[$roleAssignment->roleId]->policies as $k => $policy) {
                 $policyName = 'policy-' . $i . '-' . $k;
                 if ($policy->limitations === 'notfound') {
@@ -462,41 +462,41 @@ class PermissionTest extends BaseServiceMockTest
 
     public function providerForTestHasAccessReturnsPermissionSetsWithRoleLimitation()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     32 => $this->createRole(
-                        array(
-                            array('test-module', 'test-function', 'test-limitation'),
-                        ),
+                        [
+                            ['test-module', 'test-function', 'test-limitation'],
+                        ],
                         32
                     ),
-                ),
-                array(
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 32,
                             'limitationIdentifier' => 'test-role-limitation',
-                            'values' => array('test-role-limitation-value'),
-                        )
+                            'values' => ['test-role-limitation-value'],
+                        ]
                     ),
-                ),
-            ),
-            array(
-                array(
-                    33 => $this->createRole(array(array('*', '*', '*')), 33),
-                ),
-                array(
+                ],
+            ],
+            [
+                [
+                    33 => $this->createRole([['*', '*', '*']], 33),
+                ],
+                [
                     new RoleAssignment(
-                        array(
+                        [
                             'roleId' => 33,
                             'limitationIdentifier' => 'test-role-limitation',
-                            'values' => array('test-role-limitation-value'),
-                        )
+                            'values' => ['test-role-limitation-value'],
+                        ]
                     ),
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -532,10 +532,10 @@ class PermissionTest extends BaseServiceMockTest
                 ->will($this->returnValue($roles[$roleAssignment->roleId]));
         }
 
-        $permissionSets = array();
+        $permissionSets = [];
         /** @var $roleAssignments \eZ\Publish\SPI\Persistence\User\RoleAssignment[] */
         foreach ($roleAssignments as $i => $roleAssignment) {
-            $permissionSet = array();
+            $permissionSet = [];
             foreach ($roles[$roleAssignment->roleId]->policies as $k => $policy) {
                 $policyName = "policy-{$i}-{$k}";
                 $permissionSet['policies'][] = $policyName;
@@ -577,32 +577,32 @@ class PermissionTest extends BaseServiceMockTest
      */
     private function createRole(array $policiesData, $roleId = null)
     {
-        $policies = array();
+        $policies = [];
         foreach ($policiesData as $policyData) {
             $policies[] = new Policy(
-                array(
+                [
                     'module' => $policyData[0],
                     'function' => $policyData[1],
                     'limitations' => $policyData[2],
-                )
+                ]
             );
         }
 
         return new Role(
-            array(
+            [
                 'id' => $roleId,
                 'policies' => $policies,
-            )
+            ]
         );
     }
 
     public function providerForTestCanUserSimple()
     {
-        return array(
-            array(true, true),
-            array(false, false),
-            array(array(), false),
-        );
+        return [
+            [true, true],
+            [false, false],
+            [[], false],
+        ];
     }
 
     /**
@@ -646,8 +646,8 @@ class PermissionTest extends BaseServiceMockTest
         );
 
         $policyMock = $this->getMockBuilder('eZ\\Publish\\SPI\\Persistence\\User\\Policy')
-            ->setMethods(array('getLimitations'))
-            ->setConstructorArgs(array())
+            ->setMethods(['getLimitations'])
+            ->setConstructorArgs([])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -655,12 +655,12 @@ class PermissionTest extends BaseServiceMockTest
             ->expects($this->once())
             ->method('getLimitations')
             ->will($this->returnValue('*'));
-        $permissionSets = array(
-            array(
+        $permissionSets = [
+            [
                 'limitation' => null,
-                'policies' => array($policyMock),
-            ),
-        );
+                'policies' => [$policyMock],
+            ],
+        ];
         $permissionResolverMock
             ->expects($this->once())
             ->method('hasAccess')
@@ -705,20 +705,20 @@ class PermissionTest extends BaseServiceMockTest
             ->will($this->returnValue('test-policy-limitation-identifier'));
 
         $policyMock = $this->getMockBuilder('eZ\\Publish\\SPI\\Persistence\\User\\Policy')
-            ->setMethods(array('getLimitations'))
-            ->setConstructorArgs(array())
+            ->setMethods(['getLimitations'])
+            ->setConstructorArgs([])
             ->getMock();
 
         $policyMock
             ->expects($this->any())
             ->method('getLimitations')
-            ->will($this->returnValue(array($policyLimitationMock, $policyLimitationMock)));
+            ->will($this->returnValue([$policyLimitationMock, $policyLimitationMock]));
 
-        $permissionSet = array(
+        $permissionSet = [
             'limitation' => clone $roleLimitationMock,
-            'policies' => array($policyMock, $policyMock),
-        );
-        $permissionSets = array($permissionSet, $permissionSet);
+            'policies' => [$policyMock, $policyMock],
+        ];
+        $permissionSets = [$permissionSet, $permissionSet];
 
         return $permissionSets;
     }
@@ -731,78 +731,78 @@ class PermissionTest extends BaseServiceMockTest
      */
     public function providerForTestCanUserComplex()
     {
-        return array(
-            array(
-                array(true, true),
-                array(
-                    array(
-                        array(true, true),
-                        array(true, true),
-                    ),
-                    array(
-                        array(true, true),
-                        array(true, true),
-                    ),
-                ),
+        return [
+            [
+                [true, true],
+                [
+                    [
+                        [true, true],
+                        [true, true],
+                    ],
+                    [
+                        [true, true],
+                        [true, true],
+                    ],
+                ],
                 true,
-            ),
-            array(
-                array(false, false),
-                array(
-                    array(
-                        array(true, true),
-                        array(true, true),
-                    ),
-                    array(
-                        array(true, true),
-                        array(true, true),
-                    ),
-                ),
+            ],
+            [
+                [false, false],
+                [
+                    [
+                        [true, true],
+                        [true, true],
+                    ],
+                    [
+                        [true, true],
+                        [true, true],
+                    ],
+                ],
                 false,
-            ),
-            array(
-                array(false, true),
-                array(
-                    array(
-                        array(true, true),
-                        array(true, true),
-                    ),
-                    array(
-                        array(true, true),
-                        array(true, true),
-                    ),
-                ),
+            ],
+            [
+                [false, true],
+                [
+                    [
+                        [true, true],
+                        [true, true],
+                    ],
+                    [
+                        [true, true],
+                        [true, true],
+                    ],
+                ],
                 true,
-            ),
-            array(
-                array(false, true),
-                array(
-                    array(
-                        array(true, true),
-                        array(true, true),
-                    ),
-                    array(
-                        array(true, false),
-                        array(true, true),
-                    ),
-                ),
+            ],
+            [
+                [false, true],
+                [
+                    [
+                        [true, true],
+                        [true, true],
+                    ],
+                    [
+                        [true, false],
+                        [true, true],
+                    ],
+                ],
                 true,
-            ),
-            array(
-                array(true, false),
-                array(
-                    array(
-                        array(true, false),
-                        array(false, true),
-                    ),
-                    array(
-                        array(true, true),
-                        array(true, true),
-                    ),
-                ),
+            ],
+            [
+                [true, false],
+                [
+                    [
+                        [true, false],
+                        [false, true],
+                    ],
+                    [
+                        [true, true],
+                        [true, true],
+                    ],
+                ],
                 false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -843,7 +843,7 @@ class PermissionTest extends BaseServiceMockTest
             $limitation
                 ->expects($this->once())
                 ->method('evaluate')
-                ->with($permissionSets[$i]['limitation'], $userRef, $valueObject, array($valueObject))
+                ->with($permissionSets[$i]['limitation'], $userRef, $valueObject, [$valueObject])
                 ->will($this->returnValue($roleLimitationEvaluations[$i]));
             $limitationServiceMock
                 ->expects($this->at($invocation++))
@@ -865,7 +865,7 @@ class PermissionTest extends BaseServiceMockTest
                     $limitation
                         ->expects($this->once())
                         ->method('evaluate')
-                        ->with($limitations[$k], $userRef, $valueObject, array($valueObject))
+                        ->with($limitations[$k], $userRef, $valueObject, [$valueObject])
                         ->will($this->returnValue($policyLimitationEvaluations[$i][$j][$k]));
                     $limitationServiceMock
                         ->expects($this->at($invocation++))

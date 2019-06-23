@@ -135,7 +135,7 @@ class StandardMapper implements MapperInterface
         $locations = $this->locationHandler->loadLocationsByContent($content->versionInfo->contentInfo->id);
         $section = $this->sectionHandler->load($content->versionInfo->contentInfo->sectionId);
         $mainLocation = null;
-        $locationDocuments = array();
+        $locationDocuments = [];
         foreach ($locations as $location) {
             $locationDocuments[] = $this->mapContentLocation($location, $content);
         }
@@ -149,7 +149,7 @@ class StandardMapper implements MapperInterface
         // Add owner user id as it can also be considered as user group.
         $ancestorLocationsContentIds[] = $content->versionInfo->contentInfo->ownerId;
 
-        $fields = array(
+        $fields = [
             new Field(
                 'id',
                 $content->versionInfo->contentInfo->id,
@@ -235,7 +235,7 @@ class StandardMapper implements MapperInterface
                 $locationDocuments,
                 new FieldType\DocumentField()
             ),
-        );
+        ];
 
         $contentType = $this->contentTypeHandler->load($content->versionInfo->contentInfo->contentTypeId);
         $fields[] = new Field(
@@ -256,11 +256,11 @@ class StandardMapper implements MapperInterface
         );
 
         $document = new Document(
-            array(
+            [
                 'id' => $content->versionInfo->contentInfo->id,
                 'type' => 'content',
                 'fields' => $fields,
-            )
+            ]
         );
 
         return $document;
@@ -277,16 +277,16 @@ class StandardMapper implements MapperInterface
      */
     protected function mapFields(Content $content, Type $contentType)
     {
-        $fieldMap = array();
+        $fieldMap = [];
 
         foreach ($content->fields as $field) {
             $fieldMap[$field->languageCode][] = $field;
         }
 
-        $fieldDocuments = array();
+        $fieldDocuments = [];
 
         foreach (array_keys($fieldMap) as $languageCode) {
-            $fields = array();
+            $fields = [];
             $fields[] = new Field(
                 'meta_language_code',
                 $languageCode,
@@ -338,9 +338,9 @@ class StandardMapper implements MapperInterface
             }
 
             $fieldDocuments[] = new Document(
-                array(
+                [
                     'fields' => $fields,
-                )
+                ]
             );
         }
 
@@ -360,7 +360,7 @@ class StandardMapper implements MapperInterface
      */
     protected function mapContentLocation(Location $location, Content $content)
     {
-        $fields = array(
+        $fields = [
             new Field(
                 'id',
                 $location->id,
@@ -416,12 +416,12 @@ class StandardMapper implements MapperInterface
                 ($location->id == $content->versionInfo->contentInfo->mainLocationId),
                 new FieldType\BooleanField()
             ),
-        );
+        ];
 
         return new Document(
-            array(
+            [
                 'fields' => $fields,
-            )
+            ]
         );
     }
 
@@ -567,8 +567,8 @@ class StandardMapper implements MapperInterface
     protected function getAncestorLocationsContentIds($contentId)
     {
         $locations = $this->locationHandler->loadLocationsByContent($contentId);
-        $ancestorLocationContentIds = array();
-        $ancestorLocationIds = array();
+        $ancestorLocationContentIds = [];
+        $ancestorLocationIds = [];
 
         foreach ($locations as $location) {
             $locationIds = explode('/', trim($location->pathString, '/'));
@@ -598,7 +598,7 @@ class StandardMapper implements MapperInterface
      */
     protected function getObjectStateIds($contentId)
     {
-        $objectStateIds = array();
+        $objectStateIds = [];
 
         foreach ($this->objectStateHandler->loadAllGroups() as $objectStateGroup) {
             $objectStateIds[] = $this->objectStateHandler->getContentState(

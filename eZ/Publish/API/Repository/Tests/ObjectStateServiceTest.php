@@ -61,12 +61,12 @@ class ObjectStateServiceTest extends BaseTest
     public function testNewObjectStateGroupCreateStructValues(ObjectStateGroupCreateStruct $objectStateGroupCreate)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'publishing',
                 'defaultLanguageCode' => null,
                 'names' => null,
                 'descriptions' => null,
-            ),
+            ],
             $objectStateGroupCreate
         );
     }
@@ -106,12 +106,12 @@ class ObjectStateServiceTest extends BaseTest
     public function testNewObjectStateGroupUpdateStructValues(ObjectStateGroupUpdateStruct $objectStateGroupUpdate)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => null,
                 'defaultLanguageCode' => null,
                 'names' => null,
                 'descriptions' => null,
-            ),
+            ],
             $objectStateGroupUpdate
         );
     }
@@ -153,13 +153,13 @@ class ObjectStateServiceTest extends BaseTest
     public function testNewObjectStateCreateStructValues(ObjectStateCreateStruct $objectStateCreate)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => 'pending',
                 'priority' => false,
                 'defaultLanguageCode' => null,
                 'names' => null,
                 'descriptions' => null,
-            ),
+            ],
             $objectStateCreate
         );
     }
@@ -199,12 +199,12 @@ class ObjectStateServiceTest extends BaseTest
     public function testNewObjectStateUpdateStructValues(ObjectStateUpdateStruct $objectStateUpdate)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'identifier' => null,
                 'defaultLanguageCode' => null,
                 'names' => null,
                 'descriptions' => null,
-            ),
+            ],
             $objectStateUpdate
         );
     }
@@ -227,14 +227,14 @@ class ObjectStateServiceTest extends BaseTest
             'publishing'
         );
         $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
-        $objectStateGroupCreate->names = array(
+        $objectStateGroupCreate->names = [
             'eng-US' => 'Publishing',
             'ger-DE' => 'Sindelfingen',
-        );
-        $objectStateGroupCreate->descriptions = array(
+        ];
+        $objectStateGroupCreate->descriptions = [
             'eng-US' => 'Put something online',
             'ger-DE' => 'Put something ton Sindelfingen.',
-        );
+        ];
 
         $createdObjectStateGroup = $objectStateService->createObjectStateGroup(
             $objectStateGroupCreate
@@ -297,14 +297,14 @@ class ObjectStateServiceTest extends BaseTest
             'ez_lock'
         );
         $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
-        $objectStateGroupCreate->names = array(
+        $objectStateGroupCreate->names = [
             'eng-US' => 'Publishing',
             'eng-GB' => 'Sindelfingen',
-        );
-        $objectStateGroupCreate->descriptions = array(
+        ];
+        $objectStateGroupCreate->descriptions = [
             'eng-US' => 'Put something online',
             'eng-GB' => 'Put something ton Sindelfingen.',
-        );
+        ];
 
         // This call will fail because group with 'ez_lock' identifier already exists
         $objectStateService->createObjectStateGroup(
@@ -588,7 +588,7 @@ class ObjectStateServiceTest extends BaseTest
             $loadedObjectStates
         );
         $this->assertObjectsLoadedByIdentifiers(
-            array('not_locked' => true, 'locked' => true),
+            ['not_locked' => true, 'locked' => true],
             $loadedObjectStates,
             'ObjectState'
         );
@@ -620,12 +620,12 @@ class ObjectStateServiceTest extends BaseTest
         $groupUpdateStruct = $objectStateService->newObjectStateGroupUpdateStruct();
         $groupUpdateStruct->identifier = 'sindelfingen';
         $groupUpdateStruct->defaultLanguageCode = 'ger-DE';
-        $groupUpdateStruct->names = array(
+        $groupUpdateStruct->names = [
             'ger-DE' => 'Sindelfingen',
-        );
-        $groupUpdateStruct->descriptions = array(
+        ];
+        $groupUpdateStruct->descriptions = [
             'ger-DE' => 'Sindelfingen ist nicht nur eine Stadt',
-        );
+        ];
 
         // Updates the $loadObjectStateGroup with the data from
         // $groupUpdateStruct and returns the updated group
@@ -642,12 +642,12 @@ class ObjectStateServiceTest extends BaseTest
             $updatedObjectStateGroup
         );
 
-        return array(
+        return [
             $loadedObjectStateGroup,
             $groupUpdateStruct,
             $updatedObjectStateGroup,
             $allObjectGroups,
-        );
+        ];
     }
 
     /**
@@ -709,14 +709,14 @@ class ObjectStateServiceTest extends BaseTest
             'publishing'
         );
         $objectStateGroupCreate->defaultLanguageCode = 'eng-US';
-        $objectStateGroupCreate->names = array(
+        $objectStateGroupCreate->names = [
             'eng-US' => 'Publishing',
             'eng-GB' => 'Sindelfingen',
-        );
-        $objectStateGroupCreate->descriptions = array(
+        ];
+        $objectStateGroupCreate->descriptions = [
             'eng-US' => 'Put something online',
             'eng-GB' => 'Put something ton Sindelfingen.',
-        );
+        ];
 
         $createdObjectStateGroup = $objectStateService->createObjectStateGroup(
             $objectStateGroupCreate
@@ -726,12 +726,12 @@ class ObjectStateServiceTest extends BaseTest
         // 'ez_lock' is the identifier of already existing group
         $groupUpdateStruct->identifier = 'ez_lock';
         $groupUpdateStruct->defaultLanguageCode = 'ger-DE';
-        $groupUpdateStruct->names = array(
+        $groupUpdateStruct->names = [
             'ger-DE' => 'Sindelfingen',
-        );
-        $groupUpdateStruct->descriptions = array(
+        ];
+        $groupUpdateStruct->descriptions = [
             'ger-DE' => 'Sindelfingen ist nicht nur eine Stadt',
-        );
+        ];
 
         // This call will fail since state group with 'ez_lock' identifier already exists
         $objectStateService->updateObjectStateGroup(
@@ -797,10 +797,10 @@ class ObjectStateServiceTest extends BaseTest
             'eng-US' => 'Locked and Unlocked',
             'ger-DE' => 'geschlossen und ungeschlossen',
         ];
-        $objectStateCreateStruct->descriptions = array(
+        $objectStateCreateStruct->descriptions = [
             'eng-US' => 'A state between locked and unlocked.',
             'ger-DE' => 'ein Zustand zwischen geschlossen und ungeschlossen.',
-        );
+        ];
 
         // Creates a new object state in the $loadObjectStateGroup with the
         // data from $objectStateCreateStruct
@@ -905,12 +905,12 @@ class ObjectStateServiceTest extends BaseTest
         );
         $objectStateCreateStruct->priority = 23;
         $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
-        $objectStateCreateStruct->names = array(
+        $objectStateCreateStruct->names = [
             'eng-US' => 'Locked and Unlocked',
-        );
-        $objectStateCreateStruct->descriptions = array(
+        ];
+        $objectStateCreateStruct->descriptions = [
             'eng-US' => 'A state between locked and unlocked.',
-        );
+        ];
 
         // This call will fail because object state with
         // 'not_locked' identifier already exists
@@ -989,15 +989,15 @@ class ObjectStateServiceTest extends BaseTest
     public function testLoadObjectStateStructValues(ObjectState $loadedObjectState)
     {
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => 2,
                 'identifier' => 'locked',
                 'priority' => 1,
                 'mainLanguageCode' => 'eng-US',
-                'languageCodes' => array(0 => 'eng-US'),
-                'names' => array('eng-US' => 'Locked'),
-                'descriptions' => array('eng-US' => ''),
-            ),
+                'languageCodes' => [0 => 'eng-US'],
+                'names' => ['eng-US' => 'Locked'],
+                'descriptions' => ['eng-US' => ''],
+            ],
             $loadedObjectState
         );
 
@@ -1238,14 +1238,14 @@ class ObjectStateServiceTest extends BaseTest
         $updateStateStruct = $objectStateService->newObjectStateUpdateStruct();
         $updateStateStruct->identifier = 'somehow_locked';
         $updateStateStruct->defaultLanguageCode = 'ger-DE';
-        $updateStateStruct->names = array(
+        $updateStateStruct->names = [
             'eng-US' => 'Somehow locked',
             'ger-DE' => 'Irgendwie gelockt',
-        );
-        $updateStateStruct->descriptions = array(
+        ];
+        $updateStateStruct->descriptions = [
             'eng-US' => 'The object is somehow locked',
             'ger-DE' => 'Sindelfingen',
-        );
+        ];
 
         $updatedObjectState = $objectStateService->updateObjectState(
             $loadedObjectState,
@@ -1260,12 +1260,12 @@ class ObjectStateServiceTest extends BaseTest
             $updatedObjectState
         );
 
-        return array(
+        return [
             $loadedObjectState,
             $updateStateStruct,
             $updatedObjectState,
             $allObjectStates,
-        );
+        ];
     }
 
     /**
@@ -1338,14 +1338,14 @@ class ObjectStateServiceTest extends BaseTest
         // 'not_locked' is the identifier of already existing state
         $updateStateStruct->identifier = 'not_locked';
         $updateStateStruct->defaultLanguageCode = 'ger-DE';
-        $updateStateStruct->names = array(
+        $updateStateStruct->names = [
             'eng-US' => 'Somehow locked',
             'ger-DE' => 'Irgendwie gelockt',
-        );
-        $updateStateStruct->descriptions = array(
+        ];
+        $updateStateStruct->descriptions = [
             'eng-US' => 'The object is somehow locked',
             'ger-DE' => 'Sindelfingen',
-        );
+        ];
 
         // This call will fail because state with
         // 'not_locked' identifier already exists
@@ -1373,15 +1373,15 @@ class ObjectStateServiceTest extends BaseTest
         ) = $testData;
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'id' => $loadedObjectState->id,
                 'identifier' => $updateStateStruct->identifier,
                 'priority' => $loadedObjectState->priority,
                 'mainLanguageCode' => $updateStateStruct->defaultLanguageCode,
-                'languageCodes' => array('eng-US', 'ger-DE'),
+                'languageCodes' => ['eng-US', 'ger-DE'],
                 'names' => $updateStateStruct->names,
                 'descriptions' => $updateStateStruct->descriptions,
-            ),
+            ],
             $updatedObjectState
         );
 
@@ -1499,7 +1499,7 @@ class ObjectStateServiceTest extends BaseTest
         );
         $objectStateCreateStruct->priority = 1;
         $objectStateCreateStruct->defaultLanguageCode = 'eng-US';
-        $objectStateCreateStruct->names = array('eng-US' => 'Sindelfingen');
+        $objectStateCreateStruct->names = ['eng-US' => 'Sindelfingen'];
 
         $createdState = $objectStateService->createObjectState(
             $customGroup,
@@ -1534,7 +1534,7 @@ class ObjectStateServiceTest extends BaseTest
             $initialObjectState
         );
         $this->assertEquals('sindelfingen', $initialObjectState->identifier);
-        $this->assertEquals(array('eng-US' => 'Sindelfingen'), $initialObjectState->names);
+        $this->assertEquals(['eng-US' => 'Sindelfingen'], $initialObjectState->names);
         $this->assertEquals('eng-US', $initialObjectState->defaultLanguageCode);
     }
 

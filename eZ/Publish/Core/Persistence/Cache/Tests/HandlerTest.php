@@ -56,7 +56,7 @@ abstract class HandlerTest extends TestCase
     /**
      * @param array|null $persistenceFactoryMockMethod
      */
-    protected $persistenceFactoryMockMethods = array();
+    protected $persistenceFactoryMockMethods = [];
 
     /**
      * Setup the HandlerTest.

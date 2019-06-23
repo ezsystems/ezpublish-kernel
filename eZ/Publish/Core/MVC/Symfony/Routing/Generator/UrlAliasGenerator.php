@@ -43,12 +43,12 @@ class UrlAliasGenerator extends Generator
     /**
      * @var array
      */
-    private $excludedUriPrefixes = array();
+    private $excludedUriPrefixes = [];
 
     /**
      * @var array
      */
-    private $pathPrefixMap = array();
+    private $pathPrefixMap = [];
 
     /**
      * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
@@ -63,7 +63,7 @@ class UrlAliasGenerator extends Generator
      */
     private $unsafeCharMap;
 
-    public function __construct(Repository $repository, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver, array $unsafeCharMap = array())
+    public function __construct(Repository $repository, RouterInterface $defaultRouter, ConfigResolverInterface $configResolver, array $unsafeCharMap = [])
     {
         $this->repository = $repository;
         $this->defaultRouter = $defaultRouter;
@@ -125,7 +125,7 @@ class UrlAliasGenerator extends Generator
         } else {
             $path = $this->defaultRouter->generate(
                 self::INTERNAL_CONTENT_VIEW_ROUTE,
-                array('contentId' => $location->contentId, 'locationId' => $location->id)
+                ['contentId' => $location->contentId, 'locationId' => $location->id]
             );
         }
 
@@ -169,7 +169,7 @@ class UrlAliasGenerator extends Generator
         }
 
         if (!isset($this->pathPrefixMap[$siteaccess])) {
-            $this->pathPrefixMap[$siteaccess] = array();
+            $this->pathPrefixMap[$siteaccess] = [];
         }
 
         if (!isset($this->pathPrefixMap[$siteaccess][$rootLocationId])) {

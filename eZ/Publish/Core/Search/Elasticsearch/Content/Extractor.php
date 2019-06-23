@@ -41,11 +41,11 @@ abstract class Extractor
     public function extract($data)
     {
         $result = new SearchResult(
-            array(
+            [
                 'time' => $data->took,
                 'maxScore' => $data->hits->max_score,
                 'totalCount' => $data->hits->total,
-            )
+            ]
         );
 
         if (isset($data->aggregations)) {
@@ -59,10 +59,10 @@ abstract class Extractor
 
         foreach ($data->hits->hits as $hit) {
             $searchHit = new SearchHit(
-                array(
+                [
                     'score' => $hit->_score,
                     'valueObject' => $this->extractHit($hit),
-                )
+                ]
             );
             $result->searchHits[] = $searchHit;
         }

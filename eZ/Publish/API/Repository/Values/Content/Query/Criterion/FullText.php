@@ -74,7 +74,7 @@ class FullText extends Criterion implements CriterionInterface, CustomFieldInter
      *
      * @var array
      */
-    public $boost = array();
+    public $boost = [];
 
     /**
      * Analyzer configuration.
@@ -99,9 +99,9 @@ class FullText extends Criterion implements CriterionInterface, CustomFieldInter
      *
      * @var array
      */
-    protected $customFields = array();
+    protected $customFields = [];
 
-    public function __construct($value, array $properties = array())
+    public function __construct($value, array $properties = [])
     {
         parent::__construct(null, Operator::LIKE, $value);
 
@@ -118,9 +118,9 @@ class FullText extends Criterion implements CriterionInterface, CustomFieldInter
 
     public function getSpecifications()
     {
-        return array(
+        return [
             new Specifications(Operator::LIKE, Specifications::FORMAT_SINGLE),
-        );
+        ];
     }
 
     public static function createFromQueryBuilder($target, $operator, $value)

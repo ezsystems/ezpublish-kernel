@@ -254,14 +254,14 @@ class UserServiceTest extends BaseTest
     public function testCreateUserGroupSetsExpectedProperties($userGroup)
     {
         $this->assertEquals(
-            array(
+            [
                 'parentId' => $this->generateId('group', 4),
                 'subGroupCount' => 0,
-            ),
-            array(
+            ],
+            [
                 'parentId' => $userGroup->parentId,
                 'subGroupCount' => $userGroup->subGroupCount,
-            )
+            ]
         );
     }
 
@@ -535,7 +535,7 @@ class UserServiceTest extends BaseTest
         );
 
         $this->assertEquals($membersGroupId, $userGroup->parentId);
-        $this->assertEquals(array($userGroup->id), $subUserGroupIds);
+        $this->assertEquals([$userGroup->id], $subUserGroupIds);
     }
 
     /**
@@ -873,18 +873,18 @@ class UserServiceTest extends BaseTest
     public function testNewUserCreateStructSetsExpectedProperties($userCreate)
     {
         $this->assertEquals(
-            array(
+            [
                 'login' => 'user',
                 'email' => 'user@example.com',
                 'password' => 'secret',
                 'mainLanguageCode' => 'eng-US',
-            ),
-            array(
+            ],
+            [
                 'login' => $userCreate->login,
                 'email' => $userCreate->email,
                 'password' => $userCreate->password,
                 'mainLanguageCode' => $userCreate->mainLanguageCode,
-            )
+            ]
         );
     }
 
@@ -956,16 +956,16 @@ class UserServiceTest extends BaseTest
     public function testCreateUserSetsExpectedProperties(User $user)
     {
         $this->assertEquals(
-            array(
+            [
                 'login' => 'user',
                 'email' => 'user@example.com',
                 'mainLanguageCode' => 'eng-US',
-            ),
-            array(
+            ],
+            [
                 'login' => $user->login,
                 'email' => $user->email,
                 'mainLanguageCode' => $user->contentInfo->mainLanguageCode,
-            )
+            ]
         );
     }
 
@@ -1004,7 +1004,7 @@ class UserServiceTest extends BaseTest
 
         // This call will fail with a "ContentFieldValidationException", because the
         // mandatory fields "first_name" and "last_name" are not set.
-        $userService->createUser($userCreate, array($group));
+        $userService->createUser($userCreate, [$group]);
         /* END: Use Case */
     }
 
@@ -1043,7 +1043,7 @@ class UserServiceTest extends BaseTest
 
         // This call will fail with an "InvalidArgumentException", because the
         // value for the firled "first_name" is not accepted by the field type.
-        $userService->createUser($userCreate, array($group));
+        $userService->createUser($userCreate, [$group]);
         /* END: Use Case */
     }
 
@@ -1083,7 +1083,7 @@ class UserServiceTest extends BaseTest
 
         // This call will fail with a "InvalidArgumentException", because the
         // user with "admin" login already exists.
-        $userService->createUser($userCreate, array($group));
+        $userService->createUser($userCreate, [$group]);
         /* END: Use Case */
     }
 
@@ -1358,7 +1358,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'login' => $user->login,
                 'email' => $user->email,
                 'passwordHash' => $user->passwordHash,
@@ -1369,7 +1369,7 @@ class UserServiceTest extends BaseTest
                 'contentInfo' => $user->contentInfo,
                 'versionInfo' => $user->versionInfo,
                 'fields' => $user->fields,
-            ),
+            ],
             $userReloaded
         );
     }
@@ -1416,7 +1416,7 @@ class UserServiceTest extends BaseTest
         /* END: Use Case */
 
         $this->assertPropertiesCorrect(
-            array(
+            [
                 'login' => $user->login,
                 'email' => $user->email,
                 'passwordHash' => $user->passwordHash,
@@ -1427,7 +1427,7 @@ class UserServiceTest extends BaseTest
                 'contentInfo' => $user->contentInfo,
                 'versionInfo' => $user->versionInfo,
                 'fields' => $user->fields,
-            ),
+            ],
             $userReloaded
         );
     }
@@ -1451,7 +1451,7 @@ class UserServiceTest extends BaseTest
         $usersReloaded = $userService->loadUsersByEmail('user@example.com');
         /* END: Use Case */
 
-        $this->assertEquals(array($user), $usersReloaded);
+        $this->assertEquals([$user], $usersReloaded);
     }
 
     /**
@@ -1474,7 +1474,7 @@ class UserServiceTest extends BaseTest
         $emptyUserList = $userService->loadUsersByEmail('user42@example.com');
         /* END: Use Case */
 
-        $this->assertEquals(array(), $emptyUserList);
+        $this->assertEquals([], $emptyUserList);
     }
 
     /**
@@ -1662,18 +1662,18 @@ class UserServiceTest extends BaseTest
     public function testUpdateUserUpdatesExpectedProperties(User $user)
     {
         $this->assertEquals(
-            array(
+            [
                 'login' => 'user',
                 'email' => 'user@example.com',
                 'maxLogin' => 42,
                 'enabled' => false,
-            ),
-            array(
+            ],
+            [
                 'login' => $user->login,
                 'email' => $user->email,
                 'maxLogin' => $user->maxLogin,
                 'enabled' => $user->enabled,
-            )
+            ]
         );
     }
 
@@ -1890,13 +1890,13 @@ class UserServiceTest extends BaseTest
         $this->refreshSearch($repository);
 
         // This array will contain the email of the newly created "Editor" user
-        $email = array();
+        $email = [];
         foreach ($userService->loadUsersOfUserGroup($group) as $user) {
             $this->assertInstanceOf(User::class, $user);
             $email[] = $user->email;
         }
         /* END: Use Case */
-        $this->assertEquals(array('user@example.com'), $email);
+        $this->assertEquals(['user@example.com'], $email);
     }
 
     /**
@@ -1924,7 +1924,7 @@ class UserServiceTest extends BaseTest
         );
 
         // This array will contain "Editors" and "Administrator users"
-        $userGroupNames = array();
+        $userGroupNames = [];
         foreach ($userService->loadUserGroupsOfUser($user) as $userGroup) {
             $userGroupNames[] = $userGroup->getFieldValue('name');
         }
@@ -1933,10 +1933,10 @@ class UserServiceTest extends BaseTest
         sort($userGroupNames, SORT_STRING);
 
         $this->assertEquals(
-            array(
+            [
                 'Administrator users',
                 'Editors',
-            ),
+            ],
             $userGroupNames
         );
     }
@@ -2002,13 +2002,13 @@ class UserServiceTest extends BaseTest
         );
 
         // This array will contain "Anonymous Users"
-        $userGroupNames = array();
+        $userGroupNames = [];
         foreach ($userService->loadUserGroupsOfUser($user) as $userGroup) {
             $userGroupNames[] = $userGroup->getFieldValue('name');
         }
         /* END: Use Case */
 
-        $this->assertEquals(array('Anonymous Users'), $userGroupNames);
+        $this->assertEquals(['Anonymous Users'], $userGroupNames);
     }
 
     /**

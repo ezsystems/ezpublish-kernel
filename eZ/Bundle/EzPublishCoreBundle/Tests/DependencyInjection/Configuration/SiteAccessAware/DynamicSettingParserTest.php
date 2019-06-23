@@ -24,21 +24,21 @@ class DynamicSettingParserTest extends TestCase
 
     public function isDynamicSettingProvider()
     {
-        return array(
-            array('foo', false),
-            array('%foo%', false),
-            array('$foo', false),
-            array('foo$', false),
-            array('$foo$', true),
-            array('$foo.bar$', true),
-            array('$foo_bar$', true),
-            array('$foo.bar$', true),
-            array('$foo;ba_bar$', true),
-            array('$foo;babar.elephant$', true),
-            array('$foo;babar;elephant$', true),
-            array('$foo;bar;baz_biz$', true),
-            array('$foo$/$bar$', false),
-        );
+        return [
+            ['foo', false],
+            ['%foo%', false],
+            ['$foo', false],
+            ['foo$', false],
+            ['$foo$', true],
+            ['$foo.bar$', true],
+            ['$foo_bar$', true],
+            ['$foo.bar$', true],
+            ['$foo;ba_bar$', true],
+            ['$foo;babar.elephant$', true],
+            ['$foo;babar;elephant$', true],
+            ['$foo;bar;baz_biz$', true],
+            ['$foo$/$bar$', false],
+        ];
     }
 
     /**
@@ -61,39 +61,39 @@ class DynamicSettingParserTest extends TestCase
 
     public function parseDynamicSettingProvider()
     {
-        return array(
-            array(
+        return [
+            [
                 '$foo$',
-                array(
+                [
                     'param' => 'foo',
                     'namespace' => null,
                     'scope' => null,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '$foo.bar$',
-                array(
+                [
                     'param' => 'foo.bar',
                     'namespace' => null,
                     'scope' => null,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '$foo;bar$',
-                array(
+                [
                     'param' => 'foo',
                     'namespace' => 'bar',
                     'scope' => null,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 '$foo;ba_bar;biz$',
-                array(
+                [
                     'param' => 'foo',
                     'namespace' => 'ba_bar',
                     'scope' => 'biz',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }

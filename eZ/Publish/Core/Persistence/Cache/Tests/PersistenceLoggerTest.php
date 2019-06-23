@@ -60,7 +60,7 @@ class PersistenceLoggerTest extends TestCase
      */
     public function testGetCalls()
     {
-        $this->assertEquals(array(), $this->logger->getCalls());
+        $this->assertEquals([], $this->logger->getCalls());
     }
 
     /**
@@ -71,7 +71,7 @@ class PersistenceLoggerTest extends TestCase
         $this->assertNull($this->logger->logCall(__METHOD__));
         $this->logger->logCall(__METHOD__);
         $this->logger->logCall(__METHOD__);
-        $this->logger->logCall(__METHOD__, array(33));
+        $this->logger->logCall(__METHOD__, [33]);
 
         return $this->logger;
     }
@@ -99,12 +99,12 @@ class PersistenceLoggerTest extends TestCase
     {
         $method = __CLASS__ . '::testLogCall';
         $this->assertEquals(
-            array(
-                array('method' => $method, 'arguments' => array()),
-                array('method' => $method, 'arguments' => array()),
-                array('method' => $method, 'arguments' => array()),
-                array('method' => $method, 'arguments' => array(33)),
-            ),
+            [
+                ['method' => $method, 'arguments' => []],
+                ['method' => $method, 'arguments' => []],
+                ['method' => $method, 'arguments' => []],
+                ['method' => $method, 'arguments' => [33]],
+            ],
             $logger->getCalls()
         );
     }

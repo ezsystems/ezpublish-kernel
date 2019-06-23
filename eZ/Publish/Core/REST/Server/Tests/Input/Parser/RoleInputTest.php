@@ -19,7 +19,7 @@ class RoleInputTest extends BaseTest
      */
     public function testParse()
     {
-        $inputArray = array(
+        $inputArray = [
             'identifier' => 'Identifier Bar',
             /* @todo uncomment when support for multilingual names and descriptions is added EZP-24776
             'mainLanguageCode' => 'eng-GB',
@@ -40,7 +40,7 @@ class RoleInputTest extends BaseTest
                 )
             )
             */
-        );
+        ];
 
         $roleInput = $this->getParser();
         $result = $roleInput->parse($inputArray, $this->getParsingDispatcherMock());
@@ -98,7 +98,7 @@ class RoleInputTest extends BaseTest
             ->method('newRoleCreateStruct')
             ->with($this->equalTo('Identifier Bar'))
             ->will(
-                $this->returnValue(new RoleCreateStruct(array('identifier' => 'Identifier Bar')))
+                $this->returnValue(new RoleCreateStruct(['identifier' => 'Identifier Bar']))
             );
 
         return $roleServiceMock;

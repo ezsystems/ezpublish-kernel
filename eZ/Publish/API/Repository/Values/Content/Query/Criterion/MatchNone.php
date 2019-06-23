@@ -26,7 +26,7 @@ class MatchNone extends Criterion implements CriterionInterface
 
     public function getSpecifications()
     {
-        return array();
+        return [];
     }
 
     public static function createFromQueryBuilder($target, $operator, $value)

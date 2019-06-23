@@ -22,7 +22,7 @@ class ContentMatcherFactoryTest extends ContentBasedMatcherFactoryTest
      */
     protected function getMatchableValueObject()
     {
-        return $this->getContentView(array('id' => 456));
+        return $this->getContentView(['id' => 456]);
     }
 
     /**
@@ -33,7 +33,7 @@ class ContentMatcherFactoryTest extends ContentBasedMatcherFactoryTest
      */
     protected function getNonMatchableValueObject()
     {
-        return $this->getContentView(array('id' => 123456789));
+        return $this->getContentView(['id' => 123456789]);
     }
 
     protected function getMatcherClass()

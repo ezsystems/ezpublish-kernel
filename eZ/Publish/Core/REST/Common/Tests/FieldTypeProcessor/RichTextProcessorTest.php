@@ -19,7 +19,7 @@ class RichTextProcessorTest extends TestCase
     {
         $processor = $this->getProcessor();
 
-        $outputValue = array(
+        $outputValue = [
             'xml' => <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>
 <section xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ezxhtml="http://ez.no/xmlns/ezpublish/docbook/xhtml" xmlns:ezcustom="http://ez.no/xmlns/ezpublish/docbook/custom" version="5.0-variant ezpublish-1.0">
@@ -27,7 +27,7 @@ class RichTextProcessorTest extends TestCase
     <para>Foobar</para>
 </section>
 EOT
-        );
+        ];
         $processedOutputValue = $outputValue;
         $processedOutputValue['xhtml5edit'] = <<<EOT
 <?xml version="1.0" encoding="UTF-8"?>

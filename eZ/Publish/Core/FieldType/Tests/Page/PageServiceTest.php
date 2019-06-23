@@ -75,27 +75,27 @@ class PageServiceTest extends TestCase
      */
     protected function getZoneDefinition()
     {
-        return array(
-            'globalZoneLayout' => array(
+        return [
+            'globalZoneLayout' => [
                 'zoneTypeName' => 'Global zone layout',
-                'zones' => array(
-                    'main' => array('name' => 'Global zone'),
-                ),
+                'zones' => [
+                    'main' => ['name' => 'Global zone'],
+                ],
                 'zoneThumbnail' => 'globalzone_layout.gif',
                 'template' => '::globalzonelayout.html.twig',
-                'availableForClasses' => array('global_layout'),
-            ),
-            '2zonesLayout1' => array(
+                'availableForClasses' => ['global_layout'],
+            ],
+            '2zonesLayout1' => [
                 'zoneTypeName' => '2 zones (layout 1)',
-                'zones' => array(
-                    'left' => array('name' => 'Left zone'),
-                    'right' => array('name' => 'Right zone'),
-                ),
+                'zones' => [
+                    'left' => ['name' => 'Left zone'],
+                    'right' => ['name' => 'Right zone'],
+                ],
                 'zoneThumbnail' => '2zones_layout1.gif',
                 'template' => '::2zoneslayout1.html.twig',
-                'availableForClasses' => array('frontpage'),
-            ),
-        );
+                'availableForClasses' => ['frontpage'],
+            ],
+        ];
     }
 
     /**
@@ -105,27 +105,27 @@ class PageServiceTest extends TestCase
      */
     protected function getBlockDefinition()
     {
-        return array(
-            'campaign' => array(
+        return [
+            'campaign' => [
                 'name' => 'Campaign',
                 'numberOfValidItems' => 5,
                 'numberOfArchivedItems' => 5,
                 'manualAddingOfItems' => 'enabled',
-                'views' => array(
-                    'default' => array('name' => 'Default'),
-                ),
-            ),
-            'mainStory' => array(
+                'views' => [
+                    'default' => ['name' => 'Default'],
+                ],
+            ],
+            'mainStory' => [
                 'name' => 'Main story',
                 'numberOfValidItems' => 1,
                 'numberOfArchivedItems' => 5,
                 'manualAddingOfItems' => 'enabled',
-                'views' => array(
-                    'default' => array('name' => 'Default'),
-                    'highlighted' => array('name' => 'Highlighted'),
-                ),
-            ),
-        );
+                'views' => [
+                    'default' => ['name' => 'Default'],
+                    'highlighted' => ['name' => 'Highlighted'],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -156,10 +156,10 @@ class PageServiceTest extends TestCase
 
     public function getLayoutTemplateProvider()
     {
-        return array(
-            array('globalZoneLayout', '::globalzonelayout.html.twig'),
-            array('2zonesLayout1', '::2zoneslayout1.html.twig'),
-        );
+        return [
+            ['globalZoneLayout', '::globalzonelayout.html.twig'],
+            ['2zonesLayout1', '::2zoneslayout1.html.twig'],
+        ];
     }
 
     /**
@@ -183,12 +183,12 @@ class PageServiceTest extends TestCase
 
     public function hasZoneLayoutProvider()
     {
-        return array(
-            array('globalZoneLayout', true),
-            array('2zonesLayout1', true),
-            array('2zonesLayout2', false),
-            array('invalid_layout', false),
-        );
+        return [
+            ['globalZoneLayout', true],
+            ['2zonesLayout1', true],
+            ['2zonesLayout2', false],
+            ['invalid_layout', false],
+        ];
     }
 
     /**
@@ -239,12 +239,12 @@ class PageServiceTest extends TestCase
 
     public function hasBlockDefinitionProvider()
     {
-        return array(
-            array('campaign', true),
-            array('mainStory', true),
-            array('invalid_block_identifier', false),
-            array('foobar', false),
-        );
+        return [
+            ['campaign', true],
+            ['mainStory', true],
+            ['invalid_block_identifier', false],
+            ['foobar', false],
+        ];
     }
 
     /**
@@ -265,7 +265,7 @@ class PageServiceTest extends TestCase
     protected function buildBlock()
     {
         return new Block(
-            array('id' => md5(mt_rand() . microtime()))
+            ['id' => md5(mt_rand() . microtime())]
         );
     }
 
@@ -300,10 +300,10 @@ class PageServiceTest extends TestCase
     public function testGetValidBlockItems()
     {
         $block = $this->buildBlock();
-        $items = array(
+        $items = [
             new Item(),
             new Item(),
-        );
+        ];
 
         $this->storageGateway
             ->expects($this->once())
@@ -345,10 +345,10 @@ class PageServiceTest extends TestCase
     public function testGetWaitingBlockItems()
     {
         $block = $this->buildBlock();
-        $items = array(
+        $items = [
             new Item(),
             new Item(),
-        );
+        ];
 
         $this->storageGateway
             ->expects($this->once())
@@ -369,10 +369,10 @@ class PageServiceTest extends TestCase
     public function testGetArchivedBlockItems()
     {
         $block = $this->buildBlock();
-        $items = array(
+        $items = [
             new Item(),
             new Item(),
-        );
+        ];
 
         $this->storageGateway
             ->expects($this->once())
@@ -389,12 +389,12 @@ class PageServiceTest extends TestCase
     {
         $contentId = 12;
         $blockId = 'abc0123';
-        $block = new Block(array('id' => $blockId));
-        $zone = new Zone(array('blocks' => array($block)));
-        $page = new Page(array('zones' => array($zone)));
+        $block = new Block(['id' => $blockId]);
+        $zone = new Zone(['blocks' => [$block]]);
+        $page = new Page(['zones' => [$zone]]);
         $value = new Value($page);
-        $field = new Field(array('value' => $value));
-        $content = new Content(array('internalFields' => array($field)));
+        $field = new Field(['value' => $value]);
+        $content = new Content(['internalFields' => [$field]]);
 
         $this->pageService->setStorageGateway($this->storageGateway);
         $this->storageGateway

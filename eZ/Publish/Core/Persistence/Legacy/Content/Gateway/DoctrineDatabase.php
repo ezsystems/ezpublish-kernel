@@ -107,10 +107,10 @@ class DoctrineDatabase extends Gateway
      */
     public function getContext()
     {
-        return array(
+        return [
             'identifier' => 'LegacyStorage',
             'connection' => $this->dbHandler,
-        );
+        ];
     }
 
     /**
@@ -199,7 +199,7 @@ class DoctrineDatabase extends Gateway
      */
     protected function generateLanguageMask(array $fields, $initialLanguageCode, $alwaysAvailable)
     {
-        $languages = array($initialLanguageCode => true);
+        $languages = [$initialLanguageCode => true];
         foreach ($fields as $field) {
             if (isset($languages[$field->languageCode])) {
                 continue;
@@ -1172,7 +1172,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $results = array();
+        $results = [];
         $previousId = null;
         foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
             if ($row['ezcontentobject_version_id'] == $previousId) {
@@ -1314,10 +1314,10 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $result = array();
+        $result = [];
         foreach ($statement->fetchAll() as $row) {
             if (!isset($result[$row['data_type_string']])) {
-                $result[$row['data_type_string']] = array();
+                $result[$row['data_type_string']] = [];
             }
             $result[$row['data_type_string']][] = (int)$row['id'];
         }
@@ -2029,7 +2029,7 @@ class DoctrineDatabase extends Gateway
     public function loadVersionedNameData($rows)
     {
         $query = $this->queryBuilder->createNamesQuery();
-        $conditions = array();
+        $conditions = [];
         foreach ($rows as $row) {
             $conditions[] = $query->expr->lAnd(
                 $query->expr->eq(

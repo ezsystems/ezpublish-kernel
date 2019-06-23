@@ -49,31 +49,31 @@ class ContentTypeTest extends BaseTest
 
     public function matchLocationProvider()
     {
-        $data = array();
+        $data = [];
 
-        $data[] = array(
+        $data[] = [
             'foo',
             $this->generateRepositoryMockForContentTypeIdentifier('foo'),
             true,
-        );
+        ];
 
-        $data[] = array(
+        $data[] = [
             'foo',
             $this->generateRepositoryMockForContentTypeIdentifier('bar'),
             false,
-        );
+        ];
 
-        $data[] = array(
-            array('foo', 'baz'),
+        $data[] = [
+            ['foo', 'baz'],
             $this->generateRepositoryMockForContentTypeIdentifier('bar'),
             false,
-        );
+        ];
 
-        $data[] = array(
-            array('foo', 'baz'),
+        $data[] = [
+            ['foo', 'baz'],
             $this->generateRepositoryMockForContentTypeIdentifier('baz'),
             true,
-        );
+        ];
 
         return $data;
     }
@@ -91,7 +91,7 @@ class ContentTypeTest extends BaseTest
             ->method('getContentInfo')
             ->will(
                 $this->returnValue(
-                    $this->getContentInfoMock(array('contentTypeId' => 42))
+                    $this->getContentInfoMock(['contentTypeId' => 42])
                 )
             );
 
@@ -115,38 +115,38 @@ class ContentTypeTest extends BaseTest
         $this->assertSame(
             $expectedResult,
             $this->matcher->matchContentInfo(
-                $this->getContentInfoMock(array('contentTypeId' => 42))
+                $this->getContentInfoMock(['contentTypeId' => 42])
             )
         );
     }
 
     public function matchContentInfoProvider()
     {
-        $data = array();
+        $data = [];
 
-        $data[] = array(
+        $data[] = [
             'foo',
             $this->generateRepositoryMockForContentTypeIdentifier('foo'),
             true,
-        );
+        ];
 
-        $data[] = array(
+        $data[] = [
             'foo',
             $this->generateRepositoryMockForContentTypeIdentifier('bar'),
             false,
-        );
+        ];
 
-        $data[] = array(
-            array('foo', 'baz'),
+        $data[] = [
+            ['foo', 'baz'],
             $this->generateRepositoryMockForContentTypeIdentifier('bar'),
             false,
-        );
+        ];
 
-        $data[] = array(
-            array('foo', 'baz'),
+        $data[] = [
+            ['foo', 'baz'],
             $this->generateRepositoryMockForContentTypeIdentifier('baz'),
             true,
-        );
+        ];
 
         return $data;
     }
@@ -163,7 +163,7 @@ class ContentTypeTest extends BaseTest
         $contentTypeMock = $this
             ->getMockBuilder(ContentType::class)
             ->setConstructorArgs(
-                array(array('identifier' => $contentTypeIdentifier))
+                [['identifier' => $contentTypeIdentifier]]
             )
             ->getMockForAbstractClass();
         $contentTypeServiceMock = $this->createMock(ContentTypeService::class);

@@ -72,10 +72,10 @@ class ValidationErrorFileVisitor implements LoggerAwareInterface, FileVisitorInt
      *
      * @var array method => position of the "domain" parameter
      */
-    protected $classToExtractFrom = array(
+    protected $classToExtractFrom = [
         'contentvalidationexception',
         'forbiddenexception',
-    );
+    ];
 
     /**
      * DefaultPhpFileExtractor constructor.

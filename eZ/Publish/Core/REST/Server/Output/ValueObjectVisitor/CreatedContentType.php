@@ -34,9 +34,9 @@ class CreatedContentType extends RestContentType
             'Location',
             $this->router->generate(
                 'ezpublish_rest_loadContentType' . $this->getUrlTypeSuffix($restContentType->contentType->status),
-                array(
+                [
                     'contentTypeId' => $restContentType->contentType->id,
-                )
+                ]
             )
         );
         $visitor->setStatus(201);

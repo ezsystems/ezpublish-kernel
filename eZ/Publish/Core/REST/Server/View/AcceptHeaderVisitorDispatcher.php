@@ -26,7 +26,7 @@ class AcceptHeaderVisitorDispatcher
      *
      * @var array
      */
-    protected $mapping = array();
+    protected $mapping = [];
 
     /**
      * Adds view handler.

@@ -119,7 +119,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $rows = array();
+        $rows = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $rows[$row['ezcobj_state_id']][] = $row;
         }
@@ -189,7 +189,7 @@ class DoctrineDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $rows = array();
+        $rows = [];
         while ($row = $statement->fetch(\PDO::FETCH_ASSOC)) {
             $rows[$row['ezcobj_state_group_id']][] = $row;
         }
@@ -828,7 +828,7 @@ class DoctrineDatabase extends Gateway
      */
     protected function generateLanguageMask(array $languageCodes)
     {
-        $maskLanguageCodes = array();
+        $maskLanguageCodes = [];
         foreach ($languageCodes as $languageCode) {
             $maskLanguageCodes[$languageCode] = 1;
         }

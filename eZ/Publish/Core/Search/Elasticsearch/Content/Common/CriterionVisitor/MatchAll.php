@@ -41,8 +41,8 @@ class MatchAll extends CriterionVisitor
      */
     public function visitFilter(Criterion $criterion, Dispatcher $dispatcher, array $languageFilter)
     {
-        return array(
+        return [
             'match_all' => new ArrayObject(),
-        );
+        ];
     }
 }

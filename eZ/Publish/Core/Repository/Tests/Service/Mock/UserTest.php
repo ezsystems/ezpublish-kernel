@@ -23,7 +23,7 @@ class UserTest extends BaseServiceMockTest
     public function testDeleteUser()
     {
         $repository = $this->getRepositoryMock();
-        $userService = $this->getPartlyMockedUserService(array('loadUser'));
+        $userService = $this->getPartlyMockedUserService(['loadUser']);
         $contentService = $this->createMock('eZ\\Publish\\API\\Repository\\ContentService');
         $userHandler = $this->getPersistenceMock()->userHandler();
 
@@ -85,7 +85,7 @@ class UserTest extends BaseServiceMockTest
     public function testDeleteUserWithRollback()
     {
         $repository = $this->getRepositoryMock();
-        $userService = $this->getPartlyMockedUserService(array('loadUser'));
+        $userService = $this->getPartlyMockedUserService(['loadUser']);
         $contentService = $this->createMock('eZ\\Publish\\API\\Repository\\ContentService');
 
         $user = $this->createMock('eZ\\Publish\\API\\Repository\\Values\\User\\User');
@@ -142,10 +142,10 @@ class UserTest extends BaseServiceMockTest
         return $this->getMockBuilder('eZ\\Publish\\Core\\Repository\\UserService')
             ->setMethods($methods)
             ->setConstructorArgs(
-                array(
+                [
                     $this->getRepositoryMock(),
                     $this->getPersistenceMock()->userHandler(),
-                )
+                ]
             )
             ->getMock();
     }

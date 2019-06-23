@@ -75,7 +75,7 @@ class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
     /**
      * @var \Symfony\Component\Security\Http\Logout\LogoutHandlerInterface[]
      */
-    private $logoutHandlers = array();
+    private $logoutHandlers = [];
 
     public function __construct(
         TokenStorageInterface $tokenStorage,

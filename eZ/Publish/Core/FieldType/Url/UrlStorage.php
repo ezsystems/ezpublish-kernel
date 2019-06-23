@@ -56,7 +56,7 @@ class UrlStorage extends GatewayBasedStorage
             return false;
         }
 
-        $map = $this->gateway->getUrlIdMap(array($url));
+        $map = $this->gateway->getUrlIdMap([$url]);
 
         if (isset($map[$url])) {
             $urlId = $map[$url];
@@ -91,7 +91,7 @@ class UrlStorage extends GatewayBasedStorage
             return;
         }
 
-        $map = $this->gateway->getIdUrlMap(array($id));
+        $map = $this->gateway->getIdUrlMap([$id]);
 
         // URL id is not in the DB
         if (!isset($map[$id]) && isset($this->logger)) {

@@ -71,7 +71,7 @@ class CacheServiceDecorator
      * @param array $keys
      * @return \Stash\Interfaces\ItemInterface[]
      */
-    public function getItems(array $keys = array())
+    public function getItems(array $keys = [])
     {
         $prefix = self::SPI_CACHE_KEY_PREFIX;
         $keys = array_map(
@@ -105,7 +105,7 @@ class CacheServiceDecorator
      */
     public function clear()
     {
-        $item = call_user_func_array(array($this, 'getItem'), func_get_args());
+        $item = call_user_func_array([$this, 'getItem'], func_get_args());
 
         return $item->clear();
     }

@@ -16,19 +16,19 @@ use Symfony\Component\Routing\RouterInterface;
 
 class RelationProcessorTest extends TestCase
 {
-    protected $constants = array(
+    protected $constants = [
         'SELECTION_BROWSE',
         'SELECTION_DROPDOWN',
-    );
+    ];
 
     public function fieldSettingsHashes()
     {
         return array_map(
             function ($constantName) {
-                return array(
-                    array('selectionMethod' => $constantName),
-                    array('selectionMethod' => constant("eZ\\Publish\\Core\\FieldType\\Relation\\Type::{$constantName}")),
-                );
+                return [
+                    ['selectionMethod' => $constantName],
+                    ['selectionMethod' => constant("eZ\\Publish\\Core\\FieldType\\Relation\\Type::{$constantName}")],
+                ];
             },
             $this->constants
         );

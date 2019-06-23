@@ -21,7 +21,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function loadTrashItem($id)
     {
-        $this->logger->logCall(__METHOD__, array('id' => $id));
+        $this->logger->logCall(__METHOD__, ['id' => $id]);
 
         return $this->persistenceHandler->trashHandler()->loadTrashItem($id);
     }
@@ -31,7 +31,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function trashSubtree($locationId)
     {
-        $this->logger->logCall(__METHOD__, array('locationId' => $locationId));
+        $this->logger->logCall(__METHOD__, ['locationId' => $locationId]);
         $return = $this->persistenceHandler->trashHandler()->trashSubtree($locationId);
         $this->cache->clear('location');//TIMBER!
         $this->cache->clear('content');//TIMBER!
@@ -45,7 +45,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function recover($trashedId, $newParentId)
     {
-        $this->logger->logCall(__METHOD__, array('id' => $trashedId, 'newParentId' => $newParentId));
+        $this->logger->logCall(__METHOD__, ['id' => $trashedId, 'newParentId' => $newParentId]);
         $return = $this->persistenceHandler->trashHandler()->recover($trashedId, $newParentId);
         $this->cache->clear('location', 'subtree');
         $this->cache->clear('content');//TIMBER!
@@ -59,7 +59,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function findTrashItems(Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null)
     {
-        $this->logger->logCall(__METHOD__, array('criterion' => $criterion ? get_class($criterion) : 'null'));
+        $this->logger->logCall(__METHOD__, ['criterion' => $criterion ? get_class($criterion) : 'null']);
 
         return $this->persistenceHandler->trashHandler()->findTrashItems($criterion, $offset, $limit, $sort);
     }
@@ -69,7 +69,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function emptyTrash()
     {
-        $this->logger->logCall(__METHOD__, array());
+        $this->logger->logCall(__METHOD__, []);
         $this->persistenceHandler->trashHandler()->emptyTrash();
     }
 
@@ -78,7 +78,7 @@ class TrashHandler extends AbstractHandler implements TrashHandlerInterface
      */
     public function deleteTrashItem($trashedId)
     {
-        $this->logger->logCall(__METHOD__, array('id' => $trashedId));
+        $this->logger->logCall(__METHOD__, ['id' => $trashedId]);
         $this->persistenceHandler->trashHandler()->deleteTrashItem($trashedId);
     }
 }

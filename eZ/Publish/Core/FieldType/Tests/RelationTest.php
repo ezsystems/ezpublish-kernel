@@ -43,7 +43,7 @@ class RelationTest extends FieldTypeTest
      */
     protected function getValidatorConfigurationSchemaExpectation()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -104,12 +104,12 @@ class RelationTest extends FieldTypeTest
      */
     public function provideInvalidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 true,
                 InvalidArgumentException::class,
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -143,20 +143,20 @@ class RelationTest extends FieldTypeTest
      */
     public function provideValidInputForAcceptValue()
     {
-        return array(
-            array(
+        return [
+            [
                 new Value(),
                 new Value(),
-            ),
-            array(
+            ],
+            [
                 23,
                 new Value(23),
-            ),
-            array(
-                new ContentInfo(array('id' => 23)),
+            ],
+            [
+                new ContentInfo(['id' => 23]),
                 new Value(23),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -196,16 +196,16 @@ class RelationTest extends FieldTypeTest
      */
     public function provideInputForToHash()
     {
-        return array(
-            array(
+        return [
+            [
                 new Value(23),
-                array('destinationContentId' => 23),
-            ),
-            array(
+                ['destinationContentId' => 23],
+            ],
+            [
                 new Value(),
-                array('destinationContentId' => null),
-            ),
-        );
+                ['destinationContentId' => null],
+            ],
+        ];
     }
 
     /**
@@ -245,16 +245,16 @@ class RelationTest extends FieldTypeTest
      */
     public function provideInputForFromHash()
     {
-        return array(
-            array(
-                array('destinationContentId' => 23),
+        return [
+            [
+                ['destinationContentId' => 23],
                 new Value(23),
-            ),
-            array(
-                array('destinationContentId' => null),
+            ],
+            [
+                ['destinationContentId' => null],
                 new Value(),
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -281,20 +281,20 @@ class RelationTest extends FieldTypeTest
      */
     public function provideValidFieldSettings()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'selectionMethod' => RelationType::SELECTION_BROWSE,
                     'selectionRoot' => 42,
-                ),
-            ),
-            array(
-                array(
+                ],
+            ],
+            [
+                [
                     'selectionMethod' => RelationType::SELECTION_DROPDOWN,
                     'selectionRoot' => 'some-key',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -322,30 +322,30 @@ class RelationTest extends FieldTypeTest
      */
     public function provideInValidFieldSettings()
     {
-        return array(
-            array(
+        return [
+            [
                 // Unknown key
-                array(
+                [
                     'unknownKey' => 23,
                     'selectionMethod' => RelationType::SELECTION_BROWSE,
                     'selectionRoot' => 42,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 // Invalid selectionMethod
-                array(
+                [
                     'selectionMethod' => 2342,
                     'selectionRoot' => 42,
-                ),
-            ),
-            array(
+                ],
+            ],
+            [
                 // Invalid selectionRoot
-                array(
+                [
                     'selectionMethod' => RelationType::SELECTION_DROPDOWN,
-                    'selectionRoot' => array(),
-                ),
-            ),
-        );
+                    'selectionRoot' => [],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -355,9 +355,9 @@ class RelationTest extends FieldTypeTest
     {
         $ft = $this->createFieldTypeUnderTest();
         $this->assertEquals(
-            array(
-                Relation::FIELD => array(70),
-            ),
+            [
+                Relation::FIELD => [70],
+            ],
             $ft->getRelations($ft->acceptValue(70))
         );
     }
@@ -378,8 +378,8 @@ class RelationTest extends FieldTypeTest
 
     public function provideDataForGetName()
     {
-        return array(
-            array($this->getEmptyValueExpectation(), ''),
-        );
+        return [
+            [$this->getEmptyValueExpectation(), ''],
+        ];
     }
 }

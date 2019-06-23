@@ -38,7 +38,7 @@ class CreateStruct extends ValueObject
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct[]
      */
-    public $locations = array();
+    public $locations = [];
 
     /**
      * Contains *all* fields of the object to be created.
@@ -50,7 +50,7 @@ class CreateStruct extends ValueObject
      *
      * @var Field[]
      */
-    public $fields = array();
+    public $fields = [];
 
     /**
      * @var bool Always available flag

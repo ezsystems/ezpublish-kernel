@@ -21,14 +21,14 @@ class Cache
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Language[]
      */
-    protected $mapById = array();
+    protected $mapById = [];
 
     /**
      * Maps locales to Language objects.
      *
      * @var \eZ\Publish\SPI\Persistence\Content\Language[]
      */
-    protected $mapByLocale = array();
+    protected $mapByLocale = [];
 
     /**
      * Stores the $language into the cache.
@@ -109,6 +109,6 @@ class Cache
      */
     public function clearCache()
     {
-        $this->mapByLocale = $this->mapById = array();
+        $this->mapByLocale = $this->mapById = [];
     }
 }

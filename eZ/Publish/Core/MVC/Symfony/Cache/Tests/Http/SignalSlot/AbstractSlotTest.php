@@ -92,7 +92,7 @@ abstract class AbstractSlotTest extends TestCase implements SlotTest
      */
     private static function getAllSignals()
     {
-        return array(
+        return [
             'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateUrlAliasSignal',
             'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\RemoveAliasesSignal',
             'eZ\Publish\Core\SignalSlot\Signal\URLAliasService\CreateGlobalUrlAliasSignal',
@@ -173,6 +173,6 @@ abstract class AbstractSlotTest extends TestCase implements SlotTest
             'eZ\Publish\Core\SignalSlot\Signal\LocationService\CreateLocationSignal',
             'eZ\Publish\Core\SignalSlot\Signal\LocationService\DeleteLocationSignal',
             'eZ\Publish\Core\SignalSlot\Signal\LocationService\CopySubtreeSignal',
-        );
+        ];
     }
 }

@@ -57,7 +57,7 @@ abstract class BaseTest extends ParentBaseTest
      */
     public function getParseHrefExpectationsMap()
     {
-        return array();
+        return [];
     }
 
     /**
