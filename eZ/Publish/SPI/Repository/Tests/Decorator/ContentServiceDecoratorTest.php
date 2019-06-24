@@ -428,7 +428,7 @@ class ContentServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(ContentInfo::class)];
 
-        $serviceMock->expects($this->once())->method('hideContent')->with(...$parameters)->willReturn($this->createMock(Content::class));
+        $serviceMock->expects($this->once())->method('hideContent')->with(...$parameters);
 
         $decoratedService->hideContent(...$parameters);
     }
@@ -440,7 +440,7 @@ class ContentServiceDecoratorTest extends TestCase
 
         $parameters = [$this->createMock(ContentInfo::class)];
 
-        $serviceMock->expects($this->once())->method('revealContent')->with(...$parameters)->willReturn($this->createMock(Content::class));
+        $serviceMock->expects($this->once())->method('revealContent')->with(...$parameters);
 
         $decoratedService->revealContent(...$parameters);
     }
