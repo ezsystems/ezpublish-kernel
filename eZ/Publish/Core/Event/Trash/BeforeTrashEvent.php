@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeTrashEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.trash.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

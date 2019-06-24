@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateUrlAliasEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.url_alias.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

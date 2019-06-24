@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeletePolicyEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.policy.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy
      */

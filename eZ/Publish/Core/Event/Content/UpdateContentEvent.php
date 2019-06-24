@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateContentEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content.update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content
      */

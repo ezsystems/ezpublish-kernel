@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteRoleDraftEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.role.draft_delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
      */

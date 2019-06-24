@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateUrlEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.url.update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\URL\URL
      */

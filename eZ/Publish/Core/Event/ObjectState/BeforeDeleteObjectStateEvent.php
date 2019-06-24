@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteObjectStateEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.object_state.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */

@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateLanguageEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.language.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Language
      */

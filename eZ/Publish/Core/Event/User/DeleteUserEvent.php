@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteUserEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

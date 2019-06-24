@@ -16,8 +16,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateContentDraftEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content.draft_create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

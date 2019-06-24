@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RemovePolicyByRoleDraftEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.role.remove_policy_by_draft';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
      */

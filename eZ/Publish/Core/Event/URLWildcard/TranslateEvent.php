@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class TranslateEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.url_wildcard.translate';
-
     private $url;
 
     /**

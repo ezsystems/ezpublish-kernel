@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateRoleEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.role.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */

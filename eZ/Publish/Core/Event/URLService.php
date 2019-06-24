@@ -9,18 +9,17 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\URLServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
 use eZ\Publish\Core\Event\URL\BeforeUpdateUrlEvent;
-use eZ\Publish\Core\Event\URL\URLEvents;
 use eZ\Publish\Core\Event\URL\UpdateUrlEvent;
 
 class URLService extends URLServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -43,7 +42,7 @@ class URLService extends URLServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateUrlEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(URLEvents::BEFORE_UPDATE_URL, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedUrl();
         }
 
@@ -51,10 +50,7 @@ class URLService extends URLServiceDecorator
             ? $beforeEvent->getUpdatedUrl()
             : parent::updateUrl($url, $struct);
 
-        $this->eventDispatcher->dispatch(
-            URLEvents::UPDATE_URL,
-            new UpdateUrlEvent($updatedUrl, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateUrlEvent($updatedUrl, ...$eventData));
 
         return $updatedUrl;
     }

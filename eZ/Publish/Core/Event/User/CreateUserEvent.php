@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateUserEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct
      */

@@ -12,8 +12,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeRemoveAliasesEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.url_alias.remove.before';
-
     /**
      * @var array
      */

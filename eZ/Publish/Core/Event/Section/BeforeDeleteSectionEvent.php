@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteSectionEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.section.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Section
      */

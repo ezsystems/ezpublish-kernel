@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateRoleEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.role.update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */

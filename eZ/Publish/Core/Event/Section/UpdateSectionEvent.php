@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateSectionEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.section.update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Section
      */

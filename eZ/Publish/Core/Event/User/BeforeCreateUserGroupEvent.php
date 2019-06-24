@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateUserGroupEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user_group.create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */

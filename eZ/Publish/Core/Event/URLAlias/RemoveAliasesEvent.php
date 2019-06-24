@@ -12,8 +12,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RemoveAliasesEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.url_alias.remove';
-
     /**
      * @var array
      */

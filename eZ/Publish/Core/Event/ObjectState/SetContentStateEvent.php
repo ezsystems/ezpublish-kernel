@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class SetContentStateEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.object_state.set_content_state';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

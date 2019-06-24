@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UnAssignUserFromUserGroupEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user.unassign_from_user_group';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

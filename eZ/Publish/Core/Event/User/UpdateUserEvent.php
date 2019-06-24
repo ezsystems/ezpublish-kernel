@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateUserEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user.update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

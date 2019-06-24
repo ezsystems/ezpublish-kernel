@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateObjectStateGroupEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.object_state_group.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */

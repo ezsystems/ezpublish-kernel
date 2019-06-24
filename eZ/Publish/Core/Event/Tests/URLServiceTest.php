@@ -10,16 +10,16 @@ use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
 use eZ\Publish\Core\Event\URLService;
+use eZ\Publish\Core\Event\URL\UpdateUrlEvent;
 use eZ\Publish\Core\Event\URL\BeforeUpdateUrlEvent;
-use eZ\Publish\Core\Event\URL\URLEvents;
 
 class URLServiceTest extends AbstractServiceTest
 {
     public function testUpdateUrlEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            URLEvents::BEFORE_UPDATE_URL,
-            URLEvents::UPDATE_URL
+            BeforeUpdateUrlEvent::class,
+            UpdateUrlEvent::class
         );
 
         $parameters = [
@@ -38,8 +38,8 @@ class URLServiceTest extends AbstractServiceTest
 
         $this->assertSame($updatedUrl, $result);
         $this->assertSame($calledListeners, [
-            [URLEvents::BEFORE_UPDATE_URL, 0],
-            [URLEvents::UPDATE_URL, 0],
+            [BeforeUpdateUrlEvent::class, 0],
+            [UpdateUrlEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -47,8 +47,8 @@ class URLServiceTest extends AbstractServiceTest
     public function testReturnUpdateUrlResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            URLEvents::BEFORE_UPDATE_URL,
-            URLEvents::UPDATE_URL
+            BeforeUpdateUrlEvent::class,
+            UpdateUrlEvent::class
         );
 
         $parameters = [
@@ -61,7 +61,7 @@ class URLServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLServiceInterface::class);
         $innerServiceMock->method('updateUrl')->willReturn($updatedUrl);
 
-        $traceableEventDispatcher->addListener(URLEvents::BEFORE_UPDATE_URL, function (BeforeUpdateUrlEvent $event) use ($eventUpdatedUrl) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUrlEvent::class, function (BeforeUpdateUrlEvent $event) use ($eventUpdatedUrl) {
             $event->setUpdatedUrl($eventUpdatedUrl);
         }, 10);
 
@@ -72,9 +72,9 @@ class URLServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventUpdatedUrl, $result);
         $this->assertSame($calledListeners, [
-            [URLEvents::BEFORE_UPDATE_URL, 10],
-            [URLEvents::BEFORE_UPDATE_URL, 0],
-            [URLEvents::UPDATE_URL, 0],
+            [BeforeUpdateUrlEvent::class, 10],
+            [BeforeUpdateUrlEvent::class, 0],
+            [UpdateUrlEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -82,8 +82,8 @@ class URLServiceTest extends AbstractServiceTest
     public function testUpdateUrlStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            URLEvents::BEFORE_UPDATE_URL,
-            URLEvents::UPDATE_URL
+            BeforeUpdateUrlEvent::class,
+            UpdateUrlEvent::class
         );
 
         $parameters = [
@@ -96,7 +96,7 @@ class URLServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(URLServiceInterface::class);
         $innerServiceMock->method('updateUrl')->willReturn($updatedUrl);
 
-        $traceableEventDispatcher->addListener(URLEvents::BEFORE_UPDATE_URL, function (BeforeUpdateUrlEvent $event) use ($eventUpdatedUrl) {
+        $traceableEventDispatcher->addListener(BeforeUpdateUrlEvent::class, function (BeforeUpdateUrlEvent $event) use ($eventUpdatedUrl) {
             $event->setUpdatedUrl($eventUpdatedUrl);
             $event->stopPropagation();
         }, 10);
@@ -109,11 +109,11 @@ class URLServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventUpdatedUrl, $result);
         $this->assertSame($calledListeners, [
-            [URLEvents::BEFORE_UPDATE_URL, 10],
+            [BeforeUpdateUrlEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [URLEvents::UPDATE_URL, 0],
-            [URLEvents::BEFORE_UPDATE_URL, 0],
+            [BeforeUpdateUrlEvent::class, 0],
+            [UpdateUrlEvent::class, 0],
         ]);
     }
 }

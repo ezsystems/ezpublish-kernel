@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateContentTypeEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content_type.create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
      */

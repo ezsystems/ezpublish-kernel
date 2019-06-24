@@ -12,19 +12,22 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 use eZ\Publish\Core\Event\TrashService;
+use eZ\Publish\Core\Event\Trash\DeleteTrashItemEvent;
 use eZ\Publish\Core\Event\Trash\BeforeDeleteTrashItemEvent;
+use eZ\Publish\Core\Event\Trash\EmptyTrashEvent;
 use eZ\Publish\Core\Event\Trash\BeforeEmptyTrashEvent;
+use eZ\Publish\Core\Event\Trash\RecoverEvent;
 use eZ\Publish\Core\Event\Trash\BeforeRecoverEvent;
+use eZ\Publish\Core\Event\Trash\TrashEvent;
 use eZ\Publish\Core\Event\Trash\BeforeTrashEvent;
-use eZ\Publish\Core\Event\Trash\TrashEvents;
 
 class TrashServiceTest extends AbstractServiceTest
 {
     public function testEmptyTrashEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_EMPTY_TRASH,
-            TrashEvents::EMPTY_TRASH
+            BeforeEmptyTrashEvent::class,
+            EmptyTrashEvent::class
         );
 
         $parameters = [
@@ -41,8 +44,8 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($resultList, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_EMPTY_TRASH, 0],
-            [TrashEvents::EMPTY_TRASH, 0],
+            [BeforeEmptyTrashEvent::class, 0],
+            [EmptyTrashEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -50,8 +53,8 @@ class TrashServiceTest extends AbstractServiceTest
     public function testReturnEmptyTrashResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_EMPTY_TRASH,
-            TrashEvents::EMPTY_TRASH
+            BeforeEmptyTrashEvent::class,
+            EmptyTrashEvent::class
         );
 
         $parameters = [
@@ -62,7 +65,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('emptyTrash')->willReturn($resultList);
 
-        $traceableEventDispatcher->addListener(TrashEvents::BEFORE_EMPTY_TRASH, function (BeforeEmptyTrashEvent $event) use ($eventResultList) {
+        $traceableEventDispatcher->addListener(BeforeEmptyTrashEvent::class, function (BeforeEmptyTrashEvent $event) use ($eventResultList) {
             $event->setResultList($eventResultList);
         }, 10);
 
@@ -73,9 +76,9 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventResultList, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_EMPTY_TRASH, 10],
-            [TrashEvents::BEFORE_EMPTY_TRASH, 0],
-            [TrashEvents::EMPTY_TRASH, 0],
+            [BeforeEmptyTrashEvent::class, 10],
+            [BeforeEmptyTrashEvent::class, 0],
+            [EmptyTrashEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -83,8 +86,8 @@ class TrashServiceTest extends AbstractServiceTest
     public function testEmptyTrashStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_EMPTY_TRASH,
-            TrashEvents::EMPTY_TRASH
+            BeforeEmptyTrashEvent::class,
+            EmptyTrashEvent::class
         );
 
         $parameters = [
@@ -95,7 +98,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('emptyTrash')->willReturn($resultList);
 
-        $traceableEventDispatcher->addListener(TrashEvents::BEFORE_EMPTY_TRASH, function (BeforeEmptyTrashEvent $event) use ($eventResultList) {
+        $traceableEventDispatcher->addListener(BeforeEmptyTrashEvent::class, function (BeforeEmptyTrashEvent $event) use ($eventResultList) {
             $event->setResultList($eventResultList);
             $event->stopPropagation();
         }, 10);
@@ -108,19 +111,19 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventResultList, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_EMPTY_TRASH, 10],
+            [BeforeEmptyTrashEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [TrashEvents::EMPTY_TRASH, 0],
-            [TrashEvents::BEFORE_EMPTY_TRASH, 0],
+            [BeforeEmptyTrashEvent::class, 0],
+            [EmptyTrashEvent::class, 0],
         ]);
     }
 
     public function testTrashEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_TRASH,
-            TrashEvents::TRASH
+            BeforeTrashEvent::class,
+            TrashEvent::class
         );
 
         $parameters = [
@@ -138,8 +141,8 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($trashItem, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_TRASH, 0],
-            [TrashEvents::TRASH, 0],
+            [BeforeTrashEvent::class, 0],
+            [TrashEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -147,8 +150,8 @@ class TrashServiceTest extends AbstractServiceTest
     public function testReturnTrashResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_TRASH,
-            TrashEvents::TRASH
+            BeforeTrashEvent::class,
+            TrashEvent::class
         );
 
         $parameters = [
@@ -160,7 +163,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('trash')->willReturn($trashItem);
 
-        $traceableEventDispatcher->addListener(TrashEvents::BEFORE_TRASH, function (BeforeTrashEvent $event) use ($eventTrashItem) {
+        $traceableEventDispatcher->addListener(BeforeTrashEvent::class, function (BeforeTrashEvent $event) use ($eventTrashItem) {
             $event->setResult($eventTrashItem);
         }, 10);
 
@@ -171,9 +174,9 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventTrashItem, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_TRASH, 10],
-            [TrashEvents::BEFORE_TRASH, 0],
-            [TrashEvents::TRASH, 0],
+            [BeforeTrashEvent::class, 10],
+            [BeforeTrashEvent::class, 0],
+            [TrashEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -181,8 +184,8 @@ class TrashServiceTest extends AbstractServiceTest
     public function testTrashStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_TRASH,
-            TrashEvents::TRASH
+            BeforeTrashEvent::class,
+            TrashEvent::class
         );
 
         $parameters = [
@@ -194,7 +197,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('trash')->willReturn($trashItem);
 
-        $traceableEventDispatcher->addListener(TrashEvents::BEFORE_TRASH, function (BeforeTrashEvent $event) use ($eventTrashItem) {
+        $traceableEventDispatcher->addListener(BeforeTrashEvent::class, function (BeforeTrashEvent $event) use ($eventTrashItem) {
             $event->setResult($eventTrashItem);
             $event->stopPropagation();
         }, 10);
@@ -207,19 +210,19 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventTrashItem, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_TRASH, 10],
+            [BeforeTrashEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [TrashEvents::TRASH, 0],
-            [TrashEvents::BEFORE_TRASH, 0],
+            [BeforeTrashEvent::class, 0],
+            [TrashEvent::class, 0],
         ]);
     }
 
     public function testRecoverEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_RECOVER,
-            TrashEvents::RECOVER
+            BeforeRecoverEvent::class,
+            RecoverEvent::class
         );
 
         $parameters = [
@@ -238,8 +241,8 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($location, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_RECOVER, 0],
-            [TrashEvents::RECOVER, 0],
+            [BeforeRecoverEvent::class, 0],
+            [RecoverEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -247,8 +250,8 @@ class TrashServiceTest extends AbstractServiceTest
     public function testReturnRecoverResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_RECOVER,
-            TrashEvents::RECOVER
+            BeforeRecoverEvent::class,
+            RecoverEvent::class
         );
 
         $parameters = [
@@ -261,7 +264,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('recover')->willReturn($location);
 
-        $traceableEventDispatcher->addListener(TrashEvents::BEFORE_RECOVER, function (BeforeRecoverEvent $event) use ($eventLocation) {
+        $traceableEventDispatcher->addListener(BeforeRecoverEvent::class, function (BeforeRecoverEvent $event) use ($eventLocation) {
             $event->setLocation($eventLocation);
         }, 10);
 
@@ -272,9 +275,9 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventLocation, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_RECOVER, 10],
-            [TrashEvents::BEFORE_RECOVER, 0],
-            [TrashEvents::RECOVER, 0],
+            [BeforeRecoverEvent::class, 10],
+            [BeforeRecoverEvent::class, 0],
+            [RecoverEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -282,8 +285,8 @@ class TrashServiceTest extends AbstractServiceTest
     public function testRecoverStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_RECOVER,
-            TrashEvents::RECOVER
+            BeforeRecoverEvent::class,
+            RecoverEvent::class
         );
 
         $parameters = [
@@ -296,7 +299,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('recover')->willReturn($location);
 
-        $traceableEventDispatcher->addListener(TrashEvents::BEFORE_RECOVER, function (BeforeRecoverEvent $event) use ($eventLocation) {
+        $traceableEventDispatcher->addListener(BeforeRecoverEvent::class, function (BeforeRecoverEvent $event) use ($eventLocation) {
             $event->setLocation($eventLocation);
             $event->stopPropagation();
         }, 10);
@@ -309,19 +312,19 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventLocation, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_RECOVER, 10],
+            [BeforeRecoverEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [TrashEvents::RECOVER, 0],
-            [TrashEvents::BEFORE_RECOVER, 0],
+            [BeforeRecoverEvent::class, 0],
+            [RecoverEvent::class, 0],
         ]);
     }
 
     public function testDeleteTrashItemEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_DELETE_TRASH_ITEM,
-            TrashEvents::DELETE_TRASH_ITEM
+            BeforeDeleteTrashItemEvent::class,
+            DeleteTrashItemEvent::class
         );
 
         $parameters = [
@@ -339,8 +342,8 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($result, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_DELETE_TRASH_ITEM, 0],
-            [TrashEvents::DELETE_TRASH_ITEM, 0],
+            [BeforeDeleteTrashItemEvent::class, 0],
+            [DeleteTrashItemEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -348,8 +351,8 @@ class TrashServiceTest extends AbstractServiceTest
     public function testReturnDeleteTrashItemResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_DELETE_TRASH_ITEM,
-            TrashEvents::DELETE_TRASH_ITEM
+            BeforeDeleteTrashItemEvent::class,
+            DeleteTrashItemEvent::class
         );
 
         $parameters = [
@@ -361,7 +364,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('deleteTrashItem')->willReturn($result);
 
-        $traceableEventDispatcher->addListener(TrashEvents::BEFORE_DELETE_TRASH_ITEM, function (BeforeDeleteTrashItemEvent $event) use ($eventResult) {
+        $traceableEventDispatcher->addListener(BeforeDeleteTrashItemEvent::class, function (BeforeDeleteTrashItemEvent $event) use ($eventResult) {
             $event->setResult($eventResult);
         }, 10);
 
@@ -372,9 +375,9 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventResult, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_DELETE_TRASH_ITEM, 10],
-            [TrashEvents::BEFORE_DELETE_TRASH_ITEM, 0],
-            [TrashEvents::DELETE_TRASH_ITEM, 0],
+            [BeforeDeleteTrashItemEvent::class, 10],
+            [BeforeDeleteTrashItemEvent::class, 0],
+            [DeleteTrashItemEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -382,8 +385,8 @@ class TrashServiceTest extends AbstractServiceTest
     public function testDeleteTrashItemStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            TrashEvents::BEFORE_DELETE_TRASH_ITEM,
-            TrashEvents::DELETE_TRASH_ITEM
+            BeforeDeleteTrashItemEvent::class,
+            DeleteTrashItemEvent::class
         );
 
         $parameters = [
@@ -395,7 +398,7 @@ class TrashServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(TrashServiceInterface::class);
         $innerServiceMock->method('deleteTrashItem')->willReturn($result);
 
-        $traceableEventDispatcher->addListener(TrashEvents::BEFORE_DELETE_TRASH_ITEM, function (BeforeDeleteTrashItemEvent $event) use ($eventResult) {
+        $traceableEventDispatcher->addListener(BeforeDeleteTrashItemEvent::class, function (BeforeDeleteTrashItemEvent $event) use ($eventResult) {
             $event->setResult($eventResult);
             $event->stopPropagation();
         }, 10);
@@ -408,11 +411,11 @@ class TrashServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventResult, $result);
         $this->assertSame($calledListeners, [
-            [TrashEvents::BEFORE_DELETE_TRASH_ITEM, 10],
+            [BeforeDeleteTrashItemEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [TrashEvents::DELETE_TRASH_ITEM, 0],
-            [TrashEvents::BEFORE_DELETE_TRASH_ITEM, 0],
+            [BeforeDeleteTrashItemEvent::class, 0],
+            [DeleteTrashItemEvent::class, 0],
         ]);
     }
 }

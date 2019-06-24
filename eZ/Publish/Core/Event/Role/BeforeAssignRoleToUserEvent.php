@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAssignRoleToUserEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.role.assign_to_user.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */

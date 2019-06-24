@@ -12,8 +12,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class SetUserPreferenceEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user_preference.set';
-
     /**
      * @var array
      */

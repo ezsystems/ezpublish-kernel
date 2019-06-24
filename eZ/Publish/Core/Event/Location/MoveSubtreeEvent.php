@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class MoveSubtreeEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.location.move_subtree';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

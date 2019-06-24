@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeSetContentStateEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.object_state.set_content_state.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateObjectStateGroupEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.object_state_group.create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
      */

@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateLanguageNameEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.language.name_update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Language
      */

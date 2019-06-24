@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdateFieldDefinitionEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content_type.update_field_definition.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */

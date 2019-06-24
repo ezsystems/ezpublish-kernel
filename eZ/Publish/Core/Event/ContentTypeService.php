@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\ContentTypeServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
@@ -39,7 +39,6 @@ use eZ\Publish\Core\Event\ContentType\BeforeUnassignContentTypeGroupEvent;
 use eZ\Publish\Core\Event\ContentType\BeforeUpdateContentTypeDraftEvent;
 use eZ\Publish\Core\Event\ContentType\BeforeUpdateContentTypeGroupEvent;
 use eZ\Publish\Core\Event\ContentType\BeforeUpdateFieldDefinitionEvent;
-use eZ\Publish\Core\Event\ContentType\ContentTypeEvents;
 use eZ\Publish\Core\Event\ContentType\CopyContentTypeEvent;
 use eZ\Publish\Core\Event\ContentType\CreateContentTypeDraftEvent;
 use eZ\Publish\Core\Event\ContentType\CreateContentTypeEvent;
@@ -57,7 +56,7 @@ use eZ\Publish\Core\Event\ContentType\UpdateFieldDefinitionEvent;
 class ContentTypeService extends ContentTypeServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -75,7 +74,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $eventData = [$contentTypeGroupCreateStruct];
 
         $beforeEvent = new BeforeCreateContentTypeGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_CREATE_CONTENT_TYPE_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getContentTypeGroup();
         }
 
@@ -83,10 +82,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             ? $beforeEvent->getContentTypeGroup()
             : parent::createContentTypeGroup($contentTypeGroupCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::CREATE_CONTENT_TYPE_GROUP,
-            new CreateContentTypeGroupEvent($contentTypeGroup, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateContentTypeGroupEvent($contentTypeGroup, ...$eventData));
 
         return $contentTypeGroup;
     }
@@ -101,16 +97,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateContentTypeGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_UPDATE_CONTENT_TYPE_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::updateContentTypeGroup($contentTypeGroup, $contentTypeGroupUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::UPDATE_CONTENT_TYPE_GROUP,
-            new UpdateContentTypeGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateContentTypeGroupEvent(...$eventData));
     }
 
     public function deleteContentTypeGroup(ContentTypeGroup $contentTypeGroup): void
@@ -118,16 +111,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $eventData = [$contentTypeGroup];
 
         $beforeEvent = new BeforeDeleteContentTypeGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_DELETE_CONTENT_TYPE_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteContentTypeGroup($contentTypeGroup);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::DELETE_CONTENT_TYPE_GROUP,
-            new DeleteContentTypeGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteContentTypeGroupEvent(...$eventData));
     }
 
     public function createContentType(
@@ -140,7 +130,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateContentTypeEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_CREATE_CONTENT_TYPE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getContentTypeDraft();
         }
 
@@ -148,10 +138,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             ? $beforeEvent->getContentTypeDraft()
             : parent::createContentType($contentTypeCreateStruct, $contentTypeGroups);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::CREATE_CONTENT_TYPE,
-            new CreateContentTypeEvent($contentTypeDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateContentTypeEvent($contentTypeDraft, ...$eventData));
 
         return $contentTypeDraft;
     }
@@ -161,7 +148,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $eventData = [$contentType];
 
         $beforeEvent = new BeforeCreateContentTypeDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_CREATE_CONTENT_TYPE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getContentTypeDraft();
         }
 
@@ -169,10 +156,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             ? $beforeEvent->getContentTypeDraft()
             : parent::createContentTypeDraft($contentType);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::CREATE_CONTENT_TYPE_DRAFT,
-            new CreateContentTypeDraftEvent($contentTypeDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateContentTypeDraftEvent($contentTypeDraft, ...$eventData));
 
         return $contentTypeDraft;
     }
@@ -187,16 +171,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateContentTypeDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_UPDATE_CONTENT_TYPE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::UPDATE_CONTENT_TYPE_DRAFT,
-            new UpdateContentTypeDraftEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateContentTypeDraftEvent(...$eventData));
     }
 
     public function deleteContentType(ContentType $contentType): void
@@ -204,16 +185,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $eventData = [$contentType];
 
         $beforeEvent = new BeforeDeleteContentTypeEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_DELETE_CONTENT_TYPE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteContentType($contentType);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::DELETE_CONTENT_TYPE,
-            new DeleteContentTypeEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteContentTypeEvent(...$eventData));
     }
 
     public function copyContentType(
@@ -226,7 +204,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeCopyContentTypeEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_COPY_CONTENT_TYPE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getContentTypeCopy();
         }
 
@@ -234,10 +212,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             ? $beforeEvent->getContentTypeCopy()
             : parent::copyContentType($contentType, $creator);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::COPY_CONTENT_TYPE,
-            new CopyContentTypeEvent($contentTypeCopy, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CopyContentTypeEvent($contentTypeCopy, ...$eventData));
 
         return $contentTypeCopy;
     }
@@ -252,16 +227,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeAssignContentTypeGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_ASSIGN_CONTENT_TYPE_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::assignContentTypeGroup($contentType, $contentTypeGroup);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::ASSIGN_CONTENT_TYPE_GROUP,
-            new AssignContentTypeGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AssignContentTypeGroupEvent(...$eventData));
     }
 
     public function unassignContentTypeGroup(
@@ -274,16 +246,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeUnassignContentTypeGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_UNASSIGN_CONTENT_TYPE_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::unassignContentTypeGroup($contentType, $contentTypeGroup);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::UNASSIGN_CONTENT_TYPE_GROUP,
-            new UnassignContentTypeGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UnassignContentTypeGroupEvent(...$eventData));
     }
 
     public function addFieldDefinition(
@@ -296,16 +265,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeAddFieldDefinitionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_ADD_FIELD_DEFINITION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::ADD_FIELD_DEFINITION,
-            new AddFieldDefinitionEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AddFieldDefinitionEvent(...$eventData));
     }
 
     public function removeFieldDefinition(
@@ -318,16 +284,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeRemoveFieldDefinitionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_REMOVE_FIELD_DEFINITION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::removeFieldDefinition($contentTypeDraft, $fieldDefinition);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::REMOVE_FIELD_DEFINITION,
-            new RemoveFieldDefinitionEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new RemoveFieldDefinitionEvent(...$eventData));
     }
 
     public function updateFieldDefinition(
@@ -342,16 +305,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateFieldDefinitionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_UPDATE_FIELD_DEFINITION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::updateFieldDefinition($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::UPDATE_FIELD_DEFINITION,
-            new UpdateFieldDefinitionEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateFieldDefinitionEvent(...$eventData));
     }
 
     public function publishContentTypeDraft(ContentTypeDraft $contentTypeDraft): void
@@ -359,16 +319,13 @@ class ContentTypeService extends ContentTypeServiceDecorator
         $eventData = [$contentTypeDraft];
 
         $beforeEvent = new BeforePublishContentTypeDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_PUBLISH_CONTENT_TYPE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::publishContentTypeDraft($contentTypeDraft);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::PUBLISH_CONTENT_TYPE_DRAFT,
-            new PublishContentTypeDraftEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new PublishContentTypeDraftEvent(...$eventData));
     }
 
     public function removeContentTypeTranslation(
@@ -381,7 +338,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
         ];
 
         $beforeEvent = new BeforeRemoveContentTypeTranslationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ContentTypeEvents::BEFORE_REMOVE_CONTENT_TYPE_TRANSLATION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getNewContentTypeDraft();
         }
 
@@ -389,10 +346,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             ? $beforeEvent->getNewContentTypeDraft()
             : parent::removeContentTypeTranslation($contentTypeDraft, $languageCode);
 
-        $this->eventDispatcher->dispatch(
-            ContentTypeEvents::REMOVE_CONTENT_TYPE_TRANSLATION,
-            new RemoveContentTypeTranslationEvent($newContentTypeDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new RemoveContentTypeTranslationEvent($newContentTypeDraft, ...$eventData));
 
         return $newContentTypeDraft;
     }

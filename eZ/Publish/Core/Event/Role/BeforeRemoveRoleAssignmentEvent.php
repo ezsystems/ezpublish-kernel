@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeRemoveRoleAssignmentEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.role.assignment_remove.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\RoleAssignment
      */

@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdatePolicyEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.policy.update.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy
      */

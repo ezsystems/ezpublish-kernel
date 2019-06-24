@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdateUserGroupEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user_group.update.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup
      */

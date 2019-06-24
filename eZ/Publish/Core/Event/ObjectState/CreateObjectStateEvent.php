@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateObjectStateEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.object_state.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */

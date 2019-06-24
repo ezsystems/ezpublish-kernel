@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUnassignRoleFromUserEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.role.unassign_from_user.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */

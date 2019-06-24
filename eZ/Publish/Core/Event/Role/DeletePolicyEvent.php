@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeletePolicyEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.policy.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy
      */

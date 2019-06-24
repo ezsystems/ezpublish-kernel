@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdatePolicyEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.policy.update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Policy
      */

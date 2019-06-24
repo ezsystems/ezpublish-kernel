@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteUserEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

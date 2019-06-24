@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateLocationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.location.update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

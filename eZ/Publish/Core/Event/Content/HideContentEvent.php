@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class HideContentEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content.hide';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

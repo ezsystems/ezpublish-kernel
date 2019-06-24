@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeMoveSubtreeEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.location.move_subtree.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

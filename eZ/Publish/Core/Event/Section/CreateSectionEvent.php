@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateSectionEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.section.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */

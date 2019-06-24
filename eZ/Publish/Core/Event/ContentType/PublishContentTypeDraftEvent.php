@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class PublishContentTypeDraftEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content_type.draft_publish';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */

@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteUserGroupEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user_group.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup
      */

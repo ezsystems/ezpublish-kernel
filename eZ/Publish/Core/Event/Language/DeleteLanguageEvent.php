@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteLanguageEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.language.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Language
      */

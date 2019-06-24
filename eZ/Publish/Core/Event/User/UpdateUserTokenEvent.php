@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateUserTokenEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user.token_update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

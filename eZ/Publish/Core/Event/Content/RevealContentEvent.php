@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RevealContentEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content.unhide';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

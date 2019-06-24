@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteRelationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.relation.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */

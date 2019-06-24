@@ -9,19 +9,18 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\BookmarkServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Event\Bookmark\BeforeCreateBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\BeforeDeleteBookmarkEvent;
-use eZ\Publish\Core\Event\Bookmark\BookmarkEvents;
 use eZ\Publish\Core\Event\Bookmark\CreateBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\DeleteBookmarkEvent;
 
 class BookmarkService extends BookmarkServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -39,16 +38,13 @@ class BookmarkService extends BookmarkServiceDecorator
         $eventData = [$location];
 
         $beforeEvent = new BeforeCreateBookmarkEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(BookmarkEvents::BEFORE_CREATE_BOOKMARK, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::createBookmark($location);
 
-        $this->eventDispatcher->dispatch(
-            BookmarkEvents::CREATE_BOOKMARK,
-            new CreateBookmarkEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateBookmarkEvent(...$eventData));
     }
 
     public function deleteBookmark(Location $location): void
@@ -56,15 +52,12 @@ class BookmarkService extends BookmarkServiceDecorator
         $eventData = [$location];
 
         $beforeEvent = new BeforeDeleteBookmarkEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(BookmarkEvents::BEFORE_DELETE_BOOKMARK, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteBookmark($location);
 
-        $this->eventDispatcher->dispatch(
-            BookmarkEvents::DELETE_BOOKMARK,
-            new DeleteBookmarkEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteBookmarkEvent(...$eventData));
     }
 }

@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteContentTypeEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content_type.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */

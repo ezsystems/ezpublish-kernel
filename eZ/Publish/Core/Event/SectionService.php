@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\SectionServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -25,13 +25,12 @@ use eZ\Publish\Core\Event\Section\BeforeDeleteSectionEvent;
 use eZ\Publish\Core\Event\Section\BeforeUpdateSectionEvent;
 use eZ\Publish\Core\Event\Section\CreateSectionEvent;
 use eZ\Publish\Core\Event\Section\DeleteSectionEvent;
-use eZ\Publish\Core\Event\Section\SectionEvents;
 use eZ\Publish\Core\Event\Section\UpdateSectionEvent;
 
 class SectionService extends SectionServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -49,7 +48,7 @@ class SectionService extends SectionServiceDecorator
         $eventData = [$sectionCreateStruct];
 
         $beforeEvent = new BeforeCreateSectionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(SectionEvents::BEFORE_CREATE_SECTION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getSection();
         }
 
@@ -57,10 +56,7 @@ class SectionService extends SectionServiceDecorator
             ? $beforeEvent->getSection()
             : parent::createSection($sectionCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            SectionEvents::CREATE_SECTION,
-            new CreateSectionEvent($section, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateSectionEvent($section, ...$eventData));
 
         return $section;
     }
@@ -75,7 +71,7 @@ class SectionService extends SectionServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateSectionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(SectionEvents::BEFORE_UPDATE_SECTION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedSection();
         }
 
@@ -83,10 +79,7 @@ class SectionService extends SectionServiceDecorator
             ? $beforeEvent->getUpdatedSection()
             : parent::updateSection($section, $sectionUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            SectionEvents::UPDATE_SECTION,
-            new UpdateSectionEvent($updatedSection, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateSectionEvent($updatedSection, ...$eventData));
 
         return $updatedSection;
     }
@@ -101,16 +94,13 @@ class SectionService extends SectionServiceDecorator
         ];
 
         $beforeEvent = new BeforeAssignSectionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(SectionEvents::BEFORE_ASSIGN_SECTION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::assignSection($contentInfo, $section);
 
-        $this->eventDispatcher->dispatch(
-            SectionEvents::ASSIGN_SECTION,
-            new AssignSectionEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AssignSectionEvent(...$eventData));
     }
 
     public function assignSectionToSubtree(
@@ -123,16 +113,13 @@ class SectionService extends SectionServiceDecorator
         ];
 
         $beforeEvent = new BeforeAssignSectionToSubtreeEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(SectionEvents::BEFORE_ASSIGN_SECTION_TO_SUBTREE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::assignSectionToSubtree($location, $section);
 
-        $this->eventDispatcher->dispatch(
-            SectionEvents::ASSIGN_SECTION_TO_SUBTREE,
-            new AssignSectionToSubtreeEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AssignSectionToSubtreeEvent(...$eventData));
     }
 
     public function deleteSection(Section $section): void
@@ -140,15 +127,12 @@ class SectionService extends SectionServiceDecorator
         $eventData = [$section];
 
         $beforeEvent = new BeforeDeleteSectionEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(SectionEvents::BEFORE_DELETE_SECTION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteSection($section);
 
-        $this->eventDispatcher->dispatch(
-            SectionEvents::DELETE_SECTION,
-            new DeleteSectionEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteSectionEvent(...$eventData));
     }
 }

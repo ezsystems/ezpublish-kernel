@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteLocationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.location.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

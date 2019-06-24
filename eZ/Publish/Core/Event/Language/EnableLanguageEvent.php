@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class EnableLanguageEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.language.enable';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Language
      */

@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.url_wildcard.create.before';
-
     private $sourceUrl;
 
     private $destinationUrl;

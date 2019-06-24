@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeRecoverEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.trash.recover.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\TrashItem
      */

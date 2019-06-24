@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class TrashEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.trash';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

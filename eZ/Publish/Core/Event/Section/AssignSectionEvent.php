@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AssignSectionEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.section.assign';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

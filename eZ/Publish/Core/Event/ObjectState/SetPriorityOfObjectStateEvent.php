@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class SetPriorityOfObjectStateEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.object_state.set_priority';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */

@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateContentTypeDraftEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.draft.content_type.draft_update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */

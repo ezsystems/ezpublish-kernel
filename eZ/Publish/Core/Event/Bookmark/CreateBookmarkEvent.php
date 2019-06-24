@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateBookmarkEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.bookmark.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

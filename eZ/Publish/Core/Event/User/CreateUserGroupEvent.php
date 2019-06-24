@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateUserGroupEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user_group.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */

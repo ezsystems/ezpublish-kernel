@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteTrashItemEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.trash.item_delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\TrashItem
      */

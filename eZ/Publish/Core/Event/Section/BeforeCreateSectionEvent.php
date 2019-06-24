@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateSectionEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.section.create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */

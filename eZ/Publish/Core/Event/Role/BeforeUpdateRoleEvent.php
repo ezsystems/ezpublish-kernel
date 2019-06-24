@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdateRoleEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.role.update.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */

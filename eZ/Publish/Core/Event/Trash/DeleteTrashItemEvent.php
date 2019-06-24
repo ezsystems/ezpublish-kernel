@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteTrashItemEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.trash.item_delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\TrashItem
      */

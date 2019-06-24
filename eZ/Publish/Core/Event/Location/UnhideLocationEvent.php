@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UnhideLocationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.location.unhide';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

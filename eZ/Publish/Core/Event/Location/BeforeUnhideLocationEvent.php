@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUnhideLocationEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.location.unhide.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

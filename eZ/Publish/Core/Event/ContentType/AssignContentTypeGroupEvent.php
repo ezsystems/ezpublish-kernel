@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AssignContentTypeGroupEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content_type_group.assign';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */

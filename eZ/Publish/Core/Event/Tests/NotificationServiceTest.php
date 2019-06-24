@@ -10,18 +10,20 @@ use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterfac
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
 use eZ\Publish\Core\Event\NotificationService;
+use eZ\Publish\Core\Event\Notification\CreateNotificationEvent;
 use eZ\Publish\Core\Event\Notification\BeforeCreateNotificationEvent;
+use eZ\Publish\Core\Event\Notification\DeleteNotificationEvent;
 use eZ\Publish\Core\Event\Notification\BeforeDeleteNotificationEvent;
+use eZ\Publish\Core\Event\Notification\MarkNotificationAsReadEvent;
 use eZ\Publish\Core\Event\Notification\BeforeMarkNotificationAsReadEvent;
-use eZ\Publish\Core\Event\Notification\NotificationEvents;
 
 class NotificationServiceTest extends AbstractServiceTest
 {
     public function testCreateNotificationEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            NotificationEvents::BEFORE_CREATE_NOTIFICATION,
-            NotificationEvents::CREATE_NOTIFICATION
+            BeforeCreateNotificationEvent::class,
+            CreateNotificationEvent::class
         );
 
         $parameters = [
@@ -39,8 +41,8 @@ class NotificationServiceTest extends AbstractServiceTest
 
         $this->assertSame($notification, $result);
         $this->assertSame($calledListeners, [
-            [NotificationEvents::BEFORE_CREATE_NOTIFICATION, 0],
-            [NotificationEvents::CREATE_NOTIFICATION, 0],
+            [BeforeCreateNotificationEvent::class, 0],
+            [CreateNotificationEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -48,8 +50,8 @@ class NotificationServiceTest extends AbstractServiceTest
     public function testReturnCreateNotificationResultInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            NotificationEvents::BEFORE_CREATE_NOTIFICATION,
-            NotificationEvents::CREATE_NOTIFICATION
+            BeforeCreateNotificationEvent::class,
+            CreateNotificationEvent::class
         );
 
         $parameters = [
@@ -61,7 +63,7 @@ class NotificationServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(NotificationServiceInterface::class);
         $innerServiceMock->method('createNotification')->willReturn($notification);
 
-        $traceableEventDispatcher->addListener(NotificationEvents::BEFORE_CREATE_NOTIFICATION, function (BeforeCreateNotificationEvent $event) use ($eventNotification) {
+        $traceableEventDispatcher->addListener(BeforeCreateNotificationEvent::class, function (BeforeCreateNotificationEvent $event) use ($eventNotification) {
             $event->setNotification($eventNotification);
         }, 10);
 
@@ -72,9 +74,9 @@ class NotificationServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventNotification, $result);
         $this->assertSame($calledListeners, [
-            [NotificationEvents::BEFORE_CREATE_NOTIFICATION, 10],
-            [NotificationEvents::BEFORE_CREATE_NOTIFICATION, 0],
-            [NotificationEvents::CREATE_NOTIFICATION, 0],
+            [BeforeCreateNotificationEvent::class, 10],
+            [BeforeCreateNotificationEvent::class, 0],
+            [CreateNotificationEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -82,8 +84,8 @@ class NotificationServiceTest extends AbstractServiceTest
     public function testCreateNotificationStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            NotificationEvents::BEFORE_CREATE_NOTIFICATION,
-            NotificationEvents::CREATE_NOTIFICATION
+            BeforeCreateNotificationEvent::class,
+            CreateNotificationEvent::class
         );
 
         $parameters = [
@@ -95,7 +97,7 @@ class NotificationServiceTest extends AbstractServiceTest
         $innerServiceMock = $this->createMock(NotificationServiceInterface::class);
         $innerServiceMock->method('createNotification')->willReturn($notification);
 
-        $traceableEventDispatcher->addListener(NotificationEvents::BEFORE_CREATE_NOTIFICATION, function (BeforeCreateNotificationEvent $event) use ($eventNotification) {
+        $traceableEventDispatcher->addListener(BeforeCreateNotificationEvent::class, function (BeforeCreateNotificationEvent $event) use ($eventNotification) {
             $event->setNotification($eventNotification);
             $event->stopPropagation();
         }, 10);
@@ -108,19 +110,19 @@ class NotificationServiceTest extends AbstractServiceTest
 
         $this->assertSame($eventNotification, $result);
         $this->assertSame($calledListeners, [
-            [NotificationEvents::BEFORE_CREATE_NOTIFICATION, 10],
+            [BeforeCreateNotificationEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [NotificationEvents::CREATE_NOTIFICATION, 0],
-            [NotificationEvents::BEFORE_CREATE_NOTIFICATION, 0],
+            [BeforeCreateNotificationEvent::class, 0],
+            [CreateNotificationEvent::class, 0],
         ]);
     }
 
     public function testDeleteNotificationEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            NotificationEvents::BEFORE_DELETE_NOTIFICATION,
-            NotificationEvents::DELETE_NOTIFICATION
+            BeforeDeleteNotificationEvent::class,
+            DeleteNotificationEvent::class
         );
 
         $parameters = [
@@ -135,8 +137,8 @@ class NotificationServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [NotificationEvents::BEFORE_DELETE_NOTIFICATION, 0],
-            [NotificationEvents::DELETE_NOTIFICATION, 0],
+            [BeforeDeleteNotificationEvent::class, 0],
+            [DeleteNotificationEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -144,8 +146,8 @@ class NotificationServiceTest extends AbstractServiceTest
     public function testDeleteNotificationStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            NotificationEvents::BEFORE_DELETE_NOTIFICATION,
-            NotificationEvents::DELETE_NOTIFICATION
+            BeforeDeleteNotificationEvent::class,
+            DeleteNotificationEvent::class
         );
 
         $parameters = [
@@ -154,7 +156,7 @@ class NotificationServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(NotificationServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(NotificationEvents::BEFORE_DELETE_NOTIFICATION, function (BeforeDeleteNotificationEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeDeleteNotificationEvent::class, function (BeforeDeleteNotificationEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -165,19 +167,19 @@ class NotificationServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [NotificationEvents::BEFORE_DELETE_NOTIFICATION, 10],
+            [BeforeDeleteNotificationEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [NotificationEvents::DELETE_NOTIFICATION, 0],
-            [NotificationEvents::BEFORE_DELETE_NOTIFICATION, 0],
+            [BeforeDeleteNotificationEvent::class, 0],
+            [DeleteNotificationEvent::class, 0],
         ]);
     }
 
     public function testMarkNotificationAsReadEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            NotificationEvents::BEFORE_MARK_NOTIFICATION_AS_READ,
-            NotificationEvents::MARK_NOTIFICATION_AS_READ
+            BeforeMarkNotificationAsReadEvent::class,
+            MarkNotificationAsReadEvent::class
         );
 
         $parameters = [
@@ -192,8 +194,8 @@ class NotificationServiceTest extends AbstractServiceTest
         $calledListeners = $this->getListenersStack($traceableEventDispatcher->getCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [NotificationEvents::BEFORE_MARK_NOTIFICATION_AS_READ, 0],
-            [NotificationEvents::MARK_NOTIFICATION_AS_READ, 0],
+            [BeforeMarkNotificationAsReadEvent::class, 0],
+            [MarkNotificationAsReadEvent::class, 0],
         ]);
         $this->assertSame([], $traceableEventDispatcher->getNotCalledListeners());
     }
@@ -201,8 +203,8 @@ class NotificationServiceTest extends AbstractServiceTest
     public function testMarkNotificationAsReadStopPropagationInBeforeEvents()
     {
         $traceableEventDispatcher = $this->getEventDispatcher(
-            NotificationEvents::BEFORE_MARK_NOTIFICATION_AS_READ,
-            NotificationEvents::MARK_NOTIFICATION_AS_READ
+            BeforeMarkNotificationAsReadEvent::class,
+            MarkNotificationAsReadEvent::class
         );
 
         $parameters = [
@@ -211,7 +213,7 @@ class NotificationServiceTest extends AbstractServiceTest
 
         $innerServiceMock = $this->createMock(NotificationServiceInterface::class);
 
-        $traceableEventDispatcher->addListener(NotificationEvents::BEFORE_MARK_NOTIFICATION_AS_READ, function (BeforeMarkNotificationAsReadEvent $event) {
+        $traceableEventDispatcher->addListener(BeforeMarkNotificationAsReadEvent::class, function (BeforeMarkNotificationAsReadEvent $event) {
             $event->stopPropagation();
         }, 10);
 
@@ -222,11 +224,11 @@ class NotificationServiceTest extends AbstractServiceTest
         $notCalledListeners = $this->getListenersStack($traceableEventDispatcher->getNotCalledListeners());
 
         $this->assertSame($calledListeners, [
-            [NotificationEvents::BEFORE_MARK_NOTIFICATION_AS_READ, 10],
+            [BeforeMarkNotificationAsReadEvent::class, 10],
         ]);
         $this->assertSame($notCalledListeners, [
-            [NotificationEvents::MARK_NOTIFICATION_AS_READ, 0],
-            [NotificationEvents::BEFORE_MARK_NOTIFICATION_AS_READ, 0],
+            [BeforeMarkNotificationAsReadEvent::class, 0],
+            [MarkNotificationAsReadEvent::class, 0],
         ]);
     }
 }

@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateLocationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.location.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeRemoveFieldDefinitionEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content_type.remove_field_definition.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */

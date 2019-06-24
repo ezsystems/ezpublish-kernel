@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteContentTypeGroupEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content_type_group.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */

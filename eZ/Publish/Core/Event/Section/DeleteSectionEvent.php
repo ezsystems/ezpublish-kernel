@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteSectionEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.section.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Section
      */

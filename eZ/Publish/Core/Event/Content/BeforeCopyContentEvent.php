@@ -16,8 +16,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCopyContentEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content.copy.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

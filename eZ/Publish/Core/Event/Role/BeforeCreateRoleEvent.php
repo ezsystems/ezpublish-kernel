@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateRoleEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.role.create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
      */

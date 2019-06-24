@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateFieldDefinitionEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content_type.update_field_definition';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */

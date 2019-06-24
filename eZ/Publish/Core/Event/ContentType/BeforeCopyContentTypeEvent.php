@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCopyContentTypeEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content_type.copy.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */

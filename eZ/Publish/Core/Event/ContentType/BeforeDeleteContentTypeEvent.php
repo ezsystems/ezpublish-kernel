@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteContentTypeEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content_type.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */

@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\UserServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
@@ -38,12 +38,11 @@ use eZ\Publish\Core\Event\User\UnAssignUserFromUserGroupEvent;
 use eZ\Publish\Core\Event\User\UpdateUserEvent;
 use eZ\Publish\Core\Event\User\UpdateUserGroupEvent;
 use eZ\Publish\Core\Event\User\UpdateUserTokenEvent;
-use eZ\Publish\Core\Event\User\UserEvents;
 
 class UserService extends UserServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -66,7 +65,7 @@ class UserService extends UserServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateUserGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_CREATE_USER_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUserGroup();
         }
 
@@ -74,10 +73,7 @@ class UserService extends UserServiceDecorator
             ? $beforeEvent->getUserGroup()
             : parent::createUserGroup($userGroupCreateStruct, $parentGroup);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::CREATE_USER_GROUP,
-            new CreateUserGroupEvent($userGroup, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateUserGroupEvent($userGroup, ...$eventData));
 
         return $userGroup;
     }
@@ -87,7 +83,7 @@ class UserService extends UserServiceDecorator
         $eventData = [$userGroup];
 
         $beforeEvent = new BeforeDeleteUserGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_DELETE_USER_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getLocations();
         }
 
@@ -95,10 +91,7 @@ class UserService extends UserServiceDecorator
             ? $beforeEvent->getLocations()
             : parent::deleteUserGroup($userGroup);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::DELETE_USER_GROUP,
-            new DeleteUserGroupEvent($locations, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteUserGroupEvent($locations, ...$eventData));
 
         return $locations;
     }
@@ -113,16 +106,13 @@ class UserService extends UserServiceDecorator
         ];
 
         $beforeEvent = new BeforeMoveUserGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_MOVE_USER_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::moveUserGroup($userGroup, $newParent);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::MOVE_USER_GROUP,
-            new MoveUserGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new MoveUserGroupEvent(...$eventData));
     }
 
     public function updateUserGroup(
@@ -135,7 +125,7 @@ class UserService extends UserServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateUserGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_UPDATE_USER_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedUserGroup();
         }
 
@@ -143,10 +133,7 @@ class UserService extends UserServiceDecorator
             ? $beforeEvent->getUpdatedUserGroup()
             : parent::updateUserGroup($userGroup, $userGroupUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::UPDATE_USER_GROUP,
-            new UpdateUserGroupEvent($updatedUserGroup, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateUserGroupEvent($updatedUserGroup, ...$eventData));
 
         return $updatedUserGroup;
     }
@@ -161,7 +148,7 @@ class UserService extends UserServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateUserEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_CREATE_USER, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUser();
         }
 
@@ -169,10 +156,7 @@ class UserService extends UserServiceDecorator
             ? $beforeEvent->getUser()
             : parent::createUser($userCreateStruct, $parentGroups);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::CREATE_USER,
-            new CreateUserEvent($user, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateUserEvent($user, ...$eventData));
 
         return $user;
     }
@@ -182,7 +166,7 @@ class UserService extends UserServiceDecorator
         $eventData = [$user];
 
         $beforeEvent = new BeforeDeleteUserEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_DELETE_USER, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getLocations();
         }
 
@@ -190,10 +174,7 @@ class UserService extends UserServiceDecorator
             ? $beforeEvent->getLocations()
             : parent::deleteUser($user);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::DELETE_USER,
-            new DeleteUserEvent($locations, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteUserEvent($locations, ...$eventData));
 
         return $locations;
     }
@@ -208,7 +189,7 @@ class UserService extends UserServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateUserEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_UPDATE_USER, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedUser();
         }
 
@@ -216,10 +197,7 @@ class UserService extends UserServiceDecorator
             ? $beforeEvent->getUpdatedUser()
             : parent::updateUser($user, $userUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::UPDATE_USER,
-            new UpdateUserEvent($updatedUser, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateUserEvent($updatedUser, ...$eventData));
 
         return $updatedUser;
     }
@@ -234,7 +212,7 @@ class UserService extends UserServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateUserTokenEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_UPDATE_USER_TOKEN, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedUser();
         }
 
@@ -242,10 +220,7 @@ class UserService extends UserServiceDecorator
             ? $beforeEvent->getUpdatedUser()
             : parent::updateUserToken($user, $userTokenUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::UPDATE_USER_TOKEN,
-            new UpdateUserTokenEvent($updatedUser, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateUserTokenEvent($updatedUser, ...$eventData));
 
         return $updatedUser;
     }
@@ -260,16 +235,13 @@ class UserService extends UserServiceDecorator
         ];
 
         $beforeEvent = new BeforeAssignUserToUserGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_ASSIGN_USER_TO_USER_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::assignUserToUserGroup($user, $userGroup);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::ASSIGN_USER_TO_USER_GROUP,
-            new AssignUserToUserGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AssignUserToUserGroupEvent(...$eventData));
     }
 
     public function unAssignUserFromUserGroup(
@@ -282,15 +254,12 @@ class UserService extends UserServiceDecorator
         ];
 
         $beforeEvent = new BeforeUnAssignUserFromUserGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserEvents::BEFORE_UN_ASSIGN_USER_FROM_USER_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::unAssignUserFromUserGroup($user, $userGroup);
 
-        $this->eventDispatcher->dispatch(
-            UserEvents::UN_ASSIGN_USER_FROM_USER_GROUP,
-            new UnAssignUserFromUserGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UnAssignUserFromUserGroupEvent(...$eventData));
     }
 }

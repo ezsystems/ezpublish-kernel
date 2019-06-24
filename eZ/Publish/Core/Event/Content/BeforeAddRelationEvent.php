@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAddRelationEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.relation.add.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */

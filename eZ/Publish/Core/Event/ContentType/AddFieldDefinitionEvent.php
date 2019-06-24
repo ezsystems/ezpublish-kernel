@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AddFieldDefinitionEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content_type.add_field_definition';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */

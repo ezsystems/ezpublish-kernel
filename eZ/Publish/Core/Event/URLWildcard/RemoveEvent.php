@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RemoveEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.url_wildcard.remove';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\URLWildcard
      */

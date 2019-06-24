@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AssignSectionToSubtreeEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.section.assign_to_subtree';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdateUserTokenEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user.token_update.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

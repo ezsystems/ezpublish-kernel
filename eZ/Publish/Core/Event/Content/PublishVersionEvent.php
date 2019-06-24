@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class PublishVersionEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.version.publish';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content
      */

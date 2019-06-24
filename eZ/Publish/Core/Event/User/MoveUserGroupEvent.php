@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class MoveUserGroupEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user_group.move';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup
      */

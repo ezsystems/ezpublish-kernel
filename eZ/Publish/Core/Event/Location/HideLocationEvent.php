@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class HideLocationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.location.hide';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

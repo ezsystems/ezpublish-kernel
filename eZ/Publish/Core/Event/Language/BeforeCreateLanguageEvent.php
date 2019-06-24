@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateLanguageEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.language.create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */

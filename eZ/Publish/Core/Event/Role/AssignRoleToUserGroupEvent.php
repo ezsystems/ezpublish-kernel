@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AssignRoleToUserGroupEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.role.assign_to_user_group';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */

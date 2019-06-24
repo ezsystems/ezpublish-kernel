@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAddPolicyByRoleDraftEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.role.add_policy_by_draft.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
      */

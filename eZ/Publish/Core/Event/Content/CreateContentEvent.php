@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateContentEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
      */

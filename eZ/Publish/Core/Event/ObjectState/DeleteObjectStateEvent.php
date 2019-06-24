@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteObjectStateEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.object_state.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */

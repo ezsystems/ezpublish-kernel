@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class EmptyTrashEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.trash.empty';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList
      */

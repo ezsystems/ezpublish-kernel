@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdateUserEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user.update.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

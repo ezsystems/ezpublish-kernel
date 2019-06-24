@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateGlobalUrlAliasEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.url_alias.create_global.before';
-
     private $resource;
 
     private $path;

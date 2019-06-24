@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateUserEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user.create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct
      */

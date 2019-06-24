@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateObjectStateEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.object_state.update';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
      */

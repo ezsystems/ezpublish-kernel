@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAssignUserToUserGroupEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user.assign_to_user_group.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

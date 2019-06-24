@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DisableLanguageEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.language.disable';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Language
      */

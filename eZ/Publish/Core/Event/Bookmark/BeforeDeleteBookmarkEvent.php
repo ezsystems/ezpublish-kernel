@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteBookmarkEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.bookmark.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

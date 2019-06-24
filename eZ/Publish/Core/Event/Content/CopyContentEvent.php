@@ -16,8 +16,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CopyContentEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content.copy';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Content
      */

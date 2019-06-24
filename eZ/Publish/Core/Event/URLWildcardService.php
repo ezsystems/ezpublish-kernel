@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\URLWildcardServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\Core\Event\URLWildcard\BeforeCreateEvent;
@@ -18,12 +18,11 @@ use eZ\Publish\Core\Event\URLWildcard\BeforeTranslateEvent;
 use eZ\Publish\Core\Event\URLWildcard\CreateEvent;
 use eZ\Publish\Core\Event\URLWildcard\RemoveEvent;
 use eZ\Publish\Core\Event\URLWildcard\TranslateEvent;
-use eZ\Publish\Core\Event\URLWildcard\URLWildcardEvents;
 
 class URLWildcardService extends URLWildcardServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -48,7 +47,7 @@ class URLWildcardService extends URLWildcardServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(URLWildcardEvents::BEFORE_CREATE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUrlWildcard();
         }
 
@@ -56,10 +55,7 @@ class URLWildcardService extends URLWildcardServiceDecorator
             ? $beforeEvent->getUrlWildcard()
             : parent::create($sourceUrl, $destinationUrl, $forward);
 
-        $this->eventDispatcher->dispatch(
-            URLWildcardEvents::CREATE,
-            new CreateEvent($urlWildcard, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateEvent($urlWildcard, ...$eventData));
 
         return $urlWildcard;
     }
@@ -69,16 +65,13 @@ class URLWildcardService extends URLWildcardServiceDecorator
         $eventData = [$urlWildcard];
 
         $beforeEvent = new BeforeRemoveEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(URLWildcardEvents::BEFORE_REMOVE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::remove($urlWildcard);
 
-        $this->eventDispatcher->dispatch(
-            URLWildcardEvents::REMOVE,
-            new RemoveEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new RemoveEvent(...$eventData));
     }
 
     public function translate($url)
@@ -86,7 +79,7 @@ class URLWildcardService extends URLWildcardServiceDecorator
         $eventData = [$url];
 
         $beforeEvent = new BeforeTranslateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(URLWildcardEvents::BEFORE_TRANSLATE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getResult();
         }
 
@@ -94,10 +87,7 @@ class URLWildcardService extends URLWildcardServiceDecorator
             ? $beforeEvent->getResult()
             : parent::translate($url);
 
-        $this->eventDispatcher->dispatch(
-            URLWildcardEvents::TRANSLATE,
-            new TranslateEvent($result, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new TranslateEvent($result, ...$eventData));
 
         return $result;
     }

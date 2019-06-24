@@ -9,16 +9,15 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\UserPreferenceServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
 use eZ\Publish\Core\Event\UserPreference\BeforeSetUserPreferenceEvent;
 use eZ\Publish\Core\Event\UserPreference\SetUserPreferenceEvent;
-use eZ\Publish\Core\Event\UserPreference\UserPreferenceEvents;
 
 class UserPreferenceService extends UserPreferenceServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -36,15 +35,12 @@ class UserPreferenceService extends UserPreferenceServiceDecorator
         $eventData = [$userPreferenceSetStructs];
 
         $beforeEvent = new BeforeSetUserPreferenceEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(UserPreferenceEvents::BEFORE_SET_USER_PREFERENCE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::setUserPreference($userPreferenceSetStructs);
 
-        $this->eventDispatcher->dispatch(
-            UserPreferenceEvents::SET_USER_PREFERENCE,
-            new SetUserPreferenceEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new SetUserPreferenceEvent(...$eventData));
     }
 }

@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CopyContentTypeEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content_type.copy';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */

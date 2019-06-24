@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteNotificationEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.notification.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Notification\Notification
      */

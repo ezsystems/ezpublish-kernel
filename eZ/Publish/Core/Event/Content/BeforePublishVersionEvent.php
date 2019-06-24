@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforePublishVersionEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.version.publish.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */

@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\ObjectStateServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
@@ -30,7 +30,6 @@ use eZ\Publish\Core\Event\ObjectState\CreateObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\CreateObjectStateGroupEvent;
 use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\ObjectStateEvents;
 use eZ\Publish\Core\Event\ObjectState\SetContentStateEvent;
 use eZ\Publish\Core\Event\ObjectState\SetPriorityOfObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateEvent;
@@ -39,7 +38,7 @@ use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateGroupEvent;
 class ObjectStateService extends ObjectStateServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -57,7 +56,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
         $eventData = [$objectStateGroupCreateStruct];
 
         $beforeEvent = new BeforeCreateObjectStateGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ObjectStateEvents::BEFORE_CREATE_OBJECT_STATE_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getObjectStateGroup();
         }
 
@@ -65,10 +64,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             ? $beforeEvent->getObjectStateGroup()
             : parent::createObjectStateGroup($objectStateGroupCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ObjectStateEvents::CREATE_OBJECT_STATE_GROUP,
-            new CreateObjectStateGroupEvent($objectStateGroup, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateObjectStateGroupEvent($objectStateGroup, ...$eventData));
 
         return $objectStateGroup;
     }
@@ -83,7 +79,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateObjectStateGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ObjectStateEvents::BEFORE_UPDATE_OBJECT_STATE_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedObjectStateGroup();
         }
 
@@ -91,10 +87,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             ? $beforeEvent->getUpdatedObjectStateGroup()
             : parent::updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ObjectStateEvents::UPDATE_OBJECT_STATE_GROUP,
-            new UpdateObjectStateGroupEvent($updatedObjectStateGroup, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateObjectStateGroupEvent($updatedObjectStateGroup, ...$eventData));
 
         return $updatedObjectStateGroup;
     }
@@ -104,16 +97,13 @@ class ObjectStateService extends ObjectStateServiceDecorator
         $eventData = [$objectStateGroup];
 
         $beforeEvent = new BeforeDeleteObjectStateGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ObjectStateEvents::BEFORE_DELETE_OBJECT_STATE_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteObjectStateGroup($objectStateGroup);
 
-        $this->eventDispatcher->dispatch(
-            ObjectStateEvents::DELETE_OBJECT_STATE_GROUP,
-            new DeleteObjectStateGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteObjectStateGroupEvent(...$eventData));
     }
 
     public function createObjectState(
@@ -126,7 +116,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateObjectStateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ObjectStateEvents::BEFORE_CREATE_OBJECT_STATE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getObjectState();
         }
 
@@ -134,10 +124,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             ? $beforeEvent->getObjectState()
             : parent::createObjectState($objectStateGroup, $objectStateCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ObjectStateEvents::CREATE_OBJECT_STATE,
-            new CreateObjectStateEvent($objectState, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateObjectStateEvent($objectState, ...$eventData));
 
         return $objectState;
     }
@@ -152,7 +139,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateObjectStateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ObjectStateEvents::BEFORE_UPDATE_OBJECT_STATE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedObjectState();
         }
 
@@ -160,10 +147,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             ? $beforeEvent->getUpdatedObjectState()
             : parent::updateObjectState($objectState, $objectStateUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            ObjectStateEvents::UPDATE_OBJECT_STATE,
-            new UpdateObjectStateEvent($updatedObjectState, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateObjectStateEvent($updatedObjectState, ...$eventData));
 
         return $updatedObjectState;
     }
@@ -178,16 +162,13 @@ class ObjectStateService extends ObjectStateServiceDecorator
         ];
 
         $beforeEvent = new BeforeSetPriorityOfObjectStateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ObjectStateEvents::BEFORE_SET_PRIORITY_OF_OBJECT_STATE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::setPriorityOfObjectState($objectState, $priority);
 
-        $this->eventDispatcher->dispatch(
-            ObjectStateEvents::SET_PRIORITY_OF_OBJECT_STATE,
-            new SetPriorityOfObjectStateEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new SetPriorityOfObjectStateEvent(...$eventData));
     }
 
     public function deleteObjectState(ObjectState $objectState): void
@@ -195,16 +176,13 @@ class ObjectStateService extends ObjectStateServiceDecorator
         $eventData = [$objectState];
 
         $beforeEvent = new BeforeDeleteObjectStateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ObjectStateEvents::BEFORE_DELETE_OBJECT_STATE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteObjectState($objectState);
 
-        $this->eventDispatcher->dispatch(
-            ObjectStateEvents::DELETE_OBJECT_STATE,
-            new DeleteObjectStateEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteObjectStateEvent(...$eventData));
     }
 
     public function setContentState(
@@ -219,15 +197,12 @@ class ObjectStateService extends ObjectStateServiceDecorator
         ];
 
         $beforeEvent = new BeforeSetContentStateEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(ObjectStateEvents::BEFORE_SET_CONTENT_STATE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::setContentState($contentInfo, $objectStateGroup, $objectState);
 
-        $this->eventDispatcher->dispatch(
-            ObjectStateEvents::SET_CONTENT_STATE,
-            new SetContentStateEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new SetContentStateEvent(...$eventData));
     }
 }

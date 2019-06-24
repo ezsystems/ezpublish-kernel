@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteUserGroupEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.user_group.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\UserGroup
      */

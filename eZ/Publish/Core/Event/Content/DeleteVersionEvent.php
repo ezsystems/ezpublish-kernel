@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteVersionEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.version.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
      */

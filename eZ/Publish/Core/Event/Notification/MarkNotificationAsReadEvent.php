@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class MarkNotificationAsReadEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.notification.mark_as_read';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Notification\Notification
      */

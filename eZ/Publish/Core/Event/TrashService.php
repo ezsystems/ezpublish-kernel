@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\TrashServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
@@ -21,12 +21,11 @@ use eZ\Publish\Core\Event\Trash\DeleteTrashItemEvent;
 use eZ\Publish\Core\Event\Trash\EmptyTrashEvent;
 use eZ\Publish\Core\Event\Trash\RecoverEvent;
 use eZ\Publish\Core\Event\Trash\TrashEvent;
-use eZ\Publish\Core\Event\Trash\TrashEvents;
 
 class TrashService extends TrashServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -44,7 +43,7 @@ class TrashService extends TrashServiceDecorator
         $eventData = [$location];
 
         $beforeEvent = new BeforeTrashEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(TrashEvents::BEFORE_TRASH, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getResult();
         }
 
@@ -52,10 +51,7 @@ class TrashService extends TrashServiceDecorator
             ? $beforeEvent->getResult()
             : parent::trash($location);
 
-        $this->eventDispatcher->dispatch(
-            TrashEvents::TRASH,
-            new TrashEvent($trashItem, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new TrashEvent($trashItem, ...$eventData));
 
         return $trashItem;
     }
@@ -70,7 +66,7 @@ class TrashService extends TrashServiceDecorator
         ];
 
         $beforeEvent = new BeforeRecoverEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(TrashEvents::BEFORE_RECOVER, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getLocation();
         }
 
@@ -78,10 +74,7 @@ class TrashService extends TrashServiceDecorator
             ? $beforeEvent->getLocation()
             : parent::recover($trashItem, $newParentLocation);
 
-        $this->eventDispatcher->dispatch(
-            TrashEvents::RECOVER,
-            new RecoverEvent($location, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new RecoverEvent($location, ...$eventData));
 
         return $location;
     }
@@ -89,7 +82,7 @@ class TrashService extends TrashServiceDecorator
     public function emptyTrash()
     {
         $beforeEvent = new BeforeEmptyTrashEvent();
-        if ($this->eventDispatcher->dispatch(TrashEvents::BEFORE_EMPTY_TRASH, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getResultList();
         }
 
@@ -97,10 +90,7 @@ class TrashService extends TrashServiceDecorator
             ? $beforeEvent->getResultList()
             : parent::emptyTrash();
 
-        $this->eventDispatcher->dispatch(
-            TrashEvents::EMPTY_TRASH,
-            new EmptyTrashEvent($resultList)
-        );
+        $this->eventDispatcher->dispatch(new EmptyTrashEvent($resultList));
 
         return $resultList;
     }
@@ -110,7 +100,7 @@ class TrashService extends TrashServiceDecorator
         $eventData = [$trashItem];
 
         $beforeEvent = new BeforeDeleteTrashItemEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(TrashEvents::BEFORE_DELETE_TRASH_ITEM, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getResult();
         }
 
@@ -118,10 +108,7 @@ class TrashService extends TrashServiceDecorator
             ? $beforeEvent->getResult()
             : parent::deleteTrashItem($trashItem);
 
-        $this->eventDispatcher->dispatch(
-            TrashEvents::DELETE_TRASH_ITEM,
-            new DeleteTrashItemEvent($result, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteTrashItemEvent($result, ...$eventData));
 
         return $result;
     }

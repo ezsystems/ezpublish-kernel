@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AddPolicyEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.role.add_policy';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */

@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteLanguageEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.language.delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Language
      */

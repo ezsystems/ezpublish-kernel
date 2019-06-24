@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdateContentMetadataEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content.metadata_update.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RemoveRoleAssignmentEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.role.assignment_remove';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\RoleAssignment
      */

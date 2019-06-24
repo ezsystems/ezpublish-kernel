@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RefreshSystemUrlAliasesForLocationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.url_alias.system_refresh';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

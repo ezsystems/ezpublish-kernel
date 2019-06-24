@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class SwapLocationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.location.swap';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Location
      */

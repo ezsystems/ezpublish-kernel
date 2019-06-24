@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUnAssignUserFromUserGroupEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.user.unassign_from_user_group.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\User
      */

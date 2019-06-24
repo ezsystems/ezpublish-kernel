@@ -15,8 +15,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AddRelationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.relation.add';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Relation
      */

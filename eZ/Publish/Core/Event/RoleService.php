@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\RoleServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy;
@@ -53,7 +53,6 @@ use eZ\Publish\Core\Event\Role\DeleteRoleEvent;
 use eZ\Publish\Core\Event\Role\PublishRoleDraftEvent;
 use eZ\Publish\Core\Event\Role\RemovePolicyByRoleDraftEvent;
 use eZ\Publish\Core\Event\Role\RemoveRoleAssignmentEvent;
-use eZ\Publish\Core\Event\Role\RoleEvents;
 use eZ\Publish\Core\Event\Role\UnassignRoleFromUserEvent;
 use eZ\Publish\Core\Event\Role\UnassignRoleFromUserGroupEvent;
 use eZ\Publish\Core\Event\Role\UpdatePolicyByRoleDraftEvent;
@@ -64,7 +63,7 @@ use eZ\Publish\Core\Event\Role\UpdateRoleEvent;
 class RoleService extends RoleServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -82,7 +81,7 @@ class RoleService extends RoleServiceDecorator
         $eventData = [$roleCreateStruct];
 
         $beforeEvent = new BeforeCreateRoleEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_CREATE_ROLE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getRoleDraft();
         }
 
@@ -90,10 +89,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getRoleDraft()
             : parent::createRole($roleCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::CREATE_ROLE,
-            new CreateRoleEvent($roleDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateRoleEvent($roleDraft, ...$eventData));
 
         return $roleDraft;
     }
@@ -103,7 +99,7 @@ class RoleService extends RoleServiceDecorator
         $eventData = [$role];
 
         $beforeEvent = new BeforeCreateRoleDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_CREATE_ROLE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getRoleDraft();
         }
 
@@ -111,10 +107,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getRoleDraft()
             : parent::createRoleDraft($role);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::CREATE_ROLE_DRAFT,
-            new CreateRoleDraftEvent($roleDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateRoleDraftEvent($roleDraft, ...$eventData));
 
         return $roleDraft;
     }
@@ -129,7 +122,7 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateRoleDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_UPDATE_ROLE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRoleDraft();
         }
 
@@ -137,10 +130,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getUpdatedRoleDraft()
             : parent::updateRoleDraft($roleDraft, $roleUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::UPDATE_ROLE_DRAFT,
-            new UpdateRoleDraftEvent($updatedRoleDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateRoleDraftEvent($updatedRoleDraft, ...$eventData));
 
         return $updatedRoleDraft;
     }
@@ -155,7 +145,7 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeAddPolicyByRoleDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_ADD_POLICY_BY_ROLE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRoleDraft();
         }
 
@@ -163,10 +153,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getUpdatedRoleDraft()
             : parent::addPolicyByRoleDraft($roleDraft, $policyCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::ADD_POLICY_BY_ROLE_DRAFT,
-            new AddPolicyByRoleDraftEvent($updatedRoleDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AddPolicyByRoleDraftEvent($updatedRoleDraft, ...$eventData));
 
         return $updatedRoleDraft;
     }
@@ -181,7 +168,7 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeRemovePolicyByRoleDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_REMOVE_POLICY_BY_ROLE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRoleDraft();
         }
 
@@ -189,10 +176,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getUpdatedRoleDraft()
             : parent::removePolicyByRoleDraft($roleDraft, $policyDraft);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::REMOVE_POLICY_BY_ROLE_DRAFT,
-            new RemovePolicyByRoleDraftEvent($updatedRoleDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new RemovePolicyByRoleDraftEvent($updatedRoleDraft, ...$eventData));
 
         return $updatedRoleDraft;
     }
@@ -209,7 +193,7 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdatePolicyByRoleDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_UPDATE_POLICY_BY_ROLE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedPolicyDraft();
         }
 
@@ -217,10 +201,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getUpdatedPolicyDraft()
             : parent::updatePolicyByRoleDraft($roleDraft, $policy, $policyUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::UPDATE_POLICY_BY_ROLE_DRAFT,
-            new UpdatePolicyByRoleDraftEvent($updatedPolicyDraft, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdatePolicyByRoleDraftEvent($updatedPolicyDraft, ...$eventData));
 
         return $updatedPolicyDraft;
     }
@@ -230,16 +211,13 @@ class RoleService extends RoleServiceDecorator
         $eventData = [$roleDraft];
 
         $beforeEvent = new BeforeDeleteRoleDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_DELETE_ROLE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteRoleDraft($roleDraft);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::DELETE_ROLE_DRAFT,
-            new DeleteRoleDraftEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteRoleDraftEvent(...$eventData));
     }
 
     public function publishRoleDraft(RoleDraft $roleDraft): void
@@ -247,16 +225,13 @@ class RoleService extends RoleServiceDecorator
         $eventData = [$roleDraft];
 
         $beforeEvent = new BeforePublishRoleDraftEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_PUBLISH_ROLE_DRAFT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::publishRoleDraft($roleDraft);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::PUBLISH_ROLE_DRAFT,
-            new PublishRoleDraftEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new PublishRoleDraftEvent(...$eventData));
     }
 
     public function updateRole(
@@ -269,7 +244,7 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateRoleEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_UPDATE_ROLE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRole();
         }
 
@@ -277,10 +252,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getUpdatedRole()
             : parent::updateRole($role, $roleUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::UPDATE_ROLE,
-            new UpdateRoleEvent($updatedRole, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateRoleEvent($updatedRole, ...$eventData));
 
         return $updatedRole;
     }
@@ -295,7 +267,7 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeAddPolicyEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_ADD_POLICY, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedRole();
         }
 
@@ -303,10 +275,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getUpdatedRole()
             : parent::addPolicy($role, $policyCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::ADD_POLICY,
-            new AddPolicyEvent($updatedRole, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AddPolicyEvent($updatedRole, ...$eventData));
 
         return $updatedRole;
     }
@@ -316,16 +285,13 @@ class RoleService extends RoleServiceDecorator
         $eventData = [$policy];
 
         $beforeEvent = new BeforeDeletePolicyEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_DELETE_POLICY, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deletePolicy($policy);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::DELETE_POLICY,
-            new DeletePolicyEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeletePolicyEvent(...$eventData));
     }
 
     public function updatePolicy(
@@ -338,7 +304,7 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdatePolicyEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_UPDATE_POLICY, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedPolicy();
         }
 
@@ -346,10 +312,7 @@ class RoleService extends RoleServiceDecorator
             ? $beforeEvent->getUpdatedPolicy()
             : parent::updatePolicy($policy, $policyUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::UPDATE_POLICY,
-            new UpdatePolicyEvent($updatedPolicy, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdatePolicyEvent($updatedPolicy, ...$eventData));
 
         return $updatedPolicy;
     }
@@ -359,16 +322,13 @@ class RoleService extends RoleServiceDecorator
         $eventData = [$role];
 
         $beforeEvent = new BeforeDeleteRoleEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_DELETE_ROLE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteRole($role);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::DELETE_ROLE,
-            new DeleteRoleEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteRoleEvent(...$eventData));
     }
 
     public function assignRoleToUserGroup(
@@ -383,16 +343,13 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeAssignRoleToUserGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_ASSIGN_ROLE_TO_USER_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::assignRoleToUserGroup($role, $userGroup, $roleLimitation);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::ASSIGN_ROLE_TO_USER_GROUP,
-            new AssignRoleToUserGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AssignRoleToUserGroupEvent(...$eventData));
     }
 
     public function unassignRoleFromUserGroup(
@@ -405,16 +362,13 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeUnassignRoleFromUserGroupEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_UNASSIGN_ROLE_FROM_USER_GROUP, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::unassignRoleFromUserGroup($role, $userGroup);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::UNASSIGN_ROLE_FROM_USER_GROUP,
-            new UnassignRoleFromUserGroupEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UnassignRoleFromUserGroupEvent(...$eventData));
     }
 
     public function assignRoleToUser(
@@ -429,16 +383,13 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeAssignRoleToUserEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_ASSIGN_ROLE_TO_USER, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::assignRoleToUser($role, $user, $roleLimitation);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::ASSIGN_ROLE_TO_USER,
-            new AssignRoleToUserEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new AssignRoleToUserEvent(...$eventData));
     }
 
     public function unassignRoleFromUser(
@@ -451,16 +402,13 @@ class RoleService extends RoleServiceDecorator
         ];
 
         $beforeEvent = new BeforeUnassignRoleFromUserEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_UNASSIGN_ROLE_FROM_USER, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::unassignRoleFromUser($role, $user);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::UNASSIGN_ROLE_FROM_USER,
-            new UnassignRoleFromUserEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UnassignRoleFromUserEvent(...$eventData));
     }
 
     public function removeRoleAssignment(RoleAssignment $roleAssignment): void
@@ -468,15 +416,12 @@ class RoleService extends RoleServiceDecorator
         $eventData = [$roleAssignment];
 
         $beforeEvent = new BeforeRemoveRoleAssignmentEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(RoleEvents::BEFORE_REMOVE_ROLE_ASSIGNMENT, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::removeRoleAssignment($roleAssignment);
 
-        $this->eventDispatcher->dispatch(
-            RoleEvents::REMOVE_ROLE_ASSIGNMENT,
-            new RemoveRoleAssignmentEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new RemoveRoleAssignmentEvent(...$eventData));
     }
 }

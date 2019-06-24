@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteRoleDraftEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.role.draft_delete.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
      */

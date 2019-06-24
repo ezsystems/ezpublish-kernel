@@ -9,7 +9,7 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Event;
 
 use eZ\Publish\SPI\Repository\Decorator\LocationServiceDecorator;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -27,7 +27,6 @@ use eZ\Publish\Core\Event\Location\CopySubtreeEvent;
 use eZ\Publish\Core\Event\Location\CreateLocationEvent;
 use eZ\Publish\Core\Event\Location\DeleteLocationEvent;
 use eZ\Publish\Core\Event\Location\HideLocationEvent;
-use eZ\Publish\Core\Event\Location\LocationEvents;
 use eZ\Publish\Core\Event\Location\MoveSubtreeEvent;
 use eZ\Publish\Core\Event\Location\SwapLocationEvent;
 use eZ\Publish\Core\Event\Location\UnhideLocationEvent;
@@ -36,7 +35,7 @@ use eZ\Publish\Core\Event\Location\UpdateLocationEvent;
 class LocationService extends LocationServiceDecorator
 {
     /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
      */
     protected $eventDispatcher;
 
@@ -59,7 +58,7 @@ class LocationService extends LocationServiceDecorator
         ];
 
         $beforeEvent = new BeforeCopySubtreeEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(LocationEvents::BEFORE_COPY_SUBTREE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getLocation();
         }
 
@@ -67,10 +66,7 @@ class LocationService extends LocationServiceDecorator
             ? $beforeEvent->getLocation()
             : parent::copySubtree($subtree, $targetParentLocation);
 
-        $this->eventDispatcher->dispatch(
-            LocationEvents::COPY_SUBTREE,
-            new CopySubtreeEvent($location, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CopySubtreeEvent($location, ...$eventData));
 
         return $location;
     }
@@ -85,7 +81,7 @@ class LocationService extends LocationServiceDecorator
         ];
 
         $beforeEvent = new BeforeCreateLocationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(LocationEvents::BEFORE_CREATE_LOCATION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getLocation();
         }
 
@@ -93,10 +89,7 @@ class LocationService extends LocationServiceDecorator
             ? $beforeEvent->getLocation()
             : parent::createLocation($contentInfo, $locationCreateStruct);
 
-        $this->eventDispatcher->dispatch(
-            LocationEvents::CREATE_LOCATION,
-            new CreateLocationEvent($location, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new CreateLocationEvent($location, ...$eventData));
 
         return $location;
     }
@@ -111,7 +104,7 @@ class LocationService extends LocationServiceDecorator
         ];
 
         $beforeEvent = new BeforeUpdateLocationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(LocationEvents::BEFORE_UPDATE_LOCATION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getUpdatedLocation();
         }
 
@@ -119,10 +112,7 @@ class LocationService extends LocationServiceDecorator
             ? $beforeEvent->getUpdatedLocation()
             : parent::updateLocation($location, $locationUpdateStruct);
 
-        $this->eventDispatcher->dispatch(
-            LocationEvents::UPDATE_LOCATION,
-            new UpdateLocationEvent($updatedLocation, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UpdateLocationEvent($updatedLocation, ...$eventData));
 
         return $updatedLocation;
     }
@@ -137,16 +127,13 @@ class LocationService extends LocationServiceDecorator
         ];
 
         $beforeEvent = new BeforeSwapLocationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(LocationEvents::BEFORE_SWAP_LOCATION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::swapLocation($location1, $location2);
 
-        $this->eventDispatcher->dispatch(
-            LocationEvents::SWAP_LOCATION,
-            new SwapLocationEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new SwapLocationEvent(...$eventData));
     }
 
     public function hideLocation(Location $location): Location
@@ -154,7 +141,7 @@ class LocationService extends LocationServiceDecorator
         $eventData = [$location];
 
         $beforeEvent = new BeforeHideLocationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(LocationEvents::BEFORE_HIDE_LOCATION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getHiddenLocation();
         }
 
@@ -162,10 +149,7 @@ class LocationService extends LocationServiceDecorator
             ? $beforeEvent->getHiddenLocation()
             : parent::hideLocation($location);
 
-        $this->eventDispatcher->dispatch(
-            LocationEvents::HIDE_LOCATION,
-            new HideLocationEvent($hiddenLocation, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new HideLocationEvent($hiddenLocation, ...$eventData));
 
         return $hiddenLocation;
     }
@@ -175,7 +159,7 @@ class LocationService extends LocationServiceDecorator
         $eventData = [$location];
 
         $beforeEvent = new BeforeUnhideLocationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(LocationEvents::BEFORE_UNHIDE_LOCATION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return $beforeEvent->getRevealedLocation();
         }
 
@@ -183,10 +167,7 @@ class LocationService extends LocationServiceDecorator
             ? $beforeEvent->getRevealedLocation()
             : parent::unhideLocation($location);
 
-        $this->eventDispatcher->dispatch(
-            LocationEvents::UNHIDE_LOCATION,
-            new UnhideLocationEvent($revealedLocation, ...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new UnhideLocationEvent($revealedLocation, ...$eventData));
 
         return $revealedLocation;
     }
@@ -201,16 +182,13 @@ class LocationService extends LocationServiceDecorator
         ];
 
         $beforeEvent = new BeforeMoveSubtreeEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(LocationEvents::BEFORE_MOVE_SUBTREE, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::moveSubtree($location, $newParentLocation);
 
-        $this->eventDispatcher->dispatch(
-            LocationEvents::MOVE_SUBTREE,
-            new MoveSubtreeEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new MoveSubtreeEvent(...$eventData));
     }
 
     public function deleteLocation(Location $location): void
@@ -218,15 +196,12 @@ class LocationService extends LocationServiceDecorator
         $eventData = [$location];
 
         $beforeEvent = new BeforeDeleteLocationEvent(...$eventData);
-        if ($this->eventDispatcher->dispatch(LocationEvents::BEFORE_DELETE_LOCATION, $beforeEvent)->isPropagationStopped()) {
+        if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
             return;
         }
 
         parent::deleteLocation($location);
 
-        $this->eventDispatcher->dispatch(
-            LocationEvents::DELETE_LOCATION,
-            new DeleteLocationEvent(...$eventData)
-        );
+        $this->eventDispatcher->dispatch(new DeleteLocationEvent(...$eventData));
     }
 }

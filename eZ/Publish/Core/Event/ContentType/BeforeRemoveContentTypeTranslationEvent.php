@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeRemoveContentTypeTranslationEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.content_type.translation_remove.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */

@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteRoleEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.role.delete';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */

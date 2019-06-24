@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateRoleDraftEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.role.draft_create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\User\Role
      */

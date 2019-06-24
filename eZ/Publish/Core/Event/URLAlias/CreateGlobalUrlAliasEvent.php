@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateGlobalUrlAliasEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.url_alias.create_global';
-
     private $resource;
 
     private $path;

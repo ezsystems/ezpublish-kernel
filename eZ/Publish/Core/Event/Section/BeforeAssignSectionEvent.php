@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAssignSectionEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.section.assign.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */

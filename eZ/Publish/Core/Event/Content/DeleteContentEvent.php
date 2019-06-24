@@ -13,8 +13,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteContentEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.content.delete';
-
     /**
      * @var array
      */

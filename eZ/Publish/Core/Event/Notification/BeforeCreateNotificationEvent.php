@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeCreateNotificationEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.notification.create.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Notification\CreateStruct
      */

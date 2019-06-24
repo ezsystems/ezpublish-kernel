@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateNotificationEvent extends AfterEvent
 {
-    public const NAME = 'ezplatform.event.notification.create';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\Notification\Notification
      */

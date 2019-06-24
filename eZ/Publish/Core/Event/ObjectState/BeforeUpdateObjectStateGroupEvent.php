@@ -14,8 +14,6 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdateObjectStateGroupEvent extends BeforeEvent
 {
-    public const NAME = 'ezplatform.event.object_state_group.update.before';
-
     /**
      * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
      */
