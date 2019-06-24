@@ -12,17 +12,17 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
-use eZ\Publish\Core\Event\SectionService;
 use eZ\Publish\Core\Event\Section\AssignSectionEvent;
-use eZ\Publish\Core\Event\Section\BeforeAssignSectionEvent;
 use eZ\Publish\Core\Event\Section\AssignSectionToSubtreeEvent;
+use eZ\Publish\Core\Event\Section\BeforeAssignSectionEvent;
 use eZ\Publish\Core\Event\Section\BeforeAssignSectionToSubtreeEvent;
-use eZ\Publish\Core\Event\Section\CreateSectionEvent;
 use eZ\Publish\Core\Event\Section\BeforeCreateSectionEvent;
-use eZ\Publish\Core\Event\Section\DeleteSectionEvent;
 use eZ\Publish\Core\Event\Section\BeforeDeleteSectionEvent;
-use eZ\Publish\Core\Event\Section\UpdateSectionEvent;
 use eZ\Publish\Core\Event\Section\BeforeUpdateSectionEvent;
+use eZ\Publish\Core\Event\Section\CreateSectionEvent;
+use eZ\Publish\Core\Event\Section\DeleteSectionEvent;
+use eZ\Publish\Core\Event\Section\UpdateSectionEvent;
+use eZ\Publish\Core\Event\SectionService;
 
 class SectionServiceTest extends AbstractServiceTest
 {

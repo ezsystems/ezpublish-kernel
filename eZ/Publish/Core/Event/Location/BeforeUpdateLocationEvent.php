@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Location;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateLocationEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdateLocationEvent extends BeforeEvent
         return $this->locationUpdateStruct;
     }
 
-    public function getUpdatedLocation(): ?Location
+    public function getUpdatedLocation(): Location
     {
+        if (!$this->hasUpdatedLocation()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedLocation() or set it by setUpdatedLocation() before you call getter.', Location::class));
+        }
+
         return $this->updatedLocation;
     }
 

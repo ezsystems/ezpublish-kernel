@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateObjectStateEvent extends BeforeEvent
 {
@@ -46,8 +47,12 @@ final class BeforeCreateObjectStateEvent extends BeforeEvent
         return $this->objectStateCreateStruct;
     }
 
-    public function getObjectState(): ?ObjectState
+    public function getObjectState(): ObjectState
     {
+        if (!$this->hasObjectState()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasObjectState() or set it by setObjectState() before you call getter.', ObjectState::class));
+        }
+
         return $this->objectState;
     }
 

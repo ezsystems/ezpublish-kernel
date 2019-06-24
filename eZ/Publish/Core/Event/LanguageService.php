@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\LanguageServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
@@ -23,6 +21,8 @@ use eZ\Publish\Core\Event\Language\DeleteLanguageEvent;
 use eZ\Publish\Core\Event\Language\DisableLanguageEvent;
 use eZ\Publish\Core\Event\Language\EnableLanguageEvent;
 use eZ\Publish\Core\Event\Language\UpdateLanguageNameEvent;
+use eZ\Publish\SPI\Repository\Decorator\LanguageServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class LanguageService extends LanguageServiceDecorator
 {

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeRemovePolicyByRoleDraftEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeRemovePolicyByRoleDraftEvent extends BeforeEvent
         return $this->policyDraft;
     }
 
-    public function getUpdatedRoleDraft(): ?RoleDraft
+    public function getUpdatedRoleDraft(): RoleDraft
     {
+        if (!$this->hasUpdatedRoleDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedRoleDraft() or set it by setUpdatedRoleDraft() before you call getter.', RoleDraft::class));
+        }
+
         return $this->updatedRoleDraft;
     }
 

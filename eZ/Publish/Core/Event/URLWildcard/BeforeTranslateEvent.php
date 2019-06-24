@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\URLWildcard;
 
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeTranslateEvent extends BeforeEvent
 {
@@ -30,8 +31,12 @@ final class BeforeTranslateEvent extends BeforeEvent
         return $this->url;
     }
 
-    public function getResult(): ?URLWildcardTranslationResult
+    public function getResult(): URLWildcardTranslationResult
     {
+        if (!$this->hasResult()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasResult() or set it by setResult() before you call getter.', URLWildcardTranslationResult::class));
+        }
+
         return $this->result;
     }
 

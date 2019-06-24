@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\URLAlias;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateUrlAliasEvent extends BeforeEvent
 {
@@ -66,8 +67,12 @@ final class BeforeCreateUrlAliasEvent extends BeforeEvent
         return $this->alwaysAvailable;
     }
 
-    public function getUrlAlias(): ?URLAlias
+    public function getUrlAlias(): URLAlias
     {
+        if (!$this->hasUrlAlias()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUrlAlias() or set it by setUrlAlias() before you call getter.', URLAlias::class));
+        }
+
         return $this->urlAlias;
     }
 

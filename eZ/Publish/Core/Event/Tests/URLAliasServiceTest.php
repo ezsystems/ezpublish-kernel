@@ -9,15 +9,15 @@ namespace eZ\Publish\Core\Event\Tests;
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\URLAlias;
-use eZ\Publish\Core\Event\URLAliasService;
-use eZ\Publish\Core\Event\URLAlias\CreateGlobalUrlAliasEvent;
 use eZ\Publish\Core\Event\URLAlias\BeforeCreateGlobalUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\CreateUrlAliasEvent;
 use eZ\Publish\Core\Event\URLAlias\BeforeCreateUrlAliasEvent;
-use eZ\Publish\Core\Event\URLAlias\RefreshSystemUrlAliasesForLocationEvent;
 use eZ\Publish\Core\Event\URLAlias\BeforeRefreshSystemUrlAliasesForLocationEvent;
-use eZ\Publish\Core\Event\URLAlias\RemoveAliasesEvent;
 use eZ\Publish\Core\Event\URLAlias\BeforeRemoveAliasesEvent;
+use eZ\Publish\Core\Event\URLAlias\CreateGlobalUrlAliasEvent;
+use eZ\Publish\Core\Event\URLAlias\CreateUrlAliasEvent;
+use eZ\Publish\Core\Event\URLAlias\RefreshSystemUrlAliasesForLocationEvent;
+use eZ\Publish\Core\Event\URLAlias\RemoveAliasesEvent;
+use eZ\Publish\Core\Event\URLAliasService;
 
 class URLAliasServiceTest extends AbstractServiceTest
 {

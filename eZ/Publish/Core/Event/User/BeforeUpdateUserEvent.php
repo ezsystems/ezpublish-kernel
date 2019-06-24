@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateUserEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdateUserEvent extends BeforeEvent
         return $this->userUpdateStruct;
     }
 
-    public function getUpdatedUser(): ?User
+    public function getUpdatedUser(): User
     {
+        if (!$this->hasUpdatedUser()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedUser() or set it by setUpdatedUser() before you call getter.', User::class));
+        }
+
         return $this->updatedUser;
     }
 

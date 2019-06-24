@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Relation;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeAddRelationEvent extends BeforeEvent
 {
@@ -46,8 +47,12 @@ final class BeforeAddRelationEvent extends BeforeEvent
         return $this->destinationContent;
     }
 
-    public function getRelation(): ?Relation
+    public function getRelation(): Relation
     {
+        if (!$this->hasRelation()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasRelation() or set it by setRelation() before you call getter.', Relation::class));
+        }
+
         return $this->relation;
     }
 

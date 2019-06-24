@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\ObjectStateServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\ObjectStateService as ObjectStateServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
@@ -34,6 +32,8 @@ use eZ\Publish\Core\Event\ObjectState\SetContentStateEvent;
 use eZ\Publish\Core\Event\ObjectState\SetPriorityOfObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateGroupEvent;
+use eZ\Publish\SPI\Repository\Decorator\ObjectStateServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ObjectStateService extends ObjectStateServiceDecorator
 {

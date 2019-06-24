@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateUserGroupEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeCreateUserGroupEvent extends BeforeEvent
         return $this->parentGroup;
     }
 
-    public function getUserGroup(): ?UserGroup
+    public function getUserGroup(): UserGroup
     {
+        if (!$this->hasUserGroup()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUserGroup() or set it by setUserGroup() before you call getter.', UserGroup::class));
+        }
+
         return $this->userGroup;
     }
 

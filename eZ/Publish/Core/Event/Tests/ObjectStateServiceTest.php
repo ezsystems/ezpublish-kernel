@@ -14,23 +14,23 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
-use eZ\Publish\Core\Event\ObjectStateService;
-use eZ\Publish\Core\Event\ObjectState\CreateObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\BeforeCreateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\CreateObjectStateGroupEvent;
 use eZ\Publish\Core\Event\ObjectState\BeforeCreateObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\BeforeDeleteObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateGroupEvent;
 use eZ\Publish\Core\Event\ObjectState\BeforeDeleteObjectStateGroupEvent;
-use eZ\Publish\Core\Event\ObjectState\SetContentStateEvent;
 use eZ\Publish\Core\Event\ObjectState\BeforeSetContentStateEvent;
-use eZ\Publish\Core\Event\ObjectState\SetPriorityOfObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\BeforeSetPriorityOfObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateEvent;
 use eZ\Publish\Core\Event\ObjectState\BeforeUpdateObjectStateEvent;
-use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateGroupEvent;
 use eZ\Publish\Core\Event\ObjectState\BeforeUpdateObjectStateGroupEvent;
+use eZ\Publish\Core\Event\ObjectState\CreateObjectStateEvent;
+use eZ\Publish\Core\Event\ObjectState\CreateObjectStateGroupEvent;
+use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateEvent;
+use eZ\Publish\Core\Event\ObjectState\DeleteObjectStateGroupEvent;
+use eZ\Publish\Core\Event\ObjectState\SetContentStateEvent;
+use eZ\Publish\Core\Event\ObjectState\SetPriorityOfObjectStateEvent;
+use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateEvent;
+use eZ\Publish\Core\Event\ObjectState\UpdateObjectStateGroupEvent;
+use eZ\Publish\Core\Event\ObjectStateService;
 
 class ObjectStateServiceTest extends AbstractServiceTest
 {

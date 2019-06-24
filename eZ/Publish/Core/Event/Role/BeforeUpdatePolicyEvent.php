@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Values\User\Policy;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdatePolicyEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdatePolicyEvent extends BeforeEvent
         return $this->policyUpdateStruct;
     }
 
-    public function getUpdatedPolicy(): ?Policy
+    public function getUpdatedPolicy(): Policy
     {
+        if (!$this->hasUpdatedPolicy()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedPolicy() or set it by setUpdatedPolicy() before you call getter.', Policy::class));
+        }
+
         return $this->updatedPolicy;
     }
 

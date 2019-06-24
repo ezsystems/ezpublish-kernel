@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Trash;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeRecoverEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeRecoverEvent extends BeforeEvent
         return $this->newParentLocation;
     }
 
-    public function getLocation(): ?Location
+    public function getLocation(): Location
     {
+        if (!$this->hasLocation()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasLocation() or set it by setLocation() before you call getter.', Location::class));
+        }
+
         return $this->location;
     }
 

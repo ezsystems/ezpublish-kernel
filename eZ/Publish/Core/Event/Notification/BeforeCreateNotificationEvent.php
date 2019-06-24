@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Notification;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateNotificationEvent extends BeforeEvent
 {
@@ -34,8 +35,12 @@ final class BeforeCreateNotificationEvent extends BeforeEvent
         return $this->createStruct;
     }
 
-    public function getNotification(): ?Notification
+    public function getNotification(): Notification
     {
+        if (!$this->hasNotification()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasNotification() or set it by setNotification() before you call getter.', Notification::class));
+        }
+
         return $this->notification;
     }
 

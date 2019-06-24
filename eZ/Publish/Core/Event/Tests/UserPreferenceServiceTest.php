@@ -7,9 +7,9 @@
 namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
-use eZ\Publish\Core\Event\UserPreferenceService;
-use eZ\Publish\Core\Event\UserPreference\SetUserPreferenceEvent;
 use eZ\Publish\Core\Event\UserPreference\BeforeSetUserPreferenceEvent;
+use eZ\Publish\Core\Event\UserPreference\SetUserPreferenceEvent;
+use eZ\Publish\Core\Event\UserPreferenceService;
 
 class UserPreferenceServiceTest extends AbstractServiceTest
 {

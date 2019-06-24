@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\Content;
 
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeDeleteContentEvent extends BeforeEvent
 {
@@ -33,8 +34,12 @@ final class BeforeDeleteContentEvent extends BeforeEvent
         return $this->contentInfo;
     }
 
-    public function getLocations(): ?array
+    public function getLocations(): array
     {
+        if (!$this->hasLocations()) {
+            throw new UnexpectedValueException('You must set proper event return value of array type by setLocations() method if you use stopPropagation()');
+        }
+
         return $this->locations;
     }
 

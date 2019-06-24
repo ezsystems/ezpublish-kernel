@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Content;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateContentEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeCreateContentEvent extends BeforeEvent
         return $this->locationCreateStructs;
     }
 
-    public function getContent(): ?Content
+    public function getContent(): Content
     {
+        if (!$this->hasContent()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContent() or set it by setContent() before you call getter.', Content::class));
+        }
+
         return $this->content;
     }
 

@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserCreateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateUserEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeCreateUserEvent extends BeforeEvent
         return $this->parentGroups;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
+        if (!$this->hasUser()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUser() or set it by setUser() before you call getter.', User::class));
+        }
+
         return $this->user;
     }
 

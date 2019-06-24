@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\URLWildcardServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\Core\Event\URLWildcard\BeforeCreateEvent;
@@ -18,6 +16,8 @@ use eZ\Publish\Core\Event\URLWildcard\BeforeTranslateEvent;
 use eZ\Publish\Core\Event\URLWildcard\CreateEvent;
 use eZ\Publish\Core\Event\URLWildcard\RemoveEvent;
 use eZ\Publish\Core\Event\URLWildcard\TranslateEvent;
+use eZ\Publish\SPI\Repository\Decorator\URLWildcardServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class URLWildcardService extends URLWildcardServiceDecorator
 {

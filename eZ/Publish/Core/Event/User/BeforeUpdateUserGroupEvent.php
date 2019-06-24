@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateUserGroupEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdateUserGroupEvent extends BeforeEvent
         return $this->userGroupUpdateStruct;
     }
 
-    public function getUpdatedUserGroup(): ?UserGroup
+    public function getUpdatedUserGroup(): UserGroup
     {
+        if (!$this->hasUpdatedUserGroup()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedUserGroup() or set it by setUpdatedUserGroup() before you call getter.', UserGroup::class));
+        }
+
         return $this->updatedUserGroup;
     }
 

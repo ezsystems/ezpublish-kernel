@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateContentTypeGroupEvent extends BeforeEvent
 {
@@ -34,8 +35,12 @@ final class BeforeCreateContentTypeGroupEvent extends BeforeEvent
         return $this->contentTypeGroupCreateStruct;
     }
 
-    public function getContentTypeGroup(): ?ContentTypeGroup
+    public function getContentTypeGroup(): ContentTypeGroup
     {
+        if (!$this->hasContentTypeGroup()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentTypeGroup() or set it by setContentTypeGroup() before you call getter.', ContentTypeGroup::class));
+        }
+
         return $this->contentTypeGroup;
     }
 

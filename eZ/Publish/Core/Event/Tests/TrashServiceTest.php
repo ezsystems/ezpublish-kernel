@@ -8,18 +8,18 @@ namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult;
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
-use eZ\Publish\Core\Event\TrashService;
-use eZ\Publish\Core\Event\Trash\DeleteTrashItemEvent;
+use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Event\Trash\BeforeDeleteTrashItemEvent;
-use eZ\Publish\Core\Event\Trash\EmptyTrashEvent;
 use eZ\Publish\Core\Event\Trash\BeforeEmptyTrashEvent;
-use eZ\Publish\Core\Event\Trash\RecoverEvent;
 use eZ\Publish\Core\Event\Trash\BeforeRecoverEvent;
-use eZ\Publish\Core\Event\Trash\TrashEvent;
 use eZ\Publish\Core\Event\Trash\BeforeTrashEvent;
+use eZ\Publish\Core\Event\Trash\DeleteTrashItemEvent;
+use eZ\Publish\Core\Event\Trash\EmptyTrashEvent;
+use eZ\Publish\Core\Event\Trash\RecoverEvent;
+use eZ\Publish\Core\Event\Trash\TrashEvent;
+use eZ\Publish\Core\Event\TrashService;
 
 class TrashServiceTest extends AbstractServiceTest
 {

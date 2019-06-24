@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateRoleEvent extends BeforeEvent
 {
@@ -34,8 +35,12 @@ final class BeforeCreateRoleEvent extends BeforeEvent
         return $this->roleCreateStruct;
     }
 
-    public function getRoleDraft(): ?RoleDraft
+    public function getRoleDraft(): RoleDraft
     {
+        if (!$this->hasRoleDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasRoleDraft() or set it by setRoleDraft() before you call getter.', RoleDraft::class));
+        }
+
         return $this->roleDraft;
     }
 

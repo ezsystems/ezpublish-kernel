@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\User;
 
 use eZ\Publish\API\Repository\Values\User\UserGroup;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeDeleteUserGroupEvent extends BeforeEvent
 {
@@ -33,8 +34,12 @@ final class BeforeDeleteUserGroupEvent extends BeforeEvent
         return $this->userGroup;
     }
 
-    public function getLocations(): ?array
+    public function getLocations(): array
     {
+        if (!$this->hasLocations()) {
+            throw new UnexpectedValueException('Return value is not set or not a type of %s. Check hasLocations() or set it by setLocations() before you call getter.');
+        }
+
         return $this->locations;
     }
 

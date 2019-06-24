@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyDraft;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleDraft;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdatePolicyByRoleDraftEvent extends BeforeEvent
 {
@@ -57,8 +58,12 @@ final class BeforeUpdatePolicyByRoleDraftEvent extends BeforeEvent
         return $this->policyUpdateStruct;
     }
 
-    public function getUpdatedPolicyDraft(): ?PolicyDraft
+    public function getUpdatedPolicyDraft(): PolicyDraft
     {
+        if (!$this->hasUpdatedPolicyDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedPolicyDraft() or set it by setUpdatedPolicyDraft() before you call getter.', PolicyDraft::class));
+        }
+
         return $this->updatedPolicyDraft;
     }
 

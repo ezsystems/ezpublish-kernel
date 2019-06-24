@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
+use eZ\Publish\API\Repository\TranslationService as TranslationServiceInterface;
 use eZ\Publish\SPI\Repository\Decorator\TranslationServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use eZ\Publish\API\Repository\TranslationService as TranslationServiceInterface;
 
 class TranslationService extends TranslationServiceDecorator
 {

@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\NotificationServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
@@ -19,6 +17,8 @@ use eZ\Publish\Core\Event\Notification\BeforeMarkNotificationAsReadEvent;
 use eZ\Publish\Core\Event\Notification\CreateNotificationEvent;
 use eZ\Publish\Core\Event\Notification\DeleteNotificationEvent;
 use eZ\Publish\Core\Event\Notification\MarkNotificationAsReadEvent;
+use eZ\Publish\SPI\Repository\Decorator\NotificationServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class NotificationService extends NotificationServiceDecorator
 {

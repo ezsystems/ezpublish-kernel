@@ -9,9 +9,9 @@ namespace eZ\Publish\Core\Event\Tests;
 use eZ\Publish\API\Repository\URLService as URLServiceInterface;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
-use eZ\Publish\Core\Event\URLService;
-use eZ\Publish\Core\Event\URL\UpdateUrlEvent;
 use eZ\Publish\Core\Event\URL\BeforeUpdateUrlEvent;
+use eZ\Publish\Core\Event\URL\UpdateUrlEvent;
+use eZ\Publish\Core\Event\URLService;
 
 class URLServiceTest extends AbstractServiceTest
 {

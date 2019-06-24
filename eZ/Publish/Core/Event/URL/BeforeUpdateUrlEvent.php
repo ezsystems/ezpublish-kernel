@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\URL;
 use eZ\Publish\API\Repository\Values\URL\URL;
 use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateUrlEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdateUrlEvent extends BeforeEvent
         return $this->struct;
     }
 
-    public function getUpdatedUrl(): ?URL
+    public function getUpdatedUrl(): URL
     {
+        if (!$this->hasUpdatedUrl()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedUrl() or set it by setUpdatedUrl() before you call getter.', URL::class));
+        }
+
         return $this->updatedUrl;
     }
 

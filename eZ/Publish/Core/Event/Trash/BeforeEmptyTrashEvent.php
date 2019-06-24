@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\Trash;
 
 use eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeEmptyTrashEvent extends BeforeEvent
 {
@@ -22,8 +23,12 @@ final class BeforeEmptyTrashEvent extends BeforeEvent
     {
     }
 
-    public function getResultList(): ?TrashItemDeleteResultList
+    public function getResultList(): TrashItemDeleteResultList
     {
+        if (!$this->hasResultList()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasResultList() or set it by setResultList() before you call getter.', TrashItemDeleteResultList::class));
+        }
+
         return $this->resultList;
     }
 

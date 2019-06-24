@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateObjectStateGroupEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdateObjectStateGroupEvent extends BeforeEvent
         return $this->objectStateGroupUpdateStruct;
     }
 
-    public function getUpdatedObjectStateGroup(): ?ObjectStateGroup
+    public function getUpdatedObjectStateGroup(): ObjectStateGroup
     {
+        if (!$this->hasUpdatedObjectStateGroup()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedObjectStateGroup() or set it by setUpdatedObjectStateGroup() before you call getter.', ObjectStateGroup::class));
+        }
+
         return $this->updatedObjectStateGroup;
     }
 

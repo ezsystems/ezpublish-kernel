@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Section;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateSectionEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdateSectionEvent extends BeforeEvent
         return $this->sectionUpdateStruct;
     }
 
-    public function getUpdatedSection(): ?Section
+    public function getUpdatedSection(): Section
     {
+        if (!$this->hasUpdatedSection()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedSection() or set it by setUpdatedSection() before you call getter.', Section::class));
+        }
+
         return $this->updatedSection;
     }
 

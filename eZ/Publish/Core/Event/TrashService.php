@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\TrashServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\TrashService as TrashServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
@@ -21,6 +19,8 @@ use eZ\Publish\Core\Event\Trash\DeleteTrashItemEvent;
 use eZ\Publish\Core\Event\Trash\EmptyTrashEvent;
 use eZ\Publish\Core\Event\Trash\RecoverEvent;
 use eZ\Publish\Core\Event\Trash\TrashEvent;
+use eZ\Publish\SPI\Repository\Decorator\TrashServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class TrashService extends TrashServiceDecorator
 {

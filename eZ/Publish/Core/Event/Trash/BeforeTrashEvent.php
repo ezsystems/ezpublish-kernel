@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Trash;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeTrashEvent extends BeforeEvent
 {
@@ -39,8 +40,12 @@ final class BeforeTrashEvent extends BeforeEvent
         return $this->location;
     }
 
-    public function getResult(): ?TrashItem
+    public function getResult(): TrashItem
     {
+        if (!$this->isResultSet()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s (or null). Check isResultSet() or set it by setResult() before you call getter.', TrashItem::class));
+        }
+
         return $this->result;
     }
 

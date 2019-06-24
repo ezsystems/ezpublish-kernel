@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\Role;
 use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateRoleEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdateRoleEvent extends BeforeEvent
         return $this->roleUpdateStruct;
     }
 
-    public function getUpdatedRole(): ?Role
+    public function getUpdatedRole(): Role
     {
+        if (!$this->hasUpdatedRole()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedRole() or set it by setUpdatedRole() before you call getter.', Role::class));
+        }
+
         return $this->updatedRole;
     }
 

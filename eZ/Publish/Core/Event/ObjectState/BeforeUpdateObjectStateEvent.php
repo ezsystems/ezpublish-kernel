@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectState;
 use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateObjectStateEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeUpdateObjectStateEvent extends BeforeEvent
         return $this->objectStateUpdateStruct;
     }
 
-    public function getUpdatedObjectState(): ?ObjectState
+    public function getUpdatedObjectState(): ObjectState
     {
+        if (!$this->hasUpdatedObjectState()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedObjectState() or set it by setUpdatedObjectState() before you call getter.', ObjectState::class));
+        }
+
         return $this->updatedObjectState;
     }
 

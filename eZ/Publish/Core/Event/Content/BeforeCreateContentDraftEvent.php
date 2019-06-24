@@ -13,6 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateContentDraftEvent extends BeforeEvent
 {
@@ -58,8 +59,12 @@ final class BeforeCreateContentDraftEvent extends BeforeEvent
         return $this->creator;
     }
 
-    public function getContentDraft(): ?Content
+    public function getContentDraft(): Content
     {
+        if (!$this->hasContentDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentDraft() or set it by setContentDraft() before you call getter.', Content::class));
+        }
+
         return $this->contentDraft;
     }
 

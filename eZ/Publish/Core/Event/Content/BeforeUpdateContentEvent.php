@@ -12,6 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateContentEvent extends BeforeEvent
 {
@@ -46,8 +47,12 @@ final class BeforeUpdateContentEvent extends BeforeEvent
         return $this->contentUpdateStruct;
     }
 
-    public function getContent(): ?Content
+    public function getContent(): Content
     {
+        if (!$this->hasContent()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContent() or set it by setContent() before you call getter.', Content::class));
+        }
+
         return $this->content;
     }
 

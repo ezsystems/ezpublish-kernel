@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\ContentTypeServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\ContentTypeService as ContentTypeServiceInterface;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
@@ -52,6 +50,8 @@ use eZ\Publish\Core\Event\ContentType\UnassignContentTypeGroupEvent;
 use eZ\Publish\Core\Event\ContentType\UpdateContentTypeDraftEvent;
 use eZ\Publish\Core\Event\ContentType\UpdateContentTypeGroupEvent;
 use eZ\Publish\Core\Event\ContentType\UpdateFieldDefinitionEvent;
+use eZ\Publish\SPI\Repository\Decorator\ContentTypeServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ContentTypeService extends ContentTypeServiceDecorator
 {

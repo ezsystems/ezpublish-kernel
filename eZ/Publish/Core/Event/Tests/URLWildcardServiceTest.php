@@ -9,13 +9,13 @@ namespace eZ\Publish\Core\Event\Tests;
 use eZ\Publish\API\Repository\URLWildcardService as URLWildcardServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult;
-use eZ\Publish\Core\Event\URLWildcardService;
-use eZ\Publish\Core\Event\URLWildcard\CreateEvent;
 use eZ\Publish\Core\Event\URLWildcard\BeforeCreateEvent;
-use eZ\Publish\Core\Event\URLWildcard\RemoveEvent;
 use eZ\Publish\Core\Event\URLWildcard\BeforeRemoveEvent;
-use eZ\Publish\Core\Event\URLWildcard\TranslateEvent;
 use eZ\Publish\Core\Event\URLWildcard\BeforeTranslateEvent;
+use eZ\Publish\Core\Event\URLWildcard\CreateEvent;
+use eZ\Publish\Core\Event\URLWildcard\RemoveEvent;
+use eZ\Publish\Core\Event\URLWildcard\TranslateEvent;
+use eZ\Publish\Core\Event\URLWildcardService;
 
 class URLWildcardServiceTest extends AbstractServiceTest
 {

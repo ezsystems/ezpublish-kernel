@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\UserPreferenceServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\UserPreferenceService as UserPreferenceServiceInterface;
 use eZ\Publish\Core\Event\UserPreference\BeforeSetUserPreferenceEvent;
 use eZ\Publish\Core\Event\UserPreference\SetUserPreferenceEvent;
+use eZ\Publish\SPI\Repository\Decorator\UserPreferenceServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class UserPreferenceService extends UserPreferenceServiceDecorator
 {

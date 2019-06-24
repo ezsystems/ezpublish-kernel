@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeRemoveContentTypeTranslationEvent extends BeforeEvent
 {
@@ -44,8 +45,12 @@ final class BeforeRemoveContentTypeTranslationEvent extends BeforeEvent
         return $this->languageCode;
     }
 
-    public function getNewContentTypeDraft(): ?ContentTypeDraft
+    public function getNewContentTypeDraft(): ContentTypeDraft
     {
+        if (!$this->hasNewContentTypeDraft()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasNewContentTypeDraft() or set it by setNewContentTypeDraft() before you call getter.', ContentTypeDraft::class));
+        }
+
         return $this->newContentTypeDraft;
     }
 

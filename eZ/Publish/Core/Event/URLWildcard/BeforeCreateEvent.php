@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\URLWildcard;
 
 use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCreateEvent extends BeforeEvent
 {
@@ -46,8 +47,12 @@ final class BeforeCreateEvent extends BeforeEvent
         return $this->forward;
     }
 
-    public function getUrlWildcard(): ?URLWildcard
+    public function getUrlWildcard(): URLWildcard
     {
+        if (!$this->hasUrlWildcard()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUrlWildcard() or set it by setUrlWildcard() before you call getter.', URLWildcard::class));
+        }
+
         return $this->urlWildcard;
     }
 

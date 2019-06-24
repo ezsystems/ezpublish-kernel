@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\RoleServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\RoleService as RoleServiceInterface;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\Policy;
@@ -59,6 +57,8 @@ use eZ\Publish\Core\Event\Role\UpdatePolicyByRoleDraftEvent;
 use eZ\Publish\Core\Event\Role\UpdatePolicyEvent;
 use eZ\Publish\Core\Event\Role\UpdateRoleDraftEvent;
 use eZ\Publish\Core\Event\Role\UpdateRoleEvent;
+use eZ\Publish\SPI\Repository\Decorator\RoleServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RoleService extends RoleServiceDecorator
 {

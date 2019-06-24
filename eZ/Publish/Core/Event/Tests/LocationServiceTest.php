@@ -11,23 +11,23 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use eZ\Publish\Core\Event\LocationService;
-use eZ\Publish\Core\Event\Location\CopySubtreeEvent;
 use eZ\Publish\Core\Event\Location\BeforeCopySubtreeEvent;
-use eZ\Publish\Core\Event\Location\CreateLocationEvent;
 use eZ\Publish\Core\Event\Location\BeforeCreateLocationEvent;
-use eZ\Publish\Core\Event\Location\DeleteLocationEvent;
 use eZ\Publish\Core\Event\Location\BeforeDeleteLocationEvent;
-use eZ\Publish\Core\Event\Location\HideLocationEvent;
 use eZ\Publish\Core\Event\Location\BeforeHideLocationEvent;
-use eZ\Publish\Core\Event\Location\MoveSubtreeEvent;
 use eZ\Publish\Core\Event\Location\BeforeMoveSubtreeEvent;
-use eZ\Publish\Core\Event\Location\SwapLocationEvent;
 use eZ\Publish\Core\Event\Location\BeforeSwapLocationEvent;
-use eZ\Publish\Core\Event\Location\UnhideLocationEvent;
 use eZ\Publish\Core\Event\Location\BeforeUnhideLocationEvent;
-use eZ\Publish\Core\Event\Location\UpdateLocationEvent;
 use eZ\Publish\Core\Event\Location\BeforeUpdateLocationEvent;
+use eZ\Publish\Core\Event\Location\CopySubtreeEvent;
+use eZ\Publish\Core\Event\Location\CreateLocationEvent;
+use eZ\Publish\Core\Event\Location\DeleteLocationEvent;
+use eZ\Publish\Core\Event\Location\HideLocationEvent;
+use eZ\Publish\Core\Event\Location\MoveSubtreeEvent;
+use eZ\Publish\Core\Event\Location\SwapLocationEvent;
+use eZ\Publish\Core\Event\Location\UnhideLocationEvent;
+use eZ\Publish\Core\Event\Location\UpdateLocationEvent;
+use eZ\Publish\Core\Event\LocationService;
 
 class LocationServiceTest extends AbstractServiceTest
 {

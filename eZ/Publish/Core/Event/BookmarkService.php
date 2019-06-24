@@ -8,14 +8,14 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\BookmarkServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Event\Bookmark\BeforeCreateBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\BeforeDeleteBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\CreateBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\DeleteBookmarkEvent;
+use eZ\Publish\SPI\Repository\Decorator\BookmarkServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class BookmarkService extends BookmarkServiceDecorator
 {

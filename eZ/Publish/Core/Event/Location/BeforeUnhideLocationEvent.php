@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\Location;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUnhideLocationEvent extends BeforeEvent
 {
@@ -33,8 +34,12 @@ final class BeforeUnhideLocationEvent extends BeforeEvent
         return $this->location;
     }
 
-    public function getRevealedLocation(): ?Location
+    public function getRevealedLocation(): Location
     {
+        if (!$this->hasRevealedLocation()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasRevealedLocation() or set it by setRevealedLocation() before you call getter.', Location::class));
+        }
+
         return $this->revealedLocation;
     }
 

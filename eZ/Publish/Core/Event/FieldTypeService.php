@@ -8,9 +8,9 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
+use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 use eZ\Publish\SPI\Repository\Decorator\FieldTypeServiceDecorator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use eZ\Publish\API\Repository\FieldTypeService as FieldTypeServiceInterface;
 
 class FieldTypeService extends FieldTypeServiceDecorator
 {

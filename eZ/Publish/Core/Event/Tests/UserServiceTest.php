@@ -14,27 +14,27 @@ use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct;
 use eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
-use eZ\Publish\Core\Event\UserService;
 use eZ\Publish\Core\Event\User\AssignUserToUserGroupEvent;
 use eZ\Publish\Core\Event\User\BeforeAssignUserToUserGroupEvent;
-use eZ\Publish\Core\Event\User\CreateUserEvent;
 use eZ\Publish\Core\Event\User\BeforeCreateUserEvent;
-use eZ\Publish\Core\Event\User\CreateUserGroupEvent;
 use eZ\Publish\Core\Event\User\BeforeCreateUserGroupEvent;
-use eZ\Publish\Core\Event\User\DeleteUserEvent;
 use eZ\Publish\Core\Event\User\BeforeDeleteUserEvent;
-use eZ\Publish\Core\Event\User\DeleteUserGroupEvent;
 use eZ\Publish\Core\Event\User\BeforeDeleteUserGroupEvent;
-use eZ\Publish\Core\Event\User\MoveUserGroupEvent;
 use eZ\Publish\Core\Event\User\BeforeMoveUserGroupEvent;
-use eZ\Publish\Core\Event\User\UnAssignUserFromUserGroupEvent;
 use eZ\Publish\Core\Event\User\BeforeUnAssignUserFromUserGroupEvent;
-use eZ\Publish\Core\Event\User\UpdateUserEvent;
 use eZ\Publish\Core\Event\User\BeforeUpdateUserEvent;
-use eZ\Publish\Core\Event\User\UpdateUserGroupEvent;
 use eZ\Publish\Core\Event\User\BeforeUpdateUserGroupEvent;
-use eZ\Publish\Core\Event\User\UpdateUserTokenEvent;
 use eZ\Publish\Core\Event\User\BeforeUpdateUserTokenEvent;
+use eZ\Publish\Core\Event\User\CreateUserEvent;
+use eZ\Publish\Core\Event\User\CreateUserGroupEvent;
+use eZ\Publish\Core\Event\User\DeleteUserEvent;
+use eZ\Publish\Core\Event\User\DeleteUserGroupEvent;
+use eZ\Publish\Core\Event\User\MoveUserGroupEvent;
+use eZ\Publish\Core\Event\User\UnAssignUserFromUserGroupEvent;
+use eZ\Publish\Core\Event\User\UpdateUserEvent;
+use eZ\Publish\Core\Event\User\UpdateUserGroupEvent;
+use eZ\Publish\Core\Event\User\UpdateUserTokenEvent;
+use eZ\Publish\Core\Event\UserService;
 
 class UserServiceTest extends AbstractServiceTest
 {

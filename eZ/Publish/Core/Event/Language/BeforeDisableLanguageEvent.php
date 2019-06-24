@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\Language;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeDisableLanguageEvent extends BeforeEvent
 {
@@ -33,8 +34,12 @@ final class BeforeDisableLanguageEvent extends BeforeEvent
         return $this->language;
     }
 
-    public function getDisabledLanguage(): ?Language
+    public function getDisabledLanguage(): Language
     {
+        if (!$this->hasDisabledLanguage()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasDisabledLanguage() or set it by setDisabledLanguage() before you call getter.', Language::class));
+        }
+
         return $this->disabledLanguage;
     }
 

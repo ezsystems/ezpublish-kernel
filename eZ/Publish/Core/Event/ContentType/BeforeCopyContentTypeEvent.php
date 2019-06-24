@@ -11,6 +11,7 @@ namespace eZ\Publish\Core\Event\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeCopyContentTypeEvent extends BeforeEvent
 {
@@ -45,8 +46,12 @@ final class BeforeCopyContentTypeEvent extends BeforeEvent
         return $this->creator;
     }
 
-    public function getContentTypeCopy(): ?ContentType
+    public function getContentTypeCopy(): ContentType
     {
+        if (!$this->hasContentTypeCopy()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasContentTypeCopy() or set it by setContentTypeCopy() before you call getter.', ContentType::class));
+        }
+
         return $this->contentTypeCopy;
     }
 

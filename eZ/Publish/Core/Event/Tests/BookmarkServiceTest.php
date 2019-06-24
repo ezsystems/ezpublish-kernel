@@ -8,11 +8,11 @@ namespace eZ\Publish\Core\Event\Tests;
 
 use eZ\Publish\API\Repository\BookmarkService as BookmarkServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Event\BookmarkService;
-use eZ\Publish\Core\Event\Bookmark\CreateBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\BeforeCreateBookmarkEvent;
-use eZ\Publish\Core\Event\Bookmark\DeleteBookmarkEvent;
 use eZ\Publish\Core\Event\Bookmark\BeforeDeleteBookmarkEvent;
+use eZ\Publish\Core\Event\Bookmark\CreateBookmarkEvent;
+use eZ\Publish\Core\Event\Bookmark\DeleteBookmarkEvent;
+use eZ\Publish\Core\Event\BookmarkService;
 
 class BookmarkServiceTest extends AbstractServiceTest
 {

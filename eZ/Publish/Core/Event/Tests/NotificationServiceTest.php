@@ -9,13 +9,13 @@ namespace eZ\Publish\Core\Event\Tests;
 use eZ\Publish\API\Repository\NotificationService as NotificationServiceInterface;
 use eZ\Publish\API\Repository\Values\Notification\CreateStruct;
 use eZ\Publish\API\Repository\Values\Notification\Notification;
-use eZ\Publish\Core\Event\NotificationService;
-use eZ\Publish\Core\Event\Notification\CreateNotificationEvent;
 use eZ\Publish\Core\Event\Notification\BeforeCreateNotificationEvent;
-use eZ\Publish\Core\Event\Notification\DeleteNotificationEvent;
 use eZ\Publish\Core\Event\Notification\BeforeDeleteNotificationEvent;
-use eZ\Publish\Core\Event\Notification\MarkNotificationAsReadEvent;
 use eZ\Publish\Core\Event\Notification\BeforeMarkNotificationAsReadEvent;
+use eZ\Publish\Core\Event\Notification\CreateNotificationEvent;
+use eZ\Publish\Core\Event\Notification\DeleteNotificationEvent;
+use eZ\Publish\Core\Event\Notification\MarkNotificationAsReadEvent;
+use eZ\Publish\Core\Event\NotificationService;
 
 class NotificationServiceTest extends AbstractServiceTest
 {

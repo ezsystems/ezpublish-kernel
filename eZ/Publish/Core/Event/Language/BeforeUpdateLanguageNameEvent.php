@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\Event\Language;
 
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\Core\Event\BeforeEvent;
+use UnexpectedValueException;
 
 final class BeforeUpdateLanguageNameEvent extends BeforeEvent
 {
@@ -44,8 +45,12 @@ final class BeforeUpdateLanguageNameEvent extends BeforeEvent
         return $this->newName;
     }
 
-    public function getUpdatedLanguage(): ?Language
+    public function getUpdatedLanguage(): Language
     {
+        if (!$this->hasUpdatedLanguage()) {
+            throw new UnexpectedValueException(sprintf('Return value is not set or not a type of %s. Check hasUpdatedLanguage() or set it by setUpdatedLanguage() before you call getter.', Language::class));
+        }
+
         return $this->updatedLanguage;
     }
 

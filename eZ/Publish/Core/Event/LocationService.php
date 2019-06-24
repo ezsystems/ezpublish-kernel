@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\LocationServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\LocationService as LocationServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -31,6 +29,8 @@ use eZ\Publish\Core\Event\Location\MoveSubtreeEvent;
 use eZ\Publish\Core\Event\Location\SwapLocationEvent;
 use eZ\Publish\Core\Event\Location\UnhideLocationEvent;
 use eZ\Publish\Core\Event\Location\UpdateLocationEvent;
+use eZ\Publish\SPI\Repository\Decorator\LocationServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class LocationService extends LocationServiceDecorator
 {

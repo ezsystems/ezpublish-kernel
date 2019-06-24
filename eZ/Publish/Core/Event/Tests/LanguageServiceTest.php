@@ -9,17 +9,17 @@ namespace eZ\Publish\Core\Event\Tests;
 use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Language;
 use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
-use eZ\Publish\Core\Event\LanguageService;
-use eZ\Publish\Core\Event\Language\CreateLanguageEvent;
 use eZ\Publish\Core\Event\Language\BeforeCreateLanguageEvent;
-use eZ\Publish\Core\Event\Language\DeleteLanguageEvent;
 use eZ\Publish\Core\Event\Language\BeforeDeleteLanguageEvent;
-use eZ\Publish\Core\Event\Language\DisableLanguageEvent;
 use eZ\Publish\Core\Event\Language\BeforeDisableLanguageEvent;
-use eZ\Publish\Core\Event\Language\EnableLanguageEvent;
 use eZ\Publish\Core\Event\Language\BeforeEnableLanguageEvent;
-use eZ\Publish\Core\Event\Language\UpdateLanguageNameEvent;
 use eZ\Publish\Core\Event\Language\BeforeUpdateLanguageNameEvent;
+use eZ\Publish\Core\Event\Language\CreateLanguageEvent;
+use eZ\Publish\Core\Event\Language\DeleteLanguageEvent;
+use eZ\Publish\Core\Event\Language\DisableLanguageEvent;
+use eZ\Publish\Core\Event\Language\EnableLanguageEvent;
+use eZ\Publish\Core\Event\Language\UpdateLanguageNameEvent;
+use eZ\Publish\Core\Event\LanguageService;
 
 class LanguageServiceTest extends AbstractServiceTest
 {

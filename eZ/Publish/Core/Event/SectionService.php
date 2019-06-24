@@ -8,8 +8,6 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Event;
 
-use eZ\Publish\SPI\Repository\Decorator\SectionServiceDecorator;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Location;
@@ -26,6 +24,8 @@ use eZ\Publish\Core\Event\Section\BeforeUpdateSectionEvent;
 use eZ\Publish\Core\Event\Section\CreateSectionEvent;
 use eZ\Publish\Core\Event\Section\DeleteSectionEvent;
 use eZ\Publish\Core\Event\Section\UpdateSectionEvent;
+use eZ\Publish\SPI\Repository\Decorator\SectionServiceDecorator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SectionService extends SectionServiceDecorator
 {
