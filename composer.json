@@ -45,7 +45,8 @@
         "jms/translation-bundle": "^1.4",
         "twig/twig": "^2.5",
         "twig/extensions": "^1.5.4",
-        "friendsofsymfony/jsrouting-bundle": "^2.3.0"
+        "friendsofsymfony/jsrouting-bundle": "^2.3.0",
+        "nyholm/psr7": "^1.1"
     },
     "require-dev": {
         "brianium/paratest": "^3.0",
