@@ -34,7 +34,20 @@ Changes affecting version compatibility with former or future versions.
 
 * Interface `eZ\Publish\SPI\FieldType\Nameable` has been removed.
 
+* `ez_trans_prop` twig function was removed
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
 * View parameter `pagelayout` set by `pagelayout` setting is deprecated, use `page_layout` instead in your Twig templates.
+
+
+## Renamed features
+
+* `ezpublish` global twig variable was renamed to `ezplatform`
+* `ez_is_field_empty` twig function  was renamed to `ez_field_is_empty`
+* `ez_first_filled_image_field_identifier` twig function  was renamed to `ez_content_field_identifier_first_filed_image`
+* `ez_render_fielddefinition_settings` twig function  was renamed to `ez_render_field_definition_settings`
+* `ez_image_asset_content_field_identifier` twig function  was renamed to `ez_content_field_identifier_image_asset`
+* `richtext_to_html5` twig filter  was renamed to `ez_richtext_to_html5`
+* `richtext_to_html5_edit` twig filter  was renamed to `ez_richtext_to_html5_edit`
