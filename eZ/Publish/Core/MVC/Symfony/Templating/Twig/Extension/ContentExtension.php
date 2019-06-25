@@ -92,7 +92,7 @@ class ContentExtension extends AbstractExtension
                 [$this, 'getTranslatedFieldDefinitionDescription']
             ),
             new TwigFunction(
-                'ez_content_field_identifier_first_filed_image',
+                'ez_content_field_identifier_first_filled_image',
                 [$this, 'getFirstFilledImageFieldIdentifier']
             ),
         ];
