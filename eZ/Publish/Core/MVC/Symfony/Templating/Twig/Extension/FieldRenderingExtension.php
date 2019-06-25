@@ -74,7 +74,7 @@ class FieldRenderingExtension extends AbstractExtension
                 ['is_safe' => ['html'], 'needs_environment' => true]
             ),
             new TwigFunction(
-                'ez_render_fielddefinition_settings',
+                'ez_render_field_definition_settings',
                 function (Environment $environment, FieldDefinition $fieldDefinition, array $params = []) {
                     $this->fieldBlockRenderer->setTwig($environment);
 

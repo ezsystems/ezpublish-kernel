@@ -1,4 +1,4 @@
-{% set image_field_identifier = ez_image_asset_content_field_identifier() %}
+{% set image_field_identifier = ez_content_field_identifier_image_asset() %}
 
 {% if image_field_identifier is not null %}
     {{ ez_render_field(content, image_field_identifier, {

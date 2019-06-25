@@ -1,7 +1,7 @@
 --TEST--
-"ez_is_field_empty" function
+"ez_field_is_empty" function
 --TEMPLATE--
-{% if ez_is_field_empty( content, field ) %}
+{% if ez_field_is_empty( content, field ) %}
     empty
 {% else %}
     not empty

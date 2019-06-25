@@ -1,11 +1,11 @@
 --TEST--
-"ez_render_fielddefinition_settings" function
+"ez_render_field_definition_settings" function
 --TEMPLATE--
-{{ ez_render_fielddefinition_settings( nooverride ) }}
-{{ ez_render_fielddefinition_settings( overrides ) }}
-{{ ez_render_fielddefinition_settings( notdefault ) }}
-{{ ez_render_fielddefinition_settings( withdata ) }}
-{{ ez_render_fielddefinition_settings( notexisting ) }}
+{{ ez_render_field_definition_settings( nooverride ) }}
+{{ ez_render_field_definition_settings( overrides ) }}
+{{ ez_render_field_definition_settings( notdefault ) }}
+{{ ez_render_field_definition_settings( withdata ) }}
+{{ ez_render_field_definition_settings( notexisting ) }}
 --DATA--
 return array(
     'nooverride' => $this->getFieldDefinition( 'eznooverride' ),

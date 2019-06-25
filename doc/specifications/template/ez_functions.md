@@ -33,11 +33,12 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
 
   `Field|null = ez_field_value( Content $content, string $fieldDefIdentifier[, string $forcedLanguage] )`
 
-* ez_is_field_empty
+* ez_field_is_empty
 
-  _Since 5.2, starting 5.3 it optionally supports Field object as second argument_
+  _Since 5.3, starting 5.3 it optionally supports Field object as second argument_
+  _Since 8.0 renamed from ez_is_field_empty
 
-  `bool = ez_is_field_empty( Content $content, string|Field $fieldDefIdentifier[, string $forcedLanguage] )`
+  `bool = ez_field_is_empty( Content $content, string|Field $fieldDefIdentifier[, string $forcedLanguage] )`
 
 * ez_field_name
 
@@ -50,23 +51,6 @@ Note: PHP Object names referred to in these examples exist in the \eZ\Publish\AP
   _Since 5.4_
 
   `string|null = ez_field_description( Content|ContentInfo $content, string $fieldDefIdentifier[, string $forcedLanguage] )`
-
-* ez_trans_prop
-
-  _Since 5.4_
-
-  `string|null = ez_trans_prop( \eZ\Publish\API\Repository\Values\ValueObject $object, string $property[, string $forcedLanguage] )`
-
-  A low level generic helper, will check if `{$property}s` property or `get{$property}` method exists on provided object
-  Using one or the other will attempt to get a value using either forced language _or_ SiteAccess language list, with
-  _main language_ fallback if no other language had a value.
-
-  _Main language_ is attempted to be applied in the following way for Value objects that support this:
-   * property: Use mainLanguageCode property if it exists, but not if alwaysAvailable exists and is true
-   *  method: Provide $langueage = null as argument to method, depends on logic of ValueObject if this gives a value or not
-
-  Example: `ez_trans_prop( versionInfo, 'name' )` will provide the same result as using `ez_content_name( content )`, in
-      both cases `VersionInfo->getName( $lang )` is internally used in prioritized language order, with main language fallback.
       
 * ez_field
 

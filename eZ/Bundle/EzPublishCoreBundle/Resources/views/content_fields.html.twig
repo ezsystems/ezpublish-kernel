@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block ezrichtext_field %}
-    {%- set field_value = field.value.xml|richtext_to_html5 -%}
+    {%- set field_value = field.value.xml|ez_richtext_to_html5 -%}
     {{ block( 'simple_block_field' ) }}
 {% endblock %}
 
@@ -71,7 +71,7 @@
 
 {% block ezdatetime_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
             {% set field_value = field.value.value|localizeddate( 'short', 'medium', parameters.locale ) %}
         {% else %}
@@ -84,7 +84,7 @@
 
 {% block ezdate_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         {% set field_value = field.value.date|localizeddate( 'short', 'none', parameters.locale, false ) %}
         {{ block( 'simple_block_field' ) }}
     {% endif %}
@@ -93,7 +93,7 @@
 
 {% block eztime_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         {% if fieldSettings.useSeconds %}
             {% set field_value = field.value.time|localizeddate( 'none', 'medium', parameters.locale, 'UTC' ) %}
         {% else %}
@@ -106,7 +106,7 @@
 
 {% block ezemail_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         {% set field_value = field.value.email %}
         <a href="mailto:{{ field.value.email|escape( 'url' ) }}" {{ block( 'field_attributes' ) }}>{{ field.value.email }}</a>
     {% endif %}
@@ -115,7 +115,7 @@
 
 {% block ezinteger_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         {% set field_value = field.value.value %}
         {{ block( 'simple_inline_field' ) }}
     {% endif %}
@@ -125,7 +125,7 @@
 {# @todo: handle localization #}
 {% block ezfloat_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         {% set field_value = field.value.value %}
         {{ block( 'simple_inline_field' ) }}
     {% endif %}
@@ -134,7 +134,7 @@
 
 {% block ezurl_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         <a href="{{ field.value.link }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.text ? field.value.text : field.value.link }}</a>
     {% endif %}
@@ -150,7 +150,7 @@
 
 {% block ezkeyword_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         <ul {{ block( 'field_attributes' ) }}>
         {% for keyword in field.value.values %}
             <li>{{ keyword }}</li>
@@ -206,7 +206,7 @@
 
 {% block ezbinaryfile_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
         {% set route_reference = ez_route( 'ez_content_download', { 'content': content, 'fieldIdentifier': field.fieldDefIdentifier } ) %}
         <a href="{{ path( route_reference ) }}"
             {{ block( 'field_attributes' ) }}>{{ field.value.fileName }}</a>&nbsp;({{ field.value.fileSize|ez_file_size( 1 ) }})
@@ -215,7 +215,7 @@
 {% endblock %}
 
 {% block ezmedia_field %}
-{% if not ez_is_field_empty( content, field ) %}
+{% if not ez_field_is_empty( content, field ) %}
 {% spaceless %}
     {% set type = fieldSettings.mediaType %}
     {% set value = field.value %}
@@ -273,7 +273,7 @@
 
 {% block ezobjectrelationlist_field %}
 {% spaceless %}
-    {% if not ez_is_field_empty( content, field ) %}
+    {% if not ez_field_is_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
         {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
         {# @todo should be uncommented once HTTP cache bundle is enabled #}
@@ -428,7 +428,7 @@
  #}
 {% block ezimage_field %}
 {% spaceless %}
-{% if not ez_is_field_empty( content, field ) %}
+{% if not ez_field_is_empty( content, field ) %}
 <figure {{ block( 'field_attributes' ) }}>
     {% set imageAlias = ez_image_alias( field, versionInfo, parameters.alias|default( 'original' ) ) %}
     {% set src = imageAlias ? asset( imageAlias.uri ) : "//:0" %}
@@ -455,7 +455,7 @@
 
 {% block ezimageasset_field %}
     {% spaceless %}
-        {% if not ez_is_field_empty(content, field) and parameters.available %}
+        {% if not ez_field_is_empty(content, field) and parameters.available %}
 {#            {{ fos_httpcache_tag('relation-' ~
             {# @todo should be uncommented once HTTP cache bundle is enabled #}field.value.destinationContentId) }}#}
             <div {{ block('field_attributes') }}>
@@ -474,7 +474,7 @@
 
 {% block ezobjectrelation_field %}
 {% spaceless %}
-{% if not ez_is_field_empty( content, field ) and parameters.available %}
+{% if not ez_field_is_empty( content, field ) and parameters.available %}
 {#    {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}#}
     {# @todo should be uncommented once HTTP cache bundle is enabled #}
     <div {{ block( 'field_attributes' ) }}>
