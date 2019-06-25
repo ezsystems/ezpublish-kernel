@@ -32,7 +32,7 @@ final class RecoverEvent extends AfterEvent
     public function __construct(
         Location $location,
         TrashItem $trashItem,
-        Location $newParentLocation
+        ?Location $newParentLocation = null
     ) {
         $this->trashItem = $trashItem;
         $this->newParentLocation = $newParentLocation;
@@ -44,7 +44,7 @@ final class RecoverEvent extends AfterEvent
         return $this->trashItem;
     }
 
-    public function getNewParentLocation(): Location
+    public function getNewParentLocation(): ?Location
     {
         return $this->newParentLocation;
     }

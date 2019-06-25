@@ -80,7 +80,7 @@ class ContentService extends ContentServiceDecorator
 
         $content = $beforeEvent->hasContent()
             ? $beforeEvent->getContent()
-            : parent::createContent($contentCreateStruct, $locationCreateStructs);
+            : $this->innerService->createContent($contentCreateStruct, $locationCreateStructs);
 
         $this->eventDispatcher->dispatch(new CreateContentEvent($content, ...$eventData));
 
@@ -103,7 +103,7 @@ class ContentService extends ContentServiceDecorator
 
         $content = $beforeEvent->hasContent()
             ? $beforeEvent->getContent()
-            : parent::updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
+            : $this->innerService->updateContentMetadata($contentInfo, $contentMetadataUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateContentMetadataEvent($content, ...$eventData));
 
@@ -121,7 +121,7 @@ class ContentService extends ContentServiceDecorator
 
         $locations = $beforeEvent->hasLocations()
             ? $beforeEvent->getLocations()
-            : parent::deleteContent($contentInfo);
+            : $this->innerService->deleteContent($contentInfo);
 
         $this->eventDispatcher->dispatch(new DeleteContentEvent($locations, ...$eventData));
 
@@ -146,7 +146,7 @@ class ContentService extends ContentServiceDecorator
 
         $contentDraft = $beforeEvent->hasContentDraft()
             ? $beforeEvent->getContentDraft()
-            : parent::createContentDraft($contentInfo, $versionInfo, $creator);
+            : $this->innerService->createContentDraft($contentInfo, $versionInfo, $creator);
 
         $this->eventDispatcher->dispatch(new CreateContentDraftEvent($contentDraft, ...$eventData));
 
@@ -169,7 +169,7 @@ class ContentService extends ContentServiceDecorator
 
         $content = $beforeEvent->hasContent()
             ? $beforeEvent->getContent()
-            : parent::updateContent($versionInfo, $contentUpdateStruct);
+            : $this->innerService->updateContent($versionInfo, $contentUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateContentEvent($content, ...$eventData));
 
@@ -187,7 +187,7 @@ class ContentService extends ContentServiceDecorator
 
         $content = $beforeEvent->hasContent()
             ? $beforeEvent->getContent()
-            : parent::publishVersion($versionInfo);
+            : $this->innerService->publishVersion($versionInfo);
 
         $this->eventDispatcher->dispatch(new PublishVersionEvent($content, ...$eventData));
 
@@ -203,7 +203,7 @@ class ContentService extends ContentServiceDecorator
             return;
         }
 
-        parent::deleteVersion($versionInfo);
+        $this->innerService->deleteVersion($versionInfo);
 
         $this->eventDispatcher->dispatch(new DeleteVersionEvent(...$eventData));
     }
@@ -226,7 +226,7 @@ class ContentService extends ContentServiceDecorator
 
         $content = $beforeEvent->hasContent()
             ? $beforeEvent->getContent()
-            : parent::copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo);
+            : $this->innerService->copyContent($contentInfo, $destinationLocationCreateStruct, $versionInfo);
 
         $this->eventDispatcher->dispatch(new CopyContentEvent($content, ...$eventData));
 
@@ -249,7 +249,7 @@ class ContentService extends ContentServiceDecorator
 
         $relation = $beforeEvent->hasRelation()
             ? $beforeEvent->getRelation()
-            : parent::addRelation($sourceVersion, $destinationContent);
+            : $this->innerService->addRelation($sourceVersion, $destinationContent);
 
         $this->eventDispatcher->dispatch(new AddRelationEvent($relation, ...$eventData));
 
@@ -270,7 +270,7 @@ class ContentService extends ContentServiceDecorator
             return;
         }
 
-        parent::deleteRelation($sourceVersion, $destinationContent);
+        $this->innerService->deleteRelation($sourceVersion, $destinationContent);
 
         $this->eventDispatcher->dispatch(new DeleteRelationEvent(...$eventData));
     }
@@ -289,7 +289,7 @@ class ContentService extends ContentServiceDecorator
             return;
         }
 
-        parent::deleteTranslation($contentInfo, $languageCode);
+        $this->innerService->deleteTranslation($contentInfo, $languageCode);
 
         $this->eventDispatcher->dispatch(new DeleteTranslationEvent(...$eventData));
     }
@@ -303,7 +303,7 @@ class ContentService extends ContentServiceDecorator
             return;
         }
 
-        parent::hideContent($contentInfo);
+        $this->innerService->hideContent($contentInfo);
 
         $this->eventDispatcher->dispatch(new HideContentEvent(...$eventData));
     }
@@ -317,7 +317,7 @@ class ContentService extends ContentServiceDecorator
             return;
         }
 
-        parent::revealContent($contentInfo);
+        $this->innerService->revealContent($contentInfo);
 
         $this->eventDispatcher->dispatch(new RevealContentEvent(...$eventData));
     }

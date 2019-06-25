@@ -42,7 +42,7 @@ class BookmarkService extends BookmarkServiceDecorator
             return;
         }
 
-        parent::createBookmark($location);
+        $this->innerService->createBookmark($location);
 
         $this->eventDispatcher->dispatch(new CreateBookmarkEvent(...$eventData));
     }
@@ -56,7 +56,7 @@ class BookmarkService extends BookmarkServiceDecorator
             return;
         }
 
-        parent::deleteBookmark($location);
+        $this->innerService->deleteBookmark($location);
 
         $this->eventDispatcher->dispatch(new DeleteBookmarkEvent(...$eventData));
     }

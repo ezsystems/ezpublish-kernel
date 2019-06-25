@@ -40,7 +40,7 @@ final class BeforeCopyContentEvent extends BeforeEvent
     public function __construct(
         ContentInfo $contentInfo,
         LocationCreateStruct $destinationLocationCreateStruct,
-        VersionInfo $versionInfo
+        ?VersionInfo $versionInfo = null
     ) {
         $this->contentInfo = $contentInfo;
         $this->destinationLocationCreateStruct = $destinationLocationCreateStruct;

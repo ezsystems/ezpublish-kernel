@@ -59,7 +59,7 @@ class URLAliasService extends URLAliasServiceDecorator
 
         $urlAlias = $beforeEvent->hasUrlAlias()
             ? $beforeEvent->getUrlAlias()
-            : parent::createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
+            : $this->innerService->createUrlAlias($location, $path, $languageCode, $forwarding, $alwaysAvailable);
 
         $this->eventDispatcher->dispatch(new CreateUrlAliasEvent($urlAlias, ...$eventData));
 
@@ -88,7 +88,7 @@ class URLAliasService extends URLAliasServiceDecorator
 
         $urlAlias = $beforeEvent->hasUrlAlias()
             ? $beforeEvent->getUrlAlias()
-            : parent::createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
+            : $this->innerService->createGlobalUrlAlias($resource, $path, $languageCode, $forwarding, $alwaysAvailable);
 
         $this->eventDispatcher->dispatch(new CreateGlobalUrlAliasEvent($urlAlias, ...$eventData));
 
@@ -104,7 +104,7 @@ class URLAliasService extends URLAliasServiceDecorator
             return;
         }
 
-        parent::removeAliases($aliasList);
+        $this->innerService->removeAliases($aliasList);
 
         $this->eventDispatcher->dispatch(new RemoveAliasesEvent(...$eventData));
     }
@@ -118,7 +118,7 @@ class URLAliasService extends URLAliasServiceDecorator
             return;
         }
 
-        parent::refreshSystemUrlAliasesForLocation($location);
+        $this->innerService->refreshSystemUrlAliasesForLocation($location);
 
         $this->eventDispatcher->dispatch(new RefreshSystemUrlAliasesForLocationEvent(...$eventData));
     }

@@ -49,7 +49,7 @@ class TrashService extends TrashServiceDecorator
 
         $trashItem = $beforeEvent->isResultSet()
             ? $beforeEvent->getResult()
-            : parent::trash($location);
+            : $this->innerService->trash($location);
 
         $this->eventDispatcher->dispatch(new TrashEvent($trashItem, ...$eventData));
 
@@ -72,7 +72,7 @@ class TrashService extends TrashServiceDecorator
 
         $location = $beforeEvent->hasLocation()
             ? $beforeEvent->getLocation()
-            : parent::recover($trashItem, $newParentLocation);
+            : $this->innerService->recover($trashItem, $newParentLocation);
 
         $this->eventDispatcher->dispatch(new RecoverEvent($location, ...$eventData));
 
@@ -88,7 +88,7 @@ class TrashService extends TrashServiceDecorator
 
         $resultList = $beforeEvent->hasResultList()
             ? $beforeEvent->getResultList()
-            : parent::emptyTrash();
+            : $this->innerService->emptyTrash();
 
         $this->eventDispatcher->dispatch(new EmptyTrashEvent($resultList));
 
@@ -106,7 +106,7 @@ class TrashService extends TrashServiceDecorator
 
         $result = $beforeEvent->hasResult()
             ? $beforeEvent->getResult()
-            : parent::deleteTrashItem($trashItem);
+            : $this->innerService->deleteTrashItem($trashItem);
 
         $this->eventDispatcher->dispatch(new DeleteTrashItemEvent($result, ...$eventData));
 

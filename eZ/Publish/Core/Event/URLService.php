@@ -48,7 +48,7 @@ class URLService extends URLServiceDecorator
 
         $updatedUrl = $beforeEvent->hasUpdatedUrl()
             ? $beforeEvent->getUpdatedUrl()
-            : parent::updateUrl($url, $struct);
+            : $this->innerService->updateUrl($url, $struct);
 
         $this->eventDispatcher->dispatch(new UpdateUrlEvent($updatedUrl, ...$eventData));
 

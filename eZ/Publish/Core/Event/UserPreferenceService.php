@@ -39,7 +39,7 @@ class UserPreferenceService extends UserPreferenceServiceDecorator
             return;
         }
 
-        parent::setUserPreference($userPreferenceSetStructs);
+        $this->innerService->setUserPreference($userPreferenceSetStructs);
 
         $this->eventDispatcher->dispatch(new SetUserPreferenceEvent(...$eventData));
     }

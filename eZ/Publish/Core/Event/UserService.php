@@ -71,7 +71,7 @@ class UserService extends UserServiceDecorator
 
         $userGroup = $beforeEvent->hasUserGroup()
             ? $beforeEvent->getUserGroup()
-            : parent::createUserGroup($userGroupCreateStruct, $parentGroup);
+            : $this->innerService->createUserGroup($userGroupCreateStruct, $parentGroup);
 
         $this->eventDispatcher->dispatch(new CreateUserGroupEvent($userGroup, ...$eventData));
 
@@ -89,7 +89,7 @@ class UserService extends UserServiceDecorator
 
         $locations = $beforeEvent->hasLocations()
             ? $beforeEvent->getLocations()
-            : parent::deleteUserGroup($userGroup);
+            : $this->innerService->deleteUserGroup($userGroup);
 
         $this->eventDispatcher->dispatch(new DeleteUserGroupEvent($locations, ...$eventData));
 
@@ -110,7 +110,7 @@ class UserService extends UserServiceDecorator
             return;
         }
 
-        parent::moveUserGroup($userGroup, $newParent);
+        $this->innerService->moveUserGroup($userGroup, $newParent);
 
         $this->eventDispatcher->dispatch(new MoveUserGroupEvent(...$eventData));
     }
@@ -131,7 +131,7 @@ class UserService extends UserServiceDecorator
 
         $updatedUserGroup = $beforeEvent->hasUpdatedUserGroup()
             ? $beforeEvent->getUpdatedUserGroup()
-            : parent::updateUserGroup($userGroup, $userGroupUpdateStruct);
+            : $this->innerService->updateUserGroup($userGroup, $userGroupUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateUserGroupEvent($updatedUserGroup, ...$eventData));
 
@@ -154,7 +154,7 @@ class UserService extends UserServiceDecorator
 
         $user = $beforeEvent->hasUser()
             ? $beforeEvent->getUser()
-            : parent::createUser($userCreateStruct, $parentGroups);
+            : $this->innerService->createUser($userCreateStruct, $parentGroups);
 
         $this->eventDispatcher->dispatch(new CreateUserEvent($user, ...$eventData));
 
@@ -172,7 +172,7 @@ class UserService extends UserServiceDecorator
 
         $locations = $beforeEvent->hasLocations()
             ? $beforeEvent->getLocations()
-            : parent::deleteUser($user);
+            : $this->innerService->deleteUser($user);
 
         $this->eventDispatcher->dispatch(new DeleteUserEvent($locations, ...$eventData));
 
@@ -195,7 +195,7 @@ class UserService extends UserServiceDecorator
 
         $updatedUser = $beforeEvent->hasUpdatedUser()
             ? $beforeEvent->getUpdatedUser()
-            : parent::updateUser($user, $userUpdateStruct);
+            : $this->innerService->updateUser($user, $userUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateUserEvent($updatedUser, ...$eventData));
 
@@ -218,7 +218,7 @@ class UserService extends UserServiceDecorator
 
         $updatedUser = $beforeEvent->hasUpdatedUser()
             ? $beforeEvent->getUpdatedUser()
-            : parent::updateUserToken($user, $userTokenUpdateStruct);
+            : $this->innerService->updateUserToken($user, $userTokenUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateUserTokenEvent($updatedUser, ...$eventData));
 
@@ -239,7 +239,7 @@ class UserService extends UserServiceDecorator
             return;
         }
 
-        parent::assignUserToUserGroup($user, $userGroup);
+        $this->innerService->assignUserToUserGroup($user, $userGroup);
 
         $this->eventDispatcher->dispatch(new AssignUserToUserGroupEvent(...$eventData));
     }
@@ -258,7 +258,7 @@ class UserService extends UserServiceDecorator
             return;
         }
 
-        parent::unAssignUserFromUserGroup($user, $userGroup);
+        $this->innerService->unAssignUserFromUserGroup($user, $userGroup);
 
         $this->eventDispatcher->dispatch(new UnAssignUserFromUserGroupEvent(...$eventData));
     }

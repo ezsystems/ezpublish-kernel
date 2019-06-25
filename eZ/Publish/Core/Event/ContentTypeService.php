@@ -80,7 +80,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $contentTypeGroup = $beforeEvent->hasContentTypeGroup()
             ? $beforeEvent->getContentTypeGroup()
-            : parent::createContentTypeGroup($contentTypeGroupCreateStruct);
+            : $this->innerService->createContentTypeGroup($contentTypeGroupCreateStruct);
 
         $this->eventDispatcher->dispatch(new CreateContentTypeGroupEvent($contentTypeGroup, ...$eventData));
 
@@ -101,7 +101,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::updateContentTypeGroup($contentTypeGroup, $contentTypeGroupUpdateStruct);
+        $this->innerService->updateContentTypeGroup($contentTypeGroup, $contentTypeGroupUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateContentTypeGroupEvent(...$eventData));
     }
@@ -115,7 +115,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::deleteContentTypeGroup($contentTypeGroup);
+        $this->innerService->deleteContentTypeGroup($contentTypeGroup);
 
         $this->eventDispatcher->dispatch(new DeleteContentTypeGroupEvent(...$eventData));
     }
@@ -136,7 +136,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $contentTypeDraft = $beforeEvent->hasContentTypeDraft()
             ? $beforeEvent->getContentTypeDraft()
-            : parent::createContentType($contentTypeCreateStruct, $contentTypeGroups);
+            : $this->innerService->createContentType($contentTypeCreateStruct, $contentTypeGroups);
 
         $this->eventDispatcher->dispatch(new CreateContentTypeEvent($contentTypeDraft, ...$eventData));
 
@@ -154,7 +154,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $contentTypeDraft = $beforeEvent->hasContentTypeDraft()
             ? $beforeEvent->getContentTypeDraft()
-            : parent::createContentTypeDraft($contentType);
+            : $this->innerService->createContentTypeDraft($contentType);
 
         $this->eventDispatcher->dispatch(new CreateContentTypeDraftEvent($contentTypeDraft, ...$eventData));
 
@@ -175,7 +175,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
+        $this->innerService->updateContentTypeDraft($contentTypeDraft, $contentTypeUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateContentTypeDraftEvent(...$eventData));
     }
@@ -189,7 +189,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::deleteContentType($contentType);
+        $this->innerService->deleteContentType($contentType);
 
         $this->eventDispatcher->dispatch(new DeleteContentTypeEvent(...$eventData));
     }
@@ -210,7 +210,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $contentTypeCopy = $beforeEvent->hasContentTypeCopy()
             ? $beforeEvent->getContentTypeCopy()
-            : parent::copyContentType($contentType, $creator);
+            : $this->innerService->copyContentType($contentType, $creator);
 
         $this->eventDispatcher->dispatch(new CopyContentTypeEvent($contentTypeCopy, ...$eventData));
 
@@ -231,7 +231,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::assignContentTypeGroup($contentType, $contentTypeGroup);
+        $this->innerService->assignContentTypeGroup($contentType, $contentTypeGroup);
 
         $this->eventDispatcher->dispatch(new AssignContentTypeGroupEvent(...$eventData));
     }
@@ -250,7 +250,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::unassignContentTypeGroup($contentType, $contentTypeGroup);
+        $this->innerService->unassignContentTypeGroup($contentType, $contentTypeGroup);
 
         $this->eventDispatcher->dispatch(new UnassignContentTypeGroupEvent(...$eventData));
     }
@@ -269,7 +269,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
+        $this->innerService->addFieldDefinition($contentTypeDraft, $fieldDefinitionCreateStruct);
 
         $this->eventDispatcher->dispatch(new AddFieldDefinitionEvent(...$eventData));
     }
@@ -288,7 +288,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::removeFieldDefinition($contentTypeDraft, $fieldDefinition);
+        $this->innerService->removeFieldDefinition($contentTypeDraft, $fieldDefinition);
 
         $this->eventDispatcher->dispatch(new RemoveFieldDefinitionEvent(...$eventData));
     }
@@ -309,7 +309,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::updateFieldDefinition($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct);
+        $this->innerService->updateFieldDefinition($contentTypeDraft, $fieldDefinition, $fieldDefinitionUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateFieldDefinitionEvent(...$eventData));
     }
@@ -323,7 +323,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
             return;
         }
 
-        parent::publishContentTypeDraft($contentTypeDraft);
+        $this->innerService->publishContentTypeDraft($contentTypeDraft);
 
         $this->eventDispatcher->dispatch(new PublishContentTypeDraftEvent(...$eventData));
     }
@@ -344,7 +344,7 @@ class ContentTypeService extends ContentTypeServiceDecorator
 
         $newContentTypeDraft = $beforeEvent->hasNewContentTypeDraft()
             ? $beforeEvent->getNewContentTypeDraft()
-            : parent::removeContentTypeTranslation($contentTypeDraft, $languageCode);
+            : $this->innerService->removeContentTypeTranslation($contentTypeDraft, $languageCode);
 
         $this->eventDispatcher->dispatch(new RemoveContentTypeTranslationEvent($newContentTypeDraft, ...$eventData));
 

@@ -33,7 +33,7 @@ final class AssignRoleToUserGroupEvent extends AfterEvent
     public function __construct(
         Role $role,
         UserGroup $userGroup,
-        RoleLimitation $roleLimitation
+        ?RoleLimitation $roleLimitation = null
     ) {
         $this->role = $role;
         $this->userGroup = $userGroup;
@@ -50,7 +50,7 @@ final class AssignRoleToUserGroupEvent extends AfterEvent
         return $this->userGroup;
     }
 
-    public function getRoleLimitation(): RoleLimitation
+    public function getRoleLimitation(): ?RoleLimitation
     {
         return $this->roleLimitation;
     }

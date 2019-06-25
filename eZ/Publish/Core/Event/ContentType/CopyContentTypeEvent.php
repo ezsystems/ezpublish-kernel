@@ -32,7 +32,7 @@ final class CopyContentTypeEvent extends AfterEvent
     public function __construct(
         ContentType $contentTypeCopy,
         ContentType $contentType,
-        User $creator
+        ?User $creator = null
     ) {
         $this->contentTypeCopy = $contentTypeCopy;
         $this->contentType = $contentType;
@@ -49,7 +49,7 @@ final class CopyContentTypeEvent extends AfterEvent
         return $this->contentType;
     }
 
-    public function getCreator(): User
+    public function getCreator(): ?User
     {
         return $this->creator;
     }

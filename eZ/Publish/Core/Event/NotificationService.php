@@ -45,7 +45,7 @@ class NotificationService extends NotificationServiceDecorator
             return;
         }
 
-        parent::markNotificationAsRead($notification);
+        $this->innerService->markNotificationAsRead($notification);
 
         $this->eventDispatcher->dispatch(new MarkNotificationAsReadEvent(...$eventData));
     }
@@ -61,7 +61,7 @@ class NotificationService extends NotificationServiceDecorator
 
         $notification = $beforeEvent->hasNotification()
             ? $beforeEvent->getNotification()
-            : parent::createNotification($createStruct);
+            : $this->innerService->createNotification($createStruct);
 
         $this->eventDispatcher->dispatch(new CreateNotificationEvent($notification, ...$eventData));
 
@@ -77,7 +77,7 @@ class NotificationService extends NotificationServiceDecorator
             return;
         }
 
-        parent::deleteNotification($notification);
+        $this->innerService->deleteNotification($notification);
 
         $this->eventDispatcher->dispatch(new DeleteNotificationEvent(...$eventData));
     }

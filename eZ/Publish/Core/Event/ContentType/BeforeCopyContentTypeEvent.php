@@ -30,7 +30,7 @@ final class BeforeCopyContentTypeEvent extends BeforeEvent
      */
     private $contentTypeCopy;
 
-    public function __construct(ContentType $contentType, User $creator)
+    public function __construct(ContentType $contentType, ?User $creator = null)
     {
         $this->contentType = $contentType;
         $this->creator = $creator;
@@ -41,7 +41,7 @@ final class BeforeCopyContentTypeEvent extends BeforeEvent
         return $this->contentType;
     }
 
-    public function getCreator(): User
+    public function getCreator(): ?User
     {
         return $this->creator;
     }

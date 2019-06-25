@@ -54,7 +54,7 @@ class SectionService extends SectionServiceDecorator
 
         $section = $beforeEvent->hasSection()
             ? $beforeEvent->getSection()
-            : parent::createSection($sectionCreateStruct);
+            : $this->innerService->createSection($sectionCreateStruct);
 
         $this->eventDispatcher->dispatch(new CreateSectionEvent($section, ...$eventData));
 
@@ -77,7 +77,7 @@ class SectionService extends SectionServiceDecorator
 
         $updatedSection = $beforeEvent->hasUpdatedSection()
             ? $beforeEvent->getUpdatedSection()
-            : parent::updateSection($section, $sectionUpdateStruct);
+            : $this->innerService->updateSection($section, $sectionUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateSectionEvent($updatedSection, ...$eventData));
 
@@ -98,7 +98,7 @@ class SectionService extends SectionServiceDecorator
             return;
         }
 
-        parent::assignSection($contentInfo, $section);
+        $this->innerService->assignSection($contentInfo, $section);
 
         $this->eventDispatcher->dispatch(new AssignSectionEvent(...$eventData));
     }
@@ -117,7 +117,7 @@ class SectionService extends SectionServiceDecorator
             return;
         }
 
-        parent::assignSectionToSubtree($location, $section);
+        $this->innerService->assignSectionToSubtree($location, $section);
 
         $this->eventDispatcher->dispatch(new AssignSectionToSubtreeEvent(...$eventData));
     }
@@ -131,7 +131,7 @@ class SectionService extends SectionServiceDecorator
             return;
         }
 
-        parent::deleteSection($section);
+        $this->innerService->deleteSection($section);
 
         $this->eventDispatcher->dispatch(new DeleteSectionEvent(...$eventData));
     }

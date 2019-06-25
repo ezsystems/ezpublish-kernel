@@ -64,7 +64,7 @@ class LocationService extends LocationServiceDecorator
 
         $location = $beforeEvent->hasLocation()
             ? $beforeEvent->getLocation()
-            : parent::copySubtree($subtree, $targetParentLocation);
+            : $this->innerService->copySubtree($subtree, $targetParentLocation);
 
         $this->eventDispatcher->dispatch(new CopySubtreeEvent($location, ...$eventData));
 
@@ -87,7 +87,7 @@ class LocationService extends LocationServiceDecorator
 
         $location = $beforeEvent->hasLocation()
             ? $beforeEvent->getLocation()
-            : parent::createLocation($contentInfo, $locationCreateStruct);
+            : $this->innerService->createLocation($contentInfo, $locationCreateStruct);
 
         $this->eventDispatcher->dispatch(new CreateLocationEvent($location, ...$eventData));
 
@@ -110,7 +110,7 @@ class LocationService extends LocationServiceDecorator
 
         $updatedLocation = $beforeEvent->hasUpdatedLocation()
             ? $beforeEvent->getUpdatedLocation()
-            : parent::updateLocation($location, $locationUpdateStruct);
+            : $this->innerService->updateLocation($location, $locationUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateLocationEvent($updatedLocation, ...$eventData));
 
@@ -131,7 +131,7 @@ class LocationService extends LocationServiceDecorator
             return;
         }
 
-        parent::swapLocation($location1, $location2);
+        $this->innerService->swapLocation($location1, $location2);
 
         $this->eventDispatcher->dispatch(new SwapLocationEvent(...$eventData));
     }
@@ -147,7 +147,7 @@ class LocationService extends LocationServiceDecorator
 
         $hiddenLocation = $beforeEvent->hasHiddenLocation()
             ? $beforeEvent->getHiddenLocation()
-            : parent::hideLocation($location);
+            : $this->innerService->hideLocation($location);
 
         $this->eventDispatcher->dispatch(new HideLocationEvent($hiddenLocation, ...$eventData));
 
@@ -165,7 +165,7 @@ class LocationService extends LocationServiceDecorator
 
         $revealedLocation = $beforeEvent->hasRevealedLocation()
             ? $beforeEvent->getRevealedLocation()
-            : parent::unhideLocation($location);
+            : $this->innerService->unhideLocation($location);
 
         $this->eventDispatcher->dispatch(new UnhideLocationEvent($revealedLocation, ...$eventData));
 
@@ -186,7 +186,7 @@ class LocationService extends LocationServiceDecorator
             return;
         }
 
-        parent::moveSubtree($location, $newParentLocation);
+        $this->innerService->moveSubtree($location, $newParentLocation);
 
         $this->eventDispatcher->dispatch(new MoveSubtreeEvent(...$eventData));
     }
@@ -200,7 +200,7 @@ class LocationService extends LocationServiceDecorator
             return;
         }
 
-        parent::deleteLocation($location);
+        $this->innerService->deleteLocation($location);
 
         $this->eventDispatcher->dispatch(new DeleteLocationEvent(...$eventData));
     }

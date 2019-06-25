@@ -40,7 +40,7 @@ final class CopyContentEvent extends AfterEvent
         Content $content,
         ContentInfo $contentInfo,
         LocationCreateStruct $destinationLocationCreateStruct,
-        VersionInfo $versionInfo
+        ?VersionInfo $versionInfo = null
     ) {
         $this->content = $content;
         $this->contentInfo = $contentInfo;

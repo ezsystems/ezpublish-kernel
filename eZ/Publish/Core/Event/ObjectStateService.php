@@ -62,7 +62,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $objectStateGroup = $beforeEvent->hasObjectStateGroup()
             ? $beforeEvent->getObjectStateGroup()
-            : parent::createObjectStateGroup($objectStateGroupCreateStruct);
+            : $this->innerService->createObjectStateGroup($objectStateGroupCreateStruct);
 
         $this->eventDispatcher->dispatch(new CreateObjectStateGroupEvent($objectStateGroup, ...$eventData));
 
@@ -85,7 +85,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $updatedObjectStateGroup = $beforeEvent->hasUpdatedObjectStateGroup()
             ? $beforeEvent->getUpdatedObjectStateGroup()
-            : parent::updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
+            : $this->innerService->updateObjectStateGroup($objectStateGroup, $objectStateGroupUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateObjectStateGroupEvent($updatedObjectStateGroup, ...$eventData));
 
@@ -101,7 +101,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             return;
         }
 
-        parent::deleteObjectStateGroup($objectStateGroup);
+        $this->innerService->deleteObjectStateGroup($objectStateGroup);
 
         $this->eventDispatcher->dispatch(new DeleteObjectStateGroupEvent(...$eventData));
     }
@@ -122,7 +122,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $objectState = $beforeEvent->hasObjectState()
             ? $beforeEvent->getObjectState()
-            : parent::createObjectState($objectStateGroup, $objectStateCreateStruct);
+            : $this->innerService->createObjectState($objectStateGroup, $objectStateCreateStruct);
 
         $this->eventDispatcher->dispatch(new CreateObjectStateEvent($objectState, ...$eventData));
 
@@ -145,7 +145,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
 
         $updatedObjectState = $beforeEvent->hasUpdatedObjectState()
             ? $beforeEvent->getUpdatedObjectState()
-            : parent::updateObjectState($objectState, $objectStateUpdateStruct);
+            : $this->innerService->updateObjectState($objectState, $objectStateUpdateStruct);
 
         $this->eventDispatcher->dispatch(new UpdateObjectStateEvent($updatedObjectState, ...$eventData));
 
@@ -166,7 +166,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             return;
         }
 
-        parent::setPriorityOfObjectState($objectState, $priority);
+        $this->innerService->setPriorityOfObjectState($objectState, $priority);
 
         $this->eventDispatcher->dispatch(new SetPriorityOfObjectStateEvent(...$eventData));
     }
@@ -180,7 +180,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             return;
         }
 
-        parent::deleteObjectState($objectState);
+        $this->innerService->deleteObjectState($objectState);
 
         $this->eventDispatcher->dispatch(new DeleteObjectStateEvent(...$eventData));
     }
@@ -201,7 +201,7 @@ class ObjectStateService extends ObjectStateServiceDecorator
             return;
         }
 
-        parent::setContentState($contentInfo, $objectStateGroup, $objectState);
+        $this->innerService->setContentState($contentInfo, $objectStateGroup, $objectState);
 
         $this->eventDispatcher->dispatch(new SetContentStateEvent(...$eventData));
     }

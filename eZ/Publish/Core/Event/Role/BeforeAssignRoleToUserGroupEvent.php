@@ -30,7 +30,7 @@ final class BeforeAssignRoleToUserGroupEvent extends BeforeEvent
      */
     private $roleLimitation;
 
-    public function __construct(Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation)
+    public function __construct(Role $role, UserGroup $userGroup, ?RoleLimitation $roleLimitation = null)
     {
         $this->role = $role;
         $this->userGroup = $userGroup;
@@ -47,7 +47,7 @@ final class BeforeAssignRoleToUserGroupEvent extends BeforeEvent
         return $this->userGroup;
     }
 
-    public function getRoleLimitation(): RoleLimitation
+    public function getRoleLimitation(): ?RoleLimitation
     {
         return $this->roleLimitation;
     }

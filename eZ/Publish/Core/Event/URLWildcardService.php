@@ -53,7 +53,7 @@ class URLWildcardService extends URLWildcardServiceDecorator
 
         $urlWildcard = $beforeEvent->hasUrlWildcard()
             ? $beforeEvent->getUrlWildcard()
-            : parent::create($sourceUrl, $destinationUrl, $forward);
+            : $this->innerService->create($sourceUrl, $destinationUrl, $forward);
 
         $this->eventDispatcher->dispatch(new CreateEvent($urlWildcard, ...$eventData));
 
@@ -69,7 +69,7 @@ class URLWildcardService extends URLWildcardServiceDecorator
             return;
         }
 
-        parent::remove($urlWildcard);
+        $this->innerService->remove($urlWildcard);
 
         $this->eventDispatcher->dispatch(new RemoveEvent(...$eventData));
     }
@@ -85,7 +85,7 @@ class URLWildcardService extends URLWildcardServiceDecorator
 
         $result = $beforeEvent->hasResult()
             ? $beforeEvent->getResult()
-            : parent::translate($url);
+            : $this->innerService->translate($url);
 
         $this->eventDispatcher->dispatch(new TranslateEvent($result, ...$eventData));
 

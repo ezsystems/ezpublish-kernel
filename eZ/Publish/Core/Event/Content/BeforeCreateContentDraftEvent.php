@@ -37,7 +37,7 @@ final class BeforeCreateContentDraftEvent extends BeforeEvent
      */
     private $contentDraft;
 
-    public function __construct(ContentInfo $contentInfo, VersionInfo $versionInfo, User $creator)
+    public function __construct(ContentInfo $contentInfo, ?VersionInfo $versionInfo = null, ?User $creator = null)
     {
         $this->contentInfo = $contentInfo;
         $this->versionInfo = $versionInfo;
@@ -49,12 +49,12 @@ final class BeforeCreateContentDraftEvent extends BeforeEvent
         return $this->contentInfo;
     }
 
-    public function getVersionInfo(): VersionInfo
+    public function getVersionInfo(): ?VersionInfo
     {
         return $this->versionInfo;
     }
 
-    public function getCreator(): User
+    public function getCreator(): ?User
     {
         return $this->creator;
     }

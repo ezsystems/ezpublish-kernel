@@ -51,7 +51,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $language = $beforeEvent->hasLanguage()
             ? $beforeEvent->getLanguage()
-            : parent::createLanguage($languageCreateStruct);
+            : $this->innerService->createLanguage($languageCreateStruct);
 
         $this->eventDispatcher->dispatch(new CreateLanguageEvent($language, ...$eventData));
 
@@ -74,7 +74,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $updatedLanguage = $beforeEvent->hasUpdatedLanguage()
             ? $beforeEvent->getUpdatedLanguage()
-            : parent::updateLanguageName($language, $newName);
+            : $this->innerService->updateLanguageName($language, $newName);
 
         $this->eventDispatcher->dispatch(new UpdateLanguageNameEvent($updatedLanguage, ...$eventData));
 
@@ -92,7 +92,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $enabledLanguage = $beforeEvent->hasEnabledLanguage()
             ? $beforeEvent->getEnabledLanguage()
-            : parent::enableLanguage($language);
+            : $this->innerService->enableLanguage($language);
 
         $this->eventDispatcher->dispatch(new EnableLanguageEvent($enabledLanguage, ...$eventData));
 
@@ -110,7 +110,7 @@ class LanguageService extends LanguageServiceDecorator
 
         $disabledLanguage = $beforeEvent->hasDisabledLanguage()
             ? $beforeEvent->getDisabledLanguage()
-            : parent::disableLanguage($language);
+            : $this->innerService->disableLanguage($language);
 
         $this->eventDispatcher->dispatch(new DisableLanguageEvent($disabledLanguage, ...$eventData));
 
@@ -126,7 +126,7 @@ class LanguageService extends LanguageServiceDecorator
             return;
         }
 
-        parent::deleteLanguage($language);
+        $this->innerService->deleteLanguage($language);
 
         $this->eventDispatcher->dispatch(new DeleteLanguageEvent(...$eventData));
     }

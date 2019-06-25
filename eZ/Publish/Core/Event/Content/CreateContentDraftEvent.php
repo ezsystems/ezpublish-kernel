@@ -39,8 +39,8 @@ final class CreateContentDraftEvent extends AfterEvent
     public function __construct(
         Content $contentDraft,
         ContentInfo $contentInfo,
-        VersionInfo $versionInfo,
-        User $creator
+        ?VersionInfo $versionInfo = null,
+        ?User $creator = null
     ) {
         $this->contentDraft = $contentDraft;
         $this->contentInfo = $contentInfo;
@@ -58,12 +58,12 @@ final class CreateContentDraftEvent extends AfterEvent
         return $this->contentInfo;
     }
 
-    public function getVersionInfo(): VersionInfo
+    public function getVersionInfo(): ?VersionInfo
     {
         return $this->versionInfo;
     }
 
-    public function getCreator(): User
+    public function getCreator(): ?User
     {
         return $this->creator;
     }
