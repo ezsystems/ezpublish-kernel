@@ -15,19 +15,13 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class FieldHelper
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\FieldTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\FieldTypeService */
     private $fieldTypeService;
 
-    /**
-     * @var TranslationHelper
-     */
+    /** @var TranslationHelper */
     private $translationHelper;
 
     public function __construct(TranslationHelper $translationHelper, ContentTypeService $contentTypeService, FieldTypeService $fieldTypeService)

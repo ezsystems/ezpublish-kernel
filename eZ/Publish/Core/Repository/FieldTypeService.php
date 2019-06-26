@@ -18,9 +18,7 @@ use eZ\Publish\Core\Repository\Values\ContentType\FieldType;
  */
 class FieldTypeService implements FieldTypeServiceInterface
 {
-    /**
-     * @var Helper\FieldTypeRegistry
-     */
+    /** @var Helper\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
     /**

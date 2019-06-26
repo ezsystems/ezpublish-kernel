@@ -29,14 +29,10 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
  */
 class VersionInfo extends APIVersionInfo
 {
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected $names;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     protected $contentInfo;
 
     /**

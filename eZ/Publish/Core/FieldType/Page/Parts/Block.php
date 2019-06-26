@@ -22,34 +22,22 @@ namespace eZ\Publish\Core\FieldType\Page\Parts;
  */
 class Block extends Base
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $type;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $view;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $overflowId;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $customAttributes;
 
     /**
@@ -59,18 +47,12 @@ class Block extends Base
      */
     protected $action;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $rotation;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $zoneId;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Item[]
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\Parts\Item[] */
     protected $items = [];
 }

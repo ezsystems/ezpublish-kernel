@@ -25,19 +25,13 @@ class DynamicSettingsListener implements EventSubscriberInterface
      */
     private $resettableServiceIds;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $updatableServices;
 
-    /**
-     * @var ExpressionLanguage
-     */
+    /** @var ExpressionLanguage */
     private $expressionLanguage;
 
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     private $container;
 
     public function __construct(array $resettableServiceIds, array $updatableServices, ExpressionLanguage $expressionLanguage = null)

@@ -21,24 +21,16 @@ use PHPUnit\Framework\TestCase;
 
 class AliasGeneratorTest extends TestCase
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\ImageAsset\AliasGenerator
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\ImageAsset\AliasGenerator */
     private $aliasGenerator;
 
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \eZ\Publish\SPI\Variation\VariationHandler|\PHPUnit_Framework_MockObject_MockObject */
     private $innerAliasGenerator;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper|\PHPUnit_Framework_MockObject_MockObject */
     private $assetMapper;
 
     protected function setUp()

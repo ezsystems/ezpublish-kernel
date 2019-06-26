@@ -12,9 +12,7 @@ use PHPUnit\Framework\TestCase;
 
 class RelativeResolverTest extends TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface */
     private $liipResolver;
 
     protected function setUp()

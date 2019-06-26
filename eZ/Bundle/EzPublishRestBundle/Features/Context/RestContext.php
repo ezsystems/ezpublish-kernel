@@ -49,24 +49,16 @@ class RestContext extends Context implements MinkAwareContext
      */
     protected $restDriver;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $url;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $driver;
 
-    /**
-     * @var \Behat\Mink\Mink
-     */
+    /** @var \Behat\Mink\Mink */
     private $mink;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $minkParameters;
 
     /**

@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  */
 class ParameterProvider implements ParameterProviderInterface
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\PageService
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\PageService */
     protected $pageService;
 
     public function __construct(PageService $pageService)

@@ -19,9 +19,7 @@ use DOMDocument;
 
 class SelectionConverter implements Converter
 {
-    /**
-     * @var \eZ\Publish\API\Repository\LanguageService
-     */
+    /** @var \eZ\Publish\API\Repository\LanguageService */
     private $languageService;
 
     /**

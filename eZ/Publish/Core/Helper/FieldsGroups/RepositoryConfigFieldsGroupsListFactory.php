@@ -13,9 +13,7 @@ use Symfony\Component\Translation\TranslatorInterface;
  */
 final class RepositoryConfigFieldsGroupsListFactory
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
     private $configProvider;
 
     public function __construct(RepositoryConfigurationProvider $configProvider)

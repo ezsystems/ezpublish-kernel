@@ -12,8 +12,6 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 class HideContentSignal extends Signal
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $contentId;
 }

@@ -71,9 +71,7 @@ abstract class VersionInfo extends ValueObject implements MultiLanguageName
      */
     protected $creatorId;
 
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     protected $creationDate;
 
     /**

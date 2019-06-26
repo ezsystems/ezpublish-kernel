@@ -17,13 +17,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class VersionUpdate extends ValueObject
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct */
     protected $contentUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     protected $contentType;
 }

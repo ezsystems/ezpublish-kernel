@@ -20,9 +20,7 @@ use PDO;
 
 class RelationListConverter implements Converter
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
     private $db;
 
     /**

@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Values;
  */
 class LogicalAnd extends LogicalOperator
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     const TAG_NAME = 'AND';
 
     /**

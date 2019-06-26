@@ -215,9 +215,7 @@ class UrlStorageTest extends TestCase
         return ['context'];
     }
 
-    /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
     /**
@@ -234,9 +232,7 @@ class UrlStorageTest extends TestCase
         return $this->loggerMock;
     }
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject */
     protected $gatewayMock;
 
     /**

@@ -14,9 +14,7 @@ use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
  */
 class QueryParameterContentViewQueryTypeMapper implements ContentViewQueryTypeMapper
 {
-    /**
-     * @var QueryTypeRegistry
-     */
+    /** @var QueryTypeRegistry */
     private $queryTypeRegistry;
 
     public function __construct(QueryTypeRegistry $queryTypeRegistry)

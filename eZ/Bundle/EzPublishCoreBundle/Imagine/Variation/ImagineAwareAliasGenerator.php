@@ -21,29 +21,19 @@ use Imagine\Image\ImagineInterface;
  */
 class ImagineAwareAliasGenerator implements VariationHandler
 {
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
+    /** @var \eZ\Publish\SPI\Variation\VariationHandler */
     private $aliasGenerator;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator */
     private $variationPathGenerator;
 
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $ioService;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \Imagine\Image\ImagineInterface
-     */
+    /** @var \Imagine\Image\ImagineInterface */
     private $imagine;
 
     public function __construct(

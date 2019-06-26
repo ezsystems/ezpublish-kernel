@@ -48,9 +48,7 @@ class ContentViewBuilder implements ViewBuilder
      */
     private $defaultTemplates;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader
-     */
+    /** @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader */
     private $locationLoader;
 
     public function __construct(

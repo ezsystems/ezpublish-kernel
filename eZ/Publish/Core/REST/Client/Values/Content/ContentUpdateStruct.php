@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct as APIContentUp
  */
 class ContentUpdateStruct extends APIContentUpdateStruct
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Field[] */
     protected $fields = array();
 
     /**

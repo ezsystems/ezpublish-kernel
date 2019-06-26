@@ -30,9 +30,7 @@ class AbstractTestCase extends LanguageAwareTestCase
      */
     private $converterRegistry;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     private $contentTypeHandler;
 
     /**

@@ -17,19 +17,13 @@ class ElasticsearchEngineFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var RepositoryConfigurationProvider
-     */
+    /** @var RepositoryConfigurationProvider */
     private $repositoryConfigurationProvider;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $defaultConnection;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $searchEngineClass;
 
     public function __construct(

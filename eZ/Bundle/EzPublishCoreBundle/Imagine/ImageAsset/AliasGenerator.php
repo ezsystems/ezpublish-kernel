@@ -22,19 +22,13 @@ use eZ\Publish\Core\FieldType\ImageAsset\Value as ImageAssetValue;
  */
 class AliasGenerator implements VariationHandler
 {
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
+    /** @var \eZ\Publish\SPI\Variation\VariationHandler */
     private $innerAliasGenerator;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper
-     */
+    /** @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper */
     private $assetMapper;
 
     /**

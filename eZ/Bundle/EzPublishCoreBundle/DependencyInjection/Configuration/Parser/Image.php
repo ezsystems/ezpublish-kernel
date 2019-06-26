@@ -20,9 +20,7 @@ use Symfony\Component\Config\Definition\Builder\NodeBuilder;
  */
 class Image extends AbstractParser implements SuggestionCollectorAwareInterface
 {
-    /**
-     * @var SuggestionCollectorInterface
-     */
+    /** @var SuggestionCollectorInterface */
     private $suggestionCollector;
 
     public function setSuggestionCollector(SuggestionCollectorInterface $suggestionCollector)

@@ -14,9 +14,7 @@ use Twig_Extension_GlobalsInterface;
 
 class CoreExtension extends Twig_Extension implements Twig_Extension_GlobalsInterface
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper */
     private $globalHelper;
 
     public function __construct(GlobalHelper $globalHelper)

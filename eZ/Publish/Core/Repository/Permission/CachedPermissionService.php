@@ -27,19 +27,13 @@ use Exception;
  */
 class CachedPermissionService implements APIPermissionResolver, APIPermissionCriterionResolver
 {
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionCriterionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionCriterionResolver */
     private $permissionCriterionResolver;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $cacheTTL;
 
     /**

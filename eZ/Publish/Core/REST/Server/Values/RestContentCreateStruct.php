@@ -17,14 +17,10 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class RestContentCreateStruct extends ValueObject
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct */
     public $contentCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct */
     public $locationCreateStruct;
 
     /**

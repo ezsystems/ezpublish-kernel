@@ -19,9 +19,7 @@ use eZ\Publish\SPI\Persistence\Content\Handler as SPIContentHandler;
  */
 class NameableField implements Nameable
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     private $handler;
 
     /**

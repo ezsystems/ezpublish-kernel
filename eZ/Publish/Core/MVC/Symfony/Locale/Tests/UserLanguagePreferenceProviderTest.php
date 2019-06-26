@@ -24,19 +24,13 @@ class UserLanguagePreferenceProviderTest extends TestCase
     private const LANGUAGE_PREFERENCE_NAME = 'language';
     private const LANGUAGE_PREFERENCE_VALUE = 'no';
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProviderInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Locale\UserLanguagePreferenceProviderInterface */
     private $userLanguagePreferenceProvider;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\RequestStack
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\HttpFoundation\RequestStack */
     private $requestStackMock;
 
-    /**
-     * @var \eZ\Publish\API\Repository\UserPreferenceService
-     */
+    /** @var \eZ\Publish\API\Repository\UserPreferenceService */
     private $userPreferenceServiceMock;
 
     public function setUp()

@@ -10,13 +10,9 @@ class ViewInput extends ValueObject
 {
     public $identifier;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Query
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Query */
     public $contentQuery;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\LocationQuery
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\LocationQuery */
     public $locationQuery;
 }

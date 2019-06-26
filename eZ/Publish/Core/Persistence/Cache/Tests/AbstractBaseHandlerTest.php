@@ -36,34 +36,22 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class AbstractBaseHandlerTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter|\PHPUnit\Framework\MockObject\MockObject */
     protected $cacheMock;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject */
     protected $persistenceHandlerMock;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\Handler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\Handler */
     protected $persistenceCacheHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache|\PHPUnit\Framework\MockObject\MockObject */
     protected $inMemoryMock;
 
-    /**
-     * @var \Closure
-     */
+    /** @var \Closure */
     protected $cacheItemsClosure;
 
     /**

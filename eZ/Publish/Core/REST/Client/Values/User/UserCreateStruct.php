@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruc
  */
 class UserCreateStruct extends APIUserCreateStruct
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Field[] */
     protected $fields = array();
 
     /**

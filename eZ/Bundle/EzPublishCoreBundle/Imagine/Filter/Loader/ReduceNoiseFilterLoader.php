@@ -21,9 +21,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
  */
 class ReduceNoiseFilterLoader implements LoaderInterface
 {
-    /**
-     * @var FilterInterface
-     */
+    /** @var FilterInterface */
     private $filter;
 
     public function __construct(FilterInterface $filter)

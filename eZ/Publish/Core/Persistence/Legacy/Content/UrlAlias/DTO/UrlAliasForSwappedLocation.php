@@ -27,33 +27,21 @@ class UrlAliasForSwappedLocation
         $this->newId = $newId;
     }
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $id;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $parentId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isAlwaysAvailable;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     public $isPathIdentificationStringModified;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $newId;
 }

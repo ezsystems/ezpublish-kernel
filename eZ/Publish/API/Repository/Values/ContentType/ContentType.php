@@ -37,19 +37,13 @@ use eZ\Publish\SPI\Repository\Values\MultiLanguageDescription;
  */
 abstract class ContentType extends ValueObject implements MultiLanguageName, MultiLanguageDescription
 {
-    /**
-     * @var int Status constant for defined (aka "published") Type
-     */
+    /** @var int Status constant for defined (aka "published") Type */
     const STATUS_DEFINED = 0;
 
-    /**
-     * @var int Status constant for draft (aka "temporary") Type
-     */
+    /** @var int Status constant for draft (aka "temporary") Type */
     const STATUS_DRAFT = 1;
 
-    /**
-     * @var int Status constant for modified (aka "deferred for publishing") Type
-     */
+    /** @var int Status constant for modified (aka "deferred for publishing") Type */
     const STATUS_MODIFIED = 2;
 
     /**

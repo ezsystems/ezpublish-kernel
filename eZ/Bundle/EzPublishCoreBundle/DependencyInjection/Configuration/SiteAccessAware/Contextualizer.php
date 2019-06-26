@@ -13,14 +13,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Contextualizer implements ContextualizerInterface
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
+    /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
     private $container;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $namespace;
 
     /**
@@ -30,14 +26,10 @@ class Contextualizer implements ContextualizerInterface
      */
     private $siteAccessNodeName;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $availableSiteAccesses;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $groupsBySiteAccess;
 
     public function __construct(

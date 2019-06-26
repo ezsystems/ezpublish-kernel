@@ -16,9 +16,7 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
  */
 class VersionTranslationInfo extends RestValue
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;
 
     /**

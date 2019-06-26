@@ -17,9 +17,7 @@ use eZ\Publish\Core\REST\Server\Service\RootResourceBuilderInterface;
  */
 class Root extends RestController
 {
-    /**
-     * @var RootResourceBuilderInterface
-     */
+    /** @var RootResourceBuilderInterface */
     private $rootResourceBuilder;
 
     public function __construct($rootResourceBuilder)

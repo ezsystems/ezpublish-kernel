@@ -24,24 +24,16 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
  */
 class Content extends APIContent
 {
-    /**
-     * @var mixed[][] An array of array of field values like[$fieldDefIdentifier][$languageCode]
-     */
+    /** @var mixed[][] An array of array of field values like[$fieldDefIdentifier][$languageCode] */
     protected $fields;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     protected $versionInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     protected $contentType;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field}
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Field[] An array of {@link Field} */
     private $internalFields = [];
 
     /**

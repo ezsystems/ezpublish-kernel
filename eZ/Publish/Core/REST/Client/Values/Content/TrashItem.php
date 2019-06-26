@@ -19,9 +19,7 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem as APITrashItem;
  */
 class TrashItem extends APITrashItem
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     protected $location;
 
     /**

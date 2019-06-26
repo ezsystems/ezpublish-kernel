@@ -13,14 +13,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ViewbaseLayout implements EventSubscriberInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $pageLayout;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $viewbaseLayout;
 
     public function __construct($viewbaseLayout)

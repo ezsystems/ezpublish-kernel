@@ -66,9 +66,7 @@ class Mapper
      */
     public function mapPolicies(array $data)
     {
-        /**
-         * @var \eZ\Publish\SPI\Persistence\User\Policy[]
-         */
+        /** @var \eZ\Publish\SPI\Persistence\User\Policy[] */
         $policies = [];
         foreach ($data as $row) {
             $policyId = $row['ezpolicy_id'];

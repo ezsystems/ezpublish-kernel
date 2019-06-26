@@ -11,9 +11,7 @@ use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
  */
 class LegacyStorage extends Gateway
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
     protected $dbHandler;
 
     public function __construct(DatabaseHandler $dbHandler)

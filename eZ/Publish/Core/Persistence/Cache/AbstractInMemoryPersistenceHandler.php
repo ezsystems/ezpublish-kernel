@@ -17,9 +17,7 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
  */
 abstract class AbstractInMemoryPersistenceHandler extends AbstractInMemoryHandler
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
     /**

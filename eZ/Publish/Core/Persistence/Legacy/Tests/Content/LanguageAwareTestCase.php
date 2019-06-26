@@ -80,9 +80,7 @@ abstract class LanguageAwareTestCase extends TestCase
         );
     }
 
-    /**
-     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $fieldNameGeneratorMock;
 
     /**

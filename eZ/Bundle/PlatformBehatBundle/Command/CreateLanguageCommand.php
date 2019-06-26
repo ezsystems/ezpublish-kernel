@@ -13,19 +13,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CreateLanguageCommand extends ContainerAwareCommand
 {
-    /**
-     * @var \eZ\Publish\API\Repository\LanguageService
-     */
+    /** @var \eZ\Publish\API\Repository\LanguageService */
     private $languageService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
+    /** @var \eZ\Publish\API\Repository\UserService */
     private $userService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
     protected function configure()

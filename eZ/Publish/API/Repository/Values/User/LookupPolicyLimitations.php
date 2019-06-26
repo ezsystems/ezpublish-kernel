@@ -15,14 +15,10 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 final class LookupPolicyLimitations extends ValueObject
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Policy
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     protected $policy;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation[] */
     protected $limitations;
 
     /**

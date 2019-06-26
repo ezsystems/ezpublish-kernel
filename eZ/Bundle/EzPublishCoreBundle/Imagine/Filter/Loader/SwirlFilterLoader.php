@@ -14,9 +14,7 @@ use Liip\ImagineBundle\Imagine\Filter\Loader\LoaderInterface;
 
 class SwirlFilterLoader implements LoaderInterface
 {
-    /**
-     * @var FilterInterface
-     */
+    /** @var FilterInterface */
     private $filter;
 
     public function __construct(FilterInterface $filter)

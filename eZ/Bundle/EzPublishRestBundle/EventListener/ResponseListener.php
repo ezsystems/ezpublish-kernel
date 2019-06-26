@@ -21,9 +21,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
  */
 class ResponseListener implements EventSubscriberInterface
 {
-    /**
-     * @var AcceptHeaderVisitorDispatcher
-     */
+    /** @var AcceptHeaderVisitorDispatcher */
     private $viewDispatcher;
 
     /**

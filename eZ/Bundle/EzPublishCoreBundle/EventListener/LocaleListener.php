@@ -18,14 +18,10 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
  */
 class LocaleListener extends BaseRequestListener
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverterInterface */
     private $localeConverter;
 
     /**

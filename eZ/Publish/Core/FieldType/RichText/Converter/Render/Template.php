@@ -25,14 +25,10 @@ use Psr\Log\NullLogger;
  */
 class Template extends Render implements Converter
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\Converter */
     private $richTextConverter;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
     /**

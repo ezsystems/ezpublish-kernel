@@ -13,14 +13,10 @@ use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class CsrfTokenManager extends BaseCsrfTokenManager
 {
-    /**
-     * @var \Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface
-     */
+    /** @var \Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface */
     private $storage;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $namespace;
 
     public function __construct(

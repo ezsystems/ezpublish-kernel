@@ -19,19 +19,13 @@ use eZ\Publish\API\Repository\Values\User\UserGroupRoleAssignment as APIUserGrou
  */
 class UserGroupRoleAssignment extends APIUserGroupRoleAssignment
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Role
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
     protected $role;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     protected $userGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation */
     protected $limitation;
 
     /**

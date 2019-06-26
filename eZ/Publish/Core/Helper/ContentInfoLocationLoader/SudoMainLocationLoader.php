@@ -16,9 +16,7 @@ use Exception;
  */
 class SudoMainLocationLoader implements ContentInfoLocationLoader
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository|\eZ\Publish\Core\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository|\eZ\Publish\Core\Repository\Repository */
     private $repository;
 
     public function __construct(Repository $repository)

@@ -20,9 +20,7 @@ class DoctrineStorage extends Gateway
     const USER_TABLE = 'ezuser';
     const USER_SETTING_TABLE = 'ezuser_setting';
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     /**

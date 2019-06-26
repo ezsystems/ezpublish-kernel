@@ -12,19 +12,13 @@ use PHPUnit\Framework\TestCase;
 
 class ProxyResolverTest extends TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface */
     private $resolver;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $path;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $filter;
 
     protected function setUp()

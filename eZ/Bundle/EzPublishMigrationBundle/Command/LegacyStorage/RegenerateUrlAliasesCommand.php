@@ -33,39 +33,25 @@ class RegenerateUrlAliasesCommand extends ContainerAwareCommand
     const CUSTOM_ALIAS_BACKUP_TABLE = '__migration_backup_custom_alias';
     const GLOBAL_ALIAS_BACKUP_TABLE = '__migration_backup_global_alias';
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     protected $contentService;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\NameSchemaService */
     protected $nameSchemaResolver;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler */
     protected $urlAliasHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\Gateway */
     protected $urlAliasGateway;
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $bulkCount;
 
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
+    /** @var \Symfony\Component\Console\Output\OutputInterface */
     protected $output;
 
     protected $actionSet = [

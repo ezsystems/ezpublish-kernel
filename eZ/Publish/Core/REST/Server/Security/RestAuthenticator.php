@@ -38,43 +38,27 @@ use Symfony\Component\Security\Http\SecurityEvents;
  */
 class RestAuthenticator implements ListenerInterface, AuthenticatorInterface
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
-    /**
-     * @var \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface
-     */
+    /** @var \Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface */
     private $authenticationManager;
-    /**
-     * @var string
-     */
+    /** @var string */
     private $providerKey;
 
-    /**
-     * @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface
-     */
+    /** @var \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface */
     private $tokenStorage;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     private $dispatcher;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface
-     */
+    /** @var \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface */
     private $sessionStorage;
 
-    /**
-     * @var \Symfony\Component\Security\Http\Logout\LogoutHandlerInterface[]
-     */
+    /** @var \Symfony\Component\Security\Http\Logout\LogoutHandlerInterface[] */
     private $logoutHandlers = [];
 
     public function __construct(

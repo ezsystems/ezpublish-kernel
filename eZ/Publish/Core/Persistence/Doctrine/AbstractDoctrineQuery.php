@@ -21,9 +21,7 @@ use PDO;
  */
 abstract class AbstractDoctrineQuery
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     /**
@@ -65,9 +63,7 @@ abstract class AbstractDoctrineQuery
      */
     private $boundValuesType = [];
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\Expression
-     */
+    /** @var \eZ\Publish\Core\Persistence\Database\Expression */
     public $expr;
 
     public function __construct(Connection $connection)

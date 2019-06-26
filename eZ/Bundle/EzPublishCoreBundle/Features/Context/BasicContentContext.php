@@ -28,14 +28,10 @@ class BasicContentContext implements Context
      */
     private $contentPaths = [];
 
-    /**
-     * @var eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var eZ\Publish\API\Repository\ContentService
-     */
+    /** @var eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
     /**

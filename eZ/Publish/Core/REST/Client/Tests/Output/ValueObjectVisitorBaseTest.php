@@ -17,9 +17,7 @@ abstract class ValueObjectVisitorBaseTest extends CommonValueObjectVisitorBaseTe
 {
     use AssertXmlTagTrait;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser\EzPublish
-     */
+    /** @var \eZ\Publish\Core\REST\Common\RequestParser\EzPublish */
     protected $requestParser;
 
     /**

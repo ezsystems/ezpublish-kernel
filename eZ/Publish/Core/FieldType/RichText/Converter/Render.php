@@ -19,9 +19,7 @@ use DOMNode;
  */
 abstract class Render
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\RendererInterface */
     protected $renderer;
 
     public function __construct(RendererInterface $renderer)

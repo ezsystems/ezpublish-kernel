@@ -53,9 +53,7 @@ EOT;
         );
     }
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit\Framework\MockObject\MockObject */
     protected $converter;
 
     /**

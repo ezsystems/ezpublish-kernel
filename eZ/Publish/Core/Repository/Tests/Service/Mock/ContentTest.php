@@ -6022,9 +6022,7 @@ class ContentTest extends BaseServiceMockTest
         return $this->locationServiceMock;
     }
 
-    /**
-     * @var \eZ\Publish\Core\Repository\ContentService
-     */
+    /** @var \eZ\Publish\Core\Repository\ContentService */
     protected $partlyMockedContentService;
 
     /**

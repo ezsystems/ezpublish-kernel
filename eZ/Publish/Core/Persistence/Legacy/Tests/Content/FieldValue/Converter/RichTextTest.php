@@ -21,14 +21,10 @@ use PHPUnit\Framework\TestCase;
  */
 class RichTextTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\RichTextConverter */
     protected $converter;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $docbookString;
 
     protected function setUp()

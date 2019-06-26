@@ -17,9 +17,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class SignalEvent extends Event
 {
-    /**
-     * @var \eZ\Publish\Core\SignalSlot\Signal
-     */
+    /** @var \eZ\Publish\Core\SignalSlot\Signal */
     private $signal;
 
     public function __construct(Signal $signal)

@@ -15,14 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 class ReduceNoiseFilterLoaderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $filter;
 
-    /**
-     * @var ReduceNoiseFilterLoader
-     */
+    /** @var ReduceNoiseFilterLoader */
     private $loader;
 
     protected function setUp()

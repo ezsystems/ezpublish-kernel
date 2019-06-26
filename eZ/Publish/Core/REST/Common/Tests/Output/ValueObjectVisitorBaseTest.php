@@ -34,19 +34,13 @@ abstract class ValueObjectVisitorBaseTest extends Tests\BaseTest
      */
     protected $generator;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
-     */
+    /** @var \eZ\Publish\Core\REST\Common\RequestParser */
     protected $requestParser;
 
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $routerMock;
 
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Symfony\Component\Routing\RouterInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $templatedRouterMock;
 
     /** @var int */

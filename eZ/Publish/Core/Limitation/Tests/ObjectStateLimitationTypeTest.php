@@ -24,19 +24,13 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as SPIHandler;
  */
 class ObjectStateLimitationTypeTest extends Base
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $objectStateHandlerMock;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Group[]
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Group[] */
     private $allObjectStateGroups;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $loadObjectStatesMap;
 
     /**

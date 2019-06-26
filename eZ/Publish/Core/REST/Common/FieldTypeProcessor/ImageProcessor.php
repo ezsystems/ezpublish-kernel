@@ -30,9 +30,7 @@ class ImageProcessor extends BinaryInputProcessor
      */
     protected $variations;
 
-    /**
-     * @var RouterInterface
-     */
+    /** @var RouterInterface */
     protected $router;
 
     /**

@@ -19,19 +19,13 @@ use eZ\Publish\API\Repository\Values\User\UserRoleAssignment as APIUserRoleAssig
  */
 class UserRoleAssignment extends APIUserRoleAssignment
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Role
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
     protected $role;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     protected $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation */
     protected $limitation;
 
     /**

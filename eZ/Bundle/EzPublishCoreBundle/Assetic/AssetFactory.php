@@ -14,14 +14,10 @@ use Symfony\Bundle\AsseticBundle\Factory\AssetFactory as BaseAssetFactory;
 
 class AssetFactory extends BaseAssetFactory
 {
-    /**
-     * @var ConfigResolverInterface
-     */
+    /** @var ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var DynamicSettingParserInterface
-     */
+    /** @var DynamicSettingParserInterface */
     private $dynamicSettingParser;
 
     public function setConfigResolver(ConfigResolverInterface $configResolver)

@@ -17,14 +17,10 @@ namespace eZ\Publish\Core\FieldType\Page\Parts;
  */
 class Zone extends Base
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Block[]
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\Parts\Block[] */
     protected $blocks = [];
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Block[]
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\Parts\Block[] */
     protected $blocksById = [];
 
     /**

@@ -15,19 +15,13 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 final class LookupLimitationResult extends ValueObject
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $hasAccess;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation[] */
     protected $roleLimitations;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\LookupPolicyLimitations[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\LookupPolicyLimitations[] */
     protected $lookupPolicyLimitations;
 
     /**

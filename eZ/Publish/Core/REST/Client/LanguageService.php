@@ -24,34 +24,22 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
  */
 class LanguageService implements APILanguageService, Sessionable
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentService */
     private $contentService;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $defaultLanguageCode;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\HttpClient
-     */
+    /** @var \eZ\Publish\Core\REST\Client\HttpClient */
     private $client;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\Dispatcher */
     private $inputDispatcher;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\Visitor */
     private $outputVisitor;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
-     */
+    /** @var \eZ\Publish\Core\REST\Common\RequestParser */
     private $requestParser;
 
     /**

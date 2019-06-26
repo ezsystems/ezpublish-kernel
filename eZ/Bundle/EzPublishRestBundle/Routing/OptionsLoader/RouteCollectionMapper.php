@@ -17,9 +17,7 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class RouteCollectionMapper
 {
-    /**
-     * @var Mapper
-     */
+    /** @var Mapper */
     protected $mapper;
 
     public function __construct(Mapper $mapper)

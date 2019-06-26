@@ -18,14 +18,10 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
  */
 class RestContentType extends RestValue
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     public $contentType;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition[] */
     public $fieldDefinitions;
 
     /**

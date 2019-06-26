@@ -15,24 +15,16 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 
 class UserLanguagePreferenceProvider implements UserLanguagePreferenceProviderInterface
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
+    /** @var \Symfony\Component\HttpFoundation\RequestStack */
     private $requestStack;
 
-    /**
-     * @var \eZ\Publish\API\Repository\UserPreferenceService
-     */
+    /** @var \eZ\Publish\API\Repository\UserPreferenceService */
     private $userPreferenceService;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $languageCodesMap;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $localeFallback;
 
     /**

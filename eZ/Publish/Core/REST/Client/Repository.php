@@ -21,64 +21,40 @@ use eZ\Publish\Core\REST\Common;
  */
 class Repository implements APIRepository
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Client\SectionService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\SectionService */
     private $sectionService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\LanguageService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\LanguageService */
     private $languageService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\UserService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\UserService */
     private $userService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\RoleService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\RoleService */
     private $roleService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\URLAliasService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\URLAliasService */
     private $urlAliasService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentService */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\TrashService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\TrashService */
     private $trashService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\LocationService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\LocationService */
     private $locationService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ObjectStateService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ObjectStateService */
     private $objectStateService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\IOService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\IOService */
     private $ioService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\FieldTypeService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\FieldTypeService */
     private $fieldTypeService;
 
     /**
@@ -95,19 +71,13 @@ class Repository implements APIRepository
      */
     private $inputDispatcher;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\Visitor */
     private $outputVisitor;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
-     */
+    /** @var \eZ\Publish\Core\REST\Common\RequestParser */
     private $requestParser;
 
-    /**
-     * @var \eZ\Publish\SPI\FieldType\FieldType[]
-     */
+    /** @var \eZ\Publish\SPI\FieldType\FieldType[] */
     private $fieldTypes;
 
     /**

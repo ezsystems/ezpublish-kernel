@@ -15,24 +15,16 @@ use eZ\Publish\API\Repository\FieldTypeService;
 
 class FieldTypeParser
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     protected $contentService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     protected $contentTypeService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\FieldTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\FieldTypeService */
     protected $fieldTypeService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
-     */
+    /** @var \eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry */
     protected $fieldTypeProcessorRegistry;
 
     /**

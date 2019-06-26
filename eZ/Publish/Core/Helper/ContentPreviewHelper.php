@@ -19,34 +19,22 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ContentPreviewHelper implements SiteAccessAware
 {
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface */
     protected $siteAccessRouter;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     protected $originalSiteAccess;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $previewActive = false;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $previewedContent;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $previewedLocation;
 
     public function __construct(EventDispatcherInterface $eventDispatcher, SiteAccessRouterInterface $siteAccessRouter)

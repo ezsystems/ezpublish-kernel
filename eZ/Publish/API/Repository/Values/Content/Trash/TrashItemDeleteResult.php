@@ -10,14 +10,10 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 class TrashItemDeleteResult extends ValueObject
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $trashItemId;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $contentId;
 
     /**

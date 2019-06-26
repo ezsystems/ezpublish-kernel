@@ -19,9 +19,7 @@ use eZ\Publish\Core\Base\Exceptions\NotFoundException;
  */
 class GeneralSlotFactory extends SlotFactory
 {
-    /**
-     * @var \eZ\Publish\Core\SignalSlot\Slot[]
-     */
+    /** @var \eZ\Publish\Core\SignalSlot\Slot[] */
     protected $slots = [];
 
     /**

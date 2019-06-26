@@ -34,14 +34,10 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo as APIContentInfo;
  */
 class ContentInfo extends APIContentInfo
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $contentTypeId;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentTypeService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentTypeService */
     protected $contentTypeService;
 
     public function __construct(ContentTypeService $contentTypeService, array $data = array())

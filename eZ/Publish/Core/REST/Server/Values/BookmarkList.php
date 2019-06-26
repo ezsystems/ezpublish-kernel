@@ -12,14 +12,10 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
 
 class BookmarkList extends RestValue
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $totalCount = 0;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Server\Values\RestLocation[]
-     */
+    /** @var \eZ\Publish\Core\REST\Server\Values\RestLocation[] */
     public $items = [];
 
     /**

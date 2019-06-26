@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\UserService;
  */
 class Session extends BaseParser
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
     /**

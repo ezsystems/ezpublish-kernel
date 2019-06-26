@@ -19,9 +19,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class SymfonyEventConverterSlot extends Slot
 {
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     private $eventDispatcher;
 
     public function __construct(EventDispatcherInterface $eventDispatcher)

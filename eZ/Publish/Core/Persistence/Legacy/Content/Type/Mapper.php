@@ -33,9 +33,7 @@ class Mapper
      */
     protected $converterRegistry;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator */
     private $maskGenerator;
 
     /**

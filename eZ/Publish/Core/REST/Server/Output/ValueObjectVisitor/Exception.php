@@ -69,9 +69,7 @@ class Exception extends ValueObjectVisitor
         510 => 'Not Extended',
     ];
 
-    /**
-     * @var TranslatorInterface
-     */
+    /** @var TranslatorInterface */
     protected $translator;
 
     /**

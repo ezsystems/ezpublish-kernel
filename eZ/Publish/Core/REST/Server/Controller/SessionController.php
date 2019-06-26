@@ -21,19 +21,13 @@ use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class SessionController extends Controller
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Security\Authentication\AuthenticatorInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Security\Authentication\AuthenticatorInterface */
     private $authenticator;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Server\Security\CsrfTokenManager
-     */
+    /** @var \eZ\Publish\Core\REST\Server\Security\CsrfTokenManager */
     private $csrfTokenManager;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $csrfTokenIntention;
 
     public function __construct(

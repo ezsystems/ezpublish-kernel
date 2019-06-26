@@ -22,19 +22,13 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class BackgroundIndexingTerminateListenerTest extends TestCase
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\EventListener\BackgroundIndexingTerminateListener
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\EventListener\BackgroundIndexingTerminateListener */
     protected $listener;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject */
     protected $persistenceMock;
 
-    /**
-     * @var \eZ\Publish\SPI\Search\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Search\Handler|\PHPUnit\Framework\MockObject\MockObject */
     protected $searchMock;
 
     protected function setUp()

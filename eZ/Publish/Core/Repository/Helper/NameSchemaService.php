@@ -47,24 +47,16 @@ class NameSchemaService
      */
     const META_STRING = 'EZMETAGROUP_';
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
 
-    /**
-     * @var ContentTypeDomainMapper
-     */
+    /** @var ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
-    /**
-     * @var NameableFieldTypeRegistry
-     */
+    /** @var NameableFieldTypeRegistry */
     protected $nameableFieldTypeRegistry;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
     /**

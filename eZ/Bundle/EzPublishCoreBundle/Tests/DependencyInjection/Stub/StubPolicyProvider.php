@@ -16,9 +16,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\Po
  */
 class StubPolicyProvider implements PolicyProviderInterface
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $policies;
 
     public function __construct(array $policies)

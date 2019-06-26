@@ -16,9 +16,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 abstract class BaseLimitationIntegrationTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
     protected $permissionResolver;
 
     public function setUp(): void

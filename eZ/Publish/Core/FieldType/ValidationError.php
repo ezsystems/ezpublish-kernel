@@ -17,19 +17,13 @@ use eZ\Publish\API\Repository\Values\Translation\Plural;
  */
 class ValidationError implements ValidationErrorInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $singular;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $plural;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $values;
 
     /**

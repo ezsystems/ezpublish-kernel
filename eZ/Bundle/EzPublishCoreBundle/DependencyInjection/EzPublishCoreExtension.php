@@ -32,24 +32,16 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
     const RICHTEXT_CUSTOM_STYLES_PARAMETER = 'ezplatform.ezrichtext.custom_styles';
     const RICHTEXT_CUSTOM_TAGS_PARAMETER = 'ezplatform.ezrichtext.custom_tags';
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollector */
     private $suggestionCollector;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface */
     private $mainConfigParser;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface[]
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface[] */
     private $configParsers;
 
-    /**
-     * @var PolicyProviderInterface[]
-     */
+    /** @var PolicyProviderInterface[] */
     private $policyProviders = [];
 
     /**
@@ -60,9 +52,7 @@ class EzPublishCoreExtension extends Extension implements PrependExtensionInterf
      */
     private $defaultSettingsCollection = [];
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter[]
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter[] */
     private $siteaccessConfigurationFilters = [];
 
     public function __construct(array $configParsers = [])

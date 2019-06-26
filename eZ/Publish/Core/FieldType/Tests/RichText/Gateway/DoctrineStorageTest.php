@@ -17,9 +17,7 @@ use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase;
  */
 class DoctrineStorageTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\DoctrineStorage */
     protected $storageGateway;
 
     public function testGetContentIds()

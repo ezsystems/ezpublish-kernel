@@ -15,9 +15,7 @@ class BuzzDriver implements DriverInterface
 {
     use DriverHelper;
 
-    /**
-     * @var \Psr\Http\Message\ResponseInterface
-     */
+    /** @var \Psr\Http\Message\ResponseInterface */
     private $response = null;
 
     /**

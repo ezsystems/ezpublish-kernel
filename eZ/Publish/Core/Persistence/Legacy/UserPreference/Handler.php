@@ -15,14 +15,10 @@ use eZ\Publish\SPI\Persistence\UserPreference\UserPreference;
 
 class Handler implements HandlerInterface
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\UserPreference\Gateway
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\UserPreference\Gateway */
     protected $gateway;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\UserPreference\Mapper
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\UserPreference\Mapper */
     protected $mapper;
 
     /**

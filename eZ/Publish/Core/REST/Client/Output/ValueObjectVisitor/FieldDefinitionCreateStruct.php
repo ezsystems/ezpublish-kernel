@@ -19,9 +19,7 @@ use eZ\Publish\Core\REST\Common\Output\Visitor;
  */
 class FieldDefinitionCreateStruct extends ValueObjectVisitor
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer */
     protected $fieldTypeSerializer;
 
     /**

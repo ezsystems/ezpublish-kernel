@@ -12,14 +12,10 @@ use eZ\Publish\Core\Base\Container\ApiLoader\SignalSlot\SignalDispatcherFactory 
 
 class SignalDispatcherFactory extends BaseSignalDispatcherFactory
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $repositoryAlias;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $repositoriesSettings;
 
     /**

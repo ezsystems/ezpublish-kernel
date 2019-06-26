@@ -17,9 +17,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollectorInterface;
 
 class EzPublishCoreCollectorTest extends TestCase
 {
-    /**
-     * @var EzPublishCoreCollector
-     */
+    /** @var EzPublishCoreCollector */
     private $mainCollector;
 
     protected function setUp()
@@ -154,9 +152,7 @@ class EzPublishCoreCollectorTest extends TestCase
         $response = new Response();
         $exception = new Exception();
 
-        /**
-         * @var \PHPUnit\Framework\MockObject\MockObject
-         */
+        /** @var \PHPUnit\Framework\MockObject\MockObject */
         foreach ($allCollectors as $name => $collector) {
             $this->mainCollector->addCollector($collector);
             $collector

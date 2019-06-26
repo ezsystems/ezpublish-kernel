@@ -26,24 +26,16 @@ abstract class Indexer
     const CONTENTOBJECT_TABLE = 'ezcontentobject';
     const CONTENTOBJECT_TREE_TABLE = 'ezcontentobject_tree';
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
     protected $databaseHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Search\Handler
-     */
+    /** @var \eZ\Publish\SPI\Search\Handler */
     protected $searchHandler;
 
     public function __construct(

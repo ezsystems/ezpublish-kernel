@@ -28,14 +28,10 @@ class RichTextIntegrationTest extends SearchBaseIntegrationTest
 {
     use RelationSearchBaseIntegrationTestTrait;
 
-    /**
-     * @var \DOMDocument
-     */
+    /** @var \DOMDocument */
     private $createdDOMValue;
 
-    /**
-     * @var \DOMDocument
-     */
+    /** @var \DOMDocument */
     private $updatedDOMValue;
 
     public function __construct($name = null, array $data = [], $dataName = '')

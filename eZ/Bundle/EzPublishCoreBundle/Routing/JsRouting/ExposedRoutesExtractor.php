@@ -15,14 +15,10 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
 {
-    /**
-     * @var ExposedRoutesExtractorInterface
-     */
+    /** @var ExposedRoutesExtractorInterface */
     private $innerExtractor;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     private $masterRequest;
 
     public function __construct(ExposedRoutesExtractorInterface $innerExtractor, Request $masterRequest)

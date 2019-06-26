@@ -20,9 +20,7 @@ use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
  */
 class RestLogoutHandler implements LogoutHandlerInterface
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
     /**

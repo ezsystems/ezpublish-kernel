@@ -25,14 +25,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class RememberMeRepositoryAuthenticationProviderTest extends TestCase
 {
-    /**
-     * @var RememberMeRepositoryAuthenticationProvider
-     */
+    /** @var RememberMeRepositoryAuthenticationProvider */
     private $authProvider;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
     private $repository;
 
     protected function setUp()

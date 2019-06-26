@@ -26,9 +26,7 @@ use eZ\Publish\SPI\Persistence\Content\ObjectState\Handler as SPIHandler;
  */
 class NewObjectStateLimitationTypeTest extends Base
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $objectStateHandlerMock;
 
     /**

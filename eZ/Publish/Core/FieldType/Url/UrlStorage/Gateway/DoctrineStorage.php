@@ -17,9 +17,7 @@ class DoctrineStorage extends Gateway
     const URL_TABLE = 'ezurl';
     const URL_LINK_TABLE = 'ezurl_object_link';
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     public function __construct(Connection $connection)

@@ -13,9 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class FilterViewBuilderParametersEvent extends Event
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
+    /** @var \Symfony\Component\HttpFoundation\Request */
     private $request;
 
     /**

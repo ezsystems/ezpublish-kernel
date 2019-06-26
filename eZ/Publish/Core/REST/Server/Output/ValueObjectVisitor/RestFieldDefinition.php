@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType as APIContentType;
  */
 class RestFieldDefinition extends RestContentTypeBase
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer */
     protected $fieldTypeSerializer;
 
     /**

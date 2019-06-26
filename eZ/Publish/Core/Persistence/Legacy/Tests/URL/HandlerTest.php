@@ -18,19 +18,13 @@ use PHPUnit\Framework\TestCase;
 
 class HandlerTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\URL\Gateway|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\URL\Gateway|\PHPUnit\Framework\MockObject\MockObject */
     private $gateway;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\URL\Mapper|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\URL\Mapper|\PHPUnit\Framework\MockObject\MockObject */
     private $mapper;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\URL\Handler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\URL\Handler */
     private $handler;
 
     protected function setUp()

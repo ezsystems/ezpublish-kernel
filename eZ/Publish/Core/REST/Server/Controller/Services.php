@@ -16,9 +16,7 @@ use eZ\Publish\Core\REST\Server\Values;
  */
 class Services extends RestController
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $countriesInfo;
 
     public function __construct(array $countriesInfo)

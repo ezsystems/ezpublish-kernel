@@ -21,9 +21,7 @@ class DoctrineStorage extends Gateway
     const EZM_POOL_TABLE = 'ezm_pool';
     const EZM_BLOCK_TABLE = 'ezm_block';
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection = self::EZM_POOL_TABLE;
 
     public function __construct(Connection $connection)

@@ -20,9 +20,7 @@ use eZ\Publish\Core\REST\Server\Values\Version as VersionValue;
  */
 class Version extends BaseParser
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
     /**
@@ -32,9 +30,7 @@ class Version extends BaseParser
      */
     protected $contentService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
     /**

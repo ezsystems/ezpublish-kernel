@@ -16,19 +16,13 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class ParameterProvider implements ParameterProviderInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionsResolver;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\FieldTypeService
-     */
+    /** @var \eZ\Publish\Core\Repository\FieldTypeService */
     private $fieldTypeService;
 
     /**

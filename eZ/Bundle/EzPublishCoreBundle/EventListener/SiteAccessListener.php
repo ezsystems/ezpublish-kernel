@@ -25,19 +25,13 @@ class SiteAccessListener implements EventSubscriberInterface, ContainerAwareInte
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
+    /** @var \Symfony\Component\Routing\RouterInterface */
     private $defaultRouter;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator */
     private $urlAliasGenerator;
 
-    /**
-     * @var \Symfony\Component\Security\Http\HttpUtils
-     */
+    /** @var \Symfony\Component\Security\Http\HttpUtils */
     private $httpUtils;
 
     public function __construct(RouterInterface $defaultRouter, UrlAliasGenerator $urlAliasGenerator, HttpUtils $httpUtils)

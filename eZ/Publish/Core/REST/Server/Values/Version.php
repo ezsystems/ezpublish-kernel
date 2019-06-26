@@ -17,19 +17,13 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
  */
 class Version extends RestValue
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     public $content;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     public $contentType;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Relation[] */
     public $relations;
 
     /**

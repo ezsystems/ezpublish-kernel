@@ -25,29 +25,19 @@ use Exception;
  */
 class DeleteContentTranslationCommand extends Command
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \Symfony\Component\Console\Input\InputInterface
-     */
+    /** @var \Symfony\Component\Console\Input\InputInterface */
     private $input;
 
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
+    /** @var \Symfony\Component\Console\Output\OutputInterface */
     private $output;
 
-    /**
-     * @var \Symfony\Component\Console\Helper\QuestionHelper
-     */
+    /** @var \Symfony\Component\Console\Helper\QuestionHelper */
     private $questionHelper;
 
     public function __construct(Repository $repository)

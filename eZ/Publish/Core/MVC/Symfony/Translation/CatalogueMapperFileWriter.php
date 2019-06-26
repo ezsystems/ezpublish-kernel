@@ -18,14 +18,10 @@ use JMS\TranslationBundle\Translation\LoaderManager;
  */
 class CatalogueMapperFileWriter extends FileWriter
 {
-    /**
-     * @var LoaderManager
-     */
+    /** @var LoaderManager */
     private $loaderManager;
 
-    /**
-     * @var FileWriter
-     */
+    /** @var FileWriter */
     private $innerFileWriter;
 
     public function __construct(FileWriter $innerFileWriter, LoaderManager $loaderManager)

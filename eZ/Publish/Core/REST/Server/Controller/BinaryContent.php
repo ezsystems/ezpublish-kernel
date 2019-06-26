@@ -19,9 +19,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidVariationException;
  */
 class BinaryContent extends RestController
 {
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
+    /** @var \eZ\Publish\SPI\Variation\VariationHandler */
     protected $imageVariationHandler;
 
     /**

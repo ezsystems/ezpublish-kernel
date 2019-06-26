@@ -24,44 +24,28 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class Item extends ValueObject
 {
-    /**
-     * @var mixed
-     */
+    /** @var mixed */
     protected $contentId;
 
-    /**
-     * @var mixed
-     */
+    /** @var mixed */
     protected $locationId;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $priority;
 
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     protected $publicationDate;
 
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     protected $visibilityDate;
 
-    /**
-     * @var \DateTime|null
-     */
+    /** @var \DateTime|null */
     protected $hiddenDate;
 
-    /**
-     * @var \DateTime|null
-     */
+    /** @var \DateTime|null */
     protected $rotationUntilDate;
 
-    /**
-     * @var mixed
-     */
+    /** @var mixed */
     protected $movedTo;
 
     /**
@@ -71,9 +55,7 @@ class Item extends ValueObject
      */
     protected $action;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $blockId;
 
     /**

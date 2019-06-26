@@ -20,14 +20,10 @@ use PHPUnit\Framework\TestCase;
  */
 class ValueObjectVisitorDispatcherTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Common\Output\Visitor
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Common\Output\Visitor */
     private $outputVisitorMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|Common\Output\Generator
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|Common\Output\Generator */
     private $outputGeneratorMock;
 
     public function testVisitValueObject()

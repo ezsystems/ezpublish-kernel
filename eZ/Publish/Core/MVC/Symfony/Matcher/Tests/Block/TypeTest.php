@@ -14,9 +14,7 @@ use PHPUnit\Framework\TestCase;
 
 class TypeTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\Block\MatcherInterface */
     private $matcher;
 
     protected function setUp()

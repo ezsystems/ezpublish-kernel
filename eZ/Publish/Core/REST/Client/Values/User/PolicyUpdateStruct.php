@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateS
  */
 class PolicyUpdateStruct extends APIPolicyUpdateStruct
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation[] */
     private $limitations;
 
     /**

@@ -12,9 +12,7 @@ use eZ\Publish\Core\REST\Common\FieldTypeProcessor;
 
 abstract class BinaryInputProcessor extends FieldTypeProcessor
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $temporaryDirectory;
 
     /**

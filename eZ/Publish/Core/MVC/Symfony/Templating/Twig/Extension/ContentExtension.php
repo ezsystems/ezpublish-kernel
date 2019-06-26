@@ -27,24 +27,16 @@ use Twig_SimpleFunction;
  */
 class ContentExtension extends Twig_Extension
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
-     */
+    /** @var \eZ\Publish\Core\Helper\TranslationHelper */
     protected $translationHelper;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\FieldHelper
-     */
+    /** @var \eZ\Publish\Core\Helper\FieldHelper */
     protected $fieldHelper;
 
-    /**
-     * @var LoggerInterface
-     */
+    /** @var LoggerInterface */
     protected $logger;
 
     public function __construct(

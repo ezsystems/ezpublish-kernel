@@ -15,19 +15,13 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 class SearchViewTest extends RESTFunctionalTestCase
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $contentTypeHref;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected $contentHrefList;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $nonSearchableContentHref;
 
     protected function setUp()

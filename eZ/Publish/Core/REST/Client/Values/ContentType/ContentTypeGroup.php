@@ -15,14 +15,10 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentT
  */
 class ContentTypeGroup extends APIContentTypeGroup
 {
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected $names;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected $descriptions;
 
     /**

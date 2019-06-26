@@ -19,29 +19,19 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
  */
 class RestUserGroup extends RestValue
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     public $content;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     public $contentType;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     public $contentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Relation[] */
     public $relations;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     public $mainLocation;
 
     /**

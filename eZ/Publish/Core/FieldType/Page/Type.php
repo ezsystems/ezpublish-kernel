@@ -18,9 +18,7 @@ use eZ\Publish\Core\FieldType\Page\Parts\Page;
 
 class Type extends FieldType
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settingsSchema = [
         'defaultLayout' => [
             'type' => 'string',
@@ -28,14 +26,10 @@ class Type extends FieldType
         ],
     ];
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\PageService
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\PageService */
     protected $pageService;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\HashConverter
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\HashConverter */
     protected $hashConverter;
 
     /**

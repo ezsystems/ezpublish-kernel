@@ -15,19 +15,13 @@ use Symfony\Component\Templating\EngineInterface;
 
 class SecurityController
 {
-    /**
-     * @var \Symfony\Component\Templating\EngineInterface
-     */
+    /** @var \Symfony\Component\Templating\EngineInterface */
     protected $templateEngine;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    /**
-     * @var \Symfony\Component\Security\Http\Authentication\AuthenticationUtils
-     */
+    /** @var \Symfony\Component\Security\Http\Authentication\AuthenticationUtils */
     protected $authenticationUtils;
 
     public function __construct(EngineInterface $templateEngine, ConfigResolverInterface $configResolver, AuthenticationUtils $authenticationUtils)
