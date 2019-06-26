@@ -16,6 +16,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -40,7 +41,8 @@ class SiteAccessMatchListenerTest extends TestCase
         parent::setUp();
         $this->saRouter = $this->createMock(Router::class);
         $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
-        $this->listener = new SiteAccessMatchListener($this->saRouter, $this->eventDispatcher);
+        $this->userHashMatcher = $this->createMock(RequestMatcherInterface::class);
+        $this->listener = new SiteAccessMatchListener($this->saRouter, $this->eventDispatcher, $this->userHashMatcher);
     }
 
     public function testGetSubscribedEvents()
@@ -53,8 +55,6 @@ class SiteAccessMatchListenerTest extends TestCase
 
     public function testOnKernelRequestUserHashNoOriginalRequest()
     {
-        $this->markTestSkipped('Test skipped until HttpCache is compatible with eZ Platform 3');
-
         $request = new Request();
         $event = new GetResponseEvent(
             $this->createMock(HttpKernelInterface::class),
@@ -62,9 +62,16 @@ class SiteAccessMatchListenerTest extends TestCase
             HttpKernelInterface::MASTER_REQUEST
         );
 
+        $this->userHashMatcher
+            ->expects($this->once())
+            ->method('matches')
+            ->with($request)
+            ->willReturn(true);
+
         $this->saRouter
             ->expects($this->never())
             ->method('match');
+
         $this->eventDispatcher
             ->expects($this->never())
             ->method('dispatch');
@@ -83,6 +90,12 @@ class SiteAccessMatchListenerTest extends TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
+
+        $this->userHashMatcher
+            ->expects($this->once())
+            ->method('matches')
+            ->with($request)
+            ->willReturn(false);
 
         $this->saRouter
             ->expects($this->never())
@@ -109,6 +122,12 @@ class SiteAccessMatchListenerTest extends TestCase
             $request,
             HttpKernelInterface::MASTER_REQUEST
         );
+
+        $this->userHashMatcher
+            ->expects($this->once())
+            ->method('matches')
+            ->with($request)
+            ->willReturn(false);
 
         $this->saRouter
             ->expects($this->never())
@@ -149,6 +168,13 @@ class SiteAccessMatchListenerTest extends TestCase
                 'headers' => $request->headers->all(),
             ]
         );
+
+        $this->userHashMatcher
+            ->expects($this->once())
+            ->method('matches')
+            ->with($request)
+            ->willReturn(false);
+
         $this->saRouter
             ->expects($this->once())
             ->method('match')
@@ -192,6 +218,13 @@ class SiteAccessMatchListenerTest extends TestCase
                 'headers' => $originalRequest->headers->all(),
             ]
         );
+
+        $this->userHashMatcher
+            ->expects($this->once())
+            ->method('matches')
+            ->with($request)
+            ->willReturn(false);
+
         $this->saRouter
             ->expects($this->once())
             ->method('match')

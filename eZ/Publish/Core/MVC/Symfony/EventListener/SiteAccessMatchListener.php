@@ -10,6 +10,7 @@ namespace eZ\Publish\Core\MVC\Symfony\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestMatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\Router as SiteAccessRouter;
@@ -31,12 +32,17 @@ class SiteAccessMatchListener implements EventSubscriberInterface
     /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
+    /** @var \Symfony\Component\HttpFoundation\RequestMatcherInterface */
+    protected $userContextRequestMatcher;
+
     public function __construct(
         SiteAccessRouter $siteAccessRouter,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        RequestMatcherInterface $userContextRequestMatcher
     ) {
         $this->siteAccessRouter = $siteAccessRouter;
         $this->eventDispatcher = $eventDispatcher;
+        $this->userContextRequestMatcher = $userContextRequestMatcher;
     }
 
     public static function getSubscribedEvents()
@@ -53,6 +59,11 @@ class SiteAccessMatchListener implements EventSubscriberInterface
     public function onKernelRequest(GetResponseEvent $event)
     {
         $request = $event->getRequest();
+
+        // Don't try to match when it's a request for user hash. SiteAccess is irrelevant in this case.
+        if ($this->userContextRequestMatcher->matches($request) && !$request->attributes->has('_ez_original_request')) {
+            return;
+        }
 
         // We have a serialized siteaccess object from a fragment (sub-request), we need to get it back.
         if ($request->attributes->has('serialized_siteaccess')) {
