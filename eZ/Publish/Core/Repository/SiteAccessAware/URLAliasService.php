@@ -10,7 +10,7 @@ namespace eZ\Publish\Core\Repository\SiteAccessAware;
 
 use eZ\Publish\API\Repository\URLAliasService as URLAliasServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
+use eZ\Publish\API\Repository\LanguageResolver;
 
 /**
  * SiteAccess aware implementation of URLAliasService injecting languages where needed.
@@ -20,14 +20,14 @@ class URLAliasService implements URLAliasServiceInterface
     /** @var \eZ\Publish\API\Repository\URLAliasService */
     protected $service;
 
-    /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
+    /** @var \eZ\Publish\API\Repository\LanguageResolver */
     protected $languageResolver;
 
     /**
      * Construct service object from aggregated service and LanguageResolver.
      *
      * @param \eZ\Publish\API\Repository\URLAliasService $service
-     * @param \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver $languageResolver
+     * @param \eZ\Publish\API\Repository\LanguageResolver $languageResolver
      */
     public function __construct(
         URLAliasServiceInterface $service,

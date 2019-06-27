@@ -1,36 +1,38 @@
 <?php
 
 /**
- * File containing LanguageResolver class.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
-namespace eZ\Publish\Core\Repository\SiteAccessAware\Language;
+namespace eZ\Bundle\EzPublishCoreBundle\SiteAccess;
+
+use eZ\Publish\Core\MVC\ConfigResolverInterface;
+use eZ\Publish\Core\Repository\SiteAccessAware\Language\AbstractLanguageResolver;
 
 /**
  * Resolves language settings for use in SiteAccess aware Repository.
  */
 final class LanguageResolver extends AbstractLanguageResolver
 {
-    /**
-     * Values typically provided by configuration.
-     *
-     * @var string[]
-     */
-    private $configLanguages;
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
+    private $configResolver;
 
     public function __construct(
-        array $configLanguages,
+        ConfigResolverInterface $configResolver,
         bool $defaultUseAlwaysAvailable = true,
         bool $defaultShowAllTranslations = false
     ) {
-        $this->configLanguages = $configLanguages;
+        $this->configResolver = $configResolver;
         parent::__construct($defaultUseAlwaysAvailable, $defaultShowAllTranslations);
     }
 
+    /**
+     * Get list of languages configured via scope/SiteAccess context.
+     *
+     * @return string[]
+     */
     protected function getConfiguredLanguages(): array
     {
-        return $this->configLanguages;
+        return $this->configResolver->getParameter('languages');
     }
 }

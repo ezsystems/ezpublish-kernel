@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\SearchService as SearchServiceInterface;
 use eZ\Publish\API\Repository\Values\Content\Query;
 use eZ\Publish\API\Repository\Values\Content\LocationQuery;
 use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
-use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
+use eZ\Publish\API\Repository\LanguageResolver;
 
 /**
  * SiteAccess aware implementation of SearchService injecting languages where needed.
@@ -22,14 +22,14 @@ class SearchService implements SearchServiceInterface
     /** @var \eZ\Publish\API\Repository\SearchService */
     protected $service;
 
-    /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
+    /** @var \eZ\Publish\API\Repository\LanguageResolver */
     protected $languageResolver;
 
     /**
      * Construct service object from aggregated service and LanguageResolver.
      *
      * @param \eZ\Publish\API\Repository\SearchService $service
-     * @param \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver $languageResolver
+     * @param \eZ\Publish\API\Repository\LanguageResolver $languageResolver
      */
     public function __construct(
         SearchServiceInterface $service,
