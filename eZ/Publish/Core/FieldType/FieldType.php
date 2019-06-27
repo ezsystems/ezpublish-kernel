@@ -271,7 +271,7 @@ abstract class FieldType extends SPIFieldType
      */
     protected function getSortInfo(Value $value)
     {
-        return false;
+        return null;
     }
 
     /**
