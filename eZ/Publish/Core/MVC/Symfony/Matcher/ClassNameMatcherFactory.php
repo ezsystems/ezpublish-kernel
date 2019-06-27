@@ -20,7 +20,7 @@ use InvalidArgumentException;
  * A relative namespace can be defined. If so, getMatcher() will search for the requested matcher
  * inside this namespace if a relative namespace (not starting with '\') is passed.
  */
-class ClassNameMatcherFactory implements MatcherFactoryInterface
+class ClassNameMatcherFactory implements ConfigurableMatcherFactoryInterface
 {
     /**
      * @var \eZ\Publish\API\Repository\Repository
@@ -145,13 +145,9 @@ class ClassNameMatcherFactory implements MatcherFactoryInterface
 
     /**
      * @param array $matchConfig
-     *
-     * @return AbstractMatcherFactory
      */
-    public function setMatchConfig($matchConfig)
+    public function setMatchConfig(array $matchConfig): void
     {
         $this->matchConfig = $matchConfig;
-
-        return $this;
     }
 }

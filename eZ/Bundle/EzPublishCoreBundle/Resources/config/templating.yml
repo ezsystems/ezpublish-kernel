@@ -75,7 +75,14 @@ services:
         arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
         calls:
             - [setContainer, ["@service_container"]]
-            - [setMatchConfig, [$content_view$]]
+
+    ezpublish.content_view.matcher_factory.dynamically_configured:
+        class: eZ\Publish\Core\MVC\Symfony\Matcher\DynamicallyConfiguredMatcherFactoryDecorator
+        decorates: ezpublish.content_view.matcher_factory
+        arguments:
+            $innerConfigurableMatcherFactory: '@ezpublish.content_view.matcher_factory.dynamically_configured.inner'
+            $configResolver: '@ezpublish.config.resolver'
+            $parameterName: content_view
 
     ezpublish.content_view_provider.default_configured:
         class: "%ezpublish.view_provider.configured.class%"
@@ -88,7 +95,14 @@ services:
         arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
         calls:
             - [setContainer, ["@service_container"]]
-            - [setMatchConfig, [$content_view_defaults$]]
+
+    ezpublish.content_view.default_matcher_factory.dynamically_configured:
+        class: eZ\Publish\Core\MVC\Symfony\Matcher\DynamicallyConfiguredMatcherFactoryDecorator
+        decorates: ezpublish.content_view.default_matcher_factory
+        arguments:
+            $innerConfigurableMatcherFactory: '@ezpublish.content_view.default_matcher_factory.dynamically_configured.inner'
+            $configResolver: '@ezpublish.config.resolver'
+            $parameterName: content_view_defaults
 
     ezpublish.location_view_provider.configured:
         class: "%ezpublish.view_provider.configured.class%"
@@ -101,7 +115,14 @@ services:
         arguments: ["@ezpublish.api.repository", 'eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased']
         calls:
             - [setContainer, ["@service_container"]]
-            - [setMatchConfig, [$location_view$]]
+
+    ezpublish.location_view.matcher_factory.dynamically_configured:
+        class: eZ\Publish\Core\MVC\Symfony\Matcher\DynamicallyConfiguredMatcherFactoryDecorator
+        decorates: ezpublish.location_view.matcher_factory
+        arguments:
+            $innerConfigurableMatcherFactory: '@ezpublish.location_view.matcher_factory.dynamically_configured.inner'
+            $configResolver: '@ezpublish.config.resolver'
+            $parameterName: location_view
 
     ezpublish.templating.global_helper.core:
         class: "%ezpublish.templating.global_helper.core.class%"
