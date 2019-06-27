@@ -302,6 +302,7 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
             return;
         }
 
+        $serviceName = '??';
         $firstService = '??';
         $commandName = null;
         $resettableServiceIds = $container->getParameter('ezpublish.config_resolver.resettable_services');
