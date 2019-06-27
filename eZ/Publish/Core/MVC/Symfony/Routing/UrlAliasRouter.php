@@ -44,29 +44,19 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     const VIEW_ACTION = 'ez_content:viewAction';
 
-    /**
-     * @var \Symfony\Component\Routing\RequestContext
-     */
+    /** @var \Symfony\Component\Routing\RequestContext */
     protected $requestContext;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     protected $locationService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\URLAliasService
-     */
+    /** @var \eZ\Publish\API\Repository\URLAliasService */
     protected $urlAliasService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     protected $contentService;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator */
     protected $generator;
 
     /**
@@ -76,9 +66,7 @@ class UrlAliasRouter implements ChainedRouterInterface, RequestMatcherInterface
      */
     protected $rootLocationId;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
     public function __construct(

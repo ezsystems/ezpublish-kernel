@@ -19,9 +19,7 @@ use eZ\Publish\API\Repository\Values\User\Role as APIRole;
  */
 class Role extends APIRole
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Policy[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy[] */
     protected $policies;
 
     /**

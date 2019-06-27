@@ -23,9 +23,7 @@ class BlockMatcherFactory extends BaseFactory implements SiteAccessAware, Contai
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface;
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface; */
     private $configResolver;
 
     public function __construct(ConfigResolverInterface $configResolver, Repository $repository)

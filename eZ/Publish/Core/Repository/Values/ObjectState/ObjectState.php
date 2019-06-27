@@ -31,9 +31,7 @@ class ObjectState extends APIObjectState
     use MultiLanguageNameTrait;
     use MultiLanguageDescriptionTrait;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     protected $objectStateGroup;
 
     /**

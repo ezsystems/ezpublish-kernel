@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
  */
 class LocationCreateStruct extends ValueObjectVisitor
 {
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     private $locationService;
 
     public function __construct(LocationService $locationService)

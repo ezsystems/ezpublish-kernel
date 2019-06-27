@@ -19,19 +19,13 @@ use eZ\Publish\API\Repository\Values\Content\Relation as APIRelation;
  */
 class Relation extends APIRelation
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     protected $sourceContentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     protected $destinationContentInfo;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $type;
 
     /**

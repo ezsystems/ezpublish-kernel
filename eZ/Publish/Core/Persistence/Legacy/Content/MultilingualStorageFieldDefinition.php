@@ -12,28 +12,18 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 class MultilingualStorageFieldDefinition extends ValueObject
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $description;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $dataText;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $dataJson;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     public $languageId;
 }

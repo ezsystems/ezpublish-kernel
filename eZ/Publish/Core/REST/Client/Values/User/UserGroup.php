@@ -19,9 +19,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroup as APIUserGroup;
  */
 class UserGroup extends APIUserGroup
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     protected $content;
 
     /**

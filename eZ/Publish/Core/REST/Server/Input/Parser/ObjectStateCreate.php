@@ -26,9 +26,7 @@ class ObjectStateCreate extends BaseParser
      */
     protected $objectStateService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
     /**

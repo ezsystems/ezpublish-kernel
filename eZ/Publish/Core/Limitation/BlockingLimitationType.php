@@ -27,9 +27,7 @@ use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
  */
 class BlockingLimitationType implements SPILimitationTypeInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $identifier;
 
     /**

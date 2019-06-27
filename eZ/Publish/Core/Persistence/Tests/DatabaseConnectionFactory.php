@@ -24,9 +24,7 @@ class DatabaseConnectionFactory
      */
     private $databasePlatforms = [];
 
-    /**
-     * @var \Doctrine\Common\EventManager
-     */
+    /** @var \Doctrine\Common\EventManager */
     private $eventManager;
 
     /**

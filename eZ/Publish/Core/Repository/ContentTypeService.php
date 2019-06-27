@@ -46,34 +46,22 @@ use Exception;
 
 class ContentTypeService implements ContentTypeServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\DomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\DomainMapper */
     protected $domainMapper;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
     /**

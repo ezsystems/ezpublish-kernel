@@ -15,9 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class Visitor
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\ValueObjectVisitorDispatcher */
     protected $valueObjectVisitorDispatcher = [];
 
     /**

@@ -68,14 +68,10 @@ class PageTest extends TestCase
 </page>
 EOT;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Page
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\Parts\Page */
     private $pageReference;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\PageConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\PageConverter */
     private $converter;
 
     protected function setUp()

@@ -19,19 +19,13 @@ use eZ\Publish\API\Repository\Values;
 
 class ContentTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
-     */
+    /** @var \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo */
     protected $versionInfoParserMock;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentService */
     protected $contentServiceMock;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser */
     protected $fieldTypeParserMock;
 
     /**

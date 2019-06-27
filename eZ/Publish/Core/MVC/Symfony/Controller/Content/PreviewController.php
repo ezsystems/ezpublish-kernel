@@ -32,29 +32,19 @@ class PreviewController
     const PREVIEW_PARAMETER_NAME = 'isPreview';
     const INTERNAL_LOCATION_VIEW_ROUTE = '_ezpublishLocation';
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \Symfony\Component\HttpKernel\HttpKernelInterface
-     */
+    /** @var \Symfony\Component\HttpKernel\HttpKernelInterface */
     private $kernel;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\ContentPreviewHelper
-     */
+    /** @var \eZ\Publish\Core\Helper\ContentPreviewHelper */
     private $previewHelper;
 
-    /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
-     */
+    /** @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\CustomLocationControllerChecker */
     private $controllerChecker;
 
     public function __construct(

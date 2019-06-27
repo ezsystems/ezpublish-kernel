@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupC
  */
 class UserGroupCreateStruct extends APIUserGroupCreateStruct
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Field[] */
     protected $fields = array();
 
     /**

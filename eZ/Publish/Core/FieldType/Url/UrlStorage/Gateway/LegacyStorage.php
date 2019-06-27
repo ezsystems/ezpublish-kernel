@@ -22,9 +22,7 @@ class LegacyStorage extends Gateway
     const URL_TABLE = 'ezurl';
     const URL_LINK_TABLE = 'ezurl_object_link';
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
     protected $dbHandler;
 
     public function __construct(DatabaseHandler $dbHandler)

@@ -13,19 +13,13 @@ namespace eZ\Publish\Core\REST\Common\Output;
  */
 class ValueObjectVisitorDispatcher
 {
-    /**
-     * @var ValueObjectVisitor[]
-     */
+    /** @var ValueObjectVisitor[] */
     private $visitors;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\Visitor */
     private $outputVisitor;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Generator
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\Generator */
     private $outputGenerator;
 
     public function setOutputVisitor(Visitor $outputVisitor)

@@ -16,14 +16,10 @@ use eZ\Publish\API\Repository\Values;
 
 class ContentTypeTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo
-     */
+    /** @var \eZ\Publish\Core\REST\Client\Input\Parser\VersionInfo */
     protected $versionInfoParserMock;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentService */
     protected $contentTypeServiceMock;
 
     /**

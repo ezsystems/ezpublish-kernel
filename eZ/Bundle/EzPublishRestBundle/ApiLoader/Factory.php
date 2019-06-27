@@ -12,14 +12,10 @@ class Factory
 {
     use RequestStackAware;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
     /**

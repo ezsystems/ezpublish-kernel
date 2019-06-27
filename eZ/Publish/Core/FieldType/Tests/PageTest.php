@@ -32,9 +32,7 @@ class PageTest extends FieldTypeTest
      */
     private $pageServiceMock;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Page
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\Parts\Page */
     protected $pageReference;
 
     protected $hashReference;

@@ -17,9 +17,7 @@ use Symfony\Component\Routing\RequestContext;
 
 class RouterTest extends TestCase
 {
-    /**
-     * @var \Symfony\Cmf\Component\Routing\ChainRouter
-     */
+    /** @var \Symfony\Cmf\Component\Routing\ChainRouter */
     private $router;
 
     protected static $routePrefix = '/api/test/v1';

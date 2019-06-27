@@ -182,9 +182,7 @@ class LegacyStorageTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage
-     */
+    /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway\LegacyStorage */
     protected $storageGateway;
 
     /**

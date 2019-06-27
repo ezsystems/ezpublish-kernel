@@ -17,9 +17,7 @@ use eZ\Publish\Core\REST\Common\Exceptions;
  */
 abstract class Criterion extends BaseParser
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected static $criterionIdMap = [
         'AND' => 'LogicalAnd',
         'OR' => 'LogicalOr',

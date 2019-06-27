@@ -18,9 +18,7 @@ use eZ\Publish\Core\REST\Server\Values\RestLocation;
 
 class BookmarkListTest extends ValueObjectVisitorBaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Server\Values\BookmarkList
-     */
+    /** @var \eZ\Publish\Core\REST\Server\Values\BookmarkList */
     private $data;
 
     protected function setUp()

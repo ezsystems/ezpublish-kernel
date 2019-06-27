@@ -16,9 +16,7 @@ use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
  */
 class StorageEngineFactory
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
     private $repositoryConfigurationProvider;
 
     /**

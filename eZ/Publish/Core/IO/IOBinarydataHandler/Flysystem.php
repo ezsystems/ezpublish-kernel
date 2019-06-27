@@ -22,9 +22,7 @@ class Flysystem implements IOBinaryDataHandler
     /** @var \League\Flysystem\FilesystemInterface */
     private $filesystem;
 
-    /**
-     * @var \eZ\Publish\Core\IO\UrlDecorator
-     */
+    /** @var \eZ\Publish\Core\IO\UrlDecorator */
     private $urlDecorator;
 
     public function __construct(FilesystemInterface $filesystem, UrlDecorator $urlDecorator = null)

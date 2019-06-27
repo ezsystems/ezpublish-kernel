@@ -15,9 +15,7 @@ use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute as Authorizatio
 
 class CoreVoter implements VoterInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
     public function __construct(Repository $repository)

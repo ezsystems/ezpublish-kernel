@@ -18,9 +18,7 @@ use eZ\Publish\Core\FieldType\Image\ImageStorage\Gateway;
  */
 class LegacyStorage extends Gateway
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
     protected $dbHandler;
 
     /**
@@ -36,9 +34,7 @@ class LegacyStorage extends Gateway
         'data_string' => 'xml',
     ];
 
-    /**
-     * @var \eZ\Publish\Core\IO\UrlRedecoratorInterface
-     */
+    /** @var \eZ\Publish\Core\IO\UrlRedecoratorInterface */
     private $redecorator;
 
     public function __construct(UrlRedecoratorInterface $redecorator, DatabaseHandler $dbHandler)

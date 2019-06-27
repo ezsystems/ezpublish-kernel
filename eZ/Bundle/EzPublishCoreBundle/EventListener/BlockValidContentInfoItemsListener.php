@@ -17,9 +17,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class BlockValidContentInfoItemsListener implements EventSubscriberInterface
 {
-    /**
-     * @var PageService
-     */
+    /** @var PageService */
     protected $pageService;
 
     public function __construct(PageService $pageService)

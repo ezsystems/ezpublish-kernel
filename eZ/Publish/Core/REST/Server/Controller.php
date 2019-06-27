@@ -20,19 +20,13 @@ abstract class Controller implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\Dispatcher */
     protected $inputDispatcher;
 
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
+    /** @var \Symfony\Component\Routing\RouterInterface */
     protected $router;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
-     */
+    /** @var \eZ\Publish\Core\REST\Common\RequestParser */
     protected $requestParser;
 
     /**

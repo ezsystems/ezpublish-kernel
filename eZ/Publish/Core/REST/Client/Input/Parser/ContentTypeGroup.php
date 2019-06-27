@@ -19,9 +19,7 @@ use eZ\Publish\Core\REST\Client\Values;
  */
 class ContentTypeGroup extends BaseParser
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
     /**

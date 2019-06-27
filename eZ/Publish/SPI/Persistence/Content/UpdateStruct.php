@@ -12,9 +12,7 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 class UpdateStruct extends ValueObject
 {
-    /**
-     * @var string[] Eg. array( 'eng-GB' => "New Article" )
-     */
+    /** @var string[] Eg. array( 'eng-GB' => "New Article" ) */
     public $name = [];
 
     /**

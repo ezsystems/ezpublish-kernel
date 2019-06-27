@@ -52,19 +52,13 @@ use Psr\Log\LoggerInterface;
  */
 class UserService implements UserServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\User\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\User\Handler */
     protected $userHandler;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
     /** @var \Psr\Log\LoggerInterface|null */

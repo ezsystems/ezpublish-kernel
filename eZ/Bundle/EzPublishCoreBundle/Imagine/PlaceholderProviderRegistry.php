@@ -12,9 +12,7 @@ use InvalidArgumentException;
 
 class PlaceholderProviderRegistry
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider */
     private $providers;
 
     /**

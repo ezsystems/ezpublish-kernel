@@ -36,9 +36,7 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class PreContentViewEvent extends Event
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\View
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\View */
     private $contentView;
 
     public function __construct(View $contentView)

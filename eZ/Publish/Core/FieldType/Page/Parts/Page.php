@@ -15,19 +15,13 @@ namespace eZ\Publish\Core\FieldType\Page\Parts;
  */
 class Page extends Base
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\Parts\Zone[]
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\Parts\Zone[] */
     protected $zones = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $zonesById = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $layout;
 
     public function __construct(array $properties = [])

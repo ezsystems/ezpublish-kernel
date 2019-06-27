@@ -25,14 +25,10 @@ use InvalidArgumentException;
  */
 class UserWrapped implements UserInterface, EquatableInterface
 {
-    /**
-     * @var \Symfony\Component\Security\Core\User\UserInterface
-     */
+    /** @var \Symfony\Component\Security\Core\User\UserInterface */
     private $wrappedUser;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $apiUser;
 
     public function __construct(CoreUserInterface $wrappedUser, APIUser $apiUser)

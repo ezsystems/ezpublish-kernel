@@ -24,21 +24,15 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
  */
 class DefaultRouter extends Router implements RequestMatcherInterface, SiteAccessAware
 {
-    /**
-     * @var SiteAccess
-     */
+    /** @var SiteAccess */
     protected $siteAccess;
 
     protected $nonSiteAccessAwareRoutes = [];
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface */
     protected $siteAccessRouter;
 
     public function setConfigResolver(ConfigResolverInterface $configResolver)

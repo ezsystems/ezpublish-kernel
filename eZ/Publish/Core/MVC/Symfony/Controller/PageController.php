@@ -21,14 +21,10 @@ use eZ\Publish\Core\MVC\Symfony\View\BlockView;
  */
 class PageController extends Controller
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Manager */
     private $viewManager;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\PageService
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\PageService */
     protected $pageService;
 
     public function __construct(ViewManager $viewManager, PageService $pageService)

@@ -24,19 +24,13 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 class Handler implements SearchHandlerInterface
 {
-    /**
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
-     */
+    /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway */
     protected $gateway;
 
-    /**
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway
-     */
+    /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway */
     protected $locationGateway;
 
-    /**
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\MapperInterface
-     */
+    /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\MapperInterface */
     protected $mapper;
 
     /**

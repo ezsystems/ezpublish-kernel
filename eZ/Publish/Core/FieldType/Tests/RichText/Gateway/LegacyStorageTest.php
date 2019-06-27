@@ -38,9 +38,7 @@ class LegacyStorageTest extends TestCase
         );
     }
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway\LegacyStorage */
     protected $storageGateway;
 
     /**

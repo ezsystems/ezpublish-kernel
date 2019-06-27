@@ -19,14 +19,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class Bookmark extends RestController
 {
-    /**
-     * @var \eZ\Publish\API\Repository\BookmarkService
-     */
+    /** @var \eZ\Publish\API\Repository\BookmarkService */
     protected $bookmarkService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     protected $locationService;
 
     /**

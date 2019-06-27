@@ -22,14 +22,10 @@ use eZ\Publish\Core\REST\Client\Values;
  */
 class FieldDefinition extends BaseParser
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser */
     protected $fieldTypeParser;
 
     /**

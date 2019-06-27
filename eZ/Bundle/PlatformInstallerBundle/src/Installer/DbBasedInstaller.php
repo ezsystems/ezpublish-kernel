@@ -14,19 +14,13 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class DbBasedInstaller
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $db;
 
-    /**
-     * @var \Symfony\Component\Console\Output\OutputInterface
-     */
+    /** @var \Symfony\Component\Console\Output\OutputInterface */
     protected $output;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $baseDataDir;
 
     public function __construct(Connection $db)

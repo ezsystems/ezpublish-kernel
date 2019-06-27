@@ -26,9 +26,7 @@ class FieldTypeSerializer
      */
     protected $fieldTypeService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry
-     */
+    /** @var \eZ\Publish\Core\REST\Common\FieldTypeProcessorRegistry */
     protected $fieldTypeProcessorRegistry;
 
     /**

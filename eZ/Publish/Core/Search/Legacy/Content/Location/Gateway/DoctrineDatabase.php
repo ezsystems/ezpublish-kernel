@@ -35,14 +35,10 @@ class DoctrineDatabase extends Gateway
      */
     protected $handler;
 
-    /**
-     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter
-     */
+    /** @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\CriteriaConverter */
     private $criteriaConverter;
 
-    /**
-     * @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter
-     */
+    /** @var \eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseConverter */
     private $sortClauseConverter;
 
     /**

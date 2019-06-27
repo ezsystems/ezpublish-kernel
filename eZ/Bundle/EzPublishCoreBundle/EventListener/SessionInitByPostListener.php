@@ -20,9 +20,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class SessionInitByPostListener implements EventSubscriberInterface
 {
-    /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface
-     */
+    /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface */
     private $session;
 
     public function __construct(SessionInterface $session = null)

@@ -26,14 +26,10 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
  */
 class SiteAccessMatchListener implements EventSubscriberInterface
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Router */
     protected $siteAccessRouter;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
     /**

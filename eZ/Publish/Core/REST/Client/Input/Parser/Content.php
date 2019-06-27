@@ -32,19 +32,13 @@ class Content extends BaseParser
      */
     protected $versionInfoParser;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     protected $contentService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\FieldTypeParser */
     protected $fieldTypeParser;
 
     /**

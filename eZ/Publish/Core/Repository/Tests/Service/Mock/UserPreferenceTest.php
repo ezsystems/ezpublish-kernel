@@ -24,9 +24,7 @@ class UserPreferenceTest extends BaseServiceMockTest
     const USER_PREFERENCE_NAME = 'setting';
     const USER_PREFERENCE_VALUE = 'value';
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\UserPreference\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Persistence\UserPreference\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $userSPIPreferenceHandler;
 
     protected function setUp()

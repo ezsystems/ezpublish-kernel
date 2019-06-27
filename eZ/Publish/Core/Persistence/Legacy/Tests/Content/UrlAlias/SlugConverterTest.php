@@ -254,9 +254,7 @@ class SlugConverterTest extends TestCase
         );
     }
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $configuration = [
         'transformation' => 'testTransformation1',
         'transformationGroups' => [
@@ -278,19 +276,13 @@ class SlugConverterTest extends TestCase
         ],
     ];
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlAlias\SlugConverter */
     protected $slugConverter;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $slugConverterMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $transformationProcessorMock;
 
     /**

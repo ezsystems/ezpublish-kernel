@@ -23,24 +23,16 @@ class GlobalHelper
 {
     use RequestStackAware;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     protected $configResolver;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     protected $locationService;
 
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
+    /** @var \Symfony\Component\Routing\RouterInterface */
     protected $router;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
-     */
+    /** @var \eZ\Publish\Core\Helper\TranslationHelper */
     protected $translationHelper;
 
     public function __construct(

@@ -19,9 +19,7 @@ class RoleContext implements Context
 {
     use RepositoryContext;
 
-    /**
-     * @var \eZ\Publish\API\Repository\roleService
-     */
+    /** @var \eZ\Publish\API\Repository\roleService */
     protected $roleService;
 
     /**

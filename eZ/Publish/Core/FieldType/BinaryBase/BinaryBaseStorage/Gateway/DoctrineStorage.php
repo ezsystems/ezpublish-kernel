@@ -21,9 +21,7 @@ use PDO;
  */
 abstract class DoctrineStorage extends Gateway
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     public function __construct(Connection $connection)

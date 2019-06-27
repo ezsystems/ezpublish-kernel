@@ -23,24 +23,16 @@ use DOMXPath;
  */
 class Link implements Converter
 {
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     protected $locationService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     protected $contentService;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\UrlAliasRouter */
     protected $urlAliasRouter;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
     public function __construct(LocationService $locationService, ContentService $contentService, UrlAliasRouter $urlAliasRouter, LoggerInterface $logger = null)

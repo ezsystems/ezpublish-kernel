@@ -17,9 +17,7 @@ use eZ\Publish\SPI\Persistence\User\Policy;
  */
 class LimitationConverter
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler[]
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationHandler[] */
     protected $limitationHandlers;
 
     /**

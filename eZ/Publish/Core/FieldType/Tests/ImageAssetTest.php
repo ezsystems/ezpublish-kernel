@@ -25,19 +25,13 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 class ImageAssetTest extends FieldTypeTest
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit\Framework\MockObject\MockObject */
     private $contentServiceMock;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject */
     private $contentTypeServiceMock;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper|\PHPUnit\Framework\MockObject\MockObject */
     private $assetMapperMock;
 
     /**

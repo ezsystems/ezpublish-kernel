@@ -28,14 +28,10 @@ class TransactionHandler implements TransactionHandlerInterface
      */
     protected $dbHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Language\Handler */
     protected $languageHandler;
 
     /**

@@ -19,9 +19,7 @@ use eZ\Publish\Core\Repository\Values\ObjectState\ObjectStateGroup as CoreObject
  */
 class ObjectStateGroup extends BaseParser
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
     public function __construct(ParserTools $parserTools)

@@ -15,19 +15,13 @@ class SignalDispatcherFactory
      */
     const RELATIVE_SIGNAL_NAMESPACE = 'eZ\\Publish\\Core\\SignalSlot\\Signal';
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $signalDispatcherClass;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $signalSlotMap = [];
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $searchEngineAlias;
 
     /**

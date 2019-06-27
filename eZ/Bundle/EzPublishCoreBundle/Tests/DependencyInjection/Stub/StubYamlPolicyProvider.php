@@ -11,9 +11,7 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Security\PolicyProvider\Ya
 
 class StubYamlPolicyProvider extends YamlPolicyProvider
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $files;
 
     public function __construct(array $files)

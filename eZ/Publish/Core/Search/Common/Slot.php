@@ -18,19 +18,13 @@ use eZ\Publish\SPI\Search\Handler as SearchHandler;
  */
 abstract class Slot extends BaseSlot
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Search\Handler
-     */
+    /** @var \eZ\Publish\SPI\Search\Handler */
     protected $searchHandler;
 
     public function __construct(

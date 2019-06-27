@@ -20,14 +20,10 @@ use eZ\Publish\API\Repository\ContentTypeService;
  */
 class ContentType extends BaseParser
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     protected $contentTypeService;
 
     /**

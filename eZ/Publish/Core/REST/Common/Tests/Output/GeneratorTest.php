@@ -15,9 +15,7 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class GeneratorTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Generator
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\Generator */
     protected $generator;
 
     /**

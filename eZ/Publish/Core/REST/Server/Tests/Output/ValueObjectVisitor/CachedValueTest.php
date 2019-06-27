@@ -27,9 +27,7 @@ class CachedValueTest extends ValueObjectVisitorBaseTest
         'content.default_ttl' => 60,
     ];
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
     public function setUp()

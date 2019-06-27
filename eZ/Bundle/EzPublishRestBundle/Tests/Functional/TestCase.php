@@ -28,14 +28,10 @@ class TestCase extends BaseTestCase
         'COPY' => 'POST',
     ];
 
-    /**
-     * @var \Buzz\Client\BuzzClientInterface
-     */
+    /** @var \Buzz\Client\BuzzClientInterface */
     private $httpClient;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $httpHost;
 
     /**
@@ -46,9 +42,7 @@ class TestCase extends BaseTestCase
 
     protected static $testSuffix;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $headers = [];
 
     /**

@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
  */
 class BlockingLimitation extends Limitation
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $identifier;
 
     /**

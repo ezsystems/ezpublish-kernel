@@ -19,19 +19,13 @@ class Configuration extends SiteAccessConfiguration
 {
     const CUSTOM_TAG_ATTRIBUTE_TYPES = ['number', 'string', 'boolean', 'choice'];
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ParserInterface */
     private $mainConfigParser;
 
-    /**
-     * @var Configuration\Suggestion\Collector\SuggestionCollectorInterface
-     */
+    /** @var Configuration\Suggestion\Collector\SuggestionCollectorInterface */
     private $suggestionCollector;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter[]
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\SiteAccess\SiteAccessConfigurationFilter[] */
     private $siteAccessConfigurationFilters;
 
     public function __construct(ParserInterface $mainConfigParser, SuggestionCollectorInterface $suggestionCollector)

@@ -15,9 +15,7 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
  */
 class CountryList extends RestValue
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\Countries[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\Countries[] */
     public $countries;
 
     /**

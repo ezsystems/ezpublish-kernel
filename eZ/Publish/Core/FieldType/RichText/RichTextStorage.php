@@ -19,14 +19,10 @@ use DOMXPath;
 
 class RichTextStorage extends GatewayBasedStorage
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway */
     protected $gateway;
 
     /**

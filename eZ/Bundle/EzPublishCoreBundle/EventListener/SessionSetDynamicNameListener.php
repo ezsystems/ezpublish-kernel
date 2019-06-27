@@ -32,19 +32,13 @@ class SessionSetDynamicNameListener implements EventSubscriberInterface
      */
     const SESSION_NAME_PREFIX = 'eZSESSID';
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Session\SessionInterface|null
-     */
+    /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface|null */
     private $session;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface|NativeSessionStorage
-     */
+    /** @var \Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface|NativeSessionStorage */
     private $sessionStorage;
 
     /**

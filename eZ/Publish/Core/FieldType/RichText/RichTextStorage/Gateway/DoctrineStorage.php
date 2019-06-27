@@ -14,9 +14,7 @@ use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway as UrlGateway;
 
 class DoctrineStorage extends Gateway
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     public function __construct(UrlGateway $urlGateway, Connection $connection)

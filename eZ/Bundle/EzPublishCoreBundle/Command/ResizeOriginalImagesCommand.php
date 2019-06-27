@@ -41,49 +41,31 @@ class ResizeOriginalImagesCommand extends Command
     const DEFAULT_ITERATION_COUNT = 25;
     const DEFAULT_REPOSITORY_USER = 'admin';
 
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
+    /** @var \eZ\Publish\API\Repository\UserService */
     private $userService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\SearchService
-     */
+    /** @var \eZ\Publish\API\Repository\SearchService */
     private $searchService;
 
-    /**
-     * @var \Liip\ImagineBundle\Imagine\Filter\FilterManager
-     */
+    /** @var \Liip\ImagineBundle\Imagine\Filter\FilterManager */
     private $filterManager;
 
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $ioService;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface
-     */
+    /** @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface */
     private $extensionGuesser;
 
-    /**
-     * @var \Imagine\Image\ImagineInterface
-     */
+    /** @var \Imagine\Image\ImagineInterface */
     private $imagine;
 
     public function __construct(

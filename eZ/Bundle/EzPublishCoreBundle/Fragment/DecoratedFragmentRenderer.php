@@ -17,14 +17,10 @@ use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
 class DecoratedFragmentRenderer implements FragmentRendererInterface, SiteAccessAware
 {
-    /**
-     * @var \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface
-     */
+    /** @var \Symfony\Component\HttpKernel\Fragment\FragmentRendererInterface */
     private $innerRenderer;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     private $siteAccess;
 
     public function __construct(FragmentRendererInterface $innerRenderer)

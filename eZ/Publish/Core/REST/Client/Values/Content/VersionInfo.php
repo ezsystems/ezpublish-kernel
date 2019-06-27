@@ -30,19 +30,13 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo as APIVersionInfo;
  */
 class VersionInfo extends APIVersionInfo
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentService */
     protected $contentService;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $contentInfoId;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     protected $names;
 
     public function __construct(ContentService $contentService, array $data = array())

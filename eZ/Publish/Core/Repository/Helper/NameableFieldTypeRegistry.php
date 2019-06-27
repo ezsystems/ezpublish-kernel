@@ -19,9 +19,7 @@ use RuntimeException;
  */
 class NameableFieldTypeRegistry
 {
-    /**
-     * @var \eZ\Publish\SPI\FieldType\Nameable[] Hash of SPI FieldTypes where key is identifier
-     */
+    /** @var \eZ\Publish\SPI\FieldType\Nameable[] Hash of SPI FieldTypes where key is identifier */
     protected $fieldTypes;
 
     /**

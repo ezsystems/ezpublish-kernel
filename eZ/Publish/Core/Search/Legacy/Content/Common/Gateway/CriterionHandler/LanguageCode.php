@@ -20,9 +20,7 @@ use eZ\Publish\Core\Persistence\Database\SelectQuery;
  */
 class LanguageCode extends CriterionHandler
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator */
     private $maskGenerator;
 
     /**

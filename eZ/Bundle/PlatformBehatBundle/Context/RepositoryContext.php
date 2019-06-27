@@ -24,9 +24,7 @@ trait RepositoryContext
      */
     private $adminUserId = 14;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
     /**

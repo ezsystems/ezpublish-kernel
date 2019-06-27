@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Values;
  */
 class LogicalOr extends LogicalOperator
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     const TAG_NAME = 'OR';
 
     /**

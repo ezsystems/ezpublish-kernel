@@ -20,9 +20,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class CustomTagsValidatorTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\CustomTagsValidator
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\CustomTagsValidator */
     private $validator;
 
     public function setUp()

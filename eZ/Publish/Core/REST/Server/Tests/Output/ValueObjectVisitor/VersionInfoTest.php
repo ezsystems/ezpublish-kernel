@@ -15,14 +15,10 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 class VersionInfoTest extends ValueObjectVisitorBaseTest
 {
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     protected $creationDate;
 
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     protected $modificationDate;
 
     public function setUp()

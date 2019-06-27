@@ -37,19 +37,13 @@ use Exception;
  */
 class ObjectStateService implements ObjectStateServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\ObjectState\Handler */
     protected $objectStateHandler;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
     /**

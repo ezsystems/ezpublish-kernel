@@ -11,29 +11,19 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 
 class ResolverFactory
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
-     */
+    /** @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface */
     private $resolver;
 
-    /**
-     * @var string|null
-     */
+    /** @var string|null */
     private $resolverDecoratorClass;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $proxyResolverClass;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $relativeResolverClass;
 
     /**

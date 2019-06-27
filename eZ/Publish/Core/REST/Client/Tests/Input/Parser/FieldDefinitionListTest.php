@@ -15,9 +15,7 @@ use eZ\Publish\Core\REST\Client\ContentTypeService;
 
 class FieldDefinitionListTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentService */
     protected $contentTypeServiceMock;
 
     /**

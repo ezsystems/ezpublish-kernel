@@ -34,19 +34,13 @@ class PermissionResolver implements PermissionResolverInterface
      */
     private $sudoNestingLevel = 0;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
     private $roleDomainMapper;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\LimitationService */
     private $limitationService;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\User\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\User\Handler */
     private $userHandler;
 
     /**

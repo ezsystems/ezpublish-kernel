@@ -20,9 +20,7 @@ use eZ\Publish\Core\Repository\Values;
  */
 class Location extends BaseParser
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
     /**

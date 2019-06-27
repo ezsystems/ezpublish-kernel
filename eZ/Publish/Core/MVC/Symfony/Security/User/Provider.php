@@ -20,9 +20,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class Provider implements APIUserProviderInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
     /**

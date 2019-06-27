@@ -30,54 +30,34 @@ class Renderer implements RendererInterface
     const RESOURCE_TYPE_CONTENT = 0;
     const RESOURCE_TYPE_LOCATION = 1;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Repository
-     */
+    /** @var \eZ\Publish\Core\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
-     */
+    /** @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface */
     private $authorizationChecker;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $tagConfigurationNamespace;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $styleConfigurationNamespace;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $embedConfigurationNamespace;
 
-    /**
-     * @var ConfigResolverInterface
-     */
+    /** @var ConfigResolverInterface */
     protected $configResolver;
 
-    /**
-     * @var \Symfony\Component\Templating\EngineInterface
-     */
+    /** @var \Symfony\Component\Templating\EngineInterface */
     protected $templateEngine;
 
-    /**
-     * @var null|\Psr\Log\LoggerInterface
-     */
+    /** @var null|\Psr\Log\LoggerInterface */
     protected $logger;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $customTagsConfiguration;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $customStylesConfiguration;
 
     /**

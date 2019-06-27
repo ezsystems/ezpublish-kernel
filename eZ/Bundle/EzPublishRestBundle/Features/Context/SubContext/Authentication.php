@@ -10,9 +10,7 @@ namespace eZ\Bundle\EzPublishRestBundle\Features\Context\SubContext;
 
 trait Authentication
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Server\Values\UserSession
-     */
+    /** @var \eZ\Publish\Core\REST\Server\Values\UserSession */
     protected $userSession;
 
     /**

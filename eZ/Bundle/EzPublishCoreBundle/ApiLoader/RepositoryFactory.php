@@ -26,9 +26,7 @@ class RepositoryFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
     /**
@@ -45,9 +43,7 @@ class RepositoryFactory implements ContainerAwareInterface
      */
     protected $fieldTypeNameableCollectionFactory;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $repositoryClass;
 
     /**
@@ -64,9 +60,7 @@ class RepositoryFactory implements ContainerAwareInterface
      */
     private $policyMap;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
     public function __construct(

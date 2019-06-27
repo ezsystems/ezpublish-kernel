@@ -21,14 +21,10 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 class InternalLinkValidator
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     private $contentHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler;
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler; */
     private $locationHandler;
 
     /**

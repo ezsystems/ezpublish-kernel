@@ -29,34 +29,22 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class ViewManagerTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Manager
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Manager */
     private $viewManager;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Templating\EngineInterface
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Templating\EngineInterface */
     private $templateEngineMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\EventDispatcher\EventDispatcherInterface */
     private $eventDispatcherMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
     private $repositoryMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolverMock;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator|\PHPUnit\Framework\MockObject\MockObject */
     private $viewConfigurator;
 
     private $viewBaseLayout = 'EzPublishCoreBundle::viewbase.html.twig';

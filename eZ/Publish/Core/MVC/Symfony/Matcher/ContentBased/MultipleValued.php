@@ -15,9 +15,7 @@ use eZ\Publish\Core\MVC\RepositoryAware;
  */
 abstract class MultipleValued extends RepositoryAware implements MatcherInterface
 {
-    /**
-     * @var array Values to test against with isset(). Key is the actual value.
-     */
+    /** @var array Values to test against with isset(). Key is the actual value. */
     protected $values;
 
     /**

@@ -15,13 +15,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  */
 class SessionInput extends ValueObject
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $login;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $password;
 }

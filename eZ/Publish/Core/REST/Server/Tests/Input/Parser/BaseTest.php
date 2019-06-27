@@ -18,19 +18,13 @@ use eZ\Publish\Core\REST\Common\RequestParser;
  */
 abstract class BaseTest extends ParentBaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher|\PHPUnit\Framework\MockObject\MockObject */
     protected $parsingDispatcherMock;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\REST\Common\RequestParser|\PHPUnit\Framework\MockObject\MockObject */
     protected $requestParserMock;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
     /**

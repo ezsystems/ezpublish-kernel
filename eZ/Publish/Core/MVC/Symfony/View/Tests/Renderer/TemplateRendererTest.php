@@ -15,19 +15,13 @@ use PHPUnit\Framework\TestCase;
 
 class TemplateRendererTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Renderer\TemplateRenderer */
     private $renderer;
 
-    /**
-     * @var \Symfony\Component\Templating\EngineInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Symfony\Component\Templating\EngineInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $templateEngineMock;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $eventDispatcherMock;
 
     public function setUp()

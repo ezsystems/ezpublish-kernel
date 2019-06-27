@@ -15,9 +15,7 @@ use eZ\Publish\Core\REST\Common\Value as RestValue;
  */
 class Root extends RestValue
 {
-    /**
-     * @var resource[]
-     */
+    /** @var resource[] */
     protected $resources;
 
     public function __construct(array $resources = [])

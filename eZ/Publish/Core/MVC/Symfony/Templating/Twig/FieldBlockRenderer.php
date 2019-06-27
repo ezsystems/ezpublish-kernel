@@ -25,9 +25,7 @@ class FieldBlockRenderer implements FieldBlockRendererInterface
     const FIELD_DEFINITION_VIEW_SUFFIX = '_settings';
     const FIELD_DEFINITION_EDIT_SUFFIX = '_field_definition_edit';
 
-    /**
-     * @var Twig_Environment
-     */
+    /** @var Twig_Environment */
     private $twig;
 
     /**

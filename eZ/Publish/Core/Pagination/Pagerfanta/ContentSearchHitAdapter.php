@@ -18,19 +18,13 @@ use Pagerfanta\Adapter\AdapterInterface;
  */
 class ContentSearchHitAdapter implements AdapterInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Query
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Query */
     private $query;
 
-    /**
-     * @var \eZ\Publish\API\Repository\SearchService
-     */
+    /** @var \eZ\Publish\API\Repository\SearchService */
     private $searchService;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $nbResults;
 
     public function __construct(Query $query, SearchService $searchService)

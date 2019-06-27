@@ -27,9 +27,7 @@ class ContentTypeGroupInput extends BaseParser
      */
     protected $contentTypeService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParserTools
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParserTools */
     protected $parserTools;
 
     /**

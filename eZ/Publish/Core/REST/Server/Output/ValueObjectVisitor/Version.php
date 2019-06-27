@@ -22,9 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
  */
 class Version extends ValueObjectVisitor
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\FieldTypeSerializer */
     protected $fieldTypeSerializer;
 
     /**

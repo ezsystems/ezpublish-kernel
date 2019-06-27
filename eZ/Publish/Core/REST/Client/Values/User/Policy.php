@@ -19,9 +19,7 @@ use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
  */
 class Policy extends APIPolicy
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation[] */
     protected $limitations = array();
 
     /**

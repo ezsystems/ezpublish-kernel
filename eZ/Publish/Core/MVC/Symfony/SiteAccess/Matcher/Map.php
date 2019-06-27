@@ -34,9 +34,7 @@ abstract class Map implements VersatileMatcher
      */
     protected $reverseMap;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest */
     protected $request;
 
     /**

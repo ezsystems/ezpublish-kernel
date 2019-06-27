@@ -12,14 +12,10 @@ use Symfony\Component\Routing\RouterInterface;
 
 abstract class BaseRelationProcessor extends FieldTypeProcessor
 {
-    /**
-     * @var \Symfony\Component\Routing\RouterInterface
-     */
+    /** @var \Symfony\Component\Routing\RouterInterface */
     private $router;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     private $locationService;
 
     /**

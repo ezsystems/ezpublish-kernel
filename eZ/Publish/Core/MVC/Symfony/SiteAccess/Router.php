@@ -62,31 +62,21 @@ class Router implements SiteAccessRouterInterface, SiteAccessAware
      */
     protected $siteAccessList;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     protected $siteAccess;
 
     protected $siteAccessClass;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface */
     protected $matcherBuilder;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest */
     protected $request;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $debug;
 
     /**

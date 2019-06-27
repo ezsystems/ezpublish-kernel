@@ -18,14 +18,10 @@ use eZ\Publish\SPI\Persistence\Content\Location;
  */
 class LocationHandler extends AbstractInMemoryPersistenceHandler implements LocationHandlerInterface
 {
-    /**
-     * @var callable
-     */
+    /** @var callable */
     private $getLocationTags;
 
-    /**
-     * @var callable
-     */
+    /** @var callable */
     private $getLocationKeys;
 
     protected function init(): void

@@ -19,14 +19,10 @@ use DOMXpath;
  */
 abstract class BaseTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\Converter */
     protected $converter;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Validator
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\Validator */
     protected $validator;
 
     /**

@@ -21,9 +21,7 @@ use PHPUnit\Framework\Assert as Assertion;
  */
 trait EzRest
 {
-    /**
-     * @var string Type of request/response body [JSON/XML]
-     */
+    /** @var string Type of request/response body [JSON/XML] */
     private $restBodyType = 'json';
 
     /**

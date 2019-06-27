@@ -23,9 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TextBlockTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextBlockConverter */
     protected $converter;
 
     protected $longText;

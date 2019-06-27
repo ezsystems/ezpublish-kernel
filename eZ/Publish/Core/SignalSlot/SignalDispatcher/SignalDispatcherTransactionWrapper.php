@@ -23,9 +23,7 @@ use eZ\Publish\SPI\Persistence\TransactionHandler;
  */
 class SignalDispatcherTransactionWrapper extends SignalDispatcher implements TransactionHandler
 {
-    /**
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
-     */
+    /** @var \eZ\Publish\Core\SignalSlot\SignalDispatcher */
     private $signalDispatcher;
 
     /**
@@ -35,14 +33,10 @@ class SignalDispatcherTransactionWrapper extends SignalDispatcher implements Tra
      */
     private $signalsQueue = [];
 
-    /**
-     * @var int Used to keep track of depth of current transaction
-     */
+    /** @var int Used to keep track of depth of current transaction */
     private $transactionDepth = 0;
 
-    /**
-     * @var int Used to be able to unset affected signals on rollback
-     */
+    /** @var int Used to be able to unset affected signals on rollback */
     private $transactionCount = 0;
 
     /**

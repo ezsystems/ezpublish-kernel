@@ -32,9 +32,7 @@ class PageService
      */
     protected $blockDefinition;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\PageStorage\Gateway
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\PageStorage\Gateway */
     protected $storageGateway;
 
     /**
@@ -72,9 +70,7 @@ class PageService
      */
     protected $blocksById;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     protected $contentService;
 
     /**

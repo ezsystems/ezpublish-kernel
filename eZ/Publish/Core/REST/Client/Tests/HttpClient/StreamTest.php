@@ -18,9 +18,7 @@ use PHPUnit\Framework\TestCase;
  */
 class StreamTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Client\HttpClient\Stream
-     */
+    /** @var \eZ\Publish\Core\REST\Client\HttpClient\Stream */
     protected $client;
 
     /**

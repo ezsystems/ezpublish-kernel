@@ -18,9 +18,7 @@ use eZ\Publish\Core\REST\Server\Values;
  */
 class Views extends Controller
 {
-    /**
-     * @var \eZ\Publish\API\Repository\SearchService
-     */
+    /** @var \eZ\Publish\API\Repository\SearchService */
     private $searchService;
 
     public function __construct(SearchService $searchService)

@@ -18,9 +18,7 @@ use Symfony\Component\HttpKernel\DataCollector\DataCollector;
  */
 class PersistenceCacheCollector extends DataCollector
 {
-    /**
-     * @var PersistenceLogger
-     */
+    /** @var PersistenceLogger */
     private $logger;
 
     public function __construct(PersistenceLogger $logger)

@@ -14,9 +14,7 @@ use DOMDocument;
 
 class RichTextProcessor extends FieldTypeProcessor
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\Converter */
     protected $docbookToXhtml5EditConverter;
 
     public function __construct(Converter $docbookToXhtml5EditConverter)

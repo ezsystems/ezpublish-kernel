@@ -18,9 +18,7 @@ class DoctrineStorage extends Gateway
 {
     const MAP_LOCATION_TABLE = 'ezgmaplocation';
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     public function __construct(Connection $connection)

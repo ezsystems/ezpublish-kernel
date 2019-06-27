@@ -20,19 +20,13 @@ use PHPUnit\Framework\TestCase;
 
 class ContentPreviewHelperTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $eventDispatcher;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $siteAccessRouter;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\ContentPreviewHelper
-     */
+    /** @var \eZ\Publish\Core\Helper\ContentPreviewHelper */
     private $previewHelper;
 
     protected function setUp()

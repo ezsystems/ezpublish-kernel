@@ -23,9 +23,7 @@ use eZ\Publish\SPI\Limitation\Type as SPILimitationTypeInterface;
  */
 class SiteAccessLimitationType implements SPILimitationTypeInterface
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $siteAccessList = [];
 
     public function __construct(array $siteAccessList = [])

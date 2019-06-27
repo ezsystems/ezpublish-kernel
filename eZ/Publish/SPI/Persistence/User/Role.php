@@ -12,14 +12,10 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 class Role extends ValueObject
 {
-    /**
-     * @var int Status constant for defined (aka "published") role
-     */
+    /** @var int Status constant for defined (aka "published") role */
     const STATUS_DEFINED = 0;
 
-    /**
-     * @var int Status constant for draft (aka "temporary") role
-     */
+    /** @var int Status constant for draft (aka "temporary") role */
     const STATUS_DRAFT = 1;
 
     /**

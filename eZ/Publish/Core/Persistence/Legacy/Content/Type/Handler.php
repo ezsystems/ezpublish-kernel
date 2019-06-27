@@ -25,9 +25,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 
 class Handler implements BaseContentTypeHandler
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway */
     protected $contentTypeGateway;
 
     /**

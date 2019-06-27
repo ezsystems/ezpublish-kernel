@@ -24,8 +24,6 @@ class DeleteTrashItemSignal extends Signal
      */
     public $trashItemId;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult */
     public $trashItemDeleteResult;
 }

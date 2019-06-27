@@ -23,9 +23,7 @@ class ContentMatcherFactory extends BaseFactory implements SiteAccessAware, Cont
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface;
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface; */
     private $configResolver;
 
     public function __construct(ConfigResolverInterface $configResolver, Repository $repository)

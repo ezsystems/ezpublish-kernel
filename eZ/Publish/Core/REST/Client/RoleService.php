@@ -42,29 +42,19 @@ use eZ\Publish\Core\REST\Common\Message;
  */
 class RoleService implements APIRoleService, Sessionable
 {
-    /**
-     * @var \eZ\Publish\Core\REST\Client\UserService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\UserService */
     private $userService;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\HttpClient
-     */
+    /** @var \eZ\Publish\Core\REST\Client\HttpClient */
     private $client;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\Dispatcher
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\Dispatcher */
     private $inputDispatcher;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Output\Visitor
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Output\Visitor */
     private $outputVisitor;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\RequestParser
-     */
+    /** @var \eZ\Publish\Core\REST\Common\RequestParser */
     private $requestParser;
 
     /**

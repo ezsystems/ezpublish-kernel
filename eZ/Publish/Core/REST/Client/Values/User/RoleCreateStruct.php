@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruc
  */
 class RoleCreateStruct extends APIRoleCreateStruct
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[] */
     private $policies = array();
 
     /**

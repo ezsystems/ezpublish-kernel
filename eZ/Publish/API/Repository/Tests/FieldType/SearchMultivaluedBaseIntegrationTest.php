@@ -96,9 +96,7 @@ abstract class SearchMultivaluedBaseIntegrationTest extends SearchBaseIntegratio
         return [];
     }
 
-    /**
-     * @var array Overload per FieldType on what is supported.
-     */
+    /** @var array Overload per FieldType on what is supported. */
     protected $legacyUnsupportedOperators = [
         Operator::EQ => 'EQ',
         Operator::IN => 'IN',

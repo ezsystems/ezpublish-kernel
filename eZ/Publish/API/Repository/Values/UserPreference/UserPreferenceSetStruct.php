@@ -12,13 +12,9 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 class UserPreferenceSetStruct extends ValueObject
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $value;
 }

@@ -137,9 +137,7 @@ class UserGroupLimitationType extends AbstractPersistenceLimitationType implemen
             );
         }
 
-        /**
-         * @var ContentInfo|ContentCreateStruct
-         */
+        /** @var ContentInfo|ContentCreateStruct */
         if ($object->ownerId === $currentUser->getUserId()) {
             return true;
         }

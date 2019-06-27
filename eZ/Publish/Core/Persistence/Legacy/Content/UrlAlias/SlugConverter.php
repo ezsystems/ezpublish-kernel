@@ -180,9 +180,7 @@ class SlugConverter
      */
     protected $transformationProcessor;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $configuration;
 
     /**

@@ -14,14 +14,10 @@ use Psr\Log\LoggerInterface;
 
 class LocaleConverterTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter */
     private $localeConverter;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $logger;
 
     private $conversionMap;

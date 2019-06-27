@@ -15,9 +15,7 @@ use eZ\Publish\Core\FieldType\Value as BaseValue;
  */
 class ValueStub extends BaseValue
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $value;
 
     /**

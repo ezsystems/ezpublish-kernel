@@ -18,14 +18,10 @@ use Symfony\Component\VarDumper\Dumper\CliDumper;
 
 class DebugConfigResolverCommand extends Command
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     private $siteAccess;
 
     public function __construct(

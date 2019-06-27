@@ -14,14 +14,10 @@ use Twig_SimpleFilter;
 
 class RichTextExtension extends Twig_Extension
 {
-    /**
-     * @var RichTextConverterInterface
-     */
+    /** @var RichTextConverterInterface */
     private $richTextConverter;
 
-    /**
-     * @var RichTextConverterInterface
-     */
+    /** @var RichTextConverterInterface */
     private $richTextEditConverter;
 
     public function __construct(RichTextConverterInterface $richTextConverter, RichTextConverterInterface $richTextEditConverter)

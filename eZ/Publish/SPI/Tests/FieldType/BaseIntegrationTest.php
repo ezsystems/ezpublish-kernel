@@ -55,9 +55,7 @@ abstract class BaseIntegrationTest extends TestCase
      */
     protected static $contentVersion;
 
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerBuilder
-     */
+    /** @var \Symfony\Component\DependencyInjection\ContainerBuilder */
     protected static $container;
 
     /**
@@ -74,9 +72,7 @@ abstract class BaseIntegrationTest extends TestCase
         return $installDir;
     }
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\TransformationProcessor
-     */
+    /** @var \eZ\Publish\Core\Persistence\TransformationProcessor */
     protected $transformationProcessor;
 
     /**

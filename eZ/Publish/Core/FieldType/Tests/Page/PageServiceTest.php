@@ -27,29 +27,19 @@ class PageServiceTest extends TestCase
      */
     const PAGESERVICE_CLASS = PageService::class;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $storageGateway;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Page\PageService
-     */
+    /** @var \eZ\Publish\Core\FieldType\Page\PageService */
     protected $pageService;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $zoneDefinition;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $blockDefinition;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\ContentService */
     protected $contentService;
 
     protected function setUp()

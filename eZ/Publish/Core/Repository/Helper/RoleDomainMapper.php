@@ -30,9 +30,7 @@ use eZ\Publish\SPI\Persistence\User\RoleCreateStruct as SPIRoleCreateStruct;
  */
 class RoleDomainMapper
 {
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\LimitationService */
     protected $limitationService;
 
     /**

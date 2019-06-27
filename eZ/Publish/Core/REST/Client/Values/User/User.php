@@ -19,9 +19,7 @@ use eZ\Publish\API\Repository\Values\User\User as APIUser;
  */
 class User extends APIUser
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     protected $content;
 
     /**

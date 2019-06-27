@@ -22,9 +22,7 @@ class DoctrineStorage extends Gateway
 {
     const IMAGE_FILE_TABLE = 'ezimagefile';
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     /**
@@ -40,9 +38,7 @@ class DoctrineStorage extends Gateway
         'data_string' => 'xml',
     ];
 
-    /**
-     * @var \eZ\Publish\Core\IO\UrlRedecoratorInterface
-     */
+    /** @var \eZ\Publish\Core\IO\UrlRedecoratorInterface */
     private $redecorator;
 
     public function __construct(UrlRedecoratorInterface $redecorator, Connection $connection)

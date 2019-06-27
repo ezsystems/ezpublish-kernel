@@ -27,24 +27,16 @@ use eZ\Publish\Core\Repository\Values\Content\Content as APIContent;
  */
 class Content extends APIContent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[][] Array of array of field values like[$fieldDefIdentifier][$languageCode]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Field[][] Array of array of field values like[$fieldDefIdentifier][$languageCode] */
     protected $fields;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     protected $versionInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Field[] */
     private $internalFields;
 
-    /**
-     * @var \eZ\Publish\Core\REST\Client\ContentService
-     */
+    /** @var \eZ\Publish\Core\REST\Client\ContentService */
     protected $contentService;
 
     /**

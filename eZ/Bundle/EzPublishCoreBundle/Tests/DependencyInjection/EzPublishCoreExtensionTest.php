@@ -23,9 +23,7 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
 
     private $siteaccessConfig = [];
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension */
     private $extension;
 
     /**

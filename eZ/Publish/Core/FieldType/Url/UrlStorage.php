@@ -19,14 +19,10 @@ use Psr\Log\LoggerInterface;
  */
 class UrlStorage extends GatewayBasedStorage
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway
-     */
+    /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway */
     protected $gateway;
 
     /**

@@ -21,9 +21,7 @@ class QueryControllerContext extends RawMinkContext implements Context
 {
     use RepositoryContext;
 
-    /**
-     * @var YamlConfigurationContext
-     */
+    /** @var YamlConfigurationContext */
     private $configurationContext;
 
     /**

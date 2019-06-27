@@ -19,9 +19,7 @@ use eZ\Publish\Core\REST\Common\Exceptions\InvalidArgumentException;
  */
 class Router implements RequestParser
 {
-    /**
-     * @var \Symfony\Cmf\Component\Routing\ChainRouter
-     */
+    /** @var \Symfony\Cmf\Component\Routing\ChainRouter */
     private $router;
 
     public function __construct(RouterInterface $router)

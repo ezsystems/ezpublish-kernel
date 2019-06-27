@@ -23,14 +23,10 @@ use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
  */
 class BinaryLoader implements LoaderInterface
 {
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $ioService;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface
-     */
+    /** @var \Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface */
     private $extensionGuesser;
 
     public function __construct(IOServiceInterface $ioService, ExtensionGuesserInterface $extensionGuesser)

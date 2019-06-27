@@ -32,9 +32,7 @@ class Dispatcher
      */
     protected $handlers = [];
 
-    /**
-     * @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher
-     */
+    /** @var \eZ\Publish\Core\REST\Common\Input\ParsingDispatcher */
     protected $parsingDispatcher;
 
     /**

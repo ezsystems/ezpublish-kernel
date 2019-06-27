@@ -13,9 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class MapperTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\URL\Mapper
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\URL\Mapper */
     private $mapper;
 
     protected function setUp()

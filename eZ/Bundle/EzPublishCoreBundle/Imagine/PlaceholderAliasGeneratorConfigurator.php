@@ -12,19 +12,13 @@ use eZ\Publish\Core\MVC\ConfigResolverInterface;
 
 class PlaceholderAliasGeneratorConfigurator
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProviderRegistry */
     private $providerRegistry;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $providersConfig;
 
     /**

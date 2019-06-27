@@ -13,14 +13,10 @@ use eZ\Publish\Core\MVC\Exception\ParameterNotFoundException;
 
 class ChainConfigResolver implements ConfigResolverInterface
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface[]
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface[] */
     protected $resolvers = [];
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface[]
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface[] */
     protected $sortedResolvers;
 
     /**

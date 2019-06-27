@@ -23,9 +23,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class Indexer extends SearchIndexer
 {
-    /**
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler
-     */
+    /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Handler */
     protected $searchHandler;
 
     /**

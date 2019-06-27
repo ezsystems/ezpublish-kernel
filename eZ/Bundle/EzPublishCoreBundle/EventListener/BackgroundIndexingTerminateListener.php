@@ -27,24 +27,16 @@ class BackgroundIndexingTerminateListener implements BackgroundIndexerInterface,
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Search\Handler
-     */
+    /** @var \eZ\Publish\SPI\Search\Handler */
     protected $searchHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\ContentInfo[]
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\ContentInfo[] */
     protected $contentInfo = [];
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location[]
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location[] */
     protected $locations = [];
 
     public function __construct(PersistenceHandler $persistenceHandler, SearchHandler $searchHandler)

@@ -23,24 +23,16 @@ class UrlWildcardRouter implements ChainedRouterInterface, RequestMatcherInterfa
 {
     public const URL_ALIAS_ROUTE_NAME = 'ez_urlalias';
 
-    /**
-     * @var \eZ\Publish\API\Repository\URLWildcardService
-     */
+    /** @var \eZ\Publish\API\Repository\URLWildcardService */
     private $wildcardService;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\UrlAliasGenerator */
     private $generator;
 
-    /**
-     * @var \Symfony\Component\Routing\RequestContext
-     */
+    /** @var \Symfony\Component\Routing\RequestContext */
     private $requestContext;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
     /**

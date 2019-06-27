@@ -47,34 +47,22 @@ class DomainMapper
     const MAX_LOCATION_PRIORITY = 2147483647;
     const MIN_LOCATION_PRIORITY = -2147483648;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     protected $contentHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
     protected $locationHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler */
     protected $contentTypeHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
     protected $contentTypeDomainMapper;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Language\Handler */
     protected $contentLanguageHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\FieldTypeRegistry */
     protected $fieldTypeRegistry;
 
     /**

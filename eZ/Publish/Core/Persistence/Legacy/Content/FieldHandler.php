@@ -29,9 +29,7 @@ class FieldHandler
      */
     protected $contentGateway;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler */
     protected $languageHandler;
 
     /**

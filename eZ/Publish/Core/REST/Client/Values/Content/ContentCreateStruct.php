@@ -20,9 +20,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentCreateStruct as APIContentCr
  */
 class ContentCreateStruct extends APIContentCreateStruct
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Field[] */
     protected $fields = array();
 
     /**

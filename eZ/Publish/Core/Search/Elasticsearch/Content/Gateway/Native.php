@@ -24,9 +24,7 @@ use RuntimeException;
  */
 class Native extends Gateway
 {
-    /**
-     * @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient
-     */
+    /** @var \eZ\Publish\Core\Search\Elasticsearch\Content\Gateway\HttpClient */
     protected $client;
 
     /**

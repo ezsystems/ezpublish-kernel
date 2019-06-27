@@ -36,14 +36,10 @@ class RegenerateUrlAliasesCommand extends Command
 - Manually clear HTTP cache after running this command.
 EOT;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
     /**
