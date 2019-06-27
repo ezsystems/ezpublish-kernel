@@ -101,6 +101,7 @@ services:
 
     ezpublish.image_alias.imagine.cache.alias_generator_decorator:
         class: '%ezpublish.image_alias.imagine.cache.alias_generator_decorator.class%'
+        lazy: true
         arguments:
             - '@ezpublish.image_alias.imagine.variation.imagine_alias_generator'
             - '@ezpublish.cache_pool'
