@@ -1,3 +1,6 @@
+parameters:
+    languages: []
+
 services:
     ezpublish.siteaccessaware.repository:
         class: eZ\Publish\Core\Repository\SiteAccessAware\Repository
@@ -80,6 +83,17 @@ services:
             - '@eZ\Publish\Core\SignalSlot\NotificationService'
 
     # Helpers
-    ezpublish.helper.language_resolver:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver
+    eZ\Publish\Core\Repository\SiteAccessAware\Language\AbstractLanguageResolver:
+        arguments:
+            $defaultUseAlwaysAvailable: true
+            $defaultShowAllTranslations: false
+
+    eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver:
+        parent: eZ\Publish\Core\Repository\SiteAccessAware\Language\AbstractLanguageResolver
         arguments: ['%languages%']
+
+    eZ\Publish\API\Repository\LanguageResolver:
+        alias: eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver
+
+    ezpublish.helper.language_resolver:
+        alias: eZ\Publish\API\Repository\LanguageResolver

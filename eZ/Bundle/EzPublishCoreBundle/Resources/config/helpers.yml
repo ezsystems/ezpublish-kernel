@@ -59,6 +59,10 @@ services:
         arguments:
             - "@ezpublish.api.repository"
 
-    ezpublish.helper.language_resolver:
-        class: eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver
-        arguments: ['$languages$']
+    eZ\Bundle\EzPublishCoreBundle\SiteAccess\LanguageResolver:
+        parent: eZ\Publish\Core\Repository\SiteAccessAware\Language\AbstractLanguageResolver
+        arguments:
+            $configResolver: '@ezpublish.config.resolver'
+
+    eZ\Publish\API\Repository\LanguageResolver:
+        alias: eZ\Bundle\EzPublishCoreBundle\SiteAccess\LanguageResolver

@@ -14,7 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
-use eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver;
+use eZ\Publish\API\Repository\LanguageResolver;
 
 /**
  * LocationService for SiteAccessAware layer.
@@ -26,14 +26,14 @@ class LocationService implements LocationServiceInterface
     /** @var \eZ\Publish\API\Repository\LocationService */
     protected $service;
 
-    /** @var \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver */
+    /** @var \eZ\Publish\API\Repository\LanguageResolver */
     protected $languageResolver;
 
     /**
      * Construct service object from aggregated service and LanguageResolver.
      *
      * @param \eZ\Publish\API\Repository\LocationService $service
-     * @param \eZ\Publish\Core\Repository\SiteAccessAware\Language\LanguageResolver $languageResolver
+     * @param \eZ\Publish\API\Repository\LanguageResolver $languageResolver
      */
     public function __construct(
         LocationServiceInterface $service,

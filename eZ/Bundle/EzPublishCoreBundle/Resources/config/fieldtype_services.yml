@@ -43,6 +43,7 @@ services:
 
     ezpublish.fieldType.ezimageasset.parameterProvider:
         class: \eZ\Publish\Core\MVC\Symfony\FieldType\ImageAsset\ParameterProvider
+        lazy: true
         arguments:
             - "@ezpublish.siteaccessaware.repository"
         tags:
@@ -100,6 +101,7 @@ services:
 
     # Symfony 3.4+ service definitions:
     eZ\Publish\Core\FieldType\ImageAsset\AssetMapper:
+        lazy: true
         arguments:
             $contentService: '@ezpublish.api.service.content'
             $locationService: '@ezpublish.api.service.location'
