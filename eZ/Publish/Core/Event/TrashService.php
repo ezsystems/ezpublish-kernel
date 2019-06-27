@@ -58,7 +58,7 @@ class TrashService extends TrashServiceDecorator
 
     public function recover(
         TrashItem $trashItem,
-        Location $newParentLocation = null
+        ?Location $newParentLocation = null
     ) {
         $eventData = [
             $trashItem,
