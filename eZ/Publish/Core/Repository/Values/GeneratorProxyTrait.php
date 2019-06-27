@@ -33,9 +33,7 @@ trait GeneratorProxyTrait
      */
     protected $id;
 
-    /**
-     * @var Generator|null
-     */
+    /** @var Generator|null */
     private $generator;
 
     /**

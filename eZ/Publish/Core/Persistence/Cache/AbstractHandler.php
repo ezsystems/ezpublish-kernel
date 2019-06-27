@@ -16,19 +16,13 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
  */
 abstract class AbstractHandler
 {
-    /**
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
-     */
+    /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface */
     protected $cache;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
     /**

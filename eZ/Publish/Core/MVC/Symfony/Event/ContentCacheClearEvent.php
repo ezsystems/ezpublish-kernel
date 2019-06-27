@@ -20,14 +20,10 @@ use Symfony\Component\EventDispatcher\Event;
  */
 class ContentCacheClearEvent extends Event
 {
-    /**
-     * @var ContentInfo
-     */
+    /** @var ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var Location[]
-     */
+    /** @var Location[] */
     private $locationsToClear = [];
 
     public function __construct(ContentInfo $contentInfo)

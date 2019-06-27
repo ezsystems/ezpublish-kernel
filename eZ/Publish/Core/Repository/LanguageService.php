@@ -27,19 +27,13 @@ use Exception;
  */
 class LanguageService implements LanguageServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Language\Handler */
     protected $languageHandler;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
     /**

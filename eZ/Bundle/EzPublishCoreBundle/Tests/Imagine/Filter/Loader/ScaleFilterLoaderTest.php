@@ -16,14 +16,10 @@ use PHPUnit\Framework\TestCase;
 
 class ScaleFilterLoaderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $innerLoader;
 
-    /**
-     * @var ScaleFilterLoader
-     */
+    /** @var ScaleFilterLoader */
     private $loader;
 
     protected function setUp(): void

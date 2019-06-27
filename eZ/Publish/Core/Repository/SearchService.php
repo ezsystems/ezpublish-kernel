@@ -31,34 +31,22 @@ use eZ\Publish\SPI\Search\Handler;
  */
 class SearchService implements SearchServiceInterface
 {
-    /**
-     * @var \eZ\Publish\Core\Repository\Repository
-     */
+    /** @var \eZ\Publish\Core\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Search\Handler
-     */
+    /** @var \eZ\Publish\SPI\Search\Handler */
     protected $searchHandler;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\DomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\DomainMapper */
     protected $domainMapper;
 
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionCriterionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionCriterionResolver */
     protected $permissionCriterionResolver;
 
-    /**
-     * @var \eZ\Publish\Core\Search\Common\BackgroundIndexer
-     */
+    /** @var \eZ\Publish\Core\Search\Common\BackgroundIndexer */
     protected $backgroundIndexer;
 
     /**

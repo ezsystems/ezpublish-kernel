@@ -58,9 +58,7 @@ class ContentUpdaterTest extends TestCase
      */
     protected $contentUpdater;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper */
     protected $contentMapperMock;
 
     /**

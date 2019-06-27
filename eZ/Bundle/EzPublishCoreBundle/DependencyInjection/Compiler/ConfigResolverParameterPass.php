@@ -25,9 +25,7 @@ use Symfony\Component\ExpressionLanguage\Expression;
  */
 class ConfigResolverParameterPass implements CompilerPassInterface
 {
-    /**
-     * @var DynamicSettingParserInterface
-     */
+    /** @var DynamicSettingParserInterface */
     private $dynamicSettingParser;
 
     public function __construct(DynamicSettingParserInterface $dynamicSettingParser)

@@ -23,9 +23,7 @@ class RepositoryFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $repositoryClass;
 
     /**

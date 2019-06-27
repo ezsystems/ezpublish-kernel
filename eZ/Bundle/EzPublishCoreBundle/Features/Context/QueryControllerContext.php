@@ -18,9 +18,7 @@ use Symfony\Component\Yaml\Yaml;
 
 class QueryControllerContext extends RawMinkContext implements Context
 {
-    /**
-     * @var YamlConfigurationContext
-     */
+    /** @var YamlConfigurationContext */
     private $configurationContext;
 
     /**

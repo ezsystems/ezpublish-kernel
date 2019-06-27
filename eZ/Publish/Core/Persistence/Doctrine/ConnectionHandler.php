@@ -22,9 +22,7 @@ use Doctrine\DBAL\DBALException;
  */
 class ConnectionHandler implements DatabaseHandler
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     /**

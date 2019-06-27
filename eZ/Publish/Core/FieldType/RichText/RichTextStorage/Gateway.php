@@ -19,9 +19,7 @@ use eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway as UrlGateway;
  */
 abstract class Gateway extends StorageGateway
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway
-     */
+    /** @var \eZ\Publish\Core\FieldType\Url\UrlStorage\Gateway */
     protected $urlGateway;
 
     public function __construct(UrlGateway $urlGateway)

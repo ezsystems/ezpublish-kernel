@@ -19,14 +19,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class SessionInitByPostListenerTest extends TestCase
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\EventListener\SessionInitByPostListener
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\EventListener\SessionInitByPostListener */
     private $listener;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $session;
 
     protected function setUp(): void

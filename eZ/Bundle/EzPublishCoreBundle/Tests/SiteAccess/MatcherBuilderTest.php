@@ -17,9 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MatcherBuilderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $container;
 
     protected function setUp(): void

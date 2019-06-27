@@ -46,9 +46,7 @@ class Type extends BaseType
         self::TYPE_HTML5_AUDIO,
     ];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settingsSchema = [
         'mediaType' => [
             'type' => 'choice',

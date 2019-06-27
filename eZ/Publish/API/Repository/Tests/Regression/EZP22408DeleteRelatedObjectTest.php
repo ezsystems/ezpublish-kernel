@@ -14,9 +14,7 @@ use eZ\Publish\Core\FieldType\Relation\Value as RelationValue;
 
 class EZP22408DeleteRelatedObjectTest extends BaseTest
 {
-    /**
-     * @var ContentType
-     */
+    /** @var ContentType */
     private $testContentType;
 
     protected function setUp(): void
@@ -42,9 +40,7 @@ class EZP22408DeleteRelatedObjectTest extends BaseTest
         $contentService->deleteContent($targetObject1->contentInfo);
 
         $reloadedReferenceObject = $contentService->loadContent($referenceObject->id);
-        /**
-         * @var RelationListValue
-         */
+        /** @var RelationListValue */
         $relationListValue = $reloadedReferenceObject->getFieldValue('relation_list');
         $this->assertSame([$targetObject2->id], $relationListValue->destinationContentIds);
     }
@@ -62,9 +58,7 @@ class EZP22408DeleteRelatedObjectTest extends BaseTest
         $contentService->deleteContent($targetObject->contentInfo);
 
         $reloadedReferenceObject = $contentService->loadContent($referenceObject->id);
-        /**
-         * @var RelationValue
-         */
+        /** @var RelationValue */
         $relationValue = $reloadedReferenceObject->getFieldValue('single_relation');
         $this->assertEmpty($relationValue->destinationContentId);
     }

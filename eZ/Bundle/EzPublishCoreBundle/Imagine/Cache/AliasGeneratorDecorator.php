@@ -19,24 +19,16 @@ use Symfony\Component\Routing\RequestContext;
  */
 class AliasGeneratorDecorator implements VariationHandler, SiteAccessAware
 {
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
+    /** @var \eZ\Publish\SPI\Variation\VariationHandler */
     private $aliasGenerator;
 
-    /**
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
-     */
+    /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface */
     private $cache;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     private $siteAccess;
 
-    /**
-     * @var \Symfony\Component\Routing\RequestContext
-     */
+    /** @var \Symfony\Component\Routing\RequestContext */
     private $requestContext;
 
     /**

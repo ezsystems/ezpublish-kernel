@@ -16,9 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GenericProvider implements PlaceholderProvider
 {
-    /**
-     * @var \Imagine\Image\ImagineInterface
-     */
+    /** @var \Imagine\Image\ImagineInterface */
     private $imagine;
 
     /**

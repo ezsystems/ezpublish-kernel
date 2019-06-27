@@ -15,9 +15,7 @@ use eZ\Publish\API\Repository\Repository;
 
 class DepthTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Depth
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Depth */
     private $matcher;
 
     protected function setUp(): void

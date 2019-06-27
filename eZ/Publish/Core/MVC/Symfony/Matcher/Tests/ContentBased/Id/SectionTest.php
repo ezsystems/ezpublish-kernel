@@ -15,9 +15,7 @@ use eZ\Publish\Core\MVC\Symfony\Matcher\Tests\ContentBased\BaseTest;
 
 class SectionTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\Section
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\Section */
     private $matcher;
 
     protected function setUp(): void

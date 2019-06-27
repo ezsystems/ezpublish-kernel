@@ -23,24 +23,16 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 class SiteAccessMatchListenerTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $saRouter;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $eventDispatcher;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $userHashMatcher;
 
-    /**
-     * @var SiteAccessMatchListener
-     */
+    /** @var SiteAccessMatchListener */
     private $listener;
 
     protected function setUp(): void

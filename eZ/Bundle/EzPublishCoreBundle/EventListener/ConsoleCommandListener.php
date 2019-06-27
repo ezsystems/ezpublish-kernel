@@ -23,19 +23,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAware
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $defaultSiteAccessName;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $siteAccessList;
 
-    /**
-     * @var EventDispatcherInterface
-     */
+    /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
     /**
@@ -43,9 +37,7 @@ class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAwar
      */
     private $siteAccess;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $debug;
 
     /**

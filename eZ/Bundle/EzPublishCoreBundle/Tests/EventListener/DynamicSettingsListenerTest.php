@@ -22,14 +22,10 @@ use Symfony\Component\DependencyInjection\ExpressionLanguage;
 
 class DynamicSettingsListenerTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $container;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $expressionLanguage;
 
     protected function setUp(): void

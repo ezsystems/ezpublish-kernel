@@ -15,9 +15,7 @@ use LogicException;
 
 class URIElement implements VersatileMatcher, URILexer
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest */
     private $request;
 
     /**

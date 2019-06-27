@@ -17,9 +17,7 @@ class CommonTest extends AbstractParserTestCase
 {
     private $minimalConfig;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $suggestionCollector;
 
     protected function getContainerExtensions(): array

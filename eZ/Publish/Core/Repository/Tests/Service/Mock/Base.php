@@ -26,24 +26,16 @@ use eZ\Publish\SPI\Persistence\Handler;
  */
 abstract class Base extends TestCase
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\Repository|\PHPUnit\Framework\MockObject\MockObject */
     private $repositoryMock;
 
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver|\PHPUnit\Framework\MockObject\MockObject */
     private $permissionResolverMock;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $persistenceMock;
 
     /**
@@ -55,9 +47,7 @@ abstract class Base extends TestCase
      */
     private $spiMockHandlers = [];
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\Repository\Helper\ContentTypeDomainMapper */
     private $contentTypeDomainMapperMock;
 
     /**

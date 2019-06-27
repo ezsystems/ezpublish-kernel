@@ -22,9 +22,7 @@ use InvalidArgumentException;
  */
 class ClassNameMatcherFactory implements ConfigurableMatcherFactoryInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
     /**
@@ -35,9 +33,7 @@ class ClassNameMatcherFactory implements ConfigurableMatcherFactoryInterface
      */
     protected $matchConfig;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[]
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[] */
     protected $matchers = [];
 
     /**

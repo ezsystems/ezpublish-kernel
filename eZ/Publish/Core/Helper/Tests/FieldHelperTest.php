@@ -23,24 +23,16 @@ use PHPUnit\Framework\TestCase;
 
 class FieldHelperTest extends TestCase
 {
-    /**
-     * @var FieldHelper
-     */
+    /** @var FieldHelper */
     private $fieldHelper;
 
-    /**
-     * @var FieldTypeService|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var FieldTypeService|\PHPUnit\Framework\MockObject\MockObject */
     private $fieldTypeServiceMock;
 
-    /**
-     * @var ContentTypeService|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var ContentTypeService|\PHPUnit\Framework\MockObject\MockObject */
     private $contentTypeServiceMock;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Helper\TranslationHelper|\PHPUnit\Framework\MockObject\MockObject */
     private $translationHelper;
 
     protected function setUp(): void

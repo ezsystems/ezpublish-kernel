@@ -23,9 +23,7 @@ use PHPUnit\Framework\TestCase;
  */
 class SelectionTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\SelectionConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\SelectionConverter */
     protected $converter;
 
     protected function setUp(): void

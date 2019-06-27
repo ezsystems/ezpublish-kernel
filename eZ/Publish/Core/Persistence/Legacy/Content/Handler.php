@@ -86,9 +86,7 @@ class Handler implements BaseContentHandler
      */
     protected $treeHandler;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
     /**

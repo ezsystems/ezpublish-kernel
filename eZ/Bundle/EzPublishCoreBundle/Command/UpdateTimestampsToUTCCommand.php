@@ -32,44 +32,28 @@ class UpdateTimestampsToUTCCommand extends ContainerAwareCommand
         'all' => ['ezdate', 'ezdatetime'],
     ];
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $done = 0;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $timezone;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $mode;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $from;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $to;
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $phpPath;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $dryRun;
 
     protected function configure()

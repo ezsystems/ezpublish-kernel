@@ -18,9 +18,7 @@ class DoctrineStorage extends Gateway
     const KEYWORD_TABLE = 'ezkeyword';
     const KEYWORD_ATTRIBUTE_LINK_TABLE = 'ezkeyword_attribute_link';
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     public function __construct(Connection $connection)

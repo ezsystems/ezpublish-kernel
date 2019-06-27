@@ -23,19 +23,13 @@ use eZ\Publish\Core\MVC\Symfony\Security\User;
 
 class RepositoryAuthenticationProviderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface */
     private $encoderFactory;
 
-    /**
-     * @var RepositoryAuthenticationProvider
-     */
+    /** @var RepositoryAuthenticationProvider */
     private $authProvider;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
     private $repository;
 
     protected function setUp(): void

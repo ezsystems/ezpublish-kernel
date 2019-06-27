@@ -15,14 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 class ScaleWidthDownOnlyFilterLoaderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $innerLoader;
 
-    /**
-     * @var ScaleWidthDownOnlyFilterLoader
-     */
+    /** @var ScaleWidthDownOnlyFilterLoader */
     private $loader;
 
     protected function setUp(): void

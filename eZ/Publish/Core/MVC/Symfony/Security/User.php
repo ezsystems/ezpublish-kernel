@@ -15,19 +15,13 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 
 class User implements ReferenceUserInterface, EquatableInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserReference
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserReference */
     private $reference;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $roles;
 
     public function __construct(APIUser $user = null, array $roles = [])

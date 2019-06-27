@@ -20,9 +20,7 @@ use Symfony\Component\Config\Definition\Builder\NodeBuilder;
  */
 class Common extends AbstractParser implements SuggestionCollectorAwareInterface
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Suggestion\Collector\SuggestionCollectorInterface */
     private $suggestionCollector;
 
     /**

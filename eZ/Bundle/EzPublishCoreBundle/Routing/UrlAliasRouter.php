@@ -15,9 +15,7 @@ use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 
 class UrlAliasRouter extends BaseUrlAliasRouter
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface;
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface; */
     protected $configResolver;
 
     /**

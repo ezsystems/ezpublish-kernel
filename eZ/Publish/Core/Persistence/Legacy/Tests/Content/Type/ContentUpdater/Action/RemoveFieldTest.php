@@ -34,9 +34,7 @@ class RemoveFieldTest extends TestCase
      */
     protected $contentStorageHandlerMock;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper */
     protected $contentMapperMock;
 
     /**

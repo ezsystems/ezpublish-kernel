@@ -30,9 +30,7 @@ class Type extends FieldType
         ],
     ];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $countriesInfo;
 
     /**

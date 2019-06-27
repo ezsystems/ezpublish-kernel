@@ -524,9 +524,7 @@ class EmbedTest extends TestCase
         );
     }
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $rendererMock;
 
     /**
@@ -537,9 +535,7 @@ class EmbedTest extends TestCase
         return $this->createMock(RendererInterface::class);
     }
 
-    /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
     /**

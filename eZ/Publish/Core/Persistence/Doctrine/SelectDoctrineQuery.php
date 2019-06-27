@@ -28,19 +28,13 @@ class SelectDoctrineQuery extends AbstractDoctrineQuery implements SelectQuery
         'having' => [],
     ];
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $distinct = false;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $limit;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $offset;
 
     /**

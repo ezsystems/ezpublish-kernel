@@ -16,9 +16,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyDraft as APIPolicyDraft;
  */
 class PolicyDraft extends APIPolicyDraft
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Policy
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     protected $innerPolicy;
 
     /**

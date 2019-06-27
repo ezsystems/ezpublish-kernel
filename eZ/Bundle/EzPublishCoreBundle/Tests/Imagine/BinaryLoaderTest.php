@@ -21,19 +21,13 @@ use Symfony\Component\HttpFoundation\File\MimeType\ExtensionGuesserInterface;
 
 class BinaryLoaderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $ioService;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $extensionGuesser;
 
-    /**
-     * @var BinaryLoader
-     */
+    /** @var BinaryLoader */
     private $binaryLoader;
 
     protected function setUp(): void

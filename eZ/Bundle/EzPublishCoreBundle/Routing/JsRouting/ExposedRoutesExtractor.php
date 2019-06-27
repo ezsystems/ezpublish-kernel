@@ -17,14 +17,10 @@ use Symfony\Component\Routing\RouteCollection;
  */
 class ExposedRoutesExtractor implements ExposedRoutesExtractorInterface
 {
-    /**
-     * @var \FOS\JsRoutingBundle\Extractor\ExposedRoutesExtractorInterface
-     */
+    /** @var \FOS\JsRoutingBundle\Extractor\ExposedRoutesExtractorInterface */
     private $innerExtractor;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\RequestStack
-     */
+    /** @var \Symfony\Component\HttpFoundation\RequestStack */
     private $requestStack;
 
     public function __construct(ExposedRoutesExtractorInterface $innerExtractor, RequestStack $requestStack)

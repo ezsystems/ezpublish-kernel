@@ -18,9 +18,7 @@ use PHPUnit\Framework\TestCase;
 
 class LegacyTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\Image\IO\Legacy
-     */
+    /** @var \eZ\Publish\Core\FieldType\Image\IO\Legacy */
     protected $service;
 
     /**

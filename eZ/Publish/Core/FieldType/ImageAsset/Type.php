@@ -25,24 +25,16 @@ class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = 'ezimageasset';
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper
-     */
+    /** @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper */
     private $assetMapper;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     private $handler;
 
     /**

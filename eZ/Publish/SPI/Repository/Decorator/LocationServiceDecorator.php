@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 
 abstract class LocationServiceDecorator implements LocationService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     protected $innerService;
 
     public function __construct(LocationService $innerService)

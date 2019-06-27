@@ -13,9 +13,7 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess\VersatileMatcher;
 
 class HostElement implements VersatileMatcher
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest */
     private $request;
 
     /**

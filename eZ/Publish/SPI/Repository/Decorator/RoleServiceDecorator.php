@@ -24,9 +24,7 @@ use eZ\Publish\API\Repository\Values\User\UserGroup;
 
 abstract class RoleServiceDecorator implements RoleService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\RoleService
-     */
+    /** @var \eZ\Publish\API\Repository\RoleService */
     protected $innerService;
 
     public function __construct(RoleService $innerService)

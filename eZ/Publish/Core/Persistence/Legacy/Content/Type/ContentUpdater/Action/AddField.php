@@ -44,9 +44,7 @@ class AddField extends Action
      */
     protected $fieldValueConverter;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper */
     protected $contentMapper;
 
     /**

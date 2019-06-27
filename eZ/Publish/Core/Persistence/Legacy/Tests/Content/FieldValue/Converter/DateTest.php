@@ -27,14 +27,10 @@ use DateTime;
  */
 class DateTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateConverter */
     protected $converter;
 
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     protected $date;
 
     protected function setUp(): void

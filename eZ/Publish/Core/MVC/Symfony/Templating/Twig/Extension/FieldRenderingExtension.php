@@ -24,19 +24,13 @@ use Twig\TwigFunction;
  */
 class FieldRenderingExtension extends AbstractExtension
 {
-    /**
-     * @var FieldBlockRendererInterface|\eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer
-     */
+    /** @var FieldBlockRendererInterface|\eZ\Publish\Core\MVC\Symfony\Templating\Twig\FieldBlockRenderer */
     private $fieldBlockRenderer;
 
-    /**
-     * @var ParameterProviderRegistryInterface
-     */
+    /** @var ParameterProviderRegistryInterface */
     private $parameterProviderRegistry;
 
-    /**
-     * @var TranslationHelper
-     */
+    /** @var TranslationHelper */
     private $translationHelper;
 
     /**

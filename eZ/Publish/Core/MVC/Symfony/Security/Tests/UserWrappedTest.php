@@ -18,9 +18,7 @@ use Symfony\Component\Security\Core\User\User;
 
 class UserWrappedTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $apiUser;
 
     protected function setUp(): void

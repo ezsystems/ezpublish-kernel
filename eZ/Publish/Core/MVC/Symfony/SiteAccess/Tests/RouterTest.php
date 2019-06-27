@@ -21,9 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RouterTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder */
     private $matcherBuilder;
 
     protected function setUp(): void

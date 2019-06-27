@@ -14,9 +14,7 @@ use Twig\TwigFunction;
 
 class RoutingExtension extends AbstractExtension
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGeneratorInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\Generator\RouteReferenceGeneratorInterface */
     private $routeReferenceGenerator;
 
     public function __construct(RouteReferenceGeneratorInterface $routeReferenceGenerator)

@@ -24,9 +24,7 @@ class Location extends APILocation
      */
     protected $contentInfo;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $path;
 
     /**

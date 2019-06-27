@@ -15,14 +15,10 @@ use eZ\Publish\Core\SignalSlot\Signal\UserPreferenceService\UserPreferenceSetSig
 
 class UserPreferenceService implements UserPreferenceServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserPreferenceService
-     */
+    /** @var \eZ\Publish\API\Repository\UserPreferenceService */
     protected $service;
 
-    /**
-     * @var \eZ\Publish\Core\SignalSlot\SignalDispatcher
-     */
+    /** @var \eZ\Publish\Core\SignalSlot\SignalDispatcher */
     protected $signalDispatcher;
 
     /**

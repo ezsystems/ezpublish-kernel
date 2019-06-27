@@ -33,14 +33,10 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo as SPIVersionInfo;
  */
 class LanguageLimitationType implements SPITargetAwareLimitationType
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Language\Handler */
     private $persistenceLanguageHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     private $persistenceContentHandler;
 
     /**

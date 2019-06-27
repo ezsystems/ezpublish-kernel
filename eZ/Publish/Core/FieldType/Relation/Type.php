@@ -49,9 +49,7 @@ class Type extends FieldType
         ],
     ];
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
     private $handler;
 
     public function __construct(SPIContentHandler $handler)

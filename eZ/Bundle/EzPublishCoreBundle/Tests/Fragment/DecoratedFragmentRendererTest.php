@@ -18,9 +18,7 @@ use Symfony\Component\HttpKernel\Fragment\RoutableFragmentRenderer;
 
 class DecoratedFragmentRendererTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $innerRenderer;
 
     protected function setUp(): void

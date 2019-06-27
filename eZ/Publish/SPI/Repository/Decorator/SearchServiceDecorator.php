@@ -15,9 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 abstract class SearchServiceDecorator implements SearchService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\SearchService
-     */
+    /** @var \eZ\Publish\API\Repository\SearchService */
     protected $innerService;
 
     public function __construct(SearchService $innerService)

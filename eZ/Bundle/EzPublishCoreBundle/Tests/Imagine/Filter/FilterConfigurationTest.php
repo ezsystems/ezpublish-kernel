@@ -14,14 +14,10 @@ use PHPUnit\Framework\TestCase;
 
 class FilterConfigurationTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $configResolver;
 
-    /**
-     * @var FilterConfiguration
-     */
+    /** @var FilterConfiguration */
     private $filterConfiguration;
 
     protected function setUp(): void

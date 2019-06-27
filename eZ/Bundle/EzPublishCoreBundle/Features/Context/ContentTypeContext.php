@@ -26,14 +26,10 @@ class ContentTypeContext implements Context
      */
     const DEFAULT_LANGUAGE = 'eng-GB';
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     protected $contentTypeService;
 
-    /**
-     * @var \EzSystems\BehatBundle\Context\Object\ContentTypeGroup
-     */
+    /** @var \EzSystems\BehatBundle\Context\Object\ContentTypeGroup */
     protected $contentTypeGroupContext;
 
     /**

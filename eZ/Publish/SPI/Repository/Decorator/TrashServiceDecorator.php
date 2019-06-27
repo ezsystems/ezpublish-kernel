@@ -15,9 +15,7 @@ use eZ\Publish\API\Repository\Values\Content\TrashItem;
 
 abstract class TrashServiceDecorator implements TrashService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\TrashService
-     */
+    /** @var \eZ\Publish\API\Repository\TrashService */
     protected $innerService;
 
     public function __construct(TrashService $innerService)

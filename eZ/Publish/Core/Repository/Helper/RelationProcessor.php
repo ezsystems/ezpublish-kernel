@@ -27,9 +27,7 @@ class RelationProcessor
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistenceHandler;
 
     /**

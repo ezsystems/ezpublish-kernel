@@ -19,9 +19,7 @@ use eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct;
 
 abstract class ObjectStateServiceDecorator implements ObjectStateService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ObjectStateService
-     */
+    /** @var \eZ\Publish\API\Repository\ObjectStateService */
     protected $innerService;
 
     public function __construct(ObjectStateService $innerService)

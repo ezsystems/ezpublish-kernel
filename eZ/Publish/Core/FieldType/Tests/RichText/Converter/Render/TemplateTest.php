@@ -16,14 +16,10 @@ use DOMDocument;
 
 class TemplateTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\RendererInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $rendererMock;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\Converter|\PHPUnit\Framework\MockObject\MockObject */
     protected $converterMock;
 
     protected function setUp(): void

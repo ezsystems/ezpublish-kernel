@@ -39,9 +39,7 @@ class ConfigurationProcessor
      */
     protected $scopeNodeName;
 
-    /**
-     * @var ContextualizerInterface
-     */
+    /** @var ContextualizerInterface */
     protected $contextualizer;
 
     public function __construct(ContainerInterface $containerBuilder, $namespace, $siteAcccessNodeName = 'system')

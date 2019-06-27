@@ -16,9 +16,7 @@ use eZ\Publish\API\Repository\Repository;
 
 class ParentLocationTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ParentLocation */
     private $matcher;
 
     protected function setUp(): void

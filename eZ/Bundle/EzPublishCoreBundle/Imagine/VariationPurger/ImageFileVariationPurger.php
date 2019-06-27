@@ -27,9 +27,7 @@ class ImageFileVariationPurger implements VariationPurger
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator */
     private $variationPathGenerator;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
     public function __construct(Iterator $imageFileList, IOServiceInterface $ioService, VariationPathGenerator $variationPathGenerator)

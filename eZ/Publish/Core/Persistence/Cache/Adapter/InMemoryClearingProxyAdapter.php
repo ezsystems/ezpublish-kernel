@@ -18,14 +18,10 @@ use Psr\Cache\CacheItemInterface;
  */
 class InMemoryClearingProxyAdapter implements TagAwareAdapterInterface
 {
-    /**
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface
-     */
+    /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface */
     private $pool;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\inMemory\InMemoryCache[]
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\inMemory\InMemoryCache[] */
     private $inMemoryPools;
 
     /**

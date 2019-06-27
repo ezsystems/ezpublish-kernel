@@ -13,9 +13,7 @@ namespace eZ\Bundle\EzPublishCoreBundle\Imagine\Filter;
  */
 abstract class AbstractFilter implements FilterInterface
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $options;
 
     public function __construct(array $options = [])

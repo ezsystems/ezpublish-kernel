@@ -22,9 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class TextLineTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLineConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLineConverter */
     protected $converter;
 
     protected function setUp(): void

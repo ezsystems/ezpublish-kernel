@@ -38,14 +38,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExceptionListenerTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Contracts\Translation\TranslatorInterface
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\Symfony\Contracts\Translation\TranslatorInterface */
     private $translator;
 
-    /**
-     * @var ExceptionListener
-     */
+    /** @var ExceptionListener */
     private $listener;
 
     protected function setUp(): void

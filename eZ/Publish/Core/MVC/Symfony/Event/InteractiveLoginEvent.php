@@ -13,9 +13,7 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent as BaseInteracti
 
 class InteractiveLoginEvent extends BaseInteractiveLoginEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $apiUser;
 
     /**

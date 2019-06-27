@@ -19,19 +19,13 @@ use eZ\Publish\Core\Persistence\Database\QueryException;
  */
 class UpdateDoctrineQuery extends AbstractDoctrineQuery implements UpdateQuery
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $table;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $values = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $where = [];
 
     /**

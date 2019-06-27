@@ -30,9 +30,7 @@ use Psr\Log\LoggerInterface;
  */
 class ContentExtensionTest extends FileSystemTwigIntegrationTestCase
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit\Framework\MockObject\MockObject */
     private $fieldHelperMock;
 
     private $fieldDefinitions = [];

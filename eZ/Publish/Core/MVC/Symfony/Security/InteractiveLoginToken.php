@@ -16,9 +16,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 class InteractiveLoginToken extends UsernamePasswordToken
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $originalTokenType;
 
     public function __construct(UserInterface $user, $originalTokenType, $credentials, $providerKey, array $roles = [])

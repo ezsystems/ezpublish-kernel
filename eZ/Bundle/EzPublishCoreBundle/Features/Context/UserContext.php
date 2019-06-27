@@ -32,14 +32,10 @@ class UserContext implements Context
     const USERGROUP_ROOT_SUBTREE = '/1/5/';
     const USERGROUP_CONTENT_IDENTIFIER = 'user_group';
 
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
+    /** @var \eZ\Publish\API\Repository\UserService */
     protected $userService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\SearchService
-     */
+    /** @var \eZ\Publish\API\Repository\SearchService */
     protected $searchService;
 
     /**

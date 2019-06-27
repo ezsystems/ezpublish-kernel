@@ -22,9 +22,7 @@ class EZP21109EzIntegerTest extends BaseTest
      */
     protected $classShortName;
 
-    /**
-     * @var ContentType
-     */
+    /** @var ContentType */
     protected $contentType;
 
     protected function setUp(): void

@@ -35,34 +35,22 @@ use Exception;
  */
 class SectionService implements SectionServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
     protected $permissionResolver;
 
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionCriterionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionCriterionResolver */
     protected $permissionCriterionResolver;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Section\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Section\Handler */
     protected $sectionHandler;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
     protected $locationHandler;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
     /**

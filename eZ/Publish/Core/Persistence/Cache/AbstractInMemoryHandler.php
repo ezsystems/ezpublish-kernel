@@ -24,9 +24,7 @@ abstract class AbstractInMemoryHandler
      */
     protected $cache;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
     /**

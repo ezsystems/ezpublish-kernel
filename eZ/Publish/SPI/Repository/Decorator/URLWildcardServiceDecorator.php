@@ -13,9 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\URLWildcard;
 
 abstract class URLWildcardServiceDecorator implements URLWildcardService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\URLWildcardService
-     */
+    /** @var \eZ\Publish\API\Repository\URLWildcardService */
     protected $innerService;
 
     public function __construct(URLWildcardService $innerService)

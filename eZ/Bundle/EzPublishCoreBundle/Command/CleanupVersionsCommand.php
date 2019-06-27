@@ -34,19 +34,13 @@ class CleanupVersionsCommand extends Command
         self::VERSION_PUBLISHED => VersionInfo::STATUS_PUBLISHED,
     ];
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \Doctrine\DBAL\Driver\Connection
-     */
+    /** @var \Doctrine\DBAL\Driver\Connection */
     private $connection;
 
     public function __construct(

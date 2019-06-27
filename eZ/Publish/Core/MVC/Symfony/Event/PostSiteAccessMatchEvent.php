@@ -17,14 +17,10 @@ use eZ\Publish\Core\MVC\Symfony\SiteAccess;
  */
 class PostSiteAccessMatchEvent extends Event
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     private $siteAccess;
 
-    /**
-     * @var \Symfony\Component\HttpFoundation\Request
-     */
+    /** @var \Symfony\Component\HttpFoundation\Request */
     private $request;
 
     /**

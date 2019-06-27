@@ -18,9 +18,7 @@ class FieldRegistry
 {
     private const INDEXABLE_FIELD_TYPE_TAG = 'ezpublish.fieldType.indexable';
 
-    /**
-     * @var \eZ\Publish\SPI\FieldType\Indexable[]
-     */
+    /** @var \eZ\Publish\SPI\FieldType\Indexable[] */
     protected $types = [];
 
     /**

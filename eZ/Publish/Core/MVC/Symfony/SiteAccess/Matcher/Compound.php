@@ -19,9 +19,7 @@ use eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest;
  */
 abstract class Compound implements CompoundInterface, URILexer
 {
-    /**
-     * @var array Collection of rules using the Compound matcher.
-     */
+    /** @var array Collection of rules using the Compound matcher. */
     protected $config;
 
     /**
@@ -32,19 +30,13 @@ abstract class Compound implements CompoundInterface, URILexer
      */
     protected $matchersMap = [];
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[]
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\Matcher[] */
     protected $subMatchers = [];
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilderInterface */
     protected $matcherBuilder;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Routing\SimplifiedRequest */
     protected $request;
 
     public function __construct(array $config)

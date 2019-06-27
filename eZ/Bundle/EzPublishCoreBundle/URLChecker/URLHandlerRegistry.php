@@ -10,9 +10,7 @@ use InvalidArgumentException;
 
 class URLHandlerRegistry implements URLHandlerRegistryInterface
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerInterface[]
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerInterface[] */
     private $handlers = [];
 
     /**

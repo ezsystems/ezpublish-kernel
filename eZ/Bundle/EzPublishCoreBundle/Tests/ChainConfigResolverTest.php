@@ -9,9 +9,7 @@ use PHPUnit\Framework\TestCase;
 
 class ChainConfigResolverTest extends TestCase
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\ChainConfigResolver */
     private $chainResolver;
 
     protected function setUp(): void

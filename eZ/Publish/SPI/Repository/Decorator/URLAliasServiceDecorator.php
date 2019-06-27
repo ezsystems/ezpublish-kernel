@@ -13,9 +13,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 
 abstract class URLAliasServiceDecorator implements URLAliasService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\URLAliasService
-     */
+    /** @var \eZ\Publish\API\Repository\URLAliasService */
     protected $innerService;
 
     public function __construct(URLAliasService $innerService)

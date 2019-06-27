@@ -15,14 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 class CropFilterLoaderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $innerLoader;
 
-    /**
-     * @var CropFilterLoader
-     */
+    /** @var CropFilterLoader */
     private $loader;
 
     protected function setUp(): void

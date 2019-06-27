@@ -21,36 +21,24 @@ use Psr\Log\LoggerInterface;
 
 class TranslationHelperTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $logger;
 
-    /**
-     * @var \eZ\Publish\Core\Helper\TranslationHelper
-     */
+    /** @var \eZ\Publish\Core\Helper\TranslationHelper */
     private $translationHelper;
 
     private $siteAccessByLanguages;
 
-    /**
-     * @var Field[]
-     */
+    /** @var Field[] */
     private $translatedFields;
 
-    /**
-     * @var string[]
-     */
+    /** @var string[] */
     private $translatedNames;
 
     protected function setUp(): void

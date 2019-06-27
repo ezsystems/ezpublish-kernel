@@ -23,14 +23,10 @@ class ContentContentInfoProxy extends APIContentInfo
 {
     use GeneratorProxyTrait;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo|null */
     protected $object;
 
-    /**
-     * @var ContentProxy
-     */
+    /** @var ContentProxy */
     protected $proxy;
 
     public function __construct(ContentProxy $proxy, int $id, $status = APIContentInfo::STATUS_PUBLISHED)

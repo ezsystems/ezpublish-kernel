@@ -17,9 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ContextualizerTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $container;
 
     private $namespace = 'ez_test';
@@ -34,9 +32,7 @@ class ContextualizerTest extends TestCase
         'sa3' => ['sa_group1'],
     ];
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Contextualizer
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\SiteAccessAware\Contextualizer */
     private $contextualizer;
 
     protected function setUp(): void

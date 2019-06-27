@@ -20,9 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class UrlTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlConverter */
     protected $converter;
 
     protected function setUp(): void

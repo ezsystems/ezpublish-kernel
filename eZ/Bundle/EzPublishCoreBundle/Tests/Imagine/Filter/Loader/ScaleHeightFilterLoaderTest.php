@@ -15,14 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 class ScaleHeightFilterLoaderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $innerLoader;
 
-    /**
-     * @var ScaleHeightFilterLoader
-     */
+    /** @var ScaleHeightFilterLoader */
     private $loader;
 
     protected function setUp(): void

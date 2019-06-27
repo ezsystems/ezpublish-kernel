@@ -14,9 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 
 abstract class LanguageServiceDecorator implements LanguageService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\LanguageService
-     */
+    /** @var \eZ\Publish\API\Repository\LanguageService */
     protected $innerService;
 
     public function __construct(LanguageService $innerService)

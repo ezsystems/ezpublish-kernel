@@ -18,9 +18,7 @@ use eZ\Publish\SPI\Persistence\Content\VersionInfo;
  */
 class LegacyStorage extends Gateway
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Database\DatabaseHandler */
     protected $dbHandler;
 
     public function __construct(DatabaseHandler $dbHandler)

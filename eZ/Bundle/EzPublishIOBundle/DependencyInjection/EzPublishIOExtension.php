@@ -22,14 +22,10 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  */
 class EzPublishIOExtension extends Extension
 {
-    /**
-     * @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|\ArrayObject
-     */
+    /** @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|\ArrayObject */
     private $metadataHandlerFactories;
 
-    /**
-     * @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|\ArrayObject
-     */
+    /** @var \eZ\Bundle\EzPublishIOBundle\DependencyInjection\ConfigurationFactory[]|\ArrayObject */
     private $binarydataHandlerFactories;
 
     public function __construct()

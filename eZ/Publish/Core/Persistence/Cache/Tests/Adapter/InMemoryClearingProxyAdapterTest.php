@@ -19,24 +19,16 @@ use PHPUnit\Framework\TestCase;
  */
 class InMemoryClearingProxyAdapterTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\Adapter\InMemoryClearingProxyAdapter */
     protected $cache;
 
-    /**
-     * @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Symfony\Component\Cache\Adapter\TagAwareAdapterInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $innerPool;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\InMemory\InMemoryCache|\PHPUnit\Framework\MockObject\MockObject */
     protected $inMemory;
 
-    /**
-     * @var \Closure
-     */
+    /** @var \Closure */
     private $cacheItemsClosure;
 
     /**

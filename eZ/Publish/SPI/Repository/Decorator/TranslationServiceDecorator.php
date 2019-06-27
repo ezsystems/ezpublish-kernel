@@ -13,9 +13,7 @@ use eZ\Publish\API\Repository\Values\Translation;
 
 abstract class TranslationServiceDecorator implements TranslationService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\TranslationService
-     */
+    /** @var \eZ\Publish\API\Repository\TranslationService */
     protected $innerService;
 
     public function __construct(TranslationService $innerService)

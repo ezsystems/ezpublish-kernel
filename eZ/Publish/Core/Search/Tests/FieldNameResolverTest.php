@@ -787,9 +787,7 @@ class FieldNameResolverTest extends TestCase
         return $fieldNameResolver;
     }
 
-    /**
-     * @var \eZ\Publish\Core\Search\Common\FieldRegistry|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Search\Common\FieldRegistry|\PHPUnit\Framework\MockObject\MockObject */
     protected $fieldRegistryMock;
 
     /**
@@ -820,9 +818,7 @@ class FieldNameResolverTest extends TestCase
         return $this->createMock(SPIFieldType::class);
     }
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Type\Handler|\PHPUnit\Framework\MockObject\MockObject */
     protected $contentTypeHandlerMock;
 
     /**
@@ -837,9 +833,7 @@ class FieldNameResolverTest extends TestCase
         return $this->contentTypeHandlerMock;
     }
 
-    /**
-     * @var \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\Search\Common\FieldNameGenerator|\PHPUnit\Framework\MockObject\MockObject */
     protected $fieldNameGeneratorMock;
 
     /**

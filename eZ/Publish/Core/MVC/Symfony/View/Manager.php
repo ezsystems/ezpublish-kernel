@@ -21,14 +21,10 @@ use RuntimeException;
 
 class Manager implements ViewManagerInterface
 {
-    /**
-     * @var \Symfony\Component\Templating\EngineInterface
-     */
+    /** @var \Symfony\Component\Templating\EngineInterface */
     protected $templateEngine;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
     /**
@@ -45,24 +41,16 @@ class Manager implements ViewManagerInterface
      */
     protected $locationViewProviders = [];
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[]
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Content[] */
     protected $sortedContentViewProviders;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[]
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\Provider\Location[] */
     protected $sortedLocationViewProviders;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
     /**
@@ -73,9 +61,7 @@ class Manager implements ViewManagerInterface
      */
     protected $viewBaseLayout;
 
-    /**
-     * @var ConfigResolverInterface
-     */
+    /** @var ConfigResolverInterface */
     protected $configResolver;
 
     /** @var \eZ\Publish\Core\MVC\Symfony\View\Configurator */

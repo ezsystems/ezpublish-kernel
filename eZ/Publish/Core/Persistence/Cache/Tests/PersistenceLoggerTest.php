@@ -16,9 +16,7 @@ use PHPUnit\Framework\TestCase;
  */
 class PersistenceLoggerTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger
-     */
+    /** @var \eZ\Publish\Core\Persistence\Cache\PersistenceLogger */
     protected $logger;
 
     /**

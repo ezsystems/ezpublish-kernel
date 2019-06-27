@@ -17,9 +17,7 @@ class ConnectionFactory implements ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\ApiLoader\RepositoryConfigurationProvider */
     protected $repositoryConfigurationProvider;
 
     public function __construct(RepositoryConfigurationProvider $repositoryConfigurationProvider)

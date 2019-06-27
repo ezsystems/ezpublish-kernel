@@ -15,9 +15,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class RememberMeRepositoryAuthenticationProvider extends RememberMeAuthenticationProvider
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
     public function setRepository(Repository $repository)

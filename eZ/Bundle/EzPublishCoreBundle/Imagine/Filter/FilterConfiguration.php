@@ -14,9 +14,7 @@ use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration as BaseFilterConfigura
 
 class FilterConfiguration extends BaseFilterConfiguration
 {
-    /**
-     * @var ConfigResolverInterface
-     */
+    /** @var ConfigResolverInterface */
     private $configResolver;
 
     /**

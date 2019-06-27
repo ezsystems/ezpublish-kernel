@@ -20,9 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class SudoMainLocationLoaderTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader\SudoMainLocationLoader
-     */
+    /** @var \eZ\Publish\Core\Helper\ContentInfoLocationLoader\SudoMainLocationLoader */
     private $loader;
 
     protected function setUp(): void

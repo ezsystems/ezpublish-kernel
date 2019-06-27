@@ -23,39 +23,25 @@ use PHPUnit\Framework\TestCase;
 
 class RequestEventListenerTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $configResolver;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $router;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|LoggerInterface */
     private $logger;
 
-    /**
-     * @var RequestEventListener
-     */
+    /** @var RequestEventListener */
     private $requestEventListener;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     private $request;
 
-    /**
-     * @var GetResponseEvent
-     */
+    /** @var GetResponseEvent */
     private $event;
 
-    /**
-     * @var HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var HttpKernelInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $httpKernel;
 
     protected function setUp(): void

@@ -16,9 +16,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BuildSchemaSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $schemaFilePath;
 
     /**

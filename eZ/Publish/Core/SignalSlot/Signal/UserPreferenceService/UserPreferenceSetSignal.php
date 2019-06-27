@@ -12,13 +12,9 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 class UserPreferenceSetSignal extends Signal
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $value;
 }

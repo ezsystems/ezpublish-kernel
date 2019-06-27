@@ -18,9 +18,7 @@ use eZ\Publish\SPI\Search;
  */
 class SearchField implements Indexable
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $countriesInfo;
 
     /**

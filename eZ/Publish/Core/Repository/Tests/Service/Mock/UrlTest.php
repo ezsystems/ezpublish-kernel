@@ -24,9 +24,7 @@ use eZ\Publish\SPI\Persistence\URL\URL as SpiUrl;
 
 class UrlTest extends BaseServiceMockTest
 {
-    /**
-     * @var \eZ\Publish\API\Repository\URLService|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\URLService|\PHPUnit\Framework\MockObject\MockObject */
     private $urlHandler;
 
     protected function setUp(): void

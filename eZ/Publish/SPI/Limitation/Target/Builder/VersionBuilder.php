@@ -20,9 +20,7 @@ use eZ\Publish\SPI\Limitation\Target;
  */
 final class VersionBuilder
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $targetVersionProperties = [];
 
     public function build(): Target\Version

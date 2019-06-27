@@ -22,14 +22,10 @@ use DOMDocument;
  */
 class ToRichTextPreNormalize implements Converter
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\Expanding
-     */
+    /** @var \eZ\Publish\Core\FieldType\XmlText\Converter\Expanding */
     protected $expandingConverter;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking
-     */
+    /** @var \eZ\Publish\Core\FieldType\XmlText\Converter\EmbedLinking */
     protected $embedLinkingConverter;
 
     /**

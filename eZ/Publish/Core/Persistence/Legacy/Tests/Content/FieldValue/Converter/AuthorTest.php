@@ -27,14 +27,10 @@ use DOMDocument;
  */
 class AuthorTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\AuthorConverter */
     protected $converter;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Author\Author[]
-     */
+    /** @var \eZ\Publish\Core\FieldType\Author\Author[] */
     private $authors;
 
     protected function setUp(): void

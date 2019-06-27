@@ -31,49 +31,31 @@ use PDO;
 
 class ReindexCommand extends Command
 {
-    /**
-     * @var string string
-     */
+    /** @var string string */
     protected static $defaultName = 'ezplatform:reindex';
 
-    /**
-     * @var \eZ\Publish\Core\Search\Common\Indexer|\eZ\Publish\Core\Search\Common\IncrementalIndexer
-     */
+    /** @var \eZ\Publish\Core\Search\Common\Indexer|\eZ\Publish\Core\Search\Common\IncrementalIndexer */
     private $searchIndexer;
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\Location\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\Location\Handler */
     private $locationHandler;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $phpPath;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $siteaccess;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $env;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $isDebug;
 
     /**
@@ -305,9 +287,7 @@ EOT
 
     private function runParallelProcess(ProgressBar $progress, Statement $stmt, $processCount, $iterationCount, $commit)
     {
-        /**
-         * @var \Symfony\Component\Process\Process[]|null[]
-         */
+        /** @var \Symfony\Component\Process\Process[]|null[] */
         $processes = array_fill(0, $processCount, null);
         $generator = $this->fetchIteration($stmt, $iterationCount);
         do {

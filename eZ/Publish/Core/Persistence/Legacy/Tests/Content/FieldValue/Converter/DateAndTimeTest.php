@@ -28,14 +28,10 @@ use ReflectionObject;
  */
 class DateAndTimeTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\DateAndTimeConverter */
     protected $converter;
 
-    /**
-     * @var \DateTime
-     */
+    /** @var \DateTime */
     protected $date;
 
     protected function setUp(): void

@@ -45,39 +45,25 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
     const UNDEFINED_STRATEGY_EXCEPTION = 1;
     const UNDEFINED_STRATEGY_NULL = 2;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     protected $siteAccess;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
-    /**
-     * @var array Siteaccess groups, indexed by siteaccess name
-     */
+    /** @var array Siteaccess groups, indexed by siteaccess name */
     protected $groupsBySiteAccess;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $defaultNamespace;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $defaultScope;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $undefinedStrategy;
 
-    /**
-     * @var array[] List of blame => [params] loaded while siteAccess->matchingType was 'uninitialized'
-     */
+    /** @var array[] List of blame => [params] loaded while siteAccess->matchingType was 'uninitialized' */
     private $tooEarlyLoadedList = [];
 
     /**

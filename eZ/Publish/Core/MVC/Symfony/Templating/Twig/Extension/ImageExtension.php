@@ -20,14 +20,10 @@ use Twig\TwigFunction;
 
 class ImageExtension extends AbstractExtension
 {
-    /**
-     * @var VariationHandler
-     */
+    /** @var VariationHandler */
     private $imageVariationService;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper
-     */
+    /** @var \eZ\Publish\Core\FieldType\ImageAsset\AssetMapper */
     protected $assetMapper;
 
     public function __construct(VariationHandler $imageVariationService, AssetMapper $assetMapper)

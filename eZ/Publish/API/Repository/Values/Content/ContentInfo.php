@@ -141,9 +141,7 @@ class ContentInfo extends ValueObject
      */
     protected $status;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $isHidden;
 
     /**

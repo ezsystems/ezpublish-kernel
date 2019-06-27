@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 trait RequestStackAware
 {
-    /**
-     * @var RequestStack
-     */
+    /** @var RequestStack */
     private $requestStack;
 
     /**

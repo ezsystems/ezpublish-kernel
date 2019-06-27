@@ -216,9 +216,7 @@ class Repository implements RepositoryInterface
      */
     protected $limitationService;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
     protected $roleDomainMapper;
 
     /**
@@ -242,14 +240,10 @@ class Repository implements RepositoryInterface
      */
     protected $permissionsHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null
-     */
+    /** @var \eZ\Publish\Core\Search\Common\BackgroundIndexer|null */
     protected $backgroundIndexer;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
     /**

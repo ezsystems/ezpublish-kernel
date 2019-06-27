@@ -39,14 +39,10 @@ abstract class BaseTest extends TestCase
      */
     const DB_INT_MAX = 2147483647;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Tests\SetupFactory
-     */
+    /** @var \eZ\Publish\API\Repository\Tests\SetupFactory */
     private $setupFactory;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
     protected function setUp(): void

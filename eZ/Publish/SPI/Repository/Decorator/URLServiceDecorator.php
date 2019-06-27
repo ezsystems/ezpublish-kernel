@@ -15,9 +15,7 @@ use eZ\Publish\API\Repository\Values\URL\URLUpdateStruct;
 
 abstract class URLServiceDecorator implements URLService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\URLService
-     */
+    /** @var \eZ\Publish\API\Repository\URLService */
     protected $innerService;
 
     public function __construct(URLService $innerService)

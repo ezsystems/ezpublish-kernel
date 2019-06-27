@@ -25,23 +25,15 @@ class IORepositoryResolver implements ResolverInterface
 {
     const VARIATION_ORIGINAL = 'original';
 
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $ioService;
 
-    /**
-     * @var \Symfony\Component\Routing\RequestContext
-     */
+    /** @var \Symfony\Component\Routing\RequestContext */
     private $requestContext;
 
-    /**
-     * @var FilterConfiguration
-     */
+    /** @var FilterConfiguration */
     private $filterConfiguration;
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationPurger
-     */
+    /** @var \eZ\Publish\SPI\Variation\VariationPurger */
     private $variationPurger;
 
     /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\VariationPathGenerator */

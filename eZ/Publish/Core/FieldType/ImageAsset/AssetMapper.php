@@ -19,29 +19,19 @@ use eZ\Publish\Core\FieldType\Image\Value as ImageValue;
 
 class AssetMapper
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     private $locationService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $mappings = [];
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $contentTypeId = null;
 
     /**

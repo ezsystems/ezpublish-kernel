@@ -60,9 +60,7 @@ class Legacy implements IOServiceInterface
      */
     private $draftPrefix;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\Image\IO\OptionsProvider
-     */
+    /** @var \eZ\Publish\Core\FieldType\Image\IO\OptionsProvider */
     private $optionsProvider;
 
     /**

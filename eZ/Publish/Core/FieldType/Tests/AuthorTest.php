@@ -21,9 +21,7 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
  */
 class AuthorTest extends FieldTypeTest
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\Author\Author[]
-     */
+    /** @var \eZ\Publish\Core\FieldType\Author\Author[] */
     private $authors;
 
     protected function setUp(): void

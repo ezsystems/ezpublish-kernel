@@ -14,14 +14,10 @@ use PHPUnit\Framework\TestCase;
 
 class AliasCleanerTest extends TestCase
 {
-    /**
-     * @var AliasCleaner
-     */
+    /** @var AliasCleaner */
     private $aliasCleaner;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $resolver;
 
     protected function setUp(): void

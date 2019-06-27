@@ -20,9 +20,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class RouteReferenceGeneratorTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $dispatcher;
 
     protected function setUp(): void

@@ -33,14 +33,10 @@ use Exception;
  */
 class ViewController extends Controller
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface */
     protected $viewManager;
 
-    /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
-     */
+    /** @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface */
     private $authorizationChecker;
 
     public function __construct(ViewManagerInterface $viewManager, AuthorizationCheckerInterface $authorizationChecker)

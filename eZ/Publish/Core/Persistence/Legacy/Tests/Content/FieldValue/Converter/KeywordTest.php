@@ -20,9 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class KeywordTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordConverter */
     protected $converter;
 
     protected function setUp(): void

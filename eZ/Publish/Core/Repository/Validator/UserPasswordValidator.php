@@ -22,9 +22,7 @@ class UserPasswordValidator
     private const AT_LEAST_ONE_NUMERIC_CHARACTER_REGEX = '/\pN/u';
     private const AT_LEAST_ONE_NON_ALPHANUMERIC_CHARACTER_REGEX = '/[^\p{Ll}\p{Lu}\pL\pN]/u';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $constraints;
 
     /**

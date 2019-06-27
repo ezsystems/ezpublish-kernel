@@ -47,9 +47,7 @@ class Handler implements BaseUserHandler
      */
     protected $mapper;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\User\Role\LimitationConverter */
     protected $limitationConverter;
 
     /**

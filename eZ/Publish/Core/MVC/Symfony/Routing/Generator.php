@@ -20,24 +20,16 @@ use Symfony\Component\Routing\RequestContext;
  */
 abstract class Generator implements SiteAccessAware
 {
-    /**
-     * @var \Symfony\Component\Routing\RequestContext
-     */
+    /** @var \Symfony\Component\Routing\RequestContext */
     protected $requestContext;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessRouterInterface */
     protected $siteAccessRouter;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     protected $siteAccess;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
     /**

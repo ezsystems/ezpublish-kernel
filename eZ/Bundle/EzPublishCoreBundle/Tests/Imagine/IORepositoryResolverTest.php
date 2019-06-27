@@ -25,29 +25,19 @@ use Symfony\Component\Routing\RequestContext;
 
 class IORepositoryResolverTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $ioService;
 
-    /**
-     * @var \Symfony\Component\Routing\RequestContext
-     */
+    /** @var \Symfony\Component\Routing\RequestContext */
     private $requestContext;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $configResolver;
 
-    /**
-     * @var IORepositoryResolver
-     */
+    /** @var IORepositoryResolver */
     private $imageResolver;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\FilterConfiguration */
     private $filterConfiguration;
 
     /** @var \eZ\Publish\SPI\Variation\VariationPurger|\PHPUnit\Framework\MockObject\MockObject */

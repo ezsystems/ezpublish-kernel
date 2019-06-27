@@ -19,9 +19,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class SiteAccessListener implements EventSubscriberInterface
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     private $siteaccess;
 
     public function __construct(

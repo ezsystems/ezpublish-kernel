@@ -24,19 +24,13 @@ use InvalidArgumentException;
  */
 abstract class AbstractMatcherFactory implements MatcherFactoryInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $matchConfig;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[]
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\MatcherInterface[] */
     protected $matchers;
 
     /**

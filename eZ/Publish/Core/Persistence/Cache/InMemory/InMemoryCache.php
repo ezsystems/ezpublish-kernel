@@ -26,19 +26,13 @@ namespace eZ\Publish\Core\Persistence\Cache\InMemory;
  */
 class InMemoryCache
 {
-    /**
-     * @var float Cache Time to Live, in seconds. This is only for how long we keep cache object around in-memory.
-     */
+    /** @var float Cache Time to Live, in seconds. This is only for how long we keep cache object around in-memory. */
     private $ttl;
 
-    /**
-     * @var int The limit of objects in cache pool at a given time
-     */
+    /** @var int The limit of objects in cache pool at a given time */
     private $limit;
 
-    /**
-     * @var bool Switch for enabeling/disabling in-memory cache
-     */
+    /** @var bool Switch for enabeling/disabling in-memory cache */
     private $enabled;
 
     /**
@@ -48,14 +42,10 @@ class InMemoryCache
      */
     private $cache = [];
 
-    /**
-     * @var float[] Expiry timestamp (float microtime) for individual cache (by primary key).
-     */
+    /** @var float[] Expiry timestamp (float microtime) for individual cache (by primary key). */
     private $cacheExpiryTime = [];
 
-    /**
-     * @var int[] Access counter for individual cache (by primary key), to order by by popularity on vacuum().
-     */
+    /** @var int[] Access counter for individual cache (by primary key), to order by by popularity on vacuum(). */
     private $cacheAccessCount = [];
 
     /**

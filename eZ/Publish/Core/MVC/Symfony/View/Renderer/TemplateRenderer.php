@@ -16,14 +16,10 @@ use Closure;
 
 class TemplateRenderer implements Renderer
 {
-    /**
-     * @var \Symfony\Component\Templating\EngineInterface
-     */
+    /** @var \Symfony\Component\Templating\EngineInterface */
     protected $templateEngine;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
     public function __construct(TemplateEngine $templateEngine, EventDispatcherInterface $eventDispatcher)

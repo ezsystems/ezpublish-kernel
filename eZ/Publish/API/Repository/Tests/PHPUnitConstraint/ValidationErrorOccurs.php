@@ -18,9 +18,7 @@ use PHPUnit\Framework\Constraint\Constraint as AbstractPHPUnitConstraint;
  */
 class ValidationErrorOccurs extends AbstractPHPUnitConstraint
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $expectedValidationErrorMessage;
 
     /**

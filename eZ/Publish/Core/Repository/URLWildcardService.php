@@ -26,19 +26,13 @@ use Exception;
  */
 class URLWildcardService implements URLWildcardServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\UrlWildcard\Handler */
     protected $urlWildcardHandler;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
     /**

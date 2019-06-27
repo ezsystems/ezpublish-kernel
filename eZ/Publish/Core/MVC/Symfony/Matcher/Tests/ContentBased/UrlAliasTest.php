@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Repository;
 
 class UrlAliasTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\UrlAlias */
     private $matcher;
 
     protected function setUp(): void

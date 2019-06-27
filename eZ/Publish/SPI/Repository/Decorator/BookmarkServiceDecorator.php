@@ -14,9 +14,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 
 abstract class BookmarkServiceDecorator implements BookmarkService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\BookmarkService
-     */
+    /** @var \eZ\Publish\API\Repository\BookmarkService */
     protected $innerService;
 
     public function __construct(BookmarkService $innerService)

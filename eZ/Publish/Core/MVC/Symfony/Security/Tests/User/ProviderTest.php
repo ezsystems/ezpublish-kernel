@@ -24,19 +24,13 @@ use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
 class ProviderTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $repository;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $userService;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Security\User\Provider
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Security\User\Provider */
     private $userProvider;
 
     protected function setUp(): void

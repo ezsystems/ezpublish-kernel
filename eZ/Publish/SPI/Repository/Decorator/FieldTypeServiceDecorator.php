@@ -12,9 +12,7 @@ use eZ\Publish\API\Repository\FieldTypeService;
 
 abstract class FieldTypeServiceDecorator implements FieldTypeService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\FieldTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\FieldTypeService */
     protected $innerService;
 
     public function __construct(FieldTypeService $innerService)

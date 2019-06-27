@@ -15,9 +15,7 @@ use eZ\Publish\API\Repository\Values\Notification\NotificationList;
 
 abstract class NotificationServiceDecorator implements NotificationService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\NotificationService
-     */
+    /** @var \eZ\Publish\API\Repository\NotificationService */
     protected $innerService;
 
     public function __construct(NotificationService $innerService)

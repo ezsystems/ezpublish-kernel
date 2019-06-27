@@ -200,9 +200,7 @@ abstract class Location extends ValueObject
      */
     protected $sortOrder;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     protected $content;
 
     /**

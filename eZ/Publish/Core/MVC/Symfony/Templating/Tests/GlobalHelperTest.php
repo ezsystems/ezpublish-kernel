@@ -23,34 +23,22 @@ use Symfony\Component\Routing\RouterInterface;
 
 class GlobalHelperTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Templating\GlobalHelper */
     protected $helper;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $container;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $locationService;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configResolver;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $router;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $translationHelper;
 
     protected function setUp(): void

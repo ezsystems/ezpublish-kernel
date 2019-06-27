@@ -19,9 +19,7 @@ use eZ\Publish\Core\Base\Exceptions\BadStateException;
  */
 class LimitationService
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
     /**
@@ -95,9 +93,7 @@ class LimitationService
             );
         }
 
-        /**
-         * @var \eZ\Publish\SPI\Limitation\Type
-         */
+        /** @var \eZ\Publish\SPI\Limitation\Type */
         $type = $this->settings['limitationTypes'][$identifier];
 
         // This will throw if it does not pass

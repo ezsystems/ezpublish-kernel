@@ -23,9 +23,7 @@ use eZ\Publish\API\Repository\Values\User\User;
 
 abstract class ContentServiceDecorator implements ContentService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     protected $innerService;
 
     public function __construct(ContentService $innerService)

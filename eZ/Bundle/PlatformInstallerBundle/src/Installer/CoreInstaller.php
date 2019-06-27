@@ -20,9 +20,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
  */
 class CoreInstaller extends DbBasedInstaller implements Installer
 {
-    /**
-     * @var \EzSystems\DoctrineSchema\API\Builder\SchemaBuilder
-     */
+    /** @var \EzSystems\DoctrineSchema\API\Builder\SchemaBuilder */
     protected $schemaBuilder;
 
     /**

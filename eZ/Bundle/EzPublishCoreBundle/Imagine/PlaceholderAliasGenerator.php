@@ -20,29 +20,19 @@ use Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface;
 
 class PlaceholderAliasGenerator implements VariationHandler
 {
-    /**
-     * @var \eZ\Publish\SPI\Variation\VariationHandler
-     */
+    /** @var \eZ\Publish\SPI\Variation\VariationHandler */
     private $aliasGenerator;
 
-    /**
-     * @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
-     */
+    /** @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface */
     private $ioResolver;
 
-    /**
-     * @var \eZ\Publish\Core\IO\IOServiceInterface
-     */
+    /** @var \eZ\Publish\Core\IO\IOServiceInterface */
     private $ioService;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider|null
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\PlaceholderProvider|null */
     private $placeholderProvider;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $placeholderOptions = [];
 
     /**

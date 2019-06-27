@@ -18,9 +18,7 @@ use RuntimeException;
  */
 class MatcherBuilder extends BaseMatcherBuilder
 {
-    /**
-     * @var \Symfony\Component\DependencyInjection\ContainerInterface
-     */
+    /** @var \Symfony\Component\DependencyInjection\ContainerInterface */
     protected $container;
 
     public function __construct(ContainerInterface $container)

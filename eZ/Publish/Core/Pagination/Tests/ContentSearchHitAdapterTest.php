@@ -20,9 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class ContentSearchHitAdapterTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\API\Repository\SearchService|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\SearchService|\PHPUnit\Framework\MockObject\MockObject */
     protected $searchService;
 
     protected function setUp(): void

@@ -19,9 +19,7 @@ use Psr\Log\LoggerInterface;
 
 class RouterHostPortURITest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess\MatcherBuilder */
     private $matcherBuilder;
 
     protected function setUp(): void

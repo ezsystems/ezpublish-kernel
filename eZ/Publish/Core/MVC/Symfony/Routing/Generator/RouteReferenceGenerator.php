@@ -19,9 +19,7 @@ class RouteReferenceGenerator implements RouteReferenceGeneratorInterface
 {
     use RequestStackAware;
 
-    /**
-     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Component\EventDispatcher\EventDispatcherInterface */
     private $dispatcher;
 
     public function __construct(EventDispatcherInterface $dispatcher)

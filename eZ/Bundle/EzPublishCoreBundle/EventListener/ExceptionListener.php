@@ -25,9 +25,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExceptionListener implements EventSubscriberInterface
 {
-    /**
-     * @var TranslatorInterface
-     */
+    /** @var TranslatorInterface */
     private $translator;
 
     public function __construct(TranslatorInterface $translator)

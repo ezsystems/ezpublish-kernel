@@ -194,19 +194,13 @@ class UrlWildcardHandlerTest extends TestCase
         ],
     ];
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Gateway\DoctrineDatabase */
     protected $gateway;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Mapper */
     protected $mapper;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\UrlWildcard\Handler */
     protected $urlWildcardHandler;
 
     /**

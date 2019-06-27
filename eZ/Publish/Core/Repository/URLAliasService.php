@@ -27,24 +27,16 @@ use Exception;
  */
 class URLAliasService implements URLAliasServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Content\UrlAlias\Handler */
     protected $urlAliasHandler;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\NameSchemaService
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\NameSchemaService */
     protected $nameSchemaService;
 
     /**

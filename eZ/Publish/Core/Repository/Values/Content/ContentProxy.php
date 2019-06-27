@@ -19,14 +19,10 @@ class ContentProxy extends APIContent
 {
     use GeneratorProxyTrait;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
     protected $object;
 
-    /**
-     * @var ContentContentInfoProxy|null
-     */
+    /** @var ContentContentInfoProxy|null */
     protected $contentInfoProxy;
 
     public function __get($name)

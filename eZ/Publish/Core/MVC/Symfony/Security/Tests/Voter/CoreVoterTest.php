@@ -19,9 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class CoreVoterTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject|\eZ\Publish\API\Repository\Repository */
     private $repository;
 
     protected function setUp(): void

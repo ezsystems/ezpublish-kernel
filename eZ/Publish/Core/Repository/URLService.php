@@ -26,14 +26,10 @@ use eZ\Publish\SPI\Persistence\URL\URLUpdateStruct as SPIUrlUpdateStruct;
 
 class URLService implements URLServiceInterface
 {
-    /**
-     * @var \eZ\Publish\Core\Repository\Repository
-     */
+    /** @var \eZ\Publish\Core\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\URL\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\URL\Handler */
     protected $urlHandler;
 
     /**

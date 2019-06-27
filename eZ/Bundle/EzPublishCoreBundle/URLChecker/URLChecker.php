@@ -16,14 +16,10 @@ class URLChecker implements URLCheckerInterface
 {
     use LoggerAwareTrait;
 
-    /**
-     * @var \eZ\Publish\API\Repository\URLService
-     */
+    /** @var \eZ\Publish\API\Repository\URLService */
     protected $urlService;
 
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerRegistryInterface
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\URLChecker\URLHandlerRegistryInterface */
     protected $handlerRegistry;
 
     /**

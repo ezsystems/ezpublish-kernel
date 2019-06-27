@@ -44,9 +44,7 @@ class DoctrineDatabase extends Gateway
      */
     protected $handler;
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     protected $connection;
 
     /**

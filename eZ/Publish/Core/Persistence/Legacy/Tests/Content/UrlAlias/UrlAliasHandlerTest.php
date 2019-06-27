@@ -5295,19 +5295,13 @@ class UrlAliasHandlerTest extends TestCase
      */
     protected $dbHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway */
     protected $locationGateway;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler */
     protected $languageHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator */
     protected $languageMaskGenerator;
 
     /**

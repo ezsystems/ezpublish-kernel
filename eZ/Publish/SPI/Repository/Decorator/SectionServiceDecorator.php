@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
 abstract class SectionServiceDecorator implements SectionService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\SectionService
-     */
+    /** @var \eZ\Publish\API\Repository\SectionService */
     protected $innerService;
 
     public function __construct(SectionService $innerService)

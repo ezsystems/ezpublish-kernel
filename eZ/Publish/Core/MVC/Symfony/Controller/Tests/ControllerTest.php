@@ -19,19 +19,13 @@ use PHPUnit\Framework\TestCase;
  */
 class ControllerTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Controller\Controller
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Controller\Controller */
     protected $controller;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $templateEngineMock;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $containerMock;
 
     protected function setUp(): void

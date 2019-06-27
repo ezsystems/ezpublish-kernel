@@ -12,18 +12,12 @@ use eZ\Publish\SPI\Persistence\ValueObject;
 
 class UserPreferenceSetStruct extends ValueObject
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     public $userId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $name;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     public $value;
 }

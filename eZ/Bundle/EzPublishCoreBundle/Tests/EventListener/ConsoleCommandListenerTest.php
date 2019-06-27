@@ -24,39 +24,25 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ConsoleCommandListenerTest extends TestCase
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $siteAccessList = ['default', 'site1'];
 
-    /**
-     * @var SiteAccess
-     */
+    /** @var SiteAccess */
     private $siteAccess;
 
-    /**
-     * @var EventDispatcherInterface|MockObject
-     */
+    /** @var EventDispatcherInterface|MockObject */
     private $dispatcher;
 
-    /**
-     * @var ConsoleCommandListener
-     */
+    /** @var ConsoleCommandListener */
     private $listener;
 
-    /**
-     * @var InputDefinition;
-     */
+    /** @var InputDefinition; */
     private $inputDefinition;
 
-    /**
-     * @var Command
-     */
+    /** @var Command */
     private $command;
 
-    /**
-     * @var TestOutput
-     */
+    /** @var TestOutput */
     private $testOutput;
 
     protected function setUp(): void

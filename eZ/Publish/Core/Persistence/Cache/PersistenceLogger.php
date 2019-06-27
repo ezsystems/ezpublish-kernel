@@ -17,9 +17,7 @@ class PersistenceLogger
 {
     const NAME = 'PersistenceLogger';
 
-    /**
-     * @var int[]
-     */
+    /** @var int[] */
     protected $stats = [
         'uncached' => 0,
         'miss' => 0,
@@ -27,19 +25,13 @@ class PersistenceLogger
         'memory' => 0,
     ];
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     protected $logCalls = true;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $calls = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $unCachedHandlers = [];
 
     /**

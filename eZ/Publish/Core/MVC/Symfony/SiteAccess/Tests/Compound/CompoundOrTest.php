@@ -20,9 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class CompoundOrTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $matcherBuilder;
 
     protected function setUp(): void

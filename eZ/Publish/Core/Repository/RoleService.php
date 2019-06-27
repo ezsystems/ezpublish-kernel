@@ -47,29 +47,19 @@ use Exception;
  */
 class RoleService implements RoleServiceInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     protected $repository;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\User\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\User\Handler */
     protected $userHandler;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\LimitationService */
     protected $limitationService;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\RoleDomainMapper */
     protected $roleDomainMapper;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $settings;
 
     /**

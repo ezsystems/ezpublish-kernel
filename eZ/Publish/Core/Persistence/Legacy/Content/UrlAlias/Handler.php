@@ -96,9 +96,7 @@ class Handler implements UrlAliasHandlerInterface
      */
     protected $maskGenerator;
 
-    /**
-     * @var \eZ\Publish\SPI\Persistence\TransactionHandler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\TransactionHandler */
     private $transactionHandler;
 
     /**

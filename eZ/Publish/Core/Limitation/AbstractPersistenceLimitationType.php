@@ -15,9 +15,7 @@ use eZ\Publish\SPI\Persistence\Handler as SPIPersistenceHandler;
  */
 class AbstractPersistenceLimitationType
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler */
     protected $persistence;
 
     /**

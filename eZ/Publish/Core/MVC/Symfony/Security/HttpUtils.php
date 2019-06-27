@@ -15,9 +15,7 @@ use Symfony\Component\Security\Http\HttpUtils as BaseHttpUtils;
 
 class HttpUtils extends BaseHttpUtils implements SiteAccessAware
 {
-    /**
-     * @var SiteAccess
-     */
+    /** @var SiteAccess */
     private $siteAccess;
 
     /**

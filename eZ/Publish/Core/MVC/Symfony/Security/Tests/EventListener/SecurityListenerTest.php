@@ -33,34 +33,22 @@ use Symfony\Component\Security\Core\User\UserInterface as SymfonyUserInterface;
 
 class SecurityListenerTest extends TestCase
 {
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $repository;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $configResolver;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $eventDispatcher;
 
-    /**
-     * @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $tokenStorage;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     protected $authChecker;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Security\EventListener\SecurityListener */
     protected $listener;
 
     protected function setUp(): void

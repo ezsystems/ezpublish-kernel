@@ -363,9 +363,7 @@ class RichTextStorageTest extends TestCase
         return ['context'];
     }
 
-    /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \Psr\Log\LoggerInterface|\PHPUnit\Framework\MockObject\MockObject */
     protected $loggerMock;
 
     /**
@@ -382,9 +380,7 @@ class RichTextStorageTest extends TestCase
         return $this->loggerMock;
     }
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\RichTextStorage\Gateway|\PHPUnit\Framework\MockObject\MockObject */
     protected $gatewayMock;
 
     /**

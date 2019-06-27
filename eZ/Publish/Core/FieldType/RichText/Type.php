@@ -27,34 +27,22 @@ use RuntimeException;
  */
 class Type extends FieldType
 {
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher */
     protected $internalFormatValidator;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\ConverterDispatcher */
     protected $inputConverterDispatcher;
 
-    /**
-     * @var \eZ\Publish\Core\FieldType\RichText\Normalizer
-     */
+    /** @var \eZ\Publish\Core\FieldType\RichText\Normalizer */
     protected $inputNormalizer;
 
-    /**
-     * @var null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher
-     */
+    /** @var null|\eZ\Publish\Core\FieldType\RichText\ValidatorDispatcher */
     protected $inputValidatorDispatcher;
 
-    /**
-     * @var null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator
-     */
+    /** @var null|\eZ\Publish\Core\FieldType\RichText\InternalLinkValidator */
     protected $internalLinkValidator;
 
-    /**
-     * @var null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator
-     */
+    /** @var null|\eZ\Publish\Core\FieldType\RichText\CustomTagsValidator */
     private $customTagsValidator;
 
     /**

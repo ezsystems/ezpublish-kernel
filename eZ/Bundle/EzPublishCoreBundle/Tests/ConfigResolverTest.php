@@ -15,14 +15,10 @@ use PHPUnit\Framework\TestCase;
 
 class ConfigResolverTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\SiteAccess
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\SiteAccess */
     private $siteAccess;
 
-    /**
-     * @var \PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $containerMock;
 
     protected function setUp(): void

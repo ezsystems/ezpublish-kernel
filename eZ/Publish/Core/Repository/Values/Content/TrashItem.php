@@ -24,9 +24,7 @@ class TrashItem extends APITrashItem
      */
     protected $contentInfo;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $path;
 
     /**

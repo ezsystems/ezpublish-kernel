@@ -22,9 +22,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CountryTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CountryConverter */
     protected $converter;
 
     protected function setUp(): void

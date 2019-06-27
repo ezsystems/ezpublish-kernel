@@ -22,14 +22,10 @@ use RuntimeException;
  */
 class PermissionCriterionResolver implements APIPermissionCriterionResolver
 {
-    /**
-     * @var \eZ\Publish\API\Repository\PermissionResolver
-     */
+    /** @var \eZ\Publish\API\Repository\PermissionResolver */
     private $permissionResolver;
 
-    /**
-     * @var \eZ\Publish\Core\Repository\Helper\LimitationService
-     */
+    /** @var \eZ\Publish\Core\Repository\Helper\LimitationService */
     private $limitationService;
 
     /**
@@ -80,9 +76,7 @@ class PermissionCriterionResolver implements APIPermissionCriterionResolver
         foreach ($permissionSets as $permissionSet) {
             // $permissionSet is a RoleAssignment, but in the form of role limitation & role policies hash
             $policyOrCriteria = [];
-            /**
-             * @var \eZ\Publish\API\Repository\Values\User\Policy
-             */
+            /** @var \eZ\Publish\API\Repository\Values\User\Policy */
             foreach ($permissionSet['policies'] as $policy) {
                 $limitations = $policy->getLimitations();
                 if ($limitations === '*' || empty($limitations)) {

@@ -42,40 +42,28 @@ class FieldTypeContext implements Context
         'objectState' => self::FIELD_TYPE_NOT_CREATED,
     ];
 
-    /**
-     * @var array Stores Internal mapping of the fieldType names
-     */
+    /** @var array Stores Internal mapping of the fieldType names */
     private $fieldTypeInternalIdentifier = [
         'integer' => 'ezinteger',
     ];
 
-    /**
-     * @var array Maps the validator of the fieldtypes
-     */
+    /** @var array Maps the validator of the fieldtypes */
     private $validatorMappings = [
         'integer' => 'IntegerValue',
     ];
 
-    /**
-     * @var array Maps the default values of the fieldtypes
-     */
+    /** @var array Maps the default values of the fieldtypes */
     private $defaultValues = [
         'integer' => 1,
     ];
 
-    /**
-     * @var eZ\Publish\B\Repository\ContentTypeService
-     */
+    /** @var eZ\Publish\B\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var eZ\Publish\B\Repository\ContentService
-     */
+    /** @var eZ\Publish\B\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var eZ\Publish\B\Repository\LocationService
-     */
+    /** @var eZ\Publish\B\Repository\LocationService */
     private $locationService;
 
     /**

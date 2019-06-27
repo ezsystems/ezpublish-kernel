@@ -21,9 +21,7 @@ use eZ\Publish\API\Repository\Values\User\UserUpdateStruct;
 
 abstract class UserServiceDecorator implements UserService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
+    /** @var \eZ\Publish\API\Repository\UserService */
     protected $innerService;
 
     public function __construct(UserService $innerService)

@@ -14,14 +14,10 @@ use eZ\Publish\SPI\Persistence\Handler as SPIHandler;
 
 abstract class Base extends TestCase
 {
-    /**
-     * @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\SPI\Persistence\Handler|\PHPUnit\Framework\MockObject\MockObject */
     private $persistenceHandlerMock;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User|\PHPUnit\Framework\MockObject\MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User|\PHPUnit\Framework\MockObject\MockObject */
     private $userMock;
 
     /**

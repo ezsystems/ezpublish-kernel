@@ -27,24 +27,16 @@ class AssetMapperTest extends TestCase
 {
     const EXAMPLE_CONTENT_ID = 487;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService|\PHPUnit_Framework_MockObject_MockObject */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService|\PHPUnit_Framework_MockObject_MockObject */
     private $locationService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService|\PHPUnit_Framework_MockObject_MockObject */
     private $contentTypeService;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $mappings = [
         'content_type_identifier' => 'image',
         'content_field_identifier' => 'image',

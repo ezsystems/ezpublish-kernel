@@ -14,9 +14,7 @@ use eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceList;
 
 abstract class UserPreferenceServiceDecorator implements UserPreferenceService
 {
-    /**
-     * @var \eZ\Publish\API\Repository\UserPreferenceService
-     */
+    /** @var \eZ\Publish\API\Repository\UserPreferenceService */
     protected $innerService;
 
     public function __construct(UserPreferenceService $innerService)

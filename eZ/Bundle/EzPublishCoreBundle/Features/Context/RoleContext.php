@@ -15,9 +15,7 @@ use eZ\Publish\API\Repository\Exceptions as ApiExceptions;
  */
 class RoleContext implements Context
 {
-    /**
-     * @var \eZ\Publish\API\Repository\roleService
-     */
+    /** @var \eZ\Publish\API\Repository\roleService */
     protected $roleService;
 
     /**

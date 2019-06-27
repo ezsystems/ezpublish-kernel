@@ -13,9 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class AbstractFilterTest extends TestCase
 {
-    /**
-     * @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\AbstractFilter
-     */
+    /** @var \eZ\Bundle\EzPublishCoreBundle\Imagine\Filter\AbstractFilter */
     protected $filter;
 
     protected function setUp(): void

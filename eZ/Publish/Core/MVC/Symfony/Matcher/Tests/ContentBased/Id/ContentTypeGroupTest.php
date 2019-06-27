@@ -17,9 +17,7 @@ use eZ\Publish\API\Repository\Repository;
 
 class ContentTypeGroupTest extends BaseTest
 {
-    /**
-     * @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup
-     */
+    /** @var \eZ\Publish\Core\MVC\Symfony\Matcher\ContentBased\Id\ContentTypeGroup */
     private $matcher;
 
     protected function setUp(): void

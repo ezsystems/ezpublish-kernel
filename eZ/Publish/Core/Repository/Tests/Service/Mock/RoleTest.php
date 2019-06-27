@@ -1020,9 +1020,7 @@ class RoleTest extends BaseServiceMockTest
         $roleServiceMock->deletePolicy($policyMock);
     }
 
-    /**
-     * @var \eZ\Publish\Core\Repository\RoleService
-     */
+    /** @var \eZ\Publish\Core\Repository\RoleService */
     protected $partlyMockedRoleService;
 
     /**
@@ -1058,9 +1056,7 @@ class RoleTest extends BaseServiceMockTest
         return $this->partlyMockedRoleService;
     }
 
-    /**
-     * @var \eZ\Publish\Core\Repository\RoleService
-     */
+    /** @var \eZ\Publish\Core\Repository\RoleService */
     protected $partlyMockedLimitationService;
 
     /**

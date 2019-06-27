@@ -37,9 +37,7 @@ class AliasGenerator implements VariationHandler
 {
     const ALIAS_ORIGINAL = 'original';
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
+    /** @var \Psr\Log\LoggerInterface */
     private $logger;
 
     /**
@@ -50,19 +48,13 @@ class AliasGenerator implements VariationHandler
      */
     private $dataLoader;
 
-    /**
-     * @var \Liip\ImagineBundle\Imagine\Filter\FilterManager
-     */
+    /** @var \Liip\ImagineBundle\Imagine\Filter\FilterManager */
     private $filterManager;
 
-    /**
-     * @var FilterConfiguration
-     */
+    /** @var FilterConfiguration */
     private $filterConfiguration;
 
-    /**
-     * @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface
-     */
+    /** @var \Liip\ImagineBundle\Imagine\Cache\Resolver\ResolverInterface */
     private $ioResolver;
 
     public function __construct(

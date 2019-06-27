@@ -20,9 +20,7 @@ use PHPUnit\Framework\TestCase;
  */
 class CheckboxTest extends TestCase
 {
-    /**
-     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CheckboxConverter
-     */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CheckboxConverter */
     protected $converter;
 
     protected function setUp(): void

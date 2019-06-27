@@ -14,14 +14,10 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ViewbaseLayout implements EventSubscriberInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $viewbaseLayout;
 
-    /**
-     * @var \eZ\Publish\Core\MVC\ConfigResolverInterface
-     */
+    /** @var \eZ\Publish\Core\MVC\ConfigResolverInterface */
     private $configResolver;
 
     public function __construct($viewbaseLayout, ConfigResolverInterface $configResolver)
