@@ -4530,26 +4530,38 @@ class SearchServiceTest extends BaseTest
      * we got to same _random_ results, or mt_rand() provides same seed for seed-supported DB implementation.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findContent()
+     *
+     * @dataProvider getSeedsForRandomSortClause
      */
-    public function testRandomSortContent()
+    public function testRandomSortContent(?int $firstSeed, ?int $secondSeed)
     {
+        if ($firstSeed || $secondSeed) {
+            $this->skipIfSeedNotImplemented();
+        }
+
         $firstQuery = new Query([
             'sortClauses' => [
-                new SortClause\Random(),
+                new SortClause\Random($firstSeed),
             ],
         ]);
 
         $secondQuery = new Query([
             'sortClauses' => [
-                new SortClause\Random(),
+                new SortClause\Random($secondSeed),
             ],
         ]);
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
+        $method = 'assertNotEquals';
+
+        if ($firstSeed !== null && $secondSeed !== null && ($firstSeed === $secondSeed)) {
+            $method = 'assertEquals';
+        }
+
         try {
-            $this->assertNotEquals(
+            $this->$method(
                 $searchService->findContent($firstQuery)->searchHits,
                 $searchService->findContent($secondQuery)->searchHits
             );
@@ -4564,26 +4576,38 @@ class SearchServiceTest extends BaseTest
      * Test for the findLocations() method.
      *
      * @see \eZ\Publish\API\Repository\SearchService::findLocations()
+     *
+     * @dataProvider getSeedsForRandomSortClause
      */
-    public function testRandomSortLocation()
+    public function testRandomSortLocation(?int $firstSeed, ?int $secondSeed)
     {
+        if ($firstSeed || $secondSeed) {
+            $this->skipIfSeedNotImplemented();
+        }
+
         $firstQuery = new LocationQuery([
             'sortClauses' => [
-                new SortClause\Random(),
+                new SortClause\Random($firstSeed),
             ],
         ]);
 
         $secondQuery = new LocationQuery([
             'sortClauses' => [
-                new SortClause\Random(),
+                new SortClause\Random($secondSeed),
             ],
         ]);
 
         $repository = $this->getRepository();
         $searchService = $repository->getSearchService();
 
+        $method = 'assertNotEquals';
+
+        if ($firstSeed !== null && $secondSeed !== null && ($firstSeed === $secondSeed)) {
+            $method = 'assertEquals';
+        }
+
         try {
-            $this->assertNotEquals(
+            $this->$method(
                 $searchService->findLocations($firstQuery)->searchHits,
                 $searchService->findLocations($secondQuery)->searchHits
             );
@@ -4594,78 +4618,35 @@ class SearchServiceTest extends BaseTest
         }
     }
 
-    public function testRandomSortContentWithSameSeed()
+    public function getSeedsForRandomSortClause()
     {
-        /** @var \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy $setupFactory */
-        $setupFactory = $this->getSetupFactory();
-
-        if ('sqlite' === $setupFactory->getDB()) {
-            $this->markTestSkipped(
-                'Seed function is not implemented in sqlite DB.'
-            );
-        }
-
-        $firstQuery = new Query([
-            'sortClauses' => [
-                new SortClause\Random(PHP_INT_MAX / 4),
+        $randomSeed = mt_rand();
+        return [
+            [
+                null,
+                null
             ],
-        ]);
-
-        $secondQuery = new Query([
-            'sortClauses' => [
-                new SortClause\Random(PHP_INT_MAX / 4),
+            [
+                123456,
+                123456
             ],
-        ]);
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-
-        try {
-            $this->assertEquals(
-                $searchService->findContent($firstQuery)->searchHits,
-                $searchService->findContent($secondQuery)->searchHits
-            );
-        } catch (NotImplementedException $e) {
-            $this->markTestSkipped(
-                'This feature is not supported by the current search backend: ' . $e->getMessage()
-            );
-        }
+            [
+               $randomSeed,
+               2 * $randomSeed
+            ]
+        ];
     }
 
-    public function testRandomSortLocationWithSameSeed()
+    private function skipIfSeedNotImplemented()
     {
         /** @var \eZ\Publish\API\Repository\Tests\SetupFactory\Legacy $setupFactory */
         $setupFactory = $this->getSetupFactory();
 
-        if ('sqlite' === $setupFactory->getDB()) {
+        $db = $setupFactory->getDB();
+
+        if (in_array($db, ['sqlite', 'pgsql'])) {
             $this->markTestSkipped(
-                'Seed function is not implemented in sqlite DB.'
-            );
-        }
-
-        $firstQuery = new LocationQuery([
-            'sortClauses' => [
-                new SortClause\Random(PHP_INT_MAX / 4),
-            ],
-        ]);
-
-        $secondQuery = new LocationQuery([
-            'sortClauses' => [
-                new SortClause\Random(PHP_INT_MAX / 4),
-            ],
-        ]);
-
-        $repository = $this->getRepository();
-        $searchService = $repository->getSearchService();
-
-        try {
-            $this->assertEquals(
-                $searchService->findLocations($firstQuery)->searchHits,
-                $searchService->findLocations($secondQuery)->searchHits
-            );
-        } catch (NotImplementedException $e) {
-            $this->markTestSkipped(
-                'This feature is not supported by the current search backend: ' . $e->getMessage()
+                'Seed function is not implemented in ' . $db . '.'
             );
         }
     }

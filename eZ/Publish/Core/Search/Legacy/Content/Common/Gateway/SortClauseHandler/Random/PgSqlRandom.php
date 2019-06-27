@@ -14,30 +14,6 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Abstr
 
 class PgSqlRandom extends AbstractRandom
 {
-    private const MIN_SEED_VAL = -1.0;
-    private const MAX_SEED_VAL = 1.0;
-
-    public function applyJoin(
-        SelectQuery $query,
-        SortClause $sortClause,
-        $number,
-        array $languageSettings
-    ) {
-        $seedAsInt = $sortClause->targetData->seed;
-        if ($seedAsInt === null) {
-            return;
-        }
-
-        $seed = $this->interpolateIntegerToFloatRange($seedAsInt);
-        $query
-            ->innerJoin(
-                '(select setseed(:seed)) as seed',
-                0,
-                0
-            )
-            ->bindParam($seed, ':seed');
-    }
-
     public function getDriverName(): string
     {
         return 'postgresql';
@@ -46,13 +22,5 @@ class PgSqlRandom extends AbstractRandom
     public function getRandomFunctionName(?int $seed): string
     {
         return 'random()';
-    }
-
-    /**
-     * Take into consideration that little seed variations can output basically that same number when interpolated to [-1,1] range.
-     */
-    private function interpolateIntegerToFloatRange(int $seedAsInt): float
-    {
-        return self::MIN_SEED_VAL + ($seedAsInt - PHP_INT_MIN) * (self::MAX_SEED_VAL - self::MIN_SEED_VAL) / (PHP_INT_MAX - PHP_INT_MIN);
     }
 }
