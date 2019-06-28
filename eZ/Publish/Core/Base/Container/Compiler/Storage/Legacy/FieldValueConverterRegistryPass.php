@@ -18,32 +18,41 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class FieldValueConverterRegistryPass implements CompilerPassInterface
 {
-    public const STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG = 'ezplatform.field_type.legacy_storage.converter';
-    public const DEPRECATED_STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG = 'ezpublish.storageEngine.legacy.converter';
+    public const CONVERTER_REGISTRY_SERVICE_ID = 'ezpublish.persistence.legacy.field_value_converter.registry';
+
+    public const CONVERTER_SERVICE_TAG = 'ezplatform.field_type.legacy_storage.converter';
+    public const DEPRECATED_CONVERTER_SERVICE_TAG = 'ezpublish.storageEngine.legacy.converter';
+
+    public const CONVERTER_SERVICE_TAGS = [
+        self::DEPRECATED_CONVERTER_SERVICE_TAG,
+        self::CONVERTER_SERVICE_TAG,
+    ];
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
-        if (!$container->hasDefinition('ezpublish.persistence.legacy.field_value_converter.registry')) {
+        if (!$container->hasDefinition(self::CONVERTER_REGISTRY_SERVICE_ID)) {
             return;
         }
 
-        $registry = $container->getDefinition('ezpublish.persistence.legacy.field_value_converter.registry');
+        $registry = $container->getDefinition(self::CONVERTER_REGISTRY_SERVICE_ID);
 
-        $deprecatedFieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::DEPRECATED_STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG);
+        $deprecatedFieldTypeStorageConverterTags = $container->findTaggedServiceIds(
+            self::DEPRECATED_CONVERTER_SERVICE_TAG
+        );
         foreach ($deprecatedFieldTypeStorageConverterTags as $deprecatedFieldTypeStorageConverterTag) {
             @trigger_error(
                 sprintf(
                     '`%s` service tag is deprecated and will be removed in eZ Platform 4.0. Please use `%s` instead.',
-                    self::DEPRECATED_STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG,
-                    self::STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG
+                    self::DEPRECATED_CONVERTER_SERVICE_TAG,
+                    self::CONVERTER_SERVICE_TAG
                 ),
                 E_USER_DEPRECATED
             );
         }
-        $fieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG);
+        $fieldTypeStorageConverterTags = $container->findTaggedServiceIds(self::CONVERTER_SERVICE_TAG);
         $storageConverterFieldTypesTags = array_merge($deprecatedFieldTypeStorageConverterTags, $fieldTypeStorageConverterTags);
         foreach ($storageConverterFieldTypesTags as $id => $attributes) {
             foreach ($attributes as $attribute) {
@@ -51,8 +60,8 @@ class FieldValueConverterRegistryPass implements CompilerPassInterface
                     throw new LogicException(
                         sprintf(
                             '%s or %s service tag needs an "alias" attribute to identify the field type. None given.',
-                            self::DEPRECATED_STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG,
-                            self::STORAGE_ENGINE_LEGACY_CONVERTER_SERVICE_TAG
+                            self::DEPRECATED_CONVERTER_SERVICE_TAG,
+                            self::CONVERTER_SERVICE_TAG
                         )
                     );
                 }
