@@ -601,3 +601,36 @@ services:
 
     ezpublish.fieldType.ezimageasset:
         alias: eZ\Publish\Core\FieldType\ImageAsset\Type
+
+    ## Generic FT
+
+    ezpublish.field_type.ezgeneric.value_serializer.symfony.normalizer:
+        class: Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer
+        public: false
+
+    ezpublish.field_type.ezgeneric.value_serializer.symfony.encoder:
+        class: Symfony\Component\Serializer\Encoder\JsonEncoder
+        public: false
+
+    ezpublish.field_type.ezgeneric.value_serializer.symfony.serializer:
+        class: Symfony\Component\Serializer\Serializer
+        arguments:
+            - [ '@ezpublish.field_type.ezgeneric.value_serializer.symfony.normalizer' ]
+            - [ '@ezpublish.field_type.ezgeneric.value_serializer.symfony.encoder' ]
+
+    eZ\Publish\Core\FieldType\Generic\ValueSerializer\SymfonySerializerAdapter:
+        arguments:
+            $normalizer: '@ezpublish.field_type.ezgeneric.value_serializer.symfony.serializer'
+            $denormalizer: '@ezpublish.field_type.ezgeneric.value_serializer.symfony.serializer'
+            $encoder: '@ezpublish.field_type.ezgeneric.value_serializer.symfony.serializer'
+            $decoder: '@ezpublish.field_type.ezgeneric.value_serializer.symfony.serializer'
+
+    eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface:
+        alias: 'eZ\Publish\Core\FieldType\Generic\ValueSerializer\SymfonySerializerAdapter'
+
+    ezpublish.field_type.ezgeneric:
+        class: eZ\Publish\Core\FieldType\Generic\Type
+        abstract: true
+        arguments:
+            $serializer: '@eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface'
+            $validator: '@validator'

@@ -20,6 +20,11 @@ class FieldTypeCollectionPass implements CompilerPassInterface
     public const FIELD_TYPE_SERVICE_TAG = 'ezplatform.field_type';
     public const DEPRECATED_FIELD_TYPE_SERVICE_TAG = 'ezpublish.fieldType';
 
+    public const FIELD_TYPE_SERVICE_TAGS = [
+        self::FIELD_TYPE_SERVICE_TAG,
+        self::DEPRECATED_FIELD_TYPE_SERVICE_TAG,
+    ];
+
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
      *
