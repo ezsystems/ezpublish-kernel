@@ -53,7 +53,7 @@ class FieldTypeCollectionPass implements CompilerPassInterface
                 if (!is_a($container->findDefinition($id)->getClass(), '\eZ\Publish\Core\FieldType\Null\Type', true)) {
                     $fieldTypeCollectionFactoryDef->addMethodCall(
                         'registerConcreteFieldTypeIdentifier',
-                        [$attribute['alias']]
+                        array($attribute['alias'])
                     );
                 }
             }

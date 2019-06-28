@@ -178,7 +178,7 @@ class LegacyStorage extends Gateway
         $statement = $selectQuery->prepare();
         $statement->execute();
 
-        $fieldLookup = [];
+        $fieldLookup = array();
         foreach ($statement->fetchAll(\PDO::FETCH_ASSOC) as $row) {
             $fieldLookup[$row['id']] = $row['data_text'];
         }
