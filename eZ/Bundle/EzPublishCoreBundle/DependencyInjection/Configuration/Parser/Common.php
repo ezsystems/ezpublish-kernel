@@ -211,6 +211,9 @@ class Common extends AbstractParser implements SuggestionCollectorAwareInterface
         if (isset($scopeSettings['pagelayout'])) {
             $contextualizer->setContextualParameter('pagelayout', $currentScope, $scopeSettings['pagelayout']);
         }
+        if (isset($scopeSettings['page_layout'])) {
+            $contextualizer->setContextualParameter('page_layout', $currentScope, $scopeSettings['page_layout']);
+        }
     }
 
     /**
