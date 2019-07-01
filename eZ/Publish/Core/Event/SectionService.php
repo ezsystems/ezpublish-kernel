@@ -29,9 +29,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SectionService extends SectionServiceDecorator
 {
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
     public function __construct(

@@ -15,14 +15,10 @@ use UnexpectedValueException;
 
 final class BeforePublishVersionEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
     private $content;
 
     public function __construct(VersionInfo $versionInfo)

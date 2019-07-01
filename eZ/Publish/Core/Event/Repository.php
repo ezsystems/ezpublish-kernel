@@ -27,94 +27,58 @@ use eZ\Publish\API\Repository\UserService as UserServiceInterface;
 
 final class Repository implements RepositoryInterface
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Repository
-     */
+    /** @var \eZ\Publish\API\Repository\Repository */
     private $repository;
 
-    /**
-     * @var \eZ\Publish\API\Repository\BookmarkService
-     */
+    /** @var \eZ\Publish\API\Repository\BookmarkService */
     private $bookmarkService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentService */
     private $contentService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ContentTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\ContentTypeService */
     private $contentTypeService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\FieldTypeService
-     */
+    /** @var \eZ\Publish\API\Repository\FieldTypeService */
     private $fieldTypeService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LanguageService
-     */
+    /** @var \eZ\Publish\API\Repository\LanguageService */
     private $languageService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\LocationService
-     */
+    /** @var \eZ\Publish\API\Repository\LocationService */
     private $locationService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\NotificationService
-     */
+    /** @var \eZ\Publish\API\Repository\NotificationService */
     private $notificationService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\ObjectStateService
-     */
+    /** @var \eZ\Publish\API\Repository\ObjectStateService */
     private $objectStateService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\RoleService
-     */
+    /** @var \eZ\Publish\API\Repository\RoleService */
     private $roleService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\SearchService
-     */
+    /** @var \eZ\Publish\API\Repository\SearchService */
     private $searchService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\SectionService
-     */
+    /** @var \eZ\Publish\API\Repository\SectionService */
     private $sectionService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\TrashService
-     */
+    /** @var \eZ\Publish\API\Repository\TrashService */
     private $trashService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\URLAliasService
-     */
+    /** @var \eZ\Publish\API\Repository\URLAliasService */
     private $urlAliasService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\URLService
-     */
+    /** @var \eZ\Publish\API\Repository\URLService */
     private $urlService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\URLWildcardService
-     */
+    /** @var \eZ\Publish\API\Repository\URLWildcardService */
     private $urlWildcardService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\UserPreferenceService
-     */
+    /** @var \eZ\Publish\API\Repository\UserPreferenceService */
     private $userPreferenceService;
 
-    /**
-     * @var \eZ\Publish\API\Repository\UserService
-     */
+    /** @var \eZ\Publish\API\Repository\UserService */
     private $userService;
 
     public function __construct(

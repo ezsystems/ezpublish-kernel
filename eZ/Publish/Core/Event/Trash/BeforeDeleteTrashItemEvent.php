@@ -15,14 +15,10 @@ use UnexpectedValueException;
 
 final class BeforeDeleteTrashItemEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\TrashItem
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\TrashItem */
     private $trashItem;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResult|null */
     private $result;
 
     public function __construct(TrashItem $trashItem)

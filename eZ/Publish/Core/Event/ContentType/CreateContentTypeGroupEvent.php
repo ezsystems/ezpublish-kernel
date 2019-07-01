@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateContentTypeGroupEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup */
     private $contentTypeGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct */
     private $contentTypeGroupCreateStruct;
 
     public function __construct(

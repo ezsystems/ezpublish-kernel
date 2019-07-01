@@ -13,19 +13,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CopySubtreeEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $subtree;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $targetParentLocation;
 
     public function __construct(

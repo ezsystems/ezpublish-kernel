@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteLanguageEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;
 
     public function __construct(Language $language)

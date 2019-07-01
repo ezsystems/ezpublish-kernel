@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateObjectStateEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $objectState;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateUpdateStruct */
     private $objectStateUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState|null */
     private $updatedObjectState;
 
     public function __construct(ObjectState $objectState, ObjectStateUpdateStruct $objectStateUpdateStruct)

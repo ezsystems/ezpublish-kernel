@@ -13,14 +13,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class MoveSubtreeEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $newParentLocation;
 
     public function __construct(

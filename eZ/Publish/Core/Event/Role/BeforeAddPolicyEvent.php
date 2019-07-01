@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeAddPolicyEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Role
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct */
     private $policyCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Role|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Role|null */
     private $updatedRole;
 
     public function __construct(Role $role, PolicyCreateStruct $policyCreateStruct)

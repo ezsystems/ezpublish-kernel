@@ -15,19 +15,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateContentEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct */
     private $contentUpdateStruct;
 
     public function __construct(

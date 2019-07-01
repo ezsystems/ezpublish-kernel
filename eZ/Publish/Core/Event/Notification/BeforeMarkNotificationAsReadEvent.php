@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeMarkNotificationAsReadEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Notification\Notification
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Notification\Notification */
     private $notification;
 
     public function __construct(Notification $notification)

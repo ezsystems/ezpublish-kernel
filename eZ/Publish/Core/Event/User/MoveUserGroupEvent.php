@@ -13,14 +13,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class MoveUserGroupEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $userGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $newParent;
 
     public function __construct(

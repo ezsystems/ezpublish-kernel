@@ -14,14 +14,10 @@ use UnexpectedValueException;
 
 final class BeforeDeleteUserGroupEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $userGroup;
 
-    /**
-     * @var array|null
-     */
+    /** @var array|null */
     private $locations;
 
     public function __construct(UserGroup $userGroup)

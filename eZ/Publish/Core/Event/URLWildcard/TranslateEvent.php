@@ -15,9 +15,7 @@ final class TranslateEvent extends AfterEvent
 {
     private $url;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult */
     private $result;
 
     public function __construct(

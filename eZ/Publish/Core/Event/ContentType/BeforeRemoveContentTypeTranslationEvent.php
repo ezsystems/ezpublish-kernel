@@ -14,19 +14,13 @@ use UnexpectedValueException;
 
 final class BeforeRemoveContentTypeTranslationEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $languageCode;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft|null */
     private $newContentTypeDraft;
 
     public function __construct(ContentTypeDraft $contentTypeDraft, string $languageCode)

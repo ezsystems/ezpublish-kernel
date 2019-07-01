@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteContentTypeEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     private $contentType;
 
     public function __construct(ContentType $contentType)

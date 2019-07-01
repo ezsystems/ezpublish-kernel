@@ -23,9 +23,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class URLAliasService extends URLAliasServiceDecorator
 {
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
     public function __construct(

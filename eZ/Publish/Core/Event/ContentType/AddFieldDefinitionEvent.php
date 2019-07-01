@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AddFieldDefinitionEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct */
     private $fieldDefinitionCreateStruct;
 
     public function __construct(

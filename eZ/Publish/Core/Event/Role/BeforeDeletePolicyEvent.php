@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeletePolicyEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Policy
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     private $policy;
 
     public function __construct(Policy $policy)

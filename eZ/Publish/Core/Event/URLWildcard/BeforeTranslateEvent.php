@@ -16,9 +16,7 @@ final class BeforeTranslateEvent extends BeforeEvent
 {
     private $url;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcardTranslationResult|null */
     private $result;
 
     public function __construct($url)

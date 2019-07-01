@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUnassignRoleFromUserEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Role
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
     public function __construct(Role $role, User $user)

@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class TrashEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\TrashItem|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\TrashItem|null */
     private $trashItem;
 
     public function __construct(

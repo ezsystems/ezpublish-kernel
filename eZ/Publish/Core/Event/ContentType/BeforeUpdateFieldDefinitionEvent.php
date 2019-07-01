@@ -15,19 +15,13 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeUpdateFieldDefinitionEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition */
     private $fieldDefinition;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct */
     private $fieldDefinitionUpdateStruct;
 
     public function __construct(

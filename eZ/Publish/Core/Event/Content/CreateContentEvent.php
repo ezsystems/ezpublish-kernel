@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateContentEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct */
     private $contentCreateStruct;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $locationCreateStructs;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;
 
     public function __construct(

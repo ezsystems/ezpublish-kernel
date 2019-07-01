@@ -20,9 +20,7 @@ final class BeforeCreateEvent extends BeforeEvent
 
     private $forward;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLWildcard|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcard|null */
     private $urlWildcard;
 
     public function __construct($sourceUrl, $destinationUrl, $forward)

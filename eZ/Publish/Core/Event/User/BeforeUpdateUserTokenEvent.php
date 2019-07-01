@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateUserTokenEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserTokenUpdateStruct */
     private $userTokenUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User|null */
     private $updatedUser;
 
     public function __construct(User $user, UserTokenUpdateStruct $userTokenUpdateStruct)

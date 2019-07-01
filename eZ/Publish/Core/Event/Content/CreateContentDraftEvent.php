@@ -16,24 +16,16 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateContentDraftEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $contentDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $creator;
 
     public function __construct(

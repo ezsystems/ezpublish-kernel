@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateUrlEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\URL\URL
-     */
+    /** @var \eZ\Publish\API\Repository\Values\URL\URL */
     private $url;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\URL\URLUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\URL\URLUpdateStruct */
     private $struct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\URL\URL
-     */
+    /** @var \eZ\Publish\API\Repository\Values\URL\URL */
     private $updatedUrl;
 
     public function __construct(

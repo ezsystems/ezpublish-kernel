@@ -15,14 +15,10 @@ use UnexpectedValueException;
 
 final class BeforeCreateNotificationEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Notification\CreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Notification\CreateStruct */
     private $createStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Notification\Notification|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Notification\Notification|null */
     private $notification;
 
     public function __construct(CreateStruct $createStruct)

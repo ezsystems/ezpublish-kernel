@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class EmptyTrashEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList */
     private $resultList;
 
     public function __construct(TrashItemDeleteResultList $resultList)

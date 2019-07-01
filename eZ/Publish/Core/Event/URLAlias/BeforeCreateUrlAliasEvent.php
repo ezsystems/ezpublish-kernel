@@ -15,9 +15,7 @@ use UnexpectedValueException;
 
 final class BeforeCreateUrlAliasEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
     private $path;
@@ -28,9 +26,7 @@ final class BeforeCreateUrlAliasEvent extends BeforeEvent
 
     private $alwaysAvailable;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLAlias|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLAlias|null */
     private $urlAlias;
 
     public function __construct(Location $location, $path, $languageCode, $forwarding, $alwaysAvailable)

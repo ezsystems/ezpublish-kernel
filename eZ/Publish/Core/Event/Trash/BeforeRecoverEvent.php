@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeRecoverEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\TrashItem
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\TrashItem */
     private $trashItem;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $newParentLocation;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
     private $location;
 
     public function __construct(TrashItem $trashItem, ?Location $newParentLocation = null)

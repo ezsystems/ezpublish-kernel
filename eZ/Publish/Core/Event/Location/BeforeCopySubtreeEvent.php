@@ -14,19 +14,13 @@ use UnexpectedValueException;
 
 final class BeforeCopySubtreeEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $subtree;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $targetParentLocation;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
     private $location;
 
     public function __construct(Location $subtree, Location $targetParentLocation)

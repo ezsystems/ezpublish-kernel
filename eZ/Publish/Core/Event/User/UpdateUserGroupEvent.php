@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateUserGroupEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $userGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct */
     private $userGroupUpdateStruct;
 
     private $updatedUserGroup;

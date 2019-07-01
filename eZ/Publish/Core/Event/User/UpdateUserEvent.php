@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateUserEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserUpdateStruct */
     private $userUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $updatedUser;
 
     public function __construct(

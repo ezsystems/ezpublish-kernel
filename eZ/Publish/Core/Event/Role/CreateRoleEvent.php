@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateRoleEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleCreateStruct */
     private $roleCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;
 
     public function __construct(

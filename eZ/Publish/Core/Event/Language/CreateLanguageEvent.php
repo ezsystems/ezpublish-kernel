@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateLanguageEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct */
     private $languageCreateStruct;
 
     public function __construct(

@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAssignUserToUserGroupEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserGroup */
     private $userGroup;
 
     public function __construct(User $user, UserGroup $userGroup)

@@ -13,14 +13,10 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeSwapLocationEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location1;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location2;
 
     public function __construct(Location $location1, Location $location2)

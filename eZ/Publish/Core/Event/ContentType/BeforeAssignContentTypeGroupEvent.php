@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAssignContentTypeGroupEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     private $contentType;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup */
     private $contentTypeGroup;
 
     public function __construct(ContentType $contentType, ContentTypeGroup $contentTypeGroup)

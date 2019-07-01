@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateLocationEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $updatedLocation;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct */
     private $locationUpdateStruct;
 
     public function __construct(

@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateSectionEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct */
     private $sectionUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section|null */
     private $updatedSection;
 
     public function __construct(Section $section, SectionUpdateStruct $sectionUpdateStruct)

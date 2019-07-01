@@ -23,9 +23,7 @@ final class CreateGlobalUrlAliasEvent extends AfterEvent
 
     private $alwaysAvailable;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLAlias
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLAlias */
     private $urlAlias;
 
     public function __construct(

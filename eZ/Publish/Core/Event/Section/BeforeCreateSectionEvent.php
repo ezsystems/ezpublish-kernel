@@ -15,14 +15,10 @@ use UnexpectedValueException;
 
 final class BeforeCreateSectionEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct */
     private $sectionCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section|null */
     private $section;
 
     public function __construct(SectionCreateStruct $sectionCreateStruct)

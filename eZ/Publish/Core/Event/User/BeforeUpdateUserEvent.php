@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateUserEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserUpdateStruct */
     private $userUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User|null */
     private $updatedUser;
 
     public function __construct(User $user, UserUpdateStruct $userUpdateStruct)

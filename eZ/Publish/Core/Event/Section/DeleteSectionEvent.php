@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteSectionEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;
 
     public function __construct(

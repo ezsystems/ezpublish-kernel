@@ -24,9 +24,7 @@ final class BeforeCreateGlobalUrlAliasEvent extends BeforeEvent
 
     private $alwaysAvailable;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLAlias|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLAlias|null */
     private $urlAlias;
 
     public function __construct($resource, $path, $languageCode, $forwarding, $alwaysAvailable)

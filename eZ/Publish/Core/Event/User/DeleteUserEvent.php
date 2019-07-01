@@ -13,14 +13,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteUserEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $locations;
 
     public function __construct(

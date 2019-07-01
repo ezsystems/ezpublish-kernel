@@ -14,14 +14,10 @@ use UnexpectedValueException;
 
 final class BeforeHideLocationEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
     private $hiddenLocation;
 
     public function __construct(Location $location)

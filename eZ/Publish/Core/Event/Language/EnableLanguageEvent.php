@@ -13,14 +13,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class EnableLanguageEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $enabledLanguage;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;
 
     public function __construct(

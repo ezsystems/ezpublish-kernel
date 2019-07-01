@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeTrashEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\TrashItem|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\TrashItem|null */
     private $result;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private $resultSet = false;
 
     public function __construct(Location $location)

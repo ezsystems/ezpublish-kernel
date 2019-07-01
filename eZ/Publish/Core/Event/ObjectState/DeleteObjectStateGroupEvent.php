@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteObjectStateGroupEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;
 
     public function __construct(ObjectStateGroup $objectStateGroup)

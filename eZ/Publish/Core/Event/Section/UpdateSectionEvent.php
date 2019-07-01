@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateSectionEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct */
     private $sectionUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $updatedSection;
 
     public function __construct(

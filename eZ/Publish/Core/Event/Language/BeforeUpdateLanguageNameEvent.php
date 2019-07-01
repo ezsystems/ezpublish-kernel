@@ -14,19 +14,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateLanguageNameEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $newName;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language|null */
     private $updatedLanguage;
 
     public function __construct(Language $language, string $newName)

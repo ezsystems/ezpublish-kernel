@@ -14,9 +14,7 @@ use UnexpectedValueException;
 
 final class BeforeEmptyTrashEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Trash\TrashItemDeleteResultList|null */
     private $resultList;
 
     public function __construct()

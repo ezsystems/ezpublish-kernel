@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdatePolicyEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Policy
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     private $policy;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct */
     private $policyUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Policy
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Policy */
     private $updatedPolicy;
 
     public function __construct(

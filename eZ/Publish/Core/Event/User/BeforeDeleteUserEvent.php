@@ -14,14 +14,10 @@ use UnexpectedValueException;
 
 final class BeforeDeleteUserEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
-    /**
-     * @var array|null
-     */
+    /** @var array|null */
     private $locations;
 
     public function __construct(User $user)

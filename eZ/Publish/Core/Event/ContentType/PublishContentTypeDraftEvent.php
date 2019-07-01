@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class PublishContentTypeDraftEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
 
     public function __construct(ContentTypeDraft $contentTypeDraft)

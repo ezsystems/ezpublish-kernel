@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeDeleteSectionEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;
 
     public function __construct(Section $section)

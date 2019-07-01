@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteObjectStateEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $objectState;
 
     public function __construct(ObjectState $objectState)

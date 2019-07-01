@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateObjectStateGroupEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $updatedObjectStateGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct */
     private $objectStateGroupUpdateStruct;
 
     public function __construct(

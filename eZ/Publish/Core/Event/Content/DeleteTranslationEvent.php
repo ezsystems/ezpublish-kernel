@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class DeleteTranslationEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
     private $languageCode;

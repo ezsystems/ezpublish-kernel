@@ -50,9 +50,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ContentService extends ContentServiceDecorator
 {
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
     public function __construct(

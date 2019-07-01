@@ -15,14 +15,10 @@ use UnexpectedValueException;
 
 final class BeforeCreateLanguageEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct */
     private $languageCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language|null */
     private $language;
 
     public function __construct(LanguageCreateStruct $languageCreateStruct)

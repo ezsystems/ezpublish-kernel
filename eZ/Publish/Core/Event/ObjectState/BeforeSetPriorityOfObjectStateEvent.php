@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeSetPriorityOfObjectStateEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $objectState;
 
     private $priority;

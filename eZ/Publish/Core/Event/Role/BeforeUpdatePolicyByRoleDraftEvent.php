@@ -16,24 +16,16 @@ use UnexpectedValueException;
 
 final class BeforeUpdatePolicyByRoleDraftEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
     private $policy;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct */
     private $policyUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyDraft|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft|null */
     private $updatedPolicyDraft;
 
     public function __construct(RoleDraft $roleDraft, PolicyDraft $policy, PolicyUpdateStruct $policyUpdateStruct)

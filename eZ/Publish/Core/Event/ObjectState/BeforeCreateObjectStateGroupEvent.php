@@ -15,14 +15,10 @@ use UnexpectedValueException;
 
 final class BeforeCreateObjectStateGroupEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupCreateStruct */
     private $objectStateGroupCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup|null */
     private $objectStateGroup;
 
     public function __construct(ObjectStateGroupCreateStruct $objectStateGroupCreateStruct)

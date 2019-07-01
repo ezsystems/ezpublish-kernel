@@ -16,19 +16,13 @@ use UnexpectedValueException;
 
 final class BeforeAddRelationEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $sourceVersion;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $destinationContent;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Relation|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Relation|null */
     private $relation;
 
     public function __construct(VersionInfo $sourceVersion, ContentInfo $destinationContent)

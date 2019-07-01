@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class AddPolicyByRoleDraftEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct */
     private $policyCreateStruct;
 
     private $updatedRoleDraft;

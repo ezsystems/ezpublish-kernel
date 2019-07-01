@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateRoleDraftEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct */
     private $roleUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleDraft|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft|null */
     private $updatedRoleDraft;
 
     public function __construct(RoleDraft $roleDraft, RoleUpdateStruct $roleUpdateStruct)

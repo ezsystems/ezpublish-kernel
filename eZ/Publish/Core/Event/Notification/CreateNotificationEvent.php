@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateNotificationEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Notification\Notification
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Notification\Notification */
     private $notification;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Notification\CreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Notification\CreateStruct */
     private $createStruct;
 
     public function __construct(

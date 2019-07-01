@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RemovePolicyByRoleDraftEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
     private $policyDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $updatedRoleDraft;
 
     public function __construct(

@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateContentTypeDraftEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct */
     private $contentTypeUpdateStruct;
 
     public function __construct(

@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateSectionEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct */
     private $sectionCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;
 
     public function __construct(

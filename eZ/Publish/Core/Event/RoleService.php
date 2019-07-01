@@ -62,9 +62,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RoleService extends RoleServiceDecorator
 {
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
     public function __construct(

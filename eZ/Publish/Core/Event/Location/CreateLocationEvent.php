@@ -15,19 +15,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateLocationEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct */
     private $locationCreateStruct;
 
     public function __construct(

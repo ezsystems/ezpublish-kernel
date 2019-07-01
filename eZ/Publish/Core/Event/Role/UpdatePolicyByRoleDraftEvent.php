@@ -15,24 +15,16 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdatePolicyByRoleDraftEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleDraft */
     private $roleDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
     private $policy;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct */
     private $policyUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\PolicyDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\PolicyDraft */
     private $updatedPolicyDraft;
 
     public function __construct(

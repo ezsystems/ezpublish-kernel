@@ -15,19 +15,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateObjectStateEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState */
     private $objectState;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct */
     private $objectStateCreateStruct;
 
     public function __construct(

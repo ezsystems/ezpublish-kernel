@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateObjectStateGroupEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroupUpdateStruct */
     private $objectStateGroupUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup|null */
     private $updatedObjectStateGroup;
 
     public function __construct(ObjectStateGroup $objectStateGroup, ObjectStateGroupUpdateStruct $objectStateGroupUpdateStruct)

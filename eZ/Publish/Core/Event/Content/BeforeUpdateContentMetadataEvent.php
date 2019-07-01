@@ -16,19 +16,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateContentMetadataEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct */
     private $contentMetadataUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
     private $content;
 
     public function __construct(ContentInfo $contentInfo, ContentMetadataUpdateStruct $contentMetadataUpdateStruct)

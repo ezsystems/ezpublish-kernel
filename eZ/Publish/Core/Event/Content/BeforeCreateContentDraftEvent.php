@@ -17,24 +17,16 @@ use UnexpectedValueException;
 
 final class BeforeCreateContentDraftEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $creator;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
     private $contentDraft;
 
     public function __construct(ContentInfo $contentInfo, ?VersionInfo $versionInfo = null, ?User $creator = null)

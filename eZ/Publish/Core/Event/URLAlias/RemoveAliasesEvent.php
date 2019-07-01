@@ -12,9 +12,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RemoveAliasesEvent extends AfterEvent
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $aliasList;
 
     public function __construct(

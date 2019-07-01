@@ -16,19 +16,13 @@ use UnexpectedValueException;
 
 final class BeforeCreateLocationEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct */
     private $locationCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location|null */
     private $location;
 
     public function __construct(ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct)

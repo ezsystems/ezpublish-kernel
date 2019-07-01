@@ -19,9 +19,7 @@ final class CreateEvent extends AfterEvent
 
     private $forward;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLWildcard
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcard */
     private $urlWildcard;
 
     public function __construct(

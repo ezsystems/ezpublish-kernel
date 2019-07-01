@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RemoveEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLWildcard
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLWildcard */
     private $urlWildcard;
 
     public function __construct(

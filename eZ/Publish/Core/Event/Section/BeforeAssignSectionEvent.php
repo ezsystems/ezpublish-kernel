@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAssignSectionEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Section
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Section */
     private $section;
 
     public function __construct(ContentInfo $contentInfo, Section $section)

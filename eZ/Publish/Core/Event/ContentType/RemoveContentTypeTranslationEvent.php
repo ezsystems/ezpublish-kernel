@@ -13,19 +13,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class RemoveContentTypeTranslationEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $newContentTypeDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $languageCode;
 
     public function __construct(

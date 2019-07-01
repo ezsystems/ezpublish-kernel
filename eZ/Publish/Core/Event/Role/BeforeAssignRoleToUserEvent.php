@@ -15,19 +15,13 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeAssignRoleToUserEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Role
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Role */
     private $role;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $user;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation */
     private $roleLimitation;
 
     public function __construct(Role $role, User $user, ?RoleLimitation $roleLimitation = null)

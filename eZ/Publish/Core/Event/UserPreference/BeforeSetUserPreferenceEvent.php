@@ -12,9 +12,7 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeSetUserPreferenceEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceSetStruct[]
-     */
+    /** @var \eZ\Publish\API\Repository\Values\UserPreference\UserPreferenceSetStruct[] */
     private $userPreferenceSetStructs;
 
     public function __construct(array $userPreferenceSetStructs)

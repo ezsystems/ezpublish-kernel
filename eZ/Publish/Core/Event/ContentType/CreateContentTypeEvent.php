@@ -14,19 +14,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateContentTypeEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct */
     private $contentTypeCreateStruct;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $contentTypeGroups;
 
     public function __construct(

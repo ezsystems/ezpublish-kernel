@@ -14,14 +14,10 @@ use UnexpectedValueException;
 
 final class BeforeDisableLanguageEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language|null */
     private $disabledLanguage;
 
     public function __construct(Language $language)

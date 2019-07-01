@@ -14,9 +14,7 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class CreateUrlAliasEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Location
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Location */
     private $location;
 
     private $path;
@@ -27,9 +25,7 @@ final class CreateUrlAliasEvent extends AfterEvent
 
     private $alwaysAvailable;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\URLAlias
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\URLAlias */
     private $urlAlias;
 
     public function __construct(

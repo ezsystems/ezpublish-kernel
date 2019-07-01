@@ -14,14 +14,10 @@ use UnexpectedValueException;
 
 final class BeforeDeleteContentEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var array|null
-     */
+    /** @var array|null */
     private $locations;
 
     public function __construct(ContentInfo $contentInfo)

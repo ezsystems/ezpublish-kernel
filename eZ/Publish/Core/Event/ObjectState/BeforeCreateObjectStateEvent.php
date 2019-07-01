@@ -16,19 +16,13 @@ use UnexpectedValueException;
 
 final class BeforeCreateObjectStateEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateGroup */
     private $objectStateGroup;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectStateCreateStruct */
     private $objectStateCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ObjectState\ObjectState|null */
     private $objectState;
 
     public function __construct(ObjectStateGroup $objectStateGroup, ObjectStateCreateStruct $objectStateCreateStruct)

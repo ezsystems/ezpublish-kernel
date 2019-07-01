@@ -15,19 +15,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateContentMetadataEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content */
     private $content;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentInfo */
     private $contentInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentMetadataUpdateStruct */
     private $contentMetadataUpdateStruct;
 
     public function __construct(

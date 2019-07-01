@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeCopyContentTypeEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType */
     private $contentType;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User */
     private $creator;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentType|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentType|null */
     private $contentTypeCopy;
 
     public function __construct(ContentType $contentType, ?User $creator = null)

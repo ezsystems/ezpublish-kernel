@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeCreateUserEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\UserCreateStruct */
     private $userCreateStruct;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $parentGroups;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\User|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\User|null */
     private $user;
 
     public function __construct(UserCreateStruct $userCreateStruct, array $parentGroups)

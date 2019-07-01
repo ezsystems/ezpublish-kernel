@@ -14,14 +14,10 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeRemoveFieldDefinitionEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft */
     private $contentTypeDraft;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition */
     private $fieldDefinition;
 
     public function __construct(ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition)

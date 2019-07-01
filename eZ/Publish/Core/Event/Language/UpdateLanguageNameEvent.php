@@ -13,19 +13,13 @@ use eZ\Publish\Core\Event\AfterEvent;
 
 final class UpdateLanguageNameEvent extends AfterEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $updatedLanguage;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Language
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Language */
     private $language;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $newName;
 
     public function __construct(

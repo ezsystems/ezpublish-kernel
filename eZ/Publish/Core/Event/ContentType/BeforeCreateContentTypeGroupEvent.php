@@ -15,14 +15,10 @@ use UnexpectedValueException;
 
 final class BeforeCreateContentTypeGroupEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct */
     private $contentTypeGroupCreateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup|null */
     private $contentTypeGroup;
 
     public function __construct(ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct)

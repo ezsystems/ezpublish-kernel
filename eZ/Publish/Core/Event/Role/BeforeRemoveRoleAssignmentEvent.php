@@ -13,9 +13,7 @@ use eZ\Publish\Core\Event\BeforeEvent;
 
 final class BeforeRemoveRoleAssignmentEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\User\RoleAssignment
-     */
+    /** @var \eZ\Publish\API\Repository\Values\User\RoleAssignment */
     private $roleAssignment;
 
     public function __construct(RoleAssignment $roleAssignment)

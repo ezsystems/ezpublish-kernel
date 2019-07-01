@@ -14,9 +14,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class FieldTypeService extends FieldTypeServiceDecorator
 {
-    /**
-     * @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface
-     */
+    /** @var \Symfony\Contracts\EventDispatcher\EventDispatcherInterface */
     protected $eventDispatcher;
 
     public function __construct(

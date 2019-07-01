@@ -16,19 +16,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateContentEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\VersionInfo
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct */
     private $contentUpdateStruct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\Content\Content|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
     private $content;
 
     public function __construct(VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct)

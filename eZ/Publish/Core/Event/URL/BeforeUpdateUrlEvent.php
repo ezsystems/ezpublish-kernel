@@ -15,19 +15,13 @@ use UnexpectedValueException;
 
 final class BeforeUpdateUrlEvent extends BeforeEvent
 {
-    /**
-     * @var \eZ\Publish\API\Repository\Values\URL\URL
-     */
+    /** @var \eZ\Publish\API\Repository\Values\URL\URL */
     private $url;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\URL\URLUpdateStruct
-     */
+    /** @var \eZ\Publish\API\Repository\Values\URL\URLUpdateStruct */
     private $struct;
 
-    /**
-     * @var \eZ\Publish\API\Repository\Values\URL\URL|null
-     */
+    /** @var \eZ\Publish\API\Repository\Values\URL\URL|null */
     private $updatedUrl;
 
     public function __construct(URL $url, URLUpdateStruct $struct)
