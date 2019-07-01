@@ -4621,19 +4621,20 @@ class SearchServiceTest extends BaseTest
     public function getSeedsForRandomSortClause()
     {
         $randomSeed = mt_rand();
+
         return [
             [
                 null,
-                null
+                null,
             ],
             [
                 123456,
-                123456
+                123456,
             ],
             [
                $randomSeed,
-               2 * $randomSeed
-            ]
+               2 * $randomSeed,
+            ],
         ];
     }
 

@@ -14,14 +14,10 @@ use eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\Abstr
 
 class RandomSortClauseHandlerFactory
 {
-    /**
-     * @var iterable|\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\AbstractRandom[]
-     */
+    /** @var iterable|\eZ\Publish\Core\Search\Legacy\Content\Common\Gateway\SortClauseHandler\AbstractRandom[] */
     private $randomSortClauseGateways = [];
 
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
+    /** @var \Doctrine\DBAL\Connection */
     private $connection;
 
     public function __construct(Connection $connection, iterable $randomSortClauseGateways)
