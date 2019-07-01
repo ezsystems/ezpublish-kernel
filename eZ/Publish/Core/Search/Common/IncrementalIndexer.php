@@ -1,68 +1,24 @@
 <?php
 
 /**
- * This file is part of the eZ Publish Kernel package.
- *
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
 namespace eZ\Publish\Core\Search\Common;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Helper\ProgressBar;
-use PDO;
+use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Search\Handler as SearchHandler;
+use eZ\Publish\SPI\Search\IncrementalIndexer as SPIIncrementalIndexer;
+use Psr\Log\LoggerInterface;
 
 /**
- * Base class for the Search Engine Indexer Service aimed to recreate Search Engine Index.
- * Each Search Engine has to extend it on its own.
+ * @deprecated since 8.0, implement \eZ\Publish\SPI\Search\IncrementalIndexer instead.
  *
- * Extends indexer to allow for reindexing your install while it is in production by splitting indexing into tree tasks:
- * - Remove items in index no longer valid in database
- * - Making purge of index optional
- * - indexing by specifying id's, for purpose of supporting parallel indexing
- *
- * @api
+ * @see \eZ\Publish\SPI\Search\IncrementalIndexer
  */
-abstract class IncrementalIndexer extends Indexer
+abstract class IncrementalIndexer implements SPIIncrementalIndexer
 {
-    /**
-     * @deprecated Kept for compatibility with consumers of Indexer, performs purge first & recreate of index second.
-     */
-    final public function createSearchIndex(OutputInterface $output, $iterationCount, $commit)
-    {
-        $output->writeln('Re-creating Search index for: ' . $this->getName());
-        $output->writeln('Purging Index...');
-        $this->searchHandler->purgeIndex();
-
-        $stmt = $this->getContentDbFieldsStmt(['count(id)']);
-        $totalCount = (int) ($stmt->fetchColumn());
-        $stmt = $this->getContentDbFieldsStmt(['id']);
-
-        $output->writeln("Re-Creating Search Engine Index for {$totalCount} content items...");
-        $progress = new ProgressBar($output);
-        $progress->start($totalCount);
-
-        $i = 0;
-        do {
-            $contentIds = [];
-            for ($k = 0; $k <= $iterationCount; ++$k) {
-                if (!$row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                    break;
-                }
-
-                $contentIds[] = $row['id'];
-            }
-
-            $this->updateSearchIndex($contentIds, $commit);
-
-            $progress->advance($k);
-        } while (($i += $iterationCount) < $totalCount);
-
-        $progress->finish();
-        $output->writeln('');
-        $output->writeln('Finished creating Search Engine Index');
-    }
-
     /**
      * Updates search engine index based on Content id's.
      *
@@ -87,4 +43,24 @@ abstract class IncrementalIndexer extends Indexer
      * @return string
      */
     abstract public function getName();
+
+    /**
+     * IncrementalIndexer constructor for BC reasons.
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
+     * @param \eZ\Publish\Core\Persistence\Database\DatabaseHandler $databaseHandler
+     * @param \eZ\Publish\SPI\Search\Handler $searchHandler
+     */
+    public function __construct(
+        LoggerInterface $logger,
+        PersistenceHandler $persistenceHandler,
+        DatabaseHandler $databaseHandler,
+        SearchHandler $searchHandler
+    ) {
+        $this->logger = $logger;
+        $this->persistenceHandler = $persistenceHandler;
+        $this->databaseHandler = $databaseHandler;
+        $this->searchHandler = $searchHandler;
+    }
 }
