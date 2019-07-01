@@ -276,8 +276,6 @@
     {% if not ez_field_is_empty( content, field ) %}
     <ul {{ block( 'field_attributes' ) }}>
         {% for contentId in field.value.destinationContentIds if parameters.available[contentId] %}
-        {# @todo should be uncommented once HTTP cache bundle is enabled #}
-        {# {{ fos_httpcache_tag('relation-' ~ contentId) }}#}
         <li>
             {{ render( controller( "ez_content:viewAction", {'contentId': contentId, 'viewType': 'embed', 'layout': false} ) ) }}
         </li>
@@ -456,8 +454,6 @@
 {% block ezimageasset_field %}
     {% spaceless %}
         {% if not ez_field_is_empty(content, field) and parameters.available %}
-{#            {{ fos_httpcache_tag('relation-' ~
-            {# @todo should be uncommented once HTTP cache bundle is enabled #}field.value.destinationContentId) }}#}
             <div {{ block('field_attributes') }}>
                 {{ render(controller('ez_content:embedAction', {
                     contentId: field.value.destinationContentId,
@@ -475,8 +471,6 @@
 {% block ezobjectrelation_field %}
 {% spaceless %}
 {% if not ez_field_is_empty( content, field ) and parameters.available %}
-{#    {{ fos_httpcache_tag('relation-' ~ field.value.destinationContentId) }}#}
-    {# @todo should be uncommented once HTTP cache bundle is enabled #}
     <div {{ block( 'field_attributes' ) }}>
         {{ render( controller( "ez_content:viewAction", {'contentId': field.value.destinationContentId, 'viewType': 'text_linked', 'layout': false} ) ) }}
     </div>
