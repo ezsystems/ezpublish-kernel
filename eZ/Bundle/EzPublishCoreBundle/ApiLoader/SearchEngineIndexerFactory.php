@@ -6,10 +6,12 @@
  * @copyright Copyright (C) eZ Systems AS. All rights reserved.
  * @license For full copyright and license information view LICENSE file distributed with this source code.
  */
+declare(strict_types=1);
+
 namespace eZ\Bundle\EzPublishCoreBundle\ApiLoader;
 
 use eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidSearchEngineIndexer;
-use eZ\Publish\Core\Search\Common\Indexer as SearchEngineIndexer;
+use eZ\Publish\SPI\Search\IncrementalIndexer;
 
 /**
  * The search engine indexer factory.
@@ -23,7 +25,7 @@ class SearchEngineIndexerFactory
      * Hash of registered search engine indexers.
      * Key is the search engine identifier, value indexer itself.
      *
-     * @var \eZ\Publish\Core\Search\Common\Indexer[]
+     * @var \eZ\Publish\SPI\Search\IncrementalIndexer[]
      */
     protected $searchEngineIndexers = [];
 
@@ -37,20 +39,22 @@ class SearchEngineIndexerFactory
      *
      * note: It is strongly recommended to register indexer as a lazy service.
      *
-     * @param \eZ\Publish\Core\Search\Common\Indexer $searchEngineIndexer
+     * @param \eZ\Publish\SPI\Search\IncrementalIndexer $searchEngineIndexer
      * @param string $searchEngineIdentifier
      */
-    public function registerSearchEngineIndexer(SearchEngineIndexer $searchEngineIndexer, $searchEngineIdentifier)
-    {
+    public function registerSearchEngineIndexer(
+        IncrementalIndexer $searchEngineIndexer,
+        $searchEngineIdentifier
+    ): void {
         $this->searchEngineIndexers[$searchEngineIdentifier] = $searchEngineIndexer;
     }
 
     /**
      * Returns registered search engine indexers.
      *
-     * @return \eZ\Publish\Core\Search\Common\Indexer[]
+     * @return \eZ\Publish\SPI\Search\IncrementalIndexer[]
      */
-    public function getSearchEngineIndexers()
+    public function getSearchEngineIndexers(): array
     {
         return $this->searchEngineIndexers;
     }
@@ -61,9 +65,9 @@ class SearchEngineIndexerFactory
      *
      * @throws \eZ\Bundle\EzPublishCoreBundle\ApiLoader\Exception\InvalidSearchEngineIndexer
      *
-     * @return \eZ\Publish\Core\Search\Common\Indexer
+     * @return \eZ\Publish\SPI\Search\IncrementalIndexer
      */
-    public function buildSearchEngineIndexer()
+    public function buildSearchEngineIndexer(): IncrementalIndexer
     {
         $repositoryConfig = $this->repositoryConfigurationProvider->getRepositoryConfig();
 

@@ -70,9 +70,10 @@ services:
         public: false
 
     ezpublish.spi.search_engine.indexer:
-        class: "%ezpublish.search.common.indexer.class%"
+        class: eZ\Publish\SPI\Search\IncrementalIndexer
         factory: ["@ezpublish.api.search_engine.indexer.factory", buildSearchEngineIndexer]
         public: false
+        lazy: true
 
     # Signal Slot API wrapper
     ezpublish.signalslot.event_converter_slot:

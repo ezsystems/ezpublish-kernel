@@ -8,15 +8,13 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Command;
 
-use function count;
 use const DIRECTORY_SEPARATOR;
 use Doctrine\DBAL\Connection;
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\SPI\Persistence\Content\ContentInfo;
-use eZ\Publish\Core\Search\Common\Indexer;
-use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use Doctrine\DBAL\Driver\Statement;
 use eZ\Publish\SPI\Persistence\Content\Location\Handler;
+use eZ\Publish\SPI\Search\IncrementalIndexer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -34,7 +32,7 @@ class ReindexCommand extends Command
     /** @var string string */
     protected static $defaultName = 'ezplatform:reindex';
 
-    /** @var \eZ\Publish\Core\Search\Common\Indexer|\eZ\Publish\Core\Search\Common\IncrementalIndexer */
+    /** @var \eZ\Publish\SPI\Search\IncrementalIndexer */
     private $searchIndexer;
 
     /** @var \Doctrine\DBAL\Connection */
@@ -59,7 +57,7 @@ class ReindexCommand extends Command
     private $isDebug;
 
     /**
-     * @param \eZ\Publish\Core\Search\Common\IncrementalIndexer|\eZ\Publish\Core\Search\Common\Indexer $searchIndexer
+     * @param \eZ\Publish\SPI\Search\IncrementalIndexer $searchIndexer
      * @param \Doctrine\DBAL\Connection $connection
      * @param \eZ\Publish\SPI\Persistence\Content\Location\Handler $locationHandler
      * @param \Psr\Log\LoggerInterface $logger
@@ -69,7 +67,7 @@ class ReindexCommand extends Command
      * @param string|null $phpPath
      */
     public function __construct(
-        $searchIndexer,
+        IncrementalIndexer $searchIndexer,
         Connection $connection,
         Handler $locationHandler,
         LoggerInterface $logger,
@@ -100,7 +98,7 @@ class ReindexCommand extends Command
     public function initialize(InputInterface $input, OutputInterface $output)
     {
         parent::initialize($input, $output);
-        if (!$this->searchIndexer instanceof Indexer) {
+        if (!$this->searchIndexer instanceof IncrementalIndexer) {
             throw new RuntimeException(
                 sprintf(
                     'Expected to find Search Engine Indexer but found "%s" instead',
@@ -191,31 +189,15 @@ EOT
             throw new InvalidArgumentException('--iteration-count', "Option should be > 0, got '{$iterationCount}'");
         }
 
-        if (!$this->searchIndexer instanceof IncrementalIndexer) {
-            $output->writeln(<<<EOT
-DEPRECATED:
-Running indexing against an Indexer that has not been updated to use IncrementalIndexer abstract.
+        $output->writeln('Re-indexing started for search engine: ' . $this->searchIndexer->getName());
+        $output->writeln('');
 
-Options that won't be taken into account:
-- since
-- content-ids
-- subtree
-- processes
-- no-purge
-EOT
-            );
-            $this->searchIndexer->createSearchIndex($output, (int) $iterationCount, !$commit);
-        } else {
-            $output->writeln('Re-indexing started for search engine: ' . $this->searchIndexer->getName());
-            $output->writeln('');
+        $return = $this->indexIncrementally($input, $output, $iterationCount, $commit);
 
-            $return = $this->indexIncrementally($input, $output, $iterationCount, $commit);
+        $output->writeln('');
+        $output->writeln('Finished re-indexing');
 
-            $output->writeln('');
-            $output->writeln('Finished re-indexing');
-
-            return $return;
-        }
+        return $return;
     }
 
     protected function indexIncrementally(InputInterface $input, OutputInterface $output, $iterationCount, $commit)

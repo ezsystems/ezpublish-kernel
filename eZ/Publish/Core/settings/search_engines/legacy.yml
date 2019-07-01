@@ -98,8 +98,7 @@ services:
         class: "%ezpublish.spi.search.legacy.indexer.class%"
         arguments:
             - "@logger"
-            - "@ezpublish.api.storage_engine"
-            - "@ezpublish.api.storage_engine.legacy.dbhandler"
+            - "@ezpublish.spi.persistence.content_handler"
             - "@ezpublish.spi.search.legacy"
         tags:
             - {name: ezpublish.searchEngineIndexer, alias: legacy}

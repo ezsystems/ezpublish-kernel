@@ -9,37 +9,46 @@
 namespace eZ\Publish\Core\Search\Legacy\Content;
 
 use eZ\Publish\API\Repository\Exceptions\NotFoundException;
-use eZ\Publish\Core\Persistence\Database\DatabaseHandler;
-use eZ\Publish\Core\Search\Common\IncrementalIndexer;
 use eZ\Publish\Core\Search\Legacy\Content\Handler as LegacySearchHandler;
-use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler;
+use eZ\Publish\SPI\Persistence\Content\ContentInfo;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandler;
+use eZ\Publish\SPI\Search\IncrementalIndexer;
 use Psr\Log\LoggerInterface;
 
-class Indexer extends IncrementalIndexer
+class Indexer implements IncrementalIndexer
 {
+    /** @var \Psr\Log\LoggerInterface */
+    private $logger;
+
+    /** @var \eZ\Publish\SPI\Persistence\Content\Handler */
+    private $contentHandler;
+
+    /** @var \eZ\Publish\Core\Search\Legacy\Content\Handler */
+    private $searchHandler;
+
     public function __construct(
         LoggerInterface $logger,
-        PersistenceHandler $persistenceHandler,
-        DatabaseHandler $databaseHandler,
+        ContentHandler $contentHandler,
         LegacySearchHandler $searchHandler
     ) {
-        parent::__construct($logger, $persistenceHandler, $databaseHandler, $searchHandler);
+        $this->logger = $logger;
+        $this->contentHandler = $contentHandler;
+        $this->searchHandler = $searchHandler;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'eZ Platform Legacy (SQL) Search Engine';
     }
 
     public function updateSearchIndex(array $contentIds, $commit)
     {
-        $contentHandler = $this->persistenceHandler->contentHandler();
         foreach ($contentIds as $contentId) {
             try {
-                $info = $contentHandler->loadContentInfo($contentId);
-                if ($info->isPublished) {
+                $info = $this->contentHandler->loadContentInfo($contentId);
+                if ($info->status === ContentInfo::STATUS_PUBLISHED) {
                     $this->searchHandler->indexContent(
-                        $contentHandler->load($info->id, $info->currentVersionNo)
+                        $this->contentHandler->load($info->id, $info->currentVersionNo)
                     );
                 } else {
                     $this->searchHandler->deleteContent($contentId);
