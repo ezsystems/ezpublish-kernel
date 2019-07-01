@@ -29,9 +29,6 @@ class SiteAccessMatchListenerTest extends TestCase
     /** @var \PHPUnit\Framework\MockObject\MockObject */
     private $eventDispatcher;
 
-    /** @var \PHPUnit\Framework\MockObject\MockObject */
-    private $userHashMatcher;
-
     /** @var SiteAccessMatchListener */
     private $listener;
 
@@ -49,28 +46,6 @@ class SiteAccessMatchListenerTest extends TestCase
             [KernelEvents::REQUEST => ['onKernelRequest', 45]],
             SiteAccessMatchListener::getSubscribedEvents()
         );
-    }
-
-    public function testOnKernelRequestUserHashNoOriginalRequest()
-    {
-        $this->markTestSkipped('Test skipped until HttpCache is compatible with eZ Platform 3');
-
-        $request = new Request();
-        $event = new GetResponseEvent(
-            $this->createMock(HttpKernelInterface::class),
-            $request,
-            HttpKernelInterface::MASTER_REQUEST
-        );
-
-        $this->saRouter
-            ->expects($this->never())
-            ->method('match');
-        $this->eventDispatcher
-            ->expects($this->never())
-            ->method('dispatch');
-
-        $this->listener->onKernelRequest($event);
-        $this->assertFalse($request->attributes->has('siteaccess'));
     }
 
     public function testOnKernelRequestSerializedSA()
@@ -149,6 +124,7 @@ class SiteAccessMatchListenerTest extends TestCase
                 'headers' => $request->headers->all(),
             ]
         );
+
         $this->saRouter
             ->expects($this->once())
             ->method('match')
@@ -192,6 +168,7 @@ class SiteAccessMatchListenerTest extends TestCase
                 'headers' => $originalRequest->headers->all(),
             ]
         );
+
         $this->saRouter
             ->expects($this->once())
             ->method('match')
