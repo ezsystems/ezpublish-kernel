@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs;
 
-use eZ\Publish\Core\FieldType\Generic\Type;
+use eZ\Publish\SPI\FieldType\Generic\Type;
 
 final class GenericFieldType extends Type
 {

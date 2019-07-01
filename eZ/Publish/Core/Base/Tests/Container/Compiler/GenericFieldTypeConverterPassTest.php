@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\Base\Tests\Container\Compiler;
 
+use eZ\Publish\SPI\FieldType\Generic\Type;
 use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use eZ\Publish\Core\Base\Container\Compiler\GenericFieldTypeConverterPass;
 use eZ\Publish\Core\Base\Container\Compiler\Storage\Legacy\FieldValueConverterRegistryPass;
 use eZ\Publish\Core\Base\Tests\Container\Compiler\Stubs\GenericFieldType;
-use eZ\Publish\Core\FieldType\Generic\Type;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\DefinitionHasMethodCallConstraint;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

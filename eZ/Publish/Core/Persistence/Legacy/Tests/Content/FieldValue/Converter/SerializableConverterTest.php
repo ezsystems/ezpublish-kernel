@@ -9,10 +9,10 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\FieldType\FieldSettings;
-use eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface;
-use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\GenericConverter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\SerializableConverter;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\FieldType\ValueSerializerInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test case for Generic converter in Legacy storage.
  */
-class GenericConverterTest extends TestCase
+class SerializableConverterTest extends TestCase
 {
     private const EXAMPLE_DATA = [
         'foo' => 'foo',
@@ -30,10 +30,10 @@ class GenericConverterTest extends TestCase
 
     private const EXAMPLE_JSON = '{"foo":"foo","bar":"bar"}';
 
-    /** @var \eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\SPI\FieldType\ValueSerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
-    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\GenericConverter */
+    /** @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\SerializableConverter */
     private $converter;
 
     protected function setUp(): void
@@ -41,7 +41,7 @@ class GenericConverterTest extends TestCase
         parent::setUp();
 
         $this->serializer = $this->createMock(ValueSerializerInterface::class);
-        $this->converter = new GenericConverter($this->serializer);
+        $this->converter = new SerializableConverter($this->serializer);
     }
 
     public function testToStorageValue(): void
@@ -123,7 +123,7 @@ class GenericConverterTest extends TestCase
         $this->serializer
             ->expects($this->once())
             ->method('encode')
-            ->with(new FieldSettings(self::EXAMPLE_DATA))
+            ->with(self::EXAMPLE_DATA)
             ->willReturn(self::EXAMPLE_JSON);
 
         $storageFieldDefinition = new StorageFieldDefinition();

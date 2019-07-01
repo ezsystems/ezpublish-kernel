@@ -6,25 +6,22 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\FieldType\Tests;
+namespace eZ\Publish\SPI\FieldType\Generic\Tests;
 
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
-use eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface;
-use eZ\Publish\Core\FieldType\Tests\Generic\Stubs\Type as GenericFieldTypeStub;
-use eZ\Publish\Core\FieldType\Tests\Generic\Stubs\Value as GenericFieldValueStub;
-use eZ\Publish\Core\FieldType\ValidationError;
+use eZ\Publish\SPI\FieldType\Tests\FieldTypeTest;
+use eZ\Publish\SPI\FieldType\ValueSerializerInterface;
+use eZ\Publish\SPI\FieldType\Generic\Tests\Stubs\Type as GenericFieldTypeStub;
+use eZ\Publish\SPI\FieldType\Generic\Tests\Stubs\Value as GenericFieldValueStub;
+use eZ\Publish\SPI\FieldType\ValidationError;
+use eZ\Publish\SPI\Exception\InvalidArgumentException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-/**
- * @group fieldType
- * @group ezgeneric
- */
 class GenericTest extends FieldTypeTest
 {
-    /** @var \eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
+    /** @var \eZ\Publish\SPI\FieldType\ValueSerializerInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $serializer;
 
     /** @var \Symfony\Component\Validator\Validator\ValidatorInterface|\PHPUnit\Framework\MockObject\MockObject */

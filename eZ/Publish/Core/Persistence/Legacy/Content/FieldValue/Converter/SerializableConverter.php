@@ -9,16 +9,16 @@ declare(strict_types=1);
 namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
 
 use eZ\Publish\Core\FieldType\FieldSettings;
-use eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter as ConverterInterface;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
+use eZ\Publish\SPI\FieldType\ValueSerializerInterface;
 use eZ\Publish\SPI\Persistence\Content\FieldValue;
 use eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
-class GenericConverter implements ConverterInterface
+final class SerializableConverter implements ConverterInterface
 {
-    /** @var \eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface */
+    /** @var \eZ\Publish\SPI\FieldType\ValueSerializerInterface */
     private $serializer;
 
     public function __construct(ValueSerializerInterface $serializer)
@@ -52,7 +52,7 @@ class GenericConverter implements ConverterInterface
     {
         $settings = $fieldDef->fieldTypeConstraints->fieldSettings;
         if ($settings !== null) {
-            $settings = $this->serializer->encode($settings);
+            $settings = $this->serializer->encode((array)$settings);
         }
 
         $storageDef->dataText5 = $settings;

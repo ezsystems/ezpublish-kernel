@@ -6,9 +6,9 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\FieldType\Tests\Generic\Stubs;
+namespace eZ\Publish\SPI\FieldType\Generic\Tests\Stubs;
 
-use eZ\Publish\Core\FieldType\Generic\Type as BaseType;
+use eZ\Publish\SPI\FieldType\Generic\Type as BaseType;
 
 final class Type extends BaseType
 {

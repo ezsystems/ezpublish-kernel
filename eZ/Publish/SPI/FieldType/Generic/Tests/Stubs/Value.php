@@ -6,11 +6,11 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\FieldType\Tests\Generic\Stubs;
+namespace eZ\Publish\SPI\FieldType\Generic\Tests\Stubs;
 
-use eZ\Publish\Core\FieldType\Generic\BaseValue;
+use eZ\Publish\SPI\FieldType\Value as ValueInterface;
 
-final class Value extends BaseValue
+final class Value implements ValueInterface
 {
     private $value;
 

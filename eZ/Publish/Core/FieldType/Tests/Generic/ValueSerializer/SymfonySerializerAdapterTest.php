@@ -8,8 +8,7 @@ declare(strict_types=1);
 
 namespace eZ\Publish\Core\FieldType\Tests\Generic\ValueSerializer;
 
-use eZ\Publish\Core\FieldType\Generic\Value;
-use eZ\Publish\Core\FieldType\Generic\ValueSerializer\SymfonySerializerAdapter;
+use eZ\Publish\SPI\FieldType\Value;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
@@ -33,7 +32,7 @@ class SymfonySerializerAdapterTest extends TestCase
     /** @var \Symfony\Component\Serializer\Encoder\DecoderInterface|\PHPUnit\Framework\MockObject\MockObject */
     private $decoder;
 
-    /** @var \eZ\Publish\Core\FieldType\Generic\ValueSerializer\SymfonySerializerAdapter */
+    /** @var \eZ\Publish\Core\FieldType\ValueSerializer\SymfonySerializerAdapter */
     private $adapter;
 
     protected function setUp(): void
@@ -43,7 +42,7 @@ class SymfonySerializerAdapterTest extends TestCase
         $this->encoder = $this->createMock(EncoderInterface::class);
         $this->decoder = $this->createMock(DecoderInterface::class);
 
-        $this->adapter = new SymfonySerializerAdapter(
+        $this->adapter = new \eZ\Publish\Core\FieldType\ValueSerializer\SymfonySerializerAdapter(
             $this->normalizer,
             $this->denomalizer,
             $this->encoder,

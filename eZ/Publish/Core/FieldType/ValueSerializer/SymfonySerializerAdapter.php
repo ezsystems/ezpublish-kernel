@@ -6,10 +6,10 @@
  */
 declare(strict_types=1);
 
-namespace eZ\Publish\Core\FieldType\Generic\ValueSerializer;
+namespace eZ\Publish\Core\FieldType\ValueSerializer;
 
-use eZ\Publish\Core\FieldType\Generic\Value;
-use eZ\Publish\Core\FieldType\Generic\ValueSerializerInterface;
+use eZ\Publish\SPI\FieldType\Value;
+use eZ\Publish\SPI\FieldType\ValueSerializerInterface;
 use Symfony\Component\Serializer\Encoder\DecoderInterface;
 use Symfony\Component\Serializer\Encoder\EncoderInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
@@ -68,12 +68,12 @@ final class SymfonySerializerAdapter implements ValueSerializerInterface
         return $this->denormalizer->denormalize($data, $valueClass, $this->format, $context);
     }
 
-    public function encode($data, array $context = []): ?string
+    public function encode(?array $data, array $context = []): ?string
     {
         return $this->encoder->encode($data, $this->format, $context);
     }
 
-    public function decode($data, array $context = []): ?array
+    public function decode(?string $data, array $context = []): ?array
     {
         return $this->decoder->decode($data, $this->format, $context);
     }
