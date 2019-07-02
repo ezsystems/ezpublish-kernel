@@ -763,8 +763,8 @@ class ObjectStateServiceTest extends BaseTest
             $updatedObjectStateGroup
         );
 
-        $this->assertContains($updatedObjectStateGroup, $allObjectGroups, '', false, false);
-        $this->assertNotContains($loadedObjectStateGroup, $allObjectGroups, '', false, false);
+        $this->assertContainsEquals($updatedObjectStateGroup, $allObjectGroups, '');
+        $this->assertNotContainsEquals($loadedObjectStateGroup, $allObjectGroups, '');
     }
 
     /**
@@ -1394,8 +1394,8 @@ class ObjectStateServiceTest extends BaseTest
             $updatedObjectState->getObjectStateGroup()
         );
 
-        $this->assertContains($updatedObjectState, $allObjectStates, '', false, false);
-        $this->assertNotContains($loadedObjectState, $allObjectStates, '', false, false);
+        $this->assertContainsEquals($updatedObjectState, $allObjectStates, '');
+        $this->assertNotContainsEquals($loadedObjectState, $allObjectStates, '');
     }
 
     /**
