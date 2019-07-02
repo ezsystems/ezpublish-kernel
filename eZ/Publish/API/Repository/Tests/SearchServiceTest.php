@@ -3741,11 +3741,11 @@ class SearchServiceTest extends BaseTest
             $this->assertEquals($content->id, $foundContent1->valueObject->id);
 
             $this->simplifySearchResult($result);
-            $this->assertEquals(
+            $this->assertEqualsWithDelta(
                 include $this->getFixtureDir() . '/UserMetadata.php',
                 $result,
+                .1, // Be quite generous regarding delay -- most important for scores
                 'Search results do not match.',
-                .1 // Be quite generous regarding delay -- most important for scores
             );
         }
     }
@@ -3840,11 +3840,11 @@ class SearchServiceTest extends BaseTest
             );
 
             $this->simplifySearchResult($result);
-            $this->assertEquals(
+            $this->assertEqualsWithDelta(
                 include $this->getFixtureDir() . '/UserMetadataLocation.php',
                 $result,
+                .1, // Be quite generous regarding delay -- most important for scores
                 'Search results do not match.',
-                .1 // Be quite generous regarding delay -- most important for scores
             );
         }
     }
@@ -4350,11 +4350,11 @@ class SearchServiceTest extends BaseTest
             }
         }
 
-        $this->assertEquals(
+        $this->assertEqualsWithDelta(
             $fixture,
             $result,
+            .99, // Be quite generous regarding delay -- most important for scores
             'Search results do not match.',
-            .99 // Be quite generous regarding delay -- most important for scores
         );
     }
 
