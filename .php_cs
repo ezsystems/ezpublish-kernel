@@ -26,6 +26,7 @@ return PhpCsFixer\Config::create()
         'php_unit_construct' => false,
         'standardize_increment' => false,
         'fopen_flags' => false,
+        'self_accessor' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder(
