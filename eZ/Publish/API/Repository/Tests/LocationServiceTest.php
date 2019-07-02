@@ -1534,7 +1534,7 @@ class LocationServiceTest extends BaseTest
         self::assertCount(count($expectedLocations), $actualLocationsIds);
 
         // perform unordered equality assertion
-        self::assertEquals(
+        self::assertEqualsCanonicalizing(
             $expectedLocationIds,
             $actualLocationsIds,
             sprintf(
@@ -1542,10 +1542,7 @@ class LocationServiceTest extends BaseTest
                 $content->id,
                 implode(', ', $actualLocationsIds),
                 implode(', ', $expectedLocationIds)
-            ),
-            0.0,
-            10,
-            true
+            )
         );
     }
 
