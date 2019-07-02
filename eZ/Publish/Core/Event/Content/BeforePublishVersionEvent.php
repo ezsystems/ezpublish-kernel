@@ -21,14 +21,23 @@ final class BeforePublishVersionEvent extends BeforeEvent
     /** @var \eZ\Publish\API\Repository\Values\Content\Content|null */
     private $content;
 
-    public function __construct(VersionInfo $versionInfo)
+    /** @var string[] */
+    private $translations;
+
+    public function __construct(VersionInfo $versionInfo, array $translations)
     {
         $this->versionInfo = $versionInfo;
+        $this->translations = $translations;
     }
 
     public function getVersionInfo(): VersionInfo
     {
         return $this->versionInfo;
+    }
+
+    public function getTranslations(): array
+    {
+        return $this->translations;
     }
 
     public function getContent(): Content

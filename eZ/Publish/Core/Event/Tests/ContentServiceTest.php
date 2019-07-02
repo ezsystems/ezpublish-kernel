@@ -899,6 +899,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $parameters = [
             $this->createMock(VersionInfo::class),
+            [],
         ];
 
         $content = $this->createMock(Content::class);
@@ -927,6 +928,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $parameters = [
             $this->createMock(VersionInfo::class),
+            [],
         ];
 
         $content = $this->createMock(Content::class);
@@ -961,6 +963,7 @@ class ContentServiceTest extends AbstractServiceTest
 
         $parameters = [
             $this->createMock(VersionInfo::class),
+            [],
         ];
 
         $content = $this->createMock(Content::class);

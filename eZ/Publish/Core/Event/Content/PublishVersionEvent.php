@@ -20,12 +20,17 @@ final class PublishVersionEvent extends AfterEvent
     /** @var \eZ\Publish\API\Repository\Values\Content\VersionInfo */
     private $versionInfo;
 
+    /** @var string[] */
+    private $translations;
+
     public function __construct(
         Content $content,
-        VersionInfo $versionInfo
+        VersionInfo $versionInfo,
+        array $translations
     ) {
         $this->content = $content;
         $this->versionInfo = $versionInfo;
+        $this->translations = $translations;
     }
 
     public function getContent(): Content
@@ -36,5 +41,10 @@ final class PublishVersionEvent extends AfterEvent
     public function getVersionInfo(): VersionInfo
     {
         return $this->versionInfo;
+    }
+
+    public function getTranslations(): array
+    {
+        return $this->translations;
     }
 }
