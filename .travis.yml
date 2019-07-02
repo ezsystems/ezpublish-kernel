@@ -56,6 +56,9 @@ matrix:
 # 7.3
     - php: 7.3
       env: TEST_CONFIG="phpunit.xml"
+    - name: 'Code Style Check'
+      php: 7.3
+      env: CHECK_CS=1
 
 # test only master, stable branches and pull requests
 branches:
@@ -67,6 +70,10 @@ branches:
 before_install:
   # Disable memory_limit for Composer
   - echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  # Disable XDebug for all jobs as we don't generate test coverge on travis
+  - phpenv config-rm xdebug.ini
+  # make sure we use UTF-8 encoding
+  - echo "default_charset=UTF-8" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   # Install igbinary & lzf PHP extensions if necessary
   - if [ "$REDIS_ENABLE_IGBINARY" = true ] ; then pecl install igbinary ; fi
   - if [ "$REDIS_ENABLE_LZF" = true ] ; then printf "no\n" | pecl install lzf ; fi
@@ -81,7 +88,7 @@ before_install:
   - TEST_TIMEZONE=${TEST_TIMEZONES["`shuf -i 0-2 -n 1`"]}
 
 install:
-  -  if [ "$TEST_CONFIG" != "" ] ; then travis_retry composer install --no-progress --no-interaction --prefer-dist $COMPOSER_FLAGS; fi
+  - if [ "$TEST_CONFIG" != "" -o "$CHECK_CS" = "1" ] ; then travis_retry composer install --no-progress --no-interaction --prefer-dist $COMPOSER_FLAGS; fi
   # Setup Solr search if asked for
   - if [ "$TEST_CONFIG" = "phpunit-integration-legacy-solr.xml" ] ; then ./vendor/ezsystems/ezplatform-solr-search-engine/bin/.travis/init_solr.sh; fi
 
@@ -90,6 +97,7 @@ script:
   - if [ "$TEST_CONFIG" != "" ] ; then php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 vendor/bin/phpunit -c $TEST_CONFIG ; fi
   - if [ "$BEHAT_OPTS" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "bin/behat $BEHAT_OPTS" ; fi
   - if [ "$REST_TEST_CONFIG" != "" ] ; then cd "$HOME/build/ezplatform"; docker-compose exec --user www-data app sh -c "php -d date.timezone=$TEST_TIMEZONE -d memory_limit=-1 bin/phpunit -v vendor/ezsystems/ezpublish-kernel/eZ/Bundle/EzPublishRestBundle/Tests/Functional"  ; fi
+  - if [ "$CHECK_CS" = "1" ] ; then ./bin/.travis/check_code_style.sh; fi
 
 notifications:
   slack:
