@@ -729,26 +729,6 @@ class ContentService implements APIContentService, Sessionable
     }
 
     /**
-     * Instantiates a new TranslationInfo object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationInfo
-     */
-    public function newTranslationInfo()
-    {
-        throw new \Exception('@todo: Implement.');
-    }
-
-    /**
-     * Instantiates a Translation object.
-     *
-     * @return \eZ\Publish\API\Repository\Values\Content\TranslationValues
-     */
-    public function newTranslationValues()
-    {
-        throw new \Exception('@todo: Implement.');
-    }
-
-    /**
      * Hides Content by making all the Locations appear hidden.
      * It does not persist hidden state on Location object itself.
      *
