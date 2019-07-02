@@ -38,16 +38,6 @@ final class MVCEvents
     const API_CONTENT_EXCEPTION = 'ezpublish.api.contentException';
 
     /**
-     * The API_SIGNAL event occurs when the SignalSlot repository services emit a signal.
-     * This make it possible to react to it, depending on which signal is emitted.
-     *
-     * All available signals can be found under eZ\Publish\Core\SignalSlot\Signal namespace.
-     *
-     * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\SignalEvent instance.
-     */
-    const API_SIGNAL = 'ezpublish.api.signal';
-
-    /**
      * CONFIG_SCOPE_CHANGE event occurs when configuration scope is changed (e.g. for content preview in a given siteaccess).
      *
      * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent instance.

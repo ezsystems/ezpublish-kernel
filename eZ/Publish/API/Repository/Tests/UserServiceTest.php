@@ -1662,12 +1662,12 @@ class UserServiceTest extends BaseTest
     public function testUpdateUserNoPassword()
     {
         $repository = $this->getRepository();
-        $signalSlotUserService = $repository->getUserService();
+        $eventUserService = $repository->getUserService();
 
-        $signalSlotUserServiceReflection = new ReflectionClass($signalSlotUserService);
-        $userServiceProperty = $signalSlotUserServiceReflection->getProperty('service');
+        $eventUserServiceReflection = new ReflectionClass($eventUserService);
+        $userServiceProperty = $eventUserServiceReflection->getProperty('innerService');
         $userServiceProperty->setAccessible(true);
-        $userService = $userServiceProperty->getValue($signalSlotUserService);
+        $userService = $userServiceProperty->getValue($eventUserService);
 
         $userServiceReflection = new ReflectionClass($userService);
         $settingsProperty = $userServiceReflection->getProperty('settings');
@@ -2691,12 +2691,12 @@ class UserServiceTest extends BaseTest
         $this->expectExceptionMessage("Argument 'type' is invalid: Password hash type '42424242' is not recognized");
 
         $repository = $this->getRepository();
-        $signalSlotUserService = $repository->getUserService();
+        $eventUserService = $repository->getUserService();
 
-        $signalSlotUserServiceReflection = new ReflectionClass($signalSlotUserService);
-        $userServiceProperty = $signalSlotUserServiceReflection->getProperty('service');
+        $eventUserServiceReflection = new ReflectionClass($eventUserService);
+        $userServiceProperty = $eventUserServiceReflection->getProperty('innerService');
         $userServiceProperty->setAccessible(true);
-        $userService = $userServiceProperty->getValue($signalSlotUserService);
+        $userService = $userServiceProperty->getValue($eventUserService);
 
         $userServiceReflection = new ReflectionClass($userService);
         $settingsProperty = $userServiceReflection->getProperty('settings');

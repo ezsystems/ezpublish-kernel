@@ -1,0 +1,94 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    eZ\Publish\Core\Event\Repository:
+        arguments:
+            $repository: '@ezpublish.api.inner_repository'
+            $bookmarkService: '@eZ\Publish\Core\Event\BookmarkService'
+            $contentService: '@eZ\Publish\Core\Event\ContentService'
+            $contentTypeService: '@eZ\Publish\Core\Event\ContentTypeService'
+            $fieldTypeService: '@eZ\Publish\Core\Event\FieldTypeService'
+            $languageService: '@eZ\Publish\Core\Event\LanguageService'
+            $locationService: '@eZ\Publish\Core\Event\LocationService'
+            $notificationService: '@eZ\Publish\Core\Event\NotificationService'
+            $objectStateService: '@eZ\Publish\Core\Event\ObjectStateService'
+            $roleService: '@eZ\Publish\Core\Event\RoleService'
+            $searchService: '@eZ\Publish\Core\Event\SearchService'
+            $sectionService: '@eZ\Publish\Core\Event\SectionService'
+            $trashService: '@eZ\Publish\Core\Event\TrashService'
+            $urlAliasService: '@eZ\Publish\Core\Event\URLAliasService'
+            $urlService: '@eZ\Publish\Core\Event\URLService'
+            $urlWildcardService: '@eZ\Publish\Core\Event\URLWildcardService'
+            $userPreferenceService: '@eZ\Publish\Core\Event\UserPreferenceService'
+            $userService: '@eZ\Publish\Core\Event\UserService'
+
+    eZ\Publish\Core\Event\BookmarkService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_bookmark'
+
+    eZ\Publish\Core\Event\ContentService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_content'
+
+    eZ\Publish\Core\Event\ContentTypeService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_content_type'
+
+    eZ\Publish\Core\Event\FieldTypeService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_field_type'
+
+    eZ\Publish\Core\Event\LanguageService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_language'
+
+    eZ\Publish\Core\Event\LocationService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_location'
+
+    eZ\Publish\Core\Event\NotificationService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_notification'
+
+    eZ\Publish\Core\Event\ObjectStateService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_object_state'
+
+    eZ\Publish\Core\Event\RoleService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_role'
+
+    eZ\Publish\Core\Event\SearchService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_search'
+
+    eZ\Publish\Core\Event\SectionService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_section'
+
+    eZ\Publish\Core\Event\TrashService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_trash'
+
+    eZ\Publish\Core\Event\URLAliasService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_url_alias'
+
+    eZ\Publish\Core\Event\URLService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_url'
+
+    eZ\Publish\Core\Event\URLWildcardService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_url_wildcard'
+
+    eZ\Publish\Core\Event\UserPreferenceService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_user_preference'
+
+    eZ\Publish\Core\Event\UserService:
+        arguments:
+            $innerService: '@ezpublish.api.service.inner_user'

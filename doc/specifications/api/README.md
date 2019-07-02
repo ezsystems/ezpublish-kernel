@@ -12,6 +12,6 @@ covering all eZ Content Repository functionality, this is where you'll find its 
 
 This folder is mainly covering concepts and features of the implementation of the API, found in:
 - `eZ\Publish\Core\Repository`: Implementation of business logic of the Repository.
-- `eZ\Publish\Core\SignalSlot`: "Signal Slot" implementation of Repository allowing to use slots (listener) for signals
-  (events) on every call to api that changes data in the repository.
+- `eZ\Publish\Core\Event`: "Event" implementation of Repository allowing to use Symfony event listeners and subscribers
+  for events on every call to api that changes data in the repository.
 

@@ -51,3 +51,13 @@ services:
     # are registered to this one using compilation pass
     ezpublish.search.common.field_value_mapper.aggregate:
         class: "%ezpublish.search.common.field_value_mapper.aggregate.class%"
+
+    eZ\Publish\Core\Search\Common\EventSubscriber\:
+        resource: '../../Search/Common/EventSubscriber/*'
+        exclude: '../../Search/Common/EventSubscriber/{AbstractSearchEventSubscriber.php}'
+        autoconfigure: true
+        autowire: true
+        public: false
+        arguments:
+            $searchHandler: '@ezpublish.spi.search'
+            $persistenceHandler: '@ezpublish.api.persistence_handler'
