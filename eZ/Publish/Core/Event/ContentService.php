@@ -176,7 +176,10 @@ class ContentService extends ContentServiceDecorator
 
     public function publishVersion(VersionInfo $versionInfo, array $translations = Language::ALL): Content
     {
-        $eventData = [$versionInfo];
+        $eventData = [
+            $versionInfo,
+            $translations,
+        ];
 
         $beforeEvent = new BeforePublishVersionEvent(...$eventData);
         if ($this->eventDispatcher->dispatch($beforeEvent)->isPropagationStopped()) {
@@ -185,7 +188,7 @@ class ContentService extends ContentServiceDecorator
 
         $content = $beforeEvent->hasContent()
             ? $beforeEvent->getContent()
-            : $this->innerService->publishVersion($versionInfo);
+            : $this->innerService->publishVersion($versionInfo, $translations);
 
         $this->eventDispatcher->dispatch(new PublishVersionEvent($content, ...$eventData));
 
