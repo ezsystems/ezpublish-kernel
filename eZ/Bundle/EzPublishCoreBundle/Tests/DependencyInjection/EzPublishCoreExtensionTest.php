@@ -12,7 +12,6 @@ use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Commo
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\Configuration\Parser\Content;
 use eZ\Bundle\EzPublishCoreBundle\DependencyInjection\EzPublishCoreExtension;
 use eZ\Bundle\EzPublishCoreBundle\Tests\DependencyInjection\Stub\StubPolicyProvider;
-use eZ\Publish\Core\Base\Container\Compiler\FieldTypeCollectionPass;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractExtensionTestCase;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\Yaml\Yaml;
@@ -132,44 +131,6 @@ class EzPublishCoreExtensionTest extends AbstractExtensionTestCase
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups', []);
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.groups_by_siteaccess', []);
         $this->assertContainerBuilderHasParameter('ezpublish.siteaccess.match_config', null);
-    }
-
-    public function testLoadWithoutRichTextPackage()
-    {
-        $this->load();
-
-        $expectedParameters = $this->loadRichTextDefaultSettings()['parameters'];
-        foreach ($expectedParameters as $parameterName => $parameterValue) {
-            $this->assertContainerBuilderHasParameter($parameterName, $parameterValue);
-        }
-
-        $this->assertContainerBuilderHasServiceDefinitionWithTag(
-            'ezpublish.fieldType.ezrichtext',
-            FieldTypeCollectionPass::FIELD_TYPE_SERVICE_TAG,
-            ['alias' => 'ezrichtext']
-        );
-
-        $this->testRichTextConfiguration();
-    }
-
-    public function testLoadWithRichTextPackage()
-    {
-        // mock existence of RichText package
-        $this->container->setParameter('kernel.bundles', ['EzPlatformRichTextBundle' => null]);
-
-        $this->load();
-
-        $unexpectedParameters = $this->loadRichTextDefaultSettings()['parameters'];
-        foreach ($unexpectedParameters as $parameterName => $parameterValue) {
-            self::assertFalse(
-                $this->container->hasParameter($parameterName),
-                "Container has '{$parameterName}' parameter"
-            );
-        }
-
-        $this->assertContainerBuilderNotHasService('ezpublish.fieldType.ezrichtext');
-
-        $this->testRichTextConfiguration();
     }
 
     public function testImageMagickConfigurationBasic()
