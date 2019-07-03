@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException;
 use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\Core\Repository\Values\Content\Relation;
-use eZ\Publish\Core\FieldType\Value as BaseValue;
+use eZ\Publish\SPI\FieldType\Value as BaseValue;
 use eZ\Publish\SPI\FieldType\FieldType as SPIFieldType;
 use eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as SPIRelationCreateStruct;
 use Psr\Log\LoggerAwareTrait;
@@ -49,7 +49,7 @@ class RelationProcessor
      * @param array $relations
      * @param array $locationIdToContentIdMapping An array with Location Ids as keys and corresponding Content Id as values
      * @param \eZ\Publish\SPI\FieldType\FieldType $fieldType
-     * @param \eZ\Publish\Core\FieldType\Value $fieldValue Accepted field value.
+     * @param \eZ\Publish\SPI\FieldType\Value $fieldValue Accepted field value.
      * @param string $fieldDefinitionId
      */
     public function appendFieldRelations(
