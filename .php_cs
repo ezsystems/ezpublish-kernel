@@ -28,6 +28,7 @@ return PhpCsFixer\Config::create()
         'php_unit_dedicate_assert_internal_type' => true,
         'standardize_increment' => false,
         'fopen_flags' => false,
+        'self_accessor' => false,
     ])
     ->setRiskyAllowed(true)
     ->setFinder(
