@@ -178,7 +178,7 @@ class ContentService extends ContentServiceDecorator
     {
         $eventData = [
             $versionInfo,
-            $translations
+            $translations,
         ];
 
         $beforeEvent = new BeforePublishVersionEvent(...$eventData);
