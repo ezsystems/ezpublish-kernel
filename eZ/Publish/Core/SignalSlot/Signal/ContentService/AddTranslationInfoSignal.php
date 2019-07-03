@@ -12,6 +12,7 @@ use eZ\Publish\Core\SignalSlot\Signal;
 
 /**
  * AddTranslationInfoSignal class.
+ * @deprecated since 7.5. Will be removed in 8.0 as it is no longer used.
  */
 class AddTranslationInfoSignal extends Signal
 {
