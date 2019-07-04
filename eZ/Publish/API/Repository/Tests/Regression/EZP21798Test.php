@@ -60,14 +60,6 @@ class EZP21798Test extends BaseTest
 
         $contentCreateStructArticle->setField('title', 'Article 1');
 
-        $contentCreateStructArticle->setField(
-            'intro',
-            '<?xml version="1.0" encoding="UTF-8"?>
-<section xmlns="http://docbook.org/ns/docbook" version="5.0-variant ezpublish-1.0">
-  <para>This is summary of Article Test</para>
-</section>'
-        );
-
         $newsLocation = $urlAliasService->lookup('/News');
         $locationNews = $locationService->loadLocation($newsLocation->destination);
 
