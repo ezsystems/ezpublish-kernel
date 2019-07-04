@@ -23,7 +23,11 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class Application extends BaseApplication
 {
-    // See doRun()
+    /**
+     * @see doRun
+     *
+     * @var \Symfony\Component\HttpKernel\KernelInterface
+     */
     private $kernel;
 
     public function __construct(KernelInterface $kernel)
