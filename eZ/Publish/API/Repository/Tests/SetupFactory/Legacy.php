@@ -304,7 +304,7 @@ class Legacy extends SetupFactory
     protected function getInitialData()
     {
         if (!isset(self::$initialData)) {
-            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/clean_ezdemo_47_dump.php';
+            self::$initialData = include __DIR__ . '/../../../../Core/Repository/Tests/Service/Integration/Legacy/_fixtures/test_data.php';
         }
 
         return self::$initialData;
