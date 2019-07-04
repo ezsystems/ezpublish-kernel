@@ -85,4 +85,15 @@ final class MVCEvents
      * The event listener method receives a eZ\Publish\Core\MVC\Symfony\Event\ContentCacheClearEvent instance.
      */
     const CACHE_CLEAR_CONTENT = 'ezpublish.cache_clear.content';
+
+    /**
+     * The CONSOLE_INIT event allows you to attach listeners before any command is
+     * loaded by the console. It also allows you react to global arguments before commands are run.
+     *
+     * @Event("eZ\Publish\Core\MVC\Symfony\Event\ConsoleInitEvent")
+     *
+     * @internal For internal use by SiteAccess system on console.
+     * @deprecated Planned for move/contribution to Symfony in the future.
+     */
+    const CONSOLE_INIT = 'ezpublish.console.init';
 }

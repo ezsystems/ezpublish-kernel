@@ -9,9 +9,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\Console;
 
 use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException as InvalidSiteAccess;
+use eZ\Publish\Core\MVC\Symfony\Event\ConsoleInitEvent;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication;
+use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,28 +44,14 @@ class Application extends BaseApplication
     public function doRun(InputInterface $input, OutputInterface $output)
     {
         // boot() will be re-executed by parent, but kernel only boots once regardlessly
-        // @todo Contribute a console.init event to Symfony 4 in order to rather use that in v3
         $this->kernel->boot();
 
-        $container = $this->kernel->getContainer();
-        $siteAccess = $container->get('ezpublish.siteaccess');
-        $siteAccessList = $container->getParameter('ezpublish.siteaccess.list');
-
-        $siteAccess->matchingType = 'cli';
-        $siteAccess->name = $input->getParameterOption(
-            '--siteaccess',
-            $container->getParameter('ezpublish.siteaccess.default')
+        // @todo Contribute a console.init event to Symfony4 in order to rather use that in v3 to drop doRun() overload
+        $this->kernel->getContainer()->get('event_dispatcher')->dispatch(
+            MVCEvents::CONSOLE_INIT,
+            new ConsoleInitEvent($input, $output)
         );
 
-
-        if (!in_array($siteAccess->name, $siteAccessList)) {
-            throw new InvalidSiteAccess($siteAccess->name, $siteAccessList, $siteAccess->matchingType, true);
-        }
-
-        $container->get('event_dispatcher')->dispatch(
-            MVCEvents::CONFIG_SCOPE_CHANGE,
-            new ScopeChangeEvent($siteAccess)
-        );
 
         return parent::doRun($input, $output);
     }
