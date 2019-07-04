@@ -17,6 +17,6 @@ class ConsoleInitEvent extends ConsoleEvent
 {
     public function __construct(InputInterface $input, OutputInterface $output)
     {
-        parent::__construct(null,$input, $output);
+        parent::__construct(null, $input, $output);
     }
 }

@@ -8,12 +8,9 @@
  */
 namespace eZ\Bundle\EzPublishCoreBundle\Console;
 
-use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException as InvalidSiteAccess;
 use eZ\Publish\Core\MVC\Symfony\Event\ConsoleInitEvent;
-use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use Symfony\Bundle\FrameworkBundle\Console\Application as BaseApplication;
-use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,7 +48,6 @@ class Application extends BaseApplication
             MVCEvents::CONSOLE_INIT,
             new ConsoleInitEvent($input, $output)
         );
-
 
         return parent::doRun($input, $output);
     }
