@@ -651,6 +651,9 @@ class ContentTypeHandlerTest extends TestCase
      */
     public function testCreateVersion()
     {
+        $userId = 42;
+        $contentTypeId = 23;
+
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMapperMock();
         $mapperMock->expects($this->once())
@@ -671,33 +674,27 @@ class ContentTypeHandlerTest extends TestCase
         $handlerMock->expects($this->once())
             ->method('load')
             ->with(
-                $this->equalTo(23, 0)
+                $this->equalTo($contentTypeId, Type::STATUS_DEFINED)
             )->will(
                 $this->returnValue(
                     new Type()
                 )
             );
+
+        $typeDraft = new Type();
         $handlerMock->expects($this->once())
             ->method('internalCreate')
             ->with(
-                $this->logicalAnd(
-                    $this->attributeEqualTo('status', 1),
-                    $this->attributeEqualTo('modifierId', 42),
-                    $this->attribute(
-                        $this->greaterThanOrEqual(
-                            time()
-                        ),
-                        'modified'
-                    )
-                )
+                $this->isInstanceOf(CreateStruct::class),
+                $this->equalTo($contentTypeId)
             )->will(
-                $this->returnValue(new Type())
+                $this->returnValue($typeDraft)
             );
 
-        $res = $handlerMock->createDraft(42, 23);
+        $res = $handlerMock->createDraft($userId, $contentTypeId);
 
-        $this->assertInstanceOf(
-            Type::class,
+        $this->assertSame(
+            $typeDraft,
             $res
         );
     }
@@ -708,15 +705,15 @@ class ContentTypeHandlerTest extends TestCase
     public function testCopy()
     {
         $gatewayMock = $this->getGatewayMock();
-        $mapperMock = $this->getMapperMock();
+        $mapperMock = $this->getMapperMock(['createCreateStructFromType']);
         $mapperMock->expects($this->once())
             ->method('createCreateStructFromType')
             ->with(
                 $this->isInstanceOf(
                     Type::class
                 )
-            )->will(
-                $this->returnValue(new CreateStruct(['identifier' => 'testCopy']))
+            )->willReturn(
+                new CreateStruct(['identifier' => 'testCopy'])
             );
 
         $handlerMock = $this->getMockBuilder(Handler::class)
@@ -724,76 +721,48 @@ class ContentTypeHandlerTest extends TestCase
             ->setConstructorArgs([$gatewayMock, $mapperMock, $this->getUpdateHandlerMock()])
             ->getMock();
 
+        $userId = 42;
+        $type = new Type([
+            'id' => 23,
+            'identifier' => md5(uniqid(get_class($handlerMock), true)),
+            'status' => Type::STATUS_DEFINED,
+        ]);
+
         $handlerMock->expects($this->once())
             ->method('load')
             ->with(
-                $this->equalTo(23, 0)
-            )->will(
-                $this->returnValue(
-                    new Type()
-                )
+                $this->equalTo($type->id, Type::STATUS_DEFINED)
+            )->willReturn(
+                $type
             );
+
+        $typeCopy = clone $type;
+        $typeCopy->id = 24;
+        $typeCopy->identifier = 'copy_of' . $type->identifier . '_' . $type->id;
+
         $handlerMock->expects($this->once())
             ->method('internalCreate')
             ->with(
-                $this->logicalAnd(
-                    $this->attributeEqualTo('modifierId', 42),
-                    $this->attribute(
-                        $this->greaterThanOrEqual(
-                            time()
-                        ),
-                        'modified'
-                    ),
-                    $this->attributeEqualTo('creatorId', 42),
-                    $this->attribute(
-                        $this->greaterThanOrEqual(
-                            time()
-                        ),
-                        'created'
-                    ),
-                    $this->attribute(
-                    // temporary identifier of a copy is a md5 hash
-                        $this->matchesRegularExpression('/^[a-f0-9]+$/'),
-                        'identifier'
-                    )
-                )
-            )->will(
-                $this->returnValue(new Type([
-                    'id' => 24,
-                    'identifier' => md5(uniqid(get_class($handlerMock), true)),
-                    'status' => Type::STATUS_DEFINED,
-                ]))
-            );
-
-        $mapperMock->expects($this->once())
-            ->method('createUpdateStructFromType')
-            ->with(
-                $this->attribute(
-                    $this->matchesRegularExpression('/^[a-f0-9]+$/'),
-                    'identifier'
-                )
-            )->will(
-                $this->returnValue(new UpdateStruct())
+                $this->isInstanceOf(CreateStruct::class),
+            )->willReturn(
+                $typeCopy
             );
 
         $handlerMock->expects($this->once())
             ->method('update')
             ->with(
-                $this->equalTo(24),
+                $this->equalTo($typeCopy->id),
                 $this->equalTo(Type::STATUS_DEFINED),
-                $this->attribute(
-                    $this->equalTo('copy_of_testCopy_24'),
-                    'identifier'
-                )
+                $this->isInstanceOf(UpdateStruct::class)
             )
             ->will(
-                $this->returnValue(new Type())
+                $this->returnValue($typeCopy)
             );
 
-        $res = $handlerMock->copy(42, 23, 0);
+        $res = $handlerMock->copy($userId, $type->id, Type::STATUS_DEFINED);
 
-        $this->assertInstanceOf(
-            Type::class,
+        $this->assertEquals(
+            $typeCopy,
             $res
         );
     }

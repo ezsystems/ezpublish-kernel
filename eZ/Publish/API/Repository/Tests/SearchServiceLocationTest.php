@@ -1184,11 +1184,11 @@ class SearchServiceLocationTest extends BaseTest
             }
         }
 
-        $this->assertEquals(
+        $this->assertEqualsWithDelta(
             $fixture,
             $result,
+            .2, // Be quite generous regarding delay -- most important for scores
             'Search results do not match.',
-            .2 // Be quite generous regarding delay -- most important for scores
         );
     }
 

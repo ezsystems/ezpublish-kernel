@@ -3295,17 +3295,17 @@ XML
 
         $this->assertPropertiesCorrect($expectedVersions[0], $versions[0]);
         $this->assertPropertiesCorrect($expectedVersions[1], $versions[1]);
-        $this->assertEquals(
+        $this->assertEqualsWithDelta(
             $versions[0]->creationDate->getTimestamp(),
             $versions[1]->creationDate->getTimestamp(),
+            2,
             'Creation time did not match within delta of 2 seconds',
-            2
         );
-        $this->assertEquals(
+        $this->assertEqualsWithDelta(
             $versions[0]->modificationDate->getTimestamp(),
             $versions[1]->modificationDate->getTimestamp(),
+            2,
             'Creation time did not match within delta of 2 seconds',
-            2
         );
         $this->assertTrue($versions[0]->isArchived());
         $this->assertFalse($versions[0]->isDraft());
