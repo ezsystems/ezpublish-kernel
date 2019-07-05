@@ -36,6 +36,22 @@ Changes affecting version compatibility with former or future versions.
 
 * `ez_trans_prop` twig function was removed
 
+* `ezrichtext` Field Type has been completely removed from this package.
+  Use [eZ Platform RichText Bundle](https://github.com/ezsystems/ezplatform-richtext) instead.
+
+  It also implies that:
+  * the semantic configuration available as:
+      ```yaml
+      ezpublish:
+          ezrichtext:
+      ```
+    is no longer supported. To upgrade please make `ezrichtext` the top node:
+      ```yaml
+      ezrichtext:
+      ```
+  * the namespace `\eZ\Publish\Core\FieldType\RichText` has been dropped (all classes are available
+  in the mentioned package).
+
 ## Deprecated features
 
 * Using SiteAccess-aware `pagelayout` setting is derecated, use `page_layout` instead.
