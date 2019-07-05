@@ -87,4 +87,14 @@ final class MVCEvents
      * @deprecated Since 6.12, not triggered anymore when using ezplatform-http-cache package.
      */
     const CACHE_CLEAR_CONTENT = 'ezpublish.cache_clear.content';
+
+    /**
+     * The CONSOLE_INIT event allows you to attach listeners before any command is
+     * loaded by the console. It also allows you react to global arguments before commands are run.
+     *
+     * @Event("eZ\Publish\Core\MVC\Symfony\Event\ConsoleInitEvent")
+     *
+     * @internal For internal use by SiteAccess system on console.
+     */
+    const CONSOLE_INIT = 'ezpublish.console.init';
 }
