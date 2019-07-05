@@ -1,9 +1,9 @@
 <?php
 
-return array(
-    'ezcontentclass' => array(
+return [
+    'ezcontentclass' => [
         // loaded
-        array(
+        [
             'id' => 1,
             'always_available' => 1,
             'contentobject_name' => '<short_name|name>',
@@ -21,10 +21,10 @@ return array(
             'sort_field' => 1,
             'sort_order' => 1,
             'url_alias_name' => '',
-            'version' => 0
-        ),
+            'version' => 0,
+        ],
         // not loaded, id mismatch
-        array(
+        [
             'id' => 2,
             'always_available' => 1,
             'contentobject_name' => '<short_name|name>',
@@ -42,12 +42,12 @@ return array(
             'sort_field' => 1,
             'sort_order' => 1,
             'url_alias_name' => '',
-            'version' => 0
-        ),
-    ),
-    'ezcontentclass_attribute' => array(
+            'version' => 0,
+        ],
+    ],
+    'ezcontentclass_attribute' => [
         // loaded
-        array(
+        [
             'id' => 4,
             'contentclass_id' => 1,
             'can_translate' => 1,
@@ -74,9 +74,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
-            'version' => 0
-        ),
-        array(
+            'version' => 0,
+        ],
+        [
             'id' => 119,
             'contentclass_id' => 1,
             'can_translate' => 1,
@@ -103,9 +103,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Short description";}',
-            'version' => 0
-        ),
-        array(
+            'version' => 0,
+        ],
+        [
             'id' => 155,
             'contentclass_id' => 1,
             'can_translate' => 1,
@@ -132,9 +132,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"Short name";}',
-            'version' => 0
-        ),
-        array(
+            'version' => 0,
+        ],
+        [
             'id' => 156,
             'contentclass_id' => 1,
             'can_translate' => 1,
@@ -161,9 +161,9 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
-            'version' => 0
-        ),
-        array(
+            'version' => 0,
+        ],
+        [
             'id' => 158,
             'contentclass_id' => 1,
             'can_translate' => 0,
@@ -190,10 +190,10 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
-            'version' => 0
-        ),
+            'version' => 0,
+        ],
         // not loaded, version mismatch
-        array(
+        [
             'id' => 159,
             'contentclass_id' => 1,
             'can_translate' => 0,
@@ -220,10 +220,10 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
-            'version' => 1
-        ),
+            'version' => 1,
+        ],
         // not loaded, contentclass_id mismatch
-        array(
+        [
             'id' => 160,
             'contentclass_id' => 2,
             'can_translate' => 0,
@@ -250,40 +250,40 @@ return array(
             'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
             'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
-            'version' => 0
-        ),
-    ),
-    'ezcontentclass_classgroup' => array(
+            'version' => 0,
+        ],
+    ],
+    'ezcontentclass_classgroup' => [
         // loaded
-        array(
+        [
             'contentclass_id' => 1,
             'contentclass_version' => 0,
             'group_id' => 1,
-            'group_name' => 'Content'
-        ),
+            'group_name' => 'Content',
+        ],
         // not loaded, version mismatch
-        array(
+        [
             'contentclass_id' => 1,
             'contentclass_version' => 1,
             'group_id' => 1,
-            'group_name' => 'Content'
-        ),
+            'group_name' => 'Content',
+        ],
         // not loaded, id mismatch
-        array(
+        [
             'contentclass_id' => 2,
             'contentclass_version' => 0,
             'group_id' => 1,
-            'group_name' => 'Content'
-        ),
-    ),
-    'ezcontentclass_name' => array(
-        array(
+            'group_name' => 'Content',
+        ],
+    ],
+    'ezcontentclass_name' => [
+        [
             'contentclass_id' => 1,
             'contentclass_version' => 0,
             'language_id' => 3,
             'language_locale' => 'eng-US',
-            'name' => 'Folder'
-        )
-    ),
-    'ezcontent_language' => array()
-);
+            'name' => 'Folder',
+        ],
+    ],
+    'ezcontent_language' => [],
+];
