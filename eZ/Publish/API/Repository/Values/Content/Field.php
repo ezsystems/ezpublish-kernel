@@ -15,7 +15,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  *
  * @property-read mixed $id an internal id of the field
  * @property-read string $fieldDefIdentifier the field definition identifier
- * @property-read $value the value of the field
+ * @property-read mixed $value the value of the field
  * @property-read string $languageCode the language code of the field
  * @property-read string $fieldTypeIdentifier field type identifier
  */
