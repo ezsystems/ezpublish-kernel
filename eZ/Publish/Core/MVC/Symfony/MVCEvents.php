@@ -92,7 +92,7 @@ final class MVCEvents
      *
      * @Event("eZ\Publish\Core\MVC\Symfony\Event\ConsoleInitEvent")
      *
-     * @internal For internal use by SiteAccess system on console, might move to symfony in some form in the future.
+     * @internal For internal use by SiteAccess system on console.
      */
     const CONSOLE_INIT = 'ezpublish.console.init';
 }
