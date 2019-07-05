@@ -9,12 +9,11 @@
 namespace eZ\Bundle\EzPublishCoreBundle\EventListener;
 
 use eZ\Publish\Core\MVC\Exception\InvalidSiteAccessException;
+use eZ\Publish\Core\MVC\Symfony\Event\ConsoleInitEvent;
 use eZ\Publish\Core\MVC\Symfony\Event\ScopeChangeEvent;
 use eZ\Publish\Core\MVC\Symfony\MVCEvents;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess;
 use eZ\Publish\Core\MVC\Symfony\SiteAccess\SiteAccessAware;
-use Symfony\Component\Console\ConsoleEvents;
-use Symfony\Component\Console\Event\ConsoleCommandEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -54,13 +53,13 @@ class ConsoleCommandListener implements EventSubscriberInterface, SiteAccessAwar
     public static function getSubscribedEvents()
     {
         return [
-            ConsoleEvents::COMMAND => [
+            MVCEvents::CONSOLE_INIT => [
                 ['onConsoleCommand', -1],
             ],
         ];
     }
 
-    public function onConsoleCommand(ConsoleCommandEvent $event)
+    public function onConsoleCommand(ConsoleInitEvent $event)
     {
         $this->siteAccess->name = $event->getInput()->getParameterOption('--siteaccess', $this->defaultSiteAccessName);
         $this->siteAccess->matchingType = 'cli';

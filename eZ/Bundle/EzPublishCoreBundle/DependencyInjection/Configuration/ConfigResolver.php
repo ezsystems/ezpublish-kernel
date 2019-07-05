@@ -290,7 +290,9 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
             return;
         }
 
-        $blame = '??';
+        $serviceName = '??';
+        $firstService = '??';
+        $commandName = null;
         $resettableServiceIds = $container->getParameter('ezpublish.config_resolver.resettable_services');
         $updatableServices = $container->getParameter('ezpublish.config_resolver.updateable_services');
 
@@ -318,20 +320,36 @@ class ConfigResolver implements VersatileScopeInterface, SiteAccessAware, Contai
                 // Possible exception: Class name based services, can't be resolved as namespace is omitted from
                 // compiled function. In this case we won't know if it was updateable and "safe", so we warn to be sure
                 if (!in_array($serviceName, $resettableServiceIds, true) && !$container->has($serviceName)) {
-                    $blame = $potentialClassName;
+                    $serviceName = $potentialClassName;
                 } else {
-                    $blame = '@' . $serviceName;
+                    $serviceName = '@' . $serviceName;
                 }
 
-                // Detect if we found the command loading the service, if so add info to blame to make it easier to spot
+                // Keep track of the first service loaded
+                if ($firstService === '??') {
+                    $firstService = $serviceName;
+                }
+
+                // Detect if we found the command loading the service, if we track that as lasts service
                 if (PHP_SAPI === 'cli' && isset($t['file']) && \stripos($t['file'], 'CommandService.php') !== false) {
-                    $path = explode('/', $t['file']);
-                    $blame = \substr($path[count($path) - 1], 3, -11) . '(' . $blame . ')';
+                    $path = explode(DIRECTORY_SEPARATOR, $t['file']);
+                    $commandName = \substr($path[count($path) - 1], 3, -11);
                     break;
                 }
             }
         }
 
+        // Skip service name if same as first service
+        if ($serviceName === $firstService) {
+            $serviceName = '';
+        }
+
+        // Add command name if present as the trigger
+        if ($commandName) {
+            $blame = "$commandName($serviceName) -> $firstService";
+        } else {
+            $blame = ($serviceName ? $serviceName . ' -> ' : '') . $firstService;
+        }
         $this->tooEarlyLoadedList[$blame][] = $paramName;
     }
 }
