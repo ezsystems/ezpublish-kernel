@@ -86,7 +86,7 @@ class ContentTypeServiceTest extends AbstractServiceTest
 
             ['newContentTypeGroupUpdateStruct', []],
 
-            ['newFieldDefinitionCreateStruct', ['body', 'ezrichtext']],
+            ['newFieldDefinitionCreateStruct', ['body', 'ezstring']],
 
             ['newFieldDefinitionUpdateStruct', []],
 
