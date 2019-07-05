@@ -359,7 +359,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $rows = $gateway->loadTypesDataForGroup(1, 0);
 
         $this->assertCount(
-            6,
+            4,
             $rows
         );
     }
@@ -379,7 +379,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $rows = $gateway->loadTypeData(1, 0);
 
         $this->assertCount(
-            5,
+            3,
             $rows
         );
         $this->assertCount(
@@ -412,7 +412,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $rows = $gateway->loadTypeDataByIdentifier('folder', 0);
 
         $this->assertCount(
-            5,
+            3,
             $rows
         );
         $this->assertCount(
@@ -436,7 +436,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $rows = $gateway->loadTypeDataByRemoteId('a3d405b81be900468eb153d774f4f0d2', 0);
 
         $this->assertCount(
-            5,
+            3,
             $rows
         );
         $this->assertCount(
@@ -737,7 +737,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $gateway->deleteFieldDefinition(1, 0, 119);
 
         $this->assertQueryResult(
-            [[6]],
+            [[5]],
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select('COUNT(*)')
@@ -1112,7 +1112,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
             ->from('ezcontentclass_attribute');
 
         $this->assertQueryResult(
-            [[7]],
+            [[5]],
             $countNotAffectedAttr
         );
     }
@@ -1242,7 +1242,7 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         );
 
         $this->assertQueryResult(
-            [[5]],
+            [[3]],
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select('COUNT( * )')
                 ->from('ezcontentclass_attribute')

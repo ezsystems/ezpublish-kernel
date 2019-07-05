@@ -8,6 +8,7 @@
  */
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
 
+use function count;
 use eZ\Publish\Core\Persistence\Legacy\Content\Mapper;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\ConverterRegistry as Registry;
 use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
@@ -167,8 +168,11 @@ class MapperTest extends LanguageAwareTestCase
      */
     public function testExtractContentFromRows()
     {
+        $rowsFixture = $this->getContentExtractFixture();
+        $nameRowsFixture = $this->getNamesExtractFixture();
+
         $convMock = $this->createMock(Converter::class);
-        $convMock->expects($this->exactly(13))
+        $convMock->expects($this->exactly(count($rowsFixture)))
             ->method('toFieldValue')
             ->with(
                 $this->isInstanceOf(
@@ -184,7 +188,6 @@ class MapperTest extends LanguageAwareTestCase
             [
                 'ezauthor' => $convMock,
                 'ezstring' => $convMock,
-                'ezrichtext' => $convMock,
                 'ezboolean' => $convMock,
                 'ezimage' => $convMock,
                 'ezdatetime' => $convMock,
@@ -192,9 +195,6 @@ class MapperTest extends LanguageAwareTestCase
                 'ezsrrating' => $convMock,
             ]
         );
-
-        $rowsFixture = $this->getContentExtractFixture();
-        $nameRowsFixture = $this->getNamesExtractFixture();
 
         $mapper = new Mapper($reg, $this->getLanguageHandler());
         $result = $mapper->extractContentFromRows($rowsFixture, $nameRowsFixture);
@@ -220,7 +220,6 @@ class MapperTest extends LanguageAwareTestCase
         $reg = new Registry(
             [
                 'ezstring' => $convMock,
-                'ezrichtext' => $convMock,
                 'ezdatetime' => $convMock,
             ]
         );

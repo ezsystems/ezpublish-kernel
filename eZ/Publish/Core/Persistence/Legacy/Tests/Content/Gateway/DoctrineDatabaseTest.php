@@ -911,7 +911,6 @@ class DoctrineDatabaseTest extends LanguageAwareTestCase
         $this->assertEquals(
             [
                 'ezstring' => [841],
-                'ezrichtext' => [842],
                 'ezimage' => [843],
                 'ezkeyword' => [844],
             ],
