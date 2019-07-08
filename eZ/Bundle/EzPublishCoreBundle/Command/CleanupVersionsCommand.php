@@ -260,12 +260,13 @@ EOT;
 
         if ($excludedContentTypeIds) {
             $expr = $query->expr();
-            $query->andWhere(
-                $expr->notIn(
-                    'c.contentclass_id',
-                    $excludedContentTypeIds
-                )
-            );
+            $query
+                ->andWhere(
+                    $expr->notIn(
+                        'c.contentclass_id',
+                        ':contentTypeIds'
+                    )
+                )->setParameter(':contentTypeIds', $excludedContentTypeIds, Connection::PARAM_INT_ARRAY);
         }
 
         $stmt = $query->execute();
